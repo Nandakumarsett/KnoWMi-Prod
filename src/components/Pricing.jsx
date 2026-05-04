@@ -28,7 +28,7 @@ const plans = [
     featured: true,
     productFeatures: [
       '220 GSM Heavyweight Cotton',
-      'Upto 4 Persona Profiles',
+      'Upto 3 Persona Profiles',
       'Advanced Identity Tools',
       'Enhanced Profile Flexibility',
     ],
