@@ -63,6 +63,11 @@ export default function Admin() {
     setUsers(prev => prev.map(u => u.id === id ? { ...u, amount_paid: n, status: n > 0 ? 'paid' : 'free' } : u))
   }
 
+  const updateTier = async (id, newTier) => {
+    await supabase.from('profiles').update({ tier: newTier }).eq('id', id)
+    setUsers(prev => prev.map(u => u.id === id ? { ...u, tier: newTier } : u))
+  }
+
   const changeRole = async (id, newRoleVal) => {
     await supabase.rpc('update_profile_admin_role', { p_profile_id: id, p_new_role: newRoleVal })
     setUsers(prev => prev.map(u => u.id === id ? { ...u, role: newRoleVal } : u))
@@ -223,6 +228,14 @@ export default function Admin() {
                     <div className="flex items-center gap-2">
                       <input type="number" defaultValue={u.amount_paid || 0} onBlur={e => updateAmount(u.id, e.target.value)}
                         className="w-16 px-2 py-1 rounded-lg text-xs text-center outline-none" style={{ border: '1px solid var(--border)', fontFamily: 'JetBrains Mono' }} />
+                      <select defaultValue={u.tier || 'Elite'} onChange={e => updateTier(u.id, e.target.value)}
+                        className="px-2 py-1.5 rounded-lg text-[11px] outline-none" style={{ border: '1px solid var(--border)', background: 'var(--off)' }}>
+                        <option value="Starter">Starter</option>
+                        <option value="Creator">Creator</option>
+                        <option value="Pro">Pro</option>
+                        <option value="Elite">Elite</option>
+                        <option value="Founding">Founding</option>
+                      </select>
                       <button onClick={() => toggleStatus(u)} disabled={updating === u.id}
                         className="px-3 py-1.5 rounded-lg text-[11px] font-bold" style={{
                           background: u.status === 'paid' ? 'rgba(220,38,38,0.08)' : 'rgba(19,136,8,0.08)',
