@@ -108,20 +108,84 @@ export default function PublicProfile() {
     )
   }
 
-  // Mobile View - Direct Persona Rendering
-  if (!isDesktop) {
-    return (
-      <>
-        <ProfileViewTracker profileId={profile.id} />
-        <PersonaRouter profile={profile} />
-      </>
-    )
-  }
-
-  // Desktop View - Two Column Layout
   const pAlias = (profile.persona || '').toLowerCase()
   const activeConfig = personaConfigs[pAlias] || personaConfigs.developer
   const accentColor = activeConfig.theme.accent
+
+  // Mobile View
+  if (!isDesktop) {
+    return (
+      <div className="min-h-screen bg-[#0d1117] text-white font-sans selection:bg-orange-500/30 pb-12">
+        <ProfileViewTracker profileId={profile.id} />
+        
+        {/* Top Header */}
+        <header className="fixed top-0 w-full z-50 bg-[#161b22]/80 border-b border-white/5 px-6 py-3 backdrop-blur-md flex justify-between items-center">
+          <div className="flex items-center gap-2">
+             <img src="/logo-square.png" alt="Logo" className="w-6 h-6 rounded-lg object-cover" />
+             <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-50">
+               {profile.first_name ? `${profile.first_name}` : "KnoWMi"}
+             </span>
+          </div>
+          <button onClick={() => navigate('/dashboard')} className="p-2 hover:bg-white/5 rounded-xl transition-colors">
+            <X size={18} />
+          </button>
+        </header>
+
+        {/* Identity & QR Card Section for Mobile */}
+        <div className="pt-20 px-4 max-w-sm mx-auto flex flex-col items-center justify-center">
+          <div className="bg-white rounded-[32px] p-6 shadow-2xl text-black flex flex-col items-center w-full relative mb-8">
+            <div className="relative mb-6 group cursor-pointer flex flex-col items-center" onClick={() => setShowQR(!showQR)}>
+               <div 
+                 className={`w-36 h-36 p-1 transition-all duration-500 hover:scale-105 active:scale-95 ${showQR ? 'rounded-[24px]' : 'rounded-full'}`}
+                 style={{ background: `linear-gradient(135deg, ${accentColor}, #F97316)` }}
+               >
+                  <div className={`w-full h-full bg-white p-1 overflow-hidden relative flex items-center justify-center ${showQR ? 'rounded-[20px]' : 'rounded-full'}`}>
+                     {showQR ? (
+                       <div className="w-full h-full bg-white flex items-center justify-center relative p-1.5 select-none animate-fadeIn rounded-none">
+                         <img 
+                           src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.secure_slug || profile?.id}`)}`} 
+                           className="w-full h-full object-contain" 
+                           alt="QR Code" 
+                         />
+                         <div className="absolute inset-0 m-auto w-6 h-6 bg-white rounded-lg flex items-center justify-center shadow-md border border-neutral-100 p-0.5">
+                           <img src="/logo-square.png" className="w-full h-full object-contain" alt="Branding" />
+                         </div>
+                       </div>
+                     ) : (
+                       <img 
+                         src={profile.avatar_url || ''} 
+                         className="w-full h-full rounded-full object-cover select-none animate-fadeIn" 
+                         alt={profile.display_name} 
+                       />
+                     )}
+                  </div>
+               </div>
+               {!showQR && (
+                 <div className="absolute bottom-1 right-1 w-10 h-10 bg-white rounded-2xl shadow-xl flex items-center justify-center border-2 border-white pointer-events-none">
+                    <VerifiedBadge isVerified={profile.is_verified} accentColor={accentColor} />
+                 </div>
+               )}
+               <div className="absolute -bottom-4 bg-orange-500/10 text-orange-600 text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-orange-500/20 backdrop-blur-sm pointer-events-none shadow-sm flex items-center gap-1 select-none">
+                 {showQR ? '↺ Tap for Photo' : '✦ Tap for QR'}
+               </div>
+            </div>
+
+            <h1 className="text-2xl font-black tracking-tight mb-1 text-center">{profile.display_name}</h1>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-30 mb-4 text-center">{profile.member_id}</p>
+            
+            <div className="px-4 py-1.5 rounded-full font-black text-[9px] uppercase tracking-widest" style={{ background: `${accentColor}15`, color: accentColor }}>
+              {profile.persona} Persona
+            </div>
+          </div>
+        </div>
+
+        {/* Full Mobile Persona Router below */}
+        <div className="px-2">
+          <PersonaRouter profile={profile} />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-[#0d1117] text-white font-sans selection:bg-orange-500/30">
