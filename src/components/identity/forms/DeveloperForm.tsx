@@ -80,35 +80,35 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
     <div className="space-y-12">
       {/* SECTION: ABOUT */}
       <section className="space-y-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/90">Section 1: About You</h3>
-        <div className="space-y-4 bg-white/5 p-6 rounded-[28px] border border-white/10">
+        <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 1: About You</h3>
+        <div className="space-y-4 bg-white p-6 rounded-[12px] border border-[#E5D5C4] shadow-sm">
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Role / Title</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Role / Title</label>
             <input
               type="text"
               value={data.about?.role || ''}
               onChange={e => updateAbout('role', e.target.value)}
               placeholder="e.g. Full Stack Developer"
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+              className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#8C8276] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
             />
-            <p className="text-[9px] text-white/30 mt-1 uppercase tracking-wider">This shows directly under your name</p>
+            <p className="text-[10px] text-[#8C8276] mt-1.5 uppercase font-bold tracking-wider">This shows directly under your name</p>
           </div>
 
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Mission Statement</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Mission Statement</label>
             <textarea
               rows={2}
               maxLength={120}
               value={data.about?.mission || ''}
               onChange={e => updateAbout('mission', e.target.value)}
               placeholder="e.g. Building digital identity for creators"
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+              className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#8C8276] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
             />
-            <p className="text-[9px] text-white/30 mt-1 uppercase tracking-wider">What are you passionate about building?</p>
+            <p className="text-[10px] text-[#8C8276] mt-1.5 uppercase font-bold tracking-wider">What are you passionate about building?</p>
           </div>
 
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Programming Languages</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Programming Languages</label>
             <TagInput
               value={data.about?.languages || []}
               onChange={tags => updateAbout('languages', tags)}
@@ -120,20 +120,20 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
 
       {/* SECTION: STATS */}
       <section className="space-y-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/90">Section 2: Stats</h3>
-        <div className="bg-white/5 p-6 rounded-[28px] border border-white/10 space-y-4">
-          <div className="flex gap-4 items-center p-4 bg-white/5 border border-dashed border-white/10 rounded-2xl">
+        <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 2: Stats</h3>
+        <div className="bg-white p-6 rounded-[12px] border border-[#E5D5C4] shadow-sm space-y-4">
+          <div className="flex gap-4 items-center p-4 bg-[#FDF6EC] border border-dashed border-[#E5D5C4] rounded-[12px]">
             <input
               type="text"
               value={githubUser}
               onChange={e => setGithubUser(e.target.value)}
               placeholder="Your GitHub Username"
-              className="flex-1 bg-transparent border-0 outline-none p-1 text-sm text-white"
+              className="flex-1 bg-transparent border-0 outline-none p-1 text-sm text-[#1A1A1A] placeholder:text-[#8C8276]"
             />
             <button
               type="button"
               onClick={handleSyncGithub}
-              className="px-4 py-2 bg-[#3fb950] text-black font-black text-xs uppercase rounded-xl hover:bg-[#3fb950]/90 flex items-center gap-1"
+              className="px-4 py-2 bg-[#C1440E] text-white font-black text-xs uppercase rounded-[12px] hover:bg-[#A0350B] transition-colors flex items-center gap-1 shrink-0"
               disabled={syncing}
             >
               {syncing ? 'Syncing...' : 'Sync GitHub'}
@@ -141,21 +141,21 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Commits</label>
+              <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Commits</label>
               <input
                 type="number"
                 value={data.commits || 0}
                 onChange={e => updateField('commits', Number(e.target.value))}
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white"
+                className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
               />
             </div>
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Collaborations</label>
+              <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Collaborations</label>
               <input
                 type="number"
                 value={data.collabs || 0}
                 onChange={e => updateField('collabs', Number(e.target.value))}
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white"
+                className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
               />
             </div>
           </div>
@@ -164,8 +164,8 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
 
       {/* SECTION: TECH STACK */}
       <section className="space-y-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/90">Section 3: Tech Stack</h3>
-        <div className="bg-white/5 p-6 rounded-[28px] border border-white/10">
+        <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 3: Tech Stack</h3>
+        <div className="bg-white p-6 rounded-[12px] border border-[#E5D5C4] shadow-sm">
           <TagInput
             value={data.tech_stack || []}
             onChange={tags => updateField('tech_stack', tags)}
@@ -177,10 +177,10 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
 
       {/* SECTION: PROJECTS */}
       <section className="space-y-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/90">Section 4: Projects</h3>
+        <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 4: Projects</h3>
         <div className="space-y-4">
           {(data.projects || []).map((p: any, i: number) => (
-            <div key={i} className="p-6 bg-white/5 border border-white/10 rounded-[28px] space-y-4 relative">
+            <div key={i} className="p-6 bg-white border border-[#E5D5C4] rounded-[12px] shadow-sm space-y-4 relative">
               <button
                 type="button"
                 onClick={() => {
@@ -188,13 +188,13 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
                   pCopy.splice(i, 1)
                   updateField('projects', pCopy)
                 }}
-                className="absolute top-6 right-6 text-red-500 hover:text-red-400"
+                className="absolute top-6 right-6 text-red-500 hover:text-red-600 transition-colors"
               >
                 <Trash2 size={16} />
               </button>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Project Name</label>
+                  <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Project Name</label>
                   <input
                     type="text"
                     value={p.name || ''}
@@ -203,11 +203,11 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
                       pCopy[i] = { ...p, name: e.target.value }
                       updateField('projects', pCopy)
                     }}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-2.5 text-sm text-white"
+                    className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Stars</label>
+                  <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Stars</label>
                   <input
                     type="number"
                     value={p.stars || 0}
@@ -216,12 +216,12 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
                       pCopy[i] = { ...p, stars: Number(e.target.value) }
                       updateField('projects', pCopy)
                     }}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-2.5 text-sm text-white"
+                    className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Description</label>
+                <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Description</label>
                 <textarea
                   maxLength={80}
                   value={p.description || ''}
@@ -230,12 +230,12 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
                     pCopy[i] = { ...p, description: e.target.value }
                     updateField('projects', pCopy)
                   }}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-2.5 text-sm text-white"
+                  className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">GitHub URL</label>
+                  <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">GitHub URL</label>
                   <URLInput
                     value={p.github_url || ''}
                     onChange={url => {
@@ -251,7 +251,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Live URL</label>
+                  <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Live URL</label>
                   <input
                     type="url"
                     value={p.live_url || ''}
@@ -260,7 +260,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
                       pCopy[i] = { ...p, live_url: e.target.value }
                       updateField('projects', pCopy)
                     }}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-2.5 text-sm text-white focus:outline-none"
+                    className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
                   />
                 </div>
               </div>
@@ -274,7 +274,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
                 { name: 'Untitled Project', description: '', stars: 0, github_url: '', live_url: '', tech: [] }
               ])
             }}
-            className="w-full p-4 border border-dashed border-white/10 rounded-3xl hover:bg-white/5 transition-colors text-xs font-black uppercase tracking-widest text-white/60 flex items-center justify-center gap-2"
+            className="w-full p-4 bg-white border border-dashed border-[#E5D5C4] rounded-[12px] hover:bg-[#FDF6EC] transition-all text-xs font-black uppercase tracking-widest text-[#C1440E] flex items-center justify-center gap-2"
           >
             <Plus size={16} /> Add another project
           </button>
@@ -283,10 +283,10 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
 
       {/* SECTION: ACHIEVEMENTS */}
       <section className="space-y-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/90">Section 5: Achievements</h3>
+        <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 5: Achievements</h3>
         <div className="space-y-4">
           {(data.achievements || []).map((ach: any, i: number) => (
-            <div key={i} className="p-4 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-4 relative">
+            <div key={i} className="p-4 bg-white border border-[#E5D5C4] rounded-[12px] flex items-center gap-4 relative shadow-sm">
               <EmojiPicker
                 value={ach.icon || '🏆'}
                 onChange={emoji => {
@@ -304,7 +304,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
                   achCopy[i] = { ...ach, label: e.target.value }
                   updateField('achievements', achCopy)
                 }}
-                className="flex-1 bg-transparent border-0 outline-none p-1 text-sm text-white"
+                className="flex-1 bg-transparent border-0 outline-none p-1 text-sm text-[#1A1A1A] focus:outline-none placeholder:text-[#8C8276]"
               />
               <button
                 type="button"
@@ -313,7 +313,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
                   achCopy.splice(i, 1)
                   updateField('achievements', achCopy)
                 }}
-                className="text-red-500 hover:text-red-400"
+                className="text-red-500 hover:text-red-600 transition-colors"
               >
                 <Trash2 size={16} />
               </button>
@@ -327,7 +327,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner }: DeveloperFormPro
                 { icon: '🏆', label: 'Hackathon Winner' }
               ])
             }}
-            className="w-full p-3 border border-dashed border-white/10 rounded-2xl text-xs font-black uppercase opacity-60 flex items-center justify-center gap-2"
+            className="w-full p-3 bg-white border border-dashed border-[#E5D5C4] rounded-[12px] text-xs font-black uppercase text-[#C1440E] flex items-center justify-center gap-2 hover:bg-[#FDF6EC] transition-all"
           >
             <Plus size={14} /> Add an achievement
           </button>
