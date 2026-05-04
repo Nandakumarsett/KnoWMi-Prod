@@ -160,7 +160,7 @@ export default function IdentitySetup() {
             <ArrowLeft size={20} className="text-orange-500" /> Go Back
           </button>
           <div className="flex items-center gap-2">
-             <img src="/BrandKit.png" alt="Logo" className="w-7 h-7 rounded-lg object-cover" />
+             <img src="/favicon.png" alt="Logo" className="w-7 h-7 rounded-lg object-cover" />
              <span className="text-xs font-black uppercase tracking-[0.3em] opacity-40">Identity Studio</span>
           </div>
         </div>
@@ -195,21 +195,12 @@ export default function IdentitySetup() {
               </div>
             </div>
 
-            {/* Persona Tabs */}
-            <div className="flex flex-wrap gap-2 bg-[#F0E0CC]/40 border border-[#F0E0CC] p-2 rounded-[28px]">
-              {PERSONAS.map(p => (
-                <button
-                  key={p.id}
-                  onClick={() => handlePersonaChange(p.id)}
-                  className={`flex-1 min-w-[120px] py-3.5 px-4 rounded-2xl text-xs font-black uppercase tracking-widest text-center transition-all ${
-                    persona === p.id 
-                      ? 'bg-orange-500 text-white shadow-xl scale-[1.02]' 
-                      : 'bg-transparent text-[#1A0A00]/50 hover:bg-[#F0E0CC]/80 hover:text-[#1A0A00]'
-                  }`}
-                >
-                  {p.label}
-                </button>
-              ))}
+            {/* Active Persona Indicator */}
+            <div className="flex items-center gap-3 bg-[#F0E0CC]/40 border border-[#F0E0CC] p-4 rounded-[12px]">
+              <span className="text-xs font-black uppercase tracking-widest text-[#5C5246]">Active Persona:</span>
+              <span className="px-3 py-1 bg-orange-500 text-white text-xs font-black uppercase tracking-wider rounded-[8px] select-none shadow-sm">
+                {PERSONAS.find(p => p.id === persona)?.label || persona.toUpperCase()}
+              </span>
             </div>
 
             {/* Main Data Forms */}
