@@ -87,6 +87,18 @@ export default function IdentitySetup() {
 
   // Change Persona type and switch its data instantly
   const handlePersonaChange = async (newPersona: string) => {
+    const configuredKeys = profile?.persona_data 
+      ? Object.keys(profile.persona_data).filter(k => PERSONAS.some(p => p.id === k)) 
+      : []
+
+    const maxPersonas = (profile?.tier === 'Creator' || profile?.tier === 'Pro') ? 3 : (profile?.tier === 'Starter' ? 1 : 6)
+
+    const alreadyExists = configuredKeys.includes(newPersona) || profile?.persona === newPersona || profile?.persona_type === newPersona
+    if (!alreadyExists && configuredKeys.length >= maxPersonas) {
+      alert(`Your ${profile?.tier || 'Starter'} Plan allows up to ${maxPersonas} persona profile(s). Please upgrade to unlock more!`)
+      return
+    }
+
     setSearchParams({ persona: newPersona })
     setPersona(newPersona)
     const nextData = profile?.persona_data?.[newPersona] || {}
@@ -166,11 +178,11 @@ export default function IdentitySetup() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0d1117] text-white font-sans selection:bg-orange-500/30 select-none pb-20">
+    <div className="min-h-screen bg-[#FDF6EE] text-[#1A0A00] font-sans selection:bg-orange-500/30 select-none pb-20">
       {/* Header bar */}
-      <header className="fixed top-0 w-full z-50 bg-[#161b22]/80 border-b border-white/5 px-8 py-4 backdrop-blur-md">
+      <header className="fixed top-0 w-full z-50 bg-[#FDF6EE]/80 border-b border-[#F0E0CC] px-8 py-4 backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#1A0A00] hover:text-orange-500 transition-all">
             <ArrowLeft size={20} className="text-orange-500" /> Go Back
           </button>
           <div className="flex items-center gap-2">
@@ -188,18 +200,29 @@ export default function IdentitySetup() {
           <div className="lg:col-span-7 space-y-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-4xl font-black tracking-tight flex items-center gap-2">
+                <h1 className="text-4xl font-black tracking-tight flex items-center gap-2 text-[#1A0A00]">
                    Live Identity Builder
                 </h1>
                 <p className="text-xs text-neutral-500 font-bold uppercase tracking-widest mt-2 flex items-center gap-2">
                   Choose a persona tab to build its specific profile data
                 </p>
               </div>
-              <SaveStatus status={saveStatus} />
+              <div className="flex flex-col sm:flex-row gap-3 items-center">
+                <SaveStatus status={saveStatus} />
+                <button 
+                  onClick={() => {
+                    save(formData)
+                    alert('Changes saved successfully!')
+                  }}
+                  className="px-5 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-orange-500/20"
+                >
+                  Save Changes
+                </button>
+              </div>
             </div>
 
             {/* Persona Tabs */}
-            <div className="flex flex-wrap gap-2 bg-white/5 border border-white/10 p-2 rounded-[28px]">
+            <div className="flex flex-wrap gap-2 bg-[#F0E0CC]/40 border border-[#F0E0CC] p-2 rounded-[28px]">
               {PERSONAS.map(p => (
                 <button
                   key={p.id}
@@ -207,7 +230,7 @@ export default function IdentitySetup() {
                   className={`flex-1 min-w-[120px] py-3.5 px-4 rounded-2xl text-xs font-black uppercase tracking-widest text-center transition-all ${
                     persona === p.id 
                       ? 'bg-orange-500 text-white shadow-xl scale-[1.02]' 
-                      : 'bg-transparent text-white/50 hover:bg-white/5 hover:text-white'
+                      : 'bg-transparent text-[#1A0A00]/50 hover:bg-[#F0E0CC]/80 hover:text-[#1A0A00]'
                   }`}
                 >
                   {p.label}
@@ -216,7 +239,7 @@ export default function IdentitySetup() {
             </div>
 
             {/* Main Data Forms */}
-            <div className="border border-white/5 bg-white/[0.02] p-6 sm:p-10 rounded-[40px] shadow-2xl">
+            <div className="border border-[#F0E0CC] bg-white p-6 sm:p-10 rounded-[40px] shadow-xl">
               {['developer', 'dev'].includes(persona) && <DeveloperForm data={formData} onChange={handleFormChange} isOwner />}
               {persona === 'student' && <StudentForm data={formData} onChange={handleFormChange} />}
               {persona === 'creator' && <CreatorForm data={formData} onChange={handleFormChange} />}
