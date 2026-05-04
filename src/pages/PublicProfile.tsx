@@ -4,7 +4,7 @@ import { fetchProfile } from '../lib/profile/fetch-profile'
 import { ProfileData } from '../types/profile'
 import { PersonaRouter } from '../components/profile/PersonaRouter'
 import ProfileViewTracker from '../components/analytics/ProfileViewTracker'
-import { Sparkles, X, UserPlus, Share2 } from 'lucide-react'
+import { Sparkles, X, UserPlus, Share2, ArrowLeft } from 'lucide-react'
 import { ProfileCTAs } from '../components/profile/shared/ProfileCTAs'
 import { PulseBar } from '../components/profile/shared/PulseBar'
 import { VerifiedBadge } from '../components/profile/shared/VerifiedBadge'
@@ -111,6 +111,7 @@ export default function PublicProfile() {
   const pAlias = (profile.persona || '').toLowerCase()
   const activeConfig = personaConfigs[pAlias] || personaConfigs.developer
   const accentColor = activeConfig.theme.accent
+  const isOwnerOfProfile = user && user.id === profile.user_id
 
   // Mobile View
   if (!isDesktop) {
@@ -126,9 +127,21 @@ export default function PublicProfile() {
                {profile.first_name ? `${profile.first_name}` : "KnoWMi"}
              </span>
           </div>
-          <button onClick={() => navigate('/dashboard')} className="p-2 hover:bg-white/5 rounded-xl transition-colors">
-            <X size={18} />
-          </button>
+          {isOwnerOfProfile ? (
+            <button 
+              onClick={() => navigate('/dashboard')} 
+              className="px-3 py-1.5 hover:bg-white/5 rounded-xl transition-all border border-white/10 flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-orange-400 select-none shrink-0"
+            >
+              <ArrowLeft size={14} /> Back
+            </button>
+          ) : (
+            <button 
+              onClick={() => navigate('/')} 
+              className="p-2 hover:bg-white/5 rounded-xl transition-all border border-white/10 text-neutral-400 select-none flex items-center justify-center shrink-0"
+            >
+              <X size={18} />
+            </button>
+          )}
         </header>
 
         {/* Small Button to view QR on Mobile */}
@@ -199,9 +212,21 @@ export default function PublicProfile() {
                {profile.first_name ? `${profile.first_name}'s Profile` : "Nanda's Profile"}
              </span>
           </div>
-          <button onClick={() => navigate('/dashboard')} className="p-2 hover:bg-white/5 rounded-xl transition-colors">
-            <X size={20} />
-          </button>
+          {isOwnerOfProfile ? (
+            <button 
+              onClick={() => navigate('/dashboard')} 
+              className="px-4 py-2 hover:bg-white/5 rounded-xl transition-all border border-white/10 flex items-center gap-2 text-xs font-black uppercase tracking-wider text-orange-400 select-none shrink-0"
+            >
+              <ArrowLeft size={16} /> Back to Dashboard
+            </button>
+          ) : (
+            <button 
+              onClick={() => navigate('/')} 
+              className="p-2 hover:bg-white/5 rounded-xl transition-all border border-white/10 text-neutral-400 select-none flex items-center justify-center shrink-0"
+            >
+              <X size={20} />
+            </button>
+          )}
         </div>
       </header>
 
