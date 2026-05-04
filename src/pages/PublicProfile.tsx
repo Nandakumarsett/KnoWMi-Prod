@@ -120,7 +120,7 @@ export default function PublicProfile() {
         <ProfileViewTracker profileId={profile.id} />
         
         {/* Top Header */}
-        <header className="fixed top-0 w-full z-50 bg-[#161b22]/80 border-b border-white/5 px-6 py-3 backdrop-blur-md flex justify-between items-center">
+        <header className="fixed top-0 w-full z-[120] bg-[#161b22]/80 border-b border-white/5 px-6 py-3 backdrop-blur-md flex justify-between items-center">
           <div className="flex items-center gap-2">
              <img src="/logo-square.png" alt="Logo" className="w-6 h-6 rounded-lg object-cover" />
              <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-50">
@@ -204,7 +204,7 @@ export default function PublicProfile() {
     <div className="min-h-screen bg-[#0d1117] text-white font-sans selection:bg-orange-500/30">
       <ProfileViewTracker profileId={profile.id} />
       
-      <header className="fixed top-0 w-full z-50 bg-[#161b22]/80 border-b border-white/5 px-8 py-4 backdrop-blur-md">
+      <header className="fixed top-0 w-full z-[120] bg-[#161b22]/80 border-b border-white/5 px-8 py-4 backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
              <img src="/logo-square.png" alt="Logo" className="w-8 h-8 rounded-lg object-cover" />
