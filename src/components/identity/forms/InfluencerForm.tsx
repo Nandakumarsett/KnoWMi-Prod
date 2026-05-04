@@ -16,21 +16,21 @@ export function InfluencerForm({ data = {}, onChange }: InfluencerFormProps) {
     <div className="space-y-12">
       {/* SECTION: YOUR IDENTITY */}
       <section className="space-y-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/90">Section 1: Your Identity</h3>
-        <div className="bg-white/5 p-6 rounded-[28px] border border-white/10 space-y-4">
+        <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 1: Your Identity</h3>
+        <div className="bg-white p-6 rounded-[12px] border border-[#E5D5C4] shadow-sm space-y-4">
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Creator Tagline</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Creator Tagline</label>
             <input
               type="text"
               maxLength={80}
               value={data.tagline || ''}
               onChange={e => updateField('tagline', e.target.value)}
               placeholder="e.g. Creating content that connects"
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+              className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#8C8276] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
             />
           </div>
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Niche / Categories</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Niche / Categories</label>
             <TagInput
               value={data.categories || []}
               onChange={tags => updateField('categories', tags)}
@@ -42,26 +42,26 @@ export function InfluencerForm({ data = {}, onChange }: InfluencerFormProps) {
 
       {/* SECTION: AUDIENCE METRICS */}
       <section className="space-y-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/90">Section 2: Audience Reach</h3>
-        <div className="grid grid-cols-2 gap-4 bg-white/5 p-6 rounded-[28px] border border-white/10">
+        <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 2: Audience Reach</h3>
+        <div className="grid grid-cols-2 gap-4 bg-white p-6 rounded-[12px] border border-[#E5D5C4] shadow-sm">
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Total Combined Reach</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Total Combined Reach</label>
             <input
               type="text"
               value={data.total_reach || ''}
               onChange={e => updateField('total_reach', e.target.value)}
               placeholder="e.g. 450K"
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+              className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
             />
           </div>
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Avg Engagement Rate</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Avg Engagement Rate</label>
             <input
               type="text"
               value={data.avg_engagement || ''}
               onChange={e => updateField('avg_engagement', e.target.value)}
               placeholder="e.g. 6.2%"
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+              className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
             />
           </div>
         </div>
@@ -69,10 +69,10 @@ export function InfluencerForm({ data = {}, onChange }: InfluencerFormProps) {
 
       {/* SECTION: PLATFORMS */}
       <section className="space-y-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/90">Section 3: Platforms</h3>
+        <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 3: Platforms</h3>
         <div className="space-y-4">
           {(data.platforms || []).map((p: any, i: number) => (
-            <div key={i} className="p-5 rounded-[28px] bg-white/5 border border-white/10 space-y-4 relative">
+            <div key={i} className="p-5 bg-white border border-[#E5D5C4] rounded-[12px] shadow-sm space-y-4 relative">
               <button
                 type="button"
                 onClick={() => {
@@ -80,13 +80,13 @@ export function InfluencerForm({ data = {}, onChange }: InfluencerFormProps) {
                   copy.splice(i, 1)
                   updateField('platforms', copy)
                 }}
-                className="absolute top-6 right-6 text-red-500"
+                className="absolute top-6 right-6 text-red-500 hover:text-red-600 transition-colors"
               >
                 <Trash2 size={16} />
               </button>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Platform Name</label>
+                  <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Platform Name</label>
                   <select
                     value={p.platform || ''}
                     onChange={e => {
@@ -94,7 +94,7 @@ export function InfluencerForm({ data = {}, onChange }: InfluencerFormProps) {
                       copy[i] = { ...p, platform: e.target.value }
                       updateField('platforms', copy)
                     }}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white outline-none"
+                    className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all bg-[image:none]"
                   >
                     <option value="">Select Platform</option>
                     <option value="instagram">Instagram</option>
@@ -103,7 +103,7 @@ export function InfluencerForm({ data = {}, onChange }: InfluencerFormProps) {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Followers / Count</label>
+                  <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Followers / Count</label>
                   <input
                     type="text"
                     value={p.followers || ''}
@@ -113,12 +113,12 @@ export function InfluencerForm({ data = {}, onChange }: InfluencerFormProps) {
                       updateField('platforms', copy)
                     }}
                     placeholder="e.g. 128K"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white"
+                    className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#8C8276] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Profile URL</label>
+                <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Profile URL</label>
                 <input
                   type="url"
                   value={p.url || ''}
@@ -128,7 +128,7 @@ export function InfluencerForm({ data = {}, onChange }: InfluencerFormProps) {
                     updateField('platforms', copy)
                   }}
                   placeholder="https://..."
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+                  className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#8C8276] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
                 />
               </div>
             </div>
@@ -141,7 +141,7 @@ export function InfluencerForm({ data = {}, onChange }: InfluencerFormProps) {
                 { platform: 'instagram', url: '', followers: '128K', metric_label: 'followers' }
               ])
             }}
-            className="w-full p-4 border border-dashed border-white/10 rounded-[28px] hover:bg-white/5 transition-colors text-xs font-black uppercase opacity-60 flex items-center justify-center gap-2"
+            className="w-full p-4 bg-white border border-dashed border-[#E5D5C4] rounded-[12px] hover:bg-[#FDF6EC] transition-all text-xs font-black uppercase text-[#C1440E] flex items-center justify-center gap-2"
           >
             <Plus size={16} /> Add a platform
           </button>
@@ -150,26 +150,26 @@ export function InfluencerForm({ data = {}, onChange }: InfluencerFormProps) {
 
       {/* SECTION: COLLAB PREFERENCES */}
       <section className="space-y-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/90">Section 4: Collab Preferences</h3>
-        <div className="bg-white/5 p-6 rounded-[28px] border border-white/10 space-y-4">
+        <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 4: Collab Preferences</h3>
+        <div className="bg-white p-6 rounded-[12px] border border-[#E5D5C4] shadow-sm space-y-4">
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Collab Types / Open To</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Collab Types / Open To</label>
             <input
               type="text"
               value={data.collab_types || ''}
               onChange={e => updateField('collab_types', e.target.value)}
               placeholder="e.g. Brand deals · UGC"
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+              className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
             />
           </div>
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Campaign Formats / Scope</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Campaign Formats / Scope</label>
             <input
               type="text"
               value={data.collab_formats || ''}
               onChange={e => updateField('collab_formats', e.target.value)}
               placeholder="e.g. Reviews · Events · Reels · Campaigns"
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+              className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
             />
           </div>
         </div>
