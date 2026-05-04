@@ -4,11 +4,11 @@ import { computeCompletionScore } from '../identity/completion-score';
 export interface InsightContext {
   profile: {
     displayName: string;
-    firstName: string;              // extracted from displayName.split(' ')[0]
+    firstName: string;
     persona: PersonaType;
     tier: string;
-    completionScore: number;        // 0–100
-    incompleteSections: string[];   // sorted by impact points desc
+    completionScore: number;
+    incompleteSections: string[];
     streakDays: number;
   };
 
@@ -16,40 +16,40 @@ export interface InsightContext {
     totalViews: number;
     uniqueVisitors: number;
     totalQRScans: number;
-    qrScanRate: number;             // 0–100
-    repeatScore: number;            // 0–100
+    qrScanRate: number;
+    repeatScore: number;
     todayScans: number;
     yesterdayScans: number;
-    thisWeekScans: number;          // Mon–today
-    lastWeekScans: number;          // previous full Mon–Sun
-    weekSparkline: number[];        // [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
-    peakHour: number | null;        // 0–23
-    peakDay: string | null;         // "Thursday"
+    thisWeekScans: number;
+    lastWeekScans: number;
+    weekSparkline: number[];
+    peakHour: number | null;
+    peakDay: string | null;
     topCities: Array<{ city: string; count: number; countryCode: string }>;
     totalCities: number;
-    newCityToday: string | null;    // city that appeared for first time today
+    newCityToday: string | null;
     totalLinkTaps: number;
     topLink: { label: string; clicks: number } | null;
-    linkTapRate: number;            // link taps / total views * 100
+    linkTapRate: number;
     bestDay: { date: string; count: number } | null;
     streak: number;
-    liveNow: number;                // scans in last 5 minutes
+    liveNow: number;
     scansThisHour: number;
   };
 
   benchmarks: {
     platformAvgViews: number;
-    userPercentile: number;         // 0–100, higher = better
+    userPercentile: number;
     leaderboardRank: number | null;
     aboveAverage: boolean;
   };
 
   time: {
-    dayOfWeek: string;              // "Tuesday"
-    hour: number;                   // 0–23 current IST hour
+    dayOfWeek: string;
+    hour: number;
     timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
     isWeekend: boolean;
-    weekNumber: number;             // 1–52
+    weekNumber: number;
   };
 }
 
@@ -60,228 +60,197 @@ export async function buildInsightContext(
   supabase: SupabaseClient
 ): Promise<InsightContext> {
 
-  const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-  const today = now.toISOString().slice(0, 10);
-  const yesterday = new Date(now.getTime() - 86400000).toISOString().slice(0, 10);
+  const nowLocal = new Date();
+  const todayLocalStr = nowLocal.toISOString().slice(0, 10);
 
-  // Week boundaries (Mon = start)
-  const dayOfWeekNum = (now.getDay() + 6) % 7; // Mon=0, Sun=6
-  const thisMonday = new Date(now);
-  thisMonday.setDate(now.getDate() - dayOfWeekNum);
-  const lastMonday = new Date(thisMonday);
-  lastMonday.setDate(thisMonday.getDate() - 7);
-  const lastSunday = new Date(thisMonday);
-  lastSunday.setDate(thisMonday.getDate() - 1);
+  const yesterdayDate = new Date(nowLocal.getTime() - 86400000);
+  const yesterdayLocalStr = yesterdayDate.toISOString().slice(0, 10);
 
-  // Run all queries in parallel
-  const [
-    profileResult,
-    totalViewsResult,
-    uniqueVisitorsResult,
-    totalQRResult,
-    todayViewsResult,
-    yesterdayViewsResult,
-    thisWeekResult,
-    lastWeekResult,
-    weekDailyResult,
-    peakHourResult,
-    peakDayResult,
-    topCitiesResult,
-    newCityResult,
-    linkTapsResult,
-    topLinkResult,
-    bestDayResult,
-    streakResult,
-    liveNowResult,
-    scansThisHourResult,
-    leaderboardResult,
-  ] = await Promise.allSettled([
-
-    // Profile & persona data (all in one)
-    supabase.from('profiles')
-      .select('*')
-      .eq('id', profileId).single(),
-
-    // Total views all time
-    supabase.from('profile_view_events')
-      .select('id', { count: 'exact', head: true })
-      .eq('profile_id', profileId),
-
-    // Unique visitors (distinct fingerprints)
-    supabase.rpc('count_distinct_visitors', { p_profile_id: profileId }),
-
-    // Total QR scans
-    supabase.from('qr_scan_events')
-      .select('id', { count: 'exact', head: true })
-      .eq('profile_id', profileId),
-
-    // Today's views
-    supabase.from('profile_view_events')
-      .select('id', { count: 'exact', head: true })
-      .eq('profile_id', profileId)
-      .gte('viewed_at', `${today}T00:00:00+05:30`),
-
-    // Yesterday's views
-    supabase.from('profile_view_events')
-      .select('id', { count: 'exact', head: true })
-      .eq('profile_id', profileId)
-      .gte('viewed_at', `${yesterday}T00:00:00+05:30`)
-      .lt('viewed_at', `${today}T00:00:00+05:30`),
-
-    // This week's views
-    supabase.from('profile_view_events')
-      .select('id', { count: 'exact', head: true })
-      .eq('profile_id', profileId)
-      .gte('viewed_at', thisMonday.toISOString()),
-
-    // Last week's views
-    supabase.from('profile_view_events')
-      .select('id', { count: 'exact', head: true })
-      .eq('profile_id', profileId)
-      .gte('viewed_at', lastMonday.toISOString())
-      .lte('viewed_at', lastSunday.toISOString()),
-
-    // Daily breakdown for sparkline (last 7 days)
-    supabase.from('profile_view_events')
-      .select('viewed_at')
-      .eq('profile_id', profileId)
-      .gte('viewed_at', new Date(now.getTime() - 6 * 86400000).toISOString()),
-
-    // Peak hour
-    supabase.rpc('get_peak_scan_hour', { p_profile_id: profileId }),
-
-    // Peak day of week
-    supabase.rpc('get_peak_scan_day', { p_profile_id: profileId }),
-
-    // Top cities
-    supabase.from('qr_scan_events')
-      .select('city, country_code')
-      .eq('profile_id', profileId)
-      .not('city', 'is', null),
-
-    // New city today (city that never appeared before today)
-    supabase.rpc('get_new_city_today', { p_profile_id: profileId }),
-
-    // Total link taps
-    supabase.from('link_click_events')
-      .select('id', { count: 'exact', head: true })
-      .eq('profile_id', profileId),
-
-    // Top link
-    supabase.from('link_click_events')
-      .select('link_label')
-      .eq('profile_id', profileId)
-      .order('clicked_at', { ascending: false })
-      .limit(100),
-
-    // Best single day
-    supabase.rpc('get_best_scan_day', { p_profile_id: profileId }),
-
-    // Streak
-    supabase.rpc('get_current_streak', { p_profile_id: profileId }),
-
-    // Live now (last 5 min)
-    supabase.from('profile_view_events')
-      .select('id', { count: 'exact', head: true })
-      .eq('profile_id', profileId)
-      .gte('viewed_at', new Date(now.getTime() - 5 * 60 * 1000).toISOString()),
-
-    // Scans this hour
-    supabase.from('profile_view_events')
-      .select('id', { count: 'exact', head: true })
-      .eq('profile_id', profileId)
-      .gte('viewed_at', new Date(now.getTime() - 60 * 60 * 1000).toISOString()),
-
-    // Leaderboard rank & score
-    supabase.from('profile_scores')
-      .select('rank, percentile')
-      .eq('profile_id', profileId)
-      .single(),
+  // Fetch all events for this specific profile
+  const [profileResult, viewsResult, scansResult, linksResult] = await Promise.all([
+    supabase.from('profiles').select('*').eq('id', profileId).single(),
+    supabase.from('profile_view_events').select('*').eq('profile_id', profileId),
+    supabase.from('qr_scan_events').select('*').eq('profile_id', profileId),
+    supabase.from('link_click_events').select('*').eq('profile_id', profileId)
   ]);
 
-  // Safe extractors
-  const safe = <T>(result: PromiseSettledResult<any>, extract: (v: any) => T, fallback: T): T => {
-    if (result.status === 'fulfilled' && result.value && !result.value.error) {
-      try { return extract(result.value); } catch { return fallback; }
-    }
-    return fallback;
-  };
+  const profileDataObj = profileResult.data || { display_name: 'Friend', persona: 'creator', tier: 'Starter', persona_data: {} };
+  const views = viewsResult.data || [];
+  const scans = scansResult.data || [];
+  const links = linksResult.data || [];
 
-  const profileDataObj = safe(profileResult, v => v.data, { display_name: 'Friend', persona: 'creator', tier: 'Starter', persona_data: {} });
   const displayName = profileDataObj.display_name || 'Friend';
   const firstName = (displayName.split(' ')[0]) || 'Friend';
   const persona: PersonaType = (profileDataObj.persona || 'creator').toLowerCase() as PersonaType;
   const tier = profileDataObj.tier || 'Starter';
   const personaData = profileDataObj.persona_data || {};
 
-  const totalViews      = safe(totalViewsResult, v => v.count ?? 0, 0);
-  const uniqueVisitors  = safe(uniqueVisitorsResult, v => v.data ?? 0, 0);
-  const totalQRScans    = safe(totalQRResult, v => v.count ?? 0, 0);
-  const todayScans      = safe(todayViewsResult, v => v.count ?? 0, 0);
-  const yesterdayScans  = safe(yesterdayViewsResult, v => v.count ?? 0, 0);
-  const thisWeekScans   = safe(thisWeekResult, v => v.count ?? 0, 0);
-  const lastWeekScans   = safe(lastWeekResult, v => v.count ?? 0, 0);
-  const peakHour        = safe(peakHourResult, v => v.data, null);
-  const peakDay         = safe(peakDayResult, v => v.data, null);
-  const bestDay         = safe(bestDayResult, v => v.data, null);
-  const streak          = safe(streakResult, v => v.data ?? 0, 0);
-  const liveNow         = safe(liveNowResult, v => v.count ?? 0, 0);
-  const scansThisHour   = safe(scansThisHourResult, v => v.count ?? 0, 0);
-  const totalLinkTaps   = safe(linkTapsResult, v => v.count ?? 0, 0);
-  const newCityToday    = safe(newCityResult, v => v.data, null);
-  const rank            = safe(leaderboardResult, v => v.data?.rank ?? null, null);
-  const percentile      = safe(leaderboardResult, v => v.data?.percentile ?? 50, 50);
+  // Analytics computation
+  const totalViews = views.length;
+
+  // Calculate unique visitors using visitor_fp or id fallback exactly like vibe stats
+  const uniqueFps = new Set();
+  views.forEach((v: any) => uniqueFps.add(v.visitor_fp || v.id));
+  scans.forEach((s: any) => uniqueFps.add(s.scanner_fp || s.id));
+  const uniqueVisitors = uniqueFps.size;
+
+  const totalQRScans = scans.length;
+
+  // Today scans
+  const todayScans = views.filter((v: any) => {
+    if (!v.viewed_at) return false;
+    return new Date(v.viewed_at).toISOString().slice(0, 10) === todayLocalStr;
+  }).length;
+
+  // Yesterday scans
+  const yesterdayScans = views.filter((v: any) => {
+    if (!v.viewed_at) return false;
+    return new Date(v.viewed_at).toISOString().slice(0, 10) === yesterdayLocalStr;
+  }).length;
+
+  // Week boundaries (Monday start)
+  const dayOfWeekNum = (nowLocal.getDay() + 6) % 7; // Mon=0, Sun=6
+  const thisMonday = new Date(nowLocal);
+  thisMonday.setDate(nowLocal.getDate() - dayOfWeekNum);
+  thisMonday.setHours(0, 0, 0, 0);
+
+  const thisWeekScans = views.filter((v: any) => {
+    if (!v.viewed_at) return false;
+    return new Date(v.viewed_at) >= thisMonday;
+  }).length;
+
+  const lastMonday = new Date(thisMonday);
+  lastMonday.setDate(thisMonday.getDate() - 7);
+  const lastSunday = new Date(thisMonday);
+  lastSunday.setMilliseconds(-1);
+
+  const lastWeekScans = views.filter((v: any) => {
+    if (!v.viewed_at) return false;
+    const d = new Date(v.viewed_at);
+    return d >= lastMonday && d <= lastSunday;
+  }).length;
+
+  const liveNow = views.filter((v: any) => {
+    if (!v.viewed_at) return false;
+    return nowLocal.getTime() - new Date(v.viewed_at).getTime() < 5 * 60 * 1000;
+  }).length;
+
+  const scansThisHour = views.filter((v: any) => {
+    if (!v.viewed_at) return false;
+    return nowLocal.getTime() - new Date(v.viewed_at).getTime() < 60 * 60 * 1000;
+  }).length;
 
   // Week sparkline
-  const weekRows = safe(weekDailyResult, v => v.data ?? [], []);
   const weekSparkline = Array(7).fill(0);
-  for (const row of weekRows) {
-    if (!row.viewed_at) continue;
-    const d = new Date(row.viewed_at);
-    const daysAgo = Math.floor((now.getTime() - d.getTime()) / 86400000);
-    if (daysAgo >= 0 && daysAgo <= 6) weekSparkline[6 - daysAgo]++;
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(nowLocal);
+    d.setDate(nowLocal.getDate() - (6 - i));
+    const ds = d.toISOString().slice(0, 10);
+    weekSparkline[i] = views.filter((v: any) => v.viewed_at && new Date(v.viewed_at).toISOString().slice(0, 10) === ds).length;
   }
 
-  // City aggregation
-  const cityRows = safe(topCitiesResult, v => v.data ?? [], []);
+  // Peak hour
+  const hourMap: Record<number, number> = {};
+  views.forEach((v: any) => {
+    if (!v.viewed_at) return;
+    const h = new Date(v.viewed_at).getHours();
+    hourMap[h] = (hourMap[h] || 0) + 1;
+  });
+  const topHourEntry = Object.entries(hourMap).sort((a, b) => b[1] - a[1])[0];
+  const peakHour = topHourEntry ? Number(topHourEntry[0]) : null;
+
+  // Peak day
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const dayMap: Record<string, number> = {};
+  views.forEach((v: any) => {
+    if (!v.viewed_at) return;
+    const dStr = days[new Date(v.viewed_at).getDay()];
+    dayMap[dStr] = (dayMap[dStr] || 0) + 1;
+  });
+  const topDayEntry = Object.entries(dayMap).sort((a, b) => b[1] - a[1])[0];
+  const peakDay = topDayEntry ? topDayEntry[0] : null;
+
+  // City Aggregation
   const cityMap: Record<string, { count: number; countryCode: string }> = {};
-  for (const r of cityRows) {
-    if (!r.city) continue;
-    cityMap[r.city] = cityMap[r.city] ?? { count: 0, countryCode: r.country_code ?? 'IN' };
-    cityMap[r.city].count++;
-  }
+  scans.forEach((s: any) => {
+    if (!s.city || s.city === 'Unknown') return;
+    cityMap[s.city] = cityMap[s.city] ?? { count: 0, countryCode: s.country_code || s.country || 'IN' };
+    cityMap[s.city].count++;
+  });
   const topCities = Object.entries(cityMap)
     .sort((a, b) => b[1].count - a[1].count)
     .slice(0, 5)
     .map(([city, v]) => ({ city, count: v.count, countryCode: v.countryCode }));
 
-  // Top link
-  const linkRows = safe(topLinkResult, v => v.data ?? [], []);
-  const linkCounts: Record<string, number> = {};
-  for (const r of linkRows) {
-    if (r.link_label) {
-      linkCounts[r.link_label] = (linkCounts[r.link_label] ?? 0) + 1;
+  // New city today
+  const pastCities = new Set();
+  scans.forEach((s: any) => {
+    if (!s.city || s.city === 'Unknown') return;
+    const ds = s.scanned_at || s.created_at || s.viewed_at;
+    if (ds && new Date(ds).toISOString().slice(0, 10) < todayLocalStr) {
+      pastCities.add(s.city);
+    }
+  });
+  let newCityToday: string | null = null;
+  scans.forEach((s: any) => {
+    if (!s.city || s.city === 'Unknown') return;
+    const ds = s.scanned_at || s.created_at || s.viewed_at;
+    if (ds && new Date(ds).toISOString().slice(0, 10) === todayLocalStr && !pastCities.has(s.city)) {
+      newCityToday = s.city;
+    }
+  });
+
+  // Best day
+  const dailyViews: Record<string, number> = {};
+  views.forEach((v: any) => {
+    if (!v.viewed_at) return;
+    const d = new Date(v.viewed_at).toISOString().slice(0, 10);
+    dailyViews[d] = (dailyViews[d] || 0) + 1;
+  });
+  const bestDayEntry = Object.entries(dailyViews).sort((a, b) => b[1] - a[1])[0];
+  const bestDay = bestDayEntry ? { date: bestDayEntry[0], count: bestDayEntry[1] } : null;
+
+  // Streak
+  let streak = 0;
+  const daysSet = new Set(Object.keys(dailyViews));
+  let checkDate = new Date(nowLocal);
+  while (true) {
+    const checkStr = checkDate.toISOString().slice(0, 10);
+    if (daysSet.has(checkStr)) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    } else {
+      break;
     }
   }
+
+  // Links
+  const totalLinkTaps = links.length;
+  const linkCounts: Record<string, number> = {};
+  links.forEach((l: any) => {
+    if (l.link_label || l.label) {
+      const label = l.link_label || l.label;
+      linkCounts[label] = (linkCounts[label] || 0) + 1;
+    }
+  });
   const topLinkEntry = Object.entries(linkCounts).sort((a, b) => b[1] - a[1])[0];
   const topLink = topLinkEntry ? { label: topLinkEntry[0], clicks: topLinkEntry[1] } : null;
 
-  // Completion score (takes persona and data)
+  // Completion Score
   const { score: completionScore, incomplete: incompleteSections } =
     computeCompletionScore(persona, personaData);
 
-  // Platform benchmarks
+  // Benchmarks
   const PERSONA_BENCHMARKS: Record<string, number> = {
     developer: 45, student: 38, creator: 62, gamer: 41, fitness: 35, influencer: 88
   };
   const platformAvgViews = PERSONA_BENCHMARKS[persona] ?? 50;
   const aboveAverage = totalViews >= platformAvgViews;
 
-  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const timeOfDay =
-    now.getHours() < 12 ? 'morning' :
-    now.getHours() < 17 ? 'afternoon' :
-    now.getHours() < 21 ? 'evening' : 'night';
+    nowLocal.getHours() < 12 ? 'morning' :
+    nowLocal.getHours() < 17 ? 'afternoon' :
+    nowLocal.getHours() < 21 ? 'evening' : 'night';
 
   return {
     profile: {
@@ -294,26 +263,41 @@ export async function buildInsightContext(
       streakDays: streak,
     },
     analytics: {
-      totalViews, uniqueVisitors, totalQRScans,
+      totalViews,
+      uniqueVisitors,
+      totalQRScans,
       qrScanRate: totalViews > 0 ? Math.round((totalQRScans / totalViews) * 100) : 0,
       repeatScore: uniqueVisitors > 0 ? Math.round(((uniqueVisitors - (totalViews - uniqueVisitors)) / uniqueVisitors) * 100) : 0,
-      todayScans, yesterdayScans, thisWeekScans, lastWeekScans,
-      weekSparkline, peakHour, peakDay, topCities,
+      todayScans,
+      yesterdayScans,
+      thisWeekScans,
+      lastWeekScans,
+      weekSparkline,
+      peakHour,
+      peakDay,
+      topCities,
       totalCities: Object.keys(cityMap).length,
-      newCityToday, totalLinkTaps, topLink,
+      newCityToday,
+      totalLinkTaps,
+      topLink,
       linkTapRate: totalViews > 0 ? Math.round((totalLinkTaps / totalViews) * 100) : 0,
-      bestDay, streak, liveNow, scansThisHour,
+      bestDay,
+      streak,
+      liveNow,
+      scansThisHour,
     },
     benchmarks: {
-      platformAvgViews, userPercentile: percentile,
-      leaderboardRank: rank, aboveAverage,
+      platformAvgViews,
+      userPercentile: 50,
+      leaderboardRank: null,
+      aboveAverage,
     },
     time: {
-      dayOfWeek: days[now.getDay()],
-      hour: now.getHours(),
+      dayOfWeek: days[nowLocal.getDay()],
+      hour: nowLocal.getHours(),
       timeOfDay,
-      isWeekend: now.getDay() === 0 || now.getDay() === 6,
-      weekNumber: Math.ceil((now.getDate() + new Date(now.getFullYear(), now.getMonth(), 1).getDay()) / 7),
+      isWeekend: nowLocal.getDay() === 0 || nowLocal.getDay() === 6,
+      weekNumber: Math.ceil((nowLocal.getDate() + new Date(nowLocal.getFullYear(), nowLocal.getMonth(), 1).getDay()) / 7),
     },
   };
 }
