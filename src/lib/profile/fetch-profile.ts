@@ -50,6 +50,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
 
   return {
     id: profile.id,
+    user_id: profile.user_id || profile.id,
     username: profile.secure_slug || profile.first_name?.toLowerCase(),
     display_name: `${profile.first_name} ${profile.last_name || ''}`.trim(),
     first_name: profile.first_name,
