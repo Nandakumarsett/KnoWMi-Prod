@@ -17,31 +17,31 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
     <div className="space-y-12">
       {/* SECTION: IDENTITY */}
       <section className="space-y-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/90">Section 1: Identity</h3>
-        <div className="bg-white/5 p-6 rounded-[28px] border border-white/10 space-y-4">
+        <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 1: Identity</h3>
+        <div className="bg-white p-6 rounded-[12px] border border-[#E5D5C4] shadow-sm space-y-4">
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Fitness Tagline</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Fitness Tagline</label>
             <input
               type="text"
               maxLength={80}
               value={data.tagline || ''}
               onChange={e => updateField('tagline', e.target.value)}
               placeholder="e.g. Stronger every day"
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+              className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#8C8276] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
             />
           </div>
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Location</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Location</label>
             <input
               type="text"
               value={data.location || ''}
               onChange={e => updateField('location', e.target.value)}
               placeholder="e.g. Bengaluru"
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+              className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#8C8276] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
             />
           </div>
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Training Styles / Disciplines</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Training Styles / Disciplines</label>
             <TagInput
               value={data.disciplines || []}
               onChange={tags => updateField('disciplines', tags)}
@@ -53,33 +53,33 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
 
       {/* SECTION: STREAK & STATS */}
       <section className="space-y-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/90">Section 2: Streak & Stats</h3>
-        <div className="grid grid-cols-3 gap-3 bg-white/5 p-6 rounded-[28px] border border-white/10">
+        <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 2: Streak & Stats</h3>
+        <div className="grid grid-cols-3 gap-3 bg-white p-6 rounded-[12px] border border-[#E5D5C4] shadow-sm">
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Streak Days</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Streak Days</label>
             <input
               type="number"
               value={data.streak_days || 0}
               onChange={e => updateField('streak_days', Number(e.target.value))}
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white"
+              className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
             />
           </div>
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">PRs Count</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">PRs Count</label>
             <input
               type="number"
               value={data.prs_count || 0}
               onChange={e => updateField('prs_count', Number(e.target.value))}
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white"
+              className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
             />
           </div>
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Workouts Logged</label>
+            <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Workouts Logged</label>
             <input
               type="number"
               value={data.total_workouts || 0}
               onChange={e => updateField('total_workouts', Number(e.target.value))}
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white"
+              className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
             />
           </div>
         </div>
@@ -87,10 +87,10 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
 
       {/* SECTION: CURRENT GOALS */}
       <section className="space-y-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/90">Section 3: Current Goals</h3>
+        <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 3: Current Goals</h3>
         <div className="space-y-4">
           {(data.goals || []).map((goal: any, i: number) => (
-            <div key={i} className="p-5 rounded-[28px] bg-white/5 border border-white/10 space-y-4 relative">
+            <div key={i} className="p-5 bg-white border border-[#E5D5C4] rounded-[12px] shadow-sm space-y-4 relative">
               <button
                 type="button"
                 onClick={() => {
@@ -98,12 +98,12 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
                   copy.splice(i, 1)
                   updateField('goals', copy)
                 }}
-                className="absolute top-6 right-6 text-red-500"
+                className="absolute top-6 right-6 text-red-500 hover:text-red-600 transition-colors"
               >
                 <Trash2 size={16} />
               </button>
               <div>
-                <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Goal Name</label>
+                <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Goal Name</label>
                 <input
                   type="text"
                   value={goal.label || ''}
@@ -113,12 +113,12 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
                     updateField('goals', copy)
                   }}
                   placeholder="e.g. Bench Press 100kg"
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+                  className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#8C8276] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
                 />
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Current</label>
+                  <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Current</label>
                   <input
                     type="number"
                     value={goal.current || 0}
@@ -127,11 +127,11 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
                       copy[i] = { ...goal, current: Number(e.target.value) }
                       updateField('goals', copy)
                     }}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white"
+                    className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Target</label>
+                  <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Target</label>
                   <input
                     type="number"
                     value={goal.target || 1}
@@ -140,11 +140,11 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
                       copy[i] = { ...goal, target: Number(e.target.value) }
                       updateField('goals', copy)
                     }}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white"
+                    className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Unit</label>
+                  <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Unit</label>
                   <input
                     type="text"
                     value={goal.unit || 'kg'}
@@ -153,7 +153,7 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
                       copy[i] = { ...goal, unit: e.target.value }
                       updateField('goals', copy)
                     }}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none"
+                    className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
                   />
                 </div>
               </div>
@@ -167,7 +167,7 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
                 { label: 'Bench Press 100kg', current: 78, target: 100, unit: 'kg' }
               ])
             }}
-            className="w-full p-4 border border-dashed border-white/10 rounded-[28px] hover:bg-white/5 transition-colors text-xs font-black uppercase opacity-60 flex items-center justify-center gap-2"
+            className="w-full p-4 bg-white border border-dashed border-[#E5D5C4] rounded-[12px] hover:bg-[#FDF6EC] transition-all text-xs font-black uppercase text-[#C1440E] flex items-center justify-center gap-2"
           >
             <Plus size={16} /> Add a current goal
           </button>
@@ -176,10 +176,10 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
 
       {/* SECTION: ACHIEVEMENTS */}
       <section className="space-y-4">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/90">Section 4: Hall of Fame / Achievements</h3>
+        <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 4: Hall of Fame / Achievements</h3>
         <div className="space-y-4">
           {(data.achievements || []).map((ach: any, i: number) => (
-            <div key={i} className="p-4 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-4 relative">
+            <div key={i} className="p-4 bg-white border border-[#E5D5C4] rounded-[12px] flex items-center gap-4 relative shadow-sm">
               <EmojiPicker
                 value={ach.icon || '🏆'}
                 onChange={emoji => {
@@ -197,7 +197,7 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
                   achCopy[i] = { ...ach, label: e.target.value }
                   updateField('achievements', achCopy)
                 }}
-                className="flex-1 bg-transparent border-0 outline-none p-1 text-sm text-white focus:outline-none"
+                className="flex-1 bg-transparent border-0 outline-none p-1 text-sm text-[#1A1A1A] placeholder:text-[#8C8276] focus:outline-none"
               />
               <button
                 type="button"
@@ -206,7 +206,7 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
                   achCopy.splice(i, 1)
                   updateField('achievements', achCopy)
                 }}
-                className="text-red-500 hover:text-red-400"
+                className="text-red-500 hover:text-red-600 transition-colors"
               >
                 <Trash2 size={16} />
               </button>
@@ -220,7 +220,7 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
                 { icon: '🥇', label: "Marathon Finisher '24" }
               ])
             }}
-            className="w-full p-4 border border-dashed border-white/10 rounded-[28px] text-xs font-black uppercase opacity-60 flex items-center justify-center gap-2 hover:bg-white/5 transition-colors"
+            className="w-full p-4 bg-white border border-dashed border-[#E5D5C4] rounded-[12px] text-xs font-black uppercase text-[#C1440E] hover:bg-[#FDF6EC] transition-all flex items-center justify-center gap-2"
           >
             <Plus size={16} /> Add an achievement
           </button>
