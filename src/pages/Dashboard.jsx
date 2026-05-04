@@ -769,7 +769,8 @@ const PersonaEditor = ({ profile, onUpdate }) => {
 
 const IdentityPass = ({ profile }) => {
   const isOwner = profile?.role === 'owner';
-  const isPaid = profile?.status === 'paid' || isOwner
+  const isFree = profile?.status === 'free' || (!profile?.status && !profile?.tier) || profile?.tier === 'Free';
+  const isPaid = !isFree || isOwner;
   const secretSlug = profile?.secure_slug || profile?.id
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`${window.location.origin}/p/${secretSlug}`)}`
 
@@ -778,14 +779,14 @@ const IdentityPass = ({ profile }) => {
       <div className="flex items-end justify-between">
         <div><p className="text-[11px] font-black uppercase text-orange-500 tracking-[0.2em] mb-2">My Official Identity</p><h2 className="text-5xl font-display font-black tracking-tight">Identity <span className="gradient-text">Pass</span></h2></div>
         <div className="flex gap-2">
-          {isPaid && <button className="btn-primary h-12 px-8 text-sm flex items-center gap-2"><Download size={18}/> Download Pass</button>}
+          {isPaid && <button onClick={() => window.print()} className="btn-primary h-12 px-8 text-sm flex items-center gap-2"><Download size={18}/> Print / Download Pass</button>}
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-10">
         <div className="relative group">
           <div 
-            onClick={() => navigate(`/p/${profile?.secure_slug || profile?.first_name || profile?.id}`)}
+            onClick={() => window.location.href = `/p/${profile?.secure_slug || profile?.first_name || profile?.id}`}
             className="card p-12 flex flex-col items-center bg-white shadow-2xl relative overflow-hidden cursor-pointer hover:shadow-orange-500/10 transition-all border-none"
           >
             <div className="absolute top-6 right-8 flex items-center gap-1.5 bg-emerald-50/50 px-2.5 py-1.5 rounded-xl backdrop-blur-sm border border-emerald-500/10">
@@ -831,13 +832,13 @@ const IdentityPass = ({ profile }) => {
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-2xl bg-orange-500 flex items-center justify-center text-white shrink-0"><Crown size={24}/></div>
               <div>
-                <h4 className="text-lg font-bold mb-1">{isPaid ? 'You are our Premium Customer Now' : 'Upgrade to Premium Pass'}</h4>
+                <h4 className="text-lg font-bold mb-1">{isPaid ? 'You are our Premium Customer Now' : 'Upgrade to Premium (Buy A Tee)'}</h4>
                 <p className="text-sm text-neutral-600 mb-6">
                   {isPaid 
                     ? 'Your physical identity is active. Enjoy unmasked QR access, detailed scan locations, and advanced persona statistics.' 
-                    : 'Activate your physical identity. Get an unmasked QR code, detailed scan locations, and advanced persona statistics.'}
+                    : 'Buy A Tee to unlock QR Analytics, location tracking, and advanced persona profile statistics.'}
                 </p>
-                {!isPaid && <button className="btn-primary px-8 py-3 text-sm">Go Premium — 499</button>}
+                {!isPaid && <button onClick={() => window.location.href = '/#pricing'} className="btn-primary px-8 py-3 text-sm">Buy A Tee — View Plans</button>}
               </div>
             </div>
           </div>
