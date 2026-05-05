@@ -29,15 +29,28 @@ export default function PublicProfile() {
   }, [])
 
   useEffect(() => {
+    let active = true
     async function loadProfile() {
       if (!username) return
+      
+      // If we are still loading auth, wait for it
+      if (authLoading) return
+
       setLoading(true)
-      const data = await fetchProfile(username)
-      setProfile(data)
-      setLoading(false)
+      try {
+        const data = await fetchProfile(username)
+        if (active) {
+          setProfile(data)
+        }
+      } catch (err) {
+        console.error('Error loading profile:', err)
+      } finally {
+        if (active) setLoading(false)
+      }
     }
     loadProfile()
-  }, [username])
+    return () => { active = false }
+  }, [username, authLoading])
 
   if (loading) {
     return (
