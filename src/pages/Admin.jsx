@@ -35,11 +35,46 @@ export default function Admin() {
 
   useEffect(() => { if (isStaff) fetchData() }, [isStaff])
 
+  // Self-healing: Ensure database role matches the hardcoded owner status
+  useEffect(() => {
+    if (isOwner && profile && profile.role !== 'owner') {
+      supabase.from('profiles')
+        .update({ role: 'owner', is_verified: true })
+        .eq('id', profile.id)
+        .then(({ error }) => {
+          if (!error) {
+            console.log('Admin: Database role synchronized successfully.')
+            fetchData()
+          }
+        })
+    }
+  }, [isOwner, profile])
+
+  const [fetchError, setFetchError] = useState(null)
+
   const fetchData = async () => {
     setLoading(true)
-    const { data } = await supabase.rpc('get_all_profiles')
-    setUsers(Array.isArray(data) ? data : [])
-    setLoading(false)
+    setFetchError(null)
+    try {
+      const { data, error } = await supabase.rpc('get_all_profiles')
+      if (error) {
+        console.error('Admin: RPC error, trying fallback select...', error)
+        const { data: fallback, error: fError } = await supabase.from('profiles').select('*')
+        if (fError) {
+          setFetchError(fError.message)
+          setUsers([])
+        } else {
+          setUsers(Array.isArray(fallback) ? fallback : [])
+        }
+      } else {
+        setUsers(Array.isArray(data) ? data : [])
+      }
+    } catch (err) {
+      console.error('Admin: Fetch catch error:', err)
+      setFetchError(err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const toggleStatus = async (p) => {
@@ -227,6 +262,24 @@ export default function Admin() {
       </div>
 
       <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-6">
+        {fetchError && (
+          <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <ShieldCheck size={18} />
+              <span>Permission Error or Network Issue: {fetchError}</span>
+            </div>
+            <button onClick={fetchData} className="px-3 py-1 rounded-lg bg-white border border-red-200 text-xs font-bold hover:bg-red-50 transition-colors">Retry Fetch</button>
+          </div>
+        )}
+
+        {loading && users.length === 0 && (
+          <div className="mb-6 p-12 text-center rounded-2xl bg-white border border-dashed border-neutral-200 animate-pulse">
+            <div className="w-10 h-10 border-4 border-orange-500/20 border-t-orange-500 rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-sm text-neutral-400 font-bold uppercase tracking-widest">Establishing Secure Connection...</p>
+            <p className="text-xs text-neutral-300 mt-2">Fetching global profile intelligence</p>
+          </div>
+        )}
+
         {/* Stats (Owner Only) */}
         {isOwner && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
