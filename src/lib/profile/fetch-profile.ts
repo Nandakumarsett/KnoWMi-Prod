@@ -7,7 +7,13 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
   let profile: any = null
 
   // 1. Try fetching from profiles first to get the most up-to-date data
-  let query = supabase.from('profiles').select('*')
+  // SECURITY: Only select public columns to prevent leaking sensitive fields (email, metadata, etc.)
+  let query = supabase.from('profiles').select(`
+    id, user_id, first_name, last_name, avatar_url, 
+    wm_code, member_id, persona, persona_type, mood, bio, 
+    pulse_score, tier, is_verified, created_at, persona_data,
+    secure_slug, instagram, linkedin, github, twitter, youtube, website, whatsapp
+  `)
   if (isUUID) {
     query = query.eq('id', slug)
   } else {
@@ -19,7 +25,13 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     profile = pData
   } else {
     // 2. Fallback to public_profiles
-    let fallbackQuery = supabase.from('public_profiles').select('*')
+    // SECURITY: Only select public columns
+    let fallbackQuery = supabase.from('public_profiles').select(`
+      id, user_id, first_name, last_name, avatar_url, 
+      wm_code, member_id, persona, persona_type, mood, bio, 
+      pulse_score, tier, is_verified, created_at, persona_data,
+      secure_slug, instagram, linkedin, github, twitter, youtube, website, whatsapp
+    `)
     if (isUUID) {
       fallbackQuery = fallbackQuery.eq('id', slug)
     } else {
