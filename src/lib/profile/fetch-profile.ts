@@ -7,13 +7,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
   let profile: any = null
 
   // 1. Try fetching from profiles first to get the most up-to-date data
-  // SECURITY: Only select public columns to prevent leaking sensitive fields (email, metadata, etc.)
-  let query = supabase.from('profiles').select(`
-    id, user_id, first_name, last_name, avatar_url, 
-    wm_code, member_id, persona, persona_type, mood, bio, 
-    pulse_score, tier, is_verified, created_at, persona_data,
-    secure_slug, instagram, linkedin, github, twitter, youtube, website, whatsapp
-  `)
+  let query = supabase.from('profiles').select('*')
   if (isUUID) {
     query = query.eq('id', slug)
   } else {
@@ -25,13 +19,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     profile = pData
   } else {
     // 2. Fallback to public_profiles
-    // SECURITY: Only select public columns
-    let fallbackQuery = supabase.from('public_profiles').select(`
-      id, user_id, first_name, last_name, avatar_url, 
-      wm_code, member_id, persona, persona_type, mood, bio, 
-      pulse_score, tier, is_verified, created_at, persona_data,
-      secure_slug, instagram, linkedin, github, twitter, youtube, website, whatsapp
-    `)
+    let fallbackQuery = supabase.from('public_profiles').select('*')
     if (isUUID) {
       fallbackQuery = fallbackQuery.eq('id', slug)
     } else {
@@ -68,7 +56,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     first_name: profile.first_name,
     last_name: profile.last_name,
     avatar_url: profile.avatar_url,
-    member_id: String(profile.wm_code || profile.member_id || '').replace('PT-', 'WM-') || `WM-${(profile.first_name || 'KWM').substring(0,3).toUpperCase()}-001`,
+    member_id: String(profile.wm_code || profile.member_id || '').replace('PT-', 'WM-') || `WM-${profile.first_name?.substring(0,3).toUpperCase()}-001`,
     persona: (profile.persona || profile.persona_type || 'developer').toLowerCase() as PersonaType,
     mood: profile.mood || 'Expressive & Curious',
     bio: profile.bio,
