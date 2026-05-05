@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [profileLoading, setProfileLoading] = useState(false)
+  const [isExiting, setIsExiting] = useState(false)
 
   const fetchProfile = useCallback(async (userId) => {
     if (!userId) {
@@ -38,12 +39,23 @@ export const AuthProvider = ({ children }) => {
     let active = true
     const fetchingUserId = { current: null }
 
+    // Fail-safe: ensure loading screen disappears after 2 seconds no matter what
+    const failSafe = setTimeout(() => {
+      if (active && loading) {
+        console.warn('Auth: Fail-safe triggered - forcing loading false')
+        setLoading(false)
+      }
+    }, 2000)
+
     const handleStateChange = async (session) => {
       const currentUser = session?.user ?? null
       setUser(currentUser)
       
       // Immediately unblock the UI once we know the session status
-      if (active) setLoading(false)
+      if (active) {
+        setLoading(false)
+        clearTimeout(failSafe)
+      }
 
       if (currentUser && fetchingUserId.current !== currentUser.id) {
         fetchingUserId.current = currentUser.id
@@ -61,31 +73,47 @@ export const AuthProvider = ({ children }) => {
         const { data: { session } } = await supabase.auth.getSession()
         if (active) await handleStateChange(session)
       } catch (e) {
+        console.error('Auth: Init error:', e)
         if (active) setLoading(false)
       }
     }
     initAuth()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      console.log('Auth: Event', _event)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth: Event', event)
       if (active) await handleStateChange(session)
     })
 
     return () => {
       active = false
       subscription.unsubscribe()
+      clearTimeout(failSafe)
     }
   }, [fetchProfile])
 
   const signUp = async (data) => supabase.auth.signUp(data)
   const signIn = async (data) => supabase.auth.signInWithPassword(data)
 
-  const signOut = async () => {
-    await supabase.auth.signOut()
+  const signOut = useCallback(async () => {
+    // 1. Mark as exiting to prevent any loading screens from re-triggering
+    setIsExiting(true)
+    
+    // 2. Optimistic cleanup: immediately clear state to unblock UI
     setUser(null)
     setProfile(null)
     setProfileLoading(false)
-  }
+    setLoading(false) // Just in case
+    
+    try {
+      // 3. Clear Supabase session
+      await supabase.auth.signOut()
+    } catch (err) {
+      console.error('Auth: SignOut Error:', err)
+    } finally {
+      // Small delay then reset exiting state
+      setTimeout(() => { if (setIsExiting) setIsExiting(false) }, 1000)
+    }
+  }, [])
 
   const refreshProfile = () => {
     if (user) fetchProfile(user.id)
@@ -111,11 +139,12 @@ export const AuthProvider = ({ children }) => {
     refreshProfile,
   }
 
-  if (loading) {
+  // Only show the global loader on INITIAL load, and NEVER during sign out
+  if (loading && !isExiting) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FDF6F0', color: '#C1440E', fontFamily: 'sans-serif' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ width: '40px', height: '40px', border: '4px solid #C1440E22', borderTopColor: '#C1440E', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+          <div style={{ width: '40px', height: '40px', border: '4px solid #C1440E22', borderTopColor: '#C1440E', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto' }}></div>
           <p style={{ marginTop: '10px', fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '2px' }}>Loading Protocol...</p>
         </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
