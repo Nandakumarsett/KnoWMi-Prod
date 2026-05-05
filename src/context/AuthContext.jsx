@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 
 const AuthContext = createContext({})
@@ -8,35 +8,54 @@ export const AuthProvider = ({ children }) => {
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  const fetchProfile = async (userId) => {
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('user_id', userId)
-      .single()
-    setProfile(data)
-  }
+  const fetchProfile = useCallback(async (userId) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, user_id, first_name, last_name, role, is_verified, tier')
+        .eq('user_id', userId)
+        .single()
+      
+      if (error) {
+        console.error('Error fetching auth profile:', error)
+        setProfile(null)
+      } else {
+        setProfile(data)
+      }
+    } catch (err) {
+      console.error('Auth Profile Crash:', err)
+      setProfile(null)
+    }
+  }, [])
 
   useEffect(() => {
-    // Check active sessions
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      const currentUser = session?.user ?? null
-      setUser(currentUser)
-      if (currentUser) fetchProfile(currentUser.id)
-      setLoading(false)
-    })
+    let active = true
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const loadInitial = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!active) return
+      
       const currentUser = session?.user ?? null
       setUser(currentUser)
-      if (currentUser) fetchProfile(currentUser.id)
+      if (currentUser) await fetchProfile(currentUser.id)
+      setLoading(false)
+    }
+
+    loadInitial()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      const currentUser = session?.user ?? null
+      setUser(currentUser)
+      if (currentUser) await fetchProfile(currentUser.id)
       else setProfile(null)
       setLoading(false)
     })
 
-    return () => subscription.unsubscribe()
-  }, [])
+    return () => {
+      active = false
+      subscription.unsubscribe()
+    }
+  }, [fetchProfile])
 
   const signUp = async (data) => supabase.auth.signUp(data)
   const signIn = async (data) => supabase.auth.signInWithPassword(data)
