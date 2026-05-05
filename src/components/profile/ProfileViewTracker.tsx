@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { buildFingerprint } from '../../lib/analytics/fingerprint'
 import { categoriseReferrer } from '../../lib/analytics/referrer'
 
@@ -7,7 +7,12 @@ interface ProfileViewTrackerProps {
 }
 
 export function ProfileViewTracker({ profileId }: ProfileViewTrackerProps) {
+  const tracked = useRef(false)
+
   useEffect(() => {
+    if (tracked.current) return
+    tracked.current = true
+    
     const track = async () => {
       try {
         const searchParams = new URLSearchParams(window.location.search)
