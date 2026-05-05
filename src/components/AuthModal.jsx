@@ -59,9 +59,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
     e.preventDefault()
     if (!firstName.trim()) { setError('Please enter your User Name'); return }
     if (!email.trim().includes('@')) { setError('Please enter a valid email'); return }
-    if (!firstName.trim()) { setError('Please enter your User Name'); return }
-    if (!email.trim().includes('@')) { setError('Please enter a valid email'); return }
-    if (password.length < 8) { setError('Password must be at least 8 characters for better security'); return }
+    if (password.length < 6) { setError('Password must be at least 6 characters'); return }
 
     setLoading(true)
     setError('')
@@ -70,7 +68,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
     const { data: existingUser } = await supabase
       .from('profiles')
       .select('id')
-      .eq('first_name', firstName.trim().toLowerCase()) // Normalize to lowercase for uniqueness
+      .eq('first_name', firstName.trim())
       .maybeSingle();
 
     if (existingUser) {
@@ -83,13 +81,14 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
     let invitedById = null;
     if (referralCode.trim()) {
       const code = referralCode.trim().toUpperCase()
+      // Try wm_code
       const { data: wmMatch } = await supabase.from('profiles').select('id').eq('wm_code', code).single()
       if (wmMatch) {
         invitedById = wmMatch.id
       }
     }
     
-    // 3. Create user in Supabase Auth
+    // 3. Create user in Supabase Auth (Trigger handles profile creation)
     const { error: signUpError } = await supabase.auth.signUp({
       email: email.trim(),
       password,
@@ -102,7 +101,6 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
     })
 
     if (signUpError) {
-      // SECURITY: Generic error for certain cases, though Supabase is usually safe
       setError(signUpError.message)
       setLoading(false)
       return
@@ -130,11 +128,12 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
     })
 
     if (signInError) {
-      // SECURITY: Generic error message to prevent account enumeration
       if (signInError.message.toLowerCase().includes('email not confirmed')) {
         setError('Please check your email and confirm your account first.')
+      } else if (signInError.message === 'Invalid login credentials') {
+        setError('Invalid email or password. Please try again.')
       } else {
-        setError('Invalid login credentials. Please check your email and password.')
+        setError(signInError.message)
       }
       setLoading(false)
       return
