@@ -16,7 +16,7 @@ const supabaseAdminGen = createClient(
 )
 
 export default function Admin() {
-  const { user, profile, role, isOwner, isStaff, profileLoading, signOut } = useAuth()
+  const { user, profile, role, isOwner, isStaff, signOut } = useAuth()
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -35,120 +35,37 @@ export default function Admin() {
 
   useEffect(() => { if (isStaff) fetchData() }, [isStaff])
 
-  // Self-healing: Ensure database role matches the hardcoded owner status
-  useEffect(() => {
-    if (isOwner && profile && profile.role !== 'owner') {
-      supabase.from('profiles')
-        .update({ role: 'owner', is_verified: true })
-        .eq('id', profile.id)
-        .then(({ error }) => {
-          if (!error) {
-            console.log('Admin: Database role synchronized successfully.')
-            fetchData()
-          }
-        })
-    }
-  }, [isOwner, profile])
-
-  const [fetchError, setFetchError] = useState(null)
-
   const fetchData = async () => {
     setLoading(true)
-    setFetchError(null)
-    try {
-      const { data, error } = await supabase.rpc('get_all_profiles')
-      if (error) {
-        console.error('Admin: RPC error, trying fallback select...', error)
-        const { data: fallback, error: fError } = await supabase.from('profiles').select('*')
-        if (fError) {
-          setFetchError(fError.message)
-          setUsers([])
-        } else {
-          setUsers(Array.isArray(fallback) ? fallback : [])
-        }
-      } else {
-        setUsers(Array.isArray(data) ? data : [])
-      }
-    } catch (err) {
-      console.error('Admin: Fetch catch error:', err)
-      setFetchError(err.message)
-    } finally {
-      setLoading(false)
-    }
+    const { data } = await supabase.rpc('get_all_profiles')
+    setUsers(Array.isArray(data) ? data : [])
+    setLoading(false)
   }
 
   const toggleStatus = async (p) => {
-    if (!isOwner) return alert('Only Owner can modify payment status')
     setUpdating(p.id)
     const ns = p.status === 'paid' ? 'free' : 'paid'
-    try {
-      const { error } = await supabase.rpc('update_profile_admin', { 
-        p_profile_id: p.id, 
-        p_status: ns, 
-        p_amount: p.amount_paid || 0 
-      })
-      if (error) throw error
-      setUsers(prev => prev.map(u => u.id === p.id ? { ...u, status: ns } : u))
-    } catch (err) {
-      alert(`Update failed: ${err.message}`)
-    } finally {
-      setUpdating(null)
-    }
+    await supabase.rpc('update_profile_admin', { p_profile_id: p.id, p_status: ns, p_amount: p.amount_paid || 0 })
+    setUsers(prev => prev.map(u => u.id === p.id ? { ...u, status: ns } : u))
+    setUpdating(null)
   }
 
   const toggleVerification = async (u) => {
-    if (!isOwner) return alert('Only Owner can verify profiles')
     setUpdating(u.id)
-    try {
-      const { error } = await supabase.from('profiles').update({ is_verified: !u.is_verified }).eq('id', u.id)
-      if (error) throw error
-      setUsers(prev => prev.map(item => item.id === u.id ? { ...item, is_verified: !u.is_verified } : item))
-    } catch (err) {
-      alert(`Verification update failed: ${err.message}`)
-    } finally {
-      setUpdating(null)
-    }
+    const { error } = await supabase.from('profiles').update({ is_verified: !u.is_verified }).eq('id', u.id)
+    if (!error) setUsers(prev => prev.map(item => item.id === u.id ? { ...item, is_verified: !u.is_verified } : item))
+    setUpdating(null)
   }
 
   const updateAmount = async (id, amt) => {
-    if (!isOwner) return
     const n = parseInt(amt) || 0
-    try {
-      const { error } = await supabase.rpc('update_profile_admin', { 
-        p_profile_id: id, 
-        p_status: n > 0 ? 'paid' : 'free', 
-        p_amount: n 
-      })
-      if (error) throw error
-      setUsers(prev => prev.map(u => u.id === id ? { ...u, amount_paid: n, status: n > 0 ? 'paid' : 'free' } : u))
-    } catch (err) {
-      console.error('Update amount error:', err)
-    }
-  }
-
-  const updateTier = async (id, newTier) => {
-    if (!isOwner) return
-    try {
-      const { error } = await supabase.from('profiles').update({ tier: newTier }).eq('id', id)
-      if (error) throw error
-      setUsers(prev => prev.map(u => u.id === id ? { ...u, tier: newTier } : u))
-    } catch (err) {
-      alert(`Tier update failed: ${err.message}`)
-    }
+    await supabase.rpc('update_profile_admin', { p_profile_id: id, p_status: n > 0 ? 'paid' : 'free', p_amount: n })
+    setUsers(prev => prev.map(u => u.id === id ? { ...u, amount_paid: n, status: n > 0 ? 'paid' : 'free' } : u))
   }
 
   const changeRole = async (id, newRoleVal) => {
-    if (!isOwner) return
-    try {
-      const { error } = await supabase.rpc('update_profile_admin_role', { 
-        p_profile_id: id, 
-        p_new_role: newRoleVal 
-      })
-      if (error) throw error
-      setUsers(prev => prev.map(u => u.id === id ? { ...u, role: newRoleVal } : u))
-    } catch (err) {
-      alert(`Role change failed: ${err.message}`)
-    }
+    await supabase.rpc('update_profile_admin_role', { p_profile_id: id, p_new_role: newRoleVal })
+    setUsers(prev => prev.map(u => u.id === id ? { ...u, role: newRoleVal } : u))
   }
 
   const handleCreateTeamAccount = async (e) => {
@@ -195,16 +112,7 @@ export default function Admin() {
     setCreating(false)
   }
 
-  // Early returns for access control
-  if (profileLoading && !isOwner) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-10 h-10 border-4 border-orange-500/20 border-t-orange-500 rounded-full animate-spin" />
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500/40">Verifying Authority</p>
-      </div>
-    </div>
-  )
-
+  // Not logged in
   if (!user) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
       <div className="text-center p-8">
@@ -216,6 +124,7 @@ export default function Admin() {
     </div>
   )
 
+  // Not staff
   if (!isStaff) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
       <div className="text-center p-8">
@@ -244,42 +153,14 @@ export default function Admin() {
             <a href="/" className="text-sm" style={{ color: 'var(--muted)' }}>← Home</a>
             <h1 className="text-lg font-bold" style={{ color: 'var(--ink)', fontFamily: 'Fraunces, serif' }}>Admin Panel</h1>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium" style={{ color: 'var(--ink)' }}>{profile?.first_name || user?.user_metadata?.first_name || 'Owner'}</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold text-white" style={{ background: myBadge.bg }}>{myBadge.label}</span>
-            </div>
-            <button 
-              onClick={() => {
-                if (window.confirm('Sign out of Admin Panel?')) signOut()
-              }}
-              className="text-xs font-bold px-3 py-1.5 rounded-lg border border-[#E5D5C4] hover:bg-red-50 hover:text-red-600 hover:border-red-100 transition-all"
-            >
-              Sign Out
-            </button>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium" style={{ color: 'var(--ink)' }}>{profile?.first_name}</span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold text-white" style={{ background: myBadge.bg }}>{myBadge.label}</span>
           </div>
         </div>
       </div>
 
       <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-6">
-        {fetchError && (
-          <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <ShieldCheck size={18} />
-              <span>Permission Error or Network Issue: {fetchError}</span>
-            </div>
-            <button onClick={fetchData} className="px-3 py-1 rounded-lg bg-white border border-red-200 text-xs font-bold hover:bg-red-50 transition-colors">Retry Fetch</button>
-          </div>
-        )}
-
-        {loading && users.length === 0 && (
-          <div className="mb-6 p-12 text-center rounded-2xl bg-white border border-dashed border-neutral-200 animate-pulse">
-            <div className="w-10 h-10 border-4 border-orange-500/20 border-t-orange-500 rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-sm text-neutral-400 font-bold uppercase tracking-widest">Establishing Secure Connection...</p>
-            <p className="text-xs text-neutral-300 mt-2">Fetching global profile intelligence</p>
-          </div>
-        )}
-
         {/* Stats (Owner Only) */}
         {isOwner && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
@@ -342,14 +223,6 @@ export default function Admin() {
                     <div className="flex items-center gap-2">
                       <input type="number" defaultValue={u.amount_paid || 0} onBlur={e => updateAmount(u.id, e.target.value)}
                         className="w-16 px-2 py-1 rounded-lg text-xs text-center outline-none" style={{ border: '1px solid var(--border)', fontFamily: 'JetBrains Mono' }} />
-                      <select defaultValue={u.tier || 'Elite'} onChange={e => updateTier(u.id, e.target.value)}
-                        className="px-2 py-1.5 rounded-lg text-[11px] outline-none" style={{ border: '1px solid var(--border)', background: 'var(--off)' }}>
-                        <option value="Starter">Starter</option>
-                        <option value="Creator">Creator</option>
-                        <option value="Pro">Pro</option>
-                        <option value="Elite">Elite</option>
-                        <option value="Founding">Founding</option>
-                      </select>
                       <button onClick={() => toggleStatus(u)} disabled={updating === u.id}
                         className="px-3 py-1.5 rounded-lg text-[11px] font-bold" style={{
                           background: u.status === 'paid' ? 'rgba(220,38,38,0.08)' : 'rgba(19,136,8,0.08)',
