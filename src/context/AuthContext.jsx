@@ -119,10 +119,13 @@ export const AuthProvider = ({ children }) => {
     if (user) fetchProfile(user.id)
   }
 
-  const role = profile?.role || 'customer'
+  const OWNER_EMAIL = 'nandakumarsettivanyam@gmail.com'
+  const isHardcodedOwner = user?.email === OWNER_EMAIL
+
+  const role = isHardcodedOwner ? 'owner' : (profile?.role || 'customer')
   const isOwner = role === 'owner'
-  const isStaff = ['owner', 'ambassador', 'collaborator'].includes(role)
-  const isVerified = profile?.is_verified === true
+  const isStaff = isHardcodedOwner || ['owner', 'ambassador', 'collaborator'].includes(role)
+  const isVerified = isHardcodedOwner || profile?.is_verified === true
 
   const value = {
     user,
