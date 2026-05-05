@@ -7,81 +7,73 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [profileLoading, setProfileLoading] = useState(false)
 
   const fetchProfile = useCallback(async (userId) => {
+    if (!userId) {
+      setProfile(null)
+      setProfileLoading(false)
+      return
+    }
+    
+    setProfileLoading(true)
     try {
       const { data, error } = await supabase
         .from('profiles')
         .select('id, user_id, first_name, last_name, role, is_verified, tier')
         .eq('user_id', userId)
-        .single()
+        .maybeSingle()
       
-      if (error) {
-        console.error('Error fetching auth profile:', error)
-        setProfile(null)
-      } else {
-        setProfile(data)
-      }
+      if (error) throw error
+      setProfile(data)
     } catch (err) {
-      console.error('Auth Profile Crash:', err)
+      console.error('Auth: Profile fetch error:', err)
       setProfile(null)
+    } finally {
+      setProfileLoading(false)
     }
   }, [])
 
   useEffect(() => {
     let active = true
+    const fetchingUserId = { current: null }
 
-    const loadInitial = async () => {
-      try {
-        console.log('Auth: Loading initial session...')
-        const { data, error } = await supabase.auth.getSession()
-        if (error) {
-          console.error('Auth: Session error:', error)
-          if (active) setLoading(false)
-          return
-        }
-        
-        if (!active) return
-        
-        const session = data?.session
-        const currentUser = session?.user ?? null
-        setUser(currentUser)
-        
-        if (currentUser) {
-          console.log('Auth: User found, fetching profile...', currentUser.id)
-          await fetchProfile(currentUser.id)
-        }
-      } catch (err) {
-        console.error('Auth: Crash in loadInitial:', err)
-      } finally {
-        if (active) {
-          console.log('Auth: Initial load complete')
-          setLoading(false)
-        }
+    const handleStateChange = async (session) => {
+      const currentUser = session?.user ?? null
+      setUser(currentUser)
+      
+      // Immediately unblock the UI once we know the session status
+      if (active) setLoading(false)
+
+      if (currentUser && fetchingUserId.current !== currentUser.id) {
+        fetchingUserId.current = currentUser.id
+        await fetchProfile(currentUser.id)
+      } else if (!currentUser) {
+        fetchingUserId.current = null
+        setProfile(null)
+        setProfileLoading(false)
       }
     }
 
-    loadInitial()
-
-    const authResult = supabase.auth.onAuthStateChange(async (_event, session) => {
+    // Initialize session and set up listener
+    const initAuth = async () => {
       try {
-        console.log('Auth: State change event:', _event)
-        const currentUser = session?.user ?? null
-        setUser(currentUser)
-        if (currentUser) await fetchProfile(currentUser.id)
-        else setProfile(null)
-      } catch (err) {
-        console.error('Auth: Crash in onAuthStateChange:', err)
-      } finally {
-        setLoading(false)
+        const { data: { session } } = await supabase.auth.getSession()
+        if (active) await handleStateChange(session)
+      } catch (e) {
+        if (active) setLoading(false)
       }
-    })
+    }
+    initAuth()
 
-    const subscription = authResult?.data?.subscription
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      console.log('Auth: Event', _event)
+      if (active) await handleStateChange(session)
+    })
 
     return () => {
       active = false
-      if (subscription) subscription.unsubscribe()
+      subscription.unsubscribe()
     }
   }, [fetchProfile])
 
@@ -92,6 +84,7 @@ export const AuthProvider = ({ children }) => {
     await supabase.auth.signOut()
     setUser(null)
     setProfile(null)
+    setProfileLoading(false)
   }
 
   const refreshProfile = () => {
@@ -107,6 +100,7 @@ export const AuthProvider = ({ children }) => {
     user,
     profile,
     loading,
+    profileLoading,
     role,
     isOwner,
     isStaff,
