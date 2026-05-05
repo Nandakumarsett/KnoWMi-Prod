@@ -16,7 +16,7 @@ const supabaseAdminGen = createClient(
 )
 
 export default function Admin() {
-  const { user, profile, role, isOwner, isStaff, signOut } = useAuth()
+  const { user, profile, role, isOwner, isStaff, profileLoading, signOut } = useAuth()
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -160,7 +160,16 @@ export default function Admin() {
     setCreating(false)
   }
 
-  // Not logged in
+  // Early returns for access control
+  if (profileLoading) return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-10 h-10 border-4 border-orange-500/20 border-t-orange-500 rounded-full animate-spin" />
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500/40">Verifying Authority</p>
+      </div>
+    </div>
+  )
+
   if (!user) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
       <div className="text-center p-8">
@@ -172,7 +181,6 @@ export default function Admin() {
     </div>
   )
 
-  // Not staff
   if (!isStaff) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
       <div className="text-center p-8">
