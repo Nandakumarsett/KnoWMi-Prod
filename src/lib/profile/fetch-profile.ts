@@ -68,7 +68,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     first_name: profile.first_name,
     last_name: profile.last_name,
     avatar_url: profile.avatar_url,
-    member_id: String(profile.wm_code || profile.member_id || '').replace('PT-', 'WM-') || `WM-${profile.first_name?.substring(0,3).toUpperCase()}-001`,
+    member_id: String(profile.wm_code || profile.member_id || '').replace('PT-', 'WM-') || `WM-${(profile.first_name || 'KWM').substring(0,3).toUpperCase()}-001`,
     persona: (profile.persona || profile.persona_type || 'developer').toLowerCase() as PersonaType,
     mood: profile.mood || 'Expressive & Curious',
     bio: profile.bio,
