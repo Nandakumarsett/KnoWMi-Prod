@@ -33,9 +33,6 @@ export default function PublicProfile() {
     async function loadProfile() {
       if (!username) return
       
-      // If we are still loading auth, wait for it
-      if (authLoading) return
-
       setLoading(true)
       try {
         const data = await fetchProfile(username)
@@ -50,7 +47,7 @@ export default function PublicProfile() {
     }
     loadProfile()
     return () => { active = false }
-  }, [username, authLoading])
+  }, [username])
 
   if (loading) {
     return (
