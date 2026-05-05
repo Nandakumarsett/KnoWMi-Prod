@@ -43,34 +43,77 @@ export default function Admin() {
   }
 
   const toggleStatus = async (p) => {
+    if (!isOwner) return alert('Only Owner can modify payment status')
     setUpdating(p.id)
     const ns = p.status === 'paid' ? 'free' : 'paid'
-    await supabase.rpc('update_profile_admin', { p_profile_id: p.id, p_status: ns, p_amount: p.amount_paid || 0 })
-    setUsers(prev => prev.map(u => u.id === p.id ? { ...u, status: ns } : u))
-    setUpdating(null)
+    try {
+      const { error } = await supabase.rpc('update_profile_admin', { 
+        p_profile_id: p.id, 
+        p_status: ns, 
+        p_amount: p.amount_paid || 0 
+      })
+      if (error) throw error
+      setUsers(prev => prev.map(u => u.id === p.id ? { ...u, status: ns } : u))
+    } catch (err) {
+      alert(`Update failed: ${err.message}`)
+    } finally {
+      setUpdating(null)
+    }
   }
 
   const toggleVerification = async (u) => {
+    if (!isOwner) return alert('Only Owner can verify profiles')
     setUpdating(u.id)
-    const { error } = await supabase.from('profiles').update({ is_verified: !u.is_verified }).eq('id', u.id)
-    if (!error) setUsers(prev => prev.map(item => item.id === u.id ? { ...item, is_verified: !u.is_verified } : item))
-    setUpdating(null)
+    try {
+      const { error } = await supabase.from('profiles').update({ is_verified: !u.is_verified }).eq('id', u.id)
+      if (error) throw error
+      setUsers(prev => prev.map(item => item.id === u.id ? { ...item, is_verified: !u.is_verified } : item))
+    } catch (err) {
+      alert(`Verification update failed: ${err.message}`)
+    } finally {
+      setUpdating(null)
+    }
   }
 
   const updateAmount = async (id, amt) => {
+    if (!isOwner) return
     const n = parseInt(amt) || 0
-    await supabase.rpc('update_profile_admin', { p_profile_id: id, p_status: n > 0 ? 'paid' : 'free', p_amount: n })
-    setUsers(prev => prev.map(u => u.id === id ? { ...u, amount_paid: n, status: n > 0 ? 'paid' : 'free' } : u))
+    try {
+      const { error } = await supabase.rpc('update_profile_admin', { 
+        p_profile_id: id, 
+        p_status: n > 0 ? 'paid' : 'free', 
+        p_amount: n 
+      })
+      if (error) throw error
+      setUsers(prev => prev.map(u => u.id === id ? { ...u, amount_paid: n, status: n > 0 ? 'paid' : 'free' } : u))
+    } catch (err) {
+      console.error('Update amount error:', err)
+    }
   }
 
   const updateTier = async (id, newTier) => {
-    await supabase.from('profiles').update({ tier: newTier }).eq('id', id)
-    setUsers(prev => prev.map(u => u.id === id ? { ...u, tier: newTier } : u))
+    if (!isOwner) return
+    try {
+      const { error } = await supabase.from('profiles').update({ tier: newTier }).eq('id', id)
+      if (error) throw error
+      setUsers(prev => prev.map(u => u.id === id ? { ...u, tier: newTier } : u))
+    } catch (err) {
+      alert(`Tier update failed: ${err.message}`)
+    }
   }
 
   const changeRole = async (id, newRoleVal) => {
-    await supabase.rpc('update_profile_admin_role', { p_profile_id: id, p_new_role: newRoleVal })
-    setUsers(prev => prev.map(u => u.id === id ? { ...u, role: newRoleVal } : u))
+    if (!isOwner) return
+    try {
+      const { error } = await supabase.rpc('update_profile_admin_role', { 
+        p_profile_id: id, 
+        p_new_role: newRoleVal 
+      })
+      if (error) throw error
+      setUsers(prev => prev.map(u => u.id === id ? { ...u, role: newRoleVal } : u))
+    } catch (err) {
+      alert(`Role change failed: ${err.message}`)
+    }
   }
 
   const handleCreateTeamAccount = async (e) => {
