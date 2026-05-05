@@ -161,7 +161,7 @@ export default function Admin() {
   }
 
   // Early returns for access control
-  if (profileLoading) return (
+  if (profileLoading && !isOwner) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
       <div className="flex flex-col items-center gap-4">
         <div className="w-10 h-10 border-4 border-orange-500/20 border-t-orange-500 rounded-full animate-spin" />
@@ -209,9 +209,19 @@ export default function Admin() {
             <a href="/" className="text-sm" style={{ color: 'var(--muted)' }}>← Home</a>
             <h1 className="text-lg font-bold" style={{ color: 'var(--ink)', fontFamily: 'Fraunces, serif' }}>Admin Panel</h1>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-medium" style={{ color: 'var(--ink)' }}>{profile?.first_name}</span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold text-white" style={{ background: myBadge.bg }}>{myBadge.label}</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium" style={{ color: 'var(--ink)' }}>{profile?.first_name || user?.user_metadata?.first_name || 'Owner'}</span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold text-white" style={{ background: myBadge.bg }}>{myBadge.label}</span>
+            </div>
+            <button 
+              onClick={() => {
+                if (window.confirm('Sign out of Admin Panel?')) signOut()
+              }}
+              className="text-xs font-bold px-3 py-1.5 rounded-lg border border-[#E5D5C4] hover:bg-red-50 hover:text-red-600 hover:border-red-100 transition-all"
+            >
+              Sign Out
+            </button>
           </div>
         </div>
       </div>
