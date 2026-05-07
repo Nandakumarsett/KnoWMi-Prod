@@ -1,0 +1,444 @@
+import React, { useState, useMemo, useEffect } from 'react';
+import Avatar from '../components/Avatar';
+import {
+  Search, Trophy, Users, Activity, Clock,
+  TrendingUp, TrendingDown, Minus, Share2,
+  X, Copy, Linkedin, Eye, Sparkles, QrCode, Star, Download
+} from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { Trie } from '../lib/leaderboard/trie';
+
+interface Profile {
+  id: string;
+  rank: number;
+  knowmi_score: number;
+  percentile: number;
+  badge: string | null;
+  rank_delta: number;
+  username: string;
+  display_name: string;
+  avatar_url: string | null;
+  bio: string | null;
+  wm_code: string;
+  secure_slug: string;
+  profile_category: string;
+  updated_at?: string;
+}
+
+interface Stats {
+  totalProfiles: number;
+  avgScore: number;
+  lastUpdated: string;
+}
+
+const CATEGORIES = ['All', 'Professional', 'Creator', 'Business'];
+
+const BadgePill = ({ badge }: { badge: string | null }) => {
+  if (!badge) return null;
+  const styles: Record<string, string> = {
+    top1: 'bg-amber-100 text-amber-700 border-amber-200',
+    top1pct: 'bg-purple-100 text-purple-700 border-purple-200',
+    top10pct: 'bg-teal-100 text-teal-700 border-teal-200',
+    top100: 'bg-gray-100 text-gray-700 border-gray-200',
+  };
+  const labels: Record<string, string> = {
+    top1: 'Global #1',
+    top1pct: 'Top 1%',
+    top10pct: 'Top 10%',
+    top100: 'Top 100',
+  };
+
+  return (
+    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${styles[badge] || styles.top100}`}>
+      {labels[badge] || 'Top Member'}
+    </span>
+  );
+};
+
+export default function Leaderboard() {
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [stats, setStats] = useState<Stats>({ totalProfiles: 0, avgScore: 0, lastUpdated: new Date().toISOString() });
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('All');
+  const [shareProfile, setShareProfile] = useState<Profile | null>(null);
+
+  useEffect(() => {
+    document.title = 'KnoWMi Elite | Global Rankings';
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', 'See where you stand in the KnoWMi global rankings. Scan more, connect better, and climb the Elite leaderboard.');
+
+    const timer = setTimeout(() => {
+      document.body.classList.add('page-loaded');
+    }, 100);
+    return () => document.body.classList.remove('page-loaded');
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { data: profilesData } = await supabase.from('public_leaderboard').select('*').limit(100);
+      const { count } = await supabase.from('profile_scores').select('*', { count: 'exact', head: true });
+      const { data: scoreData } = await supabase.from('profile_scores').select('knowmi_score');
+
+      const avg = scoreData?.length ? scoreData.reduce((acc, curr) => acc + Number(curr.knowmi_score), 0) / scoreData.length : 0;
+
+      if (profilesData) {
+        const usernames = profilesData.map(p => p.username).filter(Boolean);
+        const { data: slugData } = await supabase
+          .from('public_profiles')
+          .select('id, first_name, secure_slug')
+          .in('first_name', usernames);
+
+        const mapped = profilesData.map(p => {
+          const extra = slugData?.find(s => s.first_name === p.username);
+          return {
+            ...p,
+            id: extra?.id || p.id,
+            secure_slug: extra?.secure_slug || p.secure_slug
+          };
+        });
+
+        setProfiles(mapped);
+      }
+
+      setStats({
+        totalProfiles: count || 0,
+        avgScore: Math.round(avg * 10) / 10,
+        lastUpdated: profilesData?.[0]?.updated_at || new Date().toISOString()
+      });
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
+
+  const trie = useMemo(() => {
+    const t = new Trie();
+    profiles.forEach(p => {
+      t.insert(p.display_name, p.username);
+      t.insert(p.username, p.username);
+    });
+    return t;
+  }, [profiles]);
+
+  const filteredProfiles = useMemo(() => {
+    let result = profiles;
+    if (category !== 'All') result = result.filter(p => p.profile_category?.toLowerCase() === category.toLowerCase());
+    if (search) {
+      const searchResults = trie.search(search);
+      const matchUsernames = searchResults.map(res => res.id);
+      result = result.filter(p => matchUsernames.includes(p.username));
+    }
+    return result;
+  }, [search, category, profiles, trie]);
+
+  const podium = filteredProfiles.filter(p => p.rank <= 3).sort((a, b) => {
+    if (a.rank === 1) return 0;
+    if (b.rank === 1) return 1;
+    return a.rank === 2 ? -1 : 1;
+  });
+
+  const tableRows = filteredProfiles.filter(p => p.rank > 3);
+
+  const formatTime = (iso: string) => {
+    const diff = Date.now() - new Date(iso).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 60) return `${mins}m ago`;
+    const hours = Math.floor(mins / 60);
+    return `${hours}h ago`;
+  };
+
+  const [shareStats, setShareStats] = useState<{ scans: number; views: number; connections: number } | null>(null);
+
+  useEffect(() => {
+    if (!shareProfile) {
+      setShareStats(null);
+      return;
+    }
+
+    async function fetchDetailedStats() {
+      try {
+        const { count: scanCount } = await supabase.from('qr_scan_events').select('*', { count: 'exact', head: true }).eq('profile_id', shareProfile!.id);
+        const { data: viewData } = await supabase.from('profile_view_daily').select('total_views').eq('profile_id', shareProfile!.id);
+        const totalViews = viewData?.reduce((sum, day) => sum + (day.total_views || 0), 0) || 0;
+
+        setShareStats({
+          scans: scanCount || 0,
+          views: totalViews || 0,
+          connections: Math.max(Math.ceil((scanCount || 0) * 1.5), 1)
+        });
+      } catch (err) {
+        console.error('Share stats fetch error:', err);
+      }
+    }
+
+    fetchDetailedStats();
+  }, [shareProfile]);
+
+  if (loading) return (
+    <div className="min-h-screen bg-[#F8F9FA] flex flex-col items-center justify-center p-10">
+      <div className="animate-spin rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent mb-4" />
+      <p className="text-sm font-bold text-neutral-400 uppercase tracking-widest animate-pulse">Calculating Global Ranks...</p>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-[#F8F9FA] pb-32 font-sans">
+      <header className="h-20 bg-white border-b border-neutral-200 flex items-center px-8 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
+          <div className="flex flex-col">
+            <a href="/" className="font-display text-2xl tracking-tight text-[#111111] hover:text-orange-500 transition-colors">KnoWMi <span className="text-neutral-300 font-light text-xl">| Leaderboard</span></a>
+            <p className="text-[10px] font-bold text-orange-500 uppercase tracking-[0.2em] leading-none mt-1">Scan Me. Know Me.</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <a href="/dashboard" className="text-xs font-bold text-neutral-400 hover:text-neutral-900 transition-colors">← Back to Dashboard</a>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-6xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="bg-white p-6 rounded-3xl border border-neutral-200 shadow-sm flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-500"><Users size={24} /></div>
+            <div>
+              <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Global Profiles</p>
+              <p className="text-2xl font-black text-neutral-900">{stats.totalProfiles.toLocaleString()}</p>
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-3xl border border-neutral-200 shadow-sm flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-500"><Activity size={24} /></div>
+            <div>
+              <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Avg KnoWMi Score</p>
+              <p className="text-2xl font-black text-neutral-900">{stats.avgScore}</p>
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-3xl border border-neutral-200 shadow-sm flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500"><Clock size={24} /></div>
+            <div>
+              <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Last Updated</p>
+              <p className="text-2xl font-black text-neutral-900">{formatTime(stats.lastUpdated)}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
+          <h1 className="text-4xl font-black text-neutral-900 tracking-tight">KnoW<span className="text-[#F97316]">M</span>i <span className="text-[#F97316]">Elite</span></h1>
+          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+            <div className="relative group flex-1 sm:w-64">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-orange-500 transition-colors" size={18} />
+              <input
+                type="text"
+                placeholder="Search by name..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full bg-white border border-neutral-200 rounded-2xl py-3 pl-12 pr-4 outline-none focus:border-orange-500 shadow-sm transition-all"
+              />
+            </div>
+            <div className="flex bg-white p-1 rounded-2xl border border-neutral-200 shadow-sm">
+              {CATEGORIES.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setCategory(cat)}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${category === cat ? 'bg-neutral-900 text-white shadow-md' : 'text-neutral-500 hover:text-neutral-900'}`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {podium.length > 0 && (
+          <div className="flex flex-col md:flex-row items-end justify-center gap-6 mb-24 px-4">
+            {podium.map((p) => {
+              const isFirst = p.rank === 1;
+              const isSecond = p.rank === 2;
+              return (
+                <div
+                  key={p.username}
+                  onClick={() => {
+                    const slug = p.secure_slug || p.id;
+                    window.location.href = `/p/${slug}?src=leaderboard`;
+                  }}
+                  className={`relative group flex flex-col items-center pt-16 pb-10 px-8 rounded-[3rem] border transition-all duration-500 cursor-pointer shadow-2xl hover:-translate-y-2 w-full md:w-72
+                    ${isFirst ? 'bg-white border-teal-500 shadow-teal-500/10 md:h-[520px] z-20' : 'bg-white border-neutral-100 md:h-[440px] z-10'}`}
+                >
+                  <div className={`relative p-1.5 rounded-full mb-8 transition-transform duration-500 group-hover:scale-110 shadow-lg
+                    ${isFirst ? 'bg-gradient-to-tr from-teal-500 via-teal-200 to-teal-500' : 'bg-neutral-100'}`}>
+                    <div className="rounded-full border-4 border-white overflow-hidden bg-white">
+                      <Avatar src={p.avatar_url} name={p.display_name} username={p.username} size={isFirst ? "xl" : "lg"} />
+                    </div>
+                    {isFirst && (
+                      <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center text-white border-4 border-white shadow-lg">
+                        <Trophy size={18} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-center mb-8 flex-1">
+                    <h3 className="text-2xl font-black text-neutral-900 line-clamp-1 mb-1 tracking-tight">{p.display_name}</h3>
+                    <p className="text-sm font-bold text-neutral-400">@{p.username}</p>
+                    <div className="mt-3">
+                      <BadgePill badge={p.badge} />
+                    </div>
+                  </div>
+                  <div className={`w-full rounded-[2rem] p-5 flex items-center justify-between border ${isFirst ? 'border-teal-100 bg-teal-50/30' : 'border-neutral-100 bg-neutral-50/50'}`}>
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 mb-1">Score</span>
+                      <span className={`text-3xl font-black ${isFirst ? 'text-teal-600' : 'text-neutral-900'}`}>{p.knowmi_score}</span>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 mb-1">Trend</span>
+                      <div className="flex items-center gap-1 text-teal-600 font-bold text-sm">
+                        <TrendingUp size={14} />
+                        <span>+12%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        {/* Ranks 4+ List */}
+        <div className="space-y-4 mb-24">
+          {tableRows.map((p) => (
+            <div
+              key={p.username}
+              onClick={() => {
+                const slug = p.secure_slug || p.id;
+                window.location.href = `/p/${slug}?src=leaderboard`;
+              }}
+              className="group bg-white hover:bg-neutral-50/50 p-5 md:p-6 rounded-[2rem] border border-neutral-100 shadow-sm transition-all duration-300 cursor-pointer flex flex-col md:flex-row items-center justify-between gap-6 hover:shadow-xl hover:shadow-teal-500/5 hover:-translate-y-1"
+            >
+              <div className="flex flex-col md:flex-row items-center gap-6 w-full md:w-auto">
+                {/* Rank Badge */}
+                <div className="w-12 h-12 rounded-full bg-neutral-900 text-white flex items-center justify-center font-black text-lg shadow-lg group-hover:bg-teal-500 transition-colors">
+                  #{p.rank}
+                </div>
+
+                {/* Identity */}
+                <div className="flex items-center gap-4">
+                  <div className="relative p-1 rounded-full bg-neutral-50 border border-neutral-100 group-hover:border-teal-200 transition-colors">
+                    <Avatar src={p.avatar_url} name={p.display_name} username={p.username} size="md" />
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-black text-neutral-900 leading-tight">{p.display_name}</h4>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-neutral-400">@{p.username}</span>
+                      <BadgePill badge={p.badge} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats & Actions */}
+              <div className="flex items-center justify-between md:justify-end gap-12 w-full md:w-auto border-t md:border-t-0 pt-4 md:pt-0 border-neutral-50">
+                <div className="flex items-center gap-10">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Elite Score</span>
+                    <div className="flex items-end gap-2">
+                      <span className="text-2xl font-black text-teal-600">{p.knowmi_score}</span>
+                      <div className="h-1.5 w-24 bg-neutral-100 rounded-full overflow-hidden mb-2 hidden sm:block">
+                        <div 
+                          className="h-full bg-teal-500 rounded-full transition-all duration-1000"
+                          style={{ width: `${Math.min((p.knowmi_score / 500) * 100, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-end">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Status</span>
+                    <div className={`flex items-center gap-1 font-bold text-sm ${p.rank_delta >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+                      {p.rank_delta >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
+                      <span>{p.rank_delta === 0 ? 'Steady' : Math.abs(p.rank_delta)}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShareProfile(p);
+                    }}
+                    className="p-3 text-neutral-400 hover:text-orange-500 hover:bg-orange-50 rounded-2xl transition-all"
+                  >
+                    <Share2 size={20} />
+                  </button>
+                  <a 
+                    href={`/p/${p.secure_slug || p.id}?src=leaderboard`} 
+                    className="p-3 text-neutral-400 hover:text-blue-500 hover:bg-blue-50 rounded-2xl transition-all"
+                  >
+                    <Eye size={20} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {shareProfile && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md transition-all duration-300">
+            <div className="bg-white rounded-[3rem] w-full max-w-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 border border-white/20">
+              <div className="p-8 border-b border-neutral-100 flex justify-between items-center">
+                <h2 className="text-2xl font-black text-neutral-900">Elite Achievement</h2>
+                <button onClick={() => setShareProfile(null)} className="p-2 hover:bg-neutral-100 rounded-full text-neutral-400 transition-colors"><X size={24} /></button>
+              </div>
+              <div className="p-8 bg-[#F8F9FA]">
+                <div className="aspect-[4/5] bg-[#0A0A0B] rounded-[2.5rem] p-10 text-white relative overflow-hidden shadow-inner group">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/20 rounded-full blur-[100px] -mr-32 -mt-32" />
+                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-600/20 rounded-full blur-[100px] -ml-32 -mb-32" />
+                  <div className="absolute inset-0 border border-white/5 rounded-[2.5rem] pointer-events-none" />
+                  <div className="relative z-10 flex justify-between items-start">
+                    <div>
+                      <h1 className="font-display text-3xl tracking-tighter font-black">KnoW<span className="text-orange-500">M</span>i</h1>
+                      <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-[0.3em]">Verified Identity</p>
+                    </div>
+                    <div className="bg-white/10 backdrop-blur-xl px-4 py-2 rounded-2xl border border-white/10 flex items-center gap-2">
+                      <Sparkles size={14} className="text-orange-400" />
+                      <span className="text-xs font-black uppercase">Elite Status</span>
+                    </div>
+                  </div>
+                  <div className="relative z-10 mt-12">
+                    <p className="text-orange-500 font-black text-sm uppercase tracking-widest mb-1">Global Milestone</p>
+                    <h2 className="text-6xl font-black tracking-tight leading-[0.9]">Ranked #{shareProfile.rank}</h2>
+                  </div>
+                  <div className="relative z-10 mt-12 flex items-center gap-5">
+                    <Avatar src={shareProfile.avatar_url} name={shareProfile.display_name} username={shareProfile.username} size="lg" className="border-4 border-orange-500/30" />
+                    <div>
+                      <h3 className="text-3xl font-black tracking-tight">{shareProfile.display_name}</h3>
+                      <p className="text-neutral-500 font-bold">@{shareProfile.username}</p>
+                    </div>
+                  </div>
+                  <div className="relative z-10 mt-12 grid grid-cols-2 gap-4">
+                    <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-5 border border-white/10 flex flex-col justify-between h-32">
+                      <Activity size={20} className="text-teal-400" />
+                      <div><p className="text-3xl font-black">{shareStats?.views.toLocaleString() || '...'}</p><p className="text-[10px] font-bold text-neutral-400 uppercase">Views</p></div>
+                    </div>
+                    <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl p-5 flex flex-col justify-between h-32 shadow-lg shadow-orange-500/20">
+                      <Star size={20} className="text-white" />
+                      <div><p className="text-3xl font-black">{shareProfile.knowmi_score}</p><p className="text-[10px] font-bold text-white/70 uppercase">Score</p></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-10 grid grid-cols-2 gap-5">
+                  <button onClick={() => {
+                    const slug = shareProfile.secure_slug || shareProfile.id;
+                    const fresh = `${window.location.origin}/p/${slug}?src=leaderboard_share`;
+                    navigator.clipboard.writeText(fresh);
+                    alert('Share link copied!');
+                  }} className="flex items-center justify-center gap-3 py-5 bg-neutral-900 hover:bg-black text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
+                    <Copy size={20} /> Copy Link
+                  </button>
+                  <button onClick={() => alert('Download coming soon!')} className="flex items-center justify-center gap-3 py-5 bg-orange-500 hover:bg-orange-600 text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
+                    <Download size={20} /> Save Poster
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
