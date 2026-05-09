@@ -45,8 +45,6 @@ import { GamerForm } from '../components/identity/forms/GamerForm'
 
 // ============ PREMIUM DESIGN SYSTEM ============
 const STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
-  
   :root {
     --sf: #F97316;
     --sf-dark: #2A2A2A;
@@ -86,26 +84,36 @@ const STYLES = `
     transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     transform-style: preserve-3d;
   }
-  .three-d-card:hover {
-    transform: rotateX(4deg) rotateY(-4deg) translateY(-8px);
-    box-shadow: 20px 20px 60px rgba(0,0,0,0.05), -20px -20px 60px rgba(255,255,255,0.8);
+  @media (min-width: 769px) {
+    .three-d-card:hover {
+      transform: rotateX(4deg) rotateY(-4deg) translateY(-8px);
+      box-shadow: 20px 20px 60px rgba(0,0,0,0.05), -20px -20px 60px rgba(255,255,255,0.8);
+    }
   }
 
   .floating { animation: floating 3s ease-in-out infinite; }
+  @media (max-width: 768px) {
+    .floating { animation: none; }
+  }
   @keyframes floating {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
   }
 
   .mesh-bg {
-    background-color: #FDF6EC;
+    background-color: #f5f5f7;
     background-image: 
-      radial-gradient(at 0% 0%, hsla(25,100%,90%,1) 0, transparent 50%), 
-      radial-gradient(at 50% 0%, hsla(35,100%,90%,1) 0, transparent 50%), 
-      radial-gradient(at 100% 0%, hsla(45,100%,90%,1) 0, transparent 50%);
-    background-attachment: fixed;
+      radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
   }
-
+  @media (min-width: 769px) {
+    .mesh-bg {
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+    }
   .glow-text {
     text-shadow: 0 0 20px rgba(193, 68, 14, 0.2);
   }
@@ -268,7 +276,7 @@ const PERSONAS = {
 
 
 
-const VerificationLock = ({ profile, user }) => (
+const VerificationLock = ({ profile, user, setActiveTab }) => (
   <div className="min-h-[80vh] flex flex-col items-center justify-center p-6 text-center">
     <div className="card p-10 max-w-md w-full glass shadow-2xl relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-1" style={{ background: 'linear-gradient(90deg, var(--sf), var(--gold))' }} />
@@ -1498,7 +1506,7 @@ export default function Dashboard() {
           {activeTab === 'analytics' && (
             isVerified !== true && role !== 'owner' ? (
               <div className="animate-slideUp pt-10">
-                <VerificationLock profile={profile} user={user} />
+                <VerificationLock profile={profile} user={user} setActiveTab={setActiveTab} />
               </div>
             ) : (
               <div className="animate-slideUp">
@@ -1850,15 +1858,14 @@ export default function Dashboard() {
               </div>
               <div className="p-6 min-h-[300px] flex items-center justify-center">
               <DevicePie data={vibeStats.deviceBreakdown} />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
-    )}
-  </div>
-)
-)}
+    )
+  )}
 </div>
 
           
@@ -1995,11 +2002,18 @@ export default function Dashboard() {
             { id: 'analytics', icon: Signal, label: 'Pulse' },
             { id: 'profile', icon: User, label: 'Identity' },
             { id: 'pass', icon: ShieldCheck, label: 'Pass' },
-            { id: 'order-status', icon: Clock, label: 'Status' }
+            { id: 'order-status', icon: Clock, label: 'Status' },
+            ...(isOwner || role === 'owner' ? [{ id: 'admin', icon: Crown, label: 'Manage' }] : [])
           ].map(tab => (
             <button 
               key={tab.id} 
-              onClick={() => setActiveTab(tab.id)} 
+              onClick={() => {
+                if (tab.id === 'admin') {
+                  navigate('/admin')
+                } else {
+                  setActiveTab(tab.id)
+                }
+              }} 
               className={`flex flex-col items-center justify-center flex-1 h-14 rounded-[20px] transition-all duration-300 relative group
                 ${activeTab === tab.id 
                   ? (isVibeDark ? 'bg-orange-500/20 text-orange-400 shadow-[0_4px_12px_rgba(234,88,12,0.1)] -translate-y-1' : 'bg-orange-50 text-orange-600 shadow-[0_4px_12px_rgba(224,123,26,0.08)] -translate-y-1') 
