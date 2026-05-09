@@ -166,7 +166,7 @@ const PERSONA_CONFIG: Record<string, any> = {
 export default function IdentityStudio() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const { user } = useAuth()
+  const { user, isOwner } = useAuth()
   
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
