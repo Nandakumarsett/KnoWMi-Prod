@@ -5,20 +5,24 @@ import { supabase } from '../supabase';
 
 export async function getAnalyticsData(profileId, dateRange = 'all') {
   try {
-    // Try to fetch with visitor info, but fallback if the columns don't exist yet
-    let viewRes = await supabase.from('profile_view_events').select('*, viewer:profiles(id, first_name, last_name, avatar_url)').eq('profile_id', profileId);
-    if (viewRes.error) {
-      console.warn("Analytics: Falling back to simple view fetch", viewRes.error.message);
-      viewRes = await supabase.from('profile_view_events').select('*').eq('profile_id', profileId);
-    }
-
-    let scanRes = await supabase.from('qr_scan_events').select('*, scanner:profiles(id, first_name, last_name, avatar_url)').eq('profile_id', profileId);
-    if (scanRes.error) {
-      console.warn("Analytics: Falling back to simple scan fetch", scanRes.error.message);
-      scanRes = await supabase.from('qr_scan_events').select('*').eq('profile_id', profileId);
-    }
-
-    const { data: linksData } = await supabase.from('link_click_events').select('*').eq('profile_id', profileId);
+    // Fetch all analytics data in parallel for speed
+    const [viewRes, scanRes, { data: linksData, error: linksError }] = await Promise.all([
+      supabase.from('profile_view_events').select('*, viewer:profiles(id, first_name, last_name, avatar_url)').eq('profile_id', profileId).then(res => {
+        if (res.error) {
+          console.warn("Analytics: Falling back to simple view fetch", res.error.message);
+          return supabase.from('profile_view_events').select('*').eq('profile_id', profileId);
+        }
+        return res;
+      }),
+      supabase.from('qr_scan_events').select('*, scanner:profiles(id, first_name, last_name, avatar_url)').eq('profile_id', profileId).then(res => {
+        if (res.error) {
+          console.warn("Analytics: Falling back to simple scan fetch", res.error.message);
+          return supabase.from('qr_scan_events').select('*').eq('profile_id', profileId);
+        }
+        return res;
+      }),
+      supabase.from('link_click_events').select('*').eq('profile_id', profileId)
+    ]);
 
     let views = viewRes.data || [];
     let scans = scanRes.data || [];
