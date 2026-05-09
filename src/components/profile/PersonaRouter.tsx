@@ -1,9 +1,7 @@
 import { ProfileData } from '../../types/profile'
 import { DeveloperProfile } from './personas/DeveloperProfile'
 import { StudentProfile } from './personas/StudentProfile'
-import { CreatorProfile } from './personas/CreatorProfile'
 import { GamerProfile } from './personas/GamerProfile'
-import { FitnessProfile } from './personas/FitnessProfile'
 
 interface PersonaRouterProps {
   profile: ProfileData
