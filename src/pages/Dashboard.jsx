@@ -757,8 +757,8 @@ const PersonaEditor = ({ profile, onUpdate }) => {
           ))}
         </div>
 
-        {/* Add New Identity Button (Creator Plan Only) */}
-        {isCreator ? (
+        {/* Add New Identity Button (Always allow first identity, then check plan) */}
+        {(isCreator || identities.length === 0) ? (
           identities.length < 3 ? (
             <button onClick={addNewIdentity} className="w-full h-24 border-2 border-dashed border-neutral-200 rounded-3xl flex flex-col items-center justify-center gap-2 text-neutral-400 hover:border-orange-500 hover:text-orange-500 hover:bg-orange-50/30 transition-all group">
               <div className="w-10 h-10 rounded-full bg-neutral-50 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-all">
@@ -844,21 +844,13 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                   return (
                     <div 
                       key={p.id} 
-                      onClick={() => {
-                        if (exists) return;
-                        setPersona(p.id);
-                      }} 
-                      className={`persona-card group h-56 flex flex-col items-center justify-center text-center three-d-card overflow-hidden relative ${persona === p.id ? 'active ring-4 ring-orange-500 shadow-2xl scale-105' : 'bg-white/40 backdrop-blur-xl border-white/60 hover:bg-white/80'} ${exists ? 'opacity-60 cursor-not-allowed grayscale-[0.5]' : 'cursor-pointer'}`} 
+                      onClick={() => setPersona(p.id)} 
+                      className={`persona-card group h-56 flex flex-col items-center justify-center text-center three-d-card overflow-hidden relative ${persona === p.id ? 'active ring-4 ring-orange-500 shadow-2xl scale-105' : 'bg-white/40 backdrop-blur-xl border-white/60 hover:bg-white/80'} cursor-pointer`} 
                       style={{ 
                         background: persona === p.id ? p.bg : undefined,
                         borderColor: persona === p.id ? 'white' : undefined
                       }}
                     >
-                      {exists && (
-                        <div className="absolute top-4 left-0 right-0 z-20">
-                          <span className="bg-orange-500 text-white text-[8px] font-black uppercase px-2 py-1 rounded-full shadow-lg">Persona Exists</span>
-                        </div>
-                      )}
                      {/* Background Glow for unselected */}
                      {persona !== p.id && (
                        <div 
@@ -1868,6 +1860,7 @@ export default function Dashboard() {
 )
 )}
 </div>
+
           
           {/* Existing Tabs */}
           <div className={`tab-transition ${activeTab === 'profile' ? 'tab-visible' : 'tab-hidden'}`}>
