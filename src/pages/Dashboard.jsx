@@ -345,6 +345,7 @@ const StatCard = ({ label, value, color, icon: Icon, delay = 0 }) => (
   </div>
 )
 const PersonaEditor = ({ profile, onUpdate }) => {
+  const { isOwner } = useAuth()
   // Initialize identities from persona_data or create the first one from profile
   const [identities, setIdentities] = useState(() => {
     const stored = profile?.persona_data?.identities || []
@@ -1219,7 +1220,7 @@ const IdentityPass = ({ profile }) => {
 export default function Dashboard() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
-  const { profile, user, loading: authLoading, refreshProfile, isVerified, role } = useAuth()
+  const { profile, user, loading: authLoading, refreshProfile, isVerified, role, isOwner } = useAuth()
   const [scans, setScans] = useState([])
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
