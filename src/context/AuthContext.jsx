@@ -9,29 +9,45 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   const fetchProfile = async (userId) => {
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('user_id', userId)
-      .single()
-    setProfile(data)
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .single()
+      
+      if (error) throw error
+      setProfile(data)
+      return data
+    } catch (err) {
+      console.error('Profile fetch error:', err)
+      return null
+    }
   }
 
   useEffect(() => {
-    // Check active sessions
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const initAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
       const currentUser = session?.user ?? null
       setUser(currentUser)
-      if (currentUser) fetchProfile(currentUser.id)
+      
+      if (currentUser) {
+        await fetchProfile(currentUser.id)
+      }
       setLoading(false)
-    })
+    }
+
+    initAuth()
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       const currentUser = session?.user ?? null
       setUser(currentUser)
-      if (currentUser) fetchProfile(currentUser.id)
-      else setProfile(null)
+      if (currentUser) {
+        await fetchProfile(currentUser.id)
+      } else {
+        setProfile(null)
+      }
       setLoading(false)
     })
 
