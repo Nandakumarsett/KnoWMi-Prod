@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
     if (user) fetchProfile(user.id)
   }
 
-  const role = profile?.role || 'customer'
+  const role = (profile?.role || 'customer').toLowerCase()
   const isOwner = role === 'owner'
   const isStaff = ['owner', 'ambassador', 'collaborator'].includes(role)
   const isVerified = profile?.is_verified === true
