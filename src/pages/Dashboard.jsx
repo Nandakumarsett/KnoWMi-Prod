@@ -40,7 +40,6 @@ import { AIInsightsToggle } from '../components/vibe/AIInsightsToggle'
 import { DeveloperForm } from '../components/identity/forms/DeveloperForm'
 import { StudentForm } from '../components/identity/forms/StudentForm'
 import { GamerForm } from '../components/identity/forms/GamerForm'
-import { FitnessForm } from '../components/identity/forms/FitnessForm'
 
 
 
@@ -290,6 +289,12 @@ const VerificationLock = ({ profile, user }) => (
           <MessageCircle size={20} className="fill-white/20" />
           Verify via WhatsApp
         </a>
+        <button
+          onClick={() => setActiveTab('profile')}
+          className="w-full py-4 border-2 border-dashed border-neutral-200 text-neutral-400 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:border-orange-500 hover:text-orange-500 hover:bg-orange-50/50 transition-all"
+        >
+          Build Your Identity Anyway
+        </button>
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
           Verification typically takes 5-10 minutes.
         </p>
@@ -1388,22 +1393,8 @@ export default function Dashboard() {
 
 
 
+  // Loading state
   if (authLoading || loading) return <div className="min-h-screen bg-[#FAFAF9] p-10"><style dangerouslySetInnerHTML={{ __html: STYLES }}/><div className="skeleton h-20 w-full rounded-2xl mb-6"/><div className="skeleton h-64 w-full rounded-2xl"/></div>
-
-  // ABSOLUTE GATE: If not verified AND not owner, they see NOTHING but the lock.
-  if (isVerified !== true && role !== 'owner') return (
-    <div className="min-h-screen bg-[#FAFAF9]">
-      <style dangerouslySetInnerHTML={{ __html: STYLES }} />
-      <header className="h-16 border-b bg-white/80 backdrop-blur-xl flex items-center px-6 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto w-full flex justify-between items-center">
-          <button onClick={() => navigate('/')} className="text-xs font-bold text-neutral-400 hover:text-neutral-900 transition-colors flex items-center gap-2">
-            <ArrowLeft size={16} /> Back to Home
-          </button>
-        </div>
-      </header>
-      <VerificationLock profile={profile} user={user} />
-    </div>
-  )
 
   const isVibeDark = activeTab === 'analytics' && vibeTheme === 'dark';
 
@@ -1454,9 +1445,6 @@ export default function Dashboard() {
                   newParams.delete('mode')
                   newParams.delete('edit')
                   setSearchParams(newParams)
-                } else if (activeTab !== 'analytics') {
-                  setActiveTab('analytics')
-                  navigate('/dashboard')
                 } else {
                   navigate('/')
                 }
@@ -1465,13 +1453,13 @@ export default function Dashboard() {
             >
               <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
               <span className="text-xs font-bold uppercase tracking-widest hidden sm:inline">
-                {searchParams.get('mode') === 'edit' ? 'Back to Identities' : activeTab === 'analytics' ? 'Home' : 'Back to Analytics'}
+                {searchParams.get('mode') === 'edit' ? 'Back to Identities' : 'Home'}
               </span>
             </button>
             <div className={`h-8 w-px hidden sm:block ${isVibeDark ? 'bg-white/10' : 'bg-neutral-100'}`} />
             <div className="flex flex-col">
               <h1 className={`font-display text-2xl tracking-tight-premium transition-colors duration-300 ${isVibeDark ? 'text-white' : 'text-[#111111]'}`}>
-                {profile?.first_name ? `${profile.first_name}'s` : 'KnoWMi'} <span className={`font-light text-xl ${isVibeDark ? 'text-neutral-500' : 'text-neutral-300'}`}>| Analytics</span>
+                {profile?.first_name ? `${profile.first_name}'s` : 'KnoWMi'} <span className={`font-light text-xl ${isVibeDark ? 'text-neutral-500' : 'text-neutral-300'}`}>| {activeTab === 'analytics' ? 'Pulse' : activeTab === 'profile' ? 'Identity' : activeTab === 'pass' ? 'Pass' : 'Dashboard'}</span>
               </h1>
               <p className="text-[10px] font-black text-orange-500 uppercase tracking-luxury leading-none mt-2">Scan Me. Know Me.</p>
             </div>
@@ -1516,7 +1504,12 @@ export default function Dashboard() {
       <main className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 pb-48">
         <div className={`tab-transition ${activeTab === 'analytics' ? 'tab-visible' : 'tab-hidden'}`}>
           {activeTab === 'analytics' && (
-            <div className="animate-slideUp">
+            isVerified !== true && role !== 'owner' ? (
+              <div className="animate-slideUp pt-10">
+                <VerificationLock profile={profile} user={user} />
+              </div>
+            ) : (
+              <div className="animate-slideUp">
 
               {/* Sub-tab toggle */}
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
@@ -1867,13 +1860,14 @@ export default function Dashboard() {
               <DevicePie data={vibeStats.deviceBreakdown} />
               </div>
             </div>
-            </div>
           </div>
-        )}
-
+        </div>
       </div>
     )}
   </div>
+)
+)}
+</div>
           
           {/* Existing Tabs */}
           <div className={`tab-transition ${activeTab === 'profile' ? 'tab-visible' : 'tab-hidden'}`}>
