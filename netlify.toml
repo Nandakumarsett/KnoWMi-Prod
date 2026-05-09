@@ -3,6 +3,11 @@
   publish = "dist"
 
 [[redirects]]
+  from = "/content/*"
+  to = "https://jwsoutcwgwwfovrdrmjk.supabase.co/storage/v1/object/public/:splat"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
