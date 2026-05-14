@@ -214,14 +214,14 @@ export function CreatorProfile({ profile }: { profile: ProfileData }) {
                 <div className="bg-neutral-50/50 p-6 rounded-[28px] border border-neutral-100/50 transition-all hover:bg-white hover:shadow-xl group">
                   <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest mb-2 group-hover:text-orange-500 transition-colors">Digital Impressions</p>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-2xl font-black text-neutral-900">{profile.views || 0}</span>
-                    <span className="text-[10px] font-bold text-neutral-400 uppercase">Views</span>
+                    <span className="text-2xl font-black text-neutral-900">{data.total_reach || profile.views || 0}</span>
+                    {!data.total_reach && <span className="text-[10px] font-bold text-neutral-400 uppercase">Views</span>}
                   </div>
                 </div>
                 <div className="bg-neutral-50/50 p-6 rounded-[28px] border border-neutral-100/50 transition-all hover:bg-white hover:shadow-xl group">
                   <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest mb-2 group-hover:text-orange-500 transition-colors">Most Scanned City</p>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-xl font-black text-neutral-900 truncate">{profile.top_location || 'Global'}</span>
+                    <span className="text-xl font-black text-neutral-900 truncate">{data.location || profile.top_location || 'Global'}</span>
                   </div>
                 </div>
               </div>
