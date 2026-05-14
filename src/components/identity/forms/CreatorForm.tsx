@@ -39,6 +39,67 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
   return (
     <div className="space-y-24 py-10 animate-fadeIn">
       
+      {/* SECTION: PROFILE HEADER / BANNER */}
+      <section className="space-y-10">
+        <div className="flex items-center gap-4 mb-2">
+          <div className="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center shadow-sm">
+            <Camera size={24} />
+          </div>
+          <div>
+            <h3 className="text-lg font-black uppercase tracking-widest text-[#1A1A1A]">Profile Aesthetics</h3>
+            <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Upload your signature profile banner</p>
+          </div>
+        </div>
+
+        <div className="relative group">
+          <div 
+            className="w-full h-48 sm:h-64 rounded-[32px] overflow-hidden bg-neutral-100 border-4 border-dashed border-neutral-200 hover:border-orange-500 transition-all flex flex-col items-center justify-center cursor-pointer relative"
+          >
+            {data.featured_work_url ? (
+              <>
+                <img 
+                  src={getAssetUrl(data.featured_work_url)} 
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                  alt="Banner Preview"
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white">
+                  <Upload size={32} className="mb-2" />
+                  <span className="text-[10px] font-black uppercase tracking-widest">Replace Banner Image</span>
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center gap-3 text-neutral-400">
+                <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                  <Camera size={32} className="text-orange-500" />
+                </div>
+                <div className="text-center">
+                  <span className="text-xs font-black uppercase text-neutral-900 tracking-widest">Upload Profile Banner</span>
+                  <p className="text-[10px] font-bold mt-1 uppercase tracking-widest">Recommended: 1200 x 400 • JPG/PNG</p>
+                </div>
+              </div>
+            )}
+            <input 
+              type="file" 
+              accept="image/*" 
+              className="absolute inset-0 opacity-0 cursor-pointer z-10"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file && onUpload) {
+                  onUpload(file, 'featured_work_url').then(url => {
+                    if (url) updateField('featured_work_url', url);
+                  });
+                }
+              }}
+            />
+          </div>
+          {uploading && (
+            <div className="absolute inset-0 bg-white/60 backdrop-blur-sm rounded-[32px] flex items-center justify-center z-20">
+              <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* SECTION: BRANDING & SPECIALTY */}
       <section className="space-y-10">
         <div className="flex items-center gap-4 mb-2">
