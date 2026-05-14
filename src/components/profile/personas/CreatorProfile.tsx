@@ -190,13 +190,28 @@ export function CreatorProfile({ profile }: { profile: ProfileData }) {
             <div className="flex flex-col items-center mb-10">
               <div className="text-center">
                 <h1 className="text-4xl font-black tracking-tight text-neutral-900 mb-2 uppercase italic leading-tight">{profile.display_name}</h1>
-                <p className="text-xs font-black text-orange-600 uppercase tracking-[0.4em] leading-none mt-2">
+                <p className="text-xs font-black text-orange-600 uppercase tracking-[0.4em] leading-none mt-2 mb-4">
                   {data.type || 'CREATIVE PROFESSIONAL'}
                 </p>
+                {profile.bio && (
+                  <p className="text-sm font-black text-neutral-800 leading-tight italic max-w-lg mx-auto">
+                    {profile.bio}
+                  </p>
+                )}
               </div>
             </div>
 
-            {/* Network Presence - Redesigned with Original Colors */}
+            {/* Professional Narrative - Moved Up for priority */}
+            {data.about && (
+              <div className="mb-8">
+                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-1">Professional Narrative</p>
+                <p className="text-base text-neutral-600 leading-relaxed bg-neutral-50/30 py-4 px-6 rounded-[24px] border border-neutral-100/50 max-w-2xl italic">
+                  "{data.about}"
+                </p>
+              </div>
+            )}
+
+            {/* Network Presence - Moved Down */}
             {data.platforms && data.platforms.length > 0 && (
               <div className="mb-12">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6">Where you can find me</p>
@@ -279,15 +294,6 @@ export function CreatorProfile({ profile }: { profile: ProfileData }) {
               </div>
             )}
 
-            {/* About the Creator - Short Summary */}
-            {data.about && (
-              <div className="mb-12">
-                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-4">Professional Narrative</p>
-                <p className="text-base text-neutral-600 leading-relaxed bg-neutral-50/30 p-6 rounded-[24px] border border-neutral-100/50 max-w-2xl italic">
-                  "{data.about}"
-                </p>
-              </div>
-            )}
 
             {/* Specialty Formats / Specialized in */}
             {data.content_formats && data.content_formats.length > 0 && (
