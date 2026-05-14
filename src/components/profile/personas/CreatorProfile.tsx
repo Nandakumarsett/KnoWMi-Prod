@@ -7,7 +7,7 @@ import { getAssetUrl } from '../../../lib/supabase'
 import { 
   LayoutGrid, Instagram, Youtube, Twitter, Github, 
   Share2, Sparkles, TrendingUp, Camera, Play, Film, MapPin, 
-  Trophy, Mail, MessageCircle, Facebook, Linkedin, Globe
+  Trophy, Mail, MessageCircle, Facebook, Linkedin, Globe, Activity
 } from 'lucide-react'
 
 const PLATFORM_ICONS: Record<string, any> = {
@@ -198,6 +198,32 @@ export function CreatorProfile({ profile }: { profile: ProfileData }) {
                     {profile.bio}
                   </p>
                 )}
+              </div>
+            </div>
+
+            {/* KnoWMi Pulse - Real-time Analytics */}
+            <div className="mb-12 animate-fadeIn">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">
+                  <Activity size={16} className="text-orange-600 animate-pulse" />
+                </div>
+                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900">KnoWMi Pulse</p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-6">
+                <div className="bg-neutral-50/50 p-6 rounded-[28px] border border-neutral-100/50 transition-all hover:bg-white hover:shadow-xl group">
+                  <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest mb-2 group-hover:text-orange-500 transition-colors">Digital Impressions</p>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-black text-neutral-900">{profile.views || 0}</span>
+                    <span className="text-[10px] font-bold text-neutral-400 uppercase">Views</span>
+                  </div>
+                </div>
+                <div className="bg-neutral-50/50 p-6 rounded-[28px] border border-neutral-100/50 transition-all hover:bg-white hover:shadow-xl group">
+                  <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest mb-2 group-hover:text-orange-500 transition-colors">Most Scanned City</p>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xl font-black text-neutral-900 truncate">{profile.top_location || 'Global'}</span>
+                  </div>
+                </div>
               </div>
             </div>
 
