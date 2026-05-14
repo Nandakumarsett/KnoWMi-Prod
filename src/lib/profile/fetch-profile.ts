@@ -43,7 +43,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     'role', 'is_verified', 'created_at', 'wm_code', 'member_id',
     'instagram', 'instagram_url', 'linkedin', 'linkedin_url', 'github', 
     'github_url', 'twitter', 'twitter_url', 'youtube', 'youtube_url', 
-    'website', 'website_url', 'whatsapp', 'whatsapp_number'
+    'website', 'website_url', 'whatsapp', 'whatsapp_number', 'views', 'top_location'
   ]
 
   // Create a clean public object
@@ -132,6 +132,8 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     tier: publicProfile.status === 'paid' ? 'Creator' : (publicProfile.status === 'team' ? 'Team' : 'Starter'),
     is_verified: publicProfile.is_verified ?? (publicProfile.status === 'paid'),
     joined_at: publicProfile.created_at,
+    views: publicProfile.views || 0,
+    top_location: publicProfile.top_location || 'Global',
     social_links,
     persona_data: (() => {
       if (activeIdentity) {
