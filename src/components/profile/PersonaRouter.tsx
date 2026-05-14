@@ -8,9 +8,10 @@ import { FitnessProfile } from './personas/FitnessProfile'
 interface PersonaRouterProps {
   profile: ProfileData
   recentVisitors?: any[]
+  stats?: any
 }
 
-export function PersonaRouter({ profile, recentVisitors = [] }: PersonaRouterProps) {
+export function PersonaRouter({ profile, recentVisitors = [], stats }: PersonaRouterProps) {
   const persona = (profile.persona || 'developer').toLowerCase()
   switch (persona) {
     case 'dev':
@@ -25,7 +26,7 @@ export function PersonaRouter({ profile, recentVisitors = [] }: PersonaRouterPro
     case 'creator':
     case 'influencer':
     case 'media':
-      return <CreatorProfile profile={profile} />
+      return <CreatorProfile profile={profile} stats={stats} />
     case 'gamer':
     case 'gaming':
     case 'esports':
