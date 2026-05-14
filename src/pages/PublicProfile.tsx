@@ -25,6 +25,7 @@ export default function PublicProfile() {
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768)
   const [showQR, setShowQR] = useState(false)
   const [recentVisitors, setRecentVisitors] = useState<any[]>([])
+  const [stats, setStats] = useState<any>(null)
 
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 768)
@@ -39,8 +40,9 @@ export default function PublicProfile() {
       const data = await fetchProfile(username)
       setProfile(data)
       if (data?.id) {
-        const stats = await getAnalyticsData(data.id, 'all')
-        setRecentVisitors(stats.latestActivity || [])
+        const analytics = await getAnalyticsData(data.id, 'all')
+        setStats(analytics)
+        setRecentVisitors(analytics.latestActivity || [])
       }
       setLoading(false)
     }
@@ -198,7 +200,7 @@ export default function PublicProfile() {
 
         {/* Full Mobile Persona Router below */}
         <div className="px-2">
-          <PersonaRouter profile={profile} recentVisitors={recentVisitors} />
+          <PersonaRouter profile={profile} recentVisitors={recentVisitors} stats={stats} />
         </div>
 
         {/* QR Overlay Modal */}
@@ -359,9 +361,8 @@ export default function PublicProfile() {
             </div>
           </div>
 
-          {/* Right Column - Persona Specific Content */}
           <div className="flex-1 max-w-[680px] min-h-[600px] rounded-[24px] overflow-hidden border shadow-2xl p-6" style={{ background: cardBg, borderColor: borderColor }}>
-             <PersonaRouter profile={profile} recentVisitors={recentVisitors} />
+             <PersonaRouter profile={profile} recentVisitors={recentVisitors} stats={stats} />
           </div>
 
         </div>
