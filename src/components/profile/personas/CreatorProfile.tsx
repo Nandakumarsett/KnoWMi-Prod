@@ -34,6 +34,34 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
   const liveViews = stats?.totalViews || 0;
   const topCity = stats?.topCities?.[0]?.city || 'Global';
 
+  const getPlaceColor = (city: string) => {
+    const c = city.toLowerCase();
+    // Karnataka (Bengaluru) - Red
+    if (c.includes('bengaluru') || c.includes('bangalore') || c.includes('karnataka') || c.includes('mysuru') || c.includes('hubballi') || c.includes('mangalore')) return '#D71920';
+    // Tamil Nadu (Chennai) - Yellow
+    if (c.includes('chennai') || c.includes('madras') || c.includes('tamil nadu') || c.includes('coimbatore') || c.includes('madurai')) return '#F9CD05';
+    // Maharashtra (Mumbai) - Royal Blue
+    if (c.includes('mumbai') || c.includes('bombay') || c.includes('maharashtra') || c.includes('pune') || c.includes('nagpur')) return '#004BA0';
+    // West Bengal (Kolkata) - Purple
+    if (c.includes('kolkata') || c.includes('calcutta') || c.includes('west bengal')) return '#3A225D';
+    // Telangana / Andhra (Hyderabad) - Orange
+    if (c.includes('hyderabad') || c.includes('telangana') || c.includes('andhra') || c.includes('vijayawada') || c.includes('visakhapatnam')) return '#F26522';
+    // Rajasthan - Pink
+    if (c.includes('rajasthan') || c.includes('jaipur') || c.includes('jodhpur') || c.includes('udaipur')) return '#EA1A85';
+    // Delhi - Blue
+    if (c.includes('delhi')) return '#17479E';
+    // Punjab - Red
+    if (c.includes('punjab') || c.includes('ludhiana') || c.includes('amritsar') || c.includes('chandigarh')) return '#DD1F2D';
+    // Gujarat - Navy Blue
+    if (c.includes('gujarat') || c.includes('ahmedabad') || c.includes('surat') || c.includes('vadodara')) return '#1C1C3C';
+    // Uttar Pradesh (Lucknow) - Sky Blue
+    if (c.includes('lucknow') || c.includes('kanpur') || c.includes('agra') || c.includes('uttar pradesh')) return '#00AEEF';
+    
+    return '#1A1A1A'; // Default Ink
+  };
+
+  const cityColor = getPlaceColor(topCity);
+
   const getThumbnail = (work: any) => {
     if (work.external_url) {
       const url = work.external_url;
@@ -204,28 +232,16 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
               </div>
             </div>
 
-            {/* KnoWMi Pulse - Real-time Analytics */}
-            <div className="mb-12 animate-fadeIn">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">
-                  <Activity size={16} className="text-orange-600 animate-pulse" />
+            {/* KnoWMi Pulse - Minimalistic Analytics */}
+            <div className="mb-16 animate-fadeIn w-full -mt-6">
+              <div className="flex justify-evenly items-start w-full">
+                <div className="flex flex-col items-center text-center">
+                  <span className="text-4xl font-black text-neutral-900 leading-none mb-3">{liveViews}</span>
+                  <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest">Profile Views</p>
                 </div>
-                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900">KnoWMi Pulse</p>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-6">
-                <div className="bg-neutral-50/50 p-6 rounded-[28px] border border-neutral-100/50 transition-all hover:bg-white hover:shadow-xl group">
-                  <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest mb-2 group-hover:text-orange-500 transition-colors">Digital Impressions</p>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-2xl font-black text-neutral-900">{liveViews}</span>
-                    <span className="text-[10px] font-bold text-neutral-400 uppercase">Views</span>
-                  </div>
-                </div>
-                <div className="bg-neutral-50/50 p-6 rounded-[28px] border border-neutral-100/50 transition-all hover:bg-white hover:shadow-xl group">
-                  <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest mb-2 group-hover:text-orange-500 transition-colors">Most Scanned City</p>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xl font-black text-neutral-900 truncate">{topCity}</span>
-                  </div>
+                <div className="flex flex-col items-center text-center transform translate-x-4">
+                  <span className="text-4xl font-black leading-none mb-3" style={{ color: cityColor }}>{topCity}</span>
+                  <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest">Most Scanned Place</p>
                 </div>
               </div>
             </div>
