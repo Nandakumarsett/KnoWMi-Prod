@@ -167,43 +167,33 @@ export function CreatorProfile({ profile }: { profile: ProfileData }) {
           </div>
         </div>
 
-        {/* Profile Avatar - Positioned deep on the extended banner */}
-        <div className="relative h-4 px-8">
-           <div className="absolute -top-24 left-8 rounded-full shadow-2xl z-30">
-              <ProfileAvatar
-                src={profile.avatar_url}
-                name={profile.display_name}
-                size={140}
-                shape="circle"
-                className="border-[3.5px] border-white/90 shadow-inner"
-              />
-           </div>
+        {/* Centered Overlapping Avatar - Deeper Integration */}
+        <div className="relative h-12 px-8 z-30">
+          <div className="absolute -top-24 sm:-top-32 left-1/2 -translate-x-1/2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+            <div 
+              className="w-40 h-40 sm:w-48 sm:h-48 p-1.5 rounded-full"
+              style={{ background: 'linear-gradient(135deg, #C1440E, #F97316)' }}
+            >
+              <div className="w-full h-full bg-white p-1 rounded-full overflow-hidden shadow-inner">
+                <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" />
+              </div>
+            </div>
+            {profile.is_verified && (
+              <div className="absolute bottom-2 right-2 w-10 h-10 bg-white rounded-full shadow-xl flex items-center justify-center border border-neutral-100">
+                <VerifiedBadge isVerified={profile.is_verified} accentColor="#C1440E" />
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="pt-16 px-8">
-            <div className="flex flex-wrap items-baseline gap-4 mb-2">
-              <h1 className="text-4xl font-black text-neutral-900 uppercase tracking-tighter" style={{ fontFamily: 'Fraunces, serif' }}>
-                {profile.display_name}
-              </h1>
-              <VerifiedBadge isVerified={profile.is_verified} accentColor={accent} />
-              {data.bio && (
-                <div className="flex-1 min-w-[200px]">
-                  <p className="text-sm font-black text-neutral-800 border-l-2 border-orange-400 pl-4 leading-tight italic">
-                    {data.bio}
-                  </p>
-                </div>
-              )}
-            </div>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-8">
-              <p className="text-xs font-black text-orange-600 uppercase tracking-[0.4em] leading-none mb-1">
-                {data.type || 'CREATIVE PROFESSIONAL'} {data.est_year ? `• EST. ${data.est_year}` : ''}
-              </p>
-              {data.location && (
-                <div className="flex items-center gap-1.5 text-xs font-black text-neutral-400 uppercase tracking-widest border-l border-neutral-200 pl-4">
-                  <MapPin size={14} className="text-orange-500" />
-                  {data.location}
-                </div>
-              )}
+        <div className="px-8 pt-4 relative z-20">
+            <div className="flex flex-col items-center mb-10">
+              <div className="text-center">
+                <h1 className="text-4xl font-black tracking-tight text-neutral-900 mb-2 uppercase italic leading-tight">{profile.display_name}</h1>
+                <p className="text-xs font-black text-orange-600 uppercase tracking-[0.4em] leading-none mt-2">
+                  {data.type || 'CREATIVE PROFESSIONAL'}
+                </p>
+              </div>
             </div>
 
             {/* Network Presence - Redesigned with Original Colors */}
