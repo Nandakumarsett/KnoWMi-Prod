@@ -186,7 +186,7 @@ export function CreatorProfile({ profile }: { profile: ProfileData }) {
           </div>
         </div>
 
-        <div className="px-8 pt-4 relative z-20">
+        <div className="px-8 pt-6 relative z-20">
             <div className="flex flex-col items-center mb-10">
               <div className="text-center">
                 <h1 className="text-4xl font-black tracking-tight text-neutral-900 mb-2 uppercase italic leading-tight">{profile.display_name}</h1>
@@ -215,7 +215,7 @@ export function CreatorProfile({ profile }: { profile: ProfileData }) {
             {data.platforms && data.platforms.length > 0 && (
               <div className="mb-12">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6">Where you can find me</p>
-                <div className="flex flex-wrap gap-8">
+                <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-start gap-3 sm:gap-8 overflow-x-auto no-scrollbar pb-2">
                   {data.platforms.map(p => {
                     const platform = p.platform?.toLowerCase();
                     const Icon = PLATFORM_ICONS[platform] || Share2;
@@ -264,9 +264,9 @@ export function CreatorProfile({ profile }: { profile: ProfileData }) {
                         href={ensureAbsoluteUrl(p.url)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex flex-col items-center gap-3 transition-transform hover:scale-105"
+                        className="group flex flex-col items-center gap-3 transition-transform hover:scale-105 shrink-0"
                       >
-                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg ${style} transition-shadow group-hover:shadow-xl p-3.5 relative overflow-hidden`}>
+                        <div className={`w-11 h-11 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shadow-lg ${style} transition-shadow group-hover:shadow-xl p-3 sm:p-3.5 relative overflow-hidden`}>
                           {logo ? (
                             <img 
                               src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
@@ -279,9 +279,10 @@ export function CreatorProfile({ profile }: { profile: ProfileData }) {
                               }}
                             />
                           ) : null}
-                          <Icon size={28} className={logo ? 'hidden' : ''} />
+                          <Icon size={24} className={logo ? 'hidden' : `sm:hidden ${logo ? '' : 'sm:block'}`} />
+                          <Icon size={28} className={logo ? 'hidden' : 'hidden sm:block'} />
                         </div>
-                        <div className="text-center">
+                        <div className="text-center hidden sm:block">
                           <p className="text-[10px] font-black uppercase text-neutral-900 tracking-tighter">{p.platform}</p>
                           <p className="text-[9px] font-bold text-neutral-400 truncate max-w-[80px]">
                             {p.url?.split('/').filter(Boolean).pop()?.replace('@', '') || 'Profile'}
