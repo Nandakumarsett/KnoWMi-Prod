@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnoWMi - Scan Me. Know Me.</title>
+    <style>
+        body {
+            background: #05050A;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 40px;
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(20px);
+        }
+        h1 { font-size: 48px; font-weight: 900; margin-bottom: 10px; }
+        span { color: #FF9933; }
+        p { color: rgba(255,255,255,0.5); margin-bottom: 30px; }
+        .btn {
+            background: #FF9933;
+            color: white;
+            padding: 16px 32px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 900;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: scale(1.05); }
+    </style>
+    <script>
+        setTimeout(() => {
+            window.location.href = "https://knowmi.in";
+        }, 3000);
+    </script>
+</head>
+<body>
+    <div className="container">
+        <h1>KnoW<span>M</span>i</h1>
+        <p>Redirecting to our official website...</p>
+        <a href="https://knowmi.in" className="btn">Visit Website Now</a>
+    </div>
+</body>
+</html>
