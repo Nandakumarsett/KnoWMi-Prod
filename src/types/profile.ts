@@ -78,6 +78,10 @@ export interface CreatorData {
   }>;
   collab_types?: string;
   contact_preference?: string;
+  total_reach?: string;
+  avg_views?: string;
+  engagement_rate?: string;
+  location?: string;
   achievements: Array<{
     icon: string;
     label: string;
@@ -177,4 +181,6 @@ export interface ProfileData {
   persona_data: PersonaData;
   is_verified: boolean;
   joined_at: string;
+  views?: number;
+  top_location?: string;
 }
