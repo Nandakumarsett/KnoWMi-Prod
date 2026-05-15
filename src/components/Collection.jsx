@@ -112,7 +112,7 @@ export default function Collection({ onSelectDesign }) {
           </div>
         )}
         <div className="mt-20 text-center">
-          <a href="https://wa.me/917981325397" className="inline-flex items-center gap-3 text-sm font-black uppercase tracking-widest text-neutral-400 hover:text-orange-500 transition-colors">
+          <a href="https://wa.me/917981325397" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 text-sm font-black uppercase tracking-widest text-neutral-400 hover:text-orange-500 transition-colors">
             Custom Group Orders <ArrowRight size={16} />
           </a>
         </div>
