@@ -39,14 +39,17 @@ export default function QRIntercept() {
           }
         }
 
-        const edgeFnUrl = `https://mifosfmxjqyhgzshfofj.supabase.co/functions/v1/handle-qr-scan?token=${token}${isOwner ? '&skip_log=true' : ''}`;
+        const edgeFnUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/handle-qr-scan?token=${token}${isOwner ? '&skip_log=true' : ''}`;
         
+        // Fire-and-forget the edge function call for background analytics
+        fetch(edgeFnUrl, {
+          headers: {
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+          }
+        }).catch(console.error);
+
         // Redirect immediately to the profile
         navigate(`/p/${qrData.profile_slug}`);
-
-        // Fire-and-forget the edge function call for background analytics
-        // We only call it if we want to log OR we want to let the edge function handle the isOwner flag
-        fetch(edgeFnUrl).catch(console.error);
 
       } catch (err) {
         console.error('QR Intercept failed:', err);
