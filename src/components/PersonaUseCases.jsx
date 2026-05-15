@@ -59,9 +59,9 @@ export default function PersonaUseCases() {
                 <p className="text-sm text-neutral-500 font-medium leading-relaxed mb-8">
                   {uc.desc}
                 </p>
-                <div className="flex items-center gap-2 text-orange-500 font-black text-[10px] uppercase tracking-widest group-hover:gap-4 transition-all">
+                <a href="#pricing" className="flex items-center gap-2 text-orange-500 font-black text-[10px] uppercase tracking-widest group-hover:gap-4 transition-all">
                    Learn More <ArrowRight size={14} />
-                </div>
+                </a>
               </div>
               
               <div className="absolute bottom-0 right-0 w-32 h-32 opacity-5 group-hover:opacity-10 transition-opacity">
