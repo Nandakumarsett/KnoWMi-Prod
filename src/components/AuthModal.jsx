@@ -407,8 +407,8 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
 
           <p style={{ fontSize: '11px', color: 'var(--muted)', textAlign: 'center', marginTop: '16px', lineHeight: 1.6 }}>
             By continuing, you agree to KnoWMi's{' '}
-            <a href="#" style={{ color: 'var(--sf)', textDecoration: 'underline' }}>Terms</a> &{' '}
-            <a href="#" style={{ color: 'var(--sf)', textDecoration: 'underline' }}>Privacy Policy</a>
+            <a href="/legal#terms" style={{ color: 'var(--sf)', textDecoration: 'underline' }}>Terms</a> &{' '}
+            <a href="/legal#privacy" style={{ color: 'var(--sf)', textDecoration: 'underline' }}>Privacy Policy</a>
           </p>
           </>
           )}
