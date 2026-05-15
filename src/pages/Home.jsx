@@ -59,8 +59,28 @@ export default function Home() {
     }
   }, [user])
 
+  // Handle post-login redirects (especially for Google Login)
+  useEffect(() => {
+    if (user) {
+      const returnTo = localStorage.getItem('return_to')
+      if (returnTo) {
+        localStorage.removeItem('return_to')
+        navigate(returnTo)
+      }
+    }
+  }, [user, navigate])
+
   const handleAuthSuccess = () => {
     setAuthOpen(false)
+    
+    // Check for pending redirect after login (e.g. from a QR scan gate)
+    const returnTo = localStorage.getItem('return_to')
+    if (returnTo) {
+      localStorage.removeItem('return_to')
+      navigate(returnTo)
+      return
+    }
+
     if (pendingRedirect === 'store_persona') {
       setPendingRedirect(null)
     }
