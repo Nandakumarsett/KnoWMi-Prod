@@ -11,21 +11,21 @@ const steps = [
   {
     icon: <Shirt size={32} className="text-orange-500" strokeWidth={1.5} />,
     title: 'Wear It',
-    desc: 'Premium 220 GSM cotton meets your unique digital soul. Built for comfort, designed for identity.',
+    desc: 'A premium 220 GSM tee that carries your entire digital world. People notice. Conversations start.',
     color: 'var(--saffron)',
     bg: 'var(--saffron-light)',
   },
   {
     icon: <Smartphone size={32} className="text-orange-500" strokeWidth={1.5} />,
     title: 'Scan It',
-    desc: 'Instant profile access with any smartphone camera. No apps. No friction. Just connection.',
+    desc: 'Instantly pulls up your live profile on any phone camera. No app. No friction. Just magic.',
     color: 'var(--green-india)',
     bg: 'var(--green-light)',
   },
   {
     icon: <Zap size={32} className="text-orange-500" strokeWidth={1.5} />,
-    title: 'Connect Instantly',
-    desc: 'Share your links, portfolio, and socials in one go. Turn every hello into a lasting legacy.',
+    title: 'You\'re Remembered',
+    desc: 'Your links, portfolio, and story — all in one place. Every scan becomes a connection that lasts.',
     color: 'var(--navy)',
     bg: 'var(--navy-light)',
   },
@@ -62,14 +62,14 @@ export function HowItWorks() {
         {/* Header */}
         <div className="text-center mb-24 reveal">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-100 mb-6 text-orange-600 text-[10px] font-black uppercase tracking-widest">
-            The Experience
+            How It Works
           </div>
           <h2 className="text-5xl md:text-7xl font-display font-black text-black mb-6 tracking-tight leading-[1.05]">
-            Simple. Human. <br />
-            <span className="text-orange-500 italic">Effective.</span>
+            It's stupidly simple.<br />
+            <span className="text-orange-500 italic">That's the point.</span>
           </h2>
           <p className="text-lg text-neutral-400 font-medium max-w-xl mx-auto">
-            Your digital identity, ready to wear in three simple steps.
+            No complicated setup. No downloaded apps. Just a tee that works as hard as you do.
           </p>
         </div>
 
