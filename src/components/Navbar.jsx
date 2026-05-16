@@ -93,7 +93,7 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
                 }}
                 className="lg:text-[36px] font-black text-[var(--ink)] tracking-tight block leading-[0.9]"
               >
-                KnoW<span style={{ color: 'var(--saffron)' }}>M</span>i
+                Kno<span style={{ color: 'var(--saffron)' }}>WM</span>i
               </span>
             </div>
             <span
