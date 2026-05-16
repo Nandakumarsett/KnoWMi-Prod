@@ -463,15 +463,15 @@ export default function Personas() {
         <div className="text-center mb-14 reveal">
           <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-orange-50 border border-orange-100">
             <span className="text-[10px] font-black uppercase tracking-widest text-orange-600">
-              The Collection
+              Pick Your Identity
             </span>
           </div>
           <h2 className="text-5xl md:text-7xl font-display font-black text-black mb-6 tracking-tight leading-[1.05]">
-            Choose Your <br />
-            <span className="text-orange-500 italic">Identity.</span>
+            What do they see <br />
+            <span className="text-orange-500 italic">when they scan you?</span>
           </h2>
           <p className="text-lg text-neutral-400 font-medium max-w-xl mx-auto">
-            Each tee is a gateway to a tailored digital experience, designed for your specific community.
+            Each tee unlocks a different profile built for your world. Tap a persona below to see it live.
           </p>
         </div>
 
