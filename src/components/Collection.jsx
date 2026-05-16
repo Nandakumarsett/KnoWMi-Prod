@@ -32,14 +32,14 @@ export default function Collection({ onSelectDesign }) {
         <div className="max-w-[850px] mx-auto w-full">
           <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-10 gap-8 text-center md:text-left">
             <div className="flex flex-col items-center md:items-start">
-              <div className="inline-block px-3 py-0.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-[9px] font-black uppercase tracking-widest mb-3">Explore Designs</div>
+              <div className="inline-block px-3 py-0.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-[9px] font-black uppercase tracking-widest mb-3">Live Designs</div>
               <h2 className="text-3xl md:text-4xl font-display font-black text-black leading-tight">
-                The Official <br className="hidden md:block"/>
-                <span className="text-orange-500 italic">Founding Series</span>
+                These tees are live. <br className="hidden md:block"/>
+                <span className="text-orange-500 italic">Yours might be next.</span>
               </h2>
             </div>
             <p className="text-sm text-neutral-500 max-w-[320px] leading-relaxed font-medium mx-auto md:mx-0">
-              Pick a design that fits your persona. After selecting, you'll choose your plan.
+              Limited designs. Pick yours before it's gone. After selecting, you'll choose your plan.
             </p>
           </div>
 
