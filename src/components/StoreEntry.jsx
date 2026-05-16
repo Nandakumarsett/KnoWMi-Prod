@@ -15,7 +15,7 @@ export default function StoreEntry({ onClose, onSelectMode }) {
 
       {/* Header */}
       <div className="absolute top-0 w-full flex justify-between p-6 z-10">
-        <h2 className="font-display font-bold text-2xl tracking-widest text-white">KnoW<span className="text-[#FF9933]">Mi</span></h2>
+        <h2 className="font-display font-bold text-2xl tracking-widest text-white">Kno<span className="text-[#FF9933]">WM</span>i</h2>
         <button onClick={onClose} className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors border border-white/20">
           ✕
         </button>
