@@ -33,10 +33,15 @@ export default function Collection({ onSelectDesign }) {
           <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-10 gap-8 text-center md:text-left">
             <div className="flex flex-col items-center md:items-start">
               <div className="inline-block px-3 py-0.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-[9px] font-black uppercase tracking-widest mb-3">Live Designs</div>
-              <h2 className="text-3xl md:text-4xl font-display font-black text-black leading-tight">
-                These tees are live. <br className="hidden md:block"/>
-                <span className="text-orange-500 italic">Yours might be next.</span>
-              </h2>
+              <div className="flex flex-col md:flex-row items-center md:items-end gap-4 md:gap-6">
+                <h2 className="text-3xl md:text-4xl font-display font-black text-black leading-tight">
+                  These tees are live. <br className="hidden md:block"/>
+                  <span className="text-orange-500 italic">Yours might be next.</span>
+                </h2>
+                <a href="/shop" className="px-4 py-2 bg-neutral-100 text-neutral-600 rounded-full font-black text-[9px] uppercase tracking-widest hover:bg-black hover:text-white transition-all flex items-center gap-2 mb-1">
+                  See More <ArrowRight size={12} />
+                </a>
+              </div>
             </div>
             <p className="text-sm text-neutral-500 max-w-[320px] leading-relaxed font-medium mx-auto md:mx-0">
               Limited designs. Pick yours before it's gone. After selecting, you'll choose your plan.
