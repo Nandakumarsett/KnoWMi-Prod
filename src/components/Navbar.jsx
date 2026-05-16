@@ -78,6 +78,10 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
           <img
             src="/logo-square.png"
             alt="KnoWMi"
+            width="96"
+            height="96"
+            loading="eager"
+            fetchpriority="high"
             className="h-20 lg:h-24 w-auto object-contain"
           />
           <div className="flex flex-col leading-none -ml-4 lg:-ml-6">
