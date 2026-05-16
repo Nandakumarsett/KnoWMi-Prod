@@ -140,26 +140,12 @@ export default function Leaderboard() {
   const tableRows = filteredProfiles.filter(p => p.rank > 3);
 
   const formatTime = (iso: string) => {
-    if (!iso) return '---';
-    const date = new Date(iso);
-    if (isNaN(date.getTime())) return '---';
-    
-    const diff = Date.now() - date.getTime();
+    const diff = Date.now() - new Date(iso).getTime();
     const mins = Math.floor(diff / 60000);
-    
-    if (mins < 1) return 'Just Now';
     if (mins < 60) return `${mins}m ago`;
     const hours = Math.floor(mins / 60);
-    if (hours < 24) return `${hours}h ago`;
-    return `${Math.floor(hours / 24)}d ago`;
+    return `${hours}h ago`;
   };
-
-  // Live timer to refresh the "time ago" display every minute
-  const [now, setNow] = useState(Date.now());
-  useEffect(() => {
-    const interval = setInterval(() => setNow(Date.now()), 60000);
-    return () => clearInterval(interval);
-  }, []);
 
   const [shareStats, setShareStats] = useState<{ scans: number; views: number; connections: number } | null>(null);
 
@@ -229,7 +215,7 @@ export default function Leaderboard() {
             <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500"><Clock size={24} /></div>
             <div>
               <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Last Updated</p>
-              <p className="text-2xl font-black text-blue-600">{formatTime(stats.lastUpdated)}</p>
+              <p className="text-2xl font-black text-neutral-900">{formatTime(stats.lastUpdated)}</p>
             </div>
           </div>
         </div>
@@ -289,12 +275,8 @@ export default function Leaderboard() {
                   </div>
                   <div className="text-center mb-8 flex-1">
                     <h3 className="text-2xl font-black text-neutral-900 line-clamp-1 mb-1 tracking-tight">{p.display_name}</h3>
-                    <p className="text-sm font-bold text-neutral-400 mb-3">@{p.username}</p>
-                    <div className={`inline-block px-4 py-1.5 rounded-full shadow-md font-black text-[10px] uppercase tracking-widest text-white mb-3
-                      ${isFirst ? 'bg-teal-500 shadow-teal-500/20' : isSecond ? 'bg-blue-500 shadow-blue-500/20' : 'bg-orange-500 shadow-orange-500/20'}`}>
-                      Global Rank #{p.rank}
-                    </div>
-                    <div className="flex justify-center">
+                    <p className="text-sm font-bold text-neutral-400">@{p.username}</p>
+                    <div className="mt-3">
                       <BadgePill badge={p.badge} />
                     </div>
                   </div>
