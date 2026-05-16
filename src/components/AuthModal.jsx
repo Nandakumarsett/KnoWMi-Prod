@@ -213,7 +213,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
                     letterSpacing: '-0.06em'
                   }}
                 >
-                  KnoW<span style={{ color: 'var(--saffron)' }}>M</span>i
+                  Kno<span style={{ color: 'var(--saffron)' }}>WM</span>i
                 </span>
               </div>
             </div>
