@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase, getAssetUrl } from '../lib/supabase'
 import Navbar from '../components/Navbar'
 import { Footer } from '../components/Footer'
 import { ShoppingBag, ChevronRight, Check, X, Ruler } from 'lucide-react'
@@ -145,7 +145,7 @@ Please share the payment link and next steps!`
                 <div key={d.id} className="group cursor-pointer" onClick={() => handleSelect(d)}>
                   <div className="aspect-square bg-neutral-100 rounded-[40px] overflow-hidden relative mb-6 border border-neutral-100 group-hover:border-orange-500/20 transition-all premium-shimmer shadow-sm group-hover:shadow-2xl group-hover:shadow-orange-500/10">
                     <img 
-                      src={d.model_image_url || d.front_image_url || '/assets/tees/front.png'} 
+                      src={getAssetUrl(d.model_image_url || d.front_image_url) || '/assets/tees/front.png'} 
                       alt={d.name} 
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
@@ -185,7 +185,7 @@ Please share the payment link and next steps!`
                 {/* Left: Preview - Smaller & Fixed-ish */}
                 <div className="bg-neutral-50 rounded-[40px] overflow-hidden border border-neutral-100 shadow-xl max-h-[500px]">
                   <img 
-                    src={selectedDesign.model_image_url || selectedDesign.front_image_url} 
+                    src={getAssetUrl(selectedDesign.model_image_url || selectedDesign.front_image_url)} 
                     className="w-full h-full object-cover"
                     alt="Selected Design"
                   />
