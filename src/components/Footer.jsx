@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useReveal } from '../hooks/useReveal'
-import { ArrowRight, Truck, Lock, Shield, Zap } from 'lucide-react'
+import { ArrowRight, Truck, Lock, Shield, Zap, Mail } from 'lucide-react'
 
 export function CTASection({ onOrderClick }) {
   const ref = useReveal()
@@ -39,9 +39,10 @@ export function CTASection({ onOrderClick }) {
             Get Your Identity Tee
             <ArrowRight size={16} />
           </a>
-          <a href="https://wa.me/917981325397" target="_blank" rel="noopener noreferrer"
-            className="px-10 py-5 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white/10 transition-all">
-            WhatsApp Us
+          <a href="mailto:support.knowmi@gmail.com"
+            className="px-10 py-5 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-2">
+            <Mail size={16} />
+            Email Support
           </a>
         </div>
 
@@ -84,7 +85,7 @@ export function Footer() {
     ],
     Support: [
       { name: 'FAQs', href: '/#faq' },
-      { name: 'WhatsApp Support', href: 'https://wa.me/917981325397', external: true },
+      { name: 'Email Support', href: 'mailto:support.knowmi@gmail.com', external: true },
       { name: 'Return Policy', href: '/legal#refund' },
       { name: 'Track Order', href: '/track' }
     ],
@@ -118,7 +119,7 @@ export function Footer() {
                     color: '#fff',
                     lineHeight: 0.9
                   }}>
-                    KnoW<span style={{ color: 'var(--saffron)' }}>M</span>i
+                    Kno<span style={{ color: 'var(--saffron)' }}>WM</span>i
                   </span>
                 </div>
                 <span 
