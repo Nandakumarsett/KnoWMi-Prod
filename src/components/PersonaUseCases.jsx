@@ -1,29 +1,29 @@
 import { useReveal } from '../hooks/useReveal'
-import { ArrowRight, GraduationCap, Code, Camera, Trophy, Instagram, Dumbbell } from 'lucide-react'
+import { ArrowRight, GraduationCap, Code, Camera } from 'lucide-react'
 
 const useCases = [
   {
     id: 'students',
     icon: <GraduationCap size={24} />,
     title: 'For Students',
-    benefit: 'The Ultimate Campus Connection.',
-    desc: 'Share your LinkedIn, project portfolio, and Spotify playlists instantly at events or in the cafeteria.',
+    benefit: 'Stop handing out paper. Start standing out.',
+    desc: 'At hackathons, fests, and networking events — your tee speaks before you do. One scan: your LinkedIn, resume, and projects, live.',
     image: 'https://images.unsplash.com/photo-1523240715630-36d93339008f?q=80&w=1000&auto=format&fit=crop'
   },
   {
     id: 'creators',
     icon: <Camera size={24} />,
     title: 'For Creators',
-    benefit: 'Your Portfolio, Wearable.',
-    desc: 'Turn every compliment on your tee into a new follower or client. Link directly to your latest work.',
+    benefit: 'Your content is everywhere. Now so are you.',
+    desc: 'Turn every "where do I follow you?" into an instant connection. No more fumbling. Your audience finds you — by scanning your tee.',
     image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000&auto=format&fit=crop'
   },
   {
     id: 'developers',
     icon: <Code size={24} />,
     title: 'For Developers',
-    benefit: 'Code Meets Connection.',
-    desc: 'Link your GitHub, Dev.to, and Twitter. Perfect for hackathons, meetups, and engineering conferences.',
+    benefit: 'Your GitHub speaks. Make them listen.',
+    desc: 'At meetups, conferences, and hackathons — skip the small talk. Let your profile do it. GitHub, portfolio, socials. One scan away.',
     image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1000&auto=format&fit=crop'
   }
 ]
@@ -36,14 +36,14 @@ export default function PersonaUseCases() {
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-24 reveal">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-100 mb-6 text-orange-600 text-[10px] font-black uppercase tracking-widest">
-            Dedicated Identities
+            Built For You
           </div>
           <h2 className="text-5xl md:text-7xl font-display font-black text-black mb-6 tracking-tight leading-[1.05]">
-            Built for Your <br />
-            <span className="text-orange-500 italic">Community.</span>
+            Who wears <br />
+            <span className="text-orange-500 italic">KnoWMi?</span>
           </h2>
           <p className="text-lg text-neutral-400 font-medium max-w-xl mx-auto">
-            We’ve designed specific identity experiences for the people who are building the future.
+            Anyone who's tired of being forgotten. Creators, students, founders, techies — your tee tells your story.
           </p>
         </div>
 
@@ -60,7 +60,7 @@ export default function PersonaUseCases() {
                   {uc.desc}
                 </p>
                 <a href="#pricing" className="flex items-center justify-center lg:justify-start gap-2 text-orange-500 font-black text-[10px] uppercase tracking-widest group-hover:gap-4 transition-all w-full lg:w-auto">
-                   Learn More <ArrowRight size={14} />
+                   Get Yours <ArrowRight size={14} />
                 </a>
               </div>
               
@@ -72,9 +72,10 @@ export default function PersonaUseCases() {
         </div>
         
         <div className="mt-16 reveal text-center">
+          <p className="text-sm text-neutral-400 font-medium mb-6">Also perfect for:</p>
            <div className="flex flex-wrap justify-center gap-4">
-              {['Gamers', 'Influencers', 'Fitness'].map(p => (
-                <span key={p} className="px-6 py-3 rounded-2xl bg-white border border-neutral-100 text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:text-orange-500 transition-colors cursor-pointer">
+              {['Gamers', 'Influencers', 'Fitness Coaches', 'Entrepreneurs', 'Artists'].map(p => (
+                <span key={p} className="px-6 py-3 rounded-2xl bg-white border border-neutral-100 text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:text-orange-500 hover:border-orange-200 transition-colors cursor-pointer">
                   {p}
                 </span>
               ))}
