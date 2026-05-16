@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase, getAssetUrl } from '../lib/supabase'
 import { ShoppingBag, ArrowRight, Star } from 'lucide-react'
 
 export default function Collection({ onSelectDesign }) {
@@ -49,7 +49,7 @@ export default function Collection({ onSelectDesign }) {
               <div key={d.id} className="min-w-[280px] md:min-w-0 snap-center group relative bg-neutral-50 rounded-[2rem] overflow-hidden border border-neutral-100 transition-all duration-500 hover:shadow-xl hover:shadow-orange-500/10 hover:-translate-y-1.5">
                 <div className="aspect-[3/4] overflow-hidden relative">
                   <img 
-                    src={d.model_image_url || d.front_image_url || '/assets/tees/front.png'} 
+                    src={getAssetUrl(d.model_image_url || d.front_image_url) || '/assets/tees/front.png'} 
                     alt={d.name} 
                     loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -57,9 +57,6 @@ export default function Collection({ onSelectDesign }) {
                   <div className="absolute top-3 left-3 flex gap-2">
                     <span className="px-2 py-0.5 bg-black text-white rounded-full text-[8px] font-black uppercase tracking-widest shadow-sm">
                       Batch 01
-                    </span>
-                    <span className="px-2 py-0.5 bg-white/90 backdrop-blur-md rounded-full text-[8px] font-black uppercase tracking-widest text-black shadow-sm">
-                      {d.category}
                     </span>
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-5">
@@ -99,7 +96,11 @@ export default function Collection({ onSelectDesign }) {
               <div key={d.id} className="min-w-[280px] md:min-w-0 snap-center group relative bg-neutral-50 rounded-[2rem] overflow-hidden border border-neutral-100 transition-all duration-500 hover:shadow-xl hover:shadow-orange-500/10 hover:-translate-y-1.5">
                 <div className="aspect-[3/4] overflow-hidden relative">
                   <img src={d.img} alt={d.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
-                  <div className="absolute top-3 left-3"><span className="px-2 py-0.5 bg-white/90 rounded-full text-[8px] font-black uppercase tracking-widest text-black">{d.category}</span></div>
+                  <div className="absolute top-3 left-3 flex gap-2">
+                    <span className="px-2 py-0.5 bg-black text-white rounded-full text-[8px] font-black uppercase tracking-widest shadow-sm">
+                      Batch 01
+                    </span>
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 flex items-end p-5 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button onClick={() => onSelectDesign(d)} className="w-full bg-white text-black py-2.5 rounded-lg font-black text-[11px]">Select Design</button>
                   </div>
