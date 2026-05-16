@@ -1,180 +1,182 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  TrendingUp, MapPin, Globe, Zap, 
-  Users, Activity, Sparkles, ChevronRight,
-  ArrowUpRight, Target, Share2, Eye
-} from 'lucide-react';
+import { Sparkles, Trophy, UserPlus, Share2, Instagram, Twitter, Linkedin, Film } from 'lucide-react';
+
+const CITIES = [
+  { name: 'Bengaluru', color: '#D71920' },
+  { name: 'Mumbai', color: '#004BA0' },
+  { name: 'Delhi', color: '#17479E' },
+  { name: 'Hyderabad', color: '#F26522' },
+  { name: 'Chennai', color: '#F9CD05' },
+  { name: 'Kolkata', color: '#3A225D' }
+];
 
 const PhoneMockup = () => {
-  const [activeTab, setActiveTab] = useState('insights');
-  const [scrollPos, setScrollPos] = useState(0);
-  const containerRef = useRef(null);
+  const [stats, setStats] = useState({ views: 2471, city: CITIES[0] });
+  const scrollRef = useRef(null);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(true);
 
-  // Auto-scrolling simulation
+  // Live Data Simulation
   useEffect(() => {
     const interval = setInterval(() => {
-      setScrollPos(prev => (prev + 1) % 300);
-    }, 50);
+      setStats(prev => ({
+        views: prev.views + Math.floor(Math.random() * 5) + 1,
+        city: CITIES[Math.floor(Math.random() * CITIES.length)]
+      }));
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  // Auto-scroll Logic
+  useEffect(() => {
+    if (!isAutoScrolling || !scrollRef.current) return;
+    
+    const interval = setInterval(() => {
+      const el = scrollRef.current;
+      if (el) {
+        // Stop scrolling when showcase is reached (approx 400px down)
+        if (el.scrollTop < 320) {
+          el.scrollTop += 0.5;
+        } else {
+          setIsAutoScrolling(false);
+        }
+      }
+    }, 50);
+    
+    return () => clearInterval(interval);
+  }, [isAutoScrolling]);
 
   return (
     <div className="relative group">
       {/* Premium Outer Glow */}
-      <div className="absolute -inset-4 bg-gradient-to-tr from-orange-500/20 via-transparent to-emerald-500/10 rounded-[4rem] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+      <div className="absolute -inset-4 bg-gradient-to-tr from-orange-500/10 via-transparent to-orange-500/5 rounded-[4rem] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
       
       {/* Hardware Frame */}
-      <div className="relative w-[320px] h-[650px] bg-[#0F172A] rounded-[3.5rem] p-3 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border-[8px] border-[#1E293B]">
+      <div className="relative w-[300px] h-[620px] bg-[#0F172A] rounded-[3.5rem] p-2.5 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.4)] border-[8px] border-[#1E293B]">
         {/* Notch */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-[#1E293B] rounded-b-3xl z-50 flex items-center justify-center gap-1.5">
-          <div className="w-2 h-2 rounded-full bg-black/40" />
-          <div className="w-8 h-1.5 rounded-full bg-black/40" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-[#1E293B] rounded-b-2xl z-50 flex items-center justify-center gap-1.5">
+          <div className="w-1.5 h-1.5 rounded-full bg-black/40" />
+          <div className="w-6 h-1 rounded-full bg-black/40" />
         </div>
 
         {/* Screen Content */}
-        <div className="relative w-full h-full bg-white rounded-[2.5rem] overflow-hidden flex flex-col font-sans">
+        <div className="relative w-full h-full bg-white rounded-[2.5rem] overflow-hidden font-sans">
           
-          {/* Mockup Header */}
-          <div className="pt-10 pb-4 px-6 bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-neutral-50">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-orange-500 flex items-center justify-center text-white shadow-lg shadow-orange-200">
-                  <Zap size={16} fill="white" />
-                </div>
-                <div>
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-neutral-900 leading-none">Vibe Pulse</h4>
-                  <p className="text-[9px] font-bold text-neutral-400 mt-1">Live Analytics</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-1 bg-emerald-50 px-2 py-1 rounded-full">
-                <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[8px] font-black text-emerald-600 uppercase tracking-tighter">Live Now</span>
-              </div>
+          {/* Scrollable Profile Content */}
+          <div 
+            ref={scrollRef}
+            className="w-full h-full overflow-y-auto no-scrollbar scroll-smooth relative"
+            onWheel={() => setIsAutoScrolling(false)}
+            onPointerDown={() => setIsAutoScrolling(false)}
+          >
+            {/* 🦋 Floating Sparkles Layer */}
+            <div className="absolute inset-0 pointer-events-none opacity-40">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="absolute animate-pulse" style={{ top: `${i * 15}%`, left: `${(i % 3) * 30}%` }}>✨</div>
+              ))}
             </div>
-          </div>
 
-          {/* Scrollable Area */}
-          <div className="flex-1 overflow-hidden relative">
-            <div 
-              className="absolute inset-0 transition-transform duration-1000 ease-out"
-              style={{ transform: `translateY(-${Math.min(scrollPos * 0.5, 120)}px)` }}
-            >
-              {/* Stat Hero */}
-              <div className="px-6 py-8 bg-gradient-to-b from-white to-neutral-50">
-                <div className="mb-6">
-                  <span className="text-[9px] font-black text-orange-500 uppercase tracking-[0.2em] mb-2 block">Total Engagement</span>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-black text-neutral-900 tracking-tighter">2,847</span>
-                    <span className="text-xs font-black text-emerald-500 flex items-center bg-emerald-50 px-1.5 py-0.5 rounded-lg">+14%</span>
-                  </div>
-                </div>
+            {/* Banner Section */}
+            <div className="w-full h-32 relative bg-[#1A1A1A] shrink-0">
+              <img 
+                src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=2070&auto=format&fit=crop" 
+                className="absolute inset-0 w-full h-full object-cover" 
+                alt="Banner"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
+            </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-white p-4 rounded-3xl border border-neutral-100 shadow-sm">
-                    <Eye size={16} className="text-orange-500 mb-2" />
-                    <div className="text-lg font-black text-neutral-900">842</div>
-                    <div className="text-[9px] font-bold text-neutral-400 uppercase">Profile Views</div>
-                  </div>
-                  <div className="bg-white p-4 rounded-3xl border border-neutral-100 shadow-sm">
-                    <Share2 size={16} className="text-blue-500 mb-2" />
-                    <div className="text-lg font-black text-neutral-900">128</div>
-                    <div className="text-[9px] font-bold text-neutral-400 uppercase">Direct Shares</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Heatmap Section */}
-              <div className="mx-4 p-6 bg-neutral-900 rounded-[2.5rem] shadow-2xl relative overflow-hidden group/card">
-                <div className="absolute inset-0 bg-gradient-to-tr from-orange-500/10 via-transparent to-transparent opacity-50" />
-                
-                <div className="relative z-10 flex items-center justify-between mb-8">
-                  <div>
-                    <h5 className="text-white text-sm font-black tracking-tight">Identity Reach</h5>
-                    <p className="text-neutral-500 text-[10px] font-bold">Top regions this week</p>
-                  </div>
-                  <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white">
-                    <MapPin size={14} />
-                  </div>
-                </div>
-
-                {/* Animated Bars */}
-                <div className="space-y-4 relative z-10">
-                  {[
-                    { city: 'Mumbai', value: 85, color: '#F97316' },
-                    { city: 'Bangalore', value: 65, color: '#3B82F6' },
-                    { city: 'Delhi', value: 45, color: '#10B981' }
-                  ].map((loc, i) => (
-                    <div key={i} className="space-y-2">
-                      <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-neutral-400">
-                        <span>{loc.city}</span>
-                        <span className="text-white">{loc.value}%</span>
-                      </div>
-                      <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full rounded-full transition-all duration-1000 delay-300"
-                          style={{ 
-                            width: `${loc.value}%`, 
-                            backgroundColor: loc.color,
-                            boxShadow: `0 0 10px ${loc.color}40`
-                          }} 
-                        />
+            {/* Identity Content Stack */}
+            <div className="px-5 pb-32">
+                {/* Avatar Stack */}
+                <div className="relative h-4 mb-12">
+                  <div className="absolute -top-12 left-1/2 -translate-x-1/2">
+                    <div className="w-24 h-24 p-1 rounded-full bg-gradient-to-tr from-[#C1440E] to-[#F97316]">
+                      <div className="w-full h-full bg-white p-0.5 rounded-full overflow-hidden shadow-inner">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200" alt="Avatar" className="w-full h-full object-cover rounded-full" />
                       </div>
                     </div>
-                  ))}
+                    <div className="absolute bottom-1 right-1 w-6 h-6 bg-white rounded-full shadow-lg flex items-center justify-center border border-neutral-100">
+                      <div className="text-orange-600 text-[8px]">✦</div>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Pulsing Dot Simulation */}
-                <div className="absolute right-6 top-20 opacity-20 pointer-events-none">
-                  <div className="w-32 h-32 rounded-full border border-orange-500/30 animate-ping" />
-                </div>
-              </div>
+                <div className="flex flex-col items-center">
+                  <h1 className="text-lg font-black tracking-tight text-neutral-900 mb-0.5 uppercase italic">Arjun Rao</h1>
+                  <p className="text-[7px] font-black text-orange-600 uppercase tracking-[0.4em] mb-3">CREATIVE PROFESSIONAL</p>
+                  
+                  <p className="text-center text-[9px] font-black text-neutral-800 leading-tight italic mb-6 px-4">
+                    "Building the phygital future of identity in India. Founder at Studio Vibe."
+                  </p>
 
-              {/* Engagement Feed */}
-              <div className="px-6 py-10">
-                <h5 className="text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em] mb-6">Recent Activity</h5>
-                <div className="space-y-6">
-                  {[
-                    { type: 'Scan', time: 'Just now', loc: 'Bandra, MH', color: 'bg-orange-500' },
-                    { type: 'Save', time: '12m ago', loc: 'Indiranagar, KA', color: 'bg-blue-500' },
-                    { type: 'View', time: '1h ago', loc: 'Cyber City, HR', color: 'bg-emerald-500' }
-                  ].map((item, i) => (
-                    <div key={i} className="flex gap-4">
-                      <div className={`w-1.5 h-10 rounded-full ${item.color} opacity-20`} />
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-black text-neutral-900">{item.type} Detected</span>
-                          <span className="text-[9px] font-bold text-neutral-300">{item.time}</span>
+                  {/* Pulse Section (Live Randomization) */}
+                  <div className="flex justify-evenly items-start w-full mb-8 border-y border-neutral-50 py-4 transition-all duration-500">
+                    <div className="flex flex-col items-center text-center">
+                      <span className="text-2xl font-black text-neutral-900 leading-none mb-1.5 tabular-nums">
+                        {(stats.views/1000).toFixed(1)}K
+                      </span>
+                      <p className="text-[7px] font-black uppercase text-neutral-400 tracking-widest">Profile Views</p>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                      <span 
+                        className="text-2xl font-black leading-none mb-1.5 transition-colors duration-1000"
+                        style={{ color: stats.city.color }}
+                      >
+                        {stats.city.name}
+                      </span>
+                      <p className="text-[7px] font-black uppercase text-neutral-400 tracking-widest">Most Scanned Place</p>
+                    </div>
+                  </div>
+
+                  {/* Network Presence */}
+                  <div className="w-full mb-8">
+                     <p className="text-[8px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-3">Network Presence</p>
+                     <div className="flex gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white"><Instagram size={14} /></div>
+                        <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-white"><Twitter size={14} /></div>
+                        <div className="w-8 h-8 rounded-lg bg-[#0077B5] flex items-center justify-center text-white"><Linkedin size={14} /></div>
+                     </div>
+                  </div>
+
+                  {/* Curated Showcase */}
+                  <div className="w-full mb-6">
+                    <div className="flex justify-between items-end mb-3">
+                       <div>
+                         <h4 className="text-[8px] font-black uppercase tracking-[0.2em] text-neutral-900 leading-none">Curated Showcase</h4>
+                         <p className="text-[7px] font-bold text-neutral-400 uppercase mt-0.5">Portfolio</p>
+                       </div>
+                       <Trophy size={10} className="text-amber-500" />
+                    </div>
+                    
+                    <div className="grid grid-cols-1 gap-3">
+                      <div className="aspect-video rounded-2xl overflow-hidden bg-neutral-100 relative group/item">
+                        <img src="https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=400&auto=format" className="w-full h-full object-cover" alt="Work" />
+                        <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                           <Film size={16} className="text-white opacity-40" />
                         </div>
-                        <p className="text-[10px] font-medium text-neutral-500 flex items-center gap-1">
-                          <MapPin size={8} /> {item.loc}
-                        </p>
                       </div>
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
             </div>
           </div>
 
-          {/* Navigation Bar */}
-          <div className="h-20 bg-white border-t border-neutral-50 flex items-center justify-around px-4 sticky bottom-0 z-40">
-            <div className="flex flex-col items-center gap-1">
-              <div className="w-10 h-10 rounded-2xl bg-orange-500 flex items-center justify-center text-white shadow-lg shadow-orange-100">
-                <Activity size={20} />
-              </div>
-            </div>
-            <div className="w-10 h-10 rounded-2xl bg-neutral-50 flex items-center justify-center text-neutral-300">
-              <Globe size={20} />
-            </div>
-            <div className="w-10 h-10 rounded-2xl bg-neutral-50 flex items-center justify-center text-neutral-300">
-              <Users size={20} />
-            </div>
+          {/* Fixed Footer CTAs */}
+          <div className="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-white via-white to-transparent pt-8 z-50">
+             <div className="grid grid-cols-2 gap-2">
+                <button className="py-2.5 bg-[#C1440E] text-white rounded-xl font-black uppercase tracking-widest text-[8px] flex items-center justify-center gap-1.5 shadow-lg shadow-orange-500/20">
+                   <UserPlus size={10} /> Connect
+                </button>
+                <button className="py-2.5 bg-white border border-neutral-200 text-[#1A1A1A] rounded-xl font-black uppercase tracking-widest text-[8px] flex items-center justify-center gap-1.5">
+                   <Share2 size={10} /> Share
+                </button>
+             </div>
           </div>
 
         </div>
 
         {/* Dynamic Shadow */}
-        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[80%] h-10 bg-black/20 blur-2xl rounded-full" />
+        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[70%] h-8 bg-black/15 blur-2xl rounded-full" />
       </div>
     </div>
   );
