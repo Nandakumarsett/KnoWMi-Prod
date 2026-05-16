@@ -32,6 +32,15 @@ export default function Shop() {
   const fetchDesigns = async () => {
     const { data } = await supabase.from('persona_designs').select('*').order('created_at', { ascending: false })
     setDesigns(data || [])
+    
+    // Check for deep-linked design
+    const params = new URLSearchParams(window.location.search)
+    const designId = params.get('design')
+    if (designId && data) {
+      const design = data.find(d => d.id === designId)
+      if (design) setSelectedDesign(design)
+    }
+    
     setLoading(false)
   }
 
