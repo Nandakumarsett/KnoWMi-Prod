@@ -78,11 +78,13 @@ export default function Hero({ onOrderClick }) {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center py-12 lg:py-4">
 
           {/* Left copy */}
-          <div className="max-w-[560px]">
+          <div className="max-w-[560px] flex flex-col items-center lg:items-start text-center lg:text-left mx-auto lg:mx-0">
             {/* Badge */}
-            <SectionLabel>Batch 01 / Founding Edition</SectionLabel>
+            <div className="flex justify-center lg:justify-start w-full">
+              <SectionLabel>Batch 01 / Founding Edition</SectionLabel>
+            </div>
 
-            <div data-fade className="mb-4 flex items-center gap-3 flex-wrap">
+            <div data-fade className="mb-4 flex items-center justify-center lg:justify-start gap-3 flex-wrap">
               <span className="tag" style={{ background: 'var(--saffron-light)', color: 'var(--saffron)' }}>
                 <span>🇮🇳</span> India's First
               </span>
@@ -93,20 +95,18 @@ export default function Hero({ onOrderClick }) {
 
             {/* Headline */}
             <h1 data-fade className="font-display font-black leading-[1.2] mb-6" style={{ fontSize: 'clamp(1.8rem, 5vw, 3.8rem)', color: 'var(--ink)' }}>
-              <span className="block whitespace-nowrap">Wear Your</span>
-              <span className="block whitespace-nowrap">Identity.</span>
-              <span className="block italic text-orange-500 whitespace-nowrap">One Tee,</span>
-              <span className="block whitespace-nowrap">One Scan.</span>
-              <span className="block italic text-orange-500 whitespace-nowrap">Infinite Connections.</span>
+              <span className="block md:whitespace-nowrap">Wear Your Identity.</span>
+              <span className="block italic text-orange-500 md:whitespace-nowrap">One Tee, One Scan.</span>
+              <span className="block italic text-orange-500 md:whitespace-nowrap">Infinite Connections.</span>
             </h1>
 
             {/* Subhead */}
-            <p data-fade className="text-xl leading-relaxed mb-10 font-medium" style={{ color: 'var(--ink3)', maxWidth: '480px' }}>
+            <p data-fade className="text-xl leading-relaxed mb-10 font-medium mx-auto lg:mx-0" style={{ color: 'var(--ink3)', maxWidth: '480px' }}>
               Your QR-powered tee turns introductions into real connections.
             </p>
 
             {/* CTAs */}
-            <div data-fade className="flex flex-wrap gap-4 mb-10">
+            <div data-fade className="flex flex-wrap justify-center lg:justify-start gap-4 mb-10">
               <a onClick={() => onOrderClick?.()} className="px-8 py-4 bg-orange-500 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-orange-200 hover:bg-orange-600 transition-all flex items-center gap-2" href="#collection">
                 Explore Tees
                 <ArrowRight size={16} />
@@ -117,7 +117,7 @@ export default function Hero({ onOrderClick }) {
             </div>
 
             {/* Social proof */}
-            <div data-fade className="flex items-center gap-3">
+            <div data-fade className="flex flex-col sm:flex-row items-center gap-3">
               <div className="flex -space-x-2" aria-label="Customer avatars">
                 {trustAvatars.map((a, i) => (
                   <div key={i}
@@ -127,7 +127,7 @@ export default function Hero({ onOrderClick }) {
                   </div>
                 ))}
               </div>
-              <div>
+              <div className="flex flex-col items-center sm:items-start">
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
                     <svg key={i} width="13" height="13" viewBox="0 0 24 24" fill="#FF9933" aria-hidden="true">
