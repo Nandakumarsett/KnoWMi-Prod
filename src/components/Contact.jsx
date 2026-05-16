@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { MessageSquare, Send } from 'lucide-react'
+import { Mail, Send } from 'lucide-react'
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' })
@@ -47,12 +47,12 @@ export default function Contact() {
             </p>
             
             <div className="space-y-6">
-               <div className="flex items-center gap-4 text-black font-black uppercase tracking-widest text-xs">
+               <a href="mailto:support.knowmi@gmail.com" className="flex items-center gap-4 text-black font-black uppercase tracking-widest text-xs hover:text-orange-500 transition-colors">
                   <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500">
-                    <MessageSquare size={18} />
+                    <Mail size={18} />
                   </div>
-                  WhatsApp: +91 79813 25397
-               </div>
+                  Email: support.knowmi@gmail.com
+               </a>
             </div>
           </div>
 
