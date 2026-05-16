@@ -49,17 +49,17 @@ export default function PersonaUseCases() {
 
         <div className="grid lg:grid-cols-3 gap-8">
           {useCases.map((uc, i) => (
-            <div key={uc.id} className={`reveal reveal-delay-${i + 1} group relative bg-white rounded-[3rem] p-10 border border-neutral-100 hover:shadow-2xl transition-all duration-500 overflow-hidden`}>
-              <div className="relative z-10">
+            <div key={uc.id} className={`reveal reveal-delay-${i + 1} group relative bg-white rounded-[3rem] p-10 border border-neutral-100 hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col items-center text-center lg:items-start lg:text-left`}>
+              <div className="relative z-10 w-full flex flex-col items-center lg:items-start">
                 <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-500 mb-8">
                   {uc.icon}
                 </div>
                 <h3 className="text-xs font-black uppercase tracking-widest text-neutral-400 mb-2">{uc.title}</h3>
                 <h4 className="text-2xl font-display font-black text-black mb-4 leading-tight">{uc.benefit}</h4>
-                <p className="text-sm text-neutral-500 font-medium leading-relaxed mb-8">
+                <p className="text-sm text-neutral-500 font-medium leading-relaxed mb-8 mx-auto lg:mx-0">
                   {uc.desc}
                 </p>
-                <a href="#pricing" className="flex items-center gap-2 text-orange-500 font-black text-[10px] uppercase tracking-widest group-hover:gap-4 transition-all">
+                <a href="#pricing" className="flex items-center justify-center lg:justify-start gap-2 text-orange-500 font-black text-[10px] uppercase tracking-widest group-hover:gap-4 transition-all w-full lg:w-auto">
                    Learn More <ArrowRight size={14} />
                 </a>
               </div>
