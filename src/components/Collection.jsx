@@ -23,6 +23,19 @@ export default function Collection({ onSelectDesign }) {
     setLoading(false)
   }
 
+  const SeeMoreCard = () => (
+    <a href="/shop" className="min-w-[280px] md:min-w-0 snap-center group relative bg-neutral-50 rounded-[2rem] overflow-hidden border border-dashed border-neutral-200 transition-all duration-500 hover:border-orange-500/50 hover:bg-orange-50/30 flex flex-col items-center justify-center p-8 text-center min-h-[350px]">
+      <div className="w-16 h-16 rounded-full bg-white border border-neutral-100 flex items-center justify-center text-neutral-400 group-hover:text-orange-500 group-hover:border-orange-500/20 group-hover:scale-110 transition-all duration-500 mb-6 shadow-sm group-hover:shadow-xl group-hover:shadow-orange-500/10">
+        <ArrowRight size={28} />
+      </div>
+      <h3 className="text-xl font-display font-black text-black mb-2">Explore Full <br/> Collection</h3>
+      <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Find your perfect match</p>
+      <div className="mt-8 px-6 py-2.5 rounded-xl bg-black text-white font-black text-[9px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+        View All Designs
+      </div>
+    </a>
+  )
+
   if (loading) return null
 
   return (
@@ -33,15 +46,10 @@ export default function Collection({ onSelectDesign }) {
           <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-10 gap-8 text-center md:text-left">
             <div className="flex flex-col items-center md:items-start">
               <div className="inline-block px-3 py-0.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-[9px] font-black uppercase tracking-widest mb-3">Live Designs</div>
-              <div className="flex flex-col md:flex-row items-center md:items-end gap-4 md:gap-6">
-                <h2 className="text-3xl md:text-4xl font-display font-black text-black leading-tight">
-                  These tees are live. <br className="hidden md:block"/>
-                  <span className="text-orange-500 italic">Yours might be next.</span>
-                </h2>
-                <a href="/shop" className="px-4 py-2 bg-neutral-100 text-neutral-600 rounded-full font-black text-[9px] uppercase tracking-widest hover:bg-black hover:text-white transition-all flex items-center gap-2 mb-1">
-                  See More <ArrowRight size={12} />
-                </a>
-              </div>
+              <h2 className="text-3xl md:text-4xl font-display font-black text-black leading-tight">
+                These tees are live. <br className="hidden md:block"/>
+                <span className="text-orange-500 italic">Yours might be next.</span>
+              </h2>
             </div>
             <p className="text-sm text-neutral-500 max-w-[320px] leading-relaxed font-medium mx-auto md:mx-0">
               Limited designs. Pick yours before it's gone. After selecting, you'll choose your plan.
@@ -90,6 +98,7 @@ export default function Collection({ onSelectDesign }) {
                 </div>
               </div>
             ))}
+            <SeeMoreCard />
           </div>
         ) : (
           <div className="flex overflow-x-auto no-scrollbar gap-5 pb-8 -mx-6 px-6 md:mx-0 md:px-0 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-visible md:pb-0">
@@ -116,6 +125,7 @@ export default function Collection({ onSelectDesign }) {
                 </div>
               </div>
             ))}
+            <SeeMoreCard />
           </div>
         )}
         <div className="mt-20 text-center">
