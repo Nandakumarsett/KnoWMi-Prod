@@ -26,6 +26,7 @@ export default function Collection({ onSelectDesign }) {
   if (loading) return null
 
   return (
+    <>
     <section id="collection" className="py-24 bg-white snap-section min-h-screen flex items-center">
       <div className="max-w-[1200px] mx-auto px-6 w-full">
         <div className="max-w-[850px] mx-auto w-full">
@@ -43,9 +44,9 @@ export default function Collection({ onSelectDesign }) {
           </div>
 
         {designs.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="flex overflow-x-auto no-scrollbar gap-5 pb-8 -mx-6 px-6 md:mx-0 md:px-0 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-visible md:pb-0">
             {designs.map((d) => (
-              <div key={d.id} className="group relative bg-neutral-50 rounded-[2rem] overflow-hidden border border-neutral-100 transition-all duration-500 hover:shadow-xl hover:shadow-orange-500/10 hover:-translate-y-1.5">
+              <div key={d.id} className="min-w-[280px] md:min-w-0 snap-center group relative bg-neutral-50 rounded-[2rem] overflow-hidden border border-neutral-100 transition-all duration-500 hover:shadow-xl hover:shadow-orange-500/10 hover:-translate-y-1.5">
                 <div className="aspect-[3/4] overflow-hidden relative">
                   <img 
                     src={d.model_image_url || d.front_image_url || '/assets/tees/front.png'} 
@@ -89,13 +90,13 @@ export default function Collection({ onSelectDesign }) {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="flex overflow-x-auto no-scrollbar gap-5 pb-8 -mx-6 px-6 md:mx-0 md:px-0 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-visible md:pb-0">
             {[
               { id: 'f1', name: 'Original Black', category: 'Classic', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80&w=800' },
               { id: 'f2', name: 'Arctic White', category: 'Minimal', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&q=80&w=800' },
               { id: 'f3', name: 'Street Saffron', category: 'Elite', img: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&q=80&w=800' }
             ].map((d) => (
-              <div key={d.id} className="group relative bg-neutral-50 rounded-[2rem] overflow-hidden border border-neutral-100 transition-all duration-500 hover:shadow-xl hover:shadow-orange-500/10 hover:-translate-y-1.5">
+              <div key={d.id} className="min-w-[280px] md:min-w-0 snap-center group relative bg-neutral-50 rounded-[2rem] overflow-hidden border border-neutral-100 transition-all duration-500 hover:shadow-xl hover:shadow-orange-500/10 hover:-translate-y-1.5">
                 <div className="aspect-[3/4] overflow-hidden relative">
                   <img src={d.img} alt={d.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
                   <div className="absolute top-3 left-3"><span className="px-2 py-0.5 bg-white/90 rounded-full text-[8px] font-black uppercase tracking-widest text-black">{d.category}</span></div>
@@ -119,5 +120,10 @@ export default function Collection({ onSelectDesign }) {
       </div>
     </div>
   </section>
+  <style dangerouslySetInnerHTML={{ __html: `
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  `}} />
+    </>
   )
 }
