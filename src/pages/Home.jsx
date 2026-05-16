@@ -118,7 +118,7 @@ export default function Home() {
         <HowItWorks />
         <Personas />
         <PersonaUseCases />
-        <Collection onSelectDesign={() => navigate('/shop')} />
+        <Collection onSelectDesign={(d) => navigate(`/shop?design=${d.id}`)} />
         <Pricing onPlanSelect={handleSelectPlan} />
 
         <Testimonials />
