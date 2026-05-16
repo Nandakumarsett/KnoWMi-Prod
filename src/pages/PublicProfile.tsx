@@ -120,6 +120,7 @@ export default function PublicProfile() {
 
   const pAlias = (profile.persona || '').toLowerCase()
   const activeConfig = personaConfigs[pAlias] || personaConfigs.developer
+  const fromSrc = searchParams.get('src')
   const fromTab = searchParams.get('from') || 'analytics'
   const accentColor = activeConfig?.theme?.accent || '#C1440E'
   const isOwnerOfProfile = user && user.id === profile.user_id
@@ -179,7 +180,7 @@ export default function PublicProfile() {
             </button>
           ) : (
             <button 
-              onClick={() => navigate('/')} 
+              onClick={() => fromSrc === 'leaderboard' ? navigate('/leaderboard') : navigate('/')} 
               className="p-2 hover:bg-white/50 rounded-xl transition-all border border-[#E5D5C4] text-[#5C5246] select-none flex items-center justify-center shrink-0"
             >
               <X size={18} />
@@ -274,7 +275,7 @@ export default function PublicProfile() {
             </button>
           ) : (
             <button 
-              onClick={() => navigate('/')} 
+              onClick={() => fromSrc === 'leaderboard' ? navigate('/leaderboard') : navigate('/')} 
               className="p-2 hover:bg-white/50 rounded-xl transition-all border border-[#E5D5C4] text-[#5C5246] select-none flex items-center justify-center shrink-0"
             >
               <X size={20} />
