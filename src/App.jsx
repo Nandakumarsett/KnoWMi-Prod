@@ -57,7 +57,7 @@ export default function App() {
         // Clear the hash and move to the clean route
         window.history.replaceState(null, '', '/leaderboard')
         window.location.reload() // Force reload to clear any cache/state
-      } else if (hash && !hash.includes('access_token')) {
+      } else if (hash && !hash.includes('access_token') && !hash.includes('pricing')) {
         // Clear any other non-auth hashes
         window.history.replaceState(null, '', window.location.pathname + window.location.search)
       }
