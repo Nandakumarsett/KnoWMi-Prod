@@ -36,9 +36,30 @@ export function StudentProfile({ profile }: { profile: ProfileData }) {
          style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
   );
 
+  const BackgroundAnimation = () => (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      <div className="absolute left-[10%] top-[15%] text-emerald-500/20 animate-float-slow">
+        <Rocket size={40} />
+      </div>
+      <div className="absolute right-[15%] top-[30%] text-blue-500/10 animate-float-medium">
+        <BookOpen size={60} />
+      </div>
+      <div className="absolute left-[20%] bottom-[30%] text-amber-500/20 animate-float-fast">
+        <Star size={30} />
+      </div>
+      <div className="absolute right-[25%] bottom-[15%] text-emerald-500/10 animate-float-slow">
+        <GraduationCap size={80} />
+      </div>
+      <div className="absolute left-[40%] top-[60%] text-indigo-500/10 animate-float-medium">
+        <Sparkles size={50} />
+      </div>
+    </div>
+  );
+
   return (
     <div className="w-full min-h-screen bg-[#FAFAFA] relative overflow-hidden font-sans">
       <BackgroundPattern />
+      <BackgroundAnimation />
 
       {/* HERO BANNER */}
       <div className="relative h-48 sm:h-64 w-full bg-neutral-200 overflow-hidden shadow-sm">
@@ -60,7 +81,7 @@ export function StudentProfile({ profile }: { profile: ProfileData }) {
       <main className="relative z-10 max-w-2xl mx-auto px-5 sm:px-8 -mt-20 sm:-mt-24 pb-24 flex flex-col items-center">
         
         {/* AVATAR & IDENTITY */}
-        <div className="flex flex-col items-center w-full mb-8">
+        <div className="flex flex-col items-center w-full mb-4">
           <div className="relative mb-5 group flex items-center justify-center">
             {/* Thought Bubble */}
             {data.thought_bubble && (
@@ -73,13 +94,12 @@ export function StudentProfile({ profile }: { profile: ProfileData }) {
             )}
 
             {/* Avatar Container - FIXED CENTERING */}
-            <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full p-1.5 sm:p-2 bg-white/80 backdrop-blur-xl shadow-2xl shadow-black/10 relative z-10 transition-transform duration-500 group-hover:scale-105 flex items-center justify-center">
+            <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full p-1.5 sm:p-2 bg-white/80 backdrop-blur-xl shadow-2xl shadow-black/10 relative z-10 transition-transform duration-500 group-hover:scale-105 flex items-center justify-center mx-auto">
               <div className="w-full h-full rounded-full overflow-hidden border-2 border-neutral-50 bg-neutral-100 flex items-center justify-center relative">
                 <ProfileAvatar
                   src={profile.avatar_url}
                   name={profile.display_name}
                   size={160}
-                  className="w-full h-full object-cover absolute inset-0"
                 />
               </div>
               {/* Decorative Ring */}
@@ -99,7 +119,7 @@ export function StudentProfile({ profile }: { profile: ProfileData }) {
 
         {/* BIO (Vibe moved to Academic Core) */}
         {data.bio && (
-          <div className="w-full max-w-md mx-auto text-center mb-10">
+          <div className="w-full max-w-md mx-auto text-center mb-8 -mt-2">
             <p className="text-sm sm:text-[15px] text-neutral-500 leading-relaxed font-medium">
               "{data.bio}"
             </p>
@@ -444,6 +464,30 @@ export function StudentProfile({ profile }: { profile: ProfileData }) {
         )}
 
       </main>
+
+      <style>{`
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        @keyframes float-medium {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-30px) rotate(-5deg); }
+        }
+        @keyframes float-fast {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-15px) rotate(10deg); }
+        }
+        .animate-float-slow {
+          animation: float-slow 8s ease-in-out infinite;
+        }
+        .animate-float-medium {
+          animation: float-medium 6s ease-in-out infinite;
+        }
+        .animate-float-fast {
+          animation: float-fast 4s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   )
 }
