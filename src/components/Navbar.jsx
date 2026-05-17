@@ -195,13 +195,13 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
                       </a>
                     </>
                   ) : (
-                    <div className="flex items-center justify-between px-4 py-3 text-sm font-medium opacity-50 cursor-not-allowed" style={{ color: 'var(--muted)', borderBottom: '1px solid var(--border)' }}>
+                    <a href="/dashboard" className="flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
                       <div className="flex items-center gap-2">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h7" /><path d="M16 5l-4 4-4-4" /><path d="M22 17l-3 3-3-3" /><path d="M19 14v6" /></svg>
                         Analytics
                       </div>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                    </div>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-orange-500"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    </a>
                   )}
                   <button
                     onClick={signOut}
