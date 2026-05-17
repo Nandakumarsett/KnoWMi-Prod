@@ -1213,7 +1213,7 @@ const IdentityPass = ({ profile }) => {
               <p className="text-[10.5px] font-black uppercase tracking-[0.2em] text-neutral-400">Official Identity Pass</p>
             </div>
 
-            <div className="relative w-64 h-64 mb-6">
+            <div className="relative w-64 h-64 mb-6 flex items-center justify-center">
               <img 
                 src={qrUrl} 
                 draggable="false"
@@ -1223,6 +1223,11 @@ const IdentityPass = ({ profile }) => {
                 alt="Identity QR" 
               />
               <div className="absolute inset-0 z-10" />
+              {isPaid && (
+                <div className="absolute inset-0 m-auto w-10 h-10 bg-neutral-950 rounded-xl flex items-center justify-center shadow-lg border border-neutral-800 z-20 select-none">
+                  <span className="text-xs font-black text-orange-500 tracking-wider font-sans leading-none">WM</span>
+                </div>
+              )}
               
               {!isPaid && (
                 <div className="qr-mask">
