@@ -1153,6 +1153,37 @@ const IdentityPass = ({ profile }) => {
   const secretSlug = profile?.secure_slug || profile?.id
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`${window.location.origin}/p/${secretSlug}`)}`
 
+  if (!isPaid) {
+    return (
+      <div className="animate-slideUp space-y-8 pb-20">
+        <div className="flex items-end justify-between">
+          <div><p className="text-[11px] font-black uppercase text-orange-500 tracking-[0.2em] mb-2">My Official Identity</p><h2 className="text-5xl font-display font-black tracking-tight">Identity <span className="gradient-text">Pass</span></h2></div>
+        </div>
+
+        <div className="card p-12 text-center bg-white shadow-xl border-none max-w-2xl mx-auto flex flex-col items-center justify-center min-h-[400px]">
+          <div className="relative inline-flex items-center justify-center mb-6">
+            <div className="absolute inset-0 bg-orange-500/10 rounded-full blur-2xl animate-pulse" />
+            <div className="relative w-20 h-20 bg-orange-50 border border-orange-200 rounded-3xl flex items-center justify-center shadow-lg">
+              <Lock size={36} className="text-orange-500 animate-bounce" />
+            </div>
+          </div>
+          <h3 className="text-2xl font-black mb-3 text-neutral-900">
+            Buy a Tee to Unlock Pass
+          </h3>
+          <p className="text-sm font-semibold max-w-sm text-neutral-500 mb-8 leading-relaxed">
+            Get your physical NFC Smart Tee to activate your official KnoWMi Identity Pass and unlock physical scanning capabilities.
+          </p>
+          <button
+            onClick={() => window.location.href = '/#pricing'}
+            className="px-8 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-xs uppercase tracking-widest rounded-2xl transition-all shadow-lg active:scale-95"
+          >
+            Buy a Tee to Unlock 🚀
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="animate-slideUp space-y-8">
       <div className="flex items-end justify-between">
@@ -1262,6 +1293,8 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const { profile, user, loading: authLoading, refreshProfile, isVerified, role } = useAuth()
+  const isFree = profile?.status === 'free' || (!profile?.status && !profile?.tier) || profile?.tier === 'Free';
+  const isPaid = !isFree || role === 'owner';
   const [scans, setScans] = useState([])
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
@@ -1550,7 +1583,32 @@ export default function Dashboard() {
       <main className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 pb-48">
         <div className={`tab-transition ${activeTab === 'analytics' ? 'tab-visible' : 'tab-hidden'}`}>
           {activeTab === 'analytics' && (
-            <div className="animate-slideUp">
+            <div className="relative">
+              {/* If not paid, display the beautiful premium lock overlay in the middle */}
+              {!isPaid && (
+                <div className="absolute inset-0 z-50 flex flex-col items-center justify-center p-8 bg-neutral-900/40 backdrop-blur-md rounded-[32px] text-center border-2 border-dashed border-orange-500/20 select-none min-h-[500px]">
+                  <div className="relative inline-flex items-center justify-center mb-6">
+                    <div className="absolute inset-0 bg-orange-500/30 rounded-3xl blur-2xl animate-pulse" />
+                    <div className="relative w-24 h-24 bg-white dark:bg-neutral-950 border-2 border-orange-500 rounded-3xl flex items-center justify-center shadow-2xl">
+                      <Lock size={44} className="text-orange-500 animate-bounce" />
+                    </div>
+                  </div>
+                  <h3 style={{ fontFamily: 'Fraunces, serif' }} className="text-3xl font-black mb-3 text-white">
+                    Unlock Analytics on a Paid Plan
+                  </h3>
+                  <p className="text-sm font-semibold max-w-sm text-neutral-300 mb-8 leading-relaxed">
+                    View advanced vibe statistics, traffic intelligence, repeat scores, global reach, and live scan tracking.
+                  </p>
+                  <button
+                    onClick={() => navigate('/#pricing')}
+                    className="px-10 py-4 bg-orange-500 text-white font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-orange-600 active:scale-95 transition-all shadow-xl shadow-orange-500/30"
+                  >
+                    Buy a Tee to Unlock 🚀
+                  </button>
+                </div>
+              )}
+
+              <div className={`animate-slideUp ${!isPaid ? 'filter blur-xl select-none pointer-events-none opacity-40' : ''}`}>
 
               {/* Sub-tab toggle */}
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
@@ -1905,7 +1963,8 @@ export default function Dashboard() {
           </div>
         )}
 
-      </div>
+              </div>
+            </div>
     )}
   </div>
           
