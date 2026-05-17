@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useReveal } from '../hooks/useReveal'
 import { supabase, getAssetUrl } from '../lib/supabase'
 import { X, Instagram, Youtube, Twitter, Github, Share2, Terminal, ExternalLink, GraduationCap, FileText, Globe, Trophy, Sparkles, TrendingUp, Music, BookOpen, Rocket, Play, Camera, Film } from 'lucide-react'
+import { DeveloperProfile } from './profile/personas/DeveloperProfile'
+import { StudentProfile } from './profile/personas/StudentProfile'
 
 const initialPersonas = [
   {
@@ -61,6 +63,83 @@ const initialPersonas = [
 
 function PreviewContent({ persona }) {
   const d = persona.data;
+
+  if (persona.id === 'developer') {
+    const mockProfile = {
+      id: 'mock-dev',
+      display_name: persona.data.name,
+      avatar_url: persona.data.avatar,
+      bio: persona.data.mission,
+      persona: 'developer',
+      tier: 'Creator',
+      pulse: 820,
+      persona_data: {
+        about: {
+          role: persona.data.role || 'Full-Stack Developer',
+          status: 'Available for work',
+          company: 'KnoWMi Protocol',
+          mission: persona.data.mission
+        },
+        platforms: [
+          { platform: 'github', url: 'https://github.com' },
+          { platform: 'twitter', url: 'https://twitter.com' },
+          { platform: 'linkedin', url: 'https://linkedin.com' }
+        ],
+        tech_stack: persona.data.languages || ['TypeScript', 'Go', 'Python'],
+        projects: persona.data.projects?.map(p => ({
+          name: p.name,
+          description: p.desc,
+          stars: 42,
+          url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80',
+          github_url: 'https://github.com'
+        })) || [
+          { name: 'KnoWMi Protocol', description: 'Web3 identity layer', stars: 2100, github_url: 'https://github.com' },
+          { name: 'GitFlow CLI', description: 'Developer productivity tool', stars: 450, github_url: 'https://github.com' }
+        ],
+        resume_url: 'https://knowmi.me',
+        contact_email: 'aryan@knowmi.me',
+        quick_talk_url: 'https://calendly.com'
+      }
+    };
+    return <DeveloperProfile profile={mockProfile} />;
+  }
+
+  if (persona.id === 'student') {
+    const mockProfile = {
+      id: 'mock-student',
+      display_name: persona.data.name,
+      avatar_url: persona.data.avatar,
+      bio: persona.data.bio,
+      persona: 'student',
+      tier: 'Creator',
+      pulse: 820,
+      persona_data: {
+        university: 'IIT DELHI',
+        major: 'Computer Science & Engineering',
+        graduation_year: '2025',
+        gpa: '9.2',
+        mood: '🔥 GRINDING',
+        featured_work_url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
+        platforms: [
+          { platform: 'github', url: 'https://github.com' },
+          { platform: 'instagram', url: 'https://instagram.com' },
+          { platform: 'linkedin', url: 'https://linkedin.com' }
+        ],
+        projects: [
+          { name: 'StartUp India', description: 'Building a micro-lending app for local merchants.', emoji: '🚀', tech: ['React Native', 'Firebase'], github_url: 'https://github.com' },
+          { name: 'Distributed Consensus', description: 'Raft consensus implementation in Rust.', emoji: '🧠', tech: ['Rust', 'gRPC'], github_url: 'https://github.com' }
+        ],
+        skills: ['Algorithms', 'Data Structures', 'System Design', 'React', 'Rust'],
+        achievements: [
+          { title: 'Google Summer of Code', description: 'Contributor to CNCF Kubernetes project.', year: '2024' },
+          { title: 'Kaggle Gold Medalist', description: 'Ranked top 1% in Global DL challenge.', year: '2023' }
+        ],
+        resume_url: 'https://knowmi.me',
+        playlist_url: 'https://spotify.com'
+      }
+    };
+    return <StudentProfile profile={mockProfile} stats={{ totalViews: 820 }} />;
+  }
 
   // Shared works component to handle images vs videos
   const WorksGrid = ({ works }) => {
