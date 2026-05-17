@@ -124,7 +124,7 @@ export default function PublicProfile() {
   const fromTab = searchParams.get('from') || 'analytics'
   const accentColor = activeConfig?.theme?.accent || '#C1440E'
   const isOwnerOfProfile = user && user.id === profile.user_id
-  const isFreeProfile = profile.status === 'free' || (!profile.status && !profile.tier) || profile.tier === 'Free';
+  const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
 
   // Sanitize display_name — strip accidental username/persona prefix concatenation
   // e.g. "tester_personaTester Persona" → "Tester Persona"
@@ -190,15 +190,19 @@ export default function PublicProfile() {
         </header>
 
         {/* Small Button to view QR on Mobile */}
-        <div className="pt-20 px-6 flex justify-center mb-6">
-          <button 
-            onClick={() => setShowQR(true)}
-            className="flex items-center gap-2 px-6 py-3 border rounded-[12px] font-black uppercase tracking-widest text-xs transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md"
-            style={{ background: cardBg, borderColor: borderColor, color: textPrimary }}
-          >
-            ✦ Tap to view QR
-          </button>
-        </div>
+        {!isFreeProfile ? (
+          <div className="pt-20 px-6 flex justify-center mb-6">
+            <button 
+              onClick={() => setShowQR(true)}
+              className="flex items-center gap-2 px-6 py-3 border rounded-[12px] font-black uppercase tracking-widest text-xs transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md"
+              style={{ background: cardBg, borderColor: borderColor, color: textPrimary }}
+            >
+              ✦ Tap to view QR
+            </button>
+          </div>
+        ) : (
+          <div className="pt-20" />
+        )}
 
 
         {isFreeProfile && (
@@ -326,37 +330,30 @@ export default function PublicProfile() {
           {/* Left Column - Fixed Identity Card */}
           <div className="w-[380px] shrink-0 sticky top-28">
             <div className="rounded-[24px] p-10 shadow-2xl flex flex-col items-center border" style={{ background: cardBg, borderColor: borderColor, color: textPrimary }}>
-                <div className="relative mb-8 group cursor-pointer flex flex-col items-center" onClick={() => setShowQR(!showQR)}>
+                <div 
+                  className={`relative mb-8 group flex flex-col items-center ${!isFreeProfile ? 'cursor-pointer' : ''}`}
+                  onClick={!isFreeProfile ? () => setShowQR(!showQR) : undefined}
+                >
                    <div 
-                     className={`w-48 h-48 p-1.5 shadow-xl transition-all duration-500 hover:scale-105 active:scale-95 ${showQR ? 'rounded-[12px]' : 'rounded-full'}`}
-                     style={{ background: `linear-gradient(135deg, ${accentColor}, #F97316)` }}
+                     className={`w-48 h-48 p-1.5 shadow-xl transition-all duration-500 ${!isFreeProfile ? 'hover:scale-105 active:scale-95 rounded-full' : 'rounded-full'}`}
+                     style={{ background: !isFreeProfile ? `linear-gradient(135deg, ${accentColor}, #F97316)` : 'transparent' }}
                    >
                       <div className={`w-full h-full bg-white p-1 overflow-hidden relative flex items-center justify-center ${showQR ? 'rounded-[10px]' : 'rounded-full'}`}>
-                         {showQR ? (
-                           isFreeProfile ? (
-                             <div className="w-full h-full bg-neutral-950 flex flex-col items-center justify-center p-4 text-center text-white relative rounded-[10px] overflow-hidden animate-fadeIn">
-                               <div className="absolute inset-0 bg-gradient-to-tr from-orange-500/20 to-transparent pointer-events-none" />
-                               <Lock size={32} className="text-orange-500 mb-2 animate-bounce" />
-                               <span className="text-[9px] font-black uppercase tracking-widest text-orange-500">Locked</span>
-                               <p className="text-[11px] font-bold mt-1 text-neutral-300">Buy a Tee to Unlock QR</p>
-                               <button onClick={() => window.location.href = '/#pricing'} className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-lg transition-all active:scale-95">Upgrade 🚀</button>
+                         {showQR && !isFreeProfile ? (
+                           <div className="w-full h-full bg-white flex items-center justify-center relative p-2 select-none animate-fadeIn rounded-none">
+                             <img 
+                               src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.secure_slug || profile?.id}`)}`} 
+                               className="w-full h-full object-contain pointer-events-none" 
+                               draggable="false"
+                               onDragStart={(e) => e.preventDefault()}
+                               onContextMenu={(e) => e.preventDefault()} 
+                               alt="QR Code" 
+                             />
+                             <div className="absolute inset-0 z-10" />
+                             <div className="absolute inset-0 m-auto w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg border border-neutral-100 p-1">
+                               <img src="/logo-square.png" className="w-full h-full object-contain" alt="Branding" />
                              </div>
-                           ) : (
-                             <div className="w-full h-full bg-white flex items-center justify-center relative p-2 select-none animate-fadeIn rounded-none">
-                               <img 
-                                 src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.secure_slug || profile?.id}`)}`} 
-                                 className="w-full h-full object-contain pointer-events-none" 
-                                 draggable="false"
-                                 onDragStart={(e) => e.preventDefault()}
-                                 onContextMenu={(e) => e.preventDefault()} 
-                                 alt="QR Code" 
-                               />
-                               <div className="absolute inset-0 z-10" />
-                               <div className="absolute inset-0 m-auto w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg border border-neutral-100 p-1">
-                                 <img src="/logo-square.png" className="w-full h-full object-contain" alt="Branding" />
-                               </div>
-                             </div>
-                           )
+                           </div>
                          ) : (
                            <ProfileAvatar
                               src={profile.avatar_url}
@@ -373,9 +370,11 @@ export default function PublicProfile() {
                         <VerifiedBadge isVerified={profile.is_verified} accentColor={accentColor} />
                      </div>
                    )}
-                   <div className="absolute -bottom-4 bg-[#FDF6EC] text-[#C1440E] text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-[#E5D5C4] backdrop-blur-sm pointer-events-none shadow-sm flex items-center gap-1 select-none">
-                     {showQR ? '↺ Tap for Photo' : '✦ Tap for QR'}
-                   </div>
+                   {!isFreeProfile && (
+                     <div className="absolute -bottom-4 bg-[#FDF6EC] text-[#C1440E] text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-[#E5D5C4] backdrop-blur-sm pointer-events-none shadow-sm flex items-center gap-1 select-none">
+                       {showQR ? '↺ Tap for Photo' : '✦ Tap for QR'}
+                     </div>
+                   )}
                 </div>
 
               <h1 className="text-4xl font-black tracking-tight mb-2 text-center" style={{ color: textPrimary }}>{safeDisplayName}</h1>
