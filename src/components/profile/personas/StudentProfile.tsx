@@ -9,10 +9,12 @@ import {
 } from 'lucide-react'
 import { getAssetUrl } from '../../../lib/supabase'
 import { QRCodeSVG } from 'qrcode.react'
+import { ProfileCTAs } from '../shared/ProfileCTAs'
 
 export function StudentProfile({ profile, stats }: { profile: ProfileData, stats?: any }) {
   const data = (profile.persona_data || {}) as StudentData
   const liveViews = stats?.totalViews || 0;
+  const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
   if (!data || Object.keys(data).length === 0) {
     return <div className="p-10 text-center text-neutral-400 font-medium text-sm">Loading student identity...</div>
   }
@@ -118,7 +120,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             <div className="absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 z-40">
               <div className="bg-neutral-900 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full shadow-lg shadow-emerald-900/10 border-2 border-white flex items-center gap-1.5 whitespace-nowrap">
                 <Activity size={14} className="text-emerald-400 sm:w-4 sm:h-4 animate-pulse" />
-                <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em]">{liveViews} Pulse</span>
+                <span className={`text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] ${isFreeProfile ? 'blur-[4px] select-none opacity-80' : ''}`}>{isFreeProfile ? '820' : liveViews} Pulse</span>
               </div>
             </div>
           </div>
@@ -141,6 +143,11 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </p>
           </div>
         )}
+
+        {/* Connection CTAs */}
+        <div className="w-full max-w-sm mb-8 z-20">
+          <ProfileCTAs profile={profile} accentColor="#10B981" />
+        </div>
 
         {/* OPEN TO / AVAILABILITY (New High-Value Field) */}
         {data.availability && (
