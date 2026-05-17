@@ -57,12 +57,12 @@ export function StudentProfile({ profile }: { profile: ProfileData }) {
   );
 
   return (
-    <div className="w-full min-h-screen bg-[#FAFAFA] relative overflow-hidden font-sans">
+    <div className="w-full pb-12 relative overflow-hidden bg-[#FAFAFA] rounded-[40px] border border-[#E5D5C4] shadow-2xl font-sans min-h-screen">
       <BackgroundPattern />
       <BackgroundAnimation />
 
       {/* HERO BANNER */}
-      <div className="relative h-48 sm:h-64 w-full bg-neutral-200 overflow-hidden shadow-sm">
+      <div className="relative h-48 sm:h-64 w-full bg-neutral-200 overflow-hidden rounded-t-[40px] shadow-sm">
         {data.featured_work_url ? (
           <img 
             src={getAssetUrl(data.featured_work_url)} 
