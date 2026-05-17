@@ -107,8 +107,8 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
     }
 
     setLoading(false)
-    setTempUser({ email: email.trim(), name: firstName.trim() })
-    setShowVerification(true)
+    handleClose()
+    onSuccess?.(redirectAfter)
   }
 
   const handleSignIn = async (e) => {
@@ -140,6 +140,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
     }
 
     setLoading(false)
+    handleClose()
     onSuccess?.(redirectAfter)
   }
 
