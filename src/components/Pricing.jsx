@@ -237,17 +237,17 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                       <span className="text-[8px] font-black uppercase tracking-widest text-orange-500">Buy a Tee to Unlock</span>
                     </div>
                   ) : null}
-                  <div className={`transition-all duration-500 ${simulatorTab === 'trial' ? 'blur-[4px] opacity-25' : 'opacity-100 scale-105'}`}>
-                    <svg width="80" height="80" viewBox="0 0 100 100" className="text-black">
-                      <rect x="0" y="0" width="20" height="20" fill="currentColor" />
-                      <rect x="0" y="0" width="10" height="10" fill="white" />
-                      <rect x="80" y="0" width="20" height="20" fill="currentColor" />
-                      <rect x="90" y="0" width="10" height="10" fill="white" />
-                      <rect x="0" y="80" width="20" height="20" fill="currentColor" />
-                      <rect x="0" y="90" width="10" height="10" fill="white" />
-                      <rect x="30" y="30" width="40" height="40" fill="currentColor" />
-                      <rect x="40" y="40" width="20" height="20" fill="white" />
-                    </svg>
+                  <div className={`w-full h-full relative flex items-center justify-center transition-all duration-500 ${simulatorTab === 'trial' ? 'blur-[4px] opacity-25' : 'opacity-100 scale-105'}`}>
+                    <img 
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent('https://knowmi.co/p/alexcarter')}`}
+                      className="w-[100px] h-[100px] object-contain pointer-events-none" 
+                      alt="HD QR Code" 
+                    />
+                    {simulatorTab === 'unlocked' && (
+                      <div className="absolute inset-0 m-auto w-6 h-6 bg-white rounded-lg flex items-center justify-center shadow-lg border border-neutral-100 p-0.5 z-20">
+                        <img src="/logo-square.png" className="w-full h-full object-contain" alt="Branding" />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
