@@ -29,15 +29,15 @@ const developerConfig: PersonaConfig = {
   id: 'developer',
   name: 'Tech',
   theme: {
-    color: 'dark',
+    color: 'light',
     style: 'minimal',
-    bg: 'linear-gradient(180deg, #0d1117 0%, #161b22 100%)',
+    bg: '#ffffff',
     accent: '#3fb950',
-    textPrimary: '#f0f6fc',
-    textSecondary: '#8b949e',
-    cardBg: 'rgba(255, 255, 255, 0.04)',
+    textPrimary: '#1A1A1A',
+    textSecondary: '#5c646e',
+    cardBg: '#ffffff',
     buttonBg: 'linear-gradient(135deg, #238636, #2ea043)',
-    badgeStyle: 'bg-green-500/20 text-green-300'
+    badgeStyle: 'bg-green-50 text-green-700'
   },
   fields: [
     { key: 'skills', label: 'Core Skills', type: 'tags', suggestions: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Docker'] },
