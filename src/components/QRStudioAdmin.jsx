@@ -289,8 +289,8 @@ USING (EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role
                               level="H"
                               includeMargin={false}
                             />
-                            <div className="absolute inset-0 m-auto w-5.5 h-5.5 bg-neutral-950 rounded-md flex items-center justify-center shadow-lg border border-neutral-800 z-20 select-none">
-                              <span className="text-[7px] font-black text-orange-500 tracking-wider font-sans leading-none">WM</span>
+                            <div className="absolute inset-0 m-auto w-6.5 h-6.5 bg-white rounded-full flex items-center justify-center shadow-lg border border-neutral-100 p-0.5 z-20 select-none overflow-hidden">
+                              <img src="/favicon.png" className="w-full h-full object-contain rounded-full" alt="KnoWMi Logo" />
                             </div>
                           </div>
                           <div className="flex-1 flex flex-col gap-2">
