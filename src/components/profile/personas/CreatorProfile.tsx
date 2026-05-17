@@ -7,7 +7,7 @@ import { getAssetUrl } from '../../../lib/supabase'
 import { 
   LayoutGrid, Instagram, Youtube, Twitter, Github, 
   Share2, Sparkles, TrendingUp, Camera, Play, Film, MapPin, 
-  Trophy, Mail, MessageCircle, Facebook, Linkedin, Globe, Activity
+  Trophy, Mail, MessageCircle, Facebook, Linkedin, Globe, Activity, X
 } from 'lucide-react'
 
 const PLATFORM_ICONS: Record<string, any> = {
@@ -30,6 +30,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
   const data = profile.persona_data as CreatorData
   const accent = '#F97316'
   const [selectedWork, setSelectedWork] = React.useState<any>(null);
+  const [showFomoModal, setShowFomoModal] = React.useState(false);
   
   const liveViews = stats?.totalViews || 0;
   const topCity = stats?.topCities?.[0]?.city || 'Global';
@@ -234,7 +235,10 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
 
             {/* KnoWMi Pulse - Minimalistic Analytics */}
-            <div className="mb-16 animate-fadeIn w-full -mt-6">
+            <div 
+              className={`mb-16 animate-fadeIn w-full -mt-6 ${isFreeProfile ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+              onClick={() => isFreeProfile && setShowFomoModal(true)}
+            >
               <div className="flex justify-evenly items-start w-full">
                 <div className="flex flex-col items-center text-center">
                   <span className={`text-4xl font-black text-neutral-900 leading-none mb-3 ${isFreeProfile ? 'blur-[6px] select-none opacity-50 inline-block px-2' : ''}`}>{isFreeProfile ? '8,204' : liveViews}</span>
@@ -487,6 +491,62 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                <p className="text-xs font-bold text-white/60 uppercase tracking-[0.3em]">
                  {selectedWork.external_url ? 'EXTERNAL MASTERPIECE' : selectedWork.type === 'video' ? 'MOTION MASTERPIECE' : 'STILL GRAPHIC'}
                </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Interactive FOMO Upsell Modal */}
+      {showFomoModal && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fadeIn">
+          <div className="bg-white rounded-[32px] p-8 max-w-sm w-full border border-neutral-100 shadow-2xl relative animate-zoomIn text-center">
+            <button 
+              onClick={() => setShowFomoModal(false)}
+              className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-600 rounded-full hover:bg-neutral-50 transition-all"
+            >
+              <X size={20} />
+            </button>
+            
+            <div className="relative inline-flex items-center justify-center mb-6">
+              <div className="absolute inset-0 bg-orange-500/10 rounded-full blur-xl animate-pulse" />
+              <div className="w-16 h-16 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center shadow-inner">
+                <Activity size={32} className="animate-pulse" />
+              </div>
+            </div>
+            
+            <h3 className="text-xl font-black text-neutral-900 tracking-tight mb-2">Unlock Profile Analytics</h3>
+            <p className="text-xs font-bold text-neutral-500 mb-6 leading-relaxed">
+              Your profile is actively receiving connections! Upgrading to a premium plan unlocks these features instantly:
+            </p>
+            
+            <ul className="text-left space-y-3 mb-8 pl-4">
+              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+                <span className="text-emerald-500 font-black">✓</span> 📈 Real-Time View Count Tracking
+              </li>
+              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+                <span className="text-emerald-500 font-black">✓</span> 📍 Global & Local City-by-City Scans
+              </li>
+              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+                <span className="text-emerald-500 font-black">✓</span> 📱 Detailed Browser & Device Insights
+              </li>
+              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+                <span className="text-emerald-500 font-black">✓</span> 👥 Unique vs. Repeat Visitor Scoring
+              </li>
+            </ul>
+            
+            <div className="space-y-3">
+              <button 
+                onClick={() => window.location.href = '/#pricing'}
+                className="w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-[0.98]"
+              >
+                🔒 Buy A Tee to Unlock
+              </button>
+              <button 
+                onClick={() => setShowFomoModal(false)}
+                className="w-full py-3 text-neutral-400 hover:text-neutral-600 font-bold text-xs uppercase tracking-wider transition-colors"
+              >
+                Maybe Later
+              </button>
             </div>
           </div>
         </div>
