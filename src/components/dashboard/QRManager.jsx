@@ -163,7 +163,7 @@ export default function QRManager({ initialTokens, profileId, profileSlug }) {
                     </div>
 
                     <div className="flex flex-row md:flex-col gap-3 w-full md:w-auto shrink-0">
-                      <div className="p-4 bg-white rounded-2xl border border-neutral-50 shadow-inner">
+                      <div className="p-4 bg-white rounded-2xl border border-neutral-50 shadow-inner relative flex items-center justify-center">
                         <QRCodeSVG 
                           id={`qr-${token.id}`}
                           value={`https://knowmi.in/q/${token.scan_token}`}
@@ -171,6 +171,9 @@ export default function QRManager({ initialTokens, profileId, profileSlug }) {
                           level="H"
                           includeMargin={false}
                         />
+                        <div className="absolute inset-0 m-auto w-6 h-6 bg-neutral-950 rounded-md flex items-center justify-center shadow-lg border border-neutral-800 z-20 select-none">
+                          <span className="text-[8px] font-black text-orange-500 tracking-wider font-sans leading-none">WM</span>
+                        </div>
                       </div>
                       <div className="flex-1 flex flex-col gap-2">
                         <button 
