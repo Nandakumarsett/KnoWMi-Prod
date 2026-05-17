@@ -102,6 +102,13 @@ export default function Home() {
     // New: Redirect old #leaderboard hash to the new page
     if (window.location.hash === '#leaderboard') {
       navigate('/leaderboard');
+    } else if (window.location.hash === '#pricing' || window.location.href.includes('#pricing')) {
+      setTimeout(() => {
+        const el = document.getElementById('pricing');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 350);
     }
   }, [navigate]);
 
