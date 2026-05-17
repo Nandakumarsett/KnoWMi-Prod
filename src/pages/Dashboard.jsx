@@ -1437,20 +1437,7 @@ export default function Dashboard() {
 
   if (authLoading || loading) return <div className="min-h-screen bg-[#FAFAF9] p-10"><style dangerouslySetInnerHTML={{ __html: STYLES }}/><div className="skeleton h-20 w-full rounded-2xl mb-6"/><div className="skeleton h-64 w-full rounded-2xl"/></div>
 
-  // ABSOLUTE GATE: If not verified AND not owner, they see NOTHING but the lock.
-  if (isVerified !== true && role !== 'owner') return (
-    <div className="min-h-screen bg-[#FAFAF9]">
-      <style dangerouslySetInnerHTML={{ __html: STYLES }} />
-      <header className="h-16 border-b bg-white/80 backdrop-blur-xl flex items-center px-6 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto w-full flex justify-between items-center">
-          <button onClick={() => navigate('/')} className="text-xs font-bold text-neutral-400 hover:text-neutral-900 transition-colors flex items-center gap-2">
-            <ArrowLeft size={16} /> Back to Home
-          </button>
-        </div>
-      </header>
-      <VerificationLock profile={profile} user={user} />
-    </div>
-  )
+  // Bypassed absolute verification gate so new unverified users can view their analytics instantly.
 
   const isVibeDark = activeTab === 'analytics' && vibeTheme === 'dark';
 
