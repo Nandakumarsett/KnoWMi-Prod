@@ -4,7 +4,7 @@ import { fetchProfile } from '../lib/profile/fetch-profile'
 import { ProfileData } from '../types/profile'
 import { PersonaRouter } from '../components/profile/PersonaRouter'
 import ProfileViewTracker from '../components/analytics/ProfileViewTracker'
-import { Sparkles, X, UserPlus, Share2, ArrowLeft } from 'lucide-react'
+import { Sparkles, X, UserPlus, Share2, ArrowLeft, Lock } from 'lucide-react'
 import { ProfileCTAs } from '../components/profile/shared/ProfileCTAs'
 import { PulseBar } from '../components/profile/shared/PulseBar'
 import { VerifiedBadge } from '../components/profile/shared/VerifiedBadge'
@@ -124,6 +124,7 @@ export default function PublicProfile() {
   const fromTab = searchParams.get('from') || 'analytics'
   const accentColor = activeConfig?.theme?.accent || '#C1440E'
   const isOwnerOfProfile = user && user.id === profile.user_id
+  const isFreeProfile = profile.status === 'free' || (!profile.status && !profile.tier) || profile.tier === 'Free';
 
   // Sanitize display_name — strip accidental username/persona prefix concatenation
   // e.g. "tester_personaTester Persona" → "Tester Persona"
@@ -199,6 +200,31 @@ export default function PublicProfile() {
           </button>
         </div>
 
+
+        {isFreeProfile && (
+          <div className="px-6 mb-6">
+            <div className="w-full p-6 rounded-2xl border border-dashed border-orange-500/30 text-center relative overflow-hidden backdrop-blur-md"
+              style={{ background: isDarkTheme ? 'rgba(255,153,51,0.03)' : 'rgba(255,153,51,0.05)' }}>
+              <div className="absolute -top-10 -right-10 w-20 h-20 bg-orange-500/10 rounded-full blur-xl pointer-events-none" />
+              <div className="flex flex-col items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full text-[8px] font-black uppercase tracking-wider bg-orange-500/15 text-orange-500">
+                  Standard Tier
+                </span>
+                <h4 className="text-sm font-black tracking-tight" style={{ color: textPrimary }}>Buy a Tee to Unlock QR & Reach</h4>
+                <p className="text-[11px] leading-relaxed max-w-[240px]" style={{ color: textSecondary, opacity: 0.8 }}>
+                  Unlock dynamic physical scans, detailed custom themes, and full global connection analytics.
+                </p>
+                <button 
+                  onClick={() => window.location.href = '/#pricing'} 
+                  className="mt-3 px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95"
+                >
+                  Buy a Tee to Unlock 🚀
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Full Mobile Persona Router below */}
         <div className="px-2">
           <PersonaRouter profile={profile} recentVisitors={recentVisitors} stats={stats} />
@@ -220,25 +246,35 @@ export default function PublicProfile() {
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#5C5246]">Identity Protocol</span>
               </div>
 
-              <div 
-                className="w-52 h-52 p-1.5 shadow-xl rounded-[12px] mb-6 flex items-center justify-center"
-                style={{ background: `linear-gradient(135deg, ${accentColor}, #F97316)` }}
-              >
-                    <div className="w-full h-full bg-white p-1 rounded-[10px] overflow-hidden relative flex items-center justify-center">
-                       <img 
-                         src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.secure_slug || profile?.id}`)}`} 
-                         className="w-full h-full object-contain pointer-events-none select-none" 
-                         draggable="false"
-                         onDragStart={(e) => e.preventDefault()}
-                         onContextMenu={(e) => e.preventDefault()}
-                         alt="QR Code" 
-                       />
-                       <div className="absolute inset-0 z-10" />
-                       <div className="absolute inset-0 m-auto w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg border border-neutral-100 p-1 z-20">
-                         <img src="/logo-square.png" className="w-full h-full object-contain" alt="Branding" />
-                       </div>
-                    </div>
-              </div>
+              {isFreeProfile ? (
+                <div className="w-52 h-52 bg-neutral-950 rounded-[12px] flex flex-col items-center justify-center p-4 text-center text-white mb-6 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-orange-500/20 to-transparent pointer-events-none" />
+                  <Lock size={32} className="text-orange-500 mb-2 animate-bounce" />
+                  <span className="text-[9px] font-black uppercase tracking-widest text-orange-500">Locked</span>
+                  <p className="text-[11px] font-bold mt-1 text-neutral-300">Buy a Tee to Unlock QR</p>
+                  <button onClick={() => window.location.href = '/#pricing'} className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-lg transition-all active:scale-95">Upgrade 🚀</button>
+                </div>
+              ) : (
+                <div 
+                  className="w-52 h-52 p-1.5 shadow-xl rounded-[12px] mb-6 flex items-center justify-center"
+                  style={{ background: `linear-gradient(135deg, ${accentColor}, #F97316)` }}
+                >
+                      <div className="w-full h-full bg-white p-1 rounded-[10px] overflow-hidden relative flex items-center justify-center">
+                         <img 
+                           src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.secure_slug || profile?.id}`)}`} 
+                           className="w-full h-full object-contain pointer-events-none select-none" 
+                           draggable="false"
+                           onDragStart={(e) => e.preventDefault()}
+                           onContextMenu={(e) => e.preventDefault()}
+                           alt="QR Code" 
+                         />
+                         <div className="absolute inset-0 z-10" />
+                         <div className="absolute inset-0 m-auto w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg border border-neutral-100 p-1 z-20">
+                           <img src="/logo-square.png" className="w-full h-full object-contain" alt="Branding" />
+                         </div>
+                      </div>
+                </div>
+              )}
 
               <h3 className="text-xl font-black tracking-tight mb-1 text-center font-display text-[#1A1A1A]">{profile.display_name}</h3>
               <p className="text-[10px] font-bold text-[#5C5246] uppercase tracking-widest text-center">{profile.member_id}</p>
@@ -297,20 +333,30 @@ export default function PublicProfile() {
                    >
                       <div className={`w-full h-full bg-white p-1 overflow-hidden relative flex items-center justify-center ${showQR ? 'rounded-[10px]' : 'rounded-full'}`}>
                          {showQR ? (
-                           <div className="w-full h-full bg-white flex items-center justify-center relative p-2 select-none animate-fadeIn rounded-none">
-                             <img 
-                               src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.secure_slug || profile?.id}`)}`} 
-                               className="w-full h-full object-contain pointer-events-none" 
-                               draggable="false"
-                               onDragStart={(e) => e.preventDefault()}
-                               onContextMenu={(e) => e.preventDefault()} 
-                               alt="QR Code" 
-                             />
-                             <div className="absolute inset-0 z-10" />
-                             <div className="absolute inset-0 m-auto w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg border border-neutral-100 p-1">
-                               <img src="/logo-square.png" className="w-full h-full object-contain" alt="Branding" />
+                           isFreeProfile ? (
+                             <div className="w-full h-full bg-neutral-950 flex flex-col items-center justify-center p-4 text-center text-white relative rounded-[10px] overflow-hidden animate-fadeIn">
+                               <div className="absolute inset-0 bg-gradient-to-tr from-orange-500/20 to-transparent pointer-events-none" />
+                               <Lock size={32} className="text-orange-500 mb-2 animate-bounce" />
+                               <span className="text-[9px] font-black uppercase tracking-widest text-orange-500">Locked</span>
+                               <p className="text-[11px] font-bold mt-1 text-neutral-300">Buy a Tee to Unlock QR</p>
+                               <button onClick={() => window.location.href = '/#pricing'} className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-lg transition-all active:scale-95">Upgrade 🚀</button>
                              </div>
-                           </div>
+                           ) : (
+                             <div className="w-full h-full bg-white flex items-center justify-center relative p-2 select-none animate-fadeIn rounded-none">
+                               <img 
+                                 src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.secure_slug || profile?.id}`)}`} 
+                                 className="w-full h-full object-contain pointer-events-none" 
+                                 draggable="false"
+                                 onDragStart={(e) => e.preventDefault()}
+                                 onContextMenu={(e) => e.preventDefault()} 
+                                 alt="QR Code" 
+                               />
+                               <div className="absolute inset-0 z-10" />
+                               <div className="absolute inset-0 m-auto w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg border border-neutral-100 p-1">
+                                 <img src="/logo-square.png" className="w-full h-full object-contain" alt="Branding" />
+                               </div>
+                             </div>
+                           )
                          ) : (
                            <ProfileAvatar
                               src={profile.avatar_url}
@@ -359,6 +405,28 @@ export default function PublicProfile() {
               <div className="w-full mt-10">
                  <PulseBar pulse={profile.pulse} tier={profile.tier} accentColor={accentColor} />
               </div>
+
+              {isFreeProfile && (
+                <div className="w-full mt-8 p-6 rounded-2xl border border-dashed border-orange-500/30 text-center relative overflow-hidden backdrop-blur-md"
+                  style={{ background: isDarkTheme ? 'rgba(255,153,51,0.03)' : 'rgba(255,153,51,0.05)' }}>
+                  <div className="absolute -top-10 -right-10 w-20 h-20 bg-orange-500/10 rounded-full blur-xl pointer-events-none" />
+                  <div className="flex flex-col items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[8px] font-black uppercase tracking-wider bg-orange-500/15 text-orange-500">
+                      Standard Tier
+                    </span>
+                    <h4 className="text-sm font-black tracking-tight" style={{ color: textPrimary }}>Buy a Tee to Unlock QR & Reach</h4>
+                    <p className="text-[11px] leading-relaxed max-w-[240px]" style={{ color: textSecondary, opacity: 0.8 }}>
+                      Unlock dynamic physical scans, detailed custom themes, and full global connection analytics.
+                    </p>
+                    <button 
+                      onClick={() => window.location.href = '/#pricing'} 
+                      className="mt-3 px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95"
+                    >
+                      Buy a Tee to Unlock 🚀
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
