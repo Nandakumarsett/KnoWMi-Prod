@@ -212,8 +212,11 @@ export default function PublicProfile() {
 
         {isFreeProfile && (
           <div className="px-6 mb-6">
-            <div className="w-full p-6 rounded-2xl border border-dashed border-orange-500/30 text-center relative overflow-hidden backdrop-blur-md"
-              style={{ background: isDarkTheme ? 'rgba(255,153,51,0.03)' : 'rgba(255,153,51,0.05)' }}>
+            <div 
+              className="w-full p-6 rounded-2xl border border-dashed border-orange-500/30 text-center relative overflow-hidden backdrop-blur-md cursor-pointer hover:bg-orange-500/5 transition-colors group"
+              style={{ background: isDarkTheme ? 'rgba(255,153,51,0.03)' : 'rgba(255,153,51,0.05)' }}
+              onClick={() => window.location.href = '/#pricing'}
+            >
               <div className="absolute -top-10 -right-10 w-20 h-20 bg-orange-500/10 rounded-full blur-xl pointer-events-none" />
               <div className="flex flex-col items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full text-[8px] font-black uppercase tracking-wider bg-orange-500/15 text-orange-500">
@@ -224,8 +227,7 @@ export default function PublicProfile() {
                   Unlock dynamic physical scans, detailed custom themes, and full global connection analytics.
                 </p>
                 <button 
-                  onClick={() => window.location.href = '/#pricing'} 
-                  className="mt-3 px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95"
+                  className="mt-3 px-6 py-2.5 bg-orange-500 group-hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95 pointer-events-none"
                 >
                   Buy a Tee to Unlock 🚀
                 </button>
@@ -256,12 +258,15 @@ export default function PublicProfile() {
               </div>
 
               {isFreeProfile ? (
-                <div className="w-52 h-52 bg-white/90 rounded-[12px] flex flex-col items-center justify-center p-4 text-center text-neutral-900 mb-6 relative overflow-hidden border border-neutral-200 shadow-sm backdrop-blur-sm">
+                <div 
+                  className="w-52 h-52 bg-white/90 rounded-[12px] flex flex-col items-center justify-center p-4 text-center text-neutral-900 mb-6 relative overflow-hidden border border-neutral-200 shadow-sm backdrop-blur-sm cursor-pointer hover:bg-white/95 transition-colors group"
+                  onClick={() => window.location.href = '/#pricing'}
+                >
                   <div className="absolute inset-0 bg-gradient-to-tr from-orange-500/5 to-transparent pointer-events-none" />
-                  <Lock size={28} className="text-orange-500 mb-2 animate-bounce" />
+                  <Lock size={28} className="text-orange-500 mb-2 group-hover:scale-110 transition-transform" />
                   <span className="text-[9px] font-black uppercase tracking-widest text-orange-500">Locked</span>
                   <p className="text-[11px] font-bold mt-1 text-neutral-600">Buy a Tee to Unlock QR</p>
-                  <button onClick={() => window.location.href = '/#pricing'} className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-lg transition-all active:scale-95 shadow-md shadow-orange-500/20">Upgrade 🚀</button>
+                  <button className="mt-4 px-4 py-2 bg-orange-500 group-hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-lg transition-all active:scale-95 shadow-md shadow-orange-500/20 pointer-events-none">Upgrade 🚀</button>
                 </div>
               ) : (
                 <div 
@@ -346,12 +351,15 @@ export default function PublicProfile() {
                       <div className={`w-full h-full bg-white p-1 overflow-hidden relative flex items-center justify-center ${showQR ? 'rounded-[10px]' : 'rounded-full'}`}>
                          {showQR ? (
                            isFreeProfile ? (
-                             <div className="w-full h-full bg-white/90 flex flex-col items-center justify-center p-4 text-center text-neutral-900 relative rounded-[10px] overflow-hidden animate-fadeIn select-none pointer-events-auto border border-neutral-200">
+                             <div 
+                               className="w-full h-full bg-white/90 flex flex-col items-center justify-center p-4 text-center text-neutral-900 relative rounded-[10px] overflow-hidden animate-fadeIn select-none pointer-events-auto border border-neutral-200 cursor-pointer hover:bg-white/95 transition-colors group"
+                               onClick={(e) => { e.stopPropagation(); window.location.href = '/#pricing'; }}
+                             >
                                <div className="absolute inset-0 bg-gradient-to-tr from-orange-500/5 to-transparent pointer-events-none" />
-                               <Lock size={28} className="text-orange-500 mb-2 animate-bounce" />
+                               <Lock size={28} className="text-orange-500 mb-2 group-hover:scale-110 transition-transform" />
                                <span className="text-[9px] font-black uppercase tracking-widest text-orange-500">Locked</span>
                                <p className="text-[11px] font-bold mt-1 text-neutral-600">Buy a Tee to Unlock QR</p>
-                               <button onClick={(e) => { e.stopPropagation(); window.location.href = '/#pricing'; }} className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-lg transition-all active:scale-95 z-20 relative shadow-md shadow-orange-500/20">Upgrade 🚀</button>
+                               <button className="mt-4 px-4 py-2 bg-orange-500 group-hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-lg transition-all active:scale-95 z-20 relative shadow-md shadow-orange-500/20 pointer-events-none">Upgrade 🚀</button>
                              </div>
                            ) : (
                              <div className="w-full h-full bg-white flex items-center justify-center relative p-2 select-none animate-fadeIn rounded-none">
@@ -419,8 +427,11 @@ export default function PublicProfile() {
               </div>
 
               {isFreeProfile && (
-                <div className="w-full mt-8 p-6 rounded-2xl border border-dashed border-orange-500/30 text-center relative overflow-hidden backdrop-blur-md"
-                  style={{ background: isDarkTheme ? 'rgba(255,153,51,0.03)' : 'rgba(255,153,51,0.05)' }}>
+                <div 
+                  className="w-full mt-8 p-6 rounded-2xl border border-dashed border-orange-500/30 text-center relative overflow-hidden backdrop-blur-md cursor-pointer hover:bg-orange-500/5 transition-colors group"
+                  style={{ background: isDarkTheme ? 'rgba(255,153,51,0.03)' : 'rgba(255,153,51,0.05)' }}
+                  onClick={() => window.location.href = '/#pricing'}
+                >
                   <div className="absolute -top-10 -right-10 w-20 h-20 bg-orange-500/10 rounded-full blur-xl pointer-events-none" />
                   <div className="flex flex-col items-center gap-2">
                     <span className="px-2.5 py-0.5 rounded-full text-[8px] font-black uppercase tracking-wider bg-orange-500/15 text-orange-500">
@@ -431,8 +442,7 @@ export default function PublicProfile() {
                       Unlock dynamic physical scans, detailed custom themes, and full global connection analytics.
                     </p>
                     <button 
-                      onClick={() => window.location.href = '/#pricing'} 
-                      className="mt-3 px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95"
+                      className="mt-3 px-6 py-2.5 bg-orange-500 group-hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95 pointer-events-none"
                     >
                       Buy a Tee to Unlock 🚀
                     </button>
