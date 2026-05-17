@@ -1298,6 +1298,35 @@ export default function Dashboard() {
   const { profile, user, loading: authLoading, refreshProfile, isVerified, role } = useAuth()
   const isFree = profile?.status === 'free' || (!profile?.status && (!profile?.tier || profile?.tier === 'Starter' || profile?.tier === 'Free')) || profile?.tier === 'Free' || profile?.tier === 'Starter';
   const isPaid = !isFree || role === 'owner';
+
+  // Strategic Completion Formula (Gamified Hook)
+  const profileCompletion = useMemo(() => {
+    if (!profile) return 0;
+    let score = 0;
+    
+    // 1. Identity created (has persona_type) -> +30%
+    if (profile.persona_type) score += 30;
+    
+    // 2. Avatar & display name -> +20%
+    if (profile.avatar_url) score += 10;
+    if (profile.first_name || profile.last_name) score += 10;
+    
+    // 3. Bio filled -> +15%
+    if (profile.bio) score += 15;
+    
+    // 4. Social links or custom links filled -> +10%
+    const storedIdentities = profile.persona_data?.identities || [];
+    const hasLinks = storedIdentities.some(id => id.data?.platforms && id.data.platforms.length > 0);
+    if (hasLinks || (profile.social_links && Object.keys(profile.social_links).length > 0)) {
+      score += 10;
+    }
+    
+    // 5. Active and Paid (NFC Tee Activated) -> +25%
+    if (isPaid) score += 25;
+    
+    return score;
+  }, [profile, isPaid]);
+
   const [scans, setScans] = useState([])
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
@@ -1584,6 +1613,48 @@ export default function Dashboard() {
       </header>
 
       <main className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 pb-48">
+        {/* Sleek Profile Completion Progress Bar */}
+        <div className="mb-10 w-full animate-slideUp">
+          <div className="bg-white border border-neutral-100 rounded-[28px] p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-4 w-full md:w-auto">
+              <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center shrink-0 shadow-inner">
+                <Target size={24} className="animate-pulse" />
+              </div>
+              <div className="text-left">
+                <h3 className="text-sm font-black text-neutral-900 uppercase tracking-widest leading-none mb-2">Profile Setup Completion</h3>
+                <p className="text-[11px] font-bold text-neutral-400">
+                  {profileCompletion < 100 
+                    ? `Complete your path to get the physical NFC smart Tee & unlock 100% of features!` 
+                    : `Congratulations! Your KnoWMi Identity is fully activated! 🎉`}
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4 w-full md:w-[320px]">
+              <div className="flex-1">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-[10px] font-black text-orange-500 uppercase tracking-wider">{profileCompletion}% Complete</span>
+                  <span className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">Level {profileCompletion === 100 ? 'Max' : '1'}</span>
+                </div>
+                <div className="w-full h-3 bg-neutral-100 rounded-full overflow-hidden p-0.5 border border-neutral-200">
+                  <div 
+                    className="h-full bg-gradient-to-r from-orange-500 to-orange-400 rounded-full transition-all duration-1000 shadow-md"
+                    style={{ width: `${profileCompletion}%` }}
+                  />
+                </div>
+              </div>
+              {profileCompletion < 100 && (
+                <button 
+                  onClick={() => window.location.href = '/#pricing'}
+                  className="px-5 py-3 bg-orange-500 hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95 whitespace-nowrap"
+                >
+                  Unlock 100% 🚀
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
         <div className={`tab-transition ${activeTab === 'analytics' ? 'tab-visible' : 'tab-hidden'}`}>
           {activeTab === 'analytics' && (
             <div className="relative">
