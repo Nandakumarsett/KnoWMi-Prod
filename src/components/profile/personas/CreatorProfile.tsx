@@ -237,11 +237,11 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             <div className="mb-16 animate-fadeIn w-full -mt-6">
               <div className="flex justify-evenly items-start w-full">
                 <div className="flex flex-col items-center text-center">
-                  <span className={`text-4xl font-black text-neutral-900 leading-none mb-3 ${isFreeProfile ? 'blur-[8px] select-none opacity-50' : ''}`}>{isFreeProfile ? '8,204' : liveViews}</span>
+                  <span className={`text-4xl font-black text-neutral-900 leading-none mb-3 ${isFreeProfile ? 'blur-[6px] select-none opacity-50 inline-block px-2' : ''}`}>{isFreeProfile ? '8,204' : liveViews}</span>
                   <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest">Profile Views</p>
                 </div>
                 <div className="flex flex-col items-center text-center transform translate-x-4">
-                  <span className={`text-4xl font-black leading-none mb-3 ${isFreeProfile ? 'blur-[8px] select-none opacity-50' : ''}`} style={{ color: cityColor }}>{isFreeProfile ? 'New York' : topCity}</span>
+                  <span className={`text-4xl font-black leading-none mb-3 ${isFreeProfile ? 'blur-[6px] select-none opacity-50 inline-block px-2' : ''}`} style={{ color: cityColor }}>{isFreeProfile ? 'New York' : topCity}</span>
                   <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest">Most Scanned Place</p>
                 </div>
               </div>
