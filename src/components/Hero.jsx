@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import PhoneMockup from './PhoneMockup'
 import { ArrowRight } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
 
 const stats = [
   { num: '12K+', label: 'Profiles Scanned' },
@@ -18,6 +19,7 @@ const trustAvatars = [
 ]
 
 export default function Hero({ onOrderClick }) {
+  const { user } = useAuth()
   const heroRef = useRef(null)
 
   useEffect(() => {
@@ -106,10 +108,17 @@ export default function Hero({ onOrderClick }) {
 
             {/* CTAs */}
             <div data-fade className="flex flex-wrap justify-center lg:justify-start gap-4 mb-10">
-              <a onClick={() => onOrderClick?.()} className="px-8 py-4 bg-orange-500 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-orange-200 hover:bg-orange-600 transition-all flex items-center gap-2" href="#collection">
-                Claim Your Tee
-                <ArrowRight size={16} />
-              </a>
+              {user ? (
+                <a href="/dashboard" className="px-8 py-4 bg-orange-500 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-orange-200 hover:bg-orange-600 transition-all flex items-center gap-2">
+                  Go to Dashboard
+                  <ArrowRight size={16} />
+                </a>
+              ) : (
+                <a onClick={() => onOrderClick?.()} className="px-8 py-4 bg-orange-500 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-orange-200 hover:bg-orange-600 transition-all flex items-center gap-2" href="#collection">
+                  Claim Your Tee
+                  <ArrowRight size={16} />
+                </a>
+              )}
               <a href="#how-it-works" className="px-8 py-4 bg-white border border-neutral-200 text-black rounded-2xl font-black text-sm uppercase tracking-widest hover:border-orange-500 transition-all">
                 How It Works
               </a>
