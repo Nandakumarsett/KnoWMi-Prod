@@ -41,6 +41,8 @@ export interface StudentData {
   campus_rank_pct: number;
   study_buddies: number;
   thought_bubble: string;
+  batch_year?: string;
+  favorite_subject?: string;
   resume_url?: string;
   website?: string;
   playlist_url?: string;
@@ -48,8 +50,10 @@ export interface StudentData {
   projects: Array<{
     name: string;
     emoji: string;
+    description?: string;
     tech: string[];
     url?: string;
+    github_url?: string;
   }>;
   hackathons: Array<{
     name: string;
@@ -57,7 +61,17 @@ export interface StudentData {
     achievement?: string;
   }>;
   clubs: string[];
+  platforms?: Array<{
+    platform: string;
+    url: string;
+  }>;
+  availability?: string;
+  core_skills?: string[];
+  hobbies?: string[];
+  contact_email?: string;
+  quick_talk_url?: string;
 }
+
 
 export interface CreatorData {
   type: 'creator';
