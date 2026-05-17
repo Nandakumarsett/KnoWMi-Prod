@@ -5,13 +5,14 @@ import {
   GraduationCap, BookOpen, Rocket, FileText, 
   Globe, Music, Sparkles, Heart, Star, Users,
   Share2, UserPlus, QrCode, ExternalLink, Github, Linkedin, Twitter, Instagram,
-  MessageCircle, Link as LinkIcon, Trophy, Target, Briefcase, Zap, Mail, Calendar, Ghost
+  MessageCircle, Link as LinkIcon, Trophy, Target, Briefcase, Zap, Mail, Calendar, Ghost, Activity
 } from 'lucide-react'
 import { getAssetUrl } from '../../../lib/supabase'
 import { QRCodeSVG } from 'qrcode.react'
 
-export function StudentProfile({ profile }: { profile: ProfileData }) {
+export function StudentProfile({ profile, stats }: { profile: ProfileData, stats?: any }) {
   const data = (profile.persona_data || {}) as StudentData
+  const liveViews = stats?.totalViews || 0;
   if (!data || Object.keys(data).length === 0) {
     return <div className="p-10 text-center text-neutral-400 font-medium text-sm">Loading student identity...</div>
   }
@@ -110,6 +111,14 @@ export function StudentProfile({ profile }: { profile: ProfileData }) {
                     {profile.display_name?.charAt(0).toUpperCase() || 'U'}
                   </div>
                 )}
+              </div>
+            </div>
+
+            {/* Total Pulse Badge */}
+            <div className="absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 z-40">
+              <div className="bg-neutral-900 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full shadow-lg shadow-emerald-900/10 border-2 border-white flex items-center gap-1.5 whitespace-nowrap">
+                <Activity size={14} className="text-emerald-400 sm:w-4 sm:h-4 animate-pulse" />
+                <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em]">{liveViews} Pulse</span>
               </div>
             </div>
           </div>
@@ -240,10 +249,16 @@ export function StudentProfile({ profile }: { profile: ProfileData }) {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
               {data.platforms.map((p: any, i: number) => {
                 const pData = getPlatformData(p.platform);
+                const ensureAbsoluteUrl = (url: string) => {
+                  if (!url) return '';
+                  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+                  return `https://${url}`;
+                };
+
                 return (
                   <a 
                     key={i}
-                    href={p.url} 
+                    href={ensureAbsoluteUrl(p.url)} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-5 rounded-2xl sm:rounded-[2rem] bg-white border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] ${pData.hoverBorder} transition-all duration-300 group`}
