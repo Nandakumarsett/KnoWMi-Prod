@@ -96,11 +96,17 @@ export function StudentProfile({ profile }: { profile: ProfileData }) {
             {/* Avatar Container - FIXED CENTERING */}
             <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full p-1.5 sm:p-2 bg-white/80 backdrop-blur-xl shadow-2xl shadow-black/10 relative z-10 transition-transform duration-500 group-hover:scale-105 flex items-center justify-center mx-auto">
               <div className="w-full h-full rounded-full overflow-hidden border-2 border-neutral-50 bg-neutral-100 flex items-center justify-center relative">
-                <ProfileAvatar
-                  src={profile.avatar_url}
-                  name={profile.display_name}
-                  size={160}
-                />
+                {profile.avatar_url ? (
+                  <img 
+                    src={getAssetUrl(profile.avatar_url)} 
+                    alt={profile.display_name} 
+                    className="w-full h-full object-cover" 
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-emerald-500 text-white font-black text-4xl sm:text-5xl">
+                    {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+                )}
               </div>
               {/* Decorative Ring */}
               <div className="absolute inset-0 rounded-full border border-neutral-200/50 -m-3 sm:-m-4 opacity-50" />
