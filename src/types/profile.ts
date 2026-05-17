@@ -30,6 +30,8 @@ export interface DeveloperData {
     icon: string;
     label: string;
   }>;
+  contact_email?: string;
+  quick_talk_url?: string;
 }
 
 export interface StudentData {
