@@ -244,8 +244,8 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                       alt="HD QR Code" 
                     />
                     {simulatorTab === 'unlocked' && (
-                      <div className="absolute inset-0 m-auto w-6 h-6 bg-white rounded-lg flex items-center justify-center shadow-lg border border-neutral-100 p-0.5 z-20">
-                        <img src="/logo-square.png" className="w-full h-full object-contain" alt="Branding" />
+                      <div className="absolute inset-0 m-auto w-6 h-6 bg-neutral-950 rounded-md flex items-center justify-center shadow-lg border border-neutral-800 z-20 select-none">
+                        <span className="text-[8px] font-black text-orange-500 tracking-wider font-sans leading-none">WM</span>
                       </div>
                     )}
                   </div>
