@@ -283,8 +283,8 @@ export default function PublicProfile() {
                            alt="QR Code" 
                          />
                          <div className="absolute inset-0 z-10" />
-                         <div className="absolute inset-0 m-auto w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg border border-neutral-100 p-1 z-20">
-                           <img src="/logo-square.png" className="w-full h-full object-contain" alt="Branding" />
+                         <div className="absolute inset-0 m-auto w-8 h-8 bg-neutral-950 rounded-lg flex items-center justify-center shadow-lg border border-neutral-800 z-20 select-none">
+                           <span className="text-[10px] font-black text-orange-500 tracking-wider font-sans leading-none">WM</span>
                          </div>
                       </div>
                 </div>
@@ -372,8 +372,8 @@ export default function PublicProfile() {
                                  alt="QR Code" 
                                />
                                <div className="absolute inset-0 z-10" />
-                               <div className="absolute inset-0 m-auto w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg border border-neutral-100 p-1">
-                                 <img src="/logo-square.png" className="w-full h-full object-contain" alt="Branding" />
+                               <div className="absolute inset-0 m-auto w-8 h-8 bg-neutral-950 rounded-lg flex items-center justify-center shadow-lg border border-neutral-800 z-20 select-none">
+                                 <span className="text-[10px] font-black text-orange-500 tracking-wider font-sans leading-none">WM</span>
                                </div>
                              </div>
                            )
