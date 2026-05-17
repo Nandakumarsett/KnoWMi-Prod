@@ -201,8 +201,9 @@ export default function IdentityStudio() {
   const [uploading, setUploading] = useState(false)
   const [profile, setProfile] = useState<any>(null)
   const [activePersona, setActivePersona] = useState(() => {
-    const p = (searchParams.get('persona') || 'influencer').toLowerCase()
-    return ['tech', 'dev', 'developer'].includes(p) ? 'developer' : p
+    const p = searchParams.get('persona')
+    if (!p) return ''
+    return ['tech', 'dev', 'developer'].includes(p.toLowerCase()) ? 'developer' : p.toLowerCase()
   })
   const [data, setData] = useState<any>({ ...INITIAL_STATE })
 
@@ -215,11 +216,21 @@ export default function IdentityStudio() {
 
         if (prof) {
           setProfile(prof)
-          const personaType = searchParams.get('persona')
-          setActivePersona(personaType || '')
-
           const identities = prof.persona_data?.identities || []
-          const editId = searchParams.get('edit')
+          let personaType = searchParams.get('persona')
+          let editId = searchParams.get('edit')
+          const isNewMode = searchParams.get('mode') === 'new'
+
+          if (!personaType && !editId && !isNewMode && identities.length > 0) {
+            // Default to the active or first identity to prevent losing place when switching tabs
+            const activeIden = identities.find((i: any) => i.active) || identities[0]
+            personaType = activeIden.persona_type
+            editId = activeIden.id
+            setActivePersona(personaType || '')
+            navigate(`/studio?persona=${personaType}&edit=${editId}`, { replace: true })
+          } else {
+            setActivePersona(personaType || '')
+          }
 
           const personaIden = editId
             ? identities.find((i: any) => i.id === editId)
@@ -471,9 +482,11 @@ export default function IdentityStudio() {
             </button>
             <div>
               <h1 className="text-xl font-black font-display tracking-tight">
-                Build Your {activeConfig?.name || (activePersona ? activePersona.charAt(0).toUpperCase() + activePersona.slice(1) : 'Identity')} Identity {config.emoji}
+                Build your {activePersona ? (activeConfig?.name || activePersona.charAt(0).toUpperCase() + activePersona.slice(1)) + ' ' : ''}Identity {activePersona ? config.emoji : '✨'}
               </h1>
-              <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mt-0.5">Complete your profile to unlock more visibility</p>
+              <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mt-0.5">
+                {activePersona ? 'Complete your profile to unlock more visibility' : 'Choose your path to begin'}
+              </p>
             </div>
           </div>
 
@@ -527,10 +540,16 @@ export default function IdentityStudio() {
                   </div>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                  {Object.entries(PERSONA_CONFIG).map(([key, p]) => (
+                  {Object.entries(PERSONA_CONFIG).filter(([key]) => {
+                    const existingIdentities = profile?.persona_data?.identities || [];
+                    return !existingIdentities.some((i: any) => i.persona_type === key);
+                  }).map(([key, p]) => (
                     <div
                       key={key}
-                      onClick={() => setActivePersona(key)}
+                      onClick={() => {
+                        setActivePersona(key)
+                        navigate(`/studio?persona=${key}&mode=new`, { replace: true })
+                      }}
                       className="glass-card group p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:border-orange-500 transition-all"
                     >
                       <div className="w-16 h-16 rounded-2xl bg-neutral-50 flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition-transform">
