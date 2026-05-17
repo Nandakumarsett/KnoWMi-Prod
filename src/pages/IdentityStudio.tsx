@@ -252,25 +252,33 @@ export default function IdentityStudio() {
           }
 
           if (personaIden) {
-            setData((prev: any) => ({
-              ...prev,
-              ...coreData,
-              ...(personaIden.data || {})
-            }))
+            setData((prev: any) => {
+              const baseData = { ...prev, ...coreData, ...(personaIden.data || {}) }
+              try {
+                const draft = sessionStorage.getItem(`draft_persona_${personaType || ''}`);
+                if (draft) return { ...baseData, ...JSON.parse(draft) };
+              } catch (e) {}
+              return baseData;
+            })
           } else if (searchParams.get('mode') === 'new') {
             // FRESH DATA for new identities - explicitly empty bio/socials/avatar
-            setData({
-              ...INITIAL_STATE,
-              first_name: prof.first_name || '',
-              last_name: prof.last_name || '',
-              avatar_url: ''
+            setData((prev: any) => {
+              const baseData = { ...INITIAL_STATE, first_name: prof.first_name || '', last_name: prof.last_name || '', avatar_url: '' }
+              try {
+                const draft = sessionStorage.getItem(`draft_persona_${personaType || ''}`);
+                if (draft) return { ...baseData, ...JSON.parse(draft) };
+              } catch (e) {}
+              return baseData;
             })
           } else {
             // Default fresh state for undefined personas
-            setData({
-              ...INITIAL_STATE,
-              first_name: prof.first_name || '',
-              last_name: prof.last_name || ''
+            setData((prev: any) => {
+              const baseData = { ...INITIAL_STATE, first_name: prof.first_name || '', last_name: prof.last_name || '' }
+              try {
+                const draft = sessionStorage.getItem(`draft_persona_${personaType || ''}`);
+                if (draft) return { ...baseData, ...JSON.parse(draft) };
+              } catch (e) {}
+              return baseData;
             })
           }
         }
@@ -282,6 +290,16 @@ export default function IdentityStudio() {
     }
     load()
   }, [user])
+
+  // Auto-save draft changes to sessionStorage
+  useEffect(() => {
+    if (activePersona && data && Object.keys(data).length > 0) {
+      // Don't save empty initialization state as draft
+      if (data.first_name !== '' || data.last_name !== '' || data.bio !== '' || data.tagline !== '' || data.about || data.tech_stack) {
+        sessionStorage.setItem(`draft_persona_${activePersona}`, JSON.stringify(data))
+      }
+    }
+  }, [data, activePersona])
 
   const updateField = (key: string, value: any) => {
     setData((prev: any) => ({ ...prev, [key]: value }))
@@ -428,6 +446,7 @@ export default function IdentityStudio() {
         persona_type: activePersona,
         persona_data: { ...(profile?.persona_data || {}), identities: newIdentities }
       })
+      sessionStorage.removeItem(`draft_persona_${activePersona}`)
       alert('Changes saved successfully!')
       window.location.reload()
     } catch (err: any) {
@@ -490,34 +509,36 @@ export default function IdentityStudio() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="px-6 py-2.5 bg-[#F97316] text-white text-[11px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-600 transition-all flex items-center gap-2 shadow-lg shadow-orange-500/20 disabled:opacity-50"
-            >
-              {saving ? <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Save size={14} />}
-              Save Changes
-            </button>
+          {activePersona ? (
+            <div className="flex items-center gap-4">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="px-6 py-2.5 bg-[#F97316] text-white text-[11px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-600 transition-all flex items-center gap-2 shadow-lg shadow-orange-500/20 disabled:opacity-50"
+              >
+                {saving ? <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Save size={14} />}
+                Save Changes
+              </button>
 
-            <div className="text-right hidden sm:block">
-              <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Strength</p>
-              <p className="text-xs font-bold text-orange-500">{score >= 80 ? "Elite Level Achieved! 🏆" : "Good progress. Let's hit 80% 🚀"}</p>
+              <div className="text-right hidden sm:block">
+                <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Strength</p>
+                <p className="text-xs font-bold text-orange-500">{score >= 80 ? "Elite Level Achieved! 🏆" : "Good progress. Let's hit 80% 🚀"}</p>
+              </div>
+              <div className="relative w-12 h-12 flex items-center justify-center">
+                <svg className="w-full h-full transform -rotate-90">
+                  <circle cx="24" cy="24" r="20" stroke="#F1F1EF" strokeWidth="4" fill="transparent" />
+                  <circle
+                    cx="24" cy="24" r="20" stroke={config.color} strokeWidth="4" fill="transparent"
+                    strokeDasharray={2 * Math.PI * 20}
+                    strokeDashoffset={2 * Math.PI * 20 * (1 - score / 100)}
+                    strokeLinecap="round"
+                    className="progress-ring"
+                  />
+                </svg>
+                <span className="absolute text-[10px] font-black">{score}%</span>
+              </div>
             </div>
-            <div className="relative w-12 h-12 flex items-center justify-center">
-              <svg className="w-full h-full transform -rotate-90">
-                <circle cx="24" cy="24" r="20" stroke="#F1F1EF" strokeWidth="4" fill="transparent" />
-                <circle
-                  cx="24" cy="24" r="20" stroke={config.color} strokeWidth="4" fill="transparent"
-                  strokeDasharray={2 * Math.PI * 20}
-                  strokeDashoffset={2 * Math.PI * 20 * (1 - score / 100)}
-                  strokeLinecap="round"
-                  className="progress-ring"
-                />
-              </svg>
-              <span className="absolute text-[10px] font-black">{score}%</span>
-            </div>
-          </div>
+          ) : null}
         </div>
       </header>
 
@@ -750,21 +771,23 @@ export default function IdentityStudio() {
       {/* Removed sticky insight strip as requested */}
 
       {/* 🚀 ACTION-DRIVEN FOOTER */}
-      <footer className="fixed bottom-0 left-0 right-0 z-[60] bg-white/80 backdrop-blur-xl border-t border-neutral-100 p-8 flex items-center justify-center gap-6">
-        <button
-          onClick={() => window.open(`/p/${profile?.secure_slug || profile?.id}`, '_blank')}
-          className="px-10 py-4 rounded-2xl border-2 border-neutral-100 text-neutral-600 font-black text-xs uppercase tracking-widest hover:bg-neutral-50 hover:border-neutral-200 transition-all flex items-center gap-2"
-        >
-          <Eye size={18} /> Preview Profile
-        </button>
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="px-14 py-4 rounded-2xl bg-[#F97316] text-white font-black text-xs uppercase tracking-widest hover:bg-orange-600 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-orange-500/20 disabled:opacity-50 flex items-center gap-2"
-        >
-          {saving ? 'Boosting...' : <><Rocket size={20} /> Boost My Profile</>}
-        </button>
-      </footer>
+      {activePersona ? (
+        <footer className="fixed bottom-0 left-0 right-0 z-[60] bg-white/80 backdrop-blur-xl border-t border-neutral-100 p-8 flex items-center justify-center gap-6">
+          <button
+            onClick={() => window.open(`/p/${profile?.secure_slug || profile?.id}`, '_blank')}
+            className="px-10 py-4 rounded-2xl border-2 border-neutral-100 text-neutral-600 font-black text-xs uppercase tracking-widest hover:bg-neutral-50 hover:border-neutral-200 transition-all flex items-center gap-2"
+          >
+            <Eye size={18} /> Preview Profile
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="px-14 py-4 rounded-2xl bg-[#F97316] text-white font-black text-xs uppercase tracking-widest hover:bg-orange-600 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-orange-500/20 disabled:opacity-50 flex items-center gap-2"
+          >
+            {saving ? 'Boosting...' : <><Rocket size={20} /> Boost My Profile</>}
+          </button>
+        </footer>
+      ) : null}
     </div>
   )
 }
