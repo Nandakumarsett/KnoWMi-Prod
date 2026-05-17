@@ -334,6 +334,8 @@ const StatCard = ({ label, value, color, icon: Icon, delay = 0 }) => (
 )
 const PersonaEditor = ({ profile, onUpdate }) => {
   const navigate = useNavigate()
+  const isFree = profile?.status === 'free' || (!profile?.status && (!profile?.tier || profile?.tier === 'Starter' || profile?.tier === 'Free')) || profile?.tier === 'Free' || profile?.tier === 'Starter';
+  const isPaid = !isFree || profile?.role === 'owner';
   // Initialize identities from persona_data or create the first one from profile
   const [identities, setIdentities] = useState([])
 
@@ -446,7 +448,8 @@ const PersonaEditor = ({ profile, onUpdate }) => {
   }, [searchParams, isEditing])
 
   const addNewIdentity = () => {
-    if (identities.length >= 3) return
+    const limit = isPaid ? 3 : 1;
+    if (identities.length >= limit) return
     const newId = `id-${Math.random().toString(36).substring(2, 9)}`
     setEditingId(newId)
     setPersona(null) // Force Choose Your Path
@@ -728,7 +731,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
       <div className="max-w-2xl mx-auto space-y-6">
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-xl font-display font-black">My <span className="text-orange-500">Identities</span></h2>
-          <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">{identities.length} / 3 Slots Used</span>
+          <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">{identities.length} / {isPaid ? 3 : 1} Slots Used</span>
         </div>
 
         {/* Identity Cards List */}
@@ -792,27 +795,27 @@ const PersonaEditor = ({ profile, onUpdate }) => {
           ))}
         </div>
 
-        {/* Add New Identity Button (Creator Plan Only) */}
-        {isCreator ? (
-          identities.length < 3 ? (
-            <button onClick={() => navigate('/studio?mode=new')} className="w-full h-24 border-2 border-dashed border-neutral-200 rounded-3xl flex flex-col items-center justify-center gap-2 text-neutral-400 hover:border-orange-500 hover:text-orange-500 hover:bg-orange-50/30 transition-all group">
-              <div className="w-10 h-10 rounded-full bg-neutral-50 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-all">
-                <Plus size={24} />
-              </div>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em]">Add New Identity</span>
-            </button>
+        {/* Add New Identity Button (Creator Plan / Free First Slot Limit Check) */}
+        {identities.length < (isPaid ? 3 : 1) ? (
+          <button onClick={() => navigate('/studio?mode=new')} className="w-full h-24 border-2 border-dashed border-neutral-200 rounded-3xl flex flex-col items-center justify-center gap-2 text-neutral-400 hover:border-orange-500 hover:text-orange-500 hover:bg-orange-50/30 transition-all group">
+            <div className="w-10 h-10 rounded-full bg-neutral-50 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-all">
+              <Plus size={24} />
+            </div>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Add New Identity</span>
+          </button>
+        ) : (
+          !isPaid ? (
+            <div className="card p-8 bg-orange-50 border border-orange-100 text-center">
+              <Lock size={32} className="mx-auto mb-4 text-orange-500 opacity-50" />
+              <h3 className="text-lg font-bold mb-1">Upgrade to Creator Plan</h3>
+              <p className="text-xs text-neutral-500 mb-6">Unlock up to 3 different identities for your phygital scans.</p>
+              <button onClick={() => window.location.href = '/#pricing'} className="btn-primary px-8 py-3 text-sm">Upgrade Now</button>
+            </div>
           ) : (
             <div className="text-center py-4 px-6 bg-neutral-50 rounded-2xl border border-neutral-100">
               <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Max 3 Identities Reached</p>
             </div>
           )
-        ) : (
-          <div className="card p-8 bg-orange-50 border border-orange-100 text-center">
-            <Lock size={32} className="mx-auto mb-4 text-orange-500 opacity-50" />
-            <h3 className="text-lg font-bold mb-1">Upgrade to Creator Plan</h3>
-            <p className="text-xs text-neutral-500 mb-6">Unlock up to 3 different identities for your phygital scans.</p>
-            <button onClick={() => window.location.href = '/#pricing'} className="btn-primary px-8 py-3 text-sm">Upgrade Now</button>
-          </div>
         )}
       </div>
     )
@@ -1148,7 +1151,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
 
 const IdentityPass = ({ profile }) => {
   const isOwner = profile?.role === 'owner';
-  const isFree = profile?.status === 'free' || (!profile?.status && !profile?.tier) || profile?.tier === 'Free';
+  const isFree = profile?.status === 'free' || (!profile?.status && (!profile?.tier || profile?.tier === 'Starter' || profile?.tier === 'Free')) || profile?.tier === 'Free' || profile?.tier === 'Starter';
   const isPaid = !isFree || isOwner;
   const secretSlug = profile?.secure_slug || profile?.id
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`${window.location.origin}/p/${secretSlug}`)}`
@@ -1293,7 +1296,7 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const { profile, user, loading: authLoading, refreshProfile, isVerified, role } = useAuth()
-  const isFree = profile?.status === 'free' || (!profile?.status && !profile?.tier) || profile?.tier === 'Free';
+  const isFree = profile?.status === 'free' || (!profile?.status && (!profile?.tier || profile?.tier === 'Starter' || profile?.tier === 'Free')) || profile?.tier === 'Free' || profile?.tier === 'Starter';
   const isPaid = !isFree || role === 'owner';
   const [scans, setScans] = useState([])
   const [orders, setOrders] = useState([])
@@ -1608,7 +1611,7 @@ export default function Dashboard() {
                 </div>
               )}
 
-              <div className={`animate-slideUp ${!isPaid ? 'filter blur-xl select-none pointer-events-none opacity-40' : ''}`}>
+              <div className={`animate-slideUp ${!isPaid ? 'filter blur-[6px] select-none pointer-events-none opacity-40' : ''}`}>
 
               {/* Sub-tab toggle */}
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
