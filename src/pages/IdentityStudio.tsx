@@ -399,7 +399,7 @@ export default function IdentityStudio() {
       const identityUpdate = {
         id: activeIdx >= 0 ? currentIdentities[activeIdx].id : (editId || `id_${Date.now()}`),
         persona_type: activePersona,
-        avatar_url: data.avatar_url || profile?.avatar_url,
+        avatar_url: data.avatar_url || '',
         first_name: data.first_name || profile?.first_name,
         last_name: data.last_name || profile?.last_name,
         active: true,
