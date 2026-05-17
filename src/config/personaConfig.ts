@@ -31,7 +31,7 @@ const developerConfig: PersonaConfig = {
   theme: {
     color: 'light',
     style: 'minimal',
-    bg: '#ffffff',
+    bg: '#f8f9fa',
     accent: '#3fb950',
     textPrimary: '#1A1A1A',
     textSecondary: '#5c646e',
