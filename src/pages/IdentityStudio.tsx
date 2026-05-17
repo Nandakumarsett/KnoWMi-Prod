@@ -774,17 +774,11 @@ export default function IdentityStudio() {
       {activePersona ? (
         <footer className="fixed bottom-0 left-0 right-0 z-[60] bg-white/80 backdrop-blur-xl border-t border-neutral-100 p-8 flex items-center justify-center gap-6">
           <button
-            onClick={() => window.open(`/p/${profile?.secure_slug || profile?.id}`, '_blank')}
-            className="px-10 py-4 rounded-2xl border-2 border-neutral-100 text-neutral-600 font-black text-xs uppercase tracking-widest hover:bg-neutral-50 hover:border-neutral-200 transition-all flex items-center gap-2"
-          >
-            <Eye size={18} /> Preview Profile
-          </button>
-          <button
             onClick={handleSave}
             disabled={saving}
             className="px-14 py-4 rounded-2xl bg-[#F97316] text-white font-black text-xs uppercase tracking-widest hover:bg-orange-600 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-orange-500/20 disabled:opacity-50 flex items-center gap-2"
           >
-            {saving ? 'Boosting...' : <><Rocket size={20} /> Boost My Profile</>}
+            {saving ? 'Saving Profile...' : <><Save size={20} /> Save Profile</>}
           </button>
         </footer>
       ) : null}
