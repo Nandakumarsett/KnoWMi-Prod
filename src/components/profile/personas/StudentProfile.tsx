@@ -83,33 +83,34 @@ export function StudentProfile({ profile }: { profile: ProfileData }) {
         {/* AVATAR & IDENTITY */}
         <div className="flex flex-col items-center w-full mb-4">
           <div className="relative mb-5 group flex items-center justify-center">
-            {/* Thought Bubble */}
-            {data.thought_bubble && (
-              <div className="absolute -right-8 -top-4 sm:-right-12 sm:-top-4 z-20 animate-bounce delay-150">
-                <div className="relative bg-white border border-neutral-100 rounded-2xl px-3 py-2 shadow-xl shadow-black/5 flex items-center gap-1.5">
-                  <span className="text-lg sm:text-xl leading-none">{data.thought_bubble}</span>
-                  <div className="absolute -left-1.5 bottom-2 w-3 h-3 bg-white border-l border-b border-neutral-100 rotate-45 rounded-sm" />
+            {/* Mood Bubble */}
+            {data.mood && (
+              <div className="absolute -right-8 -top-2 sm:-right-12 sm:-top-2 z-30 animate-bounce" style={{ animationDuration: '3s' }}>
+                <div className="relative bg-white border-2 border-emerald-100 rounded-2xl px-3 py-2 shadow-xl shadow-emerald-500/10 flex items-center gap-1.5">
+                  <span className="text-xs sm:text-sm font-black text-emerald-600 uppercase tracking-widest whitespace-nowrap">{data.mood}</span>
+                  <div className="absolute -left-1.5 bottom-3 w-3 h-3 bg-white border-l-2 border-b-2 border-emerald-100 rotate-45 rounded-sm" />
                 </div>
               </div>
             )}
 
-            {/* Avatar Container - FIXED CENTERING */}
-            <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full p-1.5 sm:p-2 bg-white/80 backdrop-blur-xl shadow-2xl shadow-black/10 relative z-10 transition-transform duration-500 group-hover:scale-105 flex items-center justify-center mx-auto">
-              <div className="w-full h-full rounded-full overflow-hidden border-2 border-neutral-50 bg-neutral-100 flex items-center justify-center relative">
+            {/* Avatar Container - GREEN RING */}
+            <div 
+              className="w-40 h-40 sm:w-48 sm:h-48 p-1.5 rounded-full shadow-[0_20px_50px_rgba(16,185,129,0.2)] relative z-10 transition-transform duration-500 group-hover:scale-105 mx-auto flex items-center justify-center"
+              style={{ background: 'linear-gradient(135deg, #059669, #34D399)' }}
+            >
+              <div className="w-full h-full bg-white p-1 rounded-full overflow-hidden shadow-inner flex items-center justify-center relative">
                 {profile.avatar_url ? (
                   <img 
                     src={getAssetUrl(profile.avatar_url)} 
                     alt={profile.display_name} 
-                    className="w-full h-full object-cover" 
+                    className="w-full h-full object-cover rounded-full" 
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-emerald-500 text-white font-black text-4xl sm:text-5xl">
+                  <div className="w-full h-full rounded-full flex items-center justify-center bg-emerald-500 text-white font-black text-4xl sm:text-5xl">
                     {profile.display_name?.charAt(0).toUpperCase() || 'U'}
                   </div>
                 )}
               </div>
-              {/* Decorative Ring */}
-              <div className="absolute inset-0 rounded-full border border-neutral-200/50 -m-3 sm:-m-4 opacity-50" />
             </div>
           </div>
 
@@ -205,12 +206,8 @@ export function StudentProfile({ profile }: { profile: ProfileData }) {
                        {data.year || 'Current Status'}
                      </span>
                      
-                     {/* VIBE BADGE MOVED HERE */}
-                     {data.mood && (
-                       <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-lg sm:rounded-full bg-amber-50 shadow-sm text-[10px] sm:text-[11px] font-bold text-amber-600 uppercase tracking-wider flex items-center gap-1.5 border border-amber-100">
-                         <Sparkles size={12} className="text-amber-500"/> {data.mood}
-                       </span>
-                     )}
+                     {/* VIBE BADGE REMOVED (Moved to Avatar Bubble) */}
+
                      
                      {data.batch_year && (
                        <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-lg sm:rounded-full bg-white shadow-sm text-[10px] sm:text-[11px] font-bold text-neutral-600 uppercase tracking-wider flex items-center gap-1.5">
