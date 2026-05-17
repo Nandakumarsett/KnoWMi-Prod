@@ -418,7 +418,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
 
   // Effect to load data if initial search params exist
   useEffect(() => {
-    if (searchParams.get('mode') === 'edit' && searchParams.get('edit')) {
+    if (searchParams.get('edit')) {
       const id = searchParams.get('edit')
       const identity = identities.find(i => i.id === id)
       if (identity) {
@@ -437,13 +437,13 @@ const PersonaEditor = ({ profile, onUpdate }) => {
   
   // Sync state FROM search params (e.g. when clicking global back button)
   useEffect(() => {
-    const isEditMode = searchParams.get('mode') === 'edit'
+    const isEditMode = searchParams.get('mode') === 'edit' || searchParams.get('mode') === 'new' || !!searchParams.get('edit')
     if (!isEditMode && isEditing) {
       setIsEditing(false)
     } else if (isEditMode && !isEditing) {
       setIsEditing(true)
     }
-  }, [searchParams])
+  }, [searchParams, isEditing])
 
   const addNewIdentity = () => {
     if (identities.length >= 3) return
@@ -835,7 +835,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                     <ArrowLeft size={20} />
                   </button>
                   <div>
-                    <h1 className="text-2xl font-display font-black text-[#1A1A1A]">Identity Builder</h1>
+                    <h1 className="text-2xl font-display font-black text-[#1A1A1A]">Build your Identity</h1>
                     <p className="text-[9px] font-bold text-orange-500 uppercase tracking-[0.2em]">{persona ? `${persona} active` : 'Configuring...'}</p>
                   </div>
                 </div>
@@ -874,8 +874,8 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                 </div>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6 three-d-container">
-                {Object.values(PERSONAS).map(p => {
-                  const exists = identities.some(i => i.persona_type === p.id);
+                {Object.values(PERSONAS).filter(p => !identities.some(i => i.persona_type === p.id)).map(p => {
+                  const exists = false; // Always false now since we filtered them out
                   return (
                     <div 
                       key={p.id} 
