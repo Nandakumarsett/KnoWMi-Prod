@@ -1665,17 +1665,20 @@ export default function Dashboard() {
             <div className="relative">
               {/* If not paid, display the beautiful premium lock overlay in the middle */}
               {!isPaid && (
-                <div className="absolute inset-0 z-50 flex flex-col items-center justify-center p-8 bg-neutral-900/40 backdrop-blur-md rounded-[32px] text-center border-2 border-dashed border-orange-500/20 select-none min-h-[500px]">
+                <div className="absolute inset-x-0 top-0 z-50 flex flex-col items-center justify-start pt-16 p-8 text-center select-none">
                   <div className="relative inline-flex items-center justify-center mb-6">
-                    <div className="absolute inset-0 bg-orange-500/30 rounded-3xl blur-2xl animate-pulse" />
+                    <div className="absolute inset-0 bg-orange-500/25 rounded-full blur-2xl animate-pulse" />
                     <div className="relative w-24 h-24 bg-white dark:bg-neutral-950 border-2 border-orange-500 rounded-3xl flex items-center justify-center shadow-2xl">
                       <Lock size={44} className="text-orange-500 animate-bounce" />
                     </div>
                   </div>
-                  <h3 style={{ fontFamily: 'Fraunces, serif' }} className="text-3xl font-black mb-3 text-white">
+                  <h3 
+                    style={{ fontFamily: 'Fraunces, serif' }} 
+                    className={`text-3xl font-black mb-3 ${isVibeDark ? 'text-white' : 'text-neutral-950'}`}
+                  >
                     Unlock Analytics on a Paid Plan
                   </h3>
-                  <p className="text-sm font-semibold max-w-sm text-neutral-300 mb-8 leading-relaxed">
+                  <p className={`text-sm font-semibold max-w-sm mb-8 leading-relaxed ${isVibeDark ? 'text-neutral-300' : 'text-neutral-700'}`}>
                     View advanced vibe statistics, traffic intelligence, repeat scores, global reach, and live scan tracking.
                   </p>
                   <button
@@ -1687,7 +1690,7 @@ export default function Dashboard() {
                 </div>
               )}
 
-              <div className={`animate-slideUp ${!isPaid ? 'filter blur-[6px] select-none pointer-events-none opacity-40' : ''}`}>
+              <div className={`animate-slideUp ${!isPaid ? 'filter blur-[10px] select-none pointer-events-none opacity-30' : ''}`}>
 
               {/* Sub-tab toggle */}
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
