@@ -1,224 +1,232 @@
 import React from 'react'
 import { ProfileData, DeveloperData } from '../../../types/profile'
-import { ProfileCTAs } from '../shared/ProfileCTAs'
-import { PulseBar } from '../shared/PulseBar'
-import { SocialGrid } from '../shared/SocialGrid'
-import { VerifiedBadge } from '../shared/VerifiedBadge'
-import { ProfileAvatar } from '../shared/ProfileAvatar'
-import { Github, ExternalLink, Code2, Terminal, FileText, Trophy } from 'lucide-react'
+import { getAssetUrl } from '../../../lib/supabase'
+import { UserPlus, Share2, X, Github, Twitter, Linkedin, Monitor, Code2, Database, Layout, Box, Globe, ExternalLink, FileText, Star, Terminal } from 'lucide-react'
 
-// Syntax Highlighting Utility
-function highlightCode(code: string): string {
-  if (!code) return ''
-  return code
-    .replace(/(const|let|var)/g, '<span style="color:#ff7b72">$1</span>')
-    .replace(/('.*?')/g, '<span style="color:#a5d6ff">$1</span>')
-    .replace(/(\[.*?\])/g, '<span style="color:#a8f0a8">$1</span>')
-    .replace(/(role|mission|languages):/g, '<span style="color:#79c0ff">$1</span>:')
+// Simple helper to pick an icon and color for tech stack items
+function getTechIcon(name: string) {
+  const n = name.toLowerCase();
+  if (n.includes('react') || n.includes('next')) return { icon: <Monitor size={28} />, color: '#61DAFB' };
+  if (n.includes('node') || n.includes('js') || n.includes('javascript') || n.includes('typescript')) return { icon: <Code2 size={28} />, color: '#68A063' };
+  if (n.includes('python') || n.includes('django')) return { icon: <Code2 size={28} />, color: '#3776AB' };
+  if (n.includes('aws') || n.includes('cloud')) return { icon: <Box size={28} />, color: '#FF9900' };
+  if (n.includes('docker') || n.includes('container')) return { icon: <Box size={28} />, color: '#2496ED' };
+  if (n.includes('git')) return { icon: <Github size={28} />, color: '#F05032' };
+  if (n.includes('sql') || n.includes('data') || n.includes('mongo')) return { icon: <Database size={28} />, color: '#336791' };
+  if (n.includes('html') || n.includes('css') || n.includes('web')) return { icon: <Layout size={28} />, color: '#E34F26' };
+  return { icon: <Code2 size={28} />, color: '#8b949e' };
 }
 
+function getPlatformIcon(platform: string) {
+  const p = platform.toLowerCase();
+  if (p.includes('github')) return { icon: <Github size={24} />, color: '#ffffff' };
+  if (p.includes('twitter') || p.includes('x')) return { icon: <Twitter size={24} />, color: '#1DA1F2' };
+  if (p.includes('linkedin')) return { icon: <Linkedin size={24} />, color: '#0A66C2' };
+  if (p.includes('stackoverflow')) return { icon: <Code2 size={24} />, color: '#F48024' }; // Fallback icon
+  return { icon: <Globe size={24} />, color: '#8b949e' };
+}
 export function DeveloperProfile({ profile }: { profile: ProfileData }) {
-  const data = profile.persona_data as DeveloperData
-  const accentGreen = '#3fb950'
+  const data = profile.persona_data as DeveloperData;
 
-  const formatUrl = (url: string) => {
-    if (!url) return '#'
-    return url.startsWith('http') ? url : `https://${url}`
-  }
-  
-  const aboutMeCode = data.about ? `const aboutMe = {
-  role: '${data.about.role || ''}',
-  mission: '${data.about.mission || ''}',
-  languages: [${(data.about.languages || []).map(l => `'${l}'`).join(', ')}]
-};` : ''
+  const aboutMeLanguages = (data.about?.languages && data.about.languages.length > 0) 
+    ? data.about.languages 
+    : ['JavaScript', 'Python', 'C++'];
+
+  const techStack = (data.tech_stack && data.tech_stack.length > 0) 
+    ? data.tech_stack 
+    : ['React', 'Node.js', 'Python', 'AWS', 'Docker', 'Git'];
 
   return (
-    <div className="min-h-screen bg-[#0d1117] text-[#e6edf3] font-mono selection:bg-[#3fb95033] selection:text-[#3fb950]">
-      {/* Header Bar */}
-      <header className="fixed top-0 w-full z-50 bg-[#161b22] border-b border-[#30363d] px-6 py-4 flex justify-between items-center backdrop-blur-md bg-opacity-80">
-        <div className="flex items-center gap-2">
-          <img src="/logo-square.png" className="w-6 h-6 object-cover rounded" alt="KW" />
-          <span className="text-[10px] font-black uppercase tracking-widest text-[#8b949e]">
-            {profile.first_name ? `${profile.first_name}'s Profile` : "Your Profile"}
+    <div className="min-h-screen bg-[#0d1117] text-[#e6edf3] font-mono relative overflow-x-hidden selection:bg-[#3fb95033] selection:text-[#3fb950]">
+      
+      {/* Matrix / Grid Background */}
+      <div 
+        className="fixed inset-0 pointer-events-none opacity-40 z-0" 
+        style={{ 
+          backgroundImage: 'linear-gradient(rgba(63, 185, 80, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(63, 185, 80, 0.15) 1px, transparent 1px)', 
+          backgroundSize: '40px 40px',
+          backgroundPosition: 'center center'
+        }} 
+      />
+
+      {/* Banner Image Overlay (Top Cover) */}
+      <div className="w-full h-48 sm:h-64 relative bg-[#0d1117] overflow-hidden rounded-b-[40px] z-10">
+        {data.featured_work_url ? (
+          <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover opacity-80" alt="Banner" />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-[#161b22] to-[#0d1117]" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117] via-transparent to-black/40" />
+      </div>
+
+      {/* Top Header (Absolute over Banner) */}
+      <header className="absolute top-0 w-full z-50 px-6 py-6 flex justify-between items-center">
+        <div className="flex items-center gap-2 bg-[#0d1117]/60 px-3 py-1.5 rounded-lg backdrop-blur-md">
+          <span className="text-lg font-black tracking-tighter text-white flex items-center font-sans">
+             K<span className="text-[#F97316]">W</span> <span className="ml-2 text-xs uppercase tracking-widest text-neutral-400">KnoWMi</span>
           </span>
         </div>
-        <div className="text-[10px] font-bold text-[#3fb950] animate-pulse uppercase tracking-widest">
-          {'>'} SCAN ME...
-        </div>
+        <button onClick={() => window.history.back()} className="w-10 h-10 bg-[#161b22]/60 backdrop-blur-md rounded-xl flex items-center justify-center text-neutral-400 hover:text-white border border-[#30363d] transition-all z-50 relative">
+          <X size={20} />
+        </button>
       </header>
 
-      <main className="max-w-[480px] mx-auto pt-24 pb-12 px-6 flex flex-col items-center">
-        {/* Hexagon Avatar */}
-        <div className="relative mb-8 group transition-transform duration-500 group-hover:scale-105">
-          <ProfileAvatar
-            src={profile.avatar_url}
-            name={profile.display_name}
-            size={128}
-            shape="hexagon"
-            accentColor={accentGreen}
-          />
-          <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-[#161b22] border border-[#30363d] rounded-xl flex items-center justify-center text-[#3fb950] shadow-2xl">
-            <Code2 size={20} />
+      <main className="max-w-[480px] mx-auto pb-20 px-6 flex flex-col items-center relative z-20">
+        
+        {/* Avatar Container - Centered Overlapping Banner */}
+        <div className="relative h-16 w-full flex justify-center z-30">
+          <div className="absolute -top-24 sm:-top-32 left-1/2 -translate-x-1/2 flex flex-col items-center">
+            {/* Green Glow behind */}
+            <div className="absolute inset-0 bg-[#3fb950] opacity-30 blur-3xl rounded-full scale-150 animate-pulse" />
+            
+            {/* Custom Avatar Border Shape */}
+            <div className="relative p-[2px] rounded-[32px] bg-gradient-to-b from-[#3fb950] to-[#161b22] shadow-2xl">
+              <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-[30px] overflow-hidden bg-[#161b22] border-4 border-[#0d1117]">
+                <img 
+                  src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=161b22&color=3fb950`} 
+                  className="w-full h-full object-cover" 
+                  alt={profile.display_name} 
+                />
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Name & Tagline */}
-        <h1 className="text-4xl font-black uppercase tracking-tight text-center mb-2 font-display">
-          {profile.display_name}
-        </h1>
-        <p className="text-sm text-[#3fb950] font-black uppercase tracking-[0.4em] mb-8 text-center">
-          {data.about?.role || data.tagline || 'SYSTEM ENGINEER'}
-        </p>
+        <div className="mt-[72px] sm:mt-24 mb-4 text-center">
+          <h1 className="text-[28px] font-mono font-bold text-white tracking-widest leading-tight">
+            {(profile.display_name || 'NEW USER').toUpperCase()}
+          </h1>
+          <p className="text-[#a1a1aa] font-mono text-sm tracking-widest mt-2">
+            {data.about?.role || data.tagline || 'SYSTEM ENGINEER'}
+          </p>
+        </div>
 
-        <VerifiedBadge isVerified={profile.is_verified} accentColor={accentGreen} />
+        {/* Public Bio */}
+        {profile.bio && (
+          <p className="text-[#8b949e] font-sans text-sm text-center mt-2 mb-6 max-w-[90%] leading-relaxed">
+            {profile.bio}
+          </p>
+        )}
 
-        {/* Stat Pills */}
-        <div className="grid grid-cols-2 gap-4 w-full mt-10">
-           <div className="bg-[#161b22] border border-[#30363d] rounded-2xl p-6 text-center group hover:border-[#3fb95066] transition-colors shadow-lg">
-             <span className="block text-[10px] font-bold text-[#8b949e] uppercase tracking-widest mb-1">Commits</span>
-             <span className="text-3xl font-black text-[#3fb950]">{data.commits || 0}+</span>
+        {/* SOCIAL LINKS (Moved near profile pic) */}
+        {data.platforms && data.platforms.length > 0 && (
+          <div className="w-full flex flex-wrap justify-center gap-6 mt-4 mb-10 z-20">
+             {data.platforms.map((p, i) => {
+               if (!p.url) return null;
+               const { icon, color } = getPlatformIcon(p.platform || '');
+               return (
+                 <a 
+                   key={i} 
+                   href={p.url.startsWith('http') ? p.url : `https://${p.url}`} 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   className="hover:scale-110 transition-transform duration-300"
+                   style={{ color: color }}
+                   aria-label={p.platform}
+                 >
+                   {icon}
+                 </a>
+               )
+             })}
+          </div>
+        )}
+
+        {/* Stats */}
+
+        {/* TECH STACK */}
+        <div className="w-full mt-10 bg-[#161b22] border border-[#30363d] rounded-[32px] p-8 shadow-xl">
+           <span className="block text-[11px] font-bold text-[#8b949e] uppercase tracking-[0.2em] mb-8">Tech Stack</span>
+           <div className="grid grid-cols-3 sm:flex sm:flex-wrap justify-between gap-y-8 gap-x-2">
+             {techStack.map(tech => {
+               const { icon, color } = getTechIcon(tech);
+               return (
+                 <div key={tech} className="flex flex-col items-center gap-3 group">
+                   <div className="text-[#8b949e] group-hover:scale-110 transition-transform duration-300" style={{ color: color }}>
+                     {icon}
+                   </div>
+                   <span className="text-[10px] font-bold text-[#8b949e] tracking-wider group-hover:text-white transition-colors">{tech}</span>
+                 </div>
+               )
+             })}
            </div>
-           <div className="bg-[#161b22] border border-[#30363d] rounded-2xl p-6 text-center group hover:border-[#79c0ff66] transition-colors shadow-lg">
-             <span className="block text-[10px] font-bold text-[#8b949e] uppercase tracking-widest mb-1">Collaborations</span>
-             <span className="text-3xl font-black text-[#79c0ff]">{data.collabs || 0}+</span>
-           </div>
         </div>
 
-        {/* CTAs */}
-        <ProfileCTAs profile={profile} accentColor={accentGreen} />
+        {/* RECENT WORKS (PROJECTS) */}
+        {data.projects && data.projects.length > 0 && (
+          <div className="w-full mt-12 text-left relative z-10">
+             <span className="block text-[11px] font-bold text-[#8b949e] uppercase tracking-[0.2em] mb-6 ml-1">Built Masterpieces</span>
+             <div className="space-y-6">
+               {data.projects.map((project: any, i: number) => (
+                 <div key={i} className="bg-[#161b22] border border-[#30363d] rounded-[32px] overflow-hidden group hover:border-[#3fb950] transition-colors shadow-xl">
+                   {project.url && (
+                     <div className="w-full h-48 bg-[#0d1117] overflow-hidden relative">
+                       <img src={getAssetUrl(project.url)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={project.name} />
+                       <div className="absolute inset-0 bg-gradient-to-t from-[#161b22] to-transparent opacity-80" />
+                     </div>
+                   )}
+                   <div className="p-8">
+                     <div className="flex justify-between items-start mb-3">
+                       <h3 className="text-xl font-bold text-white flex items-center gap-3">
+                         <Terminal size={20} className="text-[#3fb950]" />
+                         {project.name}
+                       </h3>
+                       {project.stars > 0 && (
+                         <div className="flex items-center gap-1.5 text-[#e3b341] bg-[#e3b341]/10 px-3 py-1 rounded-full border border-[#e3b341]/20">
+                           <Star size={12} fill="currentColor" />
+                           <span className="text-[10px] font-bold">{project.stars}</span>
+                         </div>
+                       )}
+                     </div>
+                     {project.description && (
+                       <p className="text-sm text-[#8b949e] leading-relaxed mb-6">
+                         {project.description}
+                       </p>
+                     )}
+                     <div className="flex flex-wrap gap-4">
+                       {project.github_url && (
+                         <a href={project.github_url.startsWith('http') ? project.github_url : `https://${project.github_url}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white hover:text-[#3fb950] transition-colors bg-[#0d1117] px-4 py-2.5 rounded-xl border border-[#30363d]">
+                           <Github size={14} /> Source Code
+                         </a>
+                       )}
+                       {project.live_url && (
+                         <a href={project.live_url.startsWith('http') ? project.live_url : `https://${project.live_url}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#161b22] hover:bg-[#3fb950]/90 bg-[#3fb950] px-4 py-2.5 rounded-xl transition-colors">
+                           <ExternalLink size={14} /> Live Demo
+                         </a>
+                       )}
+                     </div>
+                   </div>
+                 </div>
+               ))}
+             </div>
+          </div>
+        )}
 
-        {/* Sections */}
-        <div className="w-full mt-12 space-y-12">
-          {/* About Me Code Block */}
-          {aboutMeCode && (
-            <section>
-              <div className="flex items-center gap-3 mb-6">
-                <span className="text-[11px] font-black uppercase tracking-widest text-[#8b949e]">System Overview</span>
-                <div className="flex-1 h-px bg-[#30363d]" />
-              </div>
-              <pre 
-                className="p-8 rounded-2xl bg-[#161b22] border border-[#30363d] overflow-x-auto text-[14px] leading-relaxed shadow-2xl"
-                style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace' }}
-                dangerouslySetInnerHTML={{ __html: highlightCode(aboutMeCode) }}
-              />
-            </section>
-          )}
+        {/* COMMAND CENTER / CV */}
+        {data.resume_url && (
+          <div className="w-full mt-10 relative z-10 text-left">
+             <span className="block text-[11px] font-bold text-[#8b949e] uppercase tracking-[0.2em] mb-4 ml-1">Engineering CV</span>
+             <a 
+               href={getAssetUrl(data.resume_url)}
+               target="_blank"
+               rel="noopener noreferrer"
+               className="flex items-center justify-between p-6 rounded-[24px] bg-[#161b22] border border-[#3fb950]/30 group hover:border-[#3fb950] transition-all active:scale-[0.98] shadow-xl relative overflow-hidden"
+             >
+               <div className="absolute inset-0 bg-[#3fb950]/5 group-hover:bg-[#3fb950]/10 transition-colors" />
+               <div className="flex items-center gap-5 relative z-10">
+                 <div className="w-12 h-12 rounded-xl bg-[#0d1117] border border-[#3fb950]/20 text-[#3fb950] flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+                   <FileText size={24} />
+                 </div>
+                 <div>
+                   <p className="text-md font-bold text-white tracking-wide">Professional Resume</p>
+                   <p className="text-[10px] font-bold text-[#8b949e] uppercase tracking-widest mt-1">Download Full PDF</p>
+                 </div>
+               </div>
+               <ExternalLink size={20} className="text-[#30363d] group-hover:text-[#3fb950] transition-colors relative z-10" />
+             </a>
+          </div>
+        )}
 
-          {/* Professional CV Section */}
-          {data.resume_url && (
-            <section>
-              <div className="flex items-center gap-3 mb-6">
-                <span className="text-[11px] font-black uppercase tracking-widest text-[#8b949e]">Engineering CV</span>
-                <div className="flex-1 h-px bg-[#30363d]" />
-              </div>
-              <a 
-                href={formatUrl(data.resume_url)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between p-8 rounded-2xl bg-[#161b22] border border-[#30363d] group hover:border-[#3fb95066] transition-all active:scale-[0.98] shadow-xl"
-              >
-                <div className="flex items-center gap-5">
-                  <div className="w-14 h-14 rounded-xl bg-[#3fb9501a] text-[#3fb950] flex items-center justify-center shadow-inner">
-                    <FileText size={28} />
-                  </div>
-                  <div>
-                    <p className="text-md font-black text-[#e6edf3]">Professional Resume</p>
-                    <p className="text-[10px] font-bold text-[#3fb950] uppercase tracking-widest mt-0.5">Download Full PDF ↓</p>
-                  </div>
-                </div>
-                <ExternalLink size={20} className="text-[#30363d] group-hover:text-[#3fb950] transition-colors" />
-              </a>
-            </section>
-          )}
-
-          {/* Tech Stack */}
-          {data.tech_stack && data.tech_stack.length > 0 && (
-            <section>
-              <div className="flex items-center gap-3 mb-6">
-                <span className="text-[11px] font-black uppercase tracking-widest text-[#8b949e]">Technology Stack</span>
-                <div className="flex-1 h-px bg-[#30363d]" />
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {data.tech_stack.map(tech => (
-                  <div key={tech} className="px-4 py-2 rounded-xl bg-[#161b22] border border-[#30363d] text-[11px] font-bold uppercase tracking-widest hover:border-[#3fb950] transition-colors flex items-center gap-2.5">
-                    <span className="w-2 h-2 rounded-full bg-[#3fb950]" />
-                    {tech}
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* Projects */}
-          {data.projects && data.projects.length > 0 && (
-            <section>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#8b949e]">Projects</span>
-                <div className="flex-1 h-px bg-[#30363d]" />
-              </div>
-              <div className="space-y-4">
-                {data.projects.map(project => (
-                  <div key={project.name} className="p-5 rounded-2xl bg-[#161b22] border border-[#30363d] hover:border-[#3fb95033] transition-all group">
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-bold text-[#79c0ff] flex items-center gap-2 group-hover:text-[#3fb950] transition-colors">
-                        <Terminal size={16} />
-                        {project.name}
-                      </h3>
-                      {project.stars && (
-                        <span className="text-[10px] font-bold text-[#e3b341]">★ {project.stars}</span>
-                      )}
-                    </div>
-                    <p className="text-xs text-[#8b949e] leading-relaxed mb-4">{project.description}</p>
-                    <div className="flex gap-3">
-                      {project.github_url && (
-                        <a href={formatUrl(project.github_url)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] font-black uppercase text-[#8b949e] hover:text-[#e6edf3] transition-colors">
-                          <Github size={12} /> Source
-                        </a>
-                      )}
-                      {project.live_url && (
-                        <a href={formatUrl(project.live_url)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] font-black uppercase text-[#8b949e] hover:text-[#e6edf3] transition-colors">
-                          <ExternalLink size={12} /> Live Demo
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* Achievements */}
-          {data.achievements && data.achievements.length > 0 && (
-            <section>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#8b949e]">Achievements</span>
-                <div className="flex-1 h-px bg-[#30363d]" />
-              </div>
-              <div className="grid grid-cols-1 gap-3">
-                {data.achievements.map((ach: string | any, i: number) => {
-                  const label = typeof ach === 'string' ? ach : ach.label;
-                  const icon = typeof ach === 'string' ? '🏆' : ach.icon;
-                  return (
-                    <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-[#161b22] border border-[#30363d] hover:bg-[#3fb9500a] transition-all group">
-                      <div className="w-10 h-10 rounded-xl bg-[#3fb9501a] text-[#3fb950] flex items-center justify-center text-xl shadow-inner group-hover:scale-110 transition-transform">
-                        {icon}
-                      </div>
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#e6edf3]">{label}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          )}
-        </div>
-
-        {/* Social Links Row */}
-        <div className="mt-12 w-full">
-           <SocialGrid links={profile.social_links} style="row" />
-        </div>
-
-        {/* Pulse Bar Footer */}
-        <PulseBar pulse={profile.pulse} tier={profile.tier} accentColor={accentGreen} />
       </main>
     </div>
   )
