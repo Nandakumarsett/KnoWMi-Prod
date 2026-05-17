@@ -388,18 +388,23 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 </div>
               </div>
 
-              <div className="relative p-1.5 bg-white rounded-xl shadow-lg shrink-0 z-10 hover:scale-105 transition-transform duration-300">
-                <div className="rounded-lg overflow-hidden border border-neutral-100 w-[60px] h-[60px] sm:w-[70px] sm:h-[70px]">
+              <div className="relative p-1.5 bg-white rounded-xl shadow-lg shrink-0 z-10 hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+                <div className="rounded-lg overflow-hidden border border-neutral-100 w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] relative flex items-center justify-center">
                   {data.playlist_url ? (
-                    <QRCodeSVG 
-                      value={data.playlist_url} 
-                      width="100%"
-                      height="100%"
-                      level="H" 
-                      includeMargin={false}
-                      bgColor="#FFFFFF"
-                      fgColor="#000000"
-                    />
+                    <>
+                      <QRCodeSVG 
+                        value={data.playlist_url} 
+                        width="100%"
+                        height="100%"
+                        level="H" 
+                        includeMargin={false}
+                        bgColor="#FFFFFF"
+                        fgColor="#000000"
+                      />
+                      <div className="absolute inset-0 m-auto w-5 h-5 bg-neutral-950 rounded flex items-center justify-center shadow-lg border border-neutral-800 z-20 select-none">
+                        <span className="text-[6px] font-black text-orange-500 tracking-wider font-sans leading-none">WM</span>
+                      </div>
+                    </>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-neutral-50">
                       <QrCode size={24} className="text-neutral-300" />
