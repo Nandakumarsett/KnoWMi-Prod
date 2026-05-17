@@ -120,7 +120,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             <div className="absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 z-40">
               <div className="bg-neutral-900 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full shadow-lg shadow-emerald-900/10 border-2 border-white flex items-center gap-1.5 whitespace-nowrap">
                 <Activity size={14} className="text-emerald-400 sm:w-4 sm:h-4 animate-pulse" />
-                <span className={`text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] ${isFreeProfile ? 'blur-[4px] select-none opacity-80' : ''}`}>{isFreeProfile ? '820' : liveViews} Pulse</span>
+                <span className={`text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] ${isFreeProfile ? 'blur-[3px] select-none opacity-60 inline-block px-1' : ''}`}>{isFreeProfile ? '820' : liveViews} Pulse</span>
               </div>
             </div>
           </div>
