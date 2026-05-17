@@ -281,7 +281,7 @@ USING (EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role
                         </div>
 
                         <div className="flex flex-row md:flex-col gap-3 w-full md:w-auto shrink-0">
-                          <div className="p-3 bg-white rounded-xl border border-neutral-100 flex items-center justify-center">
+                          <div className="p-3 bg-white rounded-xl border border-neutral-100 flex items-center justify-center relative">
                             <QRCodeSVG 
                               id={`qr-${token.id}`}
                               value={`${window.location.origin}/q/${token.scan_token}`}
@@ -289,6 +289,9 @@ USING (EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role
                               level="H"
                               includeMargin={false}
                             />
+                            <div className="absolute inset-0 m-auto w-5.5 h-5.5 bg-neutral-950 rounded-md flex items-center justify-center shadow-lg border border-neutral-800 z-20 select-none">
+                              <span className="text-[7px] font-black text-orange-500 tracking-wider font-sans leading-none">WM</span>
+                            </div>
                           </div>
                           <div className="flex-1 flex flex-col gap-2">
                             <button 
