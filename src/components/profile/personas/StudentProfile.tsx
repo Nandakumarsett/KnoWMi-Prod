@@ -5,7 +5,7 @@ import {
   GraduationCap, BookOpen, Rocket, FileText, 
   Globe, Music, Sparkles, Heart, Star, Users,
   Share2, UserPlus, QrCode, ExternalLink, Github, Linkedin, Twitter, Instagram,
-  MessageCircle, Link as LinkIcon, Trophy, Target, Briefcase, Zap, Mail, Calendar, Ghost, Activity
+  MessageCircle, Link as LinkIcon, Trophy, Target, Briefcase, Zap, Mail, Calendar, Ghost, Activity, X
 } from 'lucide-react'
 import { getAssetUrl } from '../../../lib/supabase'
 import { QRCodeSVG } from 'qrcode.react'
@@ -15,6 +15,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   const data = (profile.persona_data || {}) as StudentData
   const liveViews = stats?.totalViews || 0;
   const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
+  const [showFomoModal, setShowFomoModal] = React.useState(false);
   if (!data || Object.keys(data).length === 0) {
     return <div className="p-10 text-center text-neutral-400 font-medium text-sm">Loading student identity...</div>
   }
@@ -117,7 +118,10 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
 
             {/* Total Pulse Badge */}
-            <div className="absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 z-40">
+            <div 
+              className={`absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 z-40 ${isFreeProfile ? 'cursor-pointer hover:opacity-85 transition-opacity' : ''}`}
+              onClick={() => isFreeProfile && setShowFomoModal(true)}
+            >
               <div className="bg-neutral-900 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full shadow-lg shadow-emerald-900/10 border-2 border-white flex items-center gap-1.5 whitespace-nowrap">
                 <Activity size={14} className="text-emerald-400 sm:w-4 sm:h-4 animate-pulse" />
                 <span className={`text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] ${isFreeProfile ? 'blur-[3px] select-none opacity-60 inline-block px-1' : ''}`}>{isFreeProfile ? '820' : liveViews} Pulse</span>
@@ -490,6 +494,62 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
       </main>
 
+      {/* Interactive FOMO Upsell Modal */}
+      {showFomoModal && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fadeIn">
+          <div className="bg-white rounded-[32px] p-8 max-w-sm w-full border border-neutral-100 shadow-2xl relative animate-zoomIn text-center">
+            <button 
+              onClick={() => setShowFomoModal(false)}
+              className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-600 rounded-full hover:bg-neutral-50 transition-all"
+            >
+              <X size={20} />
+            </button>
+            
+            <div className="relative inline-flex items-center justify-center mb-6">
+              <div className="absolute inset-0 bg-orange-500/10 rounded-full blur-xl animate-pulse" />
+              <div className="w-16 h-16 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center shadow-inner">
+                <Activity size={32} className="animate-pulse" />
+              </div>
+            </div>
+            
+            <h3 className="text-xl font-black text-neutral-900 tracking-tight mb-2">Unlock Profile Analytics</h3>
+            <p className="text-xs font-bold text-neutral-500 mb-6 leading-relaxed">
+              Your profile is actively receiving connections! Upgrading to a premium plan unlocks these features instantly:
+            </p>
+            
+            <ul className="text-left space-y-3 mb-8 pl-4">
+              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+                <span className="text-emerald-500 font-black">✓</span> 📈 Real-Time View Count Tracking
+              </li>
+              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+                <span className="text-emerald-500 font-black">✓</span> 📍 Global & Local City-by-City Scans
+              </li>
+              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+                <span className="text-emerald-500 font-black">✓</span> 📱 Detailed Browser & Device Insights
+              </li>
+              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+                <span className="text-emerald-500 font-black">✓</span> 👥 Unique vs. Repeat Visitor Scoring
+              </li>
+            </ul>
+            
+            <div className="space-y-3">
+              <button 
+                onClick={() => window.location.href = '/#pricing'}
+                className="w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-[0.98]"
+              >
+                🔒 Buy A Tee to Unlock
+              </button>
+              <button 
+                onClick={() => setShowFomoModal(false)}
+                className="w-full py-3 text-neutral-400 hover:text-neutral-600 font-bold text-xs uppercase tracking-wider transition-colors"
+              >
+                Maybe Later
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <style>{`
         @keyframes float-slow {
           0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -511,6 +571,13 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         }
         .animate-float-fast {
           animation: float-fast 4s ease-in-out infinite;
+        }
+        @keyframes zoomIn {
+          from { transform: scale(0.95); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        .animate-zoomIn {
+          animation: zoomIn 0.3s ease-out forwards;
         }
       `}</style>
     </div>
