@@ -239,7 +239,7 @@ export default function IdentityStudio() {
           const coreData = {
             first_name: prof.first_name || '',
             last_name: prof.last_name || '',
-            bio: personaIden?.data?.bio || '',
+            bio: personaIden?.bio || personaIden?.data?.bio || '',
             instagram: personaIden?.data?.instagram || '',
             linkedin: personaIden?.data?.linkedin || '',
             github: personaIden?.data?.github || '',
@@ -402,8 +402,9 @@ export default function IdentityStudio() {
         avatar_url: data.avatar_url || '',
         first_name: data.first_name || profile?.first_name,
         last_name: data.last_name || profile?.last_name,
+        bio: data.bio || '',
         active: true,
-        data: { ...data }
+        data: { ...data, bio: data.bio || '' }
       }
 
       const newIdentities = currentIdentities.map((i: any) => ({ ...i, active: false }))
