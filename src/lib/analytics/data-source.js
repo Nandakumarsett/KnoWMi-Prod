@@ -5,17 +5,15 @@ import { supabase } from '../supabase';
 
 export async function getAnalyticsData(profileId, dateRange = 'all') {
   try {
-    // Try to fetch with visitor info, but fallback if the columns don't exist yet
-    let viewRes = await supabase.from('profile_view_events').select('*, viewer:profiles(id, first_name, last_name, avatar_url)').eq('profile_id', profileId);
+    // Fetch views and scans directly and robustly to avoid PostgREST relationship conflicts
+    const viewRes = await supabase.from('profile_view_events').select('*').eq('profile_id', profileId);
     if (viewRes.error) {
-      console.warn("Analytics: Falling back to simple view fetch", viewRes.error.message);
-      viewRes = await supabase.from('profile_view_events').select('*').eq('profile_id', profileId);
+      console.error("Analytics: Error fetching views:", viewRes.error.message);
     }
 
-    let scanRes = await supabase.from('qr_scan_events').select('*, scanner:profiles(id, first_name, last_name, avatar_url)').eq('profile_id', profileId);
+    const scanRes = await supabase.from('qr_scan_events').select('*').eq('profile_id', profileId);
     if (scanRes.error) {
-      console.warn("Analytics: Falling back to simple scan fetch", scanRes.error.message);
-      scanRes = await supabase.from('qr_scan_events').select('*').eq('profile_id', profileId);
+      console.error("Analytics: Error fetching scans:", scanRes.error.message);
     }
 
     const { data: linksData } = await supabase.from('link_click_events').select('*').eq('profile_id', profileId);
@@ -205,19 +203,43 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       peakHour = `${sortedHours[0][0]}:00`;
     }
 
-    // Latest activity
-    const latestActivity = views
-      .map(v => ({
-        viewed_at: v.viewed_at,
-        referrer: v.referrer,
-        device_type: v.device_type,
-        city: v.city,
-        country: v.country,
-        is_repeat: v.is_repeat,
-        visitor: v.viewer || null // Include visitor profile if available
-      }))
+    // Sort and slice top 20 latest views
+    const topViews = [...views]
       .sort((a, b) => new Date(b.viewed_at).getTime() - new Date(a.viewed_at).getTime())
       .slice(0, 20);
+
+    // Fetch visitor profiles for these top views to display on the dashboard privately
+    const viewerIds = [...new Set(topViews.map(v => v.viewer_id || v.user_id).filter(Boolean))];
+    let visitorProfiles = [];
+    if (viewerIds.length > 0) {
+      try {
+        const { data: profs } = await supabase
+          .from('profiles')
+          .select('id, user_id, first_name, last_name, avatar_url')
+          .or(`id.in.(${viewerIds.map(id => `"${id}"`).join(',')}),user_id.in.(${viewerIds.map(id => `"${id}"`).join(',')})`);
+        if (profs) {
+          visitorProfiles = profs;
+        }
+      } catch (e) {
+        console.warn("Analytics: Error fetching visitor profiles for activity log:", e);
+      }
+    }
+
+    // Latest activity
+    const latestActivity = topViews
+      .map(v => {
+        const vId = v.viewer_id || v.user_id;
+        const prof = visitorProfiles.find(p => p.id === vId || p.user_id === vId) || null;
+        return {
+          viewed_at: v.viewed_at,
+          referrer: v.referrer,
+          device_type: v.device_type,
+          city: v.city,
+          country: v.country,
+          is_repeat: v.is_repeat,
+          visitor: prof
+        };
+      });
 
     // Referral Sources
     const referrerCounts = {};
