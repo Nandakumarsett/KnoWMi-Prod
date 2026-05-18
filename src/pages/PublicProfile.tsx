@@ -76,6 +76,7 @@ export default function PublicProfile() {
   if (!user && !authLoading) {
     return (
       <div className="min-h-screen bg-[#FDF6EC] flex flex-col items-center justify-center p-6 text-center text-[#1A1A1A] relative overflow-hidden selection:bg-orange-500/30">
+        <ProfileViewTracker profileId={profile.id} />
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-orange-500/10 rounded-full blur-[160px] pointer-events-none" />
         <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-orange-500/10 rounded-full blur-[160px] pointer-events-none" />
 
