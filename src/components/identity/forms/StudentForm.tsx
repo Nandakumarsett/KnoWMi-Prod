@@ -95,8 +95,8 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
              <label className={labelClasses}>Your Story / Bio</label>
              <textarea
               rows={6}
-              value={data.about_me || ''}
-              onChange={e => updateField('about_me', e.target.value)}
+              value={data.bio || data.about_me || ''}
+              onChange={e => onChange({ ...data, bio: e.target.value, about_me: e.target.value })}
               placeholder="What drives you? What are you learning right now?"
               className={`${inputBaseClasses} flex-1 resize-none`}
             />
