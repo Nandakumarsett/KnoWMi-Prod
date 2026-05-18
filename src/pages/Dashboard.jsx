@@ -409,7 +409,11 @@ const PersonaEditor = ({ profile, onUpdate }) => {
       setEditingId(id)
       setPersona(identity.persona_type)
       setAvatarUrl(identity.avatar_url || '')
-      setData(identity.data || {})
+      const identityDataObj = { ...(identity.data || {}) };
+      if (identity.bio && !identityDataObj.bio) {
+        identityDataObj.bio = identity.bio;
+      }
+      setData(identityDataObj)
       setFirstName(identity.first_name)
 
       setLastName(identity.last_name)
@@ -427,7 +431,11 @@ const PersonaEditor = ({ profile, onUpdate }) => {
         setEditingId(id)
         setPersona(identity.persona_type)
         setAvatarUrl(identity.avatar_url || '')
-        setData(identity.data || {})
+        const identityDataObj = { ...(identity.data || {}) };
+        if (identity.bio && !identityDataObj.bio) {
+          identityDataObj.bio = identity.bio;
+        }
+        setData(identityDataObj)
         setFirstName(identity.first_name)
 
         setLastName(identity.last_name)
@@ -652,8 +660,8 @@ const PersonaEditor = ({ profile, onUpdate }) => {
         avatar_url: avatarUrl,
         first_name: firstName,
         last_name: lastName,
-        bio: bio,
-        data: data,
+        bio: data.bio || '',
+        data: { ...data, bio: data.bio || '' },
         active: existingIndex >= 0 ? updatedIdentities[existingIndex].active : identities.length === 0
       }
 
@@ -689,7 +697,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
 
         first_name: isMainSync ? firstName : profile.first_name,
         last_name: isMainSync ? lastName : profile.last_name,
-        bio: isMainSync ? bio : profile.bio,
+        bio: isMainSync ? (data.bio || '') : profile.bio,
         ...dbData
       }).eq('id', profile.id)
 
@@ -700,7 +708,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
         await supabase.from('public_profiles').update({
           first_name: firstName,
           last_name: lastName,
-          bio: bio,
+          bio: data.bio || '',
           avatar_url: avatarUrl,
           persona_type: persona || 'influencer',
           ...dbData
@@ -986,10 +994,6 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                       <label className="text-[11px] font-black uppercase tracking-widest text-[#5C5246] ml-1">Last Name</label>
                       <input className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-800 focus:outline-none focus:border-[#C1440E] transition-all" value={lastName} onChange={e => setLastName(e.target.value)} />
                     </div>
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-[11px] font-black uppercase tracking-widest text-[#5C5246] ml-1">Creative Bio</label>
-                    <textarea className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-800 focus:outline-none focus:border-[#C1440E] transition-all min-h-[140px] resize-none" value={bio} onChange={e => setBio(e.target.value)} placeholder="Tell the world who you are..." />
                   </div>
                   <div className="space-y-3">
                     <label className="text-[11px] font-black uppercase tracking-widest text-[#5C5246] ml-1">Public Tagline</label>
