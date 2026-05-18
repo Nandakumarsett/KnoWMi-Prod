@@ -375,24 +375,35 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
               </div>
             )}
 
-            <div className="mb-4">
-              <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-2">Influence Analytics</p>
-            </div>
-            
-            <div className="grid grid-cols-3 gap-4 mb-12">
-              <div className="bg-white/40 backdrop-blur-md p-5 rounded-3xl border border-white/50 text-center shadow-sm">
-                <div className="text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-1">Total Reach</div>
-                <div className="text-2xl font-black text-neutral-900">{data.total_reach || '-'}</div>
-              </div>
-              <div className="bg-white/40 backdrop-blur-md p-5 rounded-3xl border border-white/50 text-center shadow-sm">
-                <div className="text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-1">Engagement</div>
-                <div className="text-2xl font-black text-neutral-900">{data.engagement_rate || '-'}</div>
-              </div>
-              <div className="bg-white/40 backdrop-blur-md p-5 rounded-3xl border border-white/50 text-center shadow-sm">
-                <div className="text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-1">Avg. Views</div>
-                <div className="text-2xl font-black text-neutral-900">{data.avg_views || '-'}</div>
-              </div>
-            </div>
+            {/* Influence Analytics */}
+            {(data.total_reach || data.engagement_rate || data.avg_views) && (
+              <>
+                <div className="mb-4">
+                  <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-2">Influence Analytics</p>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-4 mb-12">
+                  {data.total_reach && (
+                    <div className="bg-white/40 backdrop-blur-md p-5 rounded-3xl border border-white/50 text-center shadow-sm">
+                      <div className="text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-1">Total Reach</div>
+                      <div className="text-2xl font-black text-neutral-900">{data.total_reach}</div>
+                    </div>
+                  )}
+                  {data.engagement_rate && (
+                    <div className="bg-white/40 backdrop-blur-md p-5 rounded-3xl border border-white/50 text-center shadow-sm">
+                      <div className="text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-1">Engagement</div>
+                      <div className="text-2xl font-black text-neutral-900">{data.engagement_rate}</div>
+                    </div>
+                  )}
+                  {data.avg_views && (
+                    <div className="bg-white/40 backdrop-blur-md p-5 rounded-3xl border border-white/50 text-center shadow-sm">
+                      <div className="text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-1">Avg. Views</div>
+                      <div className="text-2xl font-black text-neutral-900">{data.avg_views}</div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
         </div>
       </section>
 
