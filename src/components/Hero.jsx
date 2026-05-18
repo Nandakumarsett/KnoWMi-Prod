@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react'
 import PhoneMockup from './PhoneMockup'
 import { ArrowRight } from 'lucide-react'
-import { SectionLabel } from './ui/SectionLabel'
+import { useAuth } from '../context/AuthContext'
 
 const stats = [
-  { num: 'Batch 01', label: 'Founding Edition' },
-  { num: '4.9★', label: 'Avg Rating' },
-  { num: 'Live', label: 'Phygital Pulse' },
-  { num: '48hrs', label: 'Dispatch Time' },
+  { num: '12K+', label: 'Profiles Scanned' },
+  { num: '4.9★', label: 'User Rating' },
+  { num: '100%', label: 'No App Needed' },
+  { num: '48hrs', label: 'Ships Fast' },
 ]
 
 const trustAvatars = [
@@ -19,6 +19,7 @@ const trustAvatars = [
 ]
 
 export default function Hero({ onOrderClick }) {
+  const { user } = useAuth()
   const heroRef = useRef(null)
 
   useEffect(() => {
@@ -78,46 +79,53 @@ export default function Hero({ onOrderClick }) {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center py-12 lg:py-4">
 
           {/* Left copy */}
-          <div className="max-w-[560px]">
-            {/* Badge */}
-            <SectionLabel>Batch 01 / Founding Edition</SectionLabel>
+          <div className="max-w-[560px] flex flex-col items-center lg:items-start text-center lg:text-left mx-auto lg:mx-0">
 
-            <div data-fade className="mb-4 flex items-center gap-3 flex-wrap">
+            {/* Trust tags */}
+            <div data-fade className="mb-6 flex items-center justify-center lg:justify-start gap-3 flex-wrap">
               <span className="tag" style={{ background: 'var(--saffron-light)', color: 'var(--saffron)' }}>
                 <span>🇮🇳</span> India's First
               </span>
               <span className="tag" style={{ background: 'var(--green-light)', color: 'var(--green-india)' }}>
-                ✦ QR Identity Tee
+                ✦ Phygital Identity
               </span>
             </div>
 
             {/* Headline */}
-            <h1 data-fade className="font-display font-black leading-[1.2] mb-6" style={{ fontSize: 'clamp(1.8rem, 5vw, 3.8rem)', color: 'var(--ink)' }}>
-              <span className="block whitespace-nowrap">Wear Your</span>
-              <span className="block whitespace-nowrap">Identity.</span>
-              <span className="block italic text-orange-500 whitespace-nowrap">One Tee,</span>
-              <span className="block whitespace-nowrap">One Scan.</span>
-              <span className="block italic text-orange-500 whitespace-nowrap">Infinite Connections.</span>
+            <h1 data-fade className="font-display font-black leading-[1.15] mb-6" style={{ fontSize: 'clamp(2rem, 5.5vw, 4rem)', color: 'var(--ink)' }}>
+              <span className="block">You meet people.</span>
+              <span className="block">They forget you.</span>
+              <span className="block italic text-orange-500">Not anymore.</span>
             </h1>
 
             {/* Subhead */}
-            <p data-fade className="text-xl leading-relaxed mb-10 font-medium" style={{ color: 'var(--ink3)', maxWidth: '480px' }}>
-              Your QR-powered tee turns introductions into real connections.
+            <p data-fade className="text-lg leading-relaxed mb-4 font-medium mx-auto lg:mx-0" style={{ color: 'var(--ink3)', maxWidth: '480px' }}>
+              KnoWMi is a <strong style={{ color: 'var(--ink)' }}>QR-powered identity tee</strong> that makes every handshake count. Scan it. See everything. Connect instantly.
+            </p>
+            <p data-fade className="text-sm leading-relaxed mb-10 font-medium mx-auto lg:mx-0 px-4 py-3 rounded-xl" style={{ color: 'var(--saffron)', background: 'var(--saffron-light)', maxWidth: '480px' }}>
+              ⚡ No app needed. No awkward exchanges. Just wear it — and let them come to you.
             </p>
 
             {/* CTAs */}
-            <div data-fade className="flex flex-wrap gap-4 mb-10">
-              <a onClick={() => onOrderClick?.()} className="px-8 py-4 bg-orange-500 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-orange-200 hover:bg-orange-600 transition-all flex items-center gap-2" href="#collection">
-                Explore Tees
-                <ArrowRight size={16} />
-              </a>
+            <div data-fade className="flex flex-wrap justify-center lg:justify-start gap-4 mb-10">
+              {user ? (
+                <a href="/dashboard" className="px-8 py-4 bg-orange-500 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-orange-200 hover:bg-orange-600 transition-all flex items-center gap-2">
+                  Go to Dashboard
+                  <ArrowRight size={16} />
+                </a>
+              ) : (
+                <a onClick={() => onOrderClick?.()} className="px-8 py-4 bg-orange-500 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-orange-200 hover:bg-orange-600 transition-all flex items-center gap-2" href="#collection">
+                  Claim Your Tee
+                  <ArrowRight size={16} />
+                </a>
+              )}
               <a href="#how-it-works" className="px-8 py-4 bg-white border border-neutral-200 text-black rounded-2xl font-black text-sm uppercase tracking-widest hover:border-orange-500 transition-all">
-                See How It Works
+                How It Works
               </a>
             </div>
 
             {/* Social proof */}
-            <div data-fade className="flex items-center gap-3">
+            <div data-fade className="flex flex-col sm:flex-row items-center gap-3">
               <div className="flex -space-x-2" aria-label="Customer avatars">
                 {trustAvatars.map((a, i) => (
                   <div key={i}
@@ -127,7 +135,7 @@ export default function Hero({ onOrderClick }) {
                   </div>
                 ))}
               </div>
-              <div>
+              <div className="flex flex-col items-center sm:items-start">
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
                     <svg key={i} width="13" height="13" viewBox="0 0 24 24" fill="#FF9933" aria-hidden="true">
@@ -136,7 +144,7 @@ export default function Hero({ onOrderClick }) {
                   ))}
                   <span className="text-xs font-semibold ml-1" style={{ color: 'var(--ink2)' }}>4.9</span>
                 </div>
-                <p className="text-xs" style={{ color: 'var(--ink3)' }}>Join our founding batch of early wearers</p>
+                <p className="text-xs" style={{ color: 'var(--ink3)' }}>Worn by creators, founders & students across India</p>
               </div>
             </div>
           </div>

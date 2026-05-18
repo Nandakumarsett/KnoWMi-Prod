@@ -33,21 +33,25 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 );
 
 -- 3. WM Code Generation Function
-CREATE OR REPLACE FUNCTION public.generate_wm_code()
+DROP FUNCTION IF EXISTS public.generate_wm_code();
+DROP FUNCTION IF EXISTS public.generate_wm_code(text);
+CREATE OR REPLACE FUNCTION public.generate_wm_code(p_prefix TEXT DEFAULT 'USR')
 RETURNS TEXT AS $$
 DECLARE
-  chars TEXT := 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  result TEXT := '';
-  i INTEGER := 0;
+  clean_prefix TEXT := 'USR';
   num_part TEXT;
 BEGIN
-  FOR i IN 1..3 LOOP
-    result := result || substr(chars, floor(random() * length(chars) + 1)::integer, 1);
-  END LOOP;
+  -- Extract only letters and numbers, capitalize, and take first 3 chars
+  clean_prefix := UPPER(SUBSTRING(REGEXP_REPLACE(COALESCE(p_prefix, 'USR'), '[^a-zA-Z0-9]', '', 'g') FROM 1 FOR 3));
+  
+  -- If prefix is shorter than 3 characters, pad with 'X'
+  IF LENGTH(clean_prefix) < 3 THEN
+    clean_prefix := clean_prefix || REPEAT('X', 3 - LENGTH(clean_prefix));
+  END IF;
   
   -- Get next sequence number and pad to 3 digits
   num_part := LPAD(nextval('public.wm_code_seq')::TEXT, 3, '0');
-  RETURN 'WM-' || result || '-' || num_part;
+  RETURN 'WM-' || clean_prefix || '-' || num_part;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -69,18 +73,81 @@ $$ LANGUAGE plpgsql;
 -- 5. Automatically create a profile for every new user
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
+DECLARE
+  first_name_input TEXT;
+  email_username TEXT;
+  chosen_prefix TEXT;
 BEGIN
+  first_name_input := COALESCE(NEW.raw_user_meta_data->>'first_name', '');
+  email_username := split_part(NEW.email, '@', 1);
+  
+  IF first_name_input <> '' AND LOWER(first_name_input) <> 'user' THEN
+    chosen_prefix := first_name_input;
+  ELSE
+    chosen_prefix := email_username;
+  END IF;
+
   INSERT INTO public.profiles (user_id, first_name, wm_code, secure_slug, invited_by)
   VALUES (
     NEW.id, 
     COALESCE(NEW.raw_user_meta_data->>'first_name', 'User'),
-    public.generate_wm_code(),
+    public.generate_wm_code(chosen_prefix),
     public.generate_secure_slug(),
     (NEW.raw_user_meta_data->>'invited_by')::UUID
   );
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 6. Trigger to automatically keep the WM Code prefix updated when first_name is updated
+CREATE OR REPLACE FUNCTION public.sync_wm_code_prefix()
+RETURNS TRIGGER AS $$
+DECLARE
+  v_email TEXT;
+  v_username TEXT;
+  v_first_name TEXT;
+  v_prefix TEXT;
+  v_seq_part TEXT;
+BEGIN
+  -- Get the email from auth.users
+  SELECT email INTO v_email FROM auth.users WHERE id = NEW.user_id;
+  v_username := COALESCE(split_part(v_email, '@', 1), 'USR');
+  v_username := REGEXP_REPLACE(v_username, '[^a-zA-Z0-9]', '', 'g');
+  
+  v_first_name := COALESCE(NEW.first_name, '');
+  v_first_name := REGEXP_REPLACE(v_first_name, '[^a-zA-Z0-9]', '', 'g');
+
+  -- Choose prefix: Use first_name if filled and not default 'User' or empty, else email prefix
+  IF v_first_name <> '' AND LOWER(v_first_name) <> 'user' THEN
+    v_prefix := v_first_name;
+  ELSE
+    v_prefix := v_username;
+  END IF;
+
+  -- Format to exactly 3 uppercase letters/digits
+  v_prefix := UPPER(SUBSTRING(v_prefix FROM 1 FOR 3));
+  IF LENGTH(v_prefix) < 3 THEN
+    v_prefix := v_prefix || REPEAT('X', 3 - LENGTH(v_prefix));
+  END IF;
+
+  -- Keep existing sequential number suffix if present, otherwise generate next
+  IF OLD.wm_code IS NOT NULL AND OLD.wm_code LIKE 'WM-%-%' THEN
+    v_seq_part := split_part(OLD.wm_code, '-', 3);
+  ELSE
+    v_seq_part := LPAD(nextval('public.wm_code_seq')::TEXT, 3, '0');
+  END IF;
+
+  NEW.wm_code := 'WM-' || v_prefix || '-' || v_seq_part;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS trg_sync_wm_code_prefix ON public.profiles;
+CREATE TRIGGER trg_sync_wm_code_prefix
+  BEFORE INSERT OR UPDATE ON public.profiles
+  FOR EACH ROW
+  EXECUTE FUNCTION public.sync_wm_code_prefix();
 
 -- (Policies and other functions remain the same, just ensure they use public.profiles)
 -- ... [Rest of the file follows same logic but using wm_code column] ...
@@ -123,7 +190,7 @@ SELECT
     id, first_name, last_name, bio, tagline, 
     instagram_url, linkedin_url, whatsapp_number, website_url, 
     avatar_url, secure_slug, wm_code, status, role, is_verified, 
-    created_at
+    persona_data, created_at
 FROM public.profiles;
 
 -- Grant access to the view

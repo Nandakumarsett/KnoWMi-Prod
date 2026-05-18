@@ -44,13 +44,16 @@ export default function ScanHandler() {
           console.warn('Fingerprinting failed, using anonymous:', e)
         }
         
+        const { data: { user } } = await supabase.auth.getUser();
+        
         await supabase.from('qr_scan_events').insert({
           profile_id: profile.id,
           device_type: device.toLowerCase(),
           browser: 'Webview/Browser',
           os: navigator.platform,
           scanner_fp: fp,
-          scanned_at: new Date().toISOString()
+          scanned_at: new Date().toISOString(),
+          scanner_id: user?.id
         })
 
         // 4. Redirect to the randomized URL (safety first)

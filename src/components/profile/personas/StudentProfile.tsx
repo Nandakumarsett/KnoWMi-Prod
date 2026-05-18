@@ -1,221 +1,599 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { ProfileData, StudentData } from '../../../types/profile'
-import { ProfileCTAs } from '../shared/ProfileCTAs'
-import { PulseBar } from '../shared/PulseBar'
-import { SocialGrid } from '../shared/SocialGrid'
-import { VerifiedBadge } from '../shared/VerifiedBadge'
 import { ProfileAvatar } from '../shared/ProfileAvatar'
-import { GraduationCap, BookOpen, Music, Rocket } from 'lucide-react'
+import { 
+  GraduationCap, BookOpen, Rocket, FileText, 
+  Globe, Music, Sparkles, Heart, Star, Users,
+  Share2, UserPlus, QrCode, ExternalLink, Github, Linkedin, Twitter, Instagram,
+  MessageCircle, Link as LinkIcon, Trophy, Target, Briefcase, Zap, Mail, Calendar, Ghost, Activity, X
+} from 'lucide-react'
+import { getAssetUrl } from '../../../lib/supabase'
+import { QRCodeSVG } from 'qrcode.react'
+import { ProfileCTAs } from '../shared/ProfileCTAs'
 
-const DOODLES = [
-  { char: '★', color: '#FF6B9D', top: '15%', left: '10%', size: '24px' },
-  { char: '✦', color: '#4A90E2', top: '25%', left: '85%', size: '20px' },
-  { char: '✧', color: '#FFB800', top: '45%', left: '5%', size: '18px' },
-  { char: '♪', color: '#F97316', top: '65%', left: '90%', size: '22px' },
-  { char: '♫', color: '#4CAF50', top: '80%', left: '15%', size: '24px' },
-  { char: '〜', color: '#4A90E2', top: '10%', left: '75%', size: '20px' },
-  { char: '●', color: '#FF6B9D', top: '55%', left: '80%', size: '14px' },
-  { char: '↗', color: '#F97316', top: '35%', left: '20%', size: '18px' },
-  { char: '✨', color: '#FFB800', top: '70%', left: '5%', size: '22px' },
-  { char: '★', color: '#4CAF50', top: '90%', left: '80%', size: '20px' },
-]
-
-const AVATAR_STYLES = [
-  { bg: '#FFE4B5', skin: '#FFDBAC', hair: '#4A3728' },
-  { bg: '#E8F5E9', skin: '#F4C194', hair: '#2C1810' },
-  { bg: '#FFF0F5', skin: '#FDBCB4', hair: '#1A1A1A' },
-  { bg: '#F0F8FF', skin: '#C68642', hair: '#3D2B1F' },
-  { bg: '#F5F0FF', skin: '#8D5524', hair: '#000000' },
-]
-
-function VisitorAvatar({ index }: { index: number }) {
-  const style = AVATAR_STYLES[index % 5]
-  return (
-    <div 
-      className="w-10 h-10 rounded-full border-2 border-white shadow-sm flex items-center justify-center overflow-hidden"
-      style={{ backgroundColor: style.bg, marginLeft: index === 0 ? 0 : '-10px', zIndex: 10 - index }}
-    >
-      <svg width="40" height="40" viewBox="0 0 40 40">
-        <circle cx="20" cy="45" r="18" fill={style.skin} />
-        <circle cx="20" cy="18" r="8" fill={style.skin} />
-        <path d="M12 12 Q20 4 28 12 Q28 18 20 20 Q12 18 12 12" fill={style.hair} />
-        <circle cx="17" cy="17" r="1" fill="#000" />
-        <circle cx="23" cy="17" r="1" fill="#000" />
-        <path d="M17 21 Q20 23 23 21" stroke="#000" strokeWidth="0.5" fill="none" />
-      </svg>
-    </div>
-  )
-}
-
-export function StudentProfile({ profile }: { profile: ProfileData }) {
-  const data = profile.persona_data as StudentData
-  const accentBlue = '#4A90E2'
-  const accentPink = '#FF6B9D'
-  const accentOrange = '#F97316'
+export function StudentProfile({ profile, stats }: { profile: ProfileData, stats?: any }) {
+  const data = (profile.persona_data || {}) as StudentData
+  const liveViews = stats?.totalViews || 0;
+  const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
+  const [showFomoModal, setShowFomoModal] = React.useState(false);
+  if (!data || Object.keys(data).length === 0) {
+    return <div className="p-10 text-center text-neutral-400 font-medium text-sm">Loading student identity...</div>
+  }
   
+  // Platform icon helper
+  const getPlatformData = (platform: string) => {
+    const p = platform.toLowerCase();
+    if (p.includes('github')) return { icon: <Github size={20} />, color: '#181717', bg: 'bg-[#181717]/5', text: 'text-[#181717]', hoverBorder: 'hover:border-[#181717]/30' };
+    if (p.includes('linkedin')) return { icon: <Linkedin size={20} />, color: '#0077B5', bg: 'bg-[#0077B5]/10', text: 'text-[#0077B5]', hoverBorder: 'hover:border-[#0077B5]/30' };
+    if (p.includes('twitter') || p.includes('x')) return { icon: <Twitter size={20} />, color: '#1DA1F2', bg: 'bg-[#1DA1F2]/10', text: 'text-[#1DA1F2]', hoverBorder: 'hover:border-[#1DA1F2]/30' };
+    if (p.includes('instagram')) return { icon: <Instagram size={20} />, color: '#E4405F', bg: 'bg-[#E4405F]/10', text: 'text-[#E4405F]', hoverBorder: 'hover:border-[#E4405F]/30' };
+    if (p.includes('snapchat')) return { icon: <Ghost size={20} />, color: '#FFFC00', bg: 'bg-[#FFFC00]/20', text: 'text-neutral-900', hoverBorder: 'hover:border-[#FFFC00]/50' };
+    if (p.includes('discord')) return { icon: <MessageCircle size={20} />, color: '#5865F2', bg: 'bg-[#5865F2]/10', text: 'text-[#5865F2]', hoverBorder: 'hover:border-[#5865F2]/30' };
+    if (p.includes('behance')) return { icon: <LinkIcon size={20} />, color: '#1769FF', bg: 'bg-[#1769FF]/10', text: 'text-[#1769FF]', hoverBorder: 'hover:border-[#1769FF]/30' };
+    if (p.includes('medium')) return { icon: <LinkIcon size={20} />, color: '#000000', bg: 'bg-neutral-100', text: 'text-black', hoverBorder: 'hover:border-black/30' };
+    return { icon: <LinkIcon size={20} />, color: '#10B981', bg: 'bg-emerald-50', text: 'text-emerald-500', hoverBorder: 'hover:border-emerald-500/30' };
+  };
+
+  // Subtle Background Pattern
+  const BackgroundPattern = () => (
+    <div className="absolute inset-0 pointer-events-none opacity-[0.02] z-0" 
+         style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+  );
+
+  const BackgroundAnimation = () => (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      <div className="absolute left-[10%] top-[15%] text-emerald-500/20 animate-float-slow">
+        <Rocket size={40} />
+      </div>
+      <div className="absolute right-[15%] top-[30%] text-blue-500/10 animate-float-medium">
+        <BookOpen size={60} />
+      </div>
+      <div className="absolute left-[20%] bottom-[30%] text-amber-500/20 animate-float-fast">
+        <Star size={30} />
+      </div>
+      <div className="absolute right-[25%] bottom-[15%] text-emerald-500/10 animate-float-slow">
+        <GraduationCap size={80} />
+      </div>
+      <div className="absolute left-[40%] top-[60%] text-indigo-500/10 animate-float-medium">
+        <Sparkles size={50} />
+      </div>
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-[#FFFBF0] text-[#1a1a2e] relative overflow-hidden font-sans">
-      {/* Background Doodles */}
-      <div className="absolute inset-0 pointer-events-none">
-        {DOODLES.map((d, i) => (
-          <div 
-            key={i}
-            className="absolute animate-float-slow"
-            style={{ 
-              top: d.top, 
-              left: d.left, 
-              color: d.color, 
-              fontSize: d.size,
-              animationDelay: `${i * 0.5}s`,
-              zIndex: 0
-            }}
-          >
-            {d.char}
+    <div className="w-full pb-12 relative overflow-hidden bg-[#FAFAFA] rounded-[40px] border border-[#E5D5C4] shadow-2xl font-sans min-h-screen">
+      <BackgroundPattern />
+      <BackgroundAnimation />
+
+      {/* HERO BANNER */}
+      <div className="relative h-48 sm:h-64 w-full bg-neutral-200 overflow-hidden rounded-t-[40px] shadow-sm">
+        {data.featured_work_url ? (
+          <img 
+            src={getAssetUrl(data.featured_work_url)} 
+            className="w-full h-full object-cover" 
+            alt="Profile Banner"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-emerald-400 via-teal-300 to-blue-400 flex items-center justify-center">
+            <Sparkles size={48} className="text-white/30" />
           </div>
-        ))}
+        )}
+        {/* Soft gradient overlay for better blending */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#FAFAFA] via-transparent to-transparent opacity-90" />
       </div>
 
-      <header className="relative z-10 px-6 py-4 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <img src="/logo-square.png" className="w-6 h-6 object-cover rounded" alt="KW" />
-          <span className="text-sm font-black tracking-tight text-[#1a1a2e]">
-            {profile.first_name ? `${profile.first_name}'s Profile` : "Nanda's Profile"}
-          </span>
-        </div>
-        <div className="w-8 h-8 flex items-center justify-center rounded-full bg-black text-white text-xs">×</div>
-      </header>
-
-      <main className="relative z-10 max-w-[480px] mx-auto pt-8 pb-12 px-6 flex flex-col items-center">
-        {/* Avatar with Thought Bubble */}
-        <div className="relative mb-6">
-          <div className="p-[4px] rounded-full shadow-xl" style={{ background: 'linear-gradient(135deg, #FFB800, #FF6B9D)' }}>
-            <ProfileAvatar
-              src={profile.avatar_url}
-              name={profile.display_name}
-              size={120}
-              shape="circle"
-            />
-          </div>
-          <div className="absolute -top-2 -right-4 w-12 h-12 bg-white rounded-2xl shadow-lg border border-[#E8E0D0] flex items-center justify-center text-2xl animate-bounce">
-            {data.thought_bubble || '💭'}
-          </div>
-        </div>
-
-        {/* Name & Title */}
-        <h1 className="text-3xl font-black text-center mb-1 text-[#4A90E2] font-display">
-          {profile.display_name}
-        </h1>
-        {data.university && (
-          <p className="text-sm text-[#6b6b8d] italic mb-4 text-center font-medium">
-            {data.university}
-          </p>
-        )}
-
-        {data.mood && (
-          <div className="mb-6 px-4 py-1.5 rounded-full bg-[#FF6B9D15] text-[#FF6B9D] text-xs font-bold border border-[#FF6B9D33]">
-            Mood: {data.mood} ✨
-          </div>
-        )}
-
-        <VerifiedBadge isVerified={profile.is_verified} accentColor={accentOrange} />
-
-        {/* Stat Pills */}
-        <div className="grid grid-cols-2 gap-4 w-full mt-8">
-          <div className="bg-white border-2 border-[#E8E0D0] rounded-3xl p-4 text-center shadow-sm">
-            <span className="block text-[10px] font-black text-[#4A90E2] uppercase tracking-widest mb-1">Campus Rank</span>
-            <span className="text-xl font-black text-[#1a1a2e]">{data.campus_rank_pct ? `Top ${data.campus_rank_pct}% ⭐` : '—'}</span>
-          </div>
-          <div className="bg-white border-2 border-[#E8E0D0] rounded-3xl p-4 text-center shadow-sm">
-            <span className="block text-[10px] font-black text-[#4CAF50] uppercase tracking-widest mb-1">Study Buddies</span>
-            <span className="text-xl font-black text-[#1a1a2e]">{data.study_buddies || 0}</span>
-          </div>
-        </div>
-
-        {/* CTAs */}
-        <ProfileCTAs profile={profile} accentColor={accentOrange} />
-
-        {/* Sections */}
-        <div className="w-full mt-12 space-y-10">
-          {/* Currently Studying */}
-          {(data.course || data.year) && (
-            <section className="bg-white rounded-[32px] p-6 border-2 border-[#E8E0D0] shadow-sm relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1.5 bg-[#4A90E2]" />
-              <h3 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#4A90E2] mb-4">
-                <BookOpen size={14} /> Currently Studying
-              </h3>
-              <div className="space-y-1">
-                {data.course && <p className="font-black text-lg text-[#1a1a2e]">{data.course}</p>}
-                {data.year && <p className="text-sm text-[#6b6b8d] font-bold">{data.year}</p>}
+      <main className="relative z-10 max-w-2xl mx-auto px-5 sm:px-8 -mt-20 sm:-mt-24 pb-24 flex flex-col items-center">
+        
+        {/* AVATAR & IDENTITY */}
+        <div className="flex flex-col items-center w-full mb-4">
+          <div className="relative mb-5 group flex items-center justify-center">
+            {/* Mood Bubble */}
+            {data.mood && (
+              <div className="absolute -right-8 -top-2 sm:-right-12 sm:-top-2 z-30 animate-bounce" style={{ animationDuration: '3s' }}>
+                <div className="relative bg-white border-2 border-emerald-100 rounded-2xl px-3 py-2 shadow-xl shadow-emerald-500/10 flex items-center gap-1.5">
+                  <span className="text-xs sm:text-sm font-black text-emerald-600 uppercase tracking-widest whitespace-nowrap">{data.mood}</span>
+                  <div className="absolute -left-1.5 bottom-3 w-3 h-3 bg-white border-l-2 border-b-2 border-emerald-100 rotate-45 rounded-sm" />
+                </div>
               </div>
-            </section>
-          )}
+            )}
 
-          {/* My Playlist */}
-          {(data.playlist_url || data.playlist_name) && (
-            <section>
-              <h3 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#1a1a2e] mb-4">
-                <Music size={14} className="text-[#FF6B9D]" /> My Playlist
-              </h3>
-              <a 
-                href={data.playlist_url || '#'} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block p-5 rounded-[32px] bg-white border-2 border-[#E8E0D0] hover:scale-[1.02] transition-transform group"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-[#1DB954] flex items-center justify-center text-white shadow-lg">
-                    <Music size={24} />
+            {/* Avatar Container - GREEN RING */}
+            <div 
+              className="w-40 h-40 sm:w-48 sm:h-48 p-1.5 rounded-full shadow-[0_20px_50px_rgba(16,185,129,0.2)] relative z-10 transition-transform duration-500 group-hover:scale-105 mx-auto flex items-center justify-center"
+              style={{ background: 'linear-gradient(135deg, #059669, #34D399)' }}
+            >
+              <div className="w-full h-full bg-white p-1 rounded-full overflow-hidden shadow-inner flex items-center justify-center relative">
+                {profile.avatar_url ? (
+                  <img 
+                    src={getAssetUrl(profile.avatar_url)} 
+                    alt={profile.display_name} 
+                    className="w-full h-full object-cover rounded-full" 
+                  />
+                ) : (
+                  <div className="w-full h-full rounded-full flex items-center justify-center bg-emerald-500 text-white font-black text-4xl sm:text-5xl">
+                    {profile.display_name?.charAt(0).toUpperCase() || 'U'}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-black text-[#1a1a2e] truncate">{data.playlist_name || '🎧 My Study Vibe'}</p>
-                    <p className="text-xs font-bold text-[#1DB954] uppercase tracking-widest">Open in Spotify →</p>
+                )}
+              </div>
+            </div>
+
+            {/* Total Pulse Badge */}
+            <div 
+              className={`absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 z-40 ${isFreeProfile ? 'cursor-pointer hover:opacity-85 transition-opacity' : ''}`}
+              onClick={() => isFreeProfile && setShowFomoModal(true)}
+            >
+              <div className="bg-neutral-900 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full shadow-lg shadow-emerald-900/10 border-2 border-white flex items-center gap-1.5 whitespace-nowrap">
+                <Activity size={14} className="text-emerald-400 sm:w-4 sm:h-4 animate-pulse" />
+                <span className={`text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] ${isFreeProfile ? 'blur-[3px] select-none opacity-60 inline-block px-1' : ''}`}>{isFreeProfile ? '820' : liveViews} Pulse</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center w-full">
+            <h1 className="text-2xl sm:text-4xl leading-tight font-black text-neutral-900 tracking-tight mb-1.5">
+              {profile.display_name}
+            </h1>
+            <p className="text-emerald-500 font-bold text-sm sm:text-base tracking-wide flex items-center justify-center gap-1.5">
+              <GraduationCap size={18} /> {data.university ? `Student @ ${data.university}` : 'Student'}
+            </p>
+          </div>
+        </div>
+
+        {/* BIO (Vibe moved to Academic Core) */}
+        {data.bio && (
+          <div className="w-full max-w-md mx-auto text-center mb-8 -mt-2">
+            <p className="text-sm sm:text-[15px] text-neutral-500 leading-relaxed font-medium">
+              "{data.bio}"
+            </p>
+          </div>
+        )}
+
+        {/* Connection CTAs */}
+        <div className="w-full max-w-sm mb-8 z-20">
+          <ProfileCTAs profile={profile} accentColor="#10B981" />
+        </div>
+
+        {/* OPEN TO / AVAILABILITY (New High-Value Field) */}
+        {data.availability && (
+          <div className="w-full max-w-md mx-auto mb-10">
+            <div className="bg-emerald-500 text-white rounded-[1.5rem] p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 shadow-[0_8px_30px_rgba(16,185,129,0.2)]">
+              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                <Briefcase size={20} className="text-white" />
+              </div>
+              <div className="text-center sm:text-left">
+                <p className="text-[10px] font-black uppercase tracking-widest text-emerald-100 mb-0.5">Currently Open To</p>
+                <p className="text-sm sm:text-base font-black tracking-wide">{data.availability}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* STATS ROW */}
+        {(data.campus_rank_pct || data.study_buddies) && (
+          <div className="grid grid-cols-2 gap-3 sm:gap-5 w-full mb-10">
+            {data.campus_rank_pct && (
+              <div className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-center flex flex-col justify-center transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1.5 sm:mb-2">Campus Rank</p>
+                <div className="text-xl sm:text-2xl font-black text-neutral-900 flex items-center justify-center gap-1.5 sm:gap-2">
+                  Top {data.campus_rank_pct}% 
+                  <Trophy size={18} className="text-amber-400" />
+                </div>
+              </div>
+            )}
+            {data.study_buddies && (
+              <div className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-center flex flex-col justify-center transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1.5 sm:mb-2">Study Buddies</p>
+                <div className="text-xl sm:text-2xl font-black text-neutral-900 flex items-center justify-center gap-1.5 sm:gap-2">
+                  {data.study_buddies}
+                  <Users size={18} className="text-emerald-400" />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ABOUT ME */}
+        {data.about_me && (
+          <div className="w-full mb-10">
+            <div className="bg-white p-6 sm:p-8 rounded-3xl sm:rounded-[2.5rem] border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-6 sm:p-8 opacity-5">
+                <BookOpen size={80} className="sm:w-[120px] sm:h-[120px]" />
+              </div>
+              <div className="relative z-10">
+                <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-5 flex items-center gap-2 sm:gap-3">
+                  <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-400" /> The Story
+                </h4>
+                <p className="text-sm sm:text-[15px] text-neutral-700 leading-relaxed sm:leading-loose font-medium text-left">
+                  {data.about_me}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ACADEMIC CORE (Now includes Vibe Badge) */}
+        {(data.course || data.year || data.batch_year || data.favorite_subject || data.website) && (
+          <div className="w-full mb-10">
+             <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 sm:p-8 rounded-3xl sm:rounded-[2rem] border border-emerald-100/50 shadow-sm relative overflow-hidden">
+                <div className="absolute -right-6 -bottom-6 opacity-10">
+                  <GraduationCap size={120} className="sm:w-[160px] sm:h-[160px]" />
+                </div>
+                
+                <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-8">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white shadow-sm text-emerald-500 flex items-center justify-center shrink-0">
+                     <GraduationCap size={28} strokeWidth={1.5} />
+                  </div>
+                  <div className="flex-1 text-left">
+                     <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-emerald-600/60 mb-2">Academic Core</h4>
+                     {data.course && (
+                       <h3 className="text-lg sm:text-xl font-black text-neutral-900 leading-tight mb-2">
+                         {data.course}
+                       </h3>
+                     )}
+                     <div className="flex flex-wrap items-center gap-2 mt-3">
+                       {data.year && (
+                         <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-lg sm:rounded-full bg-white shadow-sm text-[10px] sm:text-[11px] font-bold text-neutral-600 uppercase tracking-wider">
+                           {data.year}
+                         </span>
+                       )}
+                       
+                       {/* VIBE BADGE REMOVED (Moved to Avatar Bubble) */}
+  
+                       
+                       {data.batch_year && (
+                         <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-lg sm:rounded-full bg-white shadow-sm text-[10px] sm:text-[11px] font-bold text-neutral-600 uppercase tracking-wider flex items-center gap-1.5">
+                           <Target size={12} className="text-emerald-500"/> {data.batch_year}
+                         </span>
+                       )}
+                       {data.favorite_subject && (
+                         <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-lg sm:rounded-full bg-white shadow-sm text-[10px] sm:text-[11px] font-bold text-neutral-600 uppercase tracking-wider flex items-center gap-1.5">
+                           <Star size={12} className="text-amber-500" fill="currentColor"/> {data.favorite_subject}
+                         </span>
+                       )}
+                     </div>
+                     
+                     {data.website && (
+                       <a href={data.website} target="_blank" rel="noopener noreferrer" 
+                          className="inline-flex items-center gap-2 mt-4 sm:mt-5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-white border border-emerald-100 text-[10px] sm:text-xs font-black uppercase text-emerald-600 hover:bg-emerald-50 transition-colors shadow-sm group">
+                         <Globe size={14} className="group-hover:rotate-12 transition-transform" />
+                         Visit Portfolio
+                       </a>
+                     )}
                   </div>
                 </div>
-              </a>
-            </section>
-          )}
+             </div>
+          </div>
+        )}
 
-          {/* Projects */}
-          {data.projects && data.projects.length > 0 && (
-            <section>
-               <h3 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#1a1a2e] mb-4">
-                <Rocket size={14} className="text-[#4A90E2]" /> Projects
-              </h3>
-              <div className="space-y-3">
-                {data.projects.map(p => (
-                  <div key={p.name} className="p-5 rounded-[32px] bg-white border-2 border-[#E8E0D0] flex items-center gap-4">
-                     <div className="text-2xl">{p.emoji || '🚀'}</div>
-                     <div className="flex-1 min-w-0">
-                        <p className="font-black text-[#1a1a2e]">{p.name}</p>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {p.tech?.map(t => (
-                            <span key={t} className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 text-[#6b6b8d]">{t}</span>
-                          ))}
-                        </div>
-                     </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
+        {/* SOCIAL PRESENCE */}
+        {data?.platforms && data?.platforms?.length > 0 && (
+          <div className="w-full mb-10">
+            <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Digital Footprint</h4>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
+              {data.platforms.map((p: any, i: number) => {
+                const pData = getPlatformData(p.platform);
+                const ensureAbsoluteUrl = (url: string) => {
+                  if (!url) return '';
+                  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+                  return `https://${url}`;
+                };
 
-          {/* Recent Visitors */}
-          <section className="text-center">
-             <h3 className="text-[10px] font-black uppercase tracking-widest text-[#6b6b8d] mb-4">
-              👥 Recent Visitors
-            </h3>
-            <div className="flex justify-center items-center">
-              {[0, 1, 2, 3, 4].map(i => <VisitorAvatar key={i} index={i} />)}
+                return (
+                  <a 
+                    key={i}
+                    href={ensureAbsoluteUrl(p.url)} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-5 rounded-2xl sm:rounded-[2rem] bg-white border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] ${pData.hoverBorder} transition-all duration-300 group`}
+                  >
+                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center ${pData.bg} ${pData.text} group-hover:scale-110 transition-transform duration-300`}>
+                      {pData.icon}
+                    </div>
+                    <span className={`text-[10px] font-black uppercase tracking-widest text-neutral-500 group-hover:${pData.text} transition-colors`}>{p.platform}</span>
+                  </a>
+                );
+              })}
             </div>
-          </section>
-        </div>
+          </div>
+        )}
 
-        <div className="mt-12 w-full">
-           <SocialGrid links={profile.social_links} style="row" />
-        </div>
+        {/* INNOVATION LAB */}
+        {data?.projects && data?.projects?.length > 0 && (
+          <div className="w-full mb-10">
+            <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8 px-2">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center">
+                <Rocket size={18} className="sm:w-5 sm:h-5" />
+              </div>
+              <div>
+                <h4 className="text-xs sm:text-sm font-black uppercase tracking-[0.15em] text-neutral-900">Innovation Lab</h4>
+                <p className="text-[9px] sm:text-[10px] font-bold text-neutral-400 uppercase tracking-widest mt-0.5">Featured Projects & Builds</p>
+              </div>
+            </div>
 
-        <PulseBar pulse={profile.pulse} tier={profile.tier} accentColor={accentOrange} />
+            <div className="grid grid-cols-1 gap-5 sm:gap-6">
+              {data.projects.map((p, i) => (
+                <div key={i} className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all group">
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
+                    <div className="w-full h-32 sm:w-28 sm:h-28 rounded-2xl sm:rounded-[1.5rem] bg-neutral-50 overflow-hidden shrink-0 border border-neutral-100 flex items-center justify-center relative">
+                      {p.url ? (
+                        <img src={getAssetUrl(p.url)} className="w-full h-full object-cover" alt={p.name} />
+                      ) : (
+                        <span className="text-4xl sm:text-5xl">{p.emoji || '🚀'}</span>
+                      )}
+                      {p.github_url && (
+                        <a href={p.github_url} target="_blank" rel="noopener noreferrer" 
+                           className="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center text-neutral-700 hover:text-black hover:scale-110 transition-all">
+                          <Github size={14} className="sm:w-4 sm:h-4" />
+                        </a>
+                      )}
+                    </div>
+                    
+                    <div className="flex-1 text-left flex flex-col justify-center">
+                      <div className="mb-3 sm:mb-4">
+                        <h5 className="font-black text-neutral-900 text-lg sm:text-xl tracking-tight mb-1 sm:mb-1.5 group-hover:text-blue-500 transition-colors">{p.name}</h5>
+                        {p.description && (
+                          <p className="text-xs sm:text-sm text-neutral-500 leading-relaxed font-medium line-clamp-2">
+                            {p.description}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                        {p.tech?.map(t => (
+                          <span key={t} className="text-[9px] sm:text-[10px] font-bold px-2 py-1 sm:px-3 sm:py-1.5 rounded-md sm:rounded-lg bg-neutral-50 text-neutral-600 border border-neutral-100 uppercase tracking-wider">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* CORE SKILLS / SUPERPOWERS (New High-Value Field) */}
+        {data.core_skills && data.core_skills.length > 0 && (
+          <div className="w-full mb-10">
+            <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Core Superpowers</h4>
+            <div className="flex flex-wrap justify-center gap-2">
+              {data.core_skills.map((skill: string, i: number) => (
+                <span key={i} className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] sm:text-xs font-black text-indigo-600 tracking-wider flex items-center gap-2 shadow-sm">
+                  <Zap size={14} className="text-indigo-400" /> {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* HOBBIES & INTERESTS */}
+        {data.hobbies && data.hobbies.length > 0 && (
+          <div className="w-full mb-10">
+            <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Hobbies & Interests</h4>
+            <div className="flex flex-wrap justify-center gap-2">
+              {data.hobbies.map((hobby: string, i: number) => (
+                <span key={i} className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-rose-50 border border-rose-100 text-[11px] sm:text-xs font-black text-rose-600 tracking-wider flex items-center gap-2 shadow-sm">
+                  <Heart size={14} className="text-rose-400" /> {hobby}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* COMPACT CAMPUS VIBES -> PLAYLIST (Redesigned & Shrunk) */}
+        {(data.playlist_url || data.playlist_name) && (
+          <div className="w-full mb-10">
+            <div className="bg-[#1A1A1A] p-4 sm:p-5 rounded-3xl sm:rounded-[2rem] shadow-xl relative overflow-hidden flex items-center justify-between gap-4">
+              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                <Music size={100} className="text-white" />
+              </div>
+              
+              <div className="relative z-10 flex items-center gap-3 sm:gap-4 overflow-hidden">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 flex items-center justify-center shrink-0 border border-white/20">
+                  <Music size={16} className="text-emerald-400 sm:w-5 sm:h-5" />
+                </div>
+                <div className="flex flex-col justify-center text-left min-w-0">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-0.5 truncate">On Repeat</p>
+                  <p className="text-sm sm:text-base font-bold text-white truncate max-w-[150px] sm:max-w-xs">
+                    {data.playlist_name || 'My Campus Playlist'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="relative p-1.5 bg-white rounded-xl shadow-lg shrink-0 z-10 hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+                <div className="rounded-lg overflow-hidden border border-neutral-100 w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] relative flex items-center justify-center">
+                  {data.playlist_url ? (
+                    <>
+                      <QRCodeSVG 
+                        value={data.playlist_url} 
+                        width="100%"
+                        height="100%"
+                        level="M" 
+                        includeMargin={false}
+                        bgColor="#FFFFFF"
+                        fgColor="#000000"
+                      />
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-neutral-50">
+                      <QrCode size={24} className="text-neutral-300" />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* PROFESSIONAL GATEWAY */}
+        {(data.resume || data.resume_url) && (
+          <div className="w-full mb-10">
+            <a href={getAssetUrl(data.resume || data.resume_url || '')} target="_blank" rel="noopener noreferrer" 
+               className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex items-center justify-between group transition-all">
+              <div className="flex items-center gap-4 sm:gap-5">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-[1rem] bg-orange-50 text-orange-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <FileText size={20} className="sm:w-6 sm:h-6" />
+                </div>
+                <div className="text-left">
+                  <span className="text-[9px] sm:text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em]">Professional Gateway</span>
+                  <p className="text-sm sm:text-base font-black text-neutral-900 mt-0.5 sm:mt-1">View Academic Resume</p>
+                </div>
+              </div>
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-neutral-50 flex items-center justify-center text-neutral-400 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                <ExternalLink size={16} />
+              </div>
+            </a>
+          </div>
+        )}
+
+        {/* EVENTS & ACHIEVEMENTS BUNDLE */}
+        {((data?.hackathons && data.hackathons.length > 0) || (data?.clubs && data.clubs.length > 0)) && (
+          <div className="w-full mb-10 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            {/* Hackathons */}
+            {data.hackathons && data.hackathons.length > 0 && (
+              <div className="bg-white p-6 sm:p-8 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-sm text-left">
+                <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-5 flex items-center gap-2">
+                  <Trophy size={14} className="text-rose-400" /> Events
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {data.hackathons.map((h: any) => {
+                    const name = typeof h === 'string' ? h : h.name;
+                    return (
+                      <span key={name} className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl bg-neutral-50 border border-neutral-100 text-[10px] sm:text-[11px] font-bold text-neutral-700 tracking-wide">
+                        {name}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            
+            {/* Clubs */}
+            {data.clubs && data.clubs.length > 0 && (
+              <div className="bg-white p-6 sm:p-8 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-sm text-left">
+                <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-5 flex items-center gap-2">
+                  <Users size={14} className="text-blue-400" /> Clubs & Societies
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {data.clubs.map((club: any) => {
+                    const name = typeof club === 'string' ? club : club.name;
+                    return (
+                      <span key={name} className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl bg-neutral-50 border border-neutral-100 text-[10px] sm:text-[11px] font-bold text-neutral-700 tracking-wide">
+                        {name}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ACTION BUTTONS */}
+        {(data.contact_email || data.quick_talk_url) && (
+          <div className="grid grid-cols-2 gap-3 sm:gap-5 w-full max-w-sm sm:max-w-md mx-auto mt-6 sm:mt-8">
+            {data.contact_email ? (
+              <a href={`mailto:${data.contact_email}`} className="bg-neutral-900 text-white py-3.5 sm:py-4 rounded-xl sm:rounded-[1.5rem] font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] hover:bg-neutral-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+                <Mail size={16} /> Email
+              </a>
+            ) : <div />}
+            
+            {data.quick_talk_url ? (
+              <a href={data.quick_talk_url} target="_blank" rel="noopener noreferrer" className="bg-white text-neutral-900 py-3.5 sm:py-4 rounded-xl sm:rounded-[1.5rem] font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] border-2 border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                <Calendar size={16} /> Quick Talk
+              </a>
+            ) : <div />}
+          </div>
+        )}
+
       </main>
+
+      {/* Interactive FOMO Upsell Modal */}
+      {showFomoModal && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fadeIn">
+          <div className="bg-white rounded-[32px] p-8 max-w-sm w-full border border-neutral-100 shadow-2xl relative animate-zoomIn text-center">
+            <button 
+              onClick={() => setShowFomoModal(false)}
+              className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-600 rounded-full hover:bg-neutral-50 transition-all"
+            >
+              <X size={20} />
+            </button>
+            
+            <div className="relative inline-flex items-center justify-center mb-6">
+              <div className="absolute inset-0 bg-orange-500/10 rounded-full blur-xl animate-pulse" />
+              <div className="w-16 h-16 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center shadow-inner">
+                <Activity size={32} className="animate-pulse" />
+              </div>
+            </div>
+            
+            <h3 className="text-xl font-black text-neutral-900 tracking-tight mb-2">Unlock Profile Analytics</h3>
+            <p className="text-xs font-bold text-neutral-500 mb-6 leading-relaxed">
+              Your profile is actively receiving connections! Upgrading to a premium plan unlocks these features instantly:
+            </p>
+            
+            <ul className="text-left space-y-3 mb-8 pl-4">
+              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+                <span className="text-emerald-500 font-black">✓</span> 📈 Real-Time View Count Tracking
+              </li>
+              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+                <span className="text-emerald-500 font-black">✓</span> 📍 Global & Local City-by-City Scans
+              </li>
+              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+                <span className="text-emerald-500 font-black">✓</span> 📱 Detailed Browser & Device Insights
+              </li>
+              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+                <span className="text-emerald-500 font-black">✓</span> 👥 Unique vs. Repeat Visitor Scoring
+              </li>
+            </ul>
+            
+            <div className="space-y-3">
+              <button 
+                onClick={() => window.location.href = '/#pricing'}
+                className="w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-[0.98]"
+              >
+                🔒 Buy A Tee to Unlock
+              </button>
+              <button 
+                onClick={() => setShowFomoModal(false)}
+                className="w-full py-3 text-neutral-400 hover:text-neutral-600 font-bold text-xs uppercase tracking-wider transition-colors"
+              >
+                Maybe Later
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        @keyframes float-medium {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-30px) rotate(-5deg); }
+        }
+        @keyframes float-fast {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-15px) rotate(10deg); }
+        }
+        .animate-float-slow {
+          animation: float-slow 8s ease-in-out infinite;
+        }
+        .animate-float-medium {
+          animation: float-medium 6s ease-in-out infinite;
+        }
+        .animate-float-fast {
+          animation: float-fast 4s ease-in-out infinite;
+        }
+        @keyframes zoomIn {
+          from { transform: scale(0.95); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        .animate-zoomIn {
+          animation: zoomIn 0.3s ease-out forwards;
+        }
+      `}</style>
     </div>
   )
 }

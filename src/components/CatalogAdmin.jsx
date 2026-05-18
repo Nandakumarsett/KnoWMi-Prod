@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
-
-const CATEGORIES = ['Gamer', 'Influencer', 'Gym', 'Student', 'Developer', 'Creator']
+import { supabase, getAssetUrl } from '../lib/supabase'
 
 export default function CatalogAdmin() {
   const [designs, setDesigns] = useState([])
   const [loading, setLoading] = useState(true)
-  const [formData, setFormData] = useState({ category: 'Gamer', name: '', price: 999 })
+  const [formData, setFormData] = useState({ name: '', price: 999 })
   const [files, setFiles] = useState({ front: null, back: null, model: null })
   const [uploading, setUploading] = useState(false)
 
@@ -32,7 +30,7 @@ export default function CatalogAdmin() {
     const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${ext}`
     const { error: uploadError } = await supabase.storage.from('product_images').upload(fileName, file)
     if (uploadError) throw uploadError
-    return `/content/product_images/${fileName}`
+    return `product_images/${fileName}`
   }
 
   const handleSubmit = async (e) => {
@@ -51,7 +49,7 @@ export default function CatalogAdmin() {
       const modelUrl = await uploadImage(files.model)
 
       const { error } = await supabase.from('persona_designs').insert([{
-        category: formData.category.toLowerCase(),
+        category: 'universal',
         name: formData.name,
         price: formData.price,
         front_image_url: frontUrl,
@@ -62,7 +60,7 @@ export default function CatalogAdmin() {
       if (error) throw error
 
       alert("Design added successfully!")
-      setFormData({ category: 'Gamer', name: '', price: 999 })
+      setFormData({ name: '', price: 999 })
       setFiles({ front: null, back: null, model: null })
       document.getElementById('catalog-form').reset()
       fetchDesigns()
@@ -90,13 +88,6 @@ export default function CatalogAdmin() {
         <form id="catalog-form" onSubmit={handleSubmit} className="bg-white p-6 rounded-xl border border-[var(--border2)]">
           <h2 className="text-lg font-bold mb-4 font-display text-[var(--ink)]">Add New Design</h2>
           
-          <div className="mb-4">
-            <label className="block text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-1">Category</label>
-            <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-[var(--border2)] bg-[var(--off)] outline-none text-sm">
-              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
-          </div>
-
           <div className="mb-4">
             <label className="block text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-1">Design Name</label>
             <input type="text" required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} placeholder="e.g. Neon Glitch V1" className="w-full px-3 py-2 rounded-lg border border-[var(--border2)] bg-[var(--off)] outline-none text-sm" />
@@ -137,11 +128,10 @@ export default function CatalogAdmin() {
               {designs.map(d => (
                 <div key={d.id} className="flex gap-4 p-4 rounded-xl border border-[var(--border2)] hover:bg-[var(--off)] transition-colors">
                   <div className="w-20 h-24 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                    <img src={d.model_image_url || d.front_image_url || d.back_image_url || '/assets/tees/front.png'} alt={d.name} className="w-full h-full object-cover" />
+                    <img src={getAssetUrl(d.model_image_url || d.front_image_url || d.back_image_url) || '/assets/tees/front.png'} alt={d.name} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1 flex flex-col justify-between py-1">
                     <div>
-                      <div className="text-[10px] font-bold text-[#FF9933] uppercase tracking-wider mb-0.5">{d.category}</div>
                       <h3 className="text-sm font-bold text-[var(--ink)] leading-tight">{d.name}</h3>
                       <div className="text-xs text-[var(--muted)] mt-1">₹{d.price}</div>
                     </div>

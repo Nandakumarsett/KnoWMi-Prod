@@ -221,7 +221,7 @@ export default function Leaderboard() {
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
-          <h1 className="text-4xl font-black text-neutral-900 tracking-tight">KnoW<span className="text-[#F97316]">M</span>i <span className="text-[#F97316]">Elite</span></h1>
+          <h1 className="text-4xl font-black text-neutral-900 tracking-tight">Kno<span className="text-[#F97316]">WM</span>i <span className="text-[#F97316]">Elite</span></h1>
           <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
             <div className="relative group flex-1 sm:w-64">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-orange-500 transition-colors" size={18} />
@@ -391,7 +391,7 @@ export default function Leaderboard() {
                   <div className="absolute inset-0 border border-white/5 rounded-[2.5rem] pointer-events-none" />
                   <div className="relative z-10 flex justify-between items-start">
                     <div>
-                      <h1 className="font-display text-3xl tracking-tighter font-black">KnoW<span className="text-orange-500">M</span>i</h1>
+                      <h1 className="font-display text-3xl tracking-tighter font-black">Kno<span className="text-orange-500">WM</span>i</h1>
                       <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-[0.3em]">Verified Identity</p>
                     </div>
                     <div className="bg-white/10 backdrop-blur-xl px-4 py-2 rounded-2xl border border-white/10 flex items-center gap-2">

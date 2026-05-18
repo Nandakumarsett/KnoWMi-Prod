@@ -1,5 +1,6 @@
 export type PersonaType = 'developer' | 'student' | 'creator' | 'gamer' | 'fitness' | 'influencer';
 
+
 export interface SocialLink {
   platform: string;   // 'instagram' | 'github' | 'linkedin' | 'twitter' | 'youtube' | 'spotify' etc
   url: string;
@@ -17,6 +18,7 @@ export interface DeveloperData {
     languages: string[];
   };
   tech_stack: string[];
+  resume_url?: string;
   projects: Array<{
     name: string;
     description: string;
@@ -28,6 +30,8 @@ export interface DeveloperData {
     icon: string;
     label: string;
   }>;
+  contact_email?: string;
+  quick_talk_url?: string;
 }
 
 export interface StudentData {
@@ -39,20 +43,37 @@ export interface StudentData {
   campus_rank_pct: number;
   study_buddies: number;
   thought_bubble: string;
+  batch_year?: string;
+  favorite_subject?: string;
+  resume_url?: string;
+  website?: string;
   playlist_url?: string;
   playlist_name?: string;
   projects: Array<{
     name: string;
     emoji: string;
+    description?: string;
     tech: string[];
     url?: string;
+    github_url?: string;
   }>;
   hackathons: Array<{
     name: string;
     year: string;
     achievement?: string;
   }>;
+  clubs: string[];
+  platforms?: Array<{
+    platform: string;
+    url: string;
+  }>;
+  availability?: string;
+  core_skills?: string[];
+  hobbies?: string[];
+  contact_email?: string;
+  quick_talk_url?: string;
 }
+
 
 export interface CreatorData {
   type: 'creator';
@@ -71,6 +92,12 @@ export interface CreatorData {
     followers?: string;
     metric_label?: string;
   }>;
+  collab_types?: string;
+  contact_preference?: string;
+  total_reach?: string;
+  avg_views?: string;
+  engagement_rate?: string;
+  location?: string;
   achievements: Array<{
     icon: string;
     label: string;
@@ -143,6 +170,7 @@ export interface InfluencerData {
   }>;
 }
 
+
 export type PersonaData =
   | DeveloperData
   | StudentData
@@ -165,8 +193,11 @@ export interface ProfileData {
   bio: string | null;
   pulse: number;
   tier: 'Founding' | 'Elite' | 'Pro' | 'Starter';
+  status?: string;
   social_links: SocialLink[];
   persona_data: PersonaData;
   is_verified: boolean;
   joined_at: string;
+  views?: number;
+  top_location?: string;
 }

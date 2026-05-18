@@ -73,18 +73,18 @@ export function URLInput({ value = '', onChange, placeholder = 'https://...', pl
         onChange={e => onChange(e.target.value)}
         onBlur={handleBlur}
         placeholder={placeholder}
-        className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-white/30"
+        className="w-full bg-white border border-[#E5D5C4] rounded-[12px] px-4 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#8C8276] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
       />
       {loading && <p className="text-[10px] font-bold text-orange-400 animate-pulse uppercase tracking-wider">Fetching preview...</p>}
       {preview && (
-        <div className="p-3 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-4">
+        <div className="p-3 bg-[#FDF6EC] border border-[#E5D5C4] rounded-[12px] flex items-center gap-4">
           {preview.thumbnail && (
             <img src={preview.thumbnail} alt="Preview" className="w-16 h-12 object-cover rounded-xl" />
           )}
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-black truncate text-white">{preview.title || 'Link Preview'}</p>
+            <p className="text-xs font-black truncate text-[#1A1A1A]">{preview.title || 'Link Preview'}</p>
             {preview.description && (
-              <p className="text-[10px] text-white/50 truncate max-w-[280px]">{preview.description}</p>
+              <p className="text-[10px] text-[#5C5246] truncate max-w-[280px]">{preview.description}</p>
             )}
             {preview.stars !== undefined && (
               <p className="text-[10px] font-bold text-[#E3B341]">★ {preview.stars} stars</p>

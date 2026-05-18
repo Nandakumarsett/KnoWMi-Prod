@@ -107,8 +107,8 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
     }
 
     setLoading(false)
-    setTempUser({ email: email.trim(), name: firstName.trim() })
-    setShowVerification(true)
+    handleClose()
+    onSuccess?.(redirectAfter)
   }
 
   const handleSignIn = async (e) => {
@@ -140,6 +140,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
     }
 
     setLoading(false)
+    handleClose()
     onSuccess?.(redirectAfter)
   }
 
@@ -213,7 +214,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
                     letterSpacing: '-0.06em'
                   }}
                 >
-                  KnoW<span style={{ color: 'var(--saffron)' }}>M</span>i
+                  Kno<span style={{ color: 'var(--saffron)' }}>WM</span>i
                 </span>
               </div>
             </div>
@@ -407,8 +408,8 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
 
           <p style={{ fontSize: '11px', color: 'var(--muted)', textAlign: 'center', marginTop: '16px', lineHeight: 1.6 }}>
             By continuing, you agree to KnoWMi's{' '}
-            <a href="#" style={{ color: 'var(--sf)', textDecoration: 'underline' }}>Terms</a> &{' '}
-            <a href="#" style={{ color: 'var(--sf)', textDecoration: 'underline' }}>Privacy Policy</a>
+            <a href="/legal#terms" style={{ color: 'var(--sf)', textDecoration: 'underline' }}>Terms</a> &{' '}
+            <a href="/legal#privacy" style={{ color: 'var(--sf)', textDecoration: 'underline' }}>Privacy Policy</a>
           </p>
           </>
           )}

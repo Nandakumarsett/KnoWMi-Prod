@@ -14,8 +14,8 @@ import TrackOrder from './pages/TrackOrder'
 import Shop from './pages/Shop'
 import Leaderboard from './pages/Leaderboard'
 import QRIntercept from './pages/QRIntercept'
+import IdentityStudio from './pages/IdentityStudio'
 import VibePage from './pages/VibePage'
-import IdentitySetup from './pages/IdentitySetup'
 import InsightsPage from './pages/InsightsPage'
 import VerifyBubble from './components/VerifyBubble'
 
@@ -57,7 +57,7 @@ export default function App() {
         // Clear the hash and move to the clean route
         window.history.replaceState(null, '', '/leaderboard')
         window.location.reload() // Force reload to clear any cache/state
-      } else if (hash && !hash.includes('access_token')) {
+      } else if (hash && !hash.includes('access_token') && !hash.includes('pricing')) {
         // Clear any other non-auth hashes
         window.history.replaceState(null, '', window.location.pathname + window.location.search)
       }
@@ -78,8 +78,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/identity" element={<IdentitySetup />} />
-        <Route path="/dashboard/analytics" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/studio" element={<IdentityStudio />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/s/:code" element={<ScanHandler />} />
         <Route path="/p/:username" element={<PublicProfile />} />

@@ -65,57 +65,27 @@ export function ProfileAvatar({
   return (
     <div
       style={accentColor ? wrapperStyle : { width: `${size}px`, height: `${size}px`, flexShrink: 0, ...(shape === 'hexagon' ? clipStyle : {}) }}
-      className={`${outerRadius} ${className}`}
+      className={`${outerRadius} ${className} overflow-hidden`}
     >
-      {accentColor ? (
-        <div style={innerStyle}>
-          {hasImage ? (
-            <div
-              role="img"
-              aria-label={name}
-              onContextMenu={(e) => e.preventDefault()}
-              className="w-full h-full bg-cover bg-top select-none pointer-events-none"
-              style={{ 
-                backgroundImage: `url(${assetSrc})`,
-                userSelect: 'none',
-                WebkitUserSelect: 'none'
-              }}
-              draggable="false"
-            />
-          ) : (
-            <div
-              className="w-full h-full flex items-center justify-center font-black text-white"
-              style={{ background: fallbackColor, fontSize: `${size * 0.35}px` }}
-            >
-              {initial}
-            </div>
-          )}
-        </div>
-      ) : (
-        <div style={innerStyle}>
-          {hasImage ? (
-            <div
-              role="img"
-              aria-label={name}
-              onContextMenu={(e) => e.preventDefault()}
-              className="w-full h-full bg-cover bg-top select-none pointer-events-none"
-              style={{ 
-                backgroundImage: `url(${assetSrc})`,
-                userSelect: 'none',
-                WebkitUserSelect: 'none'
-              }}
-              draggable="false"
-            />
-          ) : (
-            <div
-              className="w-full h-full flex items-center justify-center font-black text-white"
-              style={{ background: fallbackColor, fontSize: `${size * 0.35}px` }}
-            >
-              {initial}
-            </div>
-          )}
-        </div>
-      )}
+      <div style={innerStyle}>
+        {hasImage ? (
+          <img
+            src={assetSrc}
+            alt={name}
+            onContextMenu={(e) => e.preventDefault()}
+            onError={() => setImgError(true)}
+            className="w-full h-full object-cover object-center select-none pointer-events-none bg-neutral-100"
+            draggable="false"
+          />
+        ) : (
+          <div
+            className="w-full h-full flex items-center justify-center font-black text-white"
+            style={{ background: fallbackColor, fontSize: `${size * 0.35}px` }}
+          >
+            {initial}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

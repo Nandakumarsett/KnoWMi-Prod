@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase, getAssetUrl } from '../lib/supabase'
 import Navbar from '../components/Navbar'
 import { Footer } from '../components/Footer'
 import { ShoppingBag, ChevronRight, Check, X, Ruler } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
+import AuthModal from '../components/AuthModal'
 
 const PLANS = [
   { id: 'starter', name: 'Starter', price: 799, gsm: '200 GSM' },
@@ -13,12 +15,14 @@ const PLANS = [
 const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
 
 export default function Shop() {
+  const { user } = useAuth()
   const [designs, setDesigns] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedDesign, setSelectedDesign] = useState(null)
   const [selectedSize, setSelectedSize] = useState('M')
   const [selectedPlan, setSelectedPlan] = useState('creator')
   const [modalOpen, setModalOpen] = useState(false)
+  const [authOpen, setAuthOpen] = useState(false)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -28,6 +32,15 @@ export default function Shop() {
   const fetchDesigns = async () => {
     const { data } = await supabase.from('persona_designs').select('*').order('created_at', { ascending: false })
     setDesigns(data || [])
+    
+    // Check for deep-linked design
+    const params = new URLSearchParams(window.location.search)
+    const designId = params.get('design')
+    if (designId && data) {
+      const design = data.find(d => d.id === designId)
+      if (design) setSelectedDesign(design)
+    }
+    
     setLoading(false)
   }
 
@@ -38,6 +51,11 @@ export default function Shop() {
   }
 
   const triggerCheckout = () => {
+    if (!user) {
+      setAuthOpen(true)
+      return
+    }
+
     const plan = PLANS.find(p => p.id === selectedPlan)
     const msg = `Hi KnoWMi! I want to order the "${selectedDesign.name}" design.
 
@@ -127,7 +145,7 @@ Please share the payment link and next steps!`
                 <div key={d.id} className="group cursor-pointer" onClick={() => handleSelect(d)}>
                   <div className="aspect-square bg-neutral-100 rounded-[40px] overflow-hidden relative mb-6 border border-neutral-100 group-hover:border-orange-500/20 transition-all premium-shimmer shadow-sm group-hover:shadow-2xl group-hover:shadow-orange-500/10">
                     <img 
-                      src={d.model_image_url || d.front_image_url || '/assets/tees/front.png'} 
+                      src={getAssetUrl(d.model_image_url || d.front_image_url) || '/assets/tees/front.png'} 
                       alt={d.name} 
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
@@ -167,7 +185,7 @@ Please share the payment link and next steps!`
                 {/* Left: Preview - Smaller & Fixed-ish */}
                 <div className="bg-neutral-50 rounded-[40px] overflow-hidden border border-neutral-100 shadow-xl max-h-[500px]">
                   <img 
-                    src={selectedDesign.model_image_url || selectedDesign.front_image_url} 
+                    src={getAssetUrl(selectedDesign.model_image_url || selectedDesign.front_image_url)} 
                     className="w-full h-full object-cover"
                     alt="Selected Design"
                   />
@@ -263,6 +281,14 @@ Please share the payment link and next steps!`
       </main>
 
       <Footer />
+      <AuthModal 
+        open={authOpen} 
+        onClose={() => setAuthOpen(false)} 
+        onSuccess={() => {
+          setAuthOpen(false);
+          triggerCheckout();
+        }}
+      />
     </div>
   )
 }

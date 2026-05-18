@@ -26,21 +26,61 @@ export default function Home() {
 
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowSticky(window.scrollY > 800)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
   const openAuth = (tab = 'signup') => {
     setAuthTab(tab)
     setAuthOpen(true)
   }
 
+  // Task: Forced Auth on Scroll
+  useEffect(() => {
+    if (user) return; // Don't trigger for logged in users
+    
+    let timer;
+    let hasTriggered = false;
+
+    const handleScroll = () => {
+      setShowSticky(window.scrollY > 800)
+      
+      // If user scrolls > 100px and we haven't started a timer yet
+      if (window.scrollY > 100 && !timer && !hasTriggered) {
+        timer = setTimeout(() => {
+          if (!user && !hasTriggered) {
+            openAuth('signup');
+            hasTriggered = true; // Only show once per mount
+          }
+        }, 5000);
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (timer) clearTimeout(timer)
+    }
+  }, [user])
+
+  // Handle post-login redirects (especially for Google Login)
+  useEffect(() => {
+    if (user) {
+      const returnTo = localStorage.getItem('return_to')
+      if (returnTo) {
+        localStorage.removeItem('return_to')
+        navigate(returnTo)
+      }
+    }
+  }, [user, navigate])
+
   const handleAuthSuccess = () => {
     setAuthOpen(false)
+    
+    // Check for pending redirect after login (e.g. from a QR scan gate)
+    const returnTo = localStorage.getItem('return_to')
+    if (returnTo) {
+      localStorage.removeItem('return_to')
+      navigate(returnTo)
+      return
+    }
+
     if (pendingRedirect === 'store_persona') {
       setPendingRedirect(null)
     }
@@ -62,6 +102,13 @@ export default function Home() {
     // New: Redirect old #leaderboard hash to the new page
     if (window.location.hash === '#leaderboard') {
       navigate('/leaderboard');
+    } else if (window.location.hash === '#pricing' || window.location.href.includes('#pricing')) {
+      setTimeout(() => {
+        const el = document.getElementById('pricing');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 350);
     }
   }, [navigate]);
 
@@ -78,7 +125,7 @@ export default function Home() {
         <HowItWorks />
         <Personas />
         <PersonaUseCases />
-        <Collection onSelectDesign={() => navigate('/shop')} />
+        <Collection onSelectDesign={(d) => navigate(`/shop?design=${d.id}`)} />
         <Pricing onPlanSelect={handleSelectPlan} />
 
         <Testimonials />

@@ -22,7 +22,7 @@ export default function RecentVisitors({ events }: { events: any[] }) {
       <table className="w-full text-left min-w-[500px]">
         <thead>
           <tr className="border-b border-neutral-100">
-            {['Time', 'Device', 'Source', 'Country', 'Type'].map(h => (
+            {['Visitor', 'Time', 'Device', 'Source', 'Country', 'Type'].map(h => (
               <th key={h} className="pb-4 text-[10px] font-black uppercase tracking-widest text-neutral-400">{h}</th>
             ))}
           </tr>
@@ -30,13 +30,39 @@ export default function RecentVisitors({ events }: { events: any[] }) {
         <tbody className="divide-y divide-neutral-50">
           {events.length === 0 ? (
             <tr>
-              <td colSpan={5} className="py-10 text-center text-sm font-medium text-neutral-400">
+              <td colSpan={6} className="py-10 text-center text-sm font-medium text-neutral-400">
                 No recent activity yet. Share your QR code to get started!
               </td>
             </tr>
           ) : (
             events.map((event, i) => (
               <tr key={i} className="group hover:bg-neutral-50 transition-colors">
+                <td className="py-4">
+                  <div className="flex items-center gap-3">
+                    {event.visitor ? (
+                      <>
+                        <div className="w-8 h-8 rounded-full overflow-hidden bg-neutral-100 border border-neutral-200">
+                          <img 
+                            src={event.visitor.avatar_url?.startsWith('http') ? event.visitor.avatar_url : `https://mrtbqfkhvpsrtvdyunqr.supabase.co/storage/v1/object/public/avatars/${event.visitor.avatar_url?.replace('/content/avatars/', '')}`} 
+                            alt={event.visitor.first_name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as any).src = `https://ui-avatars.com/api/?name=${event.visitor.first_name}&background=random`;
+                            }}
+                          />
+                        </div>
+                        <span className="text-sm font-bold text-neutral-900">{event.visitor.first_name}</span>
+                      </>
+                    ) : (
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-neutral-50 border border-neutral-100 flex items-center justify-center">
+                          <span className="text-[10px] font-bold text-neutral-400">?</span>
+                        </div>
+                        <span className="text-sm font-medium text-neutral-400 italic">Anonymous</span>
+                      </div>
+                    )}
+                  </div>
+                </td>
                 <td className="py-4 text-sm font-bold text-neutral-900">{getRelativeTime(event.viewed_at)}</td>
                 <td className="py-4 text-sm font-medium text-neutral-500 capitalize">{event.device_type}</td>
                 <td className="py-4 text-sm font-medium text-neutral-500 capitalize">{event.referrer}</td>

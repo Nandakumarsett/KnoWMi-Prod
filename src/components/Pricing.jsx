@@ -69,6 +69,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
   const { profile } = useAuth()
   const isPaid = profile?.status === 'paid'
   const [remainingSpots, setRemainingSpots] = useState(100)
+  const [simulatorTab, setSimulatorTab] = useState('trial')
 
   useEffect(() => {
     fetchRemainingSpots()
@@ -184,6 +185,109 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
               </div>
             )
           })}
+        </div>
+
+        {/* Interactive Feature Simulator */}
+        <div className="mb-24 mt-16 bg-neutral-50/50 border border-neutral-100 rounded-[32px] p-8 max-w-4xl mx-auto reveal">
+          <div className="text-center mb-8">
+            <span className="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-[10px] font-black uppercase tracking-widest">Interactive Simulator</span>
+            <h3 className="text-2xl font-display font-black text-black mt-3 mb-2">Compare Digital vs Phygital</h3>
+            <p className="text-xs text-neutral-400 font-medium max-w-md mx-auto">Toggle between the basic digital trial profile and a fully unlocked physical smart tee profile.</p>
+          </div>
+          
+          <div className="flex justify-center gap-2 mb-8 p-1 bg-neutral-100/80 rounded-2xl max-w-[280px] mx-auto">
+            <button
+              onClick={() => setSimulatorTab('trial')}
+              className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${
+                simulatorTab === 'trial' ? 'bg-[#111111] text-white shadow-md' : 'text-neutral-400 hover:text-neutral-600'
+              }`}
+            >
+              Digital Trial
+            </button>
+            <button
+              onClick={() => setSimulatorTab('unlocked')}
+              className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${
+                simulatorTab === 'unlocked' ? 'bg-orange-500 text-white shadow-md' : 'text-neutral-400 hover:text-neutral-600'
+              }`}
+            >
+              Tee Unlocked
+            </button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-white border border-neutral-100 rounded-3xl p-6 shadow-sm">
+            {/* Left side: Simulated Profile Preview */}
+            <div className="border border-neutral-100 rounded-2xl p-6 relative overflow-hidden bg-[#FDF6EC]">
+              <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-neutral-900/5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider text-neutral-600">
+                <span className={`w-1.5 h-1.5 rounded-full ${simulatorTab === 'unlocked' ? 'bg-emerald-500 animate-pulse' : 'bg-neutral-300'}`} />
+                {simulatorTab === 'unlocked' ? 'Live Profile' : 'Trial Mode'}
+              </div>
+              
+              <div className="flex flex-col items-center text-center mt-4">
+                <div className="w-16 h-16 rounded-2xl bg-neutral-200 border-2 border-white shadow-sm mb-3 overflow-hidden relative mx-auto">
+                  <img src="https://i.pravatar.cc/100?u=mockowner" alt="Owner" className="w-full h-full object-cover" />
+                </div>
+                <h4 className="text-sm font-black text-neutral-900">Alex Carter</h4>
+                <p className="text-[10px] text-neutral-400 font-bold mb-6">@alexcarter</p>
+                
+                {/* QR Preview Gating */}
+                <div className="relative w-36 h-36 bg-white border border-neutral-100 rounded-2xl flex items-center justify-center p-3 shadow-inner mx-auto">
+                  {simulatorTab === 'trial' ? (
+                    <div className="absolute inset-0 bg-white/95 backdrop-blur-[6px] rounded-2xl flex flex-col items-center justify-center p-4 z-10">
+                      <Lock size={20} className="text-orange-500 mb-1" />
+                      <span className="text-[8px] font-black uppercase tracking-widest text-orange-500">Buy a Tee to Unlock</span>
+                    </div>
+                  ) : null}
+                  <div className={`w-full h-full relative flex items-center justify-center transition-all duration-500 ${simulatorTab === 'trial' ? 'blur-[4px] opacity-25' : 'opacity-100 scale-105'}`}>
+                    <img 
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent('https://knowmi.co/p/alexcarter')}`}
+                      className="w-[100px] h-[100px] object-contain pointer-events-none" 
+                      alt="HD QR Code" 
+                    />
+                    {simulatorTab === 'unlocked' && (
+                      <div className="absolute inset-0 m-auto w-6 h-6 bg-neutral-950 rounded-md flex items-center justify-center shadow-lg border border-neutral-800 z-20 select-none">
+                        <span className="text-[8px] font-black text-orange-500 tracking-wider font-sans leading-none">WM</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right side: Analytics Simulator */}
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-neutral-50 rounded-2xl p-4 border border-neutral-100 text-center">
+                  <p className="text-[9px] font-black uppercase text-neutral-400 tracking-wider mb-1">Simulated Views</p>
+                  <span className={`text-2xl font-black transition-all duration-500 ${simulatorTab === 'trial' ? 'blur-[5px] select-none opacity-50 inline-block' : 'text-orange-500'}`}>
+                    {simulatorTab === 'trial' ? '8,204' : '12,450'}
+                  </span>
+                </div>
+                <div className="bg-neutral-50 rounded-2xl p-4 border border-neutral-100 text-center">
+                  <p className="text-[9px] font-black uppercase text-neutral-400 tracking-wider mb-1">Top Location</p>
+                  <span className={`text-sm font-black transition-all duration-500 ${simulatorTab === 'trial' ? 'blur-[5px] select-none opacity-50 inline-block' : 'text-neutral-900'}`}>
+                    {simulatorTab === 'trial' ? 'Bengaluru' : 'Mumbai, MH'}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="bg-neutral-50 rounded-2xl p-4 border border-neutral-100 relative overflow-hidden min-h-[140px] flex flex-col justify-between">
+                <p className="text-[9px] font-black uppercase text-neutral-400 tracking-wider mb-3">Live Traffic Velocity</p>
+                {simulatorTab === 'trial' ? (
+                  <div className="absolute inset-0 bg-white/80 backdrop-blur-[6px] flex flex-col items-center justify-center p-4 z-10">
+                    <Lock size={16} className="text-orange-500 mb-1" />
+                    <span className="text-[8px] font-black uppercase tracking-widest text-orange-500">Tee Activation Required</span>
+                  </div>
+                ) : null}
+                <div className={`h-24 flex items-end gap-1.5 px-2 transition-all duration-500 ${simulatorTab === 'trial' ? 'blur-[4px] opacity-20' : ''}`}>
+                  {[40, 20, 60, 80, 50, 90, 70, 45, 85, 100, 65].map((h, idx) => (
+                    <div key={idx} className="flex-1 bg-orange-500/25 rounded-t-sm group-hover:bg-orange-500/35 transition-colors" style={{ height: `${h}%` }}>
+                      <div className="h-full w-full bg-orange-500 rounded-t-sm transition-all duration-1000" style={{ height: simulatorTab === 'unlocked' ? '100%' : '0%' }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Footer: Trust & Upgrades */}

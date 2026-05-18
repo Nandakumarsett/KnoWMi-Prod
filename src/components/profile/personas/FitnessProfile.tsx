@@ -26,7 +26,7 @@ export function FitnessProfile({ profile }: { profile: ProfileData }) {
         <div className="flex items-center gap-2">
           <img src="/logo-square.png" className="w-6 h-6 object-cover rounded" alt="KW" />
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#888888]">
-            {profile.first_name ? `${profile.first_name}'s Profile` : "Nanda's Profile"}
+            {profile.first_name ? `${profile.first_name}'s Profile` : "Your Profile"}
           </span>
         </div>
         <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-[#111111] border border-[#222222] text-xs">×</div>

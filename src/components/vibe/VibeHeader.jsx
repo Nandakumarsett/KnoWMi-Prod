@@ -13,7 +13,7 @@ export default function VibeHeader({ displayName, avatarUrl, profileSlug }) {
       alignItems: 'center',
     }}>
       <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 20, letterSpacing: '-0.5px', color: 'var(--text)' }}>
-        Know<span style={{ color: 'var(--teal)' }}>Mi</span>
+        Kno<span style={{ color: 'var(--saffron)' }}>WM</span>i
       </span>
 
       <div 

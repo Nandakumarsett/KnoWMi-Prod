@@ -25,18 +25,16 @@ export default function Avatar({ src, name, username, size = "md", className = "
 
   if (assetSrc && assetSrc.trim() !== "" && !imgError) {
     return (
-      <div
-        role="img"
-        aria-label={name || username}
-        onContextMenu={(e) => e.preventDefault()}
-        className={`${dimensions} rounded-full bg-cover bg-center border-2 border-white shadow-sm select-none pointer-events-none ${className}`}
-        style={{ 
-          backgroundImage: `url(${assetSrc})`,
-          userSelect: 'none',
-          WebkitUserSelect: 'none'
-        }}
-        draggable="false"
-      />
+      <div className={`${dimensions} rounded-full border-2 border-white shadow-sm overflow-hidden bg-neutral-100 ${className}`}>
+        <img
+          src={assetSrc}
+          alt={name || username || 'User'}
+          onError={() => setImgError(true)}
+          onContextMenu={(e) => e.preventDefault()}
+          className="w-full h-full object-cover object-center select-none pointer-events-none"
+          draggable="false"
+        />
+      </div>
     );
   }
 

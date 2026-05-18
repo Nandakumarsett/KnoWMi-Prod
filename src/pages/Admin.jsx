@@ -6,6 +6,7 @@ import LeadsAdmin from '../components/LeadsAdmin'
 import AnalyticsAdmin from '../components/AnalyticsAdmin'
 import OrdersAdmin from '../components/OrdersAdmin'
 import QRStudioAdmin from '../components/QRStudioAdmin'
+import HomepagePreviewsAdmin from '../components/HomepagePreviewsAdmin'
 import { createClient } from '@supabase/supabase-js'
 
 // Separate client for creating users without logging the Owner out
@@ -189,6 +190,7 @@ export default function Admin() {
               { k: 'catalog', l: '👕 Catalog' }, 
               { k: 'leads', l: '📥 Leads' },
               { k: 'analytics', l: '📊 Analytics' },
+              { k: 'previews', l: '✨ Previews' },
               { k: 'create', l: '➕ Create Account' }
             ] : [{ k: 'referrals', l: '🔗 My Referrals' }])
           ].map(t => (
@@ -423,6 +425,11 @@ export default function Admin() {
         {/* Analytics tab (Owner Only) */}
         {tab === 'analytics' && isOwner && (
           <AnalyticsAdmin users={users} />
+        )}
+
+        {/* Previews tab (Owner Only) */}
+        {tab === 'previews' && isOwner && (
+          <HomepagePreviewsAdmin />
         )}
       </div>
     </div>

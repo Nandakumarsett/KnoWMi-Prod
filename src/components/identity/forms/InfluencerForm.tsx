@@ -14,11 +14,11 @@ export function InfluencerForm({ data = {}, onChange }: InfluencerFormProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-12 gap-y-16 items-start">
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-12 gap-y-24 items-start">
       {/* SECTION: YOUR IDENTITY */}
       <section className="space-y-4">
         <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 1: Your Identity</h3>
-        <div className="bg-white p-8 rounded-[24px] border border-[#E5D5C4] shadow-sm space-y-6">
+        <div className="bg-white p-10 rounded-[24px] border border-[#E5D5C4] shadow-sm space-y-10">
           <div>
             <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Creator Tagline</label>
             <input
@@ -44,7 +44,7 @@ export function InfluencerForm({ data = {}, onChange }: InfluencerFormProps) {
       {/* SECTION: AUDIENCE METRICS */}
       <section className="space-y-4">
         <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 2: Audience Reach</h3>
-        <div className="grid grid-cols-2 gap-4 bg-white p-6 rounded-[12px] border border-[#E5D5C4] shadow-sm">
+        <div className="grid grid-cols-2 gap-6 bg-white p-10 rounded-[24px] border border-[#E5D5C4] shadow-sm">
           <div>
             <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Total Combined Reach</label>
             <input
@@ -73,7 +73,7 @@ export function InfluencerForm({ data = {}, onChange }: InfluencerFormProps) {
         <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 3: Platforms</h3>
         <div className="space-y-4">
           {(data.platforms || []).map((p: any, i: number) => (
-            <div key={i} className="p-5 bg-white border border-[#E5D5C4] rounded-[12px] shadow-sm space-y-4 relative">
+            <div key={i} className="p-8 bg-white border border-[#E5D5C4] rounded-[12px] shadow-sm space-y-8 relative">
               <button
                 type="button"
                 onClick={() => {

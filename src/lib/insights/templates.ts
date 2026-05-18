@@ -534,23 +534,6 @@ export const BEST_TIME_TEMPLATES: InsightTemplate[] = [
 
 export const GROWTH_TIP_TEMPLATES: InsightTemplate[] = [
 
-  {
-    id: 'gt_complete_profile',
-    type: 'growth_tip',
-    emoji: '⚡',
-    headline: 'Your profile is {score}% complete. Fix that.',
-    body: "Add your {topMissing} section. Visitors who land on complete profiles click 2× more links.",
-    cta: 'Fill it in',
-    cta_url: '/dashboard/identity#{topMissingAnchor}',
-    data_point: '{score}% complete',
-    condition: ctx => ctx.profile.completionScore < 70 && ctx.profile.incompleteSections.length > 0,
-    priority: 1,
-    tokens: ctx => ({
-      score: String(ctx.profile.completionScore),
-      topMissing: ctx.profile.incompleteSections[0]?.replace('_', ' ') ?? 'missing',
-      topMissingAnchor: ctx.profile.incompleteSections[0] ?? 'bio',
-    }),
-  },
 
   {
     id: 'gt_low_link_taps',
@@ -559,7 +542,7 @@ export const GROWTH_TIP_TEMPLATES: InsightTemplate[] = [
     headline: 'Views are good. Link taps are next.',
     body: "Only {linkTapRate}% of visitors tap your links. Add a short bio — it makes people stay longer.",
     cta: 'Improve bio',
-    cta_url: '/dashboard/identity',
+    cta_url: '/dashboard?tab=profile',
     data_point: '{linkTapRate}% click-through',
     condition: ctx =>
       ctx.analytics.totalViews >= 20 &&
@@ -609,7 +592,7 @@ export const GROWTH_TIP_TEMPLATES: InsightTemplate[] = [
     headline: 'No projects on your profile. Add at least one.',
     body: "Developers without projects look like they have nothing to show. Ship something — then list it.",
     cta: 'Add projects',
-    cta_url: '/dashboard/identity?persona=developer#projects',
+    cta_url: '/dashboard?tab=profile',
     data_point: '0 projects',
     condition: ctx =>
       ctx.profile.persona === 'developer' &&
@@ -626,7 +609,7 @@ export const GROWTH_TIP_TEMPLATES: InsightTemplate[] = [
     headline: "Your portfolio is empty. That's the first thing they look for.",
     body: "Add your 3 best pieces. Visitors to creator profiles decide in 4 seconds. Make it count.",
     cta: 'Add your work',
-    cta_url: '/dashboard/identity?persona=creator#works',
+    cta_url: '/dashboard?tab=profile',
     data_point: '0 works',
     condition: ctx =>
       ctx.profile.persona === 'creator' &&
@@ -643,7 +626,7 @@ export const GROWTH_TIP_TEMPLATES: InsightTemplate[] = [
     headline: 'Add your goals. Progress bars make profiles alive.',
     body: "Strangers love watching someone work toward something real. Set 2–3 goals and show your progress.",
     cta: 'Set goals',
-    cta_url: '/dashboard/identity?persona=fitness#goals',
+    cta_url: '/dashboard?tab=profile',
     data_point: 'No goals set',
     condition: ctx =>
       ctx.profile.persona === 'fitness' &&
@@ -660,7 +643,7 @@ export const GROWTH_TIP_TEMPLATES: InsightTemplate[] = [
     headline: 'Follower counts missing. That is your credibility.',
     body: "Influencer profiles without platform stats feel incomplete. Add your numbers — even if they are small.",
     cta: 'Add platforms',
-    cta_url: '/dashboard/identity?persona=influencer#platforms',
+    cta_url: '/dashboard?tab=profile',
     data_point: 'No platforms',
     condition: ctx =>
       ctx.profile.persona === 'influencer' &&
@@ -677,7 +660,7 @@ export const GROWTH_TIP_TEMPLATES: InsightTemplate[] = [
     headline: 'Share your playlist. Music is the fastest connect.',
     body: "Students who add a playlist get 40% more profile shares. It is the most personal thing you can add.",
     cta: 'Add playlist',
-    cta_url: '/dashboard/identity?persona=student#playlist',
+    cta_url: '/dashboard?tab=profile',
     data_point: 'No playlist',
     condition: ctx =>
       ctx.profile.persona === 'student' &&
@@ -694,7 +677,7 @@ export const GROWTH_TIP_TEMPLATES: InsightTemplate[] = [
     headline: 'No games listed. What are you even playing?',
     body: "Add your main games and ranks. Other gamers decide in 2 seconds if you are worth connecting with.",
     cta: 'Add games',
-    cta_url: '/dashboard/identity?persona=gamer#main_games',
+    cta_url: '/dashboard?tab=profile',
     data_point: 'No games listed',
     condition: ctx =>
       ctx.profile.persona === 'gamer' &&

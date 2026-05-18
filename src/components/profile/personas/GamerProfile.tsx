@@ -32,7 +32,7 @@ export function GamerProfile({ profile }: { profile: ProfileData }) {
         <div className="flex items-center gap-2">
           <img src="/logo-square.png" className="w-6 h-6 object-cover rounded" alt="KW" />
           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#6060AA]">
-            {profile.first_name ? `${profile.first_name}'s Profile` : "Nanda's Profile"}
+            {profile.first_name ? `${profile.first_name}'s Profile` : "Your Profile"}
           </span>
         </div>
         <div className="px-3 py-1 rounded bg-[#1A1A30] border border-white/10 text-[9px] font-black uppercase tracking-widest hover:text-[#00FFAA] transition-colors cursor-pointer">

@@ -5,13 +5,41 @@ import { QRCodeSVG } from 'qrcode.react';
 import { 
   Plus, Download, Trash2, Power, MapPin, Activity, 
   ChevronRight, ExternalLink, Loader2, CheckCircle2,
-  QrCode, Signal, Smartphone, Users
+  QrCode, Signal, Smartphone, Users, Lock
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import TokenScanCard from '../analytics/TokenScanCard';
 
-export default function QRManager({ initialTokens, profileId, profileSlug }) {
+export default function QRManager({ initialTokens, profileId, profileSlug, isPaid }) {
   const [tokens, setTokens] = useState(initialTokens);
+  
+  if (!isPaid) {
+    return (
+      <div className="bg-white rounded-3xl p-12 text-center border border-neutral-100 max-w-2xl mx-auto flex flex-col items-center justify-center min-h-[400px] premium-shimmer relative overflow-hidden">
+        <div className="relative z-10 flex flex-col items-center">
+          <div className="relative inline-flex items-center justify-center mb-6">
+            <div className="absolute inset-0 bg-orange-500/10 rounded-full blur-2xl animate-pulse" />
+            <div className="relative w-20 h-20 bg-orange-50 border border-orange-200 rounded-3xl flex items-center justify-center shadow-lg">
+              <Lock size={36} className="text-orange-500 animate-bounce" />
+            </div>
+          </div>
+          <h3 className="text-2xl font-display font-black mb-3 text-neutral-900">
+            Buy a Tee to Unlock QR Studio
+          </h3>
+          <p className="text-sm font-semibold max-w-sm text-neutral-500 mb-8 leading-relaxed">
+            Get your physical NFC Smart Tee to activate your official QR Studio, generate custom scan tracking tokens, and export high-resolution QR codes for print.
+          </p>
+          <button
+            onClick={() => window.location.href = '/#pricing'}
+            className="px-8 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-xs uppercase tracking-widest rounded-2xl transition-all shadow-lg active:scale-95"
+          >
+            Buy a Tee to Unlock 🚀
+          </button>
+        </div>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-full blur-3xl -mr-16 -mt-16" />
+      </div>
+    );
+  }
   const [label, setLabel] = useState('');
   const [isCreating, setIsCreating] = useState(false);
 
@@ -163,7 +191,7 @@ export default function QRManager({ initialTokens, profileId, profileSlug }) {
                     </div>
 
                     <div className="flex flex-row md:flex-col gap-3 w-full md:w-auto shrink-0">
-                      <div className="p-4 bg-white rounded-2xl border border-neutral-50 shadow-inner">
+                      <div className="p-4 bg-white rounded-2xl border border-neutral-50 shadow-inner relative flex items-center justify-center">
                         <QRCodeSVG 
                           id={`qr-${token.id}`}
                           value={`https://knowmi.in/q/${token.scan_token}`}
@@ -171,6 +199,9 @@ export default function QRManager({ initialTokens, profileId, profileSlug }) {
                           level="H"
                           includeMargin={false}
                         />
+                        <div className="absolute inset-0 m-auto w-7.5 h-7.5 bg-white rounded-full flex items-center justify-center shadow-lg border border-neutral-100 p-0.5 z-20 select-none overflow-hidden">
+                          <img src="/favicon.png" className="w-full h-full object-contain rounded-full" alt="KnoWMi Logo" />
+                        </div>
                       </div>
                       <div className="flex-1 flex flex-col gap-2">
                         <button 

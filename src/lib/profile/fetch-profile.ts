@@ -4,7 +4,7 @@ import { computeCompletionScore } from '../identity/completion-score'
 
 export async function fetchProfile(slug: string): Promise<ProfileData | null> {
   const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug)
-  
+
   let profile: any = null
 
   // 1. Fetch full record (safe because we filter before returning)
@@ -38,12 +38,12 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
 
   // Define Whitelist of public fields to prevent leakage
   const PUBLIC_WHITELIST = [
-    'id', 'user_id', 'secure_slug', 'first_name', 'last_name', 'avatar_url', 
-    'persona', 'persona_type', 'persona_data', 'bio', 'mood', 'status', 
+    'id', 'user_id', 'secure_slug', 'first_name', 'last_name', 'avatar_url',
+    'persona', 'persona_type', 'persona_data', 'bio', 'mood', 'status',
     'role', 'is_verified', 'created_at', 'wm_code', 'member_id',
-    'instagram', 'instagram_url', 'linkedin', 'linkedin_url', 'github', 
-    'github_url', 'twitter', 'twitter_url', 'youtube', 'youtube_url', 
-    'website', 'website_url', 'whatsapp', 'whatsapp_number'
+    'instagram', 'instagram_url', 'linkedin', 'linkedin_url', 'github',
+    'github_url', 'twitter', 'twitter_url', 'youtube', 'youtube_url',
+    'website', 'website_url', 'whatsapp', 'whatsapp_number', 'views', 'top_location'
   ]
 
   // Create a clean public object
@@ -59,7 +59,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     if (!value) return '';
     let clean = value.trim();
     if (clean.startsWith('http://') || clean.startsWith('https://')) return clean;
-    
+
     if (platform === 'website') return `https://${clean}`;
     if (platform === 'whatsapp') {
       const nums = clean.replace(/\D/g, '');
@@ -71,7 +71,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     }
 
     clean = clean.replace(/^@/, '').replace(/^\//, '');
-    
+
     switch (platform) {
       case 'instagram': return `https://www.instagram.com/${clean}`;
       case 'linkedin': return `https://www.linkedin.com/in/${clean}`;
@@ -92,13 +92,16 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     { platform: 'whatsapp', url: normalizeUrl('whatsapp', publicProfile.whatsapp || publicProfile.whatsapp_number) }
   ].filter(link => link.url)
 
-  const fn = (publicProfile.first_name || '').trim()
-  const ln = (publicProfile.last_name || '').trim()
-  const firstNameIsSlug = fn.includes('_') || (fn === fn.toLowerCase() && !fn.includes(' ') && fn.length > 0)
+  const rawPersonaData = publicProfile.persona_data || {}
+  const activeIdentity = (rawPersonaData.identities && Array.isArray(rawPersonaData.identities))
+    ? (rawPersonaData.identities.find((i: any) => i.active) || rawPersonaData.identities[0])
+    : null
+
+  const fn = (activeIdentity?.first_name || publicProfile.first_name || '').trim()
+  const ln = (activeIdentity?.last_name || publicProfile.last_name || '').trim()
+
   let builtDisplayName: string
-  if (firstNameIsSlug && ln) {
-    builtDisplayName = ln
-  } else if (fn && ln) {
+  if (fn && ln) {
     builtDisplayName = `${fn} ${ln}`
   } else {
     builtDisplayName = fn || ln || publicProfile.secure_slug || 'KnoWMi User'
@@ -111,33 +114,40 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     display_name: builtDisplayName,
     first_name: fn,
     last_name: ln,
-    avatar_url: publicProfile.avatar_url,
-    member_id: String(publicProfile.wm_code || publicProfile.member_id || '').replace('PT-', 'WM-') || `WM-${fn.substring(0,3).toUpperCase()}-001`,
-    persona: (publicProfile.persona || publicProfile.persona_type || 'developer').toLowerCase() as PersonaType,
+    avatar_url: activeIdentity?.avatar_url || publicProfile.avatar_url,
+    member_id: String(publicProfile.wm_code || publicProfile.member_id || '').replace('PT-', 'WM-') || `WM-${fn.substring(0, 3).toUpperCase()}-001`,
+    persona: (activeIdentity?.persona_type || publicProfile.persona || publicProfile.persona_type || 'developer').toLowerCase() as PersonaType,
     mood: publicProfile.mood || 'Expressive & Curious',
-    bio: publicProfile.bio,
+    bio: activeIdentity ? (activeIdentity.bio !== undefined && activeIdentity.bio !== null ? activeIdentity.bio : '') : (publicProfile.bio || ''),
     pulse: (() => {
-      const { score } = computeCompletionScore(
-        (publicProfile.persona || publicProfile.persona_type || 'developer').toLowerCase(),
-        publicProfile.persona_data || {}
-      )
-      return score || 20 
+      const activeType = (activeIdentity?.persona_type || publicProfile.persona || publicProfile.persona_type || 'developer').toLowerCase();
+      const isolatedData = activeIdentity
+        ? { ...activeIdentity.data, type: activeIdentity.data?.type || activeIdentity.persona_type }
+        : (rawPersonaData[publicProfile.persona || publicProfile.persona_type || 'developer'] || { type: publicProfile.persona_type || 'developer' });
+      const { score } = computeCompletionScore(activeType, isolatedData);
+      return score || 20;
     })(),
     tier: publicProfile.status === 'paid' ? 'Creator' : (publicProfile.status === 'team' ? 'Team' : 'Starter'),
+    status: publicProfile.status || 'free',
     is_verified: publicProfile.is_verified ?? (publicProfile.status === 'paid'),
     joined_at: publicProfile.created_at,
+    views: publicProfile.views || 0,
+    top_location: publicProfile.top_location || 'Global',
     social_links,
     persona_data: (() => {
-      let pData = publicProfile.persona_data || {}
-      if (pData.identities && Array.isArray(pData.identities)) {
-        const active = pData.identities.find((i: any) => i.active) || pData.identities[0]
-        if (active) {
-          return { ...active.data, ...pData, type: active.persona_type }
+      if (activeIdentity) {
+        return {
+          ...activeIdentity.data,
+          type: activeIdentity.data?.type || activeIdentity.persona_type
         }
-      } else if (pData[publicProfile.persona || publicProfile.persona_type || 'developer']) {
-        return { ...pData[publicProfile.persona || publicProfile.persona_type || 'developer'], ...pData }
+      } else if (rawPersonaData[publicProfile.persona || publicProfile.persona_type || 'developer']) {
+        const legacyData = rawPersonaData[publicProfile.persona || publicProfile.persona_type || 'developer'] || {}
+        return {
+          ...legacyData,
+          type: publicProfile.persona_type || 'developer'
+        }
       }
-      return { ...pData, type: publicProfile.persona_type || 'developer' }
+      return { type: publicProfile.persona_type || 'developer' }
     })()
   }
 }

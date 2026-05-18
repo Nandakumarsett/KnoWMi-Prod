@@ -8,30 +8,35 @@ interface GamerFormProps {
 }
 
 export function GamerForm({ data = {}, onChange }: GamerFormProps) {
+  const safeData = data || {}
+  const safeStats = safeData.stats || {}
+  const safeGames = Array.isArray(safeData.main_games) ? safeData.main_games : []
+  const safeAchievements = Array.isArray(safeData.achievements) ? safeData.achievements : []
+
   const updateField = (key: string, value: any) => {
-    onChange({ ...data, [key]: value })
+    onChange({ ...safeData, [key]: value })
   }
 
   const updateStats = (key: string, value: any) => {
     onChange({
-      ...data,
-      stats: { ...(data.stats || {}), [key]: value }
+      ...safeData,
+      stats: { ...(safeStats && typeof safeStats === 'object' ? safeStats : {}), [key]: value }
     })
   }
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-12 gap-y-16 items-start">
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-12 gap-y-20 items-start">
       {/* SECTION: IDENTITY */}
       <section className="space-y-4">
         <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 1: Identity</h3>
-        <div className="bg-white p-8 rounded-[24px] border border-[#E5D5C4] shadow-sm space-y-6">
+        <div className="bg-white p-10 rounded-[24px] border border-[#E5D5C4] shadow-sm space-y-10">
           <div>
             <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Gamer Tag / Username</label>
             <input
               type="text"
-              value={data.gamer_tag || ''}
+              value={safeData.gamer_tag || ''}
               onChange={e => updateField('gamer_tag', e.target.value)}
-              placeholder="e.g. NandaKumar"
+              placeholder="e.g. ShadowBlade"
               className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#8C8276] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
             />
           </div>
@@ -39,10 +44,11 @@ export function GamerForm({ data = {}, onChange }: GamerFormProps) {
             <div>
               <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Status</label>
               <select
-                value={data.status || ''}
+                value={safeData.status || ''}
                 onChange={e => updateField('status', e.target.value)}
                 className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all bg-[image:none]"
               >
+                <option value="">Select Status</option>
                 <option value="ONLINE">ONLINE</option>
                 <option value="AFK">AFK</option>
                 <option value="IN-GAME">IN-GAME</option>
@@ -53,7 +59,7 @@ export function GamerForm({ data = {}, onChange }: GamerFormProps) {
               <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Stream URL</label>
               <input
                 type="url"
-                value={data.stream_url || ''}
+                value={safeData.stream_url || ''}
                 onChange={e => updateField('stream_url', e.target.value)}
                 placeholder="e.g. https://twitch.tv/..."
                 className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#8C8276] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
@@ -66,12 +72,12 @@ export function GamerForm({ data = {}, onChange }: GamerFormProps) {
       {/* SECTION: COMBAT STATS */}
       <section className="space-y-4">
         <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 2: Combat Stats</h3>
-        <div className="grid grid-cols-3 gap-4 bg-white p-8 rounded-[24px] border border-[#E5D5C4] shadow-sm">
+        <div className="grid grid-cols-3 gap-6 bg-white p-10 rounded-[24px] border border-[#E5D5C4] shadow-sm">
           <div>
             <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">K/D Ratio</label>
             <input
               type="text"
-              value={data.stats?.kd_ratio || ''}
+              value={safeStats.kd_ratio || ''}
               onChange={e => updateStats('kd_ratio', e.target.value)}
               placeholder="2.4"
               className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
@@ -81,7 +87,7 @@ export function GamerForm({ data = {}, onChange }: GamerFormProps) {
             <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Total Wins</label>
             <input
               type="text"
-              value={data.stats?.total_wins || ''}
+              value={safeStats.total_wins || ''}
               onChange={e => updateStats('total_wins', e.target.value)}
               placeholder="847"
               className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
@@ -91,7 +97,7 @@ export function GamerForm({ data = {}, onChange }: GamerFormProps) {
             <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Hours Played</label>
             <input
               type="text"
-              value={data.stats?.hours_played || ''}
+              value={safeStats.hours_played || ''}
               onChange={e => updateStats('hours_played', e.target.value)}
               placeholder="1,200"
               className="w-full bg-white border border-[#E5D5C4] rounded-[8px] px-4 py-3.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#C1440E] focus:ring-1 focus:ring-[#C1440E] transition-all"
@@ -104,12 +110,12 @@ export function GamerForm({ data = {}, onChange }: GamerFormProps) {
       <section className="space-y-4">
         <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 3: Main Games</h3>
         <div className="space-y-4">
-          {(data.main_games || []).map((game: any, i: number) => (
-            <div key={i} className="p-5 bg-white border border-[#E5D5C4] rounded-[12px] shadow-sm space-y-4 relative">
+          {safeGames.map((game: any, i: number) => (
+            <div key={i} className="p-8 bg-white border border-[#E5D5C4] rounded-[12px] shadow-sm space-y-8 relative">
               <button
                 type="button"
                 onClick={() => {
-                  const copy = [...(data.main_games || [])]
+                  const copy = [...safeGames]
                   copy.splice(i, 1)
                   updateField('main_games', copy)
                 }}
@@ -124,7 +130,7 @@ export function GamerForm({ data = {}, onChange }: GamerFormProps) {
                     type="text"
                     value={game.name || ''}
                     onChange={e => {
-                      const copy = [...(data.main_games || [])]
+                      const copy = [...safeGames]
                       copy[i] = { ...game, name: e.target.value }
                       updateField('main_games', copy)
                     }}
@@ -138,7 +144,7 @@ export function GamerForm({ data = {}, onChange }: GamerFormProps) {
                     type="text"
                     value={game.rank || ''}
                     onChange={e => {
-                      const copy = [...(data.main_games || [])]
+                      const copy = [...safeGames]
                       copy[i] = { ...game, rank: e.target.value }
                       updateField('main_games', copy)
                     }}
@@ -153,8 +159,8 @@ export function GamerForm({ data = {}, onChange }: GamerFormProps) {
             type="button"
             onClick={() => {
               updateField('main_games', [
-                ...(data.main_games || []),
-                { name: 'Valorant', rank: 'MVP' }
+                ...safeGames,
+                { name: 'New Game', rank: 'MVP' }
               ])
             }}
             className="w-full p-4 bg-white border border-dashed border-[#E5D5C4] rounded-[12px] hover:bg-[#FDF6EC] transition-all text-xs font-black uppercase text-[#C1440E] flex items-center justify-center gap-2"
@@ -168,13 +174,13 @@ export function GamerForm({ data = {}, onChange }: GamerFormProps) {
       <section className="space-y-4">
         <h3 className="text-sm font-black uppercase tracking-widest text-[#1A1A1A]">Section 4: Achievements</h3>
         <div className="space-y-4">
-          {(data.achievements || []).map((ach: any, i: number) => (
+          {safeAchievements.map((ach: any, i: number) => (
             <div key={i} className="p-4 bg-white border border-[#E5D5C4] rounded-[12px] flex items-center gap-4 relative shadow-sm">
               <EmojiPicker
                 value={ach.icon || '🏆'}
                 onChange={emoji => {
-                  const achCopy = [...(data.achievements || [])]
-                  achCopy[i] = { ...ach, icon: emoji }
+                  const achCopy = [...safeAchievements]
+                  achCopy[i] = { ...(ach && typeof ach === 'object' ? ach : { label: ach }), icon: emoji }
                   updateField('achievements', achCopy)
                 }}
               />
@@ -182,20 +188,24 @@ export function GamerForm({ data = {}, onChange }: GamerFormProps) {
                 <input
                   type="text"
                   maxLength={60}
-                  value={ach.label || ''}
+                  value={typeof ach === 'string' ? ach : (ach.label || '')}
                   onChange={e => {
-                    const achCopy = [...(data.achievements || [])]
-                    achCopy[i] = { ...ach, label: e.target.value }
+                    const achCopy = [...safeAchievements]
+                    if (typeof ach === 'string') {
+                      achCopy[i] = e.target.value
+                    } else {
+                      achCopy[i] = { ...ach, label: e.target.value }
+                    }
                     updateField('achievements', achCopy)
                   }}
                   placeholder="e.g. Top 1% Accuracy"
                   className="w-full bg-transparent border-0 outline-none p-1 text-sm text-[#1A1A1A] focus:outline-none placeholder:text-[#8C8276]"
                 />
                 <select
-                  value={ach.rarity || 'common'}
+                  value={ach?.rarity || 'common'}
                   onChange={e => {
-                    const achCopy = [...(data.achievements || [])]
-                    achCopy[i] = { ...ach, rarity: e.target.value }
+                    const achCopy = [...safeAchievements]
+                    achCopy[i] = { ...(ach && typeof ach === 'object' ? ach : { label: ach }), rarity: e.target.value }
                     updateField('achievements', achCopy)
                   }}
                   className="bg-transparent text-[10px] font-black uppercase text-[#C1440E] outline-none border-0"
@@ -209,7 +219,7 @@ export function GamerForm({ data = {}, onChange }: GamerFormProps) {
               <button
                 type="button"
                 onClick={() => {
-                  const achCopy = [...(data.achievements || [])]
+                  const achCopy = [...safeAchievements]
                   achCopy.splice(i, 1)
                   updateField('achievements', achCopy)
                 }}
@@ -223,8 +233,8 @@ export function GamerForm({ data = {}, onChange }: GamerFormProps) {
             type="button"
             onClick={() => {
               updateField('achievements', [
-                ...(data.achievements || []),
-                { icon: '🎮', label: '1000 Ranked Matches', rarity: 'epic' }
+                ...safeAchievements,
+                { icon: '🎮', label: 'New Achievement', rarity: 'common' }
               ])
             }}
             className="w-full p-3 bg-white border border-dashed border-[#E5D5C4] rounded-[12px] text-xs font-black uppercase text-[#C1440E] hover:bg-[#FDF6EC] transition-all flex items-center justify-center gap-2"

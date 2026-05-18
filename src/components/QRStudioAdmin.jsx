@@ -281,7 +281,7 @@ USING (EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role
                         </div>
 
                         <div className="flex flex-row md:flex-col gap-3 w-full md:w-auto shrink-0">
-                          <div className="p-3 bg-white rounded-xl border border-neutral-100 flex items-center justify-center">
+                          <div className="p-3 bg-white rounded-xl border border-neutral-100 flex items-center justify-center relative">
                             <QRCodeSVG 
                               id={`qr-${token.id}`}
                               value={`${window.location.origin}/q/${token.scan_token}`}
@@ -289,6 +289,9 @@ USING (EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role
                               level="H"
                               includeMargin={false}
                             />
+                            <div className="absolute inset-0 m-auto w-6.5 h-6.5 bg-white rounded-full flex items-center justify-center shadow-lg border border-neutral-100 p-0.5 z-20 select-none overflow-hidden">
+                              <img src="/favicon.png" className="w-full h-full object-contain rounded-full" alt="KnoWMi Logo" />
+                            </div>
                           </div>
                           <div className="flex-1 flex flex-col gap-2">
                             <button 
