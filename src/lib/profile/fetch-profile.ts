@@ -100,11 +100,8 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
   const fn = (activeIdentity?.first_name || publicProfile.first_name || '').trim()
   const ln = (activeIdentity?.last_name || publicProfile.last_name || '').trim()
 
-  const firstNameIsSlug = fn.includes('_') || (fn === fn.toLowerCase() && !fn.includes(' ') && fn.length > 0)
   let builtDisplayName: string
-  if (firstNameIsSlug && ln) {
-    builtDisplayName = ln
-  } else if (fn && ln) {
+  if (fn && ln) {
     builtDisplayName = `${fn} ${ln}`
   } else {
     builtDisplayName = fn || ln || publicProfile.secure_slug || 'KnoWMi User'
