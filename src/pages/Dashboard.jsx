@@ -2162,7 +2162,7 @@ export default function Dashboard() {
                 <div className="flex items-end justify-between">
                   <div><p className="text-[11px] font-black uppercase text-orange-500 tracking-[0.2em] mb-2">Physical Identification</p><h2 className="text-5xl font-display font-black tracking-tight">QR <span className="gradient-text">Studio</span></h2></div>
                 </div>
-                <QRManager initialTokens={qrTokens} profileId={profile?.id} profileSlug={profile?.secure_slug} />
+                <QRManager initialTokens={qrTokens} profileId={profile?.id} profileSlug={profile?.secure_slug} isPaid={isPaid} />
               </div>
             )}
           </div>
