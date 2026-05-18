@@ -128,6 +128,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
       return score || 20;
     })(),
     tier: publicProfile.status === 'paid' ? 'Creator' : (publicProfile.status === 'team' ? 'Team' : 'Starter'),
+    status: publicProfile.status || 'free',
     is_verified: publicProfile.is_verified ?? (publicProfile.status === 'paid'),
     joined_at: publicProfile.created_at,
     views: publicProfile.views || 0,
