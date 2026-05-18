@@ -134,7 +134,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               {profile.display_name}
             </h1>
             <p className="text-emerald-500 font-bold text-sm sm:text-base tracking-wide flex items-center justify-center gap-1.5">
-              <GraduationCap size={18} /> Student @ {data.university || 'University'}
+              <GraduationCap size={18} /> {data.university ? `Student @ ${data.university}` : 'Student'}
             </p>
           </div>
         </div>
@@ -169,22 +169,28 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         )}
 
         {/* STATS ROW */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-5 w-full mb-10">
-          <div className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-center flex flex-col justify-center transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
-            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1.5 sm:mb-2">Campus Rank</p>
-            <div className="text-xl sm:text-2xl font-black text-neutral-900 flex items-center justify-center gap-1.5 sm:gap-2">
-              Top {data.campus_rank_pct || '—'}% 
-              <Trophy size={18} className="text-amber-400" />
-            </div>
+        {(data.campus_rank_pct || data.study_buddies) && (
+          <div className="grid grid-cols-2 gap-3 sm:gap-5 w-full mb-10">
+            {data.campus_rank_pct && (
+              <div className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-center flex flex-col justify-center transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1.5 sm:mb-2">Campus Rank</p>
+                <div className="text-xl sm:text-2xl font-black text-neutral-900 flex items-center justify-center gap-1.5 sm:gap-2">
+                  Top {data.campus_rank_pct}% 
+                  <Trophy size={18} className="text-amber-400" />
+                </div>
+              </div>
+            )}
+            {data.study_buddies && (
+              <div className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-center flex flex-col justify-center transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1.5 sm:mb-2">Study Buddies</p>
+                <div className="text-xl sm:text-2xl font-black text-neutral-900 flex items-center justify-center gap-1.5 sm:gap-2">
+                  {data.study_buddies}
+                  <Users size={18} className="text-emerald-400" />
+                </div>
+              </div>
+            )}
           </div>
-          <div className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-center flex flex-col justify-center transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
-            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1.5 sm:mb-2">Study Buddies</p>
-            <div className="text-xl sm:text-2xl font-black text-neutral-900 flex items-center justify-center gap-1.5 sm:gap-2">
-              {data.study_buddies || '0'}
-              <Users size={18} className="text-emerald-400" />
-            </div>
-          </div>
-        </div>
+        )}
 
         {/* ABOUT ME */}
         {data.about_me && (
@@ -206,52 +212,58 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         )}
 
         {/* ACADEMIC CORE (Now includes Vibe Badge) */}
-        <div className="w-full mb-10">
-           <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 sm:p-8 rounded-3xl sm:rounded-[2.5rem] border border-emerald-100/50 shadow-sm relative overflow-hidden">
-              <div className="absolute -right-6 -bottom-6 opacity-10">
-                <GraduationCap size={120} className="sm:w-[160px] sm:h-[160px]" />
-              </div>
-              
-              <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-8">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white shadow-sm text-emerald-500 flex items-center justify-center shrink-0">
-                   <GraduationCap size={28} strokeWidth={1.5} />
+        {(data.course || data.year || data.batch_year || data.favorite_subject || data.website) && (
+          <div className="w-full mb-10">
+             <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 sm:p-8 rounded-3xl sm:rounded-[2rem] border border-emerald-100/50 shadow-sm relative overflow-hidden">
+                <div className="absolute -right-6 -bottom-6 opacity-10">
+                  <GraduationCap size={120} className="sm:w-[160px] sm:h-[160px]" />
                 </div>
-                <div className="flex-1 text-left">
-                   <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-emerald-600/60 mb-2">Academic Core</h4>
-                   <h3 className="text-lg sm:text-xl font-black text-neutral-900 leading-tight mb-2">
-                     {data.course || 'Academic Major'}
-                   </h3>
-                   <div className="flex flex-wrap items-center gap-2 mt-3">
-                     <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-lg sm:rounded-full bg-white shadow-sm text-[10px] sm:text-[11px] font-bold text-neutral-600 uppercase tracking-wider">
-                       {data.year || 'Current Status'}
-                     </span>
-                     
-                     {/* VIBE BADGE REMOVED (Moved to Avatar Bubble) */}
-
-                     
-                     {data.batch_year && (
-                       <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-lg sm:rounded-full bg-white shadow-sm text-[10px] sm:text-[11px] font-bold text-neutral-600 uppercase tracking-wider flex items-center gap-1.5">
-                         <Target size={12} className="text-emerald-500"/> {data.batch_year}
-                       </span>
+                
+                <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-8">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white shadow-sm text-emerald-500 flex items-center justify-center shrink-0">
+                     <GraduationCap size={28} strokeWidth={1.5} />
+                  </div>
+                  <div className="flex-1 text-left">
+                     <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-emerald-600/60 mb-2">Academic Core</h4>
+                     {data.course && (
+                       <h3 className="text-lg sm:text-xl font-black text-neutral-900 leading-tight mb-2">
+                         {data.course}
+                       </h3>
                      )}
-                     {data.favorite_subject && (
-                       <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-lg sm:rounded-full bg-white shadow-sm text-[10px] sm:text-[11px] font-bold text-neutral-600 uppercase tracking-wider flex items-center gap-1.5">
-                         <Star size={12} className="text-amber-500" fill="currentColor"/> {data.favorite_subject}
-                       </span>
+                     <div className="flex flex-wrap items-center gap-2 mt-3">
+                       {data.year && (
+                         <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-lg sm:rounded-full bg-white shadow-sm text-[10px] sm:text-[11px] font-bold text-neutral-600 uppercase tracking-wider">
+                           {data.year}
+                         </span>
+                       )}
+                       
+                       {/* VIBE BADGE REMOVED (Moved to Avatar Bubble) */}
+  
+                       
+                       {data.batch_year && (
+                         <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-lg sm:rounded-full bg-white shadow-sm text-[10px] sm:text-[11px] font-bold text-neutral-600 uppercase tracking-wider flex items-center gap-1.5">
+                           <Target size={12} className="text-emerald-500"/> {data.batch_year}
+                         </span>
+                       )}
+                       {data.favorite_subject && (
+                         <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-lg sm:rounded-full bg-white shadow-sm text-[10px] sm:text-[11px] font-bold text-neutral-600 uppercase tracking-wider flex items-center gap-1.5">
+                           <Star size={12} className="text-amber-500" fill="currentColor"/> {data.favorite_subject}
+                         </span>
+                       )}
+                     </div>
+                     
+                     {data.website && (
+                       <a href={data.website} target="_blank" rel="noopener noreferrer" 
+                          className="inline-flex items-center gap-2 mt-4 sm:mt-5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-white border border-emerald-100 text-[10px] sm:text-xs font-black uppercase text-emerald-600 hover:bg-emerald-50 transition-colors shadow-sm group">
+                         <Globe size={14} className="group-hover:rotate-12 transition-transform" />
+                         Visit Portfolio
+                       </a>
                      )}
-                   </div>
-                   
-                   {data.website && (
-                     <a href={data.website} target="_blank" rel="noopener noreferrer" 
-                        className="inline-flex items-center gap-2 mt-4 sm:mt-5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-white border border-emerald-100 text-[10px] sm:text-xs font-black uppercase text-emerald-600 hover:bg-emerald-50 transition-colors shadow-sm group">
-                       <Globe size={14} className="group-hover:rotate-12 transition-transform" />
-                       Visit Portfolio
-                     </a>
-                   )}
+                  </div>
                 </div>
-              </div>
-           </div>
-        </div>
+             </div>
+          </div>
+        )}
 
         {/* SOCIAL PRESENCE */}
         {data?.platforms && data?.platforms?.length > 0 && (
@@ -396,14 +408,11 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                         value={data.playlist_url} 
                         width="100%"
                         height="100%"
-                        level="H" 
+                        level="M" 
                         includeMargin={false}
                         bgColor="#FFFFFF"
                         fgColor="#000000"
                       />
-                      <div className="absolute inset-0 m-auto w-5 h-5 bg-neutral-950 rounded flex items-center justify-center shadow-lg border border-neutral-800 z-20 select-none">
-                        <span className="text-[6px] font-black text-orange-500 tracking-wider font-sans leading-none">WM</span>
-                      </div>
                     </>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-neutral-50">
