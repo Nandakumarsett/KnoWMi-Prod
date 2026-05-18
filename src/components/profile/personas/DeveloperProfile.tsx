@@ -2,6 +2,7 @@ import React from 'react'
 import { ProfileData, DeveloperData } from '../../../types/profile'
 import { getAssetUrl } from '../../../lib/supabase'
 import { UserPlus, Share2, X, Github, Twitter, Linkedin, Monitor, Code2, Database, Layout, Box, Globe, ExternalLink, FileText, Star, Terminal, Mail, Calendar } from 'lucide-react'
+import { ProfileCTAs } from '../shared/ProfileCTAs'
 
 // Simple helper to pick an icon and color for tech stack items
 function getTechIcon(name: string) {
@@ -27,15 +28,15 @@ function getPlatformIcon(platform: string) {
 }
 
 export function DeveloperProfile({ profile }: { profile: ProfileData }) {
-  const data = profile.persona_data as DeveloperData;
+  const data = (profile.persona_data || {}) as DeveloperData;
 
   const aboutMeLanguages = (data.about?.languages && data.about.languages.length > 0)
     ? data.about.languages
-    : ['JavaScript', 'Python', 'C++'];
+    : [];
 
   const techStack = (data.tech_stack && data.tech_stack.length > 0)
     ? data.tech_stack
-    : ['React', 'Node.js', 'Python', 'AWS', 'Docker', 'Git'];
+    : [];
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-neutral-900 font-mono relative overflow-x-hidden selection:bg-green-200 selection:text-green-800">
@@ -191,107 +192,122 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           </div>
         )}
 
-        {/* ABOUT ME IDE Card - Tighter Gaps, Bigger Text, Overlapping corner sticker! */}
-        <div className="w-full mt-10 text-left bg-white border-2 border-neutral-300 border-l-[6px] border-l-green-600 rounded-[32px] rounded-l-none p-8 shadow-xl relative group hover:shadow-2xl hover:border-neutral-400 transition-all duration-300">
-
-          {/* Physical Laptop Sticker 1 - Overlapping Top Left corner cleanly! */}
-          <div className="absolute -top-4 -left-3 rotate-[-10deg] z-40 bg-gradient-to-r from-amber-500 to-orange-600 border-2 border-white text-white px-3 py-1.5 rounded-2xl shadow-lg select-none pointer-events-none transform hover:scale-110 hover:rotate-[-6deg] transition-all duration-300">
-            <span className="text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 font-mono">
-              ⚡️ SUPER_CHARGED
-            </span>
-          </div>
-
-          {/* Decorative IDE buttons */}
-          <div className="absolute top-6 right-6 flex gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
-            <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
-            <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
-          </div>
-
-          <span className="block text-[13px] font-black text-neutral-500 uppercase tracking-[0.2em] mb-6 mt-2">About Me</span>
-          <div className="space-y-4 font-mono text-sm">
-            <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
-              <span className="text-neutral-500 font-bold text-[12px] uppercase tracking-wider flex items-center gap-1.5">
-                <Terminal size={12} className="text-green-600" /> ROLE
-              </span>
-              <span className="text-neutral-900 font-black text-[15px]">{data.about?.role || 'Full Stack Developer'}</span>
-            </div>
-            <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
-              <span className="text-neutral-500 font-bold text-[12px] uppercase tracking-wider flex items-center gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-green-600 animate-pulse" /> STATUS
-              </span>
-              <span className="text-green-700 font-black text-[15px]">{data.about?.status || 'Active'}</span>
-            </div>
-            {data.about?.company && (
-              <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
-                <span className="text-neutral-500 font-bold text-[12px] uppercase tracking-wider flex items-center gap-1.5">
-                  <Box size={12} className="text-blue-600" /> ORGANIZATION
-                </span>
-                <span className="text-neutral-900 font-black text-[15px]">{data.about.company}</span>
-              </div>
-            )}
-            {data.about?.mission && (
-              <div className="pt-2 text-left">
-                <span className="block text-[10px] text-neutral-500 font-black uppercase tracking-widest mb-1.5">MISSION</span>
-                <p className="text-[14px] text-neutral-700 leading-relaxed font-sans font-medium">{data.about.mission}</p>
-              </div>
-            )}
-          </div>
+        {/* Connection CTAs */}
+        <div className="w-full max-w-sm mt-4 z-20">
+          <ProfileCTAs profile={profile} accentColor="#16a34a" />
         </div>
+
+        {/* ABOUT ME IDE Card - Tighter Gaps, Bigger Text, Overlapping corner sticker! */}
+        {(data.about?.role || data.about?.status || data.about?.company || data.about?.mission) && (
+          <div className="w-full mt-10 text-left bg-white border-2 border-neutral-300 border-l-[6px] border-l-green-600 rounded-[32px] rounded-l-none p-8 shadow-xl relative group hover:shadow-2xl hover:border-neutral-400 transition-all duration-300">
+
+            {/* Physical Laptop Sticker 1 - Overlapping Top Left corner cleanly! */}
+            <div className="absolute -top-4 -left-3 rotate-[-10deg] z-40 bg-gradient-to-r from-amber-500 to-orange-600 border-2 border-white text-white px-3 py-1.5 rounded-2xl shadow-lg select-none pointer-events-none transform hover:scale-110 hover:rotate-[-6deg] transition-all duration-300">
+              <span className="text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 font-mono">
+                ⚡️ SUPER_CHARGED
+              </span>
+            </div>
+
+            {/* Decorative IDE buttons */}
+            <div className="absolute top-6 right-6 flex gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
+              <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+              <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+            </div>
+
+            <span className="block text-[13px] font-black text-neutral-500 uppercase tracking-[0.2em] mb-6 mt-2">About Me</span>
+            <div className="space-y-4 font-mono text-sm">
+              {data.about?.role && (
+                <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
+                  <span className="text-neutral-500 font-bold text-[12px] uppercase tracking-wider flex items-center gap-1.5">
+                    <Terminal size={12} className="text-green-600" /> ROLE
+                  </span>
+                  <span className="text-neutral-900 font-black text-[15px]">{data.about.role}</span>
+                </div>
+              )}
+              {data.about?.status && (
+                <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
+                  <span className="text-neutral-500 font-bold text-[12px] uppercase tracking-wider flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-green-600 animate-pulse" /> STATUS
+                  </span>
+                  <span className="text-green-700 font-black text-[15px]">{data.about.status}</span>
+                </div>
+              )}
+              {data.about?.company && (
+                <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
+                  <span className="text-neutral-500 font-bold text-[12px] uppercase tracking-wider flex items-center gap-1.5">
+                    <Box size={12} className="text-blue-600" /> ORGANIZATION
+                  </span>
+                  <span className="text-neutral-900 font-black text-[15px]">{data.about.company}</span>
+                </div>
+              )}
+              {data.about?.mission && (
+                <div className="pt-2 text-left">
+                  <span className="block text-[10px] text-neutral-500 font-black uppercase tracking-widest mb-1.5">MISSION</span>
+                  <p className="text-[14px] text-neutral-700 leading-relaxed font-sans font-medium">{data.about.mission}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* TECH STACK & LANGUAGES - Physical Sticker overlapping top-right! */}
-        <div className="w-full mt-10 bg-white border-2 border-neutral-300 rounded-[32px] p-8 shadow-xl space-y-8 group/tech hover:shadow-2xl hover:border-neutral-400 transition-all duration-300 relative">
+        {((aboutMeLanguages && aboutMeLanguages.length > 0) || (techStack && techStack.length > 0)) && (
+          <div className="w-full mt-10 bg-white border-2 border-neutral-300 rounded-[32px] p-8 shadow-xl space-y-8 group/tech hover:shadow-2xl hover:border-neutral-400 transition-all duration-300 relative">
 
-          {/* Physical Laptop Sticker 2 - Overlapping Top Right corner cleanly! */}
-          <div className="absolute -top-4 -right-3 rotate-[8deg] z-40 bg-gradient-to-r from-blue-500 to-purple-600 border-2 border-white text-white px-3 py-1.5 rounded-2xl shadow-lg select-none pointer-events-none transform hover:scale-110 hover:rotate-[14deg] transition-all duration-300">
-            <span className="text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 font-mono">
-              🚀 SHIP_EVERYDAY
-            </span>
-          </div>
+            {/* Physical Laptop Sticker 2 - Overlapping Top Right corner cleanly! */}
+            <div className="absolute -top-4 -right-3 rotate-[8deg] z-40 bg-gradient-to-r from-blue-500 to-purple-600 border-2 border-white text-white px-3 py-1.5 rounded-2xl shadow-lg select-none pointer-events-none transform hover:scale-110 hover:rotate-[14deg] transition-all duration-300">
+              <span className="text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 font-mono">
+                🚀 SHIP_EVERYDAY
+              </span>
+            </div>
 
-          {aboutMeLanguages && aboutMeLanguages.length > 0 && (
-            <div>
-              <span className="block text-[13px] font-black text-neutral-500 uppercase tracking-[0.2em] mb-4">Core Languages</span>
-              <div className="flex flex-wrap gap-2.5">
-                {aboutMeLanguages.map((l, i) => (
-                  <span key={i} className="text-[12px] bg-neutral-50 hover:bg-green-50 hover:text-green-800 hover:border-green-300 transition-colors text-neutral-800 px-4 py-2 rounded-xl border border-neutral-300 font-black uppercase tracking-wider cursor-default shadow-sm">
-                    {l}
-                  </span>
-                ))}
+            {aboutMeLanguages && aboutMeLanguages.length > 0 && (
+              <div>
+                <span className="block text-[13px] font-black text-neutral-500 uppercase tracking-[0.2em] mb-4">Core Languages</span>
+                <div className="flex flex-wrap gap-2.5">
+                  {aboutMeLanguages.map((l, i) => (
+                    <span key={i} className="text-[12px] bg-neutral-50 hover:bg-green-50 hover:text-green-800 hover:border-green-300 transition-colors text-neutral-800 px-4 py-2 rounded-xl border border-neutral-300 font-black uppercase tracking-wider cursor-default shadow-sm">
+                      {l}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <div>
-            <span className="block text-[13px] font-black text-neutral-500 uppercase tracking-[0.2em] mb-6">Technologies & Frameworks</span>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6">
-              {techStack.map(tech => {
-                const { icon, color } = getTechIcon(tech);
-                return (
-                  <div key={tech} className="flex flex-col items-center gap-2 group cursor-pointer">
-                    <div
-                      className="w-14 h-14 rounded-2xl bg-neutral-50 border border-neutral-200 flex items-center justify-center text-neutral-500 group-hover:scale-110 group-hover:-rotate-3 group-hover:bg-white group-hover:shadow-md transition-all duration-300"
-                      style={{ '--hover-color': color } as React.CSSProperties}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.color = color;
-                        e.currentTarget.style.borderColor = `${color}60`;
-                        e.currentTarget.style.boxShadow = `0 10px 15px -3px ${color}30, 0 4px 6px -4px ${color}30`;
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.color = '';
-                        e.currentTarget.style.borderColor = '';
-                        e.currentTarget.style.boxShadow = '';
-                      }}
-                    >
-                      {icon}
-                    </div>
-                    <span className="text-[11px] font-black text-neutral-600 tracking-wider group-hover:text-neutral-900 transition-colors uppercase">{tech}</span>
-                  </div>
-                )
-              })}
-            </div>
+            {techStack && techStack.length > 0 && (
+              <div>
+                <span className="block text-[13px] font-black text-neutral-500 uppercase tracking-[0.2em] mb-6">Technologies & Frameworks</span>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6">
+                  {techStack.map(tech => {
+                    const { icon, color } = getTechIcon(tech);
+                    return (
+                      <div key={tech} className="flex flex-col items-center gap-2 group cursor-pointer">
+                        <div
+                          className="w-14 h-14 rounded-2xl bg-neutral-50 border border-neutral-200 flex items-center justify-center text-neutral-500 group-hover:scale-110 group-hover:-rotate-3 group-hover:bg-white group-hover:shadow-md transition-all duration-300"
+                          style={{ '--hover-color': color } as React.CSSProperties}
+                          onMouseEnter={e => {
+                            e.currentTarget.style.color = color;
+                            e.currentTarget.style.borderColor = `${color}60`;
+                            e.currentTarget.style.boxShadow = `0 10px 15px -3px ${color}30, 0 4px 6px -4px ${color}30`;
+                          }}
+                          onMouseLeave={e => {
+                            e.currentTarget.style.color = '';
+                            e.currentTarget.style.borderColor = '';
+                            e.currentTarget.style.boxShadow = '';
+                          }}
+                        >
+                          {icon}
+                        </div>
+                        <span className="text-[11px] font-black text-neutral-600 tracking-wider group-hover:text-neutral-900 transition-colors uppercase">{tech}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        )}
 
         {/* RECENT WORKS (PROJECTS) */}
         {data.projects && data.projects.length > 0 && (
