@@ -473,7 +473,7 @@ function ProfileModal({ persona, onClose }) {
         >
           <X size={24} />
         </button>
-        <div className="preview-content-wrapper min-h-full">
+        <div className="preview-content-wrapper min-h-full pointer-events-none select-none">
           <PreviewContent persona={persona} />
         </div>
       </div>
