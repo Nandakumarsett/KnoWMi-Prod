@@ -117,6 +117,10 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
                <label className={labelClasses}>Collaboration Interest</label>
                <textarea rows={2} value={data.collab_types || ''} onChange={e => updateField('collab_types', e.target.value)} placeholder="e.g. Open to UGC, Ambassadorships..." className={`${inputBaseClasses} resize-none`} />
              </div>
+             <div>
+               <label className={labelClasses}>Creative Bio</label>
+               <textarea rows={3} value={data.bio || ''} onChange={e => updateField('bio', e.target.value)} placeholder="Tell the world who you are as a creator..." className={`${inputBaseClasses} resize-none`} />
+             </div>
           </div>
         </div>
       </section>
