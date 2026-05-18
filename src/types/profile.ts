@@ -193,6 +193,7 @@ export interface ProfileData {
   bio: string | null;
   pulse: number;
   tier: 'Founding' | 'Elite' | 'Pro' | 'Starter';
+  status?: string;
   social_links: SocialLink[];
   persona_data: PersonaData;
   is_verified: boolean;
