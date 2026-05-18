@@ -121,13 +121,14 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     member_id: String(publicProfile.wm_code || publicProfile.member_id || '').replace('PT-', 'WM-') || `WM-${fn.substring(0,3).toUpperCase()}-001`,
     persona: (activeIdentity?.persona_type || publicProfile.persona || publicProfile.persona_type || 'developer').toLowerCase() as PersonaType,
     mood: publicProfile.mood || 'Expressive & Curious',
-    bio: activeIdentity?.bio || publicProfile.bio,
+    bio: activeIdentity ? (activeIdentity.bio !== undefined && activeIdentity.bio !== null ? activeIdentity.bio : '') : (publicProfile.bio || ''),
     pulse: (() => {
-      const { score } = computeCompletionScore(
-        (activeIdentity?.persona_type || publicProfile.persona || publicProfile.persona_type || 'developer').toLowerCase(),
-        rawPersonaData
-      )
-      return score || 20 
+      const activeType = (activeIdentity?.persona_type || publicProfile.persona || publicProfile.persona_type || 'developer').toLowerCase();
+      const isolatedData = activeIdentity 
+        ? { ...activeIdentity.data, type: activeIdentity.data?.type || activeIdentity.persona_type }
+        : (rawPersonaData[publicProfile.persona || publicProfile.persona_type || 'developer'] || { type: publicProfile.persona_type || 'developer' });
+      const { score } = computeCompletionScore(activeType, isolatedData);
+      return score || 20;
     })(),
     tier: publicProfile.status === 'paid' ? 'Creator' : (publicProfile.status === 'team' ? 'Team' : 'Starter'),
     is_verified: publicProfile.is_verified ?? (publicProfile.status === 'paid'),
@@ -138,14 +139,17 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     persona_data: (() => {
       if (activeIdentity) {
         return { 
-          ...rawPersonaData, 
           ...activeIdentity.data, 
           type: activeIdentity.data?.type || activeIdentity.persona_type 
         }
       } else if (rawPersonaData[publicProfile.persona || publicProfile.persona_type || 'developer']) {
-        return { ...rawPersonaData[publicProfile.persona || publicProfile.persona_type || 'developer'], ...rawPersonaData }
+        const legacyData = rawPersonaData[publicProfile.persona || publicProfile.persona_type || 'developer'] || {}
+        return { 
+          ...legacyData, 
+          type: publicProfile.persona_type || 'developer' 
+        }
       }
-      return { ...rawPersonaData, type: publicProfile.persona_type || 'developer' }
+      return { type: publicProfile.persona_type || 'developer' }
     })()
   }
 }
