@@ -695,25 +695,13 @@ const PersonaEditor = ({ profile, onUpdate }) => {
           identities: updatedIdentities
         },
 
-        first_name: isMainSync ? firstName : profile.first_name,
+        first_name: profile.first_name,
         last_name: isMainSync ? lastName : profile.last_name,
         bio: isMainSync ? (data.bio || '') : profile.bio,
         ...dbData
       }).eq('id', profile.id)
 
       if (error) throw error
-
-      // 2. Sync to public_profiles table
-      if (isMainSync) {
-        await supabase.from('public_profiles').update({
-          first_name: firstName,
-          last_name: lastName,
-          bio: data.bio || '',
-          avatar_url: avatarUrl,
-          persona_type: persona || 'influencer',
-          ...dbData
-        }).eq('id', profile.id)
-      }
 
       setIdentities(updatedIdentities)
       setShowToast(true)
@@ -1160,6 +1148,26 @@ const IdentityPass = ({ profile }) => {
   const secretSlug = profile?.secure_slug || profile?.id
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`${window.location.origin}/p/${secretSlug}`)}`
 
+  const rawPersonaData = profile?.persona_data || {}
+  const activeIdentity = (rawPersonaData.identities && Array.isArray(rawPersonaData.identities))
+    ? (rawPersonaData.identities.find((i) => i.active) || rawPersonaData.identities[0])
+    : null
+
+  const fn = (activeIdentity?.first_name || profile?.first_name || '').trim()
+  const ln = (activeIdentity?.last_name || profile?.last_name || '').trim()
+
+  const firstNameIsSlug = fn.includes('_') || (fn === fn.toLowerCase() && !fn.includes(' ') && fn.length > 0)
+  let displayName;
+  if (firstNameIsSlug && ln) {
+    displayName = ln;
+  } else if (fn && ln) {
+    displayName = `${fn} ${ln}`;
+  } else {
+    displayName = fn || ln || 'KnoWMi User';
+  }
+
+  const personaTitle = activeIdentity?.display_label || (activeIdentity?.persona_type ? activeIdentity.persona_type.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) : 'Digital Creator');
+
   return (
     <div className="animate-slideUp space-y-8">
       <div className="flex items-end justify-between">
@@ -1224,9 +1232,9 @@ const IdentityPass = ({ profile }) => {
 
             <div className="flex flex-col items-center gap-5 w-64 text-center">
               <div className="flex flex-col items-center gap-0.5">
-                <h3 className="text-3xl font-display font-black leading-tight">{profile?.first_name} {profile?.last_name || ''}</h3>
+                <h3 className="text-3xl font-display font-black leading-tight">{displayName}</h3>
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
-                  {profile?.persona_data?.title || 'Digital Creator'}
+                  {personaTitle}
                 </p>
               </div>
               <p className="text-[14px] font-black text-orange-500 uppercase tracking-[0.3em]">
