@@ -283,8 +283,8 @@ export default function PublicProfile() {
                            alt="QR Code" 
                          />
                          <div className="absolute inset-0 z-10" />
-                         <div className="absolute inset-0 m-auto w-8 h-8 bg-neutral-950 rounded-lg flex items-center justify-center shadow-lg border border-neutral-800 z-20 select-none">
-                           <span className="text-[10px] font-black text-orange-500 tracking-wider font-sans leading-none">WM</span>
+                         <div className="absolute inset-0 m-auto w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg border border-neutral-100 p-0.5 z-20 select-none overflow-hidden">
+                           <img src="/favicon.png" className="w-full h-full object-contain rounded-full" alt="KnoWMi Logo" />
                          </div>
                       </div>
                 </div>
