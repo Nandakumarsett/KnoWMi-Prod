@@ -1354,6 +1354,17 @@ export default function Dashboard() {
       setActiveTab('profile')
     }
   }, [searchParams])
+
+  // If the profile loads and the user has no identities, default to the 'profile' (Identity Studio) tab so they aren't greeted by a blurred analytics lock screen.
+  useEffect(() => {
+    if (profile && !authLoading) {
+      const stored = profile?.persona_data?.identities || []
+      const hasTabParam = searchParams.get('tab')
+      if (stored.length === 0 && !hasTabParam) {
+        setActiveTab('profile')
+      }
+    }
+  }, [profile, authLoading, searchParams])
   
   useEffect(() => {
     localStorage.setItem('knowmi_active_tab', activeTab)
@@ -1694,7 +1705,7 @@ export default function Dashboard() {
                 </div>
               )}
 
-              <div className={`animate-slideUp ${!isPaid ? 'filter blur-[10px] select-none pointer-events-none opacity-30' : ''}`}>
+              <div className={`animate-slideUp ${!isPaid ? 'filter blur-[10px] select-none opacity-30' : ''}`}>
 
               {/* Sub-tab toggle */}
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
