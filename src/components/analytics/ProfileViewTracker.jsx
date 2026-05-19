@@ -89,7 +89,8 @@ export default function ProfileViewTracker({ profileId }) {
               referrer,
               device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
               browser: navigator.userAgent,
-              is_repeat: false
+              is_repeat: false,
+              viewer_id: user?.id
             });
           if (insertError) {
             console.error("Client fallback tracking insert failed:", insertError.message);

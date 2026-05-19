@@ -30,7 +30,7 @@ export default function ViralCard({ bestMoment }) {
         pointerEvents: 'none',
       }} />
 
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100%', flexGrow: 1 }}>
         {bestMoment ? (
           <>
             <p style={{
@@ -48,6 +48,69 @@ export default function ViralCard({ bestMoment }) {
             <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>
               On <strong style={{ color: 'var(--amber)' }}>{bestMoment.bestDate}</strong> — probably that event you went to 👀
             </p>
+
+            {bestMoment.viewedAt && (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                background: 'transparent',
+                border: '1px dashed var(--border)',
+                borderRadius: 16,
+                padding: '10px 12px',
+                marginBottom: 16,
+              }}>
+                {bestMoment.viewerAvatar ? (
+                  <img 
+                    src={bestMoment.viewerAvatar} 
+                    alt={bestMoment.viewerName} 
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: '2px solid var(--coral-glow)',
+                    }}
+                  />
+                ) : (
+                  <div style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: '50%',
+                    background: 'var(--coral-dim)',
+                    border: '1px solid var(--coral-glow)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--coral)',
+                    fontWeight: 'bold',
+                    fontSize: 14,
+                    fontFamily: 'Syne, sans-serif'
+                  }}>
+                    👤
+                  </div>
+                )}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  <span style={{
+                    fontFamily: 'DM Sans, sans-serif',
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: 'var(--text)',
+                    lineHeight: 1.2
+                  }}>
+                    {bestMoment.viewerName}
+                  </span>
+                  <span style={{
+                    fontFamily: 'DM Sans, sans-serif',
+                    fontSize: 10,
+                    color: 'var(--muted)',
+                  }}>
+                    Scanned at {new Date(bestMoment.viewedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                  </span>
+                </div>
+              </div>
+            )}
+
             <div style={{ flexGrow: 1 }} />
             <button
               onClick={handleShare}
@@ -56,6 +119,7 @@ export default function ViralCard({ bestMoment }) {
                 borderRadius: 20, padding: '7px 14px', marginTop: 'auto',
                 fontFamily: 'DM Sans, sans-serif', fontSize: 12, fontWeight: 500,
                 color: 'var(--coral)', cursor: 'pointer', transition: 'background .2s',
+                alignSelf: 'flex-start'
               }}
               onMouseEnter={e => e.currentTarget.style.background = 'var(--coral-glow)'}
               onMouseLeave={e => e.currentTarget.style.background = 'var(--coral-dim)'}
