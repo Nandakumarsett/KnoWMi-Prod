@@ -49,65 +49,68 @@ export default function ViralCard({ bestMoment }) {
               On <strong style={{ color: 'var(--amber)' }}>{bestMoment.bestDate}</strong> — probably that event you went to 👀
             </p>
 
-            {bestMoment.viewedAt && (
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 12,
-                background: 'transparent',
-                border: '1px dashed var(--border)',
-                borderRadius: 16,
-                padding: '10px 12px',
-                marginBottom: 16,
-              }}>
-                {bestMoment.viewerAvatar ? (
-                  <img 
-                    src={bestMoment.viewerAvatar} 
-                    alt={bestMoment.viewerName} 
-                    style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      border: '2px solid var(--coral-glow)',
-                    }}
-                  />
-                ) : (
-                  <div style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: '50%',
-                    background: 'var(--coral-dim)',
-                    border: '1px solid var(--coral-glow)',
+            {bestMoment.viewers && Array.isArray(bestMoment.viewers) && bestMoment.viewers.length > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
+                {bestMoment.viewers.map((viewer, index) => (
+                  <div key={index} style={{
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'var(--coral)',
-                    fontWeight: 'bold',
-                    fontSize: 14,
-                    fontFamily: 'Syne, sans-serif'
+                    gap: 12,
+                    background: 'transparent',
+                    border: '1px dashed var(--border)',
+                    borderRadius: 16,
+                    padding: '10px 12px',
                   }}>
-                    👤
+                    {viewer.avatar ? (
+                      <img 
+                        src={viewer.avatar} 
+                        alt={viewer.name} 
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          border: '2px solid var(--coral-glow)',
+                        }}
+                      />
+                    ) : (
+                      <div style={{
+                        width: 32,
+                        height: 32,
+                        borderRadius: '50%',
+                        background: 'var(--coral-dim)',
+                        border: '1px solid var(--coral-glow)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'var(--coral)',
+                        fontWeight: 'bold',
+                        fontSize: 14,
+                        fontFamily: 'Syne, sans-serif'
+                      }}>
+                        👤
+                      </div>
+                    )}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                      <span style={{
+                        fontFamily: 'DM Sans, sans-serif',
+                        fontSize: 11,
+                        fontWeight: 700,
+                        color: 'var(--text)',
+                        lineHeight: 1.2
+                      }}>
+                        {viewer.name}
+                      </span>
+                      <span style={{
+                        fontFamily: 'DM Sans, sans-serif',
+                        fontSize: 10,
+                        color: 'var(--muted)',
+                      }}>
+                        Scanned on {new Date(viewer.viewedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} at {new Date(viewer.viewedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                      </span>
+                    </div>
                   </div>
-                )}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  <span style={{
-                    fontFamily: 'DM Sans, sans-serif',
-                    fontSize: 11,
-                    fontWeight: 700,
-                    color: 'var(--text)',
-                    lineHeight: 1.2
-                  }}>
-                    {bestMoment.viewerName}
-                  </span>
-                  <span style={{
-                    fontFamily: 'DM Sans, sans-serif',
-                    fontSize: 10,
-                    color: 'var(--muted)',
-                  }}>
-                    Scanned at {new Date(bestMoment.viewedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
-                  </span>
-                </div>
+                ))}
               </div>
             )}
 

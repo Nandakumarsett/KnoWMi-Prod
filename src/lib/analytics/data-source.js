@@ -196,55 +196,71 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       // Find all views on this best day
       const bestDayViews = views.filter(v => new Date(v.viewed_at).toISOString().split('T')[0] === bestDay.day);
       
-      // Select the target view (prefer registered users, otherwise latest view)
-      let targetView = bestDayViews.find(v => v.viewer_id);
-      if (!targetView) {
-        // Sort descending by viewed_at to get the latest
-        const sortedViews = [...bestDayViews].sort((a, b) => new Date(b.viewed_at).getTime() - new Date(a.viewed_at).getTime());
-        targetView = sortedViews[0];
-      } else {
-        // If there are registered users, get the latest one
-        const registeredViews = bestDayViews.filter(v => v.viewer_id)
-          .sort((a, b) => new Date(b.viewed_at).getTime() - new Date(a.viewed_at).getTime());
-        targetView = registeredViews[0];
-      }
+      // Sort views: registered users (having viewer_id or user_id) first, then guest views, both ordered descending by viewed_at
+      const sortedBestDayViews = [...bestDayViews].sort((a, b) => {
+        const aHasId = !!(a.viewer_id || a.user_id);
+        const bHasId = !!(b.viewer_id || b.user_id);
+        if (aHasId && !bHasId) return -1;
+        if (!aHasId && bHasId) return 1;
+        return new Date(b.viewed_at).getTime() - new Date(a.viewed_at).getTime();
+      });
 
-      let viewerName = 'Anonymous Guest';
-      let viewerAvatar = null;
-      let viewedAt = null;
+      // Take top 5 views
+      const top5Views = sortedBestDayViews.slice(0, 5);
 
-      if (targetView) {
-        viewedAt = targetView.viewed_at;
-        if (targetView.viewer_id) {
-          try {
-            const { data: p } = await supabase
-              .from('profiles')
-              .select('first_name, last_name, avatar_url')
-              .eq('id', targetView.viewer_id)
-              .single();
-            if (p) {
-              const fullName = [p.first_name, p.last_name].filter(Boolean).join(' ').trim();
-              viewerName = fullName || 'KnoWMi Member';
-              viewerAvatar = p.avatar_url;
-            }
-          } catch (e) {
-            console.warn("Analytics: Error fetching viewer profile for best moment:", e);
+      // Collect all viewer UUIDs to fetch profiles in a single query
+      const targetViewerIds = [...new Set(top5Views.map(v => v.viewer_id || v.user_id).filter(Boolean))];
+      let viewerProfilesMap = {};
+      
+      if (targetViewerIds.length > 0) {
+        try {
+          const { data: profilesList } = await supabase
+            .from('profiles')
+            .select('id, user_id, first_name, last_name, avatar_url')
+            .or(`id.in.(${targetViewerIds.map(id => `"${id}"`).join(',')}),user_id.in.(${targetViewerIds.map(id => `"${id}"`).join(',')})`);
+          
+          if (profilesList) {
+            profilesList.forEach(p => {
+              if (p.id) viewerProfilesMap[p.id] = p;
+              if (p.user_id) viewerProfilesMap[p.user_id] = p;
+            });
           }
-        } else {
-          // Guest view, enhance name with city/country if present
-          const locationParts = [targetView.city, targetView.country].filter(Boolean);
-          if (locationParts.length > 0) {
-            viewerName = `Guest from ${locationParts.join(', ')}`;
-          }
+        } catch (e) {
+          console.warn("Analytics: Error fetching viewer profiles for bestMoment top 5:", e);
         }
       }
+
+      // Build the viewers list
+      const viewers = top5Views.map(v => {
+        const vId = v.viewer_id || v.user_id;
+        const profile = vId ? viewerProfilesMap[vId] : null;
+
+        let name = 'Anonymous Guest';
+        let avatar = null;
+
+        if (profile) {
+          const fullName = [profile.first_name, profile.last_name].filter(Boolean).join(' ').trim();
+          name = fullName || 'KnoWMi Member';
+          avatar = profile.avatar_url;
+        } else {
+          // If guest, enhance with location if available
+          const locationParts = [v.city, v.country].filter(Boolean);
+          if (locationParts.length > 0) {
+            name = `Guest from ${locationParts.join(', ')}`;
+          }
+        }
+
+        return {
+          name,
+          avatar,
+          viewedAt: v.viewed_at
+        };
+      });
 
       bestMoment = {
         maxScansInDay: bestDay.total_views,
         bestDate: new Date(bestDay.day).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }),
-        viewerName,
-        viewerAvatar,
-        viewedAt
+        viewers
       };
     }
 
