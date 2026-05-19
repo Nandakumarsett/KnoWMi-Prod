@@ -49,6 +49,13 @@ export default function ViralCard({ bestMoment }) {
               On <strong style={{ color: 'var(--amber)' }}>{bestMoment.bestDate}</strong> — probably that event you went to 👀
             </p>
 
+            <p style={{
+              fontFamily: 'DM Sans, sans-serif', fontWeight: 700, fontSize: 11,
+              letterSpacing: '0.08em', color: 'var(--coral)', textTransform: 'uppercase', marginTop: 8, marginBottom: 10,
+            }}>
+              ⏱️ Recent Visitors
+            </p>
+
             {bestMoment.viewers && Array.isArray(bestMoment.viewers) && bestMoment.viewers.length > 0 && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
                 {bestMoment.viewers.map((viewer, index) => (

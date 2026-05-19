@@ -193,20 +193,11 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
 
     let bestMoment = null;
     if (bestDay) {
-      // Find all views on this best day
-      const bestDayViews = views.filter(v => new Date(v.viewed_at).toISOString().split('T')[0] === bestDay.day);
-      
-      // Sort views: registered users (having viewer_id or user_id) first, then guest views, both ordered descending by viewed_at
-      const sortedBestDayViews = [...bestDayViews].sort((a, b) => {
-        const aHasId = !!(a.viewer_id || a.user_id);
-        const bHasId = !!(b.viewer_id || b.user_id);
-        if (aHasId && !bHasId) return -1;
-        if (!aHasId && bHasId) return 1;
-        return new Date(b.viewed_at).getTime() - new Date(a.viewed_at).getTime();
-      });
+      // Sort ALL views chronologically descending by viewed_at to get the most recent overall
+      const sortedAllViews = [...views].sort((a, b) => new Date(b.viewed_at).getTime() - new Date(a.viewed_at).getTime());
 
-      // Take top 5 views
-      const top5Views = sortedBestDayViews.slice(0, 5);
+      // Take top 5 most recent views
+      const top5Views = sortedAllViews.slice(0, 5);
 
       // Collect all viewer UUIDs to fetch profiles in a single query
       const targetViewerIds = [...new Set(top5Views.map(v => v.viewer_id || v.user_id).filter(Boolean))];
