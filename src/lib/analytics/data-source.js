@@ -199,15 +199,68 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       // Take top 5 most recent views
       const top5Views = sortedAllViews.slice(0, 5);
 
-      // Collect all viewer UUIDs to fetch profiles in a single query
-      const targetViewerIds = [...new Set(top5Views.map(v => v.viewer_id || v.user_id).filter(Boolean))];
+      // Build a map of visitor_fp -> viewer_id from all views in the fetched dataset
+      const fpToViewerMap = {};
+      views.forEach(v => {
+        const vId = v.viewer_id || v.user_id;
+        if (v.visitor_fp && vId) {
+          fpToViewerMap[v.visitor_fp] = vId;
+        }
+      });
+
+      const guestFps = top5Views
+        .filter(v => !(v.viewer_id || v.user_id || fpToViewerMap[v.visitor_fp]))
+        .map(v => v.visitor_fp)
+        .filter(Boolean);
+
+      if (guestFps.length > 0) {
+        try {
+          // Query profile_view_events globally
+          const { data: viewFpMappings } = await supabase
+            .from('profile_view_events')
+            .select('visitor_fp, viewer_id')
+            .in('visitor_fp', guestFps)
+            .not('viewer_id', 'is', null);
+            
+          if (viewFpMappings) {
+            viewFpMappings.forEach(m => {
+              if (m.viewer_id) {
+                fpToViewerMap[m.visitor_fp] = m.viewer_id;
+              }
+            });
+          }
+
+          // Query qr_scan_events for scanner_fp mappings
+          const missingFps = guestFps.filter(fp => !fpToViewerMap[fp]);
+          if (missingFps.length > 0) {
+            const { data: scanFpMappings } = await supabase
+              .from('qr_scan_events')
+              .select('scanner_fp, scanner_id')
+              .in('scanner_fp', missingFps)
+              .not('scanner_id', 'is', null);
+              
+            if (scanFpMappings) {
+              scanFpMappings.forEach(m => {
+                if (m.scanner_id) {
+                  fpToViewerMap[m.scanner_fp] = m.scanner_id;
+                }
+              });
+            }
+          }
+        } catch (e) {
+          console.warn("Analytics: Error fetching global fp mappings:", e);
+        }
+      }
+
+      // Collect all resolved viewer IDs to fetch profiles in a single query
+      const targetViewerIds = [...new Set(top5Views.map(v => v.viewer_id || v.user_id || fpToViewerMap[v.visitor_fp]).filter(Boolean))];
       let viewerProfilesMap = {};
       
       if (targetViewerIds.length > 0) {
         try {
           const { data: profilesList } = await supabase
             .from('profiles')
-            .select('id, user_id, first_name, last_name, avatar_url')
+            .select('id, user_id, first_name, last_name, display_name, username, avatar_url, secure_slug')
             .or(`id.in.(${targetViewerIds.map(id => `"${id}"`).join(',')}),user_id.in.(${targetViewerIds.map(id => `"${id}"`).join(',')})`);
           
           if (profilesList) {
@@ -223,7 +276,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
 
       // Build the viewers list
       const viewers = top5Views.map(v => {
-        const vId = v.viewer_id || v.user_id;
+        const vId = v.viewer_id || v.user_id || fpToViewerMap[v.visitor_fp];
         const profile = vId ? viewerProfilesMap[vId] : null;
 
         let name = 'Anonymous Guest';
@@ -231,7 +284,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
 
         if (profile) {
           const fullName = [profile.first_name, profile.last_name].filter(Boolean).join(' ').trim();
-          name = fullName || 'KnoWMi Member';
+          name = fullName || profile.display_name || profile.username || 'KnoWMi Member';
           avatar = profile.avatar_url;
         } else {
           // If guest, enhance with location if available
@@ -244,7 +297,8 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
         return {
           name,
           avatar,
-          viewedAt: v.viewed_at
+          viewedAt: v.viewed_at,
+          secureSlug: profile ? (profile.secure_slug || profile.id) : null
         };
       });
 
