@@ -207,7 +207,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
         try {
           const { data: profilesList } = await supabase
             .from('profiles')
-            .select('id, user_id, first_name, last_name, avatar_url')
+            .select('id, user_id, first_name, last_name, avatar_url, secure_slug')
             .or(`id.in.(${targetViewerIds.map(id => `"${id}"`).join(',')}),user_id.in.(${targetViewerIds.map(id => `"${id}"`).join(',')})`);
           
           if (profilesList) {
@@ -244,7 +244,8 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
         return {
           name,
           avatar,
-          viewedAt: v.viewed_at
+          viewedAt: v.viewed_at,
+          secureSlug: profile ? (profile.secure_slug || profile.id) : null
         };
       });
 
