@@ -33,7 +33,7 @@ export default function ProfileViewTracker({ profileId }) {
         }
 
         // Step 3: Prevent duplicate tracking on refresh (Session-based)
-        const sessionKey = `v_tracked_${profileId}`;
+        const sessionKey = user ? `v_tracked_user_${profileId}` : `v_tracked_anon_${profileId}`;
         if (sessionStorage.getItem(sessionKey)) {
           console.log('Page refresh detected, skipping duplicate analytics tracking.');
           return;
