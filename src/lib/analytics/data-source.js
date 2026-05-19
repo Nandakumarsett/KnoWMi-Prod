@@ -191,6 +191,63 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       };
     }
 
+    let bestMoment = null;
+    if (bestDay) {
+      // Find all views on this best day
+      const bestDayViews = views.filter(v => new Date(v.viewed_at).toISOString().split('T')[0] === bestDay.day);
+      
+      // Select the target view (prefer registered users, otherwise latest view)
+      let targetView = bestDayViews.find(v => v.viewer_id);
+      if (!targetView) {
+        // Sort descending by viewed_at to get the latest
+        const sortedViews = [...bestDayViews].sort((a, b) => new Date(b.viewed_at).getTime() - new Date(a.viewed_at).getTime());
+        targetView = sortedViews[0];
+      } else {
+        // If there are registered users, get the latest one
+        const registeredViews = bestDayViews.filter(v => v.viewer_id)
+          .sort((a, b) => new Date(b.viewed_at).getTime() - new Date(a.viewed_at).getTime());
+        targetView = registeredViews[0];
+      }
+
+      let viewerName = 'Anonymous Guest';
+      let viewerAvatar = null;
+      let viewedAt = null;
+
+      if (targetView) {
+        viewedAt = targetView.viewed_at;
+        if (targetView.viewer_id) {
+          try {
+            const { data: p } = await supabase
+              .from('profiles')
+              .select('first_name, last_name, avatar_url')
+              .eq('id', targetView.viewer_id)
+              .single();
+            if (p) {
+              const fullName = [p.first_name, p.last_name].filter(Boolean).join(' ').trim();
+              viewerName = fullName || 'KnoWMi Member';
+              viewerAvatar = p.avatar_url;
+            }
+          } catch (e) {
+            console.warn("Analytics: Error fetching viewer profile for best moment:", e);
+          }
+        } else {
+          // Guest view, enhance name with city/country if present
+          const locationParts = [targetView.city, targetView.country].filter(Boolean);
+          if (locationParts.length > 0) {
+            viewerName = `Guest from ${locationParts.join(', ')}`;
+          }
+        }
+      }
+
+      bestMoment = {
+        maxScansInDay: bestDay.total_views,
+        bestDate: new Date(bestDay.day).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }),
+        viewerName,
+        viewerAvatar,
+        viewedAt
+      };
+    }
+
     // Peak scan hour
     const hourCounts = {};
     views.forEach(v => {
@@ -271,6 +328,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       weekSparkline,
       streak: { current: currentStreak, best: currentStreak, status: currentStreak > 0 ? 'Active' : 'Building' },
       bestDay,
+      bestMoment,
       peakHour,
       totalLinkTaps: links.length
     };
