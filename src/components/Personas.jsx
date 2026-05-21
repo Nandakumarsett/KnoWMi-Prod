@@ -195,16 +195,18 @@ function PreviewContent({ persona }) {
            ))}
         </div>
         
-        <div className="h-44 bg-gradient-to-br from-orange-500 to-rose-500 relative z-10 overflow-hidden">
-          {d.banner ? (
-            <img src={getAssetUrl(d.banner)} className="absolute inset-0 w-full h-full object-cover opacity-80" alt="Banner" />
-          ) : (
-            <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
-          )}
-          <div className="absolute -bottom-8 left-8 p-1.5 bg-white rounded-full shadow-2xl">
-             <img src={getAssetUrl(d.avatar)} className="w-24 h-24 rounded-full object-cover border-2 border-orange-50" alt="" />
+        <div className="h-44 bg-gradient-to-br from-orange-500 to-rose-500 relative z-10">
+          <div className="absolute inset-0 overflow-hidden">
+            {d.banner ? (
+              <img src={getAssetUrl(d.banner)} className="absolute inset-0 w-full h-full object-cover opacity-80" alt="Banner" />
+            ) : (
+              <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+            )}
           </div>
-          <div className="absolute top-4 right-8 text-white/60"><Sparkles size={28} className="animate-pulse" /></div>
+          <div className="absolute -bottom-8 left-8 p-1.5 bg-white rounded-full shadow-2xl z-20">
+             <img src={getAssetUrl(d.avatar)} className="w-24 h-24 rounded-full object-cover border-2 border-orange-50 relative z-20" alt="" />
+          </div>
+          <div className="absolute top-4 right-8 text-white/60 z-20"><Sparkles size={28} className="animate-pulse" /></div>
         </div>
         <div className="pt-12 px-8 relative z-20">
            <div className="flex items-center gap-2 mb-1">
