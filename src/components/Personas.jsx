@@ -13,6 +13,7 @@ const initialPersonas = [
       name: 'Sneha Kapoor',
       handle: '@sneha.kapoor',
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=256&h=256&q=80',
+      banner: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=800&q=80',
       type: 'LIFESTYLE CREATOR',
       tagline: 'Building a community around sustainable luxury and mindful living.',
       stats: [{ l: 'Reach', v: '120K+' }, { l: 'Engagement', v: '4.8%' }],
@@ -80,6 +81,7 @@ function PreviewContent({ persona }) {
           company: 'KnoWMi Protocol',
           mission: persona.data.mission
         },
+        featured_work_url: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80',
         platforms: [
           { platform: 'github', url: 'https://github.com' },
           { platform: 'twitter', url: 'https://twitter.com' },
@@ -193,8 +195,12 @@ function PreviewContent({ persona }) {
            ))}
         </div>
         
-        <div className="h-44 bg-gradient-to-br from-orange-500 to-rose-500 relative z-10">
-          <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+        <div className="h-44 bg-gradient-to-br from-orange-500 to-rose-500 relative z-10 overflow-hidden">
+          {d.banner ? (
+            <img src={getAssetUrl(d.banner)} className="absolute inset-0 w-full h-full object-cover opacity-80" alt="Banner" />
+          ) : (
+            <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+          )}
           <div className="absolute -bottom-8 left-8 p-1.5 bg-white rounded-full shadow-2xl">
              <img src={getAssetUrl(d.avatar)} className="w-24 h-24 rounded-full object-cover border-2 border-orange-50" alt="" />
           </div>
