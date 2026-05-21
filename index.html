@@ -33,7 +33,12 @@
     <link rel="apple-touch-icon" href="/favicon.png?v=2" />
 
     <!-- Preload critical assets -->
-    <link rel="preload" as="image" href="/logo-square.png" />
+    <link rel="preload" as="image" href="/logo-square.png" fetchpriority="high" />
+    <link rel="preload" as="image" href="/favicon.png?v=2" fetchpriority="high" />
+
+    <!-- DNS prefetch for external resources (Supabase storage, Razorpay) -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://checkout.razorpay.com" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

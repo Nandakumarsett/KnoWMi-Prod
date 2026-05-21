@@ -1,0 +1,97 @@
+import { serve } from "https://deno.land/std@0.177.0/http/server.ts"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.44.0"
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
+  try {
+    const { plan_id, amount_override, user_id, customer_details } = await req.json()
+
+    // 1. Determine price on the backend securely.
+    // For fixed subscription plans, prices are hardcoded here (tamper-proof).
+    // For store items (PersonaStore), `amount_override` is used — the price
+    // comes from the DB-driven design card, not user input.
+    let pricePaise = 0
+
+    if (amount_override && typeof amount_override === 'number' && amount_override > 0) {
+      // Store item: use the amount passed (already in paise, from selectedDesign.price * qty * 100)
+      pricePaise = amount_override
+    } else if (plan_id === 'starter') {
+      pricePaise = 79900
+    } else if (plan_id === 'creator') {
+      pricePaise = 99900
+    } else if (plan_id === 'team') {
+      pricePaise = 69900
+    } else if (plan_id === 'corporate') {
+      pricePaise = 59900
+    } else {
+      throw new Error("Invalid plan or missing amount")
+    }
+
+
+    // 2. Call Razorpay API to create an order
+    const rzpKey = Deno.env.get('RAZORPAY_KEY_ID')
+    const rzpSecret = Deno.env.get('RAZORPAY_KEY_SECRET')
+    
+    if (!rzpKey || !rzpSecret) {
+      throw new Error("Razorpay credentials are not set in Edge Function secrets")
+    }
+    
+    const basicAuth = btoa(`${rzpKey}:${rzpSecret}`)
+
+    const rzpResponse = await fetch('https://api.razorpay.com/v1/orders', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${basicAuth}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        amount: pricePaise,
+        currency: 'INR',
+        receipt: `receipt_${Date.now()}`
+      })
+    })
+
+    const rzpData = await rzpResponse.json()
+    if (!rzpResponse.ok) {
+      throw new Error(`Razorpay Error: ${rzpData.error?.description || 'Unknown error'}`)
+    }
+
+    // 3. Save to Supabase using the Service Role Key (bypasses RLS)
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    )
+
+    const { error: dbError } = await supabaseClient
+      .from('payment_orders')
+      .insert({
+        user_id: user_id || null,
+        razorpay_order_id: rzpData.id,
+        amount_paise: pricePaise,
+        items: [{ plan_id, quantity: 1 }],
+        customer_details
+      })
+
+    if (dbError) throw dbError
+
+    // 4. Return order ID to frontend
+    return new Response(
+      JSON.stringify({ order_id: rzpData.id, amount: pricePaise }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
+
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ error: error.message }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+    )
+  }
+})

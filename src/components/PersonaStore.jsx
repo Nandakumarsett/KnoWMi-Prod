@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabase'
+import LazyImage from './ui/LazyImage'
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
 
@@ -12,7 +13,7 @@ function ProductCard({ design, onClick }) {
       style={{ aspectRatio: '4/5' }}>
       
       <div className="absolute inset-0 w-full h-full transition-transform duration-500 group-hover:scale-110">
-        <img src={imageUrl} alt={design.name} className="w-full h-full object-cover" />
+        <LazyImage src={imageUrl} alt={design.name} className="w-full h-full object-cover" skeletonClassName="absolute inset-0" />
       </div>
 
       <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f11] via-[#0f0f11]/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity" />
@@ -36,6 +37,7 @@ export default function PersonaStore({ onClose, onAuth, user }) {
   const [qrPlacement, setQrPlacement] = useState('back')
   const [qty, setQty] = useState(1)
   const [activeImage, setActiveImage] = useState('model') // model, front, back
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
 
   useEffect(() => {
     document.body.style.overflow = 'hidden'
@@ -55,25 +57,84 @@ export default function PersonaStore({ onClose, onAuth, user }) {
     setLoading(false)
   }
 
-  const handleOrder = () => {
+  const handleOrder = async () => {
     if (!user) {
       onAuth()
       return
     }
 
-    const totalPrice = selectedDesign.price * qty
-    const msg = `Hi KnoWMi! I want to order a Persona Tee.
-    
-📦 *Order Details:*
-• Category: ${selectedDesign.category}
-• Design: ${selectedDesign.name}
-• Size: ${size}
-• QR Placement: ${qrPlacement}
-• Quantity: ${qty}
-💰 *Total:* ₹${totalPrice.toLocaleString('en-IN')}
+    setCheckoutLoading(true)
 
-Please share payment details!`
-    window.open(`https://wa.me/917981325397?text=${encodeURIComponent(msg)}`, '_blank')
+    // Dynamically load Razorpay SDK
+    const sdkLoaded = await new Promise((resolve) => {
+      if (window.Razorpay) return resolve(true)
+      const script = document.createElement('script')
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+      script.onload = () => resolve(true)
+      script.onerror = () => resolve(false)
+      document.body.appendChild(script)
+    })
+
+    if (!sdkLoaded) {
+      alert('Razorpay SDK failed to load. Please check your connection.')
+      setCheckoutLoading(false)
+      return
+    }
+
+    try {
+      // Map design price to paise (multiply by qty)
+      const amountPaise = selectedDesign.price * qty * 100
+
+      // Create secure order via backend Edge Function
+      const { data: orderData, error: apiError } = await supabase.functions.invoke('create-razorpay-order', {
+        body: {
+          plan_id: selectedDesign.id, // Edge function will need to handle dynamic product IDs
+          amount_override: amountPaise, // Pass actual amount for store items
+          user_id: user.id,
+          customer_details: {
+            design: selectedDesign.name,
+            category: selectedDesign.category,
+            size,
+            qr_placement: qrPlacement,
+            quantity: qty
+          }
+        }
+      })
+
+      if (apiError || !orderData) throw new Error(apiError?.message || 'Failed to create order')
+
+      // Open Razorpay Modal
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: orderData.amount,
+        currency: 'INR',
+        name: 'KnoWMi',
+        description: `${selectedDesign.name} — ${selectedDesign.category} Collection`,
+        image: 'https://knowmi.co/favicon.ico',
+        order_id: orderData.order_id,
+        handler: function (response) {
+          alert(`Payment successful! Your ${selectedDesign.name} tee is on its way. 🎉 (ID: ${response.razorpay_payment_id})`)
+          onClose()
+        },
+        prefill: {
+          email: user.email,
+        },
+        theme: {
+          color: '#f97316'
+        }
+      }
+
+      const paymentObject = new window.Razorpay(options)
+      paymentObject.on('payment.failed', function (response) {
+        alert('Payment Failed. Reason: ' + response.error.description)
+      })
+      paymentObject.open()
+
+    } catch (error) {
+      alert('Error initiating checkout: ' + error.message)
+    } finally {
+      setCheckoutLoading(false)
+    }
   }
 
   if (loading) {
@@ -137,7 +198,7 @@ Please share payment details!`
                     style={{ aspectRatio: '1/1' }}>
                     
                     <div className="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-110 group-hover:rotate-2">
-                      <img src={bgImg} alt={c} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+                      <LazyImage src={bgImg} alt={c} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" skeletonClassName="absolute inset-0" />
                     </div>
                     
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f11] via-[#0f0f11]/60 to-transparent" />
@@ -177,12 +238,16 @@ Please share payment details!`
                 {/* Product Images Gallery */}
                 <div className="w-full lg:w-1/2 flex flex-col gap-4">
                   {/* Main Display */}
-                  <div className="rounded-2xl overflow-hidden border border-white/10 bg-[#0f0f11] flex items-center justify-center relative" style={{ aspectRatio: '4/5' }}>
-                    {activeImage === 'model' && selectedDesign.model_image_url && <img src={selectedDesign.model_image_url} className="w-full h-full object-cover animate-fade-in" />}
-                    {activeImage === 'front' && selectedDesign.front_image_url && <img src={selectedDesign.front_image_url} className="w-full h-full object-cover animate-fade-in" />}
-                    {activeImage === 'back' && selectedDesign.back_image_url && <img src={selectedDesign.back_image_url} className="w-full h-full object-cover animate-fade-in" />}
-                    
-                    {/* Fallback */}
+                  <div className="rounded-2xl overflow-hidden border border-white/10 bg-[#0f0f11] flex items-center justify-center relative" style={{ aspectRatio: '4/5', position: 'relative' }}>
+                    {activeImage === 'model' && selectedDesign.model_image_url && (
+                      <LazyImage key={`model-${selectedDesign.id}`} src={selectedDesign.model_image_url} alt={selectedDesign.name} className="w-full h-full object-cover" eager skeletonClassName="absolute inset-0" />
+                    )}
+                    {activeImage === 'front' && selectedDesign.front_image_url && (
+                      <LazyImage key={`front-${selectedDesign.id}`} src={selectedDesign.front_image_url} alt={selectedDesign.name} className="w-full h-full object-cover" eager skeletonClassName="absolute inset-0" />
+                    )}
+                    {activeImage === 'back' && selectedDesign.back_image_url && (
+                      <LazyImage key={`back-${selectedDesign.id}`} src={selectedDesign.back_image_url} alt={selectedDesign.name} className="w-full h-full object-cover" eager skeletonClassName="absolute inset-0" />
+                    )}
                     {(!selectedDesign[`${activeImage}_image_url`]) && (
                       <div className="text-[var(--muted)] text-sm">Image not available</div>
                     )}
@@ -191,18 +256,18 @@ Please share payment details!`
                   {/* Thumbnails */}
                   <div className="flex gap-4">
                     {selectedDesign.model_image_url && (
-                      <button onClick={() => setActiveImage('model')} className={`flex-1 rounded-xl overflow-hidden border-2 transition-all ${activeImage === 'model' ? 'border-[#FF9933]' : 'border-white/10 opacity-50 hover:opacity-100'}`} style={{ aspectRatio: '1/1' }}>
-                        <img src={selectedDesign.model_image_url} className="w-full h-full object-cover" />
+                      <button onClick={() => setActiveImage('model')} className={`flex-1 rounded-xl overflow-hidden border-2 transition-all ${activeImage === 'model' ? 'border-[#FF9933]' : 'border-white/10 opacity-50 hover:opacity-100'}`} style={{ aspectRatio: '1/1', position: 'relative' }}>
+                        <LazyImage src={selectedDesign.model_image_url} alt="Model" className="w-full h-full object-cover" skeletonClassName="absolute inset-0" />
                       </button>
                     )}
                     {selectedDesign.front_image_url && (
-                      <button onClick={() => setActiveImage('front')} className={`flex-1 rounded-xl overflow-hidden border-2 transition-all ${activeImage === 'front' ? 'border-[#FF9933]' : 'border-white/10 opacity-50 hover:opacity-100'}`} style={{ aspectRatio: '1/1' }}>
-                        <img src={selectedDesign.front_image_url} className="w-full h-full object-cover" />
+                      <button onClick={() => setActiveImage('front')} className={`flex-1 rounded-xl overflow-hidden border-2 transition-all ${activeImage === 'front' ? 'border-[#FF9933]' : 'border-white/10 opacity-50 hover:opacity-100'}`} style={{ aspectRatio: '1/1', position: 'relative' }}>
+                        <LazyImage src={selectedDesign.front_image_url} alt="Front" className="w-full h-full object-cover" skeletonClassName="absolute inset-0" />
                       </button>
                     )}
                     {selectedDesign.back_image_url && (
-                      <button onClick={() => setActiveImage('back')} className={`flex-1 rounded-xl overflow-hidden border-2 transition-all ${activeImage === 'back' ? 'border-[#FF9933]' : 'border-white/10 opacity-50 hover:opacity-100'}`} style={{ aspectRatio: '1/1' }}>
-                        <img src={selectedDesign.back_image_url} className="w-full h-full object-cover" />
+                      <button onClick={() => setActiveImage('back')} className={`flex-1 rounded-xl overflow-hidden border-2 transition-all ${activeImage === 'back' ? 'border-[#FF9933]' : 'border-white/10 opacity-50 hover:opacity-100'}`} style={{ aspectRatio: '1/1', position: 'relative' }}>
+                        <LazyImage src={selectedDesign.back_image_url} alt="Back" className="w-full h-full object-cover" skeletonClassName="absolute inset-0" />
                       </button>
                     )}
                   </div>
@@ -261,11 +326,18 @@ Please share payment details!`
                         <button onClick={() => setQty(q => Math.min(50, q + 1))} className="w-14 h-full text-xl hover:bg-white/10 rounded-r-xl transition-colors">+</button>
                       </div>
                       
-                      <button onClick={handleOrder}
-                        className="flex-1 w-full h-14 rounded-xl font-bold text-white text-lg transition-transform hover:-translate-y-1 flex items-center justify-center gap-3"
-                        style={{ background: 'linear-gradient(135deg, #25D366, #128C7E)', boxShadow: '0 8px 24px rgba(37,211,102,0.2)' }}>
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.711.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 3.825 0 6.938 3.112 6.938 6.937 0 3.825-3.113 6.938-6.938 6.938z"/></svg>
-                        Order via WhatsApp
+                      <button
+                        onClick={handleOrder}
+                        disabled={checkoutLoading}
+                        className="flex-1 w-full h-14 rounded-xl font-bold text-white text-lg transition-all hover:-translate-y-1 flex items-center justify-center gap-3 disabled:opacity-50"
+                        style={{ background: 'linear-gradient(135deg, #f97316, #ea580c)', boxShadow: '0 8px 24px rgba(249,115,22,0.3)' }}
+                      >
+                        {checkoutLoading ? (
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                        )}
+                        {checkoutLoading ? 'Securing Checkout...' : `Pay ₹${(selectedDesign.price * qty).toLocaleString('en-IN')} Securely`}
                       </button>
                     </div>
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { supabase, getAssetUrl } from '../lib/supabase'
 import { ShoppingBag, ArrowRight, Star } from 'lucide-react'
+import LazyImage from './ui/LazyImage'
 
 export default function Collection({ onSelectDesign }) {
   const [designs, setDesigns] = useState([])
@@ -66,12 +67,12 @@ export default function Collection({ onSelectDesign }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {designs.map((d) => (
               <div key={d.id} className="group relative bg-neutral-50 rounded-[2.5rem] overflow-hidden border border-neutral-100 transition-all duration-500 hover:shadow-2xl hover:shadow-orange-500/10 hover:-translate-y-1.5">
-                <div className="aspect-[4/5] overflow-hidden relative">
-                  <img 
+                <div className="aspect-[4/5] overflow-hidden relative bg-neutral-100">
+                  <LazyImage 
                     src={getAssetUrl(d.model_image_url || d.front_image_url) || '/assets/tees/front.png'} 
                     alt={d.name} 
-                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    skeletonClassName="absolute inset-0"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
                     <button 
@@ -104,8 +105,8 @@ export default function Collection({ onSelectDesign }) {
               { id: 'f3', name: 'Street Saffron', category: 'Elite', img: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&q=80&w=800' }
             ].map((d) => (
               <div key={d.id} className="group relative bg-neutral-50 rounded-[2.5rem] overflow-hidden border border-neutral-100 transition-all duration-500 hover:shadow-2xl hover:shadow-orange-500/10 hover:-translate-y-1.5">
-                <div className="aspect-[4/5] overflow-hidden relative">
-                  <img src={d.img} alt={d.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+                <div className="aspect-[4/5] overflow-hidden relative bg-neutral-100">
+                  <LazyImage src={d.img} alt={d.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" skeletonClassName="absolute inset-0" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
                     <button onClick={() => onSelectDesign(d)} className="w-full bg-white text-black py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Select Design</button>
                   </div>

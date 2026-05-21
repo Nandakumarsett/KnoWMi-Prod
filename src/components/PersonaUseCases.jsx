@@ -74,7 +74,7 @@ export default function PersonaUseCases() {
         <div className="mt-16 reveal text-center">
           <p className="text-sm text-neutral-400 font-medium mb-6">Also perfect for:</p>
            <div className="flex flex-wrap justify-center gap-4">
-              {['Gamers', 'Influencers', 'Fitness Coaches', 'Entrepreneurs', 'Artists'].map(p => (
+              {['Entrepreneurs', 'Artists', 'Founders', 'Freelancers', 'Athletes'].map(p => (
                 <span key={p} className="px-6 py-3 rounded-2xl bg-white border border-neutral-100 text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:text-orange-500 hover:border-orange-200 transition-colors cursor-pointer">
                   {p}
                 </span>

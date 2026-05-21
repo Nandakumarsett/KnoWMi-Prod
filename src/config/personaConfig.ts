@@ -118,6 +118,7 @@ const studentConfig: PersonaConfig = {
   ]
 };
 
+
 const gamerConfig: PersonaConfig = {
   id: 'gamer',
   name: 'Gamer',
@@ -146,5 +147,5 @@ export const personaConfigs: Record<string, PersonaConfig> = {
   influencer: creatorConfig,
   creator: creatorConfig,
   student: studentConfig,
-  gamer: gamerConfig
 };
+

@@ -560,3 +560,75 @@
   50%       { opacity: 0.8; }
 }
 
+/* ============================================================
+   GLOBAL IMAGE OPTIMISATION
+   Prevents flicker, flash-of-unstyled-content, and layout shift
+   ============================================================ */
+
+/* LazyImage shimmer animation */
+@keyframes knowmi-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Every <img> on the site: GPU composited, no layout shift */
+img {
+  display: block;
+  max-width: 100%;
+  /* Prevent the default "broken image" icon from flashing */
+  color: transparent;
+  /* Smooth rendering on high-DPI screens */
+  image-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Utility: fade-in an image once the browser loads it */
+.img-fade {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.img-fade.loaded {
+  opacity: 1;
+}
+
+/* Prevent layout shift on images inside flex/grid containers */
+.img-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Logo — never flash */
+.site-logo {
+  will-change: auto;
+  contain: layout style;
+}
+
+/* Vibecard slide down animation */
+@keyframes vibeSlideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Dashboard skeleton */
+@keyframes animate-slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slideUp {
+  animation: animate-slideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Prevent images from stretching during load inside aspect-ratio containers */
+[style*="aspect-ratio"] img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

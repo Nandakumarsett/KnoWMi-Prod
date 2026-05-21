@@ -97,7 +97,9 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
     // Calculate daily stats in the last 30 days
     const dailyMap = {};
     views.forEach(v => {
-      const day = new Date(v.viewed_at).toISOString().split('T')[0];
+      const d = new Date(v.viewed_at);
+      // Use LOCAL date to avoid IST midnight UTC offset
+      const day = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
       if (!dailyMap[day]) dailyMap[day] = { day, total_views: 0, unique_views: new Set() };
       dailyMap[day].total_views++;
       dailyMap[day].unique_views.add(v.visitor_fp || v.id);
@@ -116,16 +118,21 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
     const weekUniqueSparkline = Array(7).fill(0);
     for (let i = 0; i < 7; i++) {
       const d = new Date(); d.setDate(d.getDate() - (6 - i));
-      const ds = d.toISOString().split('T')[0];
+      // Use local date parts for bucket key
+      const ds = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
       const match = dailyStats.find(row => row.day === ds);
       weekSparkline[i] = match ? match.total_views : 0;
       weekUniqueSparkline[i] = match ? match.unique_views : 0;
     }
 
-    // Filter events from today
+    // Filter events from today — compare using LOCAL date (not UTC) to avoid IST timezone mismatch
     const nowLocal = new Date();
-    const todayStart = new Date(nowLocal.getFullYear(), nowLocal.getMonth(), nowLocal.getDate()).toISOString().split('T')[0];
-    const todayViews = views.filter(v => new Date(v.viewed_at).toISOString().split('T')[0] === todayStart);
+    const todayLocalStr = `${nowLocal.getFullYear()}-${String(nowLocal.getMonth() + 1).padStart(2, '0')}-${String(nowLocal.getDate()).padStart(2, '0')}`;
+    const todayViews = views.filter(v => {
+      const d = new Date(v.viewed_at);
+      const localStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      return localStr === todayLocalStr;
+    });
     const realTimeToday = todayViews.length;
 
     // Top Cities

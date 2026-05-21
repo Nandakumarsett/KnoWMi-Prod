@@ -73,29 +73,30 @@ export function Footer() {
   const links = {
     Product: [
       { name: 'How It Works', href: '/#how-it-works' },
-      { name: 'Features', href: '/#features' },
+      { name: 'Personas', href: '/#personas' },
       { name: 'Pricing', href: '/#pricing' },
-      { name: 'Leaderboard', href: '/leaderboard' }
+      { name: 'Shop Collection', href: '/shop' },
     ],
     Company: [
       { name: 'About Us', href: '/about' },
-      { name: 'Blog', href: '/blog' },
-      { name: 'Press Kit', href: '/press' },
-      { name: 'Careers', href: '/about' }
+      { name: 'Leaderboard', href: '/leaderboard' },
+      { name: 'Contact Us', href: 'mailto:support.knowmi@gmail.com', external: true },
+      { name: 'WhatsApp Us', href: 'https://wa.me/917981325397', external: true },
     ],
     Support: [
       { name: 'FAQs', href: '/#faq' },
-      { name: 'Email Support', href: 'mailto:support.knowmi@gmail.com', external: true },
+      { name: 'Track My Order', href: '/track' },
       { name: 'Return Policy', href: '/legal#refund' },
-      { name: 'Track Order', href: '/track' }
+      { name: 'Shipping Info', href: '/legal#shipping' },
     ],
     Legal: [
       { name: 'Privacy Policy', href: '/legal#privacy' },
       { name: 'Terms of Service', href: '/legal#terms' },
       { name: 'Refund Policy', href: '/legal#refund' },
-      { name: 'Sitemap', href: '/' }
+      { name: 'Shipping Policy', href: '/legal#shipping' },
     ],
   }
+
 
   return (
     <footer style={{ background: '#05050a', borderTop: '1px solid rgba(255,255,255,0.05)' }}>

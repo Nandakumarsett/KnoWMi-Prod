@@ -18,18 +18,46 @@ export default function ProfileViewTracker({ profileId }) {
 
         // Step 2: Check if the viewer is the owner of the profile
         const { data: { user } } = await supabase.auth.getUser();
+        let viewerProfile = null;
         if (user) {
-          const { data: viewerProfile } = await supabase
+          const { data: profileData } = await supabase
             .from('profiles')
             .select('id')
             .eq('user_id', user.id)
             .single();
-          
-          if (viewerProfile && viewerProfile.id === profileId) {
-            // It's the owner viewing their own profile - SKIP tracking
-            console.log('Owner view detected, skipping analytics tracking.');
-            return;
+          viewerProfile = profileData;
+        }
+
+        const fp = await buildFingerprint();
+        const referrer = categoriseReferrer(document.referrer);
+
+        // Proactively establish browser fingerprint mapping if the visitor is logged in
+        if (viewerProfile) {
+          const mapKey = `fp_mapped_${viewerProfile.id}`;
+          if (!localStorage.getItem(mapKey)) {
+            supabase
+              .from('profile_view_events')
+              .insert({
+                profile_id: viewerProfile.id,
+                visitor_fp: fp,
+                viewer_id: viewerProfile.id,
+                referrer: 'direct',
+                device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
+                browser: navigator.userAgent,
+                is_repeat: true
+              })
+              .then(() => {
+                localStorage.setItem(mapKey, 'true');
+                console.log('Fingerprint mapping recorded successfully.');
+              })
+              .catch(err => console.error('Failed to record fingerprint mapping:', err));
           }
+        }
+
+        if (viewerProfile && viewerProfile.id === profileId) {
+          // It's the owner viewing their own profile - SKIP tracking
+          console.log('Owner view detected, skipping analytics tracking.');
+          return;
         }
 
         // Step 3: Prevent duplicate tracking on refresh (Session-based)
@@ -38,9 +66,6 @@ export default function ProfileViewTracker({ profileId }) {
           console.log('Page refresh detected, skipping duplicate analytics tracking.');
           return;
         }
-
-        const fp = await buildFingerprint();
-        const referrer = categoriseReferrer(document.referrer);
 
         // Mark as tracked for this session
         sessionStorage.setItem(sessionKey, '1');
@@ -66,7 +91,7 @@ export default function ProfileViewTracker({ profileId }) {
               source,
               utm_medium: utmMedium,
               utm_campaign: utmCampaign,
-              viewerId: user?.id
+              viewerId: viewerProfile?.id
             }),
             keepalive: true,
           });
@@ -90,7 +115,7 @@ export default function ProfileViewTracker({ profileId }) {
               device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
               browser: navigator.userAgent,
               is_repeat: false,
-              viewer_id: user?.id
+              viewer_id: viewerProfile?.id
             });
           if (insertError) {
             console.error("Client fallback tracking insert failed:", insertError.message);

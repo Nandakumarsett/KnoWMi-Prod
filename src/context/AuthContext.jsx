@@ -15,6 +15,52 @@ export const AuthProvider = ({ children }) => {
       .eq('user_id', userId)
       .single()
     setProfile(data)
+    return data
+  }
+
+  // Send welcome email — only on first signup (created_at ≈ last_sign_in_at)
+  const maybeSendWelcomeEmail = async (authUser) => {
+    try {
+      const createdAt = new Date(authUser.created_at).getTime()
+      const lastSignIn = new Date(authUser.last_sign_in_at || authUser.created_at).getTime()
+      const isFirstLogin = Math.abs(createdAt - lastSignIn) < 10_000 // within 10 seconds
+
+      if (!isFirstLogin) return
+
+      // Check if we already sent a welcome email (flag stored in profile metadata)
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('welcome_email_sent, first_name, last_name')
+        .eq('user_id', authUser.id)
+        .single()
+
+      if (profileData?.welcome_email_sent) return
+
+      const firstName = profileData?.first_name || authUser.user_metadata?.first_name || 'there'
+
+      // Invoke the send-email edge function
+      await supabase.functions.invoke('send-email', {
+        body: {
+          type: 'welcome',
+          to: authUser.email,
+          toName: firstName,
+          data: {
+            firstName,
+            email: authUser.email,
+          }
+        }
+      })
+
+      // Mark welcome email as sent so we never send it again
+      await supabase
+        .from('profiles')
+        .update({ welcome_email_sent: true })
+        .eq('user_id', authUser.id)
+
+    } catch (err) {
+      // Non-critical — never block auth flow
+      console.warn('Welcome email could not be sent:', err?.message)
+    }
   }
 
   useEffect(() => {
@@ -27,11 +73,18 @@ export const AuthProvider = ({ children }) => {
     })
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       const currentUser = session?.user ?? null
       setUser(currentUser)
-      if (currentUser) fetchProfile(currentUser.id)
-      else setProfile(null)
+      if (currentUser) {
+        fetchProfile(currentUser.id)
+        // Send welcome email on SIGNED_IN (covers both email+password and OAuth)
+        if (event === 'SIGNED_IN') {
+          maybeSendWelcomeEmail(currentUser)
+        }
+      } else {
+        setProfile(null)
+      }
       setLoading(false)
     })
 

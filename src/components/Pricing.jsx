@@ -3,6 +3,7 @@ import { useReveal } from '../hooks/useReveal'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import { Check, Shield, Truck, Lock, Star, ArrowRight, MessageSquare, Zap } from 'lucide-react'
+import TeamCheckout from './TeamCheckout'
 
 const plans = [
   {
@@ -66,10 +67,19 @@ const plans = [
 
 export default function Pricing({ onPlanSelect, selectedDesign }) {
   const ref = useReveal()
-  const { profile } = useAuth()
+  const { user, profile } = useAuth()
   const isPaid = profile?.status === 'paid'
   const [remainingSpots, setRemainingSpots] = useState(100)
   const [simulatorTab, setSimulatorTab] = useState('trial')
+  const [teamCheckoutOpen, setTeamCheckoutOpen] = useState(false)
+
+  const handlePlanClick = (planId) => {
+    if (planId === 'team') {
+      setTeamCheckoutOpen(true)
+    } else {
+      onPlanSelect?.(planId)
+    }
+  }
 
   useEffect(() => {
     fetchRemainingSpots()
@@ -86,6 +96,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
   }
 
   return (
+    <>
     <section id="pricing" className="py-32 bg-[#FDFDFB] relative overflow-hidden snap-section min-h-screen flex items-center" ref={ref}>
       <div className="max-w-[1280px] mx-auto px-6 relative z-10 w-full">
         
@@ -166,7 +177,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
 
                 <div className="space-y-4">
                   <button
-                    onClick={() => onPlanSelect?.(plan.id)}
+                    onClick={() => handlePlanClick(plan.id)}
                     className={`w-full py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.15em] transition-all duration-300 flex items-center justify-center gap-2 ${
                       plan.featured
                         ? 'bg-orange-500 text-white shadow-xl shadow-orange-500/20 hover:bg-orange-600'
@@ -332,5 +343,15 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
         </div>
       </div>
     </section>
+
+    {teamCheckoutOpen && (
+      <TeamCheckout
+        onClose={() => setTeamCheckoutOpen(false)}
+        user={user}
+        onAuth={() => setTeamCheckoutOpen(false)}
+        selectedDesign={selectedDesign}
+      />
+    )}
+  </>
   )
 }

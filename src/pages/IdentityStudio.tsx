@@ -5,7 +5,7 @@ import {
   Plus, Instagram, Youtube, Twitter, MessageCircle, Globe,
   Trash2, Layout, Info, Rocket, Trophy, Save,
   Link as LinkIcon, Camera, Target, User, ShieldCheck, Eye,
-  Code2, GraduationCap, Dumbbell, Gamepad2, ChevronRight,
+  Code2, GraduationCap, ChevronRight,
   Zap, Github, Linkedin, Mail, Calendar, MapPin, Star
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
@@ -20,8 +20,6 @@ import Avatar from '../components/Avatar'
 import { DeveloperForm } from '../components/identity/forms/DeveloperForm'
 import { StudentForm } from '../components/identity/forms/StudentForm'
 import { CreatorForm } from '../components/identity/forms/CreatorForm'
-import { GamerForm } from '../components/identity/forms/GamerForm'
-import { FitnessForm } from '../components/identity/forms/FitnessForm'
 
 // --- STYLES ---
 
@@ -382,19 +380,14 @@ export default function IdentityStudio() {
     }
 
     setSaving(true)
-    console.log('⏳ setSaving(true)')
 
     try {
       const currentIdentities = profile?.persona_data?.identities || []
       const editId = searchParams.get('edit')
-      console.log('🔍 currentIdentities count:', currentIdentities.length)
-      console.log('🔍 editId from URL:', editId)
 
       const activeIdx = editId
         ? currentIdentities.findIndex((i: any) => i.id === editId)
         : currentIdentities.findIndex((i: any) => i.persona_type === activePersona)
-
-      console.log('🔍 activeIdx:', activeIdx)
 
       const identityUpdate = {
         id: activeIdx >= 0 ? currentIdentities[activeIdx].id : (editId || `id_${Date.now()}`),
@@ -423,7 +416,6 @@ export default function IdentityStudio() {
       if (data.tiktok) legacySync.tiktok_url = data.tiktok
       if (data.twitch) legacySync.twitch_url = data.twitch
 
-      console.log('📡 Sending update to profiles table for ID:', user.id)
       const { error } = await supabase.from('profiles').update({
         persona_type: activePersona,
         avatar_url: identityUpdate.avatar_url,
@@ -451,11 +443,9 @@ export default function IdentityStudio() {
       alert('Changes saved successfully!')
       window.location.reload()
     } catch (err: any) {
-      console.error('❌ Runtime error in handleSave:', err)
       alert('Runtime error: ' + err.message)
     } finally {
       setSaving(false)
-      console.log('🏁 setSaving(false)')
     }
   }
 
@@ -733,10 +723,7 @@ export default function IdentityStudio() {
                   <div className="p-0 sm:p-2">
                     {['developer', 'dev'].includes(activePersona) && <DeveloperForm data={data} onChange={setData} isOwner onUpload={handleFileUpload} uploading={uploading} />}
                     {activePersona === 'student' && <StudentForm data={data} onChange={setData} onUpload={handleFileUpload} uploading={uploading} />}
-                    {activePersona === 'creator' && <CreatorForm data={data} onChange={setData} onUpload={handleFileUpload} uploading={uploading} />}
-                    {activePersona === 'gamer' && <GamerForm data={data} onChange={setData} />}
-                    {['fitness', 'gym', 'athlete'].includes(activePersona) && <FitnessForm data={data} onChange={setData} />}
-                    {activePersona === 'influencer' && <CreatorForm data={data} onChange={setData} onUpload={handleFileUpload} uploading={uploading} />}
+                    {(activePersona === 'creator' || activePersona === 'influencer') && <CreatorForm data={data} onChange={setData} onUpload={handleFileUpload} uploading={uploading} />}
                   </div>
                 </section>
 

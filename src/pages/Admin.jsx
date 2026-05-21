@@ -7,6 +7,9 @@ import AnalyticsAdmin from '../components/AnalyticsAdmin'
 import OrdersAdmin from '../components/OrdersAdmin'
 import QRStudioAdmin from '../components/QRStudioAdmin'
 import HomepagePreviewsAdmin from '../components/HomepagePreviewsAdmin'
+import ReturnRequestsAdmin from '../components/ReturnRequestsAdmin'
+import BroadcastAdmin from '../components/BroadcastAdmin'
+import TestCenterAdmin from '../components/TestCenterAdmin'
 import { createClient } from '@supabase/supabase-js'
 
 // Separate client for creating users without logging the Owner out
@@ -185,13 +188,16 @@ export default function Admin() {
             ...(isOwner ? [
               { k: 'users', l: '👥 Customers' }, 
               { k: 'orders', l: '📦 Orders' },
+              { k: 'returns', l: '↩️ Returns' },
+              { k: 'broadcast', l: '📢 Broadcast' },
               { k: 'qr_studio', l: '🖨️ QR Studio' },
               { k: 'team', l: '🛡️ Team' }, 
               { k: 'catalog', l: '👕 Catalog' }, 
               { k: 'leads', l: '📥 Leads' },
               { k: 'analytics', l: '📊 Analytics' },
               { k: 'previews', l: '✨ Previews' },
-              { k: 'create', l: '➕ Create Account' }
+              { k: 'create', l: '➕ Create Account' },
+              { k: 'test', l: '🧪 Test Center' }
             ] : [{ k: 'referrals', l: '🔗 My Referrals' }])
           ].map(t => (
             <button key={t.k} onClick={() => setTab(t.k)} className="flex-1 min-w-[120px] py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap px-4"
@@ -430,6 +436,21 @@ export default function Admin() {
         {/* Previews tab (Owner Only) */}
         {tab === 'previews' && isOwner && (
           <HomepagePreviewsAdmin />
+        )}
+
+        {/* Returns tab (Owner Only) */}
+        {tab === 'returns' && isOwner && (
+          <ReturnRequestsAdmin />
+        )}
+
+        {/* Policy Broadcast tab (Owner Only) */}
+        {tab === 'broadcast' && isOwner && (
+          <BroadcastAdmin />
+        )}
+
+        {/* Test Center tab (Owner Only) */}
+        {tab === 'test' && isOwner && (
+          <TestCenterAdmin />
         )}
       </div>
     </div>

@@ -1,4 +1,4 @@
-export type PersonaType = 'developer' | 'student' | 'creator' | 'gamer' | 'fitness' | 'influencer';
+export type PersonaType = 'developer' | 'student' | 'creator' | 'influencer';
 
 
 export interface SocialLink {
@@ -175,8 +175,6 @@ export type PersonaData =
   | DeveloperData
   | StudentData
   | CreatorData
-  | GamerData
-  | FitnessData
   | InfluencerData;
 
 export interface ProfileData {

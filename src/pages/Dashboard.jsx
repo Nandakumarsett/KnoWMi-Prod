@@ -43,6 +43,150 @@ import { CreatorForm } from '../components/identity/forms/CreatorForm'
 import { GamerForm } from '../components/identity/forms/GamerForm'
 
 
+// ─── Dashboard Support Components ──────────────────────────
+
+function ReturnRequestForm({ user, latestOrder, supabaseClient }) {
+  const [form, setForm] = useState({ issue_type: 'defect', description: '', video_url: '' })
+  const [submitting, setSubmitting] = useState(false)
+  const [done, setDone] = useState(false)
+  const [err, setErr] = useState('')
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!form.description.trim()) { setErr('Please describe the issue.'); return }
+    if (!latestOrder) { setErr('No order found on your account.'); return }
+    setSubmitting(true); setErr('')
+    const { error } = await supabaseClient.from('return_requests').insert({
+      user_id: user?.id,
+      order_id: latestOrder.id,
+      order_number: latestOrder.order_number || latestOrder.id,
+      issue_type: form.issue_type,
+      description: form.description,
+      video_url: form.video_url || null,
+    })
+    if (error) { setErr(error.message); setSubmitting(false); return }
+    // Send confirmation email
+    await supabaseClient.functions.invoke('send-email', {
+      body: {
+        type: 'return_request',
+        to: user?.email,
+        toName: '',
+        data: {
+          firstName: '',
+          requestId: 'REQ-' + Date.now().toString().slice(-6),
+          orderNumber: latestOrder.order_number || latestOrder.id,
+          issueDescription: form.description,
+        }
+      }
+    })
+    setDone(true); setSubmitting(false)
+  }
+
+  if (done) return (
+    <div className="flex items-center gap-3 p-4 bg-green-50 rounded-2xl text-green-700 text-sm font-bold">
+      <CheckCircle2 size={18} /> Request submitted! We'll respond within 2 business days.
+    </div>
+  )
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {err && <p className="text-sm text-red-500 font-medium">{err}</p>}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-[10px] font-black uppercase tracking-wide text-neutral-400 mb-1.5">Issue Type</label>
+          <select value={form.issue_type} onChange={e => setForm(f => ({ ...f, issue_type: e.target.value }))}
+            className="w-full px-4 py-2.5 rounded-xl text-sm outline-none border border-neutral-200 bg-neutral-50">
+            <option value="defect">Manufacturing Defect</option>
+            <option value="wrong_item">Wrong Item Delivered</option>
+            <option value="qr_issue">QR Not Scanning</option>
+            <option value="size_exchange">Size Exchange</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-[10px] font-black uppercase tracking-wide text-neutral-400 mb-1.5">Unboxing Video Link</label>
+          <input type="url" value={form.video_url} onChange={e => setForm(f => ({ ...f, video_url: e.target.value }))}
+            placeholder="Google Drive / YouTube link"
+            className="w-full px-4 py-2.5 rounded-xl text-sm outline-none border border-neutral-200 bg-neutral-50" />
+        </div>
+      </div>
+      <div>
+        <label className="block text-[10px] font-black uppercase tracking-wide text-neutral-400 mb-1.5">Describe the Issue</label>
+        <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+          rows={3} required placeholder="Be specific — what is the defect, what did you receive, etc."
+          className="w-full px-4 py-3 rounded-xl text-sm outline-none border border-neutral-200 bg-neutral-50 resize-none" />
+      </div>
+      <div className="p-3 bg-amber-50 border border-amber-100 rounded-xl text-xs text-amber-700 leading-relaxed">
+        ⚠️ A valid, continuous, uncut unboxing video is <strong>mandatory</strong> for all return requests. No video = No return/exchange.
+      </div>
+      <button type="submit" disabled={submitting}
+        className="px-6 py-3 bg-neutral-900 text-white rounded-xl text-sm font-bold transition-all hover:bg-neutral-700 disabled:opacity-60">
+        {submitting ? 'Submitting...' : 'Submit Return Request'}
+      </button>
+    </form>
+  )
+}
+
+function AccountDeletionButton({ user, supabaseClient }) {
+  const [confirming, setConfirming] = useState(false)
+  const [reason, setReason] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [done, setDone] = useState(false)
+
+  const handleRequest = async () => {
+    setSubmitting(true)
+    await supabaseClient.from('deletion_requests').insert({
+      user_id: user?.id,
+      email: user?.email,
+      reason: reason || null,
+    })
+    await supabaseClient.functions.invoke('send-email', {
+      body: {
+        type: 'deletion_request',
+        to: user?.email,
+        toName: '',
+        data: {
+          firstName: '',
+          email: user?.email,
+          requestId: 'DEL-' + Date.now().toString().slice(-6),
+        }
+      }
+    })
+    setDone(true); setSubmitting(false)
+  }
+
+  if (done) return (
+    <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-sm text-red-700 font-medium">
+      ✓ Deletion request submitted. We'll process it within 15 business days and send a confirmation email.
+    </div>
+  )
+
+  if (!confirming) return (
+    <button onClick={() => setConfirming(true)}
+      className="px-5 py-2.5 border border-red-200 text-red-500 rounded-xl text-sm font-bold hover:bg-red-50 transition-all">
+      Request Account Deletion
+    </button>
+  )
+
+  return (
+    <div className="space-y-3 p-4 bg-red-50 rounded-2xl border border-red-100">
+      <p className="text-sm font-bold text-red-700">Are you sure? This will permanently delete your profile and data.</p>
+      <textarea value={reason} onChange={e => setReason(e.target.value)} rows={2}
+        placeholder="Optional: reason for leaving"
+        className="w-full px-3 py-2 rounded-xl text-sm border border-red-200 bg-white resize-none outline-none" />
+      <div className="flex gap-3">
+        <button onClick={handleRequest} disabled={submitting}
+          className="px-5 py-2.5 bg-red-500 text-white rounded-xl text-sm font-bold disabled:opacity-60">
+          {submitting ? 'Submitting...' : 'Yes, Delete My Account'}
+        </button>
+        <button onClick={() => setConfirming(false)}
+          className="px-5 py-2.5 text-neutral-500 text-sm font-bold hover:text-neutral-800">
+          Cancel
+        </button>
+      </div>
+    </div>
+  )
+}
 
 // ============ PREMIUM DESIGN SYSTEM ============
 const STYLES = `
@@ -2152,6 +2296,24 @@ export default function Dashboard() {
                     </div>
                   </div>
                 )}
+
+                {/* Return Request Form */}
+                <div className="card p-8 bg-white shadow-sm border border-neutral-100">
+                  <div className="mb-6">
+                    <p className="text-[11px] font-black uppercase text-orange-500 tracking-[0.2em] mb-1">Support</p>
+                    <h3 className="text-2xl font-display font-black tracking-tight">Report an Issue</h3>
+                    <p className="text-sm text-neutral-400 mt-1">For defects, wrong items, or size exchanges. Requests must be raised within 7 days of delivery.</p>
+                  </div>
+                  <ReturnRequestForm user={user} latestOrder={latestOrder} supabaseClient={supabase} />
+                </div>
+
+                {/* Account Deletion */}
+                <div className="card p-8 bg-white shadow-sm border border-red-50">
+                  <p className="text-[11px] font-black uppercase text-red-400 tracking-[0.2em] mb-1">Danger Zone</p>
+                  <h3 className="text-xl font-display font-black tracking-tight text-neutral-800 mb-2">Delete My Account</h3>
+                  <p className="text-sm text-neutral-400 mb-5 leading-relaxed">Request permanent deletion of your KnoWMi account and personal data. This cannot be undone. Order records are retained for 7 years for tax compliance.</p>
+                  <AccountDeletionButton user={user} supabaseClient={supabase} />
+                </div>
               </div>
             )}
           </div>

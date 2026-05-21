@@ -45,7 +45,6 @@ export default function OrdersAdmin() {
 
   const handleUpdateOrder = async (id) => {
     setLoading(true)
-    // Filter out nested objects like 'profiles' from the fetch
     const { profiles, ...updateData } = editForm
     const { error } = await supabase
       .from('orders')
@@ -55,6 +54,29 @@ export default function OrdersAdmin() {
     if (error) {
       alert(`Update failed: ${error.message}`)
     } else {
+      // If status just changed to 'shipped' and tracking info is set → send dispatch email
+      const originalOrder = orders.find(o => o.id === id)
+      const justShipped = updateData.status === 'shipped' && originalOrder?.status !== 'shipped'
+      const hasTracking = updateData.tracking_info && updateData.tracking_info.trim()
+
+      if (justShipped && hasTracking && editForm.profiles?.user_id) {
+        // Fetch user email
+        const { data: authData } = await supabase.functions.invoke('send-email', {
+          body: {
+            type: 'dispatch',
+            to: editForm._customer_email || '',
+            toName: editForm.profiles?.first_name || 'Customer',
+            data: {
+              firstName: editForm.profiles?.first_name || 'Customer',
+              orderNumber: updateData.order_number || originalOrder?.order_number || id,
+              courierName: updateData.tracking_info?.split(':')[0]?.trim() || 'Our Courier',
+              trackingNumber: updateData.tracking_info?.split(':').slice(1).join(':').trim() || updateData.tracking_info,
+              estimatedDelivery: updateData.estimated_delivery || null,
+            }
+          }
+        })
+      }
+
       setEditingId(null)
       fetchOrders()
     }

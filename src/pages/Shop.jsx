@@ -5,6 +5,7 @@ import { Footer } from '../components/Footer'
 import { ShoppingBag, ChevronRight, Check, X, Ruler } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import AuthModal from '../components/AuthModal'
+import TeamCheckout from '../components/TeamCheckout'
 
 const PLANS = [
   { id: 'starter', name: 'Starter', price: 799, gsm: '200 GSM' },
@@ -23,6 +24,8 @@ export default function Shop() {
   const [selectedPlan, setSelectedPlan] = useState('creator')
   const [modalOpen, setModalOpen] = useState(false)
   const [authOpen, setAuthOpen] = useState(false)
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
+  const [teamCheckoutOpen, setTeamCheckoutOpen] = useState(false)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -50,24 +53,81 @@ export default function Shop() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const triggerCheckout = () => {
+  const triggerCheckout = async () => {
     if (!user) {
       setAuthOpen(true)
       return
     }
 
+    // Team plan gets a dedicated configurator modal
+    if (selectedPlan === 'team') {
+      setTeamCheckoutOpen(true)
+      return
+    }
+
+    setCheckoutLoading(true)
     const plan = PLANS.find(p => p.id === selectedPlan)
-    const msg = `Hi KnoWMi! I want to order the "${selectedDesign.name}" design.
-
-Order Details:
-- Design: ${selectedDesign.name}
-- Size: ${selectedSize}
-- Plan: ${plan.name} (₹${plan.price})
-- Quality: ${plan.gsm}
-
-Please share the payment link and next steps!`
     
-    window.open(`https://wa.me/917981325397?text=${encodeURIComponent(msg)}`, '_blank')
+    // Load Razorpay SDK
+    const res = await new Promise((resolve) => {
+      const script = document.createElement('script')
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+      script.onload = () => resolve(true)
+      script.onerror = () => resolve(false)
+      document.body.appendChild(script)
+    })
+
+    if (!res) {
+      alert('Razorpay SDK failed to load. Are you connected to the internet?')
+      setCheckoutLoading(false)
+      return
+    }
+
+    try {
+      // 1. Create secure order on our backend
+      const { data: orderData, error: apiError } = await supabase.functions.invoke('create-razorpay-order', {
+        body: { 
+          plan_id: selectedPlan,
+          user_id: user.id,
+          customer_details: { design: selectedDesign.id, size: selectedSize }
+        }
+      })
+
+      if (apiError || !orderData) throw new Error(apiError?.message || 'Failed to create order')
+
+      // 2. Open Razorpay Modal
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: orderData.amount,
+        currency: "INR",
+        name: "KnoWMi",
+        description: `Purchase ${plan.name} Plan`,
+        image: "https://knowmi.co/favicon.ico", // This will show the KnoWMi logo in the checkout modal
+        order_id: orderData.order_id,
+        handler: async function (response) {
+          alert(`Payment successful! We are preparing your order. (Payment ID: ${response.razorpay_payment_id})`)
+          setModalOpen(false)
+        },
+        prefill: {
+          email: user.email,
+        },
+        theme: {
+          color: "#f97316"
+        }
+      }
+
+      const paymentObject = new window.Razorpay(options)
+      paymentObject.on('payment.failed', function (response) {
+        alert("Payment Failed. Reason: " + response.error.description)
+      })
+      paymentObject.open()
+      
+    } catch (error) {
+      console.error(error)
+      alert("Error initiating checkout: " + error.message)
+    } finally {
+      setCheckoutLoading(false)
+    }
   }
 
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false)
@@ -253,10 +313,20 @@ Please share the payment link and next steps!`
                   <div className="pt-0">
                     <button 
                       onClick={triggerCheckout}
-                      className="w-full bg-black text-white py-4 rounded-xl font-black text-base hover:scale-[1.01] active:scale-[0.99] transition-all shadow-xl shadow-black/10 flex items-center justify-center gap-3"
+                      disabled={checkoutLoading}
+                      className="w-full bg-black text-white py-4 rounded-xl font-black text-base hover:scale-[1.01] active:scale-[0.99] transition-all shadow-xl shadow-black/10 flex items-center justify-center gap-3 disabled:opacity-50"
                     >
-                      <ShoppingBag size={18} />
-                      Safe Checkout via WhatsApp
+                      {checkoutLoading ? (
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <ShoppingBag size={18} />
+                      )}
+                      {checkoutLoading
+                        ? 'Initiating Secure Checkout...'
+                        : selectedPlan === 'team'
+                        ? 'Configure Team Order →'
+                        : 'Secure Checkout'
+                      }
                     </button>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mt-10">
                       <div className="flex items-center gap-3">
@@ -289,6 +359,14 @@ Please share the payment link and next steps!`
           triggerCheckout();
         }}
       />
+      {teamCheckoutOpen && (
+        <TeamCheckout
+          onClose={() => setTeamCheckoutOpen(false)}
+          user={user}
+          onAuth={() => { setTeamCheckoutOpen(false); setAuthOpen(true) }}
+          selectedDesign={selectedDesign}
+        />
+      )}
     </div>
   )
 }

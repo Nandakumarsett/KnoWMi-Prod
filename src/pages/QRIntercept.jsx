@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Loader2, QrCode, Sparkles, ArrowRight, ShieldCheck, Heart } from 'lucide-react';
 import AuthModal from '../components/AuthModal';
+import { buildFingerprint } from '../lib/analytics/fingerprint';
 
 export default function QRIntercept() {
   const { token } = useParams();
@@ -36,6 +37,7 @@ export default function QRIntercept() {
         // Check if the current user is the owner of this QR token
         const { data: { user } } = await supabase.auth.getUser();
         let isOwner = false;
+        let viewerProfile = null;
         
         if (user) {
           // Get the profile for this user to check profile_id
@@ -45,8 +47,37 @@ export default function QRIntercept() {
             .eq('user_id', user.id)
             .single();
           
+          viewerProfile = userProfile;
           if (userProfile && userProfile.id === qrData.profile_id) {
             isOwner = true;
+          }
+        }
+
+        // Proactively establish browser fingerprint mapping if the scanner is logged in
+        if (viewerProfile) {
+          try {
+            const fp = await buildFingerprint();
+            const mapKey = `fp_mapped_${viewerProfile.id}`;
+            if (!localStorage.getItem(mapKey)) {
+              supabase
+                .from('profile_view_events')
+                .insert({
+                  profile_id: viewerProfile.id,
+                  visitor_fp: fp,
+                  viewer_id: viewerProfile.id,
+                  referrer: 'direct',
+                  device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
+                  browser: navigator.userAgent,
+                  is_repeat: true
+                })
+                .then(() => {
+                  localStorage.setItem(mapKey, 'true');
+                  console.log('Fingerprint mapping recorded successfully via QR Intercept.');
+                })
+                .catch(err => console.error('Failed to record fingerprint mapping via QR Intercept:', err));
+            }
+          } catch (fpErr) {
+            console.error('Failed to establish fingerprint mapping in QR Intercept:', fpErr);
           }
         }
 
