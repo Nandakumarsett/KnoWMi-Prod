@@ -8,9 +8,9 @@ import AuthModal from '../components/AuthModal'
 import TeamCheckout from '../components/TeamCheckout'
 
 const PLANS = [
-  { id: 'starter', name: 'Starter', price: 799, gsm: '200 GSM' },
-  { id: 'creator', name: 'Creator', price: 999, gsm: '220 GSM' },
-  { id: 'team', name: 'Team', price: 699, gsm: '240 GSM' }
+  { id: 'starter', name: 'Starter', price: 1, gsm: '200 GSM' },
+  { id: 'creator', name: 'Creator', price: 1, gsm: '220 GSM' },
+  { id: 'team', name: 'Team', price: 1, gsm: '240 GSM' }
 ]
 
 const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
