@@ -56,7 +56,17 @@ export default function ScanHandler() {
           scanner_id: user?.id
         })
 
-        // 4. Redirect to the randomized URL (safety first)
+        // 4. Trigger Push Notification asynchronously
+        supabase.functions.invoke('send-push-notification', {
+          body: {
+            userId: profile.user_id,
+            title: 'New Scan Alert! 🔥',
+            body: `Someone just scanned your KnoWMi profile using a ${device}!`,
+            url: '/dashboard'
+          }
+        }).catch(err => console.error('Failed to trigger push notification:', err));
+
+        // 5. Redirect to the randomized URL (safety first)
         const finalSlug = profile.secure_slug || profile.id
         navigate(`/p/${finalSlug}?src=qr`)
       } catch (err) {

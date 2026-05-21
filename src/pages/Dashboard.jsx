@@ -35,6 +35,7 @@ import StreakCard from '../components/vibe/StreakCard'
 import CityCard from '../components/vibe/CityCard'
 import ViralCard from '../components/vibe/ViralCard'
 import { AIInsightsToggle } from '../components/vibe/AIInsightsToggle'
+import { usePushNotifications } from '../hooks/usePushNotifications'
 
 // Import Persona forms
 import { DeveloperForm } from '../components/identity/forms/DeveloperForm'
@@ -1472,6 +1473,8 @@ export default function Dashboard() {
   const [scans, setScans] = useState([])
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
+  
+  const { isSupported: pushSupported, isSubscribed: pushSubscribed, loading: pushLoading, subscribe: pushSubscribe, unsubscribe: pushUnsubscribe } = usePushNotifications(user?.id);
   const [activeTab, setActiveTab] = useState(() => {
     const tab = searchParams.get('tab')
     if (tab) return tab
@@ -1976,6 +1979,16 @@ export default function Dashboard() {
               Highlights <span className="lowercase font-bold opacity-60">({selectedRange === 'today' ? 'Today' : selectedRange === 'yesterday' ? 'Yesterday' : selectedRange === 'last_7' ? 'Last 7 days' : selectedRange === 'last_week' ? 'Last week' : selectedRange === 'last_month' ? 'Last month' : selectedRange === 'ytd' ? 'Year to date' : 'All time'})</span>
             </h2>
             <div className="flex gap-3">
+              {pushSupported && (
+                <button 
+                  onClick={pushSubscribed ? pushUnsubscribe : pushSubscribe}
+                  disabled={pushLoading}
+                  className={`flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all shadow-lg ${pushSubscribed ? 'bg-orange-500 text-white shadow-orange-500/20 hover:scale-105' : 'bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-50'}`}
+                >
+                  <Bell size={12} className={pushSubscribed ? 'fill-current' : ''} />
+                  {pushLoading ? 'Loading...' : pushSubscribed ? 'Alerts On' : 'Enable Scan Alerts'}
+                </button>
+              )}
               <select
                 value={selectedRange}
                 onChange={(e) => setSelectedRange(e.target.value)}
@@ -1989,7 +2002,7 @@ export default function Dashboard() {
                 <option value="ytd">Year to Date (YTD)</option>
                 <option value="all">All Time</option>
               </select>
-              <button className="px-4 py-2 bg-[#3B82F6] text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-lg shadow-blue-500/20 hover:scale-105 transition-all">Export Analytics</button>
+              <button className="px-4 py-2 bg-[#3B82F6] text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-lg shadow-blue-500/20 hover:scale-105 transition-all">Export</button>
             </div>
           </div>
           
