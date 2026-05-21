@@ -9,7 +9,7 @@ const plans = [
   {
     id: 'starter',
     name: 'Starter',
-    price: 1,
+    price: 799,
     tagline: 'The Essential Tee',
     desc: 'Everything you need to launch your phygital identity.',
     productFeatures: [
@@ -23,7 +23,7 @@ const plans = [
   {
     id: 'creator',
     name: 'Creator',
-    price: 1,
+    price: 999,
     tagline: 'The Signature Choice',
     desc: 'Enhanced flexibility for those building a serious personal brand.',
     featured: true,
@@ -38,7 +38,7 @@ const plans = [
   {
     id: 'team',
     name: 'Team',
-    price: 1,
+    price: 699,
     tagline: 'For Elite Squads',
     desc: 'Unified branding for teams of four or more.',
     productFeatures: [
@@ -52,7 +52,7 @@ const plans = [
   {
     id: 'corporate',
     name: 'Corporate',
-    price: 1,
+    price: 599,
     tagline: 'Enterprise Solutions',
     desc: 'High-volume identity solutions for large organizations.',
     productFeatures: [

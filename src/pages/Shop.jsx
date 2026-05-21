@@ -8,9 +8,9 @@ import AuthModal from '../components/AuthModal'
 import TeamCheckout from '../components/TeamCheckout'
 
 const PLANS = [
-  { id: 'starter', name: 'Starter', price: 1, gsm: '200 GSM' },
-  { id: 'creator', name: 'Creator', price: 1, gsm: '220 GSM' },
-  { id: 'team', name: 'Team', price: 1, gsm: '240 GSM' }
+  { id: 'starter', name: 'Starter', price: 799, gsm: '200 GSM' },
+  { id: 'creator', name: 'Creator', price: 999, gsm: '220 GSM' },
+  { id: 'team', name: 'Team', price: 699, gsm: '240 GSM' }
 ]
 
 const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
@@ -26,6 +26,7 @@ export default function Shop() {
   const [authOpen, setAuthOpen] = useState(false)
   const [checkoutLoading, setCheckoutLoading] = useState(false)
   const [teamCheckoutOpen, setTeamCheckoutOpen] = useState(false)
+  const [orderSuccess, setOrderSuccess] = useState(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -105,8 +106,7 @@ export default function Shop() {
         image: "https://knowmi.co/favicon.ico", // This will show the KnoWMi logo in the checkout modal
         order_id: orderData.order_id,
         handler: async function (response) {
-          alert(`Payment successful! We are preparing your order. (Payment ID: ${response.razorpay_payment_id})`)
-          setModalOpen(false)
+          setOrderSuccess({ paymentId: response.razorpay_payment_id, orderId: orderData.order_id })
         },
         prefill: {
           email: user.email,
@@ -227,6 +227,41 @@ export default function Shop() {
                   </div>
                 </div>
               ))}
+            </div>
+          ) : orderSuccess ? (
+            <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
+              <div className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
+                <Check size={48} />
+              </div>
+              <h2 className="text-4xl font-display font-black text-black mb-4">
+                Hurray! Your order is placed.
+              </h2>
+              <p className="text-lg text-neutral-500 max-w-md mx-auto mb-8">
+                We've received your payment and are preparing your KnoWMi gear. An invoice and order confirmation has been sent to your email.
+              </p>
+              <div className="bg-neutral-50 p-6 rounded-2xl border border-neutral-100 mb-8 inline-block text-left min-w-[300px]">
+                <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-2">Order Details</p>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-bold">Payment ID</span>
+                  <span className="text-sm font-mono text-neutral-600">{orderSuccess.paymentId}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-bold">Design</span>
+                  <span className="text-sm text-neutral-600">{selectedDesign.name} (Size {selectedSize})</span>
+                </div>
+              </div>
+              <div>
+                <button 
+                  onClick={() => {
+                    setOrderSuccess(null)
+                    setSelectedDesign(null)
+                    window.scrollTo(0, 0)
+                  }}
+                  className="px-8 py-4 bg-black text-white rounded-xl font-black uppercase tracking-widest text-xs hover:bg-neutral-800 transition-colors"
+                >
+                  Continue Shopping
+                </button>
+              </div>
             </div>
           ) : (
             /* Single Design Customization View */

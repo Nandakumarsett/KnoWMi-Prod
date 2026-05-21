@@ -24,13 +24,13 @@ serve(async (req) => {
       // Store item: use the amount passed (already in paise, from selectedDesign.price * qty * 100)
       pricePaise = amount_override
     } else if (plan_id === 'starter') {
-      pricePaise = 100
+      pricePaise = 79900
     } else if (plan_id === 'creator') {
-      pricePaise = 100
+      pricePaise = 99900
     } else if (plan_id === 'team') {
-      pricePaise = 100
+      pricePaise = 69900
     } else if (plan_id === 'corporate') {
-      pricePaise = 100
+      pricePaise = 59900
     } else {
       throw new Error("Invalid plan or missing amount")
     }
