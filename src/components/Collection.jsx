@@ -48,10 +48,6 @@ export default function Collection({ onSelectDesign }) {
             <div className="flex flex-col items-center md:items-start">
               <div className="flex items-center gap-3 mb-3">
                 <div className="inline-block px-3 py-0.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-[9px] font-black uppercase tracking-widest">Live Designs</div>
-                <a href="/shop" className="group flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-neutral-400 hover:text-black transition-all">
-                  See All 
-                  <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
-                </a>
               </div>
               <h2 className="text-3xl md:text-4xl font-display font-black text-black leading-tight">
                 These tees are live. <br className="hidden md:block"/>
@@ -96,6 +92,7 @@ export default function Collection({ onSelectDesign }) {
                 </div>
               </div>
             ))}
+            <SeeMoreCard />
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -119,6 +116,7 @@ export default function Collection({ onSelectDesign }) {
                 </div>
               </div>
             ))}
+            <SeeMoreCard />
           </div>
         )}
         <div className="mt-16 text-center">
