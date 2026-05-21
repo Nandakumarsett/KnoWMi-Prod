@@ -427,7 +427,7 @@ serve(async (req) => {
     const resendPayload = {
       from: 'KnoWMi <onboarding@resend.dev>',
       reply_to: 'support.knowmi@gmail.com',
-      to: toName ? [`${toName} <${to}>`] : [to],
+      to: [to],
       subject,
       html,
     }
