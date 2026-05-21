@@ -98,19 +98,20 @@ export default function TestCenterAdmin() {
 
   const myEmail = user?.email || 'noemail@test.com'
   const myName = profile?.first_name || 'Admin'
+  const [testEmail, setTestEmail] = useState(myEmail)
 
   // ─── Test triggers ────────────────────────────────────
 
   const testWelcome = () => sendTestEmail('welcome', {
     type: 'welcome',
-    to: myEmail,
+    to: testEmail,
     toName: myName,
-    data: { firstName: myName, email: myEmail }
+    data: { firstName: myName, email: testEmail }
   })
 
   const testOrderConfirm = () => sendTestEmail('order_confirm', {
     type: 'order_confirmation',
-    to: myEmail,
+    to: testEmail,
     toName: myName,
     data: {
       firstName: myName,
@@ -128,7 +129,7 @@ export default function TestCenterAdmin() {
 
   const testDispatch = () => sendTestEmail('dispatch', {
     type: 'dispatch',
-    to: myEmail,
+    to: testEmail,
     toName: myName,
     data: {
       firstName: myName,
@@ -141,7 +142,7 @@ export default function TestCenterAdmin() {
 
   const testReturn = () => sendTestEmail('return_req', {
     type: 'return_request',
-    to: myEmail,
+    to: testEmail,
     toName: myName,
     data: {
       firstName: myName,
@@ -153,11 +154,11 @@ export default function TestCenterAdmin() {
 
   const testDeletion = () => sendTestEmail('deletion', {
     type: 'deletion_request',
-    to: myEmail,
+    to: testEmail,
     toName: myName,
     data: {
       firstName: myName,
-      email: myEmail,
+      email: testEmail,
       requestId: 'DEL-TEST001'
     }
   })
@@ -209,19 +210,28 @@ export default function TestCenterAdmin() {
       <div className="rounded-xl p-5 flex items-start gap-3"
         style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)' }}>
         <AlertTriangle size={18} className="text-indigo-500 mt-0.5 flex-shrink-0" />
-        <div>
+        <div className="flex-1">
           <p className="text-sm font-bold text-indigo-800">Test Center — Owner Only</p>
-          <p className="text-xs text-indigo-500 mt-0.5">
-            All test emails will be sent to <strong>{myEmail}</strong>. No real orders or data are created.
-            Check your inbox after each test.
+          <p className="text-xs text-indigo-500 mt-0.5 mb-2">
+            Since your custom domain isn't verified in Resend yet, enter the exact email you registered Resend with below.
+            No real orders or data are created.
           </p>
+          <div className="flex items-center gap-2 max-w-sm">
+            <input 
+              type="email"
+              value={testEmail}
+              onChange={(e) => setTestEmail(e.target.value)}
+              placeholder="Your Resend registered email"
+              className="w-full px-3 py-1.5 text-xs rounded border border-indigo-200 focus:outline-none focus:border-indigo-400 bg-white"
+            />
+          </div>
         </div>
       </div>
 
       {/* ── Email Tests ───────────────────────────── */}
       <div>
         <p className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: 'var(--muted)' }}>
-          📧 Email Templates — Send to {myEmail}
+          📧 Email Templates — Send to {testEmail || '...'}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           <TestCard
