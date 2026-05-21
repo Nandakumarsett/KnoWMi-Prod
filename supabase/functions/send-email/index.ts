@@ -453,9 +453,10 @@ serve(async (req) => {
     )
   } catch (error) {
     console.error('send-email error:', error)
+    // Return 200 so the frontend gets the JSON body instead of a generic non-2xx error
     return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ error: error.message || 'Unknown error occurred' }),
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
 })
