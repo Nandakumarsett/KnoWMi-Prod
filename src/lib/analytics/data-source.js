@@ -61,8 +61,8 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
     
     // Calculate unique visitors using visitor_fp or row ID fallback
     const uniqueFps = new Set();
-    views.forEach(v => uniqueFps.add(v.visitor_fp || v.id));
-    scans.forEach(s => uniqueFps.add(s.scanner_fp || s.id));
+    views.forEach(v => uniqueFps.add(v.viewer_id || v.visitor_fp || v.id));
+    scans.forEach(s => uniqueFps.add(s.scanner_id || s.scanner_fp || s.id));
     const uniqueViews = uniqueFps.size;
 
     // QR Scans
@@ -71,7 +71,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
     // Repeat count (calculate dynamically using fingerprints)
     const fpCounts = {};
     views.forEach(v => {
-      const fp = v.visitor_fp || v.id;
+      const fp = v.viewer_id || v.visitor_fp || v.id;
       fpCounts[fp] = (fpCounts[fp] || 0) + 1;
     });
     let repeatCount = 0;
