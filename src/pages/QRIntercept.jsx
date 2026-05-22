@@ -90,6 +90,24 @@ export default function QRIntercept() {
         else if (isAndroid) device = 'Android';
         else if (window.innerWidth < 768) device = 'Mobile';
 
+        // Log the scan to qr_scan_events
+        let currentFp = 'anonymous';
+        try {
+          currentFp = await buildFingerprint();
+        } catch (e) {}
+        
+        if (!isOwner) {
+          await supabase.from('qr_scan_events').insert({
+            profile_id: qrData.profile_id,
+            device_type: device.toLowerCase(),
+            browser: 'Webview/Browser',
+            os: navigator.platform,
+            scanner_fp: currentFp,
+            scanned_at: new Date().toISOString(),
+            scanner_id: user?.id
+          });
+        }
+
         // Fetch owner's user_id to send push notification
         const { data: ownerProfile } = await supabase
           .from('profiles')

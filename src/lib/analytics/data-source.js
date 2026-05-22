@@ -68,8 +68,18 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
     // QR Scans
     const totalQRScans = scans.length;
 
-    // Repeat count
-    const repeatCount = views.filter(v => v.is_repeat === true).length;
+    // Repeat count (calculate dynamically using fingerprints)
+    const fpCounts = {};
+    views.forEach(v => {
+      const fp = v.visitor_fp || v.id;
+      fpCounts[fp] = (fpCounts[fp] || 0) + 1;
+    });
+    let repeatCount = 0;
+    Object.values(fpCounts).forEach(count => {
+      if (count > 1) {
+        repeatCount += (count - 1);
+      }
+    });
 
     // Device breakdown
     const deviceCounts = { mobile: 0, desktop: 0, tablet: 0 };
