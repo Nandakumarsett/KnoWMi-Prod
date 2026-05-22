@@ -198,10 +198,13 @@ export default function QRManager({ initialTokens, profileId, profileSlug, isPai
                           size={120}
                           level="H"
                           includeMargin={false}
+                          imageSettings={{
+                            src: "/favicon.png",
+                            height: 28,
+                            width: 28,
+                            excavate: true,
+                          }}
                         />
-                        <div className="absolute inset-0 m-auto w-7.5 h-7.5 bg-white rounded-full flex items-center justify-center shadow-lg border border-neutral-100 p-0.5 z-20 select-none overflow-hidden">
-                          <img src="/favicon.png" className="w-full h-full object-contain rounded-full" alt="KnoWMi Logo" />
-                        </div>
                       </div>
                       <div className="flex-1 flex flex-col gap-2">
                         <button 

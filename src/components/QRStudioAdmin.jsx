@@ -288,10 +288,13 @@ USING (EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role
                               size={100}
                               level="H"
                               includeMargin={false}
+                              imageSettings={{
+                                src: "/favicon.png",
+                                height: 24,
+                                width: 24,
+                                excavate: true,
+                              }}
                             />
-                            <div className="absolute inset-0 m-auto w-6.5 h-6.5 bg-white rounded-full flex items-center justify-center shadow-lg border border-neutral-100 p-0.5 z-20 select-none overflow-hidden">
-                              <img src="/favicon.png" className="w-full h-full object-contain rounded-full" alt="KnoWMi Logo" />
-                            </div>
                           </div>
                           <div className="flex-1 flex flex-col gap-2">
                             <button 
