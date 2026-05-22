@@ -1291,7 +1291,7 @@ const IdentityPass = ({ profile }) => {
   const isFree = profile?.status === 'free' || (!profile?.status && (!profile?.tier || profile?.tier === 'Starter' || profile?.tier === 'Free')) || profile?.tier === 'Free' || profile?.tier === 'Starter';
   const isPaid = !isFree || isOwner;
   const secretSlug = profile?.secure_slug || profile?.id
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`${window.location.origin}/p/${secretSlug}`)}`
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`${window.location.origin}/s/${secretSlug}`)}`
 
   const rawPersonaData = profile?.persona_data || {}
   const activeIdentity = (rawPersonaData.identities && Array.isArray(rawPersonaData.identities))
