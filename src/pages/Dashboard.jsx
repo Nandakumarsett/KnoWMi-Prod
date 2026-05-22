@@ -1435,6 +1435,74 @@ const IdentityPass = ({ profile }) => {
   )
 }
 
+const GamificationTab = ({ profile, completion, stats }) => {
+  const totalScans = stats?.scans || 0;
+  const level = profile?.tier === 'Creator' ? 'Pro' : (profile?.tier === 'Diamond' ? 'Diamond' : Math.floor(completion / 25) + 1 + Math.floor(totalScans / 50));
+  
+  const badges = [
+    { id: 'identity', name: 'Identity Complete', desc: '100% Profile Completion', icon: Star, unlocked: completion === 100, color: 'text-yellow-500', bg: 'bg-yellow-500/10' },
+    { id: 'first_scan', name: 'First Contact', desc: 'Got your first physical scan', icon: Zap, unlocked: totalScans > 0, color: 'text-orange-500', bg: 'bg-orange-500/10' },
+    { id: 'popular', name: 'Rising Star', desc: 'Reached 50+ total scans', icon: TrendingUp, unlocked: totalScans >= 50, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+    { id: 'pro', name: 'Verified Creator', desc: 'Active Premium Subscription', icon: ShieldCheck, unlocked: profile?.status !== 'free' || profile?.role === 'owner', color: 'text-blue-500', bg: 'bg-blue-500/10' },
+    { id: 'early', name: 'Early Adopter', desc: 'Joined during Beta phase', icon: Rocket, unlocked: new Date(profile?.created_at || Date.now()) < new Date('2026-08-01'), color: 'text-purple-500', bg: 'bg-purple-500/10' },
+  ];
+
+  const unlockedCount = badges.filter(b => b.unlocked).length;
+
+  return (
+    <div className="animate-slideUp max-w-[1200px] mx-auto space-y-8 pb-32">
+      <div className="flex items-end justify-between">
+        <div>
+          <p className="text-[11px] font-black uppercase text-orange-500 tracking-[0.2em] mb-2">Rewards & Progress</p>
+          <h2 className="text-5xl font-display font-black tracking-tight">Level <span className="gradient-text">{level}</span></h2>
+        </div>
+        <div className="text-right hidden sm:block">
+          <p className="text-sm font-bold text-neutral-400 uppercase tracking-widest">{unlockedCount}/{badges.length} Badges Unlocked</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {badges.map(badge => (
+          <div key={badge.id} className={`card p-6 border-2 transition-all duration-300 ${badge.unlocked ? 'border-orange-500/30 bg-white shadow-xl shadow-orange-500/5 hover:-translate-y-1' : 'border-neutral-100 bg-neutral-50/50 opacity-60 grayscale'}`}>
+            <div className="flex items-center gap-4">
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${badge.unlocked ? badge.bg + ' ' + badge.color : 'bg-neutral-200 text-neutral-400'}`}>
+                <badge.icon size={28} />
+              </div>
+              <div>
+                <h4 className="text-lg font-black text-neutral-900 tracking-tight">{badge.name}</h4>
+                <p className="text-[10px] font-bold text-neutral-400 mt-1 uppercase tracking-wider">{badge.desc}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="card p-8 bg-neutral-900 text-white border-neutral-800 mt-8 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl -mr-20 -mt-20" />
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div>
+            <h3 className="text-2xl font-black font-display mb-2">Next Level Goals</h3>
+            <p className="text-sm text-neutral-400 font-medium max-w-lg">Keep building your KnoWMi identity to unlock exclusive perks, custom apparel discounts, and verified status.</p>
+          </div>
+          <div className="flex-shrink-0 w-full md:w-auto">
+             <div className="bg-neutral-800 rounded-2xl p-6 border border-neutral-700 w-full md:w-72">
+               <div className="flex justify-between items-center mb-2">
+                 <span className="text-xs font-black uppercase text-orange-500 tracking-wider">Completion</span>
+                 <span className="text-xs font-black">{completion}%</span>
+               </div>
+               <div className="w-full h-3 bg-neutral-900 rounded-full overflow-hidden">
+                 <div className="h-full bg-orange-500 rounded-full relative transition-all duration-1000" style={{ width: `${completion}%` }}>
+                   <div className="absolute inset-0 bg-white/20 w-full animate-shimmer" />
+                 </div>
+               </div>
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Dashboard() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -2341,6 +2409,12 @@ export default function Dashboard() {
               </div>
             )}
           </div>
+          
+          <div className={`tab-transition ${activeTab === 'gamification' ? 'tab-visible' : 'tab-hidden'}`}>
+            {activeTab === 'gamification' && (
+              <GamificationTab profile={profile} completion={profileCompletion} stats={{scans: scans.length}} />
+            )}
+          </div>
         </main>
 
         {/* Global Live Toast Notification - TOP BANNER */}
@@ -2361,6 +2435,7 @@ export default function Dashboard() {
           {[
             { id: 'analytics', icon: Signal, label: 'Pulse' },
             { id: 'profile', icon: User, label: 'Identity' },
+            { id: 'gamification', icon: Trophy, label: 'Badges' },
             { id: 'pass', icon: ShieldCheck, label: 'Pass' },
             { id: 'order-status', icon: Clock, label: 'Status' }
           ].map(tab => (
