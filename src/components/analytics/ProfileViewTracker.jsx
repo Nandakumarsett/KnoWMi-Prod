@@ -111,7 +111,7 @@ export default function ProfileViewTracker({ profileId }) {
             .insert({
               profile_id: profileId,
               visitor_fp: fp,
-              referrer,
+              referrer: source !== 'direct' ? source : referrer,
               device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
               browser: navigator.userAgent,
               is_repeat: false,

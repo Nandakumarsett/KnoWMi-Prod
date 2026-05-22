@@ -127,8 +127,8 @@ export default function QRIntercept() {
           }).catch(err => console.error('Failed to trigger push notification:', err));
         }
 
-        // Redirect immediately to the profile
-        navigate(`/p/${qrData.profile_slug}`);
+        // 6. Redirect to the actual profile, appending ?src=tshirt to ensure analytics picks it up
+        navigate(`/p/${qrData.profile_slug}?src=tshirt`);
 
       } catch (err) {
         console.error('QR Intercept failed:', err);
