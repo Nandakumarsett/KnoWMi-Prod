@@ -81,14 +81,32 @@ export default function QRIntercept() {
           }
         }
 
-        const edgeFnUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/handle-qr-scan?token=${token}${isOwner ? '&skip_log=true' : ''}`;
-        
-        // Fire-and-forget the edge function call for background analytics
-        fetch(edgeFnUrl, {
-          headers: {
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
-          }
-        }).catch(console.error);
+        // Determine device type
+        const userAgent = navigator.userAgent;
+        const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+        const isAndroid = /Android/.test(userAgent);
+        let device = 'Desktop';
+        if (isIOS) device = 'iPhone';
+        else if (isAndroid) device = 'Android';
+        else if (window.innerWidth < 768) device = 'Mobile';
+
+        // Fetch owner's user_id to send push notification
+        const { data: ownerProfile } = await supabase
+          .from('profiles')
+          .select('user_id')
+          .eq('id', qrData.profile_id)
+          .single();
+
+        if (ownerProfile?.user_id && !isOwner) {
+          supabase.functions.invoke('send-push-notification', {
+            body: {
+              userId: ownerProfile.user_id,
+              title: 'T-Shirt Scan Alert! 👕',
+              body: `Someone just scanned your physical KnoWMi item using a ${device}!`,
+              url: '/dashboard'
+            }
+          }).catch(err => console.error('Failed to trigger push notification:', err));
+        }
 
         // Redirect immediately to the profile
         navigate(`/p/${qrData.profile_slug}`);
