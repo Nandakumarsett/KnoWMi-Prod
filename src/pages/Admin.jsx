@@ -14,8 +14,8 @@ import { createClient } from '@supabase/supabase-js'
 
 // Separate client for creating users without logging the Owner out
 const supabaseAdminGen = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY,
+  import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co',
+  import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder',
   { auth: { persistSession: false, autoRefreshToken: false } }
 )
 
