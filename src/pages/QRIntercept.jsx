@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Loader2, QrCode, Sparkles, ArrowRight, ShieldCheck, Heart } from 'lucide-react';
+import { Loader2, QrCode, Sparkles, ArrowRight, ShieldCheck, Heart, Power } from 'lucide-react';
 import AuthModal from '../components/AuthModal';
 import { buildFingerprint } from '../lib/analytics/fingerprint';
 
@@ -10,6 +10,7 @@ export default function QRIntercept() {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isUnclaimed, setIsUnclaimed] = useState(false);
+  const [isDeactivated, setIsDeactivated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [claimLoading, setClaimLoading] = useState(false);
 
@@ -30,7 +31,7 @@ export default function QRIntercept() {
 
         if (!qrData.is_active) {
           // Token is deactivated
-          setIsUnclaimed(true);
+          setIsDeactivated(true);
           return;
         }
 

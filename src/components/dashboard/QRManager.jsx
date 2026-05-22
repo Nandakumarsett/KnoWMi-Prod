@@ -54,7 +54,8 @@ export default function QRManager({ initialTokens, profileId, profileSlug, isPai
         .insert({
           profile_id: profileId,
           profile_slug: profileSlug,
-          label: label || 'New T-Shirt Token'
+          label: label || 'New T-Shirt Token',
+          is_active: true
         })
         .select(`
           *,

@@ -1630,7 +1630,11 @@ export default function Dashboard() {
     if (profile?.id) {
       // Fetch orders
       supabase.from('orders').select('*').eq('profile_id', profile.id).order('created_at', { ascending: false })
-        .then(({data}) => { setOrders(data || []); setLoading(false) })
+        .then(({data}) => { setOrders(data || []) })
+      
+      // Fetch QR Tokens
+      supabase.from('qr_tokens').select('*, stats:qr_token_stats(*)').eq('profile_id', profile.id).order('created_at', { ascending: false })
+        .then(({data}) => { setQrTokens(data || []); setLoading(false) })
     } else if (!authLoading) setLoading(false)
   }, [profile, authLoading])
 
