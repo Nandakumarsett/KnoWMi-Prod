@@ -128,7 +128,7 @@ export default function QRIntercept() {
         }
 
         // 6. Redirect to the actual profile, appending ?src=tshirt to ensure analytics picks it up
-        navigate(`/p/${qrData.profile_slug}?src=tshirt`);
+        window.location.href = `/p/${qrData.profile_slug || qrData.profile_id}?src=tshirt`;
 
       } catch (err) {
         console.error('QR Intercept failed:', err);

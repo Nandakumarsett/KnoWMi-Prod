@@ -138,12 +138,28 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
     // Filter events from today — compare using LOCAL date (not UTC) to avoid IST timezone mismatch
     const nowLocal = new Date();
     const todayLocalStr = `${nowLocal.getFullYear()}-${String(nowLocal.getMonth() + 1).padStart(2, '0')}-${String(nowLocal.getDate()).padStart(2, '0')}`;
-    const todayViews = views.filter(v => {
+    
+    // Completely based on QR T-shirt scans and Unique Visitors today
+    const todayTshirtViews = views.filter(v => {
       const d = new Date(v.viewed_at);
+      const localStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const isToday = localStr === todayLocalStr;
+      const ref = (v.referrer || '').toLowerCase();
+      const isTshirt = ref.includes('tshirt') || ref.includes('tee');
+      return isToday && isTshirt;
+    });
+    
+    const todayTshirtScans = scans.filter(s => {
+      const d = new Date(s.scanned_at);
       const localStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
       return localStr === todayLocalStr;
     });
-    const realTimeToday = todayViews.length;
+
+    const uniqueTodayTshirtFps = new Set();
+    todayTshirtViews.forEach(v => uniqueTodayTshirtFps.add(v.viewer_id || v.visitor_fp || v.id));
+    todayTshirtScans.forEach(s => uniqueTodayTshirtFps.add(s.scanner_id || s.scanner_fp || s.id));
+    
+    const realTimeToday = uniqueTodayTshirtFps.size;
 
     // Top Cities
     const cityCounts = {};
