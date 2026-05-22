@@ -25,15 +25,6 @@ export function usePushNotifications(userId) {
   // Replace this with the actual public key you generate
   const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
-  useEffect(() => {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      setIsSupported(true);
-      checkSubscription();
-    } else {
-      setLoading(false);
-    }
-  }, []);
-
   const checkSubscription = async () => {
     try {
       const registration = await navigator.serviceWorker.ready;
@@ -44,6 +35,15 @@ export function usePushNotifications(userId) {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      setIsSupported(true);
+      checkSubscription();
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
   const subscribe = async () => {
     if (!VAPID_PUBLIC_KEY) {
