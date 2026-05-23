@@ -42,7 +42,7 @@ export default function PWABanner() {
       aria-label="Install KnoWMi app"
     >
       <img 
-        src="/logo-square.png" 
+        src="/favicon.png" 
         alt="KnoWMi Logo" 
         className="w-10 h-10 rounded-xl object-cover flex-shrink-0"
       />
