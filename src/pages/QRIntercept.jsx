@@ -97,7 +97,10 @@ export default function QRIntercept() {
           currentFp = await buildFingerprint();
         } catch (e) {}
         
-        if (!isOwner) {
+        if (isOwner) {
+          // Tell the user why it wasn't tracked
+          alert('You scanned your own QR code! KnoWMi is deliberately ignoring this scan so your analytics are not artificially inflated. To test tracking, scan using an Incognito tab.');
+        } else {
           const { error: scanInsertError } = await supabase.from('qr_scan_events').insert({
             profile_id: qrData.profile_id,
             device_type: device.toLowerCase(),
@@ -109,7 +112,7 @@ export default function QRIntercept() {
           });
           
           if (scanInsertError) {
-            console.error('Failed to insert qr_scan_events. You may need to add an RLS policy for anonymous inserts on qr_scan_events:', scanInsertError);
+            console.error('Failed to insert qr_scan_events:', scanInsertError);
           }
         }
 
