@@ -98,7 +98,7 @@ export default function QRIntercept() {
         } catch (e) {}
         
         if (!isOwner) {
-          await supabase.from('qr_scan_events').insert({
+          const { error: scanInsertError } = await supabase.from('qr_scan_events').insert({
             profile_id: qrData.profile_id,
             device_type: device.toLowerCase(),
             browser: 'Webview/Browser',
@@ -107,6 +107,10 @@ export default function QRIntercept() {
             scanned_at: new Date().toISOString(),
             scanner_id: user?.id
           });
+          
+          if (scanInsertError) {
+            console.error('Failed to insert qr_scan_events. You may need to add an RLS policy for anonymous inserts on qr_scan_events:', scanInsertError);
+          }
         }
 
         // Fetch owner's user_id to send push notification
