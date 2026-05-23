@@ -61,14 +61,19 @@ export default function ProfileViewTracker({ profileId }) {
         }
 
         // Step 3: Prevent duplicate tracking on refresh (Session-based)
+        // EXCEPTION: If this is a QR T-shirt scan (?src=tshirt), always record it.
+        // Deduplication (same person = 1 per day) happens in analytics, not here.
+        const isTshirtScan = source === 'tshirt';
         const sessionKey = user ? `v_tracked_user_${profileId}` : `v_tracked_anon_${profileId}`;
-        if (sessionStorage.getItem(sessionKey)) {
+        if (!isTshirtScan && sessionStorage.getItem(sessionKey)) {
           console.log('Page refresh detected, skipping duplicate analytics tracking.');
           return;
         }
 
-        // Mark as tracked for this session
-        sessionStorage.setItem(sessionKey, '1');
+        // Mark as tracked for this session (only for non-tshirt views)
+        if (!isTshirtScan) {
+          sessionStorage.setItem(sessionKey, '1');
+        }
 
         // Fire-and-forget: proxy through your API or call Edge Function directly
         // For Vite + Supabase, you might call the Edge Function directly if allowed
@@ -111,7 +116,8 @@ export default function ProfileViewTracker({ profileId }) {
             .insert({
               profile_id: profileId,
               visitor_fp: fp,
-              referrer: source !== 'direct' ? source : referrer,
+              // If this is a QR T-shirt scan, always store 'tshirt' as referrer so analytics can find it
+              referrer: isTshirtScan ? 'tshirt' : (source !== 'direct' ? source : referrer),
               device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
               browser: navigator.userAgent,
               is_repeat: false,
@@ -120,7 +126,7 @@ export default function ProfileViewTracker({ profileId }) {
           if (insertError) {
             console.error("Client fallback tracking insert failed:", insertError.message);
           } else {
-            console.log("Client fallback tracking view recorded successfully!");
+            console.log(`Client fallback tracking view recorded successfully! source=${source}, referrer_stored=${isTshirtScan ? 'tshirt' : source}`);
           }
         }
       } catch (err) {

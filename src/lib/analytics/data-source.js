@@ -135,22 +135,24 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       weekUniqueSparkline[i] = match ? match.unique_views : 0;
     }
 
-    // "People who discovered you today" = unique scanners today from qr_scan_events
+    // "People who discovered you today" = unique people who visited via ?src=tshirt today
+    // Source: profile_view_events with referrer='tshirt' (this table always works, no RLS issues)
     // Rules:
-    //   - Only today's scans (using local IST date)
-    //   - Same person scanning multiple times today = counts as 1
-    //   - Same person scanned yesterday AND today = counts as 1 today (separate day bucket)
-    //   - Identity: use scanner_id (account ID) if available, else scanner_fp (fingerprint)
+    //   - Only today's events (using local IST date)
+    //   - Same person visiting multiple times today = counts as 1
+    //   - Identity: viewer_id (account ID, stable) → visitor_fp (fingerprint) → row id
     const nowLocal = new Date();
     const todayLocalStr = `${nowLocal.getFullYear()}-${String(nowLocal.getMonth() + 1).padStart(2, '0')}-${String(nowLocal.getDate()).padStart(2, '0')}`;
     
     const uniqueScannersToday = new Set();
-    scans.forEach(s => {
-      const d = new Date(s.scanned_at);
+    views.forEach(v => {
+      const d = new Date(v.viewed_at);
       const localStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-      if (localStr === todayLocalStr) {
-        // Prefer account ID (stable) over fingerprint (can rotate on mobile)
-        const identity = s.scanner_id || s.scanner_fp || s.id;
+      const ref = (v.referrer || '').toLowerCase();
+      const isTshirt = ref === 'tshirt' || ref.includes('tshirt') || ref.includes('tee');
+      if (localStr === todayLocalStr && isTshirt) {
+        // Prefer stable account ID over rotating fingerprint
+        const identity = v.viewer_id || v.visitor_fp || v.id;
         uniqueScannersToday.add(identity);
       }
     });
@@ -180,10 +182,13 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
     }).length;
 
     const effectiveQRScans = Math.max(totalQRScans, qrViewsCount);
-    const tshirtScans = scans.length + views.filter(v => {
+    // tshirtScans = unique people who arrived via QR T-shirt (from profile_view_events, referrer=tshirt)
+    const tshirtScanViews = views.filter(v => {
       const ref = (v.referrer || '').toLowerCase();
-      return ref.includes('tshirt') || ref.includes('tee');
-    }).length;
+      return ref === 'tshirt' || ref.includes('tshirt') || ref.includes('tee');
+    });
+    const uniqueTshirtScanners = new Set(tshirtScanViews.map(v => v.viewer_id || v.visitor_fp || v.id));
+    const tshirtScans = uniqueTshirtScanners.size;
 
     const profileQRScans = views.filter(v => {
       const ref = (v.referrer || '').toLowerCase();
