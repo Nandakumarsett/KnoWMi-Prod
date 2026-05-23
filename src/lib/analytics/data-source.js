@@ -112,7 +112,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       const day = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
       if (!dailyMap[day]) dailyMap[day] = { day, total_views: 0, unique_views: new Set() };
       dailyMap[day].total_views++;
-      dailyMap[day].unique_views.add(v.visitor_fp || v.id);
+      dailyMap[day].unique_views.add(v.viewer_id || v.visitor_fp || v.id);
     });
 
     const dailyStats = Object.values(dailyMap)

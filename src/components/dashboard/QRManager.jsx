@@ -195,7 +195,7 @@ export default function QRManager({ initialTokens, profileId, profileSlug, isPai
                       <div className="p-4 bg-white rounded-2xl border border-neutral-50 shadow-inner relative flex items-center justify-center">
                         <QRCodeSVG 
                           id={`qr-${token.id}`}
-                          value={`https://knowmi.in/q/${token.scan_token}`}
+                          value={`https://knowmi.in/q/${token.scan_token}?src=tshirt`}
                           size={120}
                           level="H"
                           includeMargin={false}
