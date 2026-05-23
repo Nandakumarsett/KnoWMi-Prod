@@ -1,4 +1,4 @@
-const CACHE_NAME = 'knowmi-v3';
+const CACHE_NAME = 'knowmi-v4';
 const ASSETS = [
   '/',
   '/index.html',
