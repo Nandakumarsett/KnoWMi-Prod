@@ -49,19 +49,44 @@
 
     <!-- Structured Data -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "KnoWMi",
-      "description": "India's first QR-enabled identity t-shirt",
-      "brand": { "@type": "Brand", "name": "KnoWMi" },
-      "offers": {
-        "@type": "Offer",
-        "price": "699",
-        "priceCurrency": "INR",
-        "availability": "https://schema.org/InStock"
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "KnoWMi",
+        "url": "https://knowmi.in",
+        "logo": "https://knowmi.in/logo-square.png",
+        "email": "support.knowmi@gmail.com",
+        "description": "India's first QR-enabled phygital identity t-shirt brand. Bridging the physical and digital worlds.",
+        "sameAs": [
+          "https://instagram.com/knowmi.in",
+          "https://twitter.com/knowmi_in",
+          "https://linkedin.com/company/knowmi-india",
+          "https://youtube.com/@knowmi_india"
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "KnoWMi QR-Enabled Identity Tee",
+        "image": "https://knowmi.in/og-image.png",
+        "description": "Premium 220 GSM heavyweight combed cotton streetwear t-shirt with a high-durability printed QR code linking to your custom real-time digital identity profile.",
+        "brand": {
+          "@type": "Brand",
+          "name": "KnoWMi"
+        },
+        "offers": {
+          "@type": "AggregateOffer",
+          "priceCurrency": "INR",
+          "lowPrice": "699",
+          "highPrice": "899",
+          "offerCount": "2",
+          "price": "699",
+          "availability": "https://schema.org/InStock",
+          "url": "https://knowmi.in"
+        }
       }
-    }
+    ]
     </script>
     <script type="module" crossorigin src="/assets/index-CMsuRN7G.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/vendor-CTqLuYwO.js">
@@ -69,8 +94,28 @@
   </head>
   <body>
     <div id="root">
-      <h1 class="sr-only">KnoWMi — Wear Your Digital Identity</h1>
-      <p class="sr-only">Scan Me. Know Me. Loading KnoWMi...</p>
+      <div class="sr-only">
+        <h1>KnoWMi — Wear Your Digital Identity</h1>
+        <p>India's first QR-enabled identity t-shirt. Wear your world. Share your story. Connect instantly with one scan.</p>
+        
+        <h2>Everything Your Identity Needs</h2>
+        <ul>
+          <li><strong>Direct Scanner Tracking</strong>: See which city and device scanned your tee in real-time.</li>
+          <li><strong>Dynamic Custom Profile</strong>: Instantly edit your bio, social links, custom buttons, and portfolio without buying a new t-shirt.</li>
+          <li><strong>Premium Streetwear Quality</strong>: Heavyweight 220 GSM combed cotton. High-durability printed QR code built to last 50+ washes.</li>
+          <li><strong>Centralized Team Dashboard</strong>: Central panel to distribute codes and manage squads/teams.</li>
+        </ul>
+
+        <h2>Transparent, Fair Pricing</h2>
+        <ul>
+          <li><strong>Creator Plan (₹699)</strong>: One premium QR tee, lifetime free dynamic profile, standard analytics.</li>
+          <li><strong>Pro Plan (₹49/mo)</strong>: Advanced real-time analytics, professional profile templates, custom branding.</li>
+          <li><strong>Team Plan (₹899 per member)</strong>: Custom group ordering for 4+ members, centralized branding, team-wide profile dashboard.</li>
+        </ul>
+
+        <h2>Claim Your Identity Today</h2>
+        <p>Pre-order your KnoWMi QR-enabled Tee now and get lifetime Pro access if you are among the first 100 wearers!</p>
+      </div>
     </div>
   </body>
 </html>
