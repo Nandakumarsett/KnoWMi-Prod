@@ -97,23 +97,21 @@ export default function QRIntercept() {
           currentFp = await buildFingerprint();
         } catch (e) {}
         
-        if (isOwner) {
-          // Tell the user why it wasn't tracked
-          alert('You scanned your own QR code! KnoWMi is deliberately ignoring this scan so your analytics are not artificially inflated. To test tracking, scan using an Incognito tab.');
-        } else {
-          const { error: scanInsertError } = await supabase.from('qr_scan_events').insert({
-            profile_id: qrData.profile_id,
-            device_type: device.toLowerCase(),
-            browser: 'Webview/Browser',
-            os: navigator.platform,
-            scanner_fp: currentFp,
-            scanned_at: new Date().toISOString(),
-            scanner_id: user?.id
-          });
-          
-          if (scanInsertError) {
-            console.error('Failed to insert qr_scan_events:', scanInsertError);
-          }
+        // Record the scan for ALL scanners — uniqueness is handled at display time, not here.
+        // This means the owner testing their own QR, other registered users, and strangers
+        // all get recorded. Daily deduplication (same person = 1 count) happens in analytics.
+        const { error: scanInsertError } = await supabase.from('qr_scan_events').insert({
+          profile_id: qrData.profile_id,
+          device_type: device.toLowerCase(),
+          browser: navigator.userAgent.slice(0, 200),
+          os: navigator.platform,
+          scanner_fp: currentFp,
+          scanned_at: new Date().toISOString(),
+          scanner_id: user?.id || null
+        });
+        
+        if (scanInsertError) {
+          console.error('Failed to insert qr_scan_events:', scanInsertError.message, '— check Supabase RLS: qr_scan_events needs an INSERT policy for anon/authenticated roles.');
         }
 
         // Fetch owner's user_id to send push notification

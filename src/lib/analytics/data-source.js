@@ -135,31 +135,26 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       weekUniqueSparkline[i] = match ? match.unique_views : 0;
     }
 
-    // Filter events from today — compare using LOCAL date (not UTC) to avoid IST timezone mismatch
+    // "People who discovered you today" = unique scanners today from qr_scan_events
+    // Rules:
+    //   - Only today's scans (using local IST date)
+    //   - Same person scanning multiple times today = counts as 1
+    //   - Same person scanned yesterday AND today = counts as 1 today (separate day bucket)
+    //   - Identity: use scanner_id (account ID) if available, else scanner_fp (fingerprint)
     const nowLocal = new Date();
     const todayLocalStr = `${nowLocal.getFullYear()}-${String(nowLocal.getMonth() + 1).padStart(2, '0')}-${String(nowLocal.getDate()).padStart(2, '0')}`;
     
-    // Completely based on QR T-shirt scans and Unique Visitors today
-    const todayTshirtViews = views.filter(v => {
-      const d = new Date(v.viewed_at);
-      const localStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-      const isToday = localStr === todayLocalStr;
-      const ref = (v.referrer || '').toLowerCase();
-      const isTshirt = ref.includes('tshirt') || ref.includes('tee');
-      return isToday && isTshirt;
-    });
-    
-    const todayTshirtScans = scans.filter(s => {
+    const uniqueScannersToday = new Set();
+    scans.forEach(s => {
       const d = new Date(s.scanned_at);
       const localStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-      return localStr === todayLocalStr;
+      if (localStr === todayLocalStr) {
+        // Prefer account ID (stable) over fingerprint (can rotate on mobile)
+        const identity = s.scanner_id || s.scanner_fp || s.id;
+        uniqueScannersToday.add(identity);
+      }
     });
-
-    const uniqueTodayTshirtFps = new Set();
-    todayTshirtViews.forEach(v => uniqueTodayTshirtFps.add(v.viewer_id || v.visitor_fp || v.id));
-    todayTshirtScans.forEach(s => uniqueTodayTshirtFps.add(s.scanner_id || s.scanner_fp || s.id));
-    
-    const realTimeToday = uniqueTodayTshirtFps.size;
+    const realTimeToday = uniqueScannersToday.size;
 
     // Top Cities
     const cityCounts = {};
