@@ -112,6 +112,7 @@ export default function FAQ() {
               style={{ color: 'var(--saffron)' }}
               target="_blank"
               rel="noopener noreferrer"
+              title="Opens in a new tab"
             >
               Chat with us on WhatsApp →
             </a>

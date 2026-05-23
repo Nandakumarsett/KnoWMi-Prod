@@ -35,7 +35,7 @@ export default function Contact() {
       <div className="max-w-[1200px] mx-auto px-6 relative z-10 w-full">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-100 mb-6 text-orange-600 text-[10px] font-black uppercase tracking-widest">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-100 mb-6 text-orange-700 text-[10px] font-black uppercase tracking-widest">
               Get In Touch
             </div>
             <h2 className="text-5xl md:text-7xl font-display font-black text-black mb-8 leading-[1.05] tracking-tight">
@@ -72,13 +72,13 @@ export default function Contact() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-2 gap-6">
                   <div className="col-span-2 md:col-span-1">
-                    <label htmlFor="contact-name" className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3">Name</label>
+                    <label htmlFor="contact-name" className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-3">Name</label>
                     <input id="contact-name" required type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })}
                       className="w-full px-6 py-4 rounded-2xl bg-white border border-neutral-100 outline-none focus:border-orange-500 transition-all text-sm font-medium"
                       placeholder="John Doe" />
                   </div>
                   <div className="col-span-2 md:col-span-1">
-                    <label htmlFor="contact-email" className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3">Email</label>
+                    <label htmlFor="contact-email" className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-3">Email</label>
                     <input id="contact-email" required type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
                       className="w-full px-6 py-4 rounded-2xl bg-white border border-neutral-100 outline-none focus:border-orange-500 transition-all text-sm font-medium"
                       placeholder="john@example.com" />
@@ -86,14 +86,14 @@ export default function Contact() {
                 </div>
 
                 <div>
-                  <label htmlFor="contact-phone" className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3">WhatsApp / Phone</label>
+                  <label htmlFor="contact-phone" className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-3">WhatsApp / Phone</label>
                   <input id="contact-phone" type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })}
                     className="w-full px-6 py-4 rounded-2xl bg-white border border-neutral-100 outline-none focus:border-orange-500 transition-all text-sm font-medium"
                     placeholder="+91 00000 00000" />
                 </div>
 
                 <div>
-                  <label htmlFor="contact-message" className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3">Message</label>
+                  <label htmlFor="contact-message" className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-3">Message</label>
                   <textarea id="contact-message" rows="4" value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })}
                     className="w-full px-6 py-4 rounded-2xl bg-white border border-neutral-100 outline-none focus:border-orange-500 transition-all text-sm font-medium resize-none"
                     placeholder="Tell us about your squad, team, or custom vision..." />

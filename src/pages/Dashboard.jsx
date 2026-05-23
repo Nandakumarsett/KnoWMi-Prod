@@ -431,6 +431,7 @@ const VerificationLock = ({ profile, user }) => (
           href={`https://wa.me/917981325397?text=${encodeURIComponent(`Hi KnoWMi! I'm ${profile?.first_name}. I've signed up and would like to verify my account.\nEmail: ${user?.email}`)}`}
           target="_blank"
           rel="noopener noreferrer"
+          title="Opens in a new tab"
           className="w-full btn-primary py-4 flex items-center justify-center gap-3 shadow-xl"
         >
           <MessageCircle size={20} className="fill-white/20" />

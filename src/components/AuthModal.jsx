@@ -241,6 +241,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
                 href={`https://wa.me/917981325397?text=${encodeURIComponent(`Hi KnoWMi! Please verify my account.\nName: ${tempUser?.name}\nEmail: ${tempUser?.email}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                title="Opens in a new tab"
                 className="w-full flex items-center justify-center gap-3 py-4 rounded-xl font-bold text-sm text-white transition-all mb-4"
                 style={{ background: '#25D366', boxShadow: '0 4px 16px rgba(37,211,102,0.3)' }}
               >

@@ -130,7 +130,7 @@ export default function ReturnRequestsAdmin() {
                       {r.video_url && (
                         <div>
                           <p className="text-[10px] font-bold uppercase text-neutral-400 mb-1">Unboxing Video</p>
-                          <a href={r.video_url} target="_blank" rel="noopener noreferrer"
+                          <a href={r.video_url} target="_blank" rel="noopener noreferrer" title="Opens in a new tab"
                             className="text-sm font-bold text-orange-500 hover:underline break-all">
                             View Video ↗
                           </a>

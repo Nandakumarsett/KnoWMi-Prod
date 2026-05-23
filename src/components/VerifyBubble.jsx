@@ -16,6 +16,7 @@ export default function VerifyBubble() {
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
+        title="Opens in a new tab"
         className="group relative flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 pr-4 rounded-full shadow-[0_15px_30px_rgba(224,123,26,0.2)] border-[1.5px] border-orange-500 transition-all hover:scale-105 active:scale-95"
       >
         <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white shadow-lg relative overflow-hidden">

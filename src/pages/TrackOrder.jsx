@@ -107,6 +107,7 @@ export default function TrackOrder() {
                 <p className="font-bold mb-1">Order not found</p>
                 <p>{error}</p>
                 <a href="https://wa.me/917981325397" target="_blank" rel="noopener noreferrer"
+                  title="Opens in a new tab"
                   className="font-bold text-orange-500 hover:underline mt-1 inline-block">
                   Contact us on WhatsApp →
                 </a>
@@ -188,6 +189,7 @@ export default function TrackOrder() {
                 <p className="text-sm text-neutral-400">
                   Need help with this order?{' '}
                   <a href="https://wa.me/917981325397" target="_blank" rel="noopener noreferrer"
+                    title="Opens in a new tab"
                     className="text-orange-500 font-bold hover:underline">WhatsApp us</a>
                   {' '}or{' '}
                   <a href="mailto:support.knowmi@gmail.com" className="text-orange-500 font-bold hover:underline">email us</a>

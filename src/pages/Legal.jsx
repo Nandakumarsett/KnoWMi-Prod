@@ -249,7 +249,7 @@ const SECTIONS = {
         </Section>
 
         <Section title="6. How to Raise a Request">
-          <p>Message us on WhatsApp at <a href="https://wa.me/917981325397" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline font-medium">+91 79813 25397</a> or email <a href="mailto:support.knowmi@gmail.com" className="text-orange-500 hover:underline font-medium">support.knowmi@gmail.com</a> within 7 days of delivery. Include:</p>
+          <p>Message us on WhatsApp at <a href="https://wa.me/917981325397" target="_blank" rel="noopener noreferrer" title="Opens in a new tab" className="text-orange-500 hover:underline font-medium">+91 79813 25397</a> or email <a href="mailto:support.knowmi@gmail.com" className="text-orange-500 hover:underline font-medium">support.knowmi@gmail.com</a> within 7 days of delivery. Include:</p>
           <ul>
             <li>Your order ID</li>
             <li>Your registered email address</li>
