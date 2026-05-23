@@ -1,4 +1,4 @@
-const CACHE_NAME = 'knowmi-v3';
+const CACHE_NAME = 'knowmi-v4';
 const ASSETS = [
   '/',
   '/index.html',
@@ -29,18 +29,42 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+
+  // Only handle GET requests — let POST/PUT/DELETE go straight to network
+  if (event.request.method !== 'GET') return;
+
+  // Never intercept Supabase API / Edge Function calls
+  if (url.hostname.includes('supabase.co') || url.pathname.startsWith('/functions/v1/')) return;
+
+  // Never intercept cross-origin requests (e.g. Google Fonts, CDN)
+  if (url.origin !== self.location.origin) return;
+
+  // Never intercept navigation requests (page loads/routing handled by browser)
+  if (event.request.mode === 'navigate') return;
+
+  // For static assets: try network first, fall back to cache
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // If network fetch succeeds, return it
+        // Cache successful responses for known static assets
+        if (response.ok && ASSETS.some(a => url.pathname === a || url.pathname.endsWith('.png') || url.pathname.endsWith('.svg'))) {
+          const cloned = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, cloned));
+        }
         return response;
       })
       .catch(() => {
-        // If network fetch fails (offline), fallback to cache
-        return caches.match(event.request);
+        // Offline fallback — only return cached if it exists
+        return caches.match(event.request).then(cached => {
+          if (cached) return cached;
+          // Return a proper empty 503 rather than undefined (prevents the TypeError)
+          return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
+        });
       })
   );
 });
+
 
 self.addEventListener('push', function(event) {
   if (event.data) {
