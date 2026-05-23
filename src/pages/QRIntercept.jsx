@@ -114,12 +114,35 @@ export default function QRIntercept() {
           console.error('Failed to insert qr_scan_events:', scanInsertError.message, '— check Supabase RLS: qr_scan_events needs an INSERT policy for anon/authenticated roles.');
         }
 
-        // Fetch owner's user_id to send push notification
-        const { data: ownerProfile } = await supabase
-          .from('profiles')
-          .select('user_id')
-          .eq('id', qrData.profile_id)
-          .single();
+        // Fetch owner's user_id to send push notification (try public_profiles first to respect RLS)
+        let ownerProfile = null;
+        try {
+          const { data: pubProfile } = await supabase
+            .from('public_profiles')
+            .select('user_id')
+            .eq('id', qrData.profile_id)
+            .single();
+          if (pubProfile?.user_id) {
+            ownerProfile = pubProfile;
+          }
+        } catch (e) {
+          console.warn('Failed to fetch from public_profiles view:', e);
+        }
+
+        if (!ownerProfile) {
+          try {
+            const { data: privProfile } = await supabase
+              .from('profiles')
+              .select('user_id')
+              .eq('id', qrData.profile_id)
+              .single();
+            if (privProfile?.user_id) {
+              ownerProfile = privProfile;
+            }
+          } catch (e) {
+            console.warn('Failed to fetch from profiles table:', e);
+          }
+        }
 
         if (ownerProfile?.user_id && !isOwner) {
           supabase.functions.invoke('send-push-notification', {

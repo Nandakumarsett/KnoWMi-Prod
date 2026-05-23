@@ -13,20 +13,58 @@ export default function ScanHandler() {
       try {
         const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(code)
         
-        let dbQuery = supabase
-          .from('public_profiles')
-          .select('id, user_id, first_name, secure_slug')
+        let profile = null
+        let profileError = null
 
-        if (isUUID) {
-          dbQuery = dbQuery.or(`id.eq.${code},secure_slug.eq.${code}`)
-        } else {
-          dbQuery = dbQuery.or(`wm_code.ilike.${code},wm_code.ilike.WM-${code},wm_code.ilike.PT-${code},secure_slug.eq.${code}`)
+        // Try querying with user_id first (optimal for push alerts)
+        try {
+          let dbQuery = supabase
+            .from('public_profiles')
+            .select('id, user_id, first_name, secure_slug')
+
+          if (isUUID) {
+            dbQuery = dbQuery.or(`id.eq.${code},secure_slug.eq.${code}`)
+          } else {
+            dbQuery = dbQuery.or(`wm_code.ilike.${code},wm_code.ilike.WM-${code},wm_code.ilike.PT-${code},secure_slug.eq.${code}`)
+          }
+
+          const res = await dbQuery.single()
+          if (!res.error && res.data) {
+            profile = res.data
+          } else {
+            profileError = res.error
+          }
+        } catch (e) {
+          console.warn('Initial profile query failed:', e)
         }
 
-        const { data: profile, error: profileError } = await dbQuery.single()
+        // If it failed (e.g., user_id column doesn't exist in live view yet), query without user_id
+        if (!profile) {
+          try {
+            let fallbackQuery = supabase
+              .from('public_profiles')
+              .select('id, first_name, secure_slug')
+
+            if (isUUID) {
+              fallbackQuery = fallbackQuery.or(`id.eq.${code},secure_slug.eq.${code}`)
+            } else {
+              fallbackQuery = fallbackQuery.or(`wm_code.ilike.${code},wm_code.ilike.WM-${code},wm_code.ilike.PT-${code},secure_slug.eq.${code}`)
+            }
+
+            const res = await fallbackQuery.single()
+            if (!res.error && res.data) {
+              profile = res.data
+              profileError = null // found successfully
+            } else {
+              profileError = res.error || new Error('Profile not found')
+            }
+          } catch (e) {
+            profileError = e
+          }
+        }
 
         if (profileError || !profile) {
-          console.error('Profile not found for code:', code)
+          console.error('Profile not found for code:', code, profileError)
           navigate('/')
           return
         }
@@ -64,14 +102,16 @@ export default function ScanHandler() {
         })
 
         // 4. Trigger Push Notification asynchronously
-        supabase.functions.invoke('send-push-notification', {
-          body: {
-            userId: profile.user_id,
-            title: 'New Scan Alert! 🔥',
-            body: `Someone just scanned your KnoWMi profile using a ${device}!`,
-            url: '/dashboard'
-          }
-        }).catch(err => console.error('Failed to trigger push notification:', err));
+        if (profile.user_id) {
+          supabase.functions.invoke('send-push-notification', {
+            body: {
+              userId: profile.user_id,
+              title: 'New Scan Alert! 🔥',
+              body: `Someone just scanned your KnoWMi profile using a ${device}!`,
+              url: '/dashboard'
+            }
+          }).catch(err => console.error('Failed to trigger push notification:', err));
+        }
 
         // 5. Redirect to the randomized URL (safety first)
         const finalSlug = profile.secure_slug || profile.id

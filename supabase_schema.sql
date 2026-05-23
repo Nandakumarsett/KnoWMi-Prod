@@ -187,7 +187,7 @@ USING (EXISTS (
 DROP VIEW IF EXISTS public.public_profiles;
 CREATE VIEW public.public_profiles AS
 SELECT 
-    id, first_name, last_name, bio, tagline, 
+    id, user_id, first_name, last_name, bio, tagline, 
     instagram_url, linkedin_url, whatsapp_number, website_url, 
     avatar_url, secure_slug, wm_code, status, role, is_verified, 
     persona_data, created_at
