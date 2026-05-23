@@ -284,7 +284,7 @@ USING (EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role
                           <div className="p-3 bg-white rounded-xl border border-neutral-100 flex items-center justify-center relative">
                             <QRCodeSVG 
                               id={`qr-${token.id}`}
-                              value={`${window.location.origin}/q/${token.scan_token}`}
+                              value={`${window.location.origin}/q/${token.scan_token}?src=tshirt`}
                               size={100}
                               level="H"
                               includeMargin={false}

@@ -5,22 +5,54 @@ import { supabase } from '../supabase';
 
 export async function getAnalyticsData(profileId, dateRange = 'all') {
   try {
-    // Fetch views and scans directly and robustly to avoid PostgREST relationship conflicts
-    const viewRes = await supabase.from('profile_view_events').select('*').eq('profile_id', profileId);
-    if (viewRes.error) {
-      console.error("Analytics: Error fetching views:", viewRes.error.message);
+    // Fetch analytics data via edge function (uses SERVICE ROLE, bypasses RLS)
+    // This is critical: without this, Kishore's dashboard cannot see scans
+    // by OTHER users (Rashmika, Owner, etc.) due to SELECT RLS policies.
+    let views = [], scans = [], links = [];
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+
+      if (token) {
+        const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-profile-analytics`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({ profileId }),
+        });
+
+        if (res.ok) {
+          const payload = await res.json();
+          views = payload.views || [];
+          scans = payload.scans || [];
+          links = payload.links || [];
+          console.log(`Analytics loaded via edge function: ${views.length} views, ${scans.length} scans`);
+        } else {
+          console.warn('get-profile-analytics edge function returned error, falling back to direct queries');
+          throw new Error('Edge function failed');
+        }
+      } else {
+        throw new Error('No session');
+      }
+    } catch (edgeFnErr) {
+      // Fallback: direct queries (may be limited by RLS but better than nothing)
+      console.warn('Using direct Supabase queries for analytics (RLS may limit results):', edgeFnErr.message);
+      const viewRes = await supabase.from('profile_view_events').select('*').eq('profile_id', profileId);
+      if (viewRes.error) console.error("Analytics: Error fetching views:", viewRes.error.message);
+
+      const scanRes = await supabase.from('qr_scan_events').select('*').eq('profile_id', profileId);
+      if (scanRes.error) console.error("Analytics: Error fetching scans:", scanRes.error.message);
+
+      const { data: linksData } = await supabase.from('link_click_events').select('*').eq('profile_id', profileId);
+
+      views = viewRes.data || [];
+      scans = scanRes.data || [];
+      links = linksData || [];
     }
 
-    const scanRes = await supabase.from('qr_scan_events').select('*').eq('profile_id', profileId);
-    if (scanRes.error) {
-      console.error("Analytics: Error fetching scans:", scanRes.error.message);
-    }
-
-    const { data: linksData } = await supabase.from('link_click_events').select('*').eq('profile_id', profileId);
-
-    let views = viewRes.data || [];
-    let scans = scanRes.data || [];
-    let links = linksData || [];
 
     if (dateRange && dateRange !== 'all') {
       const now = new Date();
