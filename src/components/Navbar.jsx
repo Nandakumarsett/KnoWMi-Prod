@@ -106,14 +106,13 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
         </a>
 
         {/* Desktop links */}
-        <div className="hidden lg:flex items-center gap-1.5 flex-1 justify-center" role="list">
+        <div className="hidden lg:flex items-center gap-1.5 flex-1 justify-center">
           {navLinks.map(l => {
             const isActive = activeSection === l.href
             return (
               <a
                 key={l.label}
                 href={l.href}
-                role="listitem"
                 className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-all duration-300 ${
                   isActive 
                     ? 'bg-white shadow-lg shadow-neutral-200/50 scale-105' 

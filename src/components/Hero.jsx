@@ -126,7 +126,7 @@ export default function Hero({ onOrderClick }) {
 
             {/* Social proof */}
             <div data-fade className="flex flex-col sm:flex-row items-center gap-3">
-              <div className="flex -space-x-2" aria-label="Customer avatars">
+              <div className="flex -space-x-2" role="group" aria-label="Customer avatars">
                 {trustAvatars.map((a, i) => (
                   <div key={i}
                     className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-xs font-bold text-white"

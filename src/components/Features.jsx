@@ -106,11 +106,10 @@ export default function Features() {
         </div>
 
         {/* Bento grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" role="list">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {features.map((f, i) => (
             <div
               key={i}
-              role="listitem"
               className={`reveal reveal-delay-${(i % 4) + 1} card-lift rounded-[2rem] p-5 relative overflow-hidden ${
                 f.size === 'large' ? 'lg:col-span-2' : ''
               }`}

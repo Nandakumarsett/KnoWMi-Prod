@@ -92,11 +92,10 @@ export default function Testimonials() {
         </div>
 
         {/* Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" role="list">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {testimonials.map((t, i) => (
             <div
               key={i}
-              role="listitem"
               className={`reveal reveal-delay-${(i % 3) + 1} testi-card card-lift rounded-3xl p-5 sm:p-7 relative overflow-hidden`}
               style={{ background: '#fff', border: '1px solid var(--border)' }}
             >

@@ -214,9 +214,9 @@ const PhoneMockup = () => {
                   <div className="w-full mb-6">
                      <p className="text-[8px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-3">Network Presence</p>
                      <div className="flex gap-3">
-                        <a href="#" onClick={e => e.preventDefault()} className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white hover:scale-105 transition-transform"><Instagram size={14} /></a>
-                        <a href="#" onClick={e => e.preventDefault()} className="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-white hover:scale-105 transition-transform"><Twitter size={14} /></a>
-                        <a href="#" onClick={e => e.preventDefault()} className="w-8 h-8 rounded-lg bg-[#0077B5] flex items-center justify-center text-white hover:scale-105 transition-transform"><Linkedin size={14} /></a>
+                        <a href="#" onClick={e => e.preventDefault()} aria-label="Instagram" className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white hover:scale-105 transition-transform"><Instagram size={14} /></a>
+                        <a href="#" onClick={e => e.preventDefault()} aria-label="Twitter" className="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-white hover:scale-105 transition-transform"><Twitter size={14} /></a>
+                        <a href="#" onClick={e => e.preventDefault()} aria-label="LinkedIn" className="w-8 h-8 rounded-lg bg-[#0077B5] flex items-center justify-center text-white hover:scale-105 transition-transform"><Linkedin size={14} /></a>
                      </div>
                   </div>
 
@@ -331,9 +331,9 @@ const PhoneMockup = () => {
                   <div className="w-full mb-6">
                      <p className="text-[8px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-3">Find Me On</p>
                      <div className="flex gap-3">
-                        <a href="#" onClick={e => e.preventDefault()} className="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-white hover:scale-105 transition-transform"><Github size={14} /></a>
-                        <a href="#" onClick={e => e.preventDefault()} className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white hover:scale-105 transition-transform"><Instagram size={14} /></a>
-                        <a href="#" onClick={e => e.preventDefault()} className="w-8 h-8 rounded-lg bg-[#1DB954] flex items-center justify-center text-white hover:scale-105 transition-transform"><Music size={14} /></a>
+                        <a href="#" onClick={e => e.preventDefault()} aria-label="GitHub" className="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-white hover:scale-105 transition-transform"><Github size={14} /></a>
+                        <a href="#" onClick={e => e.preventDefault()} aria-label="Instagram" className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white hover:scale-105 transition-transform"><Instagram size={14} /></a>
+                        <a href="#" onClick={e => e.preventDefault()} aria-label="Music Profile" className="w-8 h-8 rounded-lg bg-[#1DB954] flex items-center justify-center text-white hover:scale-105 transition-transform"><Music size={14} /></a>
                      </div>
                   </div>
 

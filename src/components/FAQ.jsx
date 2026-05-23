@@ -90,7 +90,7 @@ export default function FAQ() {
           </h2>
         </div>
 
-        <div className="flex flex-col gap-3" role="list">
+        <div className="flex flex-col gap-3">
           {faqs.map((faq, i) => (
             <FAQItem
               key={i}

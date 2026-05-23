@@ -562,9 +562,9 @@ export default function Personas() {
           </p>
         </div>
 
-        <div className="personas-grid reveal" role="list">
+        <div className="personas-grid reveal">
           {dynamicPersonas.map(p => (
-            <div key={p.id} role="listitem" onClick={() => setActive(p)}
+            <div key={p.id} onClick={() => setActive(p)}
               className="persona-card"
               style={{ '--pc': p.color }}
               onMouseEnter={e => {

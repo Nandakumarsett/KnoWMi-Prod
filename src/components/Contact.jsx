@@ -72,29 +72,29 @@ export default function Contact() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-2 gap-6">
                   <div className="col-span-2 md:col-span-1">
-                    <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3">Name</label>
-                    <input required type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })}
+                    <label htmlFor="contact-name" className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3">Name</label>
+                    <input id="contact-name" required type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })}
                       className="w-full px-6 py-4 rounded-2xl bg-white border border-neutral-100 outline-none focus:border-orange-500 transition-all text-sm font-medium"
                       placeholder="John Doe" />
                   </div>
                   <div className="col-span-2 md:col-span-1">
-                    <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3">Email</label>
-                    <input required type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
+                    <label htmlFor="contact-email" className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3">Email</label>
+                    <input id="contact-email" required type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
                       className="w-full px-6 py-4 rounded-2xl bg-white border border-neutral-100 outline-none focus:border-orange-500 transition-all text-sm font-medium"
                       placeholder="john@example.com" />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3">WhatsApp / Phone</label>
-                  <input type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                  <label htmlFor="contact-phone" className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3">WhatsApp / Phone</label>
+                  <input id="contact-phone" type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })}
                     className="w-full px-6 py-4 rounded-2xl bg-white border border-neutral-100 outline-none focus:border-orange-500 transition-all text-sm font-medium"
                     placeholder="+91 00000 00000" />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3">Message</label>
-                  <textarea rows="4" value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })}
+                  <label htmlFor="contact-message" className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3">Message</label>
+                  <textarea id="contact-message" rows="4" value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })}
                     className="w-full px-6 py-4 rounded-2xl bg-white border border-neutral-100 outline-none focus:border-orange-500 transition-all text-sm font-medium resize-none"
                     placeholder="Tell us about your squad, team, or custom vision..." />
                 </div>
