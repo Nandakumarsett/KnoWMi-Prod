@@ -11,12 +11,19 @@ export default function ScanHandler() {
       if (!code) return
 
       try {
-        // 1. Find the profile (search by wm_code for QR scans, but get the secure_slug for the URL)
-        const { data: profile, error: profileError } = await supabase
+        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(code)
+        
+        let dbQuery = supabase
           .from('public_profiles')
           .select('id, user_id, first_name, secure_slug')
-          .or(`wm_code.ilike.${code},wm_code.ilike.WM-${code},wm_code.ilike.PT-${code},secure_slug.eq.${code}`)
-          .single()
+
+        if (isUUID) {
+          dbQuery = dbQuery.or(`id.eq.${code},secure_slug.eq.${code}`)
+        } else {
+          dbQuery = dbQuery.or(`wm_code.ilike.${code},wm_code.ilike.WM-${code},wm_code.ilike.PT-${code},secure_slug.eq.${code}`)
+        }
+
+        const { data: profile, error: profileError } = await dbQuery.single()
 
         if (profileError || !profile) {
           console.error('Profile not found for code:', code)
