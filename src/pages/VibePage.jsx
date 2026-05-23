@@ -109,7 +109,7 @@ export default function VibePage() {
 
                 <div className="vibe-fade-in vibe-d2" style={{ padding: '0 20px' }}>
                     <HeroCard
-                        todayScans={stats.todayScans}
+                        todayScans={stats.todayTotal || 0}
                         isLive={isLive}
                         weekSparkline={stats.weekSparkline}
                     />
