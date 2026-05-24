@@ -308,15 +308,22 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       cityCounts[city].count++;
     });
 
+    delete cityCounts['Unknown']; // Remove Unknown from top cities list and calculations
+    const totalKnownScans = Object.values(cityCounts).reduce((sum, c) => sum + c.count, 0) || 1;
+
     const topCities = Object.entries(cityCounts)
       .sort((a, b) => b[1].count - a[1].count)
       .slice(0, 5)
-      .map(([city, data]) => ({
-        city,
-        ...data,
-        flag: flagEmoji(data.country || ''),
-        barPct: Math.round((data.count / Math.max(...Object.values(cityCounts).map(c => c.count), 1)) * 100)
-      }));
+      .map(([city, data]) => {
+        const pct = (data.count / totalKnownScans) * 100;
+        return {
+          city,
+          ...data,
+          flag: flagEmoji(data.country || ''),
+          percentage: pct.toFixed(1),
+          barPct: pct
+        };
+      });
 
     // Explicit views with qr source or referrer
     const qrViewsCount = views.filter(v => {

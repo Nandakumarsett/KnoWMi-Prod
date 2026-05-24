@@ -167,7 +167,7 @@ export default function CityCard({ topCities = [], totalCities = 0 }) {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
         <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: 14, color: 'var(--text)' }}>
-          Deep Map Intelligence
+          Top towns/cities
         </span>
         <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 12, color: 'var(--muted)' }}>
           {totalCities} {totalCities === 1 ? 'city' : 'cities'}
@@ -217,30 +217,29 @@ export default function CityCard({ topCities = [], totalCities = 0 }) {
         )}
       </div>
 
-      {/* City list */}
+      {/* City list (Instagram Style) */}
       {topCities.length === 0 ? (
         <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 13, color: 'var(--muted)', textAlign: 'center', padding: '12px 0' }}>
           🌍 No scans yet — your first could come from anywhere
         </p>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {topCities.map((city, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }} className="hover:translate-x-1 transition-transform cursor-pointer group">
-              <span style={{ fontSize: 18, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}>{city.flag}</span>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>
-                  {city.city}
-                </span>
-                <div style={{ width: '100%', height: 4, borderRadius: 2, background: 'var(--surface2)', marginTop: 6, overflow: 'hidden' }}>
+            <div key={i} className="hover:opacity-80 transition-opacity cursor-pointer group">
+              <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 14, fontWeight: 500, color: 'var(--text)', display: 'block', marginBottom: 8 }}>
+                {city.city}
+              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ flex: 1, height: 8, borderRadius: 4, background: 'var(--surface2)', overflow: 'hidden' }}>
                   <div style={{
-                    height: '100%', borderRadius: 2, background: 'var(--teal)',
+                    height: '100%', borderRadius: 4, background: '#d926a9',
                     width: `${animated[i] || 0}%`, transition: 'none',
                   }} />
                 </div>
+                <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 14, fontWeight: 700, color: 'var(--text)', minWidth: 44, textAlign: 'right' }}>
+                  {city.percentage}%
+                </span>
               </div>
-              <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 14, fontWeight: 800, color: 'var(--text)', minWidth: 32, textAlign: 'right' }}>
-                {city.count}
-              </span>
             </div>
           ))}
         </div>
