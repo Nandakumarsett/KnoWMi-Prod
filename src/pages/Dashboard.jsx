@@ -1312,7 +1312,10 @@ const IdentityPass = ({ profile }) => {
     displayName = fn || ln || 'KnoWMi User';
   }
 
-  const personaTitle = activeIdentity?.display_label || (activeIdentity?.persona_type ? activeIdentity.persona_type.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) : 'Digital Creator');
+  const personaTitle = activeIdentity?.display_label || 
+    (activeIdentity?.persona_type === 'influencer' ? 'Content Creator' : 
+     activeIdentity?.persona_type === 'developer' || activeIdentity?.persona_type === 'dev' ? 'Tech' : 
+     activeIdentity?.persona_type ? activeIdentity.persona_type.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) : 'Digital Creator');
 
   return (
     <div className="animate-slideUp space-y-8">
