@@ -1,10 +1,15 @@
 import React from 'react';
 
-const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
 export default function StreakCard({ current, currentStreak, best, status, weekDots, message }) {
   const finalStreak = typeof current === 'number' ? current : (typeof currentStreak === 'number' ? currentStreak : 0);
   const dots = weekDots && weekDots.length === 7 ? weekDots : Array.from({ length: 7 }, (_, i) => i >= 7 - finalStreak);
+
+  const today = new Date();
+  const dayLabels = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date();
+    d.setDate(today.getDate() - (6 - i));
+    return d.toLocaleDateString('en-US', { weekday: 'short' });
+  });
 
   let dynamicMessage = message;
   if (!dynamicMessage) {
@@ -60,7 +65,7 @@ export default function StreakCard({ current, currentStreak, best, status, weekD
 
         {/* Calendar visual row of days */}
         <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
-          {DAY_LABELS.map((day, i) => {
+          {dayLabels.map((day, i) => {
             const isToday = i === 6;
             const isActive = dots[i];
             let bg, color, border, fontWeight;
