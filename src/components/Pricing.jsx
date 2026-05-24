@@ -243,12 +243,12 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                 {/* QR Preview Gating */}
                 <div className="relative w-36 h-36 bg-white border border-neutral-100 rounded-2xl flex items-center justify-center p-3 shadow-inner mx-auto">
                   {simulatorTab === 'trial' ? (
-                    <div className="absolute inset-0 bg-white/95 backdrop-blur-[6px] rounded-2xl flex flex-col items-center justify-center p-4 z-10">
+                    <div className="absolute inset-0 bg-white/40 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center p-4 z-10">
                       <Lock size={20} className="text-orange-500 mb-1" />
-                      <span className="text-[8px] font-black uppercase tracking-widest text-orange-500">Buy a Tee to Unlock</span>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-orange-500 shadow-white drop-shadow-md">Buy a Tee to Unlock</span>
                     </div>
                   ) : null}
-                  <div className={`w-full h-full relative flex items-center justify-center transition-all duration-500 ${simulatorTab === 'trial' ? 'blur-[4px] opacity-25' : 'opacity-100 scale-105'}`}>
+                  <div className={`w-full h-full relative flex items-center justify-center transition-all duration-500 ${simulatorTab === 'trial' ? 'opacity-50' : 'opacity-100 scale-105'}`}>
                     <img 
                       src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent('https://knowmi.co/p/alexcarter')}`}
                       className="w-[100px] h-[100px] object-contain pointer-events-none" 
@@ -296,12 +296,12 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                   </div>
                 </div>
                 {simulatorTab === 'trial' ? (
-                  <div className="absolute inset-0 bg-white/80 backdrop-blur-[6px] flex flex-col items-center justify-center p-4 z-30">
+                  <div className="absolute inset-0 bg-white/40 backdrop-blur-md flex flex-col items-center justify-center p-4 z-30">
                     <Lock size={16} className="text-orange-500 mb-1" />
-                    <span className="text-[8px] font-black uppercase tracking-widest text-orange-500">Tee Activation Required</span>
+                    <span className="text-[8px] font-black uppercase tracking-widest text-orange-500 shadow-white drop-shadow-md">Tee Activation Required</span>
                   </div>
                 ) : null}
-                <div className={`h-24 w-full relative transition-all duration-500 ${simulatorTab === 'trial' ? 'blur-[4px] opacity-30 scale-95' : 'scale-100 opacity-100'}`}>
+                <div className={`h-24 w-full relative transition-all duration-500 ${simulatorTab === 'trial' ? 'opacity-40 scale-95' : 'scale-100 opacity-100'}`}>
                   {/* Mock Area Chart for Total Views (Blue) and Unique (Green) */}
                   <svg className="absolute bottom-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                     <defs>
