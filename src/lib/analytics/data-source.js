@@ -49,6 +49,43 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
           scans = payload.scans || [];
           links = payload.links || [];
           console.log(`Analytics loaded via edge function: ${views.length} views, ${scans.length} scans`);
+          
+          // PATCH: Edge function might not return city/country if it's an older deployment.
+          // Fetch them directly using RLS (since user is the owner, they can read their own analytics).
+          const needsScanPatch = scans.length > 0 && (!('city' in scans[0]) || scans[0].city == null);
+          const needsViewPatch = views.length > 0 && (!('city' in views[0]) || views[0].city == null);
+          
+          if (needsScanPatch || needsViewPatch) {
+            console.log("Patching missing city/country data from direct query...");
+            try {
+              const promises = [];
+              if (needsScanPatch) promises.push(supabase.from('qr_scan_events').select('*').eq('profile_id', profileId));
+              else promises.push(Promise.resolve({ data: null }));
+              
+              if (needsViewPatch) promises.push(supabase.from('profile_view_events').select('*').eq('profile_id', profileId));
+              else promises.push(Promise.resolve({ data: null }));
+
+              const [scanRes, viewRes] = await Promise.all(promises);
+              
+              if (scanRes && scanRes.data) {
+                const scanMap = {};
+                scanRes.data.forEach(s => scanMap[s.id] = s);
+                scans.forEach(s => {
+                  if (scanMap[s.id]) Object.assign(s, scanMap[s.id]);
+                });
+              }
+              if (viewRes && viewRes.data) {
+                const viewMap = {};
+                viewRes.data.forEach(v => viewMap[v.id] = v);
+                views.forEach(v => {
+                  if (viewMap[v.id]) Object.assign(v, viewMap[v.id]);
+                });
+              }
+            } catch(e) {
+              console.warn("Could not patch cities via direct query:", e);
+            }
+          }
+
         } else {
           console.warn('get-profile-analytics edge function returned error, falling back to direct queries');
           throw new Error('Edge function failed');
@@ -257,7 +294,8 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
     });
 
     [...nonTshirtViews, ...scans].forEach(row => {
-      if (!row.city || row.city === 'Unknown') return;
+      let city = row.city || 'Unknown';
+      if (city === '-') city = 'Unknown';
       
       let countryName = row.country || 'Unknown';
       const normCountry = countryName.trim().toUpperCase();
@@ -266,8 +304,8 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       else if (normCountry === 'UK' || normCountry === 'GB' || normCountry === 'UNITED KINGDOM') countryName = 'United Kingdom';
       else if (normCountry === 'AE' || normCountry === 'UAE' || normCountry === 'UNITED ARAB EMIRATES') countryName = 'UAE';
       
-      cityCounts[row.city] = cityCounts[row.city] || { count: 0, country: countryName };
-      cityCounts[row.city].count++;
+      cityCounts[city] = cityCounts[city] || { count: 0, country: countryName };
+      cityCounts[city].count++;
     });
 
     const topCities = Object.entries(cityCounts)
@@ -534,7 +572,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       qrScanRate,
       repeatScore: totalViews > 0 ? Math.round((repeatCount / totalViews) * 100) : 0,
       todayTotal: realTimeToday,
-      todayUnique: weekUniqueSparkline[6] || (todayViews.length > 0 ? 1 : 0),
+      todayUnique: weekUniqueSparkline[6] || 0,
       deviceBreakdown,
       topCities,
       totalCities: Object.keys(cityCounts).length,

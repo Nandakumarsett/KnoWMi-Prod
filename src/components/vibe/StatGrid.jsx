@@ -35,7 +35,7 @@ function StatCard({ emoji, value, label, sublabel, delta, color, suffix = '' }) 
   );
 }
 
-export default function StatGrid({ totalViews, tshirtScans, profileQRScans, uniqueViews }) {
+export default function StatGrid({ totalViews, totalCities, profileQRScans, uniqueViews }) {
   return (
     <div style={{
       display: 'grid', 
@@ -44,8 +44,8 @@ export default function StatGrid({ totalViews, tshirtScans, profileQRScans, uniq
       width: '100%'
     }}>
       <StatCard emoji="👁️" value={totalViews} label="Total Views" sublabel="QR + Share links" delta={null} color="var(--teal)" />
-      <StatCard emoji="👕" value={tshirtScans} label="QR T-shirt Scans" sublabel="From your tee only" delta={null} color="var(--amber)" />
       <StatCard emoji="📱" value={profileQRScans} label="Profile QR Scans" sublabel="Website related QR scans" delta={null} color="var(--purple)" />
+      <StatCard emoji="🌍" value={totalCities} label="Cities Reached" sublabel="Global footprint" delta={null} color="var(--indigo)" />
       <StatCard emoji="🫂" value={uniqueViews} label="Unique Visitors" sublabel="Across all sources" delta={null} color="var(--teal)" />
     </div>
   );

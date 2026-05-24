@@ -1996,7 +1996,7 @@ export default function Dashboard() {
                           <p style={{ fontFamily: 'Syne,sans-serif', fontSize: 14, fontWeight: 700, letterSpacing: '0.1em', color: 'var(--muted)', textTransform: 'uppercase' }}>Your numbers</p>
                           <StatGrid 
                             totalViews={vibeStats.totalViews} 
-                            tshirtScans={vibeStats.tshirtScans} 
+                            totalCities={vibeStats.totalCities} 
                             profileQRScans={vibeStats.profileQRScans} 
                             uniqueViews={vibeStats.uniqueViews} 
                           />

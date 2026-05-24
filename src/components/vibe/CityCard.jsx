@@ -58,13 +58,18 @@ const fetchGeocode = async (cityName, countryName) => {
   if (geocodeCache[cacheKey]) return geocodeCache[cacheKey];
   if (geocodeCache[cityName]) return geocodeCache[cityName];
   
+  if (!cityName || cityName === 'Unknown' || cityName === '-') return null;
+
   try {
-    const res = await fetch(`https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(cityName)}&country=${encodeURIComponent(countryName)}&format=json&limit=1`);
-    const data = await res.json();
-    if (data && data.length > 0) {
-      const coords = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-      geocodeCache[cacheKey] = coords; // Store in cache for O(1) future lookups
-      return coords;
+    const query = encodeURIComponent(`${cityName}, ${countryName}`);
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.length > 0) {
+        const coords = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+        geocodeCache[cacheKey] = coords; // Store in cache for O(1) future lookups
+        return coords;
+      }
     }
   } catch (err) {
     console.error("Geocoding failed for:", cityName, err);
@@ -87,9 +92,11 @@ const MapController = ({ cities, setMarkers }) => {
       // Attempt to get exact coordinates via cache or Nominatim API
       let streetCoords = await fetchGeocode(city.city, city.country);
       
+      const isExactLocation = !!streetCoords;
+
       // Fallback offset if Geocoding fails
       if (!streetCoords) {
-        streetCoords = [baseCoords[0] + 0.15, baseCoords[1] + 0.15];
+        streetCoords = baseCoords;
       }
 
       if (!isMounted) return;
@@ -107,14 +114,20 @@ const MapController = ({ cities, setMarkers }) => {
       await new Promise(r => setTimeout(r, 2500));
       if (!isMounted) return;
 
-      // 3. District / State View (Zoom 10)
-      map.flyTo(streetCoords, 10, { duration: 2, easeLinearity: 0.25 });
-      await new Promise(r => setTimeout(r, 2500));
-      if (!isMounted) return;
+      if (isExactLocation) {
+        // 3. District / State View (Zoom 10)
+        map.flyTo(streetCoords, 10, { duration: 2, easeLinearity: 0.25 });
+        await new Promise(r => setTimeout(r, 2500));
+        if (!isMounted) return;
 
-      // 4. Street Level / City View (Zoom 14)
-      map.flyTo(streetCoords, 14, { duration: 2.5, easeLinearity: 0.25 });
-      await new Promise(r => setTimeout(r, 4000));
+        // 4. Street Level / City View (Zoom 14)
+        map.flyTo(streetCoords, 14, { duration: 2.5, easeLinearity: 0.25 });
+        await new Promise(r => setTimeout(r, 4000));
+      } else {
+        // Just hover at the country view if no exact location
+        await new Promise(r => setTimeout(r, 4000));
+      }
+      
       if (!isMounted) return;
 
       // Move to next city

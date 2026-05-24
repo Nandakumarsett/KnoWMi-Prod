@@ -133,7 +133,8 @@ export default function VibePage() {
                     <SectionLabel>Your numbers</SectionLabel>
                     <StatGrid
                         totalViews={stats.totalViews}
-                        tshirtScans={stats.totalQRScans}
+                        totalCities={stats.totalCities}
+                        profileQRScans={stats.profileQRScans}
                         uniqueViews={stats.uniqueViews}
                     />
                 </div>
