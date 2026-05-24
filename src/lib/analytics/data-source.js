@@ -202,6 +202,13 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       dailyMap[day].total_views++;
       dailyMap[day].unique_views.add(v.viewer_id || v.visitor_fp || v.id);
     });
+    scans.forEach(s => {
+      const d = new Date(s.scanned_at);
+      const day = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      if (!dailyMap[day]) dailyMap[day] = { day, total_views: 0, unique_views: new Set() };
+      dailyMap[day].total_views++;
+      dailyMap[day].unique_views.add(s.scanner_id || s.scanner_fp || s.id);
+    });
 
     const dailyStats = Object.values(dailyMap)
       .map(d => ({
@@ -293,8 +300,6 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       return true;
     });
 
-    const cityCounts = {};
-    
     // DSA Algorithm: Build a hash map of device fingerprints to known cities
     const fpToCityMap = {};
     [...nonTshirtViews, ...scans].forEach(row => {
@@ -373,13 +378,11 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
     const tshirtScans = Math.max(physicalScansList.length, physicalScansCombined.size);
 
     // Profile QR Scans = Who scans the profile QR, link in bio scans (total views)
+    // We include all digital/non-physical traffic (direct, qr, social links)
     const profileQRScans = views.filter(v => {
       const ref = (v.referrer || '').toLowerCase();
-      const isTshirt = ref.includes('tshirt') || ref.includes('tee');
-      if (isTshirt) return false;
-      const isQR = ref.includes('qr') || ref.includes('utm_source');
-      const isLinkInBio = ['instagram', 'linkedin', 'whatsapp', 'twitter', 'facebook', 'linktree', 'bio', 'social', 'share', 'github', 'threads', 'tiktok'].some(s => ref.includes(s));
-      return isQR || isLinkInBio;
+      const isTshirt = ref === 'tshirt' || ref.includes('tshirt') || ref.includes('tee');
+      return !isTshirt;
     }).length;
 
     const qrScanRate = totalViews > 0 ? Math.round((effectiveQRScans / totalViews) * 100) : 0;
@@ -478,10 +481,14 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       
       if (targetViewerIds.length > 0) {
         try {
-          const { data: profilesList } = await supabase
+          const { data: profilesList, error } = await supabase
             .from('profiles')
-            .select('id, user_id, first_name, last_name, display_name, username, avatar_url, secure_slug')
+            .select('id, user_id, first_name, last_name, avatar_url, secure_slug')
             .or(`id.in.(${targetViewerIds.map(id => `"${id}"`).join(',')}),user_id.in.(${targetViewerIds.map(id => `"${id}"`).join(',')})`);
+          
+          if (error) {
+            console.error("Analytics: Supabase error fetching viewer profiles:", error);
+          }
           
           if (profilesList) {
             profilesList.forEach(p => {
@@ -504,7 +511,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
 
         if (profile) {
           const fullName = [profile.first_name, profile.last_name].filter(Boolean).join(' ').trim();
-          name = fullName || profile.display_name || profile.username || 'KnoWMi Member';
+          name = fullName || 'KnoWMi Member';
           avatar = profile.avatar_url;
         } else {
           // If guest, enhance with location if available
