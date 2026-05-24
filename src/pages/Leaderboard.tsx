@@ -73,7 +73,7 @@ export default function Leaderboard() {
 
   useEffect(() => {
     async function fetchData() {
-      const { data: profilesData } = await supabase.from('public_leaderboard').select('*').limit(100);
+      const { data: profilesData } = await supabase.from('public_leaderboard').select('*').limit(10);
       const { count } = await supabase.from('profile_scores').select('*', { count: 'exact', head: true });
       const { data: scoreData } = await supabase.from('profile_scores').select('knowmi_score');
 
