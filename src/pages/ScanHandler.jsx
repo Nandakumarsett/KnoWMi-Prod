@@ -120,7 +120,7 @@ export default function ScanHandler() {
     }
   }
 
-  const handleAllowLocation = () => {
+  const handleAllowLocation = async () => {
     setStatus('redirecting')
     if (!navigator.geolocation) {
       finishScan('Unknown', 'India')

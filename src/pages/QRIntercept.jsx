@@ -123,7 +123,7 @@ export default function QRIntercept() {
     }
   };
 
-  const handleAllowLocation = () => {
+  const handleAllowLocation = async () => {
     setStatus('redirecting');
     if (!navigator.geolocation) {
       finishScan('Unknown', 'India');
