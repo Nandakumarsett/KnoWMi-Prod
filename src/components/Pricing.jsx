@@ -284,9 +284,15 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
               <div className="bg-neutral-50 rounded-2xl p-4 border border-neutral-100 relative overflow-hidden min-h-[140px] flex flex-col justify-between">
                 <div className="flex justify-between items-center mb-3 relative z-20">
                   <p className="text-[9px] font-black uppercase text-neutral-400 tracking-wider">Traffic Intelligence</p>
-                  <div className="flex gap-1.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-sm"></div>
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-sm"></div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-sm"></div>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-neutral-400">Total</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-sm"></div>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-neutral-400">Unique</span>
+                    </div>
                   </div>
                 </div>
                 {simulatorTab === 'trial' ? (
