@@ -1,197 +1,170 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { buildFingerprint } from '../../lib/analytics/fingerprint';
 import { categoriseReferrer } from '../../lib/analytics/referrer';
+import { MapPin, ShieldCheck, X } from 'lucide-react';
 
 export default function ProfileViewTracker({ profileId }) {
+  const [showPrompt, setShowPrompt] = useState(false);
+  const [tracked, setTracked] = useState(false);
+
   useEffect(() => {
-    const track = async () => {
-      try {
-        // Step 1: Check source and UTM parameters
-        const searchParams = new URLSearchParams(window.location.search);
-        const utmSource = searchParams.get('utm_source');
-        const utmMedium = searchParams.get('utm_medium');
-        const utmCampaign = searchParams.get('utm_campaign');
-        const customSrc = searchParams.get('src');
-        
-        const source = utmSource || customSrc || 'direct';
+    const initTracking = async () => {
+      if (!profileId || tracked) return;
 
-        // Step 2: Check if the viewer is the owner of the profile
-        const { data: { user } } = await supabase.auth.getUser();
-        let viewerProfile = null;
-        if (user) {
-          const { data: profileData } = await supabase
-            .from('profiles')
-            .select('id')
-            .eq('user_id', user.id)
-            .single();
-          viewerProfile = profileData;
-        }
+      const searchParams = new URLSearchParams(window.location.search);
+      const isTshirtScan = searchParams.get('src') === 'tshirt' || searchParams.get('src') === 'qr';
+      
+      const { data: { user } } = await supabase.auth.getUser();
+      let viewerProfile = null;
+      if (user) {
+        const { data: profileData } = await supabase.from('profiles').select('id').eq('user_id', user.id).single();
+        viewerProfile = profileData;
+      }
 
-        const fp = await buildFingerprint();
-        const referrer = categoriseReferrer(document.referrer);
+      if (viewerProfile && viewerProfile.id === profileId) {
+        console.log('Owner view detected, skipping analytics tracking.');
+        setTracked(true);
+        return;
+      }
 
-        // Proactively establish browser fingerprint mapping if the visitor is logged in
-        if (viewerProfile) {
-          const mapKey = `fp_mapped_${viewerProfile.id}`;
-          if (!localStorage.getItem(mapKey)) {
-            supabase
-              .from('profile_view_events')
-              .insert({
-                profile_id: viewerProfile.id,
-                visitor_fp: fp,
-                viewer_id: viewerProfile.id,
-                referrer: 'direct',
-                device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
-                browser: navigator.userAgent,
-                is_repeat: true
-              })
-              .then(() => {
-                localStorage.setItem(mapKey, 'true');
-                console.log('Fingerprint mapping recorded successfully.');
-              })
-              .catch(err => console.error('Failed to record fingerprint mapping:', err));
-          }
-        }
+      const sessionKey = user ? `v_tracked_user_${profileId}` : `v_tracked_anon_${profileId}`;
+      if (!isTshirtScan && sessionStorage.getItem(sessionKey)) {
+        console.log('Page refresh detected, skipping duplicate analytics tracking.');
+        setTracked(true);
+        return;
+      }
 
-        if (viewerProfile && viewerProfile.id === profileId) {
-          // It's the owner viewing their own profile - SKIP tracking
-          console.log('Owner view detected, skipping analytics tracking.');
-          return;
-        }
-
-        // Step 3: Prevent duplicate tracking on refresh (Session-based)
-        // EXCEPTION: If this is a QR T-shirt scan (?src=tshirt), always record it.
-        // Deduplication (same person = 1 per day) happens in analytics, not here.
-        const isTshirtScan = source === 'tshirt';
-        const sessionKey = user ? `v_tracked_user_${profileId}` : `v_tracked_anon_${profileId}`;
-        if (!isTshirtScan && sessionStorage.getItem(sessionKey)) {
-          console.log('Page refresh detected, skipping duplicate analytics tracking.');
-          return;
-        }
-
-        // Mark as tracked for this session (only for non-tshirt views)
-        if (!isTshirtScan) {
-          sessionStorage.setItem(sessionKey, '1');
-        }
-
-        // Silent IP Geolocation (no browser prompt, completely invisible)
-        let resolvedCity = 'Unknown';
-        let resolvedCountry = 'Unknown';
-        
-        const getSilentIpLocation = async () => {
-          // 1. Try freeipapi.com (reliable, high limits, HTTPS)
-          try {
-            const res = await fetch('https://freeipapi.com/api/json');
-            if (res.ok) {
-              const data = await res.json();
-              if (data.cityName && data.cityName !== 'Unknown') {
-                return { city: data.cityName, country: data.countryName || 'Unknown' };
-              }
-            }
-          } catch (e) {
-            console.warn('Silent freeipapi failed:', e);
-          }
-
-          // 2. Try ipwho.is (reliable, HTTPS)
-          try {
-            const res = await fetch('https://ipwho.is/');
-            if (res.ok) {
-              const data = await res.json();
-              if (data.success && data.city && data.city !== 'Unknown') {
-                return { city: data.city, country: data.country || 'Unknown' };
-              }
-            }
-          } catch (e) {
-            console.warn('Silent ipwho.is failed:', e);
-          }
-
-          // 3. Try ipapi.co (standard fallback)
-          try {
-            const res = await fetch('https://ipapi.co/json/');
-            if (res.ok) {
-              const data = await res.json();
-              if (data.city && data.city !== 'Unknown') {
-                return { city: data.city, country: data.country_name || 'Unknown' };
-              }
-            }
-          } catch (e) {
-            console.warn('Silent ipapi.co failed:', e);
-          }
-
-          return { city: 'Unknown', country: 'Unknown' };
-        };
-
-        try {
-          const loc = await getSilentIpLocation();
-          resolvedCity = loc.city;
-          resolvedCountry = loc.country;
-        } catch (e) {
-          console.warn('Silent geocoding failed:', e);
-        }
-
-        // Fire-and-forget: proxy through your API or call Edge Function directly
-        let edgeSuccess = false;
-        try {
-          const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ingest-profile-view`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-            },
-            body: JSON.stringify({ 
-              profileId, 
-              referrer, 
-              fp,
-              source,
-              utm_medium: utmMedium,
-              utm_campaign: utmCampaign,
-              viewerId: viewerProfile?.id,
-              city: resolvedCity,
-              country: resolvedCountry
-            }),
-            keepalive: true,
-          });
-          if (response.ok) {
-            edgeSuccess = true;
-          } else {
-            console.warn("Edge Function tracking returned error status:", response.status);
-          }
-        } catch (e) {
-          console.warn("Edge Function ingest-profile-view failed or not deployed, using client fallback:", e);
-        }
-
-        // If Edge Function was not successful, fallback to inserting the view directly
-        if (!edgeSuccess) {
-          const { error: insertError } = await supabase
-            .from('profile_view_events')
-            .insert({
-              profile_id: profileId,
-              visitor_fp: fp,
-              // If this is a QR T-shirt scan, always store 'tshirt' as referrer so analytics can find it
-              referrer: isTshirtScan ? 'tshirt' : (source !== 'direct' ? source : referrer),
-              device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
-              browser: navigator.userAgent,
-              is_repeat: false,
-              viewer_id: viewerProfile?.id,
-              city: resolvedCity,
-              country: resolvedCountry
-            });
-          if (insertError) {
-            console.error("Client fallback tracking insert failed:", insertError.message);
-          } else {
-            console.log(`Client fallback tracking view recorded successfully! source=${source}, referrer_stored=${isTshirtScan ? 'tshirt' : source}`);
-          }
-        }
-      } catch (err) {
-        console.error('Tracking error:', err);
+      // If they came from a QR scan, they already saw the prompt. Don't show it again.
+      if (isTshirtScan) {
+        handleLocation(false, viewerProfile, true); // silent attempt
+      } else {
+        // Normal web visit, show prompt
+        setShowPrompt(true);
       }
     };
 
-    if (profileId) {
-      track();
-    }
-  }, [profileId]);
+    initTracking();
+  }, [profileId, tracked]);
 
-  return null;
+  const handleLocation = async (allow, viewerProfile, silent = false) => {
+    setShowPrompt(false);
+    
+    let resolvedCity = 'Unknown';
+    let resolvedCountry = 'Unknown';
+
+    if (allow || silent) {
+      if (navigator.geolocation) {
+        try {
+          const loc = await new Promise((resolve) => {
+            navigator.geolocation.getCurrentPosition(
+              async (position) => {
+                try {
+                  const { latitude, longitude } = position.coords;
+                  const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
+                  if (res.ok) {
+                    const data = await res.json();
+                    const city = data.city || data.locality || 'Unknown';
+                    const country = data.countryName || 'Unknown';
+                    resolve({ city: city !== 'Unknown' ? city : 'Unknown', country });
+                  } else {
+                    resolve({ city: 'Unknown', country: 'Unknown' });
+                  }
+                } catch (e) {
+                  resolve({ city: 'Unknown', country: 'Unknown' });
+                }
+              },
+              () => resolve({ city: 'Unknown', country: 'Unknown' }),
+              { timeout: silent ? 2000 : 6000, enableHighAccuracy: true } // Faster timeout if silent
+            );
+          });
+          resolvedCity = loc.city;
+          resolvedCountry = loc.country;
+        } catch (e) { }
+      }
+    }
+
+    // Now log the view
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const utmSource = searchParams.get('utm_source');
+      const utmMedium = searchParams.get('utm_medium');
+      const utmCampaign = searchParams.get('utm_campaign');
+      const customSrc = searchParams.get('src');
+      const source = utmSource || customSrc || 'direct';
+      const isTshirtScan = source === 'tshirt';
+      const sessionKey = viewerProfile ? `v_tracked_user_${profileId}` : `v_tracked_anon_${profileId}`;
+
+      const fp = await buildFingerprint();
+      const referrer = categoriseReferrer(document.referrer);
+
+      if (!isTshirtScan) sessionStorage.setItem(sessionKey, '1');
+
+      let edgeSuccess = false;
+      try {
+        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ingest-profile-view`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}` },
+          body: JSON.stringify({ 
+            profileId, referrer, fp, source, utm_medium: utmMedium, utm_campaign: utmCampaign,
+            viewerId: viewerProfile?.id, city: resolvedCity, country: resolvedCountry
+          }),
+          keepalive: true,
+        });
+        if (response.ok) edgeSuccess = true;
+      } catch (e) { }
+
+      if (!edgeSuccess) {
+        await supabase.from('profile_view_events').insert({
+          profile_id: profileId, visitor_fp: fp,
+          referrer: isTshirtScan ? 'tshirt' : (source !== 'direct' ? source : referrer),
+          device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
+          browser: navigator.userAgent, is_repeat: false, viewer_id: viewerProfile?.id,
+          city: resolvedCity, country: resolvedCountry
+        });
+      }
+    } catch (e) { }
+    
+    setTracked(true);
+  };
+
+  if (!showPrompt) return null;
+
+  return (
+    <div className="fixed bottom-4 left-4 right-4 z-[9999] md:left-auto md:right-4 md:w-96 animate-slideUp">
+      <div className="bg-white/95 backdrop-blur-xl border border-neutral-200 rounded-2xl p-6 shadow-2xl">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center text-orange-500">
+              <MapPin size={20} />
+            </div>
+            <div>
+              <h3 className="text-sm font-black text-neutral-900">Accurate Analytics</h3>
+              <p className="text-[10px] uppercase tracking-widest font-bold text-neutral-400">KnoWMi Protocol</p>
+            </div>
+          </div>
+          <button onClick={() => handleLocation(false, null)} className="text-neutral-400 hover:text-neutral-600 transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+        <p className="text-xs text-neutral-600 mb-5 leading-relaxed font-medium">
+          To provide 100% accurate scan analytics to the creator as outlined in our Privacy Policy, we request your location.
+        </p>
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleLocation(true, null)}
+            className="flex-1 py-2.5 bg-orange-500 text-white text-[11px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-600 transition-colors flex items-center justify-center gap-1.5 shadow-md"
+          >
+            <ShieldCheck size={14} /> Allow
+          </button>
+          <button
+            onClick={() => handleLocation(false, null)}
+            className="flex-1 py-2.5 bg-neutral-100 text-neutral-600 text-[11px] font-black uppercase tracking-widest rounded-xl hover:bg-neutral-200 transition-colors flex items-center justify-center"
+          >
+            Skip
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
