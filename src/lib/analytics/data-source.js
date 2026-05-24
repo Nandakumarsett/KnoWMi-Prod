@@ -3,6 +3,25 @@ import { supabase } from '../supabase';
 // This is the ONLY place that queries analytics data.
 // Both VibeStats tab and Reports tab import from here.
 
+export function flagEmoji(codeOrName) {
+  if (!codeOrName) return '🌍';
+  const val = codeOrName.trim().toUpperCase();
+  if (val === 'INDIA' || val === 'IN') return '🇮🇳';
+  if (val === 'USA' || val === 'US' || val === 'UNITED STATES') return '🇺🇸';
+  if (val === 'UK' || val === 'GB' || val === 'UNITED KINGDOM') return '🇬🇧';
+  if (val === 'CANADA' || val === 'CA') return '🇨🇦';
+  if (val === 'AUSTRALIA' || val === 'AU') return '🇦🇺';
+  if (val === 'UAE' || val === 'AE' || val === 'UNITED ARAB EMIRATES') return '🇦🇪';
+  if (val === 'SINGAPORE' || val === 'SG') return '🇸🇬';
+  
+  if (val.length === 2) {
+    return val.split('')
+      .map(c => String.fromCodePoint(0x1F1E6 - 65 + c.charCodeAt(0)))
+      .join('');
+  }
+  return '🌍';
+}
+
 export async function getAnalyticsData(profileId, dateRange = 'all') {
   try {
     // Fetch analytics data via edge function (uses SERVICE ROLE, bypasses RLS)
@@ -204,6 +223,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       .map(([city, data]) => ({
         city,
         ...data,
+        flag: flagEmoji(data.country || ''),
         barPct: Math.round((data.count / Math.max(...Object.values(cityCounts).map(c => c.count), 1)) * 100)
       }));
 

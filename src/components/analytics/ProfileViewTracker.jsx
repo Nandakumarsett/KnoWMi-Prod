@@ -75,12 +75,62 @@ export default function ProfileViewTracker({ profileId }) {
           sessionStorage.setItem(sessionKey, '1');
         }
 
-        // Fire-and-forget: proxy through your API or call Edge Function directly
-        // For Vite + Supabase, you might call the Edge Function directly if allowed
-        // But the prompt asked for an API route proxy.
-        // On localhost:5173, /api/track-view won't exist unless you have a proxy setup.
-        // We can call the Supabase Edge Function directly using the anon key.
+        // Silent IP Geolocation (no browser prompt, completely invisible)
+        let resolvedCity = 'Unknown';
+        let resolvedCountry = 'Unknown';
+        
+        const getSilentIpLocation = async () => {
+          // 1. Try freeipapi.com (reliable, high limits, HTTPS)
+          try {
+            const res = await fetch('https://freeipapi.com/api/json');
+            if (res.ok) {
+              const data = await res.json();
+              if (data.cityName && data.cityName !== 'Unknown') {
+                return { city: data.cityName, country: data.countryName || 'Unknown' };
+              }
+            }
+          } catch (e) {
+            console.warn('Silent freeipapi failed:', e);
+          }
 
+          // 2. Try ipwho.is (reliable, HTTPS)
+          try {
+            const res = await fetch('https://ipwho.is/');
+            if (res.ok) {
+              const data = await res.json();
+              if (data.success && data.city && data.city !== 'Unknown') {
+                return { city: data.city, country: data.country || 'Unknown' };
+              }
+            }
+          } catch (e) {
+            console.warn('Silent ipwho.is failed:', e);
+          }
+
+          // 3. Try ipapi.co (standard fallback)
+          try {
+            const res = await fetch('https://ipapi.co/json/');
+            if (res.ok) {
+              const data = await res.json();
+              if (data.city && data.city !== 'Unknown') {
+                return { city: data.city, country: data.country_name || 'Unknown' };
+              }
+            }
+          } catch (e) {
+            console.warn('Silent ipapi.co failed:', e);
+          }
+
+          return { city: 'Unknown', country: 'Unknown' };
+        };
+
+        try {
+          const loc = await getSilentIpLocation();
+          resolvedCity = loc.city;
+          resolvedCountry = loc.country;
+        } catch (e) {
+          console.warn('Silent geocoding failed:', e);
+        }
+
+        // Fire-and-forget: proxy through your API or call Edge Function directly
         let edgeSuccess = false;
         try {
           const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ingest-profile-view`, {
@@ -96,7 +146,9 @@ export default function ProfileViewTracker({ profileId }) {
               source,
               utm_medium: utmMedium,
               utm_campaign: utmCampaign,
-              viewerId: viewerProfile?.id
+              viewerId: viewerProfile?.id,
+              city: resolvedCity,
+              country: resolvedCountry
             }),
             keepalive: true,
           });
@@ -121,7 +173,9 @@ export default function ProfileViewTracker({ profileId }) {
               device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
               browser: navigator.userAgent,
               is_repeat: false,
-              viewer_id: viewerProfile?.id
+              viewer_id: viewerProfile?.id,
+              city: resolvedCity,
+              country: resolvedCountry
             });
           if (insertError) {
             console.error("Client fallback tracking insert failed:", insertError.message);

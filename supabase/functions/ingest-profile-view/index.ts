@@ -10,7 +10,7 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   try {
-    const { profileId, referrer, fp, source, utm_medium, utm_campaign, viewerId } = await req.json()
+    const { profileId, referrer, fp, source, utm_medium, utm_campaign, viewerId, city, country } = await req.json()
 
     if (!profileId) {
       return new Response(JSON.stringify({ error: 'profileId required' }), {
@@ -44,6 +44,8 @@ serve(async (req) => {
         browser: userAgent.slice(0, 200),
         is_repeat: false,
         viewer_id: viewerId || null,
+        city: city || 'Unknown',
+        country: country || 'Unknown',
       })
 
     if (insertError) {

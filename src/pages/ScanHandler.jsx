@@ -91,14 +91,26 @@ export default function ScanHandler() {
               async (position) => {
                 try {
                   const { latitude, longitude } = position.coords
-                  const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`, {
+                  // 1. Try BigDataCloud (fast, completely free, no headers block)
+                  const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`)
+                  if (res.ok) {
+                    const data = await res.json()
+                    const city = data.city || data.locality || 'Unknown'
+                    if (city !== 'Unknown') return resolve(city)
+                  }
+                  
+                  // 2. Try Nominatim as fallback
+                  const resNom = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`, {
                     headers: { 'Accept-Language': 'en' }
                   })
-                  const data = await res.json()
-                  const city = data.address?.city || data.address?.town || data.address?.suburb || data.address?.state_district || data.address?.state || 'Unknown'
-                  resolve(city)
+                  if (resNom.ok) {
+                    const data = await resNom.json()
+                    const city = data.address?.city || data.address?.town || data.address?.suburb || data.address?.state_district || data.address?.state || 'Unknown'
+                    return resolve(city)
+                  }
+                  resolve(null)
                 } catch (e) {
-                  console.warn('Nominatim reverse geocode failed:', e)
+                  console.warn('Reverse geocode failed:', e)
                   resolve(null)
                 }
               },
@@ -112,14 +124,40 @@ export default function ScanHandler() {
         }
 
         const getIpLocation = async () => {
+          // 1. Try freeipapi.com (reliable, high limits, HTTPS)
+          try {
+            const res = await fetch('https://freeipapi.com/api/json')
+            if (res.ok) {
+              const data = await res.json()
+              if (data.cityName && data.cityName !== 'Unknown') return data.cityName
+            }
+          } catch (e) {
+            console.warn('freeipapi failed:', e)
+          }
+
+          // 2. Try ipwho.is (reliable, HTTPS)
+          try {
+            const res = await fetch('https://ipwho.is/')
+            if (res.ok) {
+              const data = await res.json()
+              if (data.success && data.city && data.city !== 'Unknown') return data.city
+            }
+          } catch (e) {
+            console.warn('ipwho.is failed:', e)
+          }
+
+          // 3. Try ipapi.co (standard fallback)
           try {
             const res = await fetch('https://ipapi.co/json/')
-            const data = await res.json()
-            return data.city || 'Unknown'
+            if (res.ok) {
+              const data = await res.json()
+              if (data.city && data.city !== 'Unknown') return data.city
+            }
           } catch (e) {
-            console.warn('IP geolocation failed:', e)
-            return 'Unknown'
+            console.warn('ipapi.co failed:', e)
           }
+
+          return 'Unknown'
         }
 
         try {
