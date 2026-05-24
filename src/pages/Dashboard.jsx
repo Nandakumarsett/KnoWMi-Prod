@@ -2111,26 +2111,27 @@ export default function Dashboard() {
             <div className="md:col-span-4 vibe-card overflow-hidden flex flex-col animate-slideUp">
               <div className="p-8 border-b border-neutral-50 flex justify-between items-center bg-neutral-50/20">
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900 mb-1">Live Traffic Velocity</h3>
-                  <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Real-time Node Saturation</p>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900 mb-1">Traffic Intelligence</h3>
+                  <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">7-Day Engagement Window</p>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-2.5 w-2.5 relative">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.6)]"></span>
-                    </div>
-                    <span className="text-[9px] font-black uppercase tracking-widest text-orange-500">Live Active</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-lg shadow-blue-500/20" />
+                    <span className="text-[9px] font-black uppercase tracking-widest text-neutral-400">Total Views</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/20" />
+                    <span className="text-[9px] font-black uppercase tracking-widest text-neutral-400">Unique Views</span>
                   </div>
                 </div>
               </div>
               <div className="p-8 flex-1">
                 <div className="h-[320px] w-full">
-                  <LiveTrafficVelocity />
+                  <ViewsChart data={vibeStats.dailyStats} />
                 </div>
               </div>
               <div className="px-8 py-5 border-t border-neutral-50 bg-neutral-50/10 text-center">
-                 <button className="text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:text-orange-500 transition-all">Intercepting Raw Signals •••</button>
+                 <button className="text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:text-blue-500 transition-all">Deep Data Analysis •••</button>
               </div>
             </div>
 
