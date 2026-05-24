@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Avatar from '../components/Avatar';
 import {
   Search, Trophy, Users, Activity, Clock,
@@ -49,7 +49,7 @@ const BadgePill = ({ badge }: { badge: string | null }) => {
   };
 
   return (
-    <span className={px-2 py-0.5 rounded-full text-[10px] font-bold border \}>
+    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${styles[badge] || styles.top100}`}>
       {labels[badge] || 'Top Member'}
     </span>
   );
@@ -145,10 +145,10 @@ export default function Leaderboard() {
     const mins = Math.floor(diff / 60000);
     
     if (mins < 1) return 'Just Now';
-    if (mins < 60) return \\m ago\;
+    if (mins < 60) return `${mins}m ago`;
     const hours = Math.floor(mins / 60);
-    if (hours < 24) return \\h ago\;
-    return \\d ago\;
+    if (hours < 24) return `${hours}h ago`;
+    return `${Math.floor(hours / 24)}d ago`;
   };
 
   const [now, setNow] = useState(Date.now());
@@ -253,7 +253,7 @@ export default function Leaderboard() {
                 <button
                   key={cat}
                   onClick={() => setCategory(cat)}
-                  className={\px-4 py-2 rounded-xl text-xs font-bold transition-all \\}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${category === cat ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/20' : 'text-neutral-400 hover:text-white hover:bg-white/5'}`}
                 >
                   {cat}
                 </button>
@@ -272,14 +272,12 @@ export default function Leaderboard() {
                   key={p.username}
                   onClick={() => {
                     const slug = p.secure_slug || p.id;
-                    window.location.href = \/p/\?src=leaderboard\;
+                    window.location.href = `/p/${slug}?src=leaderboard`;
                   }}
-                  className={\elative group flex flex-col items-center pt-16 pb-10 px-8 rounded-[3rem] border transition-all duration-500 cursor-pointer shadow-2xl hover:-translate-y-2 w-full md:w-72 backdrop-blur-xl
-                    \\}
+                  className={`relative group flex flex-col items-center pt-16 pb-10 px-8 rounded-[3rem] border transition-all duration-500 cursor-pointer shadow-2xl hover:-translate-y-2 w-full md:w-72 backdrop-blur-xl ${isFirst ? 'bg-white/10 border-orange-500/50 shadow-orange-500/20 md:h-[520px] z-20' : 'bg-white/5 border-white/10 md:h-[440px] z-10'}`}
                 >
                   {isFirst && <div className="absolute inset-0 bg-gradient-to-b from-orange-500/10 to-transparent rounded-[3rem] pointer-events-none" />}
-                  <div className={\elative p-1.5 rounded-full mb-8 transition-transform duration-500 group-hover:scale-110 shadow-lg
-                    \\}>
+                  <div className={`relative p-1.5 rounded-full mb-8 transition-transform duration-500 group-hover:scale-110 shadow-lg ${isFirst ? 'bg-gradient-to-tr from-orange-400 via-amber-300 to-orange-500 shadow-orange-500/50' : isSecond ? 'bg-gradient-to-tr from-slate-300 to-slate-500' : 'bg-gradient-to-tr from-orange-800 to-orange-900'}`}>
                     <div className="rounded-full border-4 border-[#0A0A0B] overflow-hidden bg-[#0A0A0B]">
                       <Avatar src={p.avatar_url} name={p.display_name} username={p.username} size={isFirst ? "xl" : "lg"} />
                     </div>
@@ -292,22 +290,21 @@ export default function Leaderboard() {
                   <div className="text-center mb-8 flex-1 relative z-10">
                     <h3 className="text-2xl font-black text-white line-clamp-1 mb-1 tracking-tight">{p.display_name}</h3>
                     <p className="text-sm font-bold text-neutral-400 mb-3">@{p.username}</p>
-                    <div className={\inline-block px-4 py-1.5 rounded-full shadow-md font-black text-[10px] uppercase tracking-widest text-white mb-3
-                      \\}>
+                    <div className={`inline-block px-4 py-1.5 rounded-full shadow-md font-black text-[10px] uppercase tracking-widest text-white mb-3 ${isFirst ? 'bg-gradient-to-r from-orange-500 to-amber-500 shadow-orange-500/20' : isSecond ? 'bg-white/20' : 'bg-white/10'}`}>
                       Global Rank #{p.rank}
                     </div>
                     <div className="flex justify-center">
                       <BadgePill badge={p.badge} />
                     </div>
                   </div>
-                  <div className={\w-full rounded-[2rem] p-5 flex items-center justify-between border relative z-10 \\}>
+                  <div className={`w-full rounded-[2rem] p-5 flex items-center justify-between border relative z-10 ${isFirst ? 'border-orange-500/30 bg-orange-500/10' : 'border-white/5 bg-black/20'}`}>
                     <div className="flex flex-col">
                       <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 mb-1">Score</span>
-                      <span className={\	ext-3xl font-black \\}>{p.knowmi_score}</span>
+                      <span className={`text-3xl font-black ${isFirst ? 'text-orange-400' : 'text-white'}`}>{p.knowmi_score}</span>
                     </div>
                     <div className="flex flex-col items-end">
                       <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 mb-1">Trend</span>
-                      <div className={\lex items-center gap-1 font-bold text-sm \\}>
+                      <div className={`flex items-center gap-1 font-bold text-sm ${isFirst ? 'text-orange-400' : 'text-teal-400'}`}>
                         <TrendingUp size={14} />
                         <span>+{Math.max(1, p.rank_delta || 12)}%</span>
                       </div>
@@ -326,7 +323,7 @@ export default function Leaderboard() {
               key={p.username}
               onClick={() => {
                 const slug = p.secure_slug || p.id;
-                window.location.href = \/p/\?src=leaderboard\;
+                window.location.href = `/p/${slug}?src=leaderboard`;
               }}
               className="group bg-white/5 backdrop-blur-sm hover:bg-white/10 p-5 md:p-6 rounded-[2rem] border border-white/5 shadow-sm transition-all duration-300 cursor-pointer flex flex-col md:flex-row items-center justify-between gap-6 hover:shadow-xl hover:shadow-orange-500/10 hover:border-orange-500/30 hover:-translate-y-1"
             >
@@ -358,7 +355,7 @@ export default function Leaderboard() {
                       <div className="h-1.5 w-24 bg-white/10 rounded-full overflow-hidden mb-2 hidden sm:block">
                         <div 
                           className="h-full bg-orange-500 rounded-full transition-all duration-1000"
-                          style={{ width: \\%\ }}
+                          style={{ width: `${Math.min((p.knowmi_score / 500) * 100, 100)}%` }}
                         />
                       </div>
                     </div>
@@ -366,7 +363,7 @@ export default function Leaderboard() {
 
                   <div className="flex flex-col items-end">
                     <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Status</span>
-                    <div className={\lex items-center gap-1 font-bold text-sm \\}>
+                    <div className={`flex items-center gap-1 font-bold text-sm ${p.rank_delta >= 0 ? 'text-teal-400' : 'text-rose-400'}`}>
                       {p.rank_delta >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
                       <span>{p.rank_delta === 0 ? 'Steady' : Math.abs(p.rank_delta)}</span>
                     </div>
@@ -383,7 +380,7 @@ export default function Leaderboard() {
                     <Share2 size={20} />
                   </button>
                   <a 
-                    href={\/p/\?src=leaderboard\} 
+                    href={`/p/${p.secure_slug || p.id}?src=leaderboard`} 
                     className="p-3 text-neutral-400 hover:text-blue-400 hover:bg-blue-500/20 rounded-2xl transition-all"
                   >
                     <Eye size={20} />
@@ -441,7 +438,7 @@ export default function Leaderboard() {
                 <div className="mt-10 grid grid-cols-2 gap-5">
                   <button onClick={() => {
                     const slug = shareProfile.secure_slug || shareProfile.id;
-                    const fresh = \\/p/\?src=leaderboard_share\;
+                    const fresh = `${window.location.origin}/p/${slug}?src=leaderboard_share`;
                     navigator.clipboard.writeText(fresh);
                     alert('Share link copied!');
                   }} className="flex items-center justify-center gap-3 py-5 bg-white/10 hover:bg-white/20 border border-white/10 text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
