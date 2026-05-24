@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { getAccurateLocation } from '../lib/analytics/geolocation'
 import { MapPin, ShieldCheck, X } from 'lucide-react'
 
 export default function ScanHandler() {
@@ -126,28 +127,21 @@ export default function ScanHandler() {
       return
     }
     
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const { latitude, longitude } = position.coords
-          const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`)
-          if (res.ok) {
-            const data = await res.json()
-            const city = data.city || data.locality || 'Unknown'
-            const country = data.countryName || 'India'
-            finishScan(city !== 'Unknown' ? city : 'Unknown', country)
-            return
-          }
-          finishScan('Unknown', 'India')
-        } catch (e) {
-          finishScan('Unknown', 'India')
-        }
-      },
-      () => {
-        finishScan('Unknown', 'India')
-      },
-      { timeout: 10000, maximumAge: 0, enableHighAccuracy: true }
-    )
+    try {
+      const position = await getAccurateLocation({ timeout: 10000, maximumAge: 0, enableHighAccuracy: true })
+      const { latitude, longitude } = position.coords
+      const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`)
+      if (res.ok) {
+        const data = await res.json()
+        const city = data.city || data.locality || 'Unknown'
+        const country = data.countryName || 'India'
+        finishScan(city !== 'Unknown' ? city : 'Unknown', country)
+        return
+      }
+      finishScan('Unknown', 'India')
+    } catch (e) {
+      finishScan('Unknown', 'India')
+    }
   }
 
   const handleSkipLocation = () => {

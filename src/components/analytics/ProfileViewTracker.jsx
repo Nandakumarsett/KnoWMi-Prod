@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { buildFingerprint } from '../../lib/analytics/fingerprint';
 import { categoriseReferrer } from '../../lib/analytics/referrer';
+import { getAccurateLocation } from '../../lib/analytics/geolocation';
 import { MapPin, ShieldCheck, X } from 'lucide-react';
 
 export default function ProfileViewTracker({ profileId }) {
@@ -56,30 +57,18 @@ export default function ProfileViewTracker({ profileId }) {
     if ((allow || silent) && !skipGeo) {
       if (navigator.geolocation) {
         try {
-          const loc = await new Promise((resolve) => {
-            navigator.geolocation.getCurrentPosition(
-              async (position) => {
-                try {
-                  const { latitude, longitude } = position.coords;
-                  const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
-                  if (res.ok) {
-                    const data = await res.json();
-                    const city = data.city || data.locality || 'Unknown';
-                    const country = data.countryName || 'Unknown';
-                    resolve({ city: city !== 'Unknown' ? city : 'Unknown', country });
-                  } else {
-                    resolve({ city: 'Unknown', country: 'Unknown' });
-                  }
-                } catch (e) {
-                  resolve({ city: 'Unknown', country: 'Unknown' });
-                }
-              },
-              () => resolve({ city: 'Unknown', country: 'Unknown' }),
-              { timeout: silent ? 2000 : 10000, maximumAge: 0, enableHighAccuracy: true } // Faster timeout if silent
-            );
-          });
-          resolvedCity = loc.city;
-          resolvedCountry = loc.country;
+        try {
+          const position = await getAccurateLocation({ timeout: silent ? 4000 : 10000, maximumAge: 0, enableHighAccuracy: true });
+          const { latitude, longitude } = position.coords;
+          const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
+          if (res.ok) {
+            const data = await res.json();
+            const city = data.city || data.locality || 'Unknown';
+            const country = data.countryName || 'Unknown';
+            resolvedCity = city !== 'Unknown' ? city : 'Unknown';
+            resolvedCountry = country;
+          }
+        } catch (e) { }
         } catch (e) { }
       }
     }

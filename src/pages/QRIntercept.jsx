@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { getAccurateLocation } from '../lib/analytics/geolocation';
 import { Loader2, QrCode, Sparkles, ArrowRight, ShieldCheck, Heart, MapPin, X } from 'lucide-react';
 import AuthModal from '../components/AuthModal';
 
@@ -128,26 +129,21 @@ export default function QRIntercept() {
       finishScan('Unknown', 'India');
       return;
     }
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const { latitude, longitude } = position.coords;
-          const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
-          if (res.ok) {
-            const data = await res.json();
-            const city = data.city || data.locality || 'Unknown';
-            const country = data.countryName || 'India';
-            finishScan(city !== 'Unknown' ? city : 'Unknown', country);
-            return;
-          }
-          finishScan('Unknown', 'India');
-        } catch (e) {
-          finishScan('Unknown', 'India');
-        }
-      },
-      () => finishScan('Unknown', 'India'),
-      { timeout: 10000, maximumAge: 0, enableHighAccuracy: true }
-    );
+    try {
+      const position = await getAccurateLocation({ timeout: 10000, maximumAge: 0, enableHighAccuracy: true });
+      const { latitude, longitude } = position.coords;
+      const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
+      if (res.ok) {
+        const data = await res.json();
+        const city = data.city || data.locality || 'Unknown';
+        const country = data.countryName || 'India';
+        finishScan(city !== 'Unknown' ? city : 'Unknown', country);
+        return;
+      }
+      finishScan('Unknown', 'India');
+    } catch (e) {
+      finishScan('Unknown', 'India');
+    }
   };
 
   const handleSkipLocation = () => finishScan('Unknown', 'India');
