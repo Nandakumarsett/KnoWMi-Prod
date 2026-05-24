@@ -29,15 +29,15 @@ export default function ProfileViewTracker({ profileId }) {
       }
 
       const sessionKey = user ? `v_tracked_user_${profileId}` : `v_tracked_anon_${profileId}`;
-      if (!isTshirtScan && sessionStorage.getItem(sessionKey)) {
+      if (!isTshirtScan && localStorage.getItem(sessionKey)) {
         console.log('Page refresh detected, skipping duplicate analytics tracking.');
         setTracked(true);
         return;
       }
 
-      // If they came from a QR scan, they already saw the prompt. Don't show it again.
+      // If they came from a QR scan, they already saw the prompt in ScanHandler.
       if (isTshirtScan) {
-        handleLocation(false, viewerProfile, true); // silent attempt
+        handleLocation(false, viewerProfile, true, true); // silent = true, skipGeo = true
       } else {
         // Normal web visit, show prompt
         setShowPrompt(true);
@@ -47,13 +47,13 @@ export default function ProfileViewTracker({ profileId }) {
     initTracking();
   }, [profileId, tracked]);
 
-  const handleLocation = async (allow, viewerProfile, silent = false) => {
+  const handleLocation = async (allow, viewerProfile, silent = false, skipGeo = false) => {
     setShowPrompt(false);
     
     let resolvedCity = 'Unknown';
     let resolvedCountry = 'Unknown';
 
-    if (allow || silent) {
+    if ((allow || silent) && !skipGeo) {
       if (navigator.geolocation) {
         try {
           const loc = await new Promise((resolve) => {
@@ -75,7 +75,7 @@ export default function ProfileViewTracker({ profileId }) {
                 }
               },
               () => resolve({ city: 'Unknown', country: 'Unknown' }),
-              { timeout: silent ? 2000 : 6000, enableHighAccuracy: true } // Faster timeout if silent
+              { timeout: silent ? 2000 : 10000, maximumAge: 0, enableHighAccuracy: true } // Faster timeout if silent
             );
           });
           resolvedCity = loc.city;
@@ -98,7 +98,7 @@ export default function ProfileViewTracker({ profileId }) {
       const fp = await buildFingerprint();
       const referrer = categoriseReferrer(document.referrer);
 
-      if (!isTshirtScan) sessionStorage.setItem(sessionKey, '1');
+      if (!isTshirtScan) localStorage.setItem(sessionKey, '1');
 
       let edgeSuccess = false;
       try {

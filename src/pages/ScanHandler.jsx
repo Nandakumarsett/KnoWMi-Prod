@@ -146,7 +146,7 @@ export default function ScanHandler() {
       () => {
         finishScan('Unknown', 'India')
       },
-      { timeout: 6000, enableHighAccuracy: true }
+      { timeout: 10000, maximumAge: 0, enableHighAccuracy: true }
     )
   }
 
