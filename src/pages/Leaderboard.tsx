@@ -237,7 +237,7 @@ export default function Leaderboard() {
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
           <h1 className="text-4xl font-black text-white tracking-tight flex items-center gap-3">
-             Kno<span className="text-orange-500">WM</span>i <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">Elite</span>
+             <span>Kno<span className="text-orange-500">WM</span>i</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">Elite</span>
              <Sparkles className="text-orange-500" size={28} />
           </h1>
           <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
