@@ -19,7 +19,6 @@ import {
 import { useAuth } from '../context/AuthContext'
 import { supabase, getAssetUrl } from '../lib/supabase'
 import ViewsChart from '../components/analytics/ViewsChart'
-import LiveTrafficVelocity from '../components/analytics/LiveTrafficVelocity'
 import DevicePie from '../components/analytics/DevicePie'
 import SourceDonut from '../components/analytics/SourceDonut'
 import ReferrerBar from '../components/analytics/ReferrerBar'
@@ -2195,8 +2194,8 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Referral Sources - 1 Column */}
+          <div className="grid grid-cols-1 gap-6">
+            {/* Referral Sources - Full Width */}
             <div className="vibe-card overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.3s' }}>
               <div className="p-8 border-b border-neutral-50 bg-neutral-50/20">
                 <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900">Referral Sources</h3>
@@ -2219,27 +2218,6 @@ export default function Dashboard() {
                      <p className="text-[10px] font-black uppercase tracking-widest">No Referral Data</p>
                   </div>
                 )}
-              </div>
-            </div>
-
-            {/* Live Traffic Velocity - 1 Column */}
-            <div className="vibe-card overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.4s' }}>
-              <div className="p-8 border-b border-neutral-50 flex justify-between items-center bg-neutral-50/20">
-                <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900 mb-1">Live Velocity</h3>
-                  <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Raw Network Signals</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex h-2.5 w-2.5 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.6)]"></span>
-                  </div>
-                </div>
-              </div>
-              <div className="p-4 flex-1">
-                <div className="h-[200px] w-full">
-                  <LiveTrafficVelocity />
-                </div>
               </div>
             </div>
           </div>
