@@ -93,6 +93,7 @@ export default function QRIntercept() {
 
         // Smart Geolocation Resolution (HTML5 Geolocation with IP API Fallback)
         let resolvedCity = 'Unknown';
+        let resolvedCountry = 'India';
         
         const getBrowserLocation = () => {
           return new Promise((resolve) => {
@@ -107,7 +108,8 @@ export default function QRIntercept() {
                   if (res.ok) {
                     const data = await res.json();
                     const city = data.city || data.locality || 'Unknown';
-                    if (city !== 'Unknown') return resolve(city);
+                    const country = data.countryName || 'India';
+                    if (city !== 'Unknown') return resolve({ city, country });
                   }
                   
                   // 2. Try Nominatim as fallback
@@ -117,7 +119,8 @@ export default function QRIntercept() {
                   if (resNom.ok) {
                     const data = await resNom.json();
                     const city = data.address?.city || data.address?.town || data.address?.suburb || data.address?.state_district || data.address?.state || 'Unknown';
-                    return resolve(city);
+                    const country = data.address?.country || 'India';
+                    return resolve({ city, country });
                   }
                   resolve(null);
                 } catch (e) {
@@ -140,7 +143,9 @@ export default function QRIntercept() {
             const res = await fetch('https://freeipapi.com/api/json');
             if (res.ok) {
               const data = await res.json();
-              if (data.cityName && data.cityName !== 'Unknown') return data.cityName;
+              if (data.cityName && data.cityName !== 'Unknown') {
+                return { city: data.cityName, country: data.countryName || 'India' };
+              }
             }
           } catch (e) {
             console.warn('freeipapi failed:', e);
@@ -151,7 +156,9 @@ export default function QRIntercept() {
             const res = await fetch('https://ipwho.is/');
             if (res.ok) {
               const data = await res.json();
-              if (data.success && data.city && data.city !== 'Unknown') return data.city;
+              if (data.success && data.city && data.city !== 'Unknown') {
+                return { city: data.city, country: data.country || 'India' };
+              }
             }
           } catch (e) {
             console.warn('ipwho.is failed:', e);
@@ -162,21 +169,28 @@ export default function QRIntercept() {
             const res = await fetch('https://ipapi.co/json/');
             if (res.ok) {
               const data = await res.json();
-              if (data.city && data.city !== 'Unknown') return data.city;
+              if (data.city && data.city !== 'Unknown') {
+                return { city: data.city, country: data.country_name || 'India' };
+              }
             }
           } catch (e) {
             console.warn('ipapi.co failed:', e);
           }
 
-          return 'Unknown';
+          return { city: 'Unknown', country: 'India' };
         };
 
         try {
-          const geoCity = await getBrowserLocation();
-          if (geoCity && geoCity !== 'Unknown') {
-            resolvedCity = geoCity;
+          const geoResult = await getBrowserLocation();
+          if (geoResult && geoResult.city && geoResult.city !== 'Unknown') {
+            resolvedCity = geoResult.city;
+            resolvedCountry = geoResult.country || 'India';
           } else {
-            resolvedCity = await getIpLocation();
+            const ipResult = await getIpLocation();
+            if (ipResult && ipResult.city && ipResult.city !== 'Unknown') {
+              resolvedCity = ipResult.city;
+              resolvedCountry = ipResult.country || 'India';
+            }
           }
         } catch (e) {
           console.warn('Geolocation resolution failed:', e);
@@ -191,13 +205,15 @@ export default function QRIntercept() {
         // Record the scan for ALL scanners
         const { error: scanInsertError } = await supabase.from('qr_scan_events').insert({
           profile_id: qrData.profile_id,
+          token_id: qrData.id,
           device_type: device.toLowerCase(),
           browser: navigator.userAgent.slice(0, 200),
           os: navigator.platform,
           scanner_fp: currentFp,
           scanned_at: new Date().toISOString(),
           scanner_id: user?.id || null,
-          city: resolvedCity
+          city: resolvedCity,
+          country: resolvedCountry
         });
         
         if (scanInsertError) {

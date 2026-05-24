@@ -82,6 +82,7 @@ export default function ScanHandler() {
 
         // 3. Smart Geolocation Resolution (HTML5 Geolocation with IP API Fallback)
         let resolvedCity = 'Unknown'
+        let resolvedCountry = 'India'
         
         const getBrowserLocation = () => {
           return new Promise((resolve) => {
@@ -96,7 +97,8 @@ export default function ScanHandler() {
                   if (res.ok) {
                     const data = await res.json()
                     const city = data.city || data.locality || 'Unknown'
-                    if (city !== 'Unknown') return resolve(city)
+                    const country = data.countryName || 'India'
+                    if (city !== 'Unknown') return resolve({ city, country })
                   }
                   
                   // 2. Try Nominatim as fallback
@@ -106,7 +108,8 @@ export default function ScanHandler() {
                   if (resNom.ok) {
                     const data = await resNom.json()
                     const city = data.address?.city || data.address?.town || data.address?.suburb || data.address?.state_district || data.address?.state || 'Unknown'
-                    return resolve(city)
+                    const country = data.address?.country || 'India'
+                    return resolve({ city, country })
                   }
                   resolve(null)
                 } catch (e) {
@@ -129,7 +132,9 @@ export default function ScanHandler() {
             const res = await fetch('https://freeipapi.com/api/json')
             if (res.ok) {
               const data = await res.json()
-              if (data.cityName && data.cityName !== 'Unknown') return data.cityName
+              if (data.cityName && data.cityName !== 'Unknown') {
+                return { city: data.cityName, country: data.countryName || 'India' }
+              }
             }
           } catch (e) {
             console.warn('freeipapi failed:', e)
@@ -140,7 +145,9 @@ export default function ScanHandler() {
             const res = await fetch('https://ipwho.is/')
             if (res.ok) {
               const data = await res.json()
-              if (data.success && data.city && data.city !== 'Unknown') return data.city
+              if (data.success && data.city && data.city !== 'Unknown') {
+                return { city: data.city, country: data.country || 'India' }
+              }
             }
           } catch (e) {
             console.warn('ipwho.is failed:', e)
@@ -151,21 +158,28 @@ export default function ScanHandler() {
             const res = await fetch('https://ipapi.co/json/')
             if (res.ok) {
               const data = await res.json()
-              if (data.city && data.city !== 'Unknown') return data.city
+              if (data.city && data.city !== 'Unknown') {
+                return { city: data.city, country: data.country_name || 'India' }
+              }
             }
           } catch (e) {
             console.warn('ipapi.co failed:', e)
           }
 
-          return 'Unknown'
+          return { city: 'Unknown', country: 'India' }
         }
 
         try {
-          const geoCity = await getBrowserLocation()
-          if (geoCity && geoCity !== 'Unknown') {
-            resolvedCity = geoCity
+          const geoResult = await getBrowserLocation()
+          if (geoResult && geoResult.city && geoResult.city !== 'Unknown') {
+            resolvedCity = geoResult.city
+            resolvedCountry = geoResult.country || 'India'
           } else {
-            resolvedCity = await getIpLocation()
+            const ipResult = await getIpLocation()
+            if (ipResult && ipResult.city && ipResult.city !== 'Unknown') {
+              resolvedCity = ipResult.city
+              resolvedCountry = ipResult.country || 'India'
+            }
           }
         } catch (e) {
           console.warn('Geolocation resolution pipeline failed:', e)
@@ -182,16 +196,24 @@ export default function ScanHandler() {
         
         const { data: { user } } = await supabase.auth.getUser();
         
-        await supabase.from('qr_scan_events').insert({
-          profile_id: profile.id,
-          device_type: device.toLowerCase(),
-          browser: 'Webview/Browser',
-          os: navigator.platform,
-          scanner_fp: fp,
-          scanned_at: new Date().toISOString(),
-          scanner_id: user?.id,
-          city: resolvedCity
-        })
+        try {
+          const { error: scanInsertError } = await supabase.from('qr_scan_events').insert({
+            profile_id: profile.id,
+            device_type: device.toLowerCase(),
+            browser: 'Webview/Browser',
+            os: navigator.platform,
+            scanner_fp: fp,
+            scanned_at: new Date().toISOString(),
+            scanner_id: user?.id,
+            city: resolvedCity,
+            country: resolvedCountry
+          })
+          if (scanInsertError) {
+            console.error('Failed to log scan to qr_scan_events:', scanInsertError.message)
+          }
+        } catch (e) {
+          console.error('Scan logging error:', e)
+        }
 
         // 5. Trigger Push Notification asynchronously (falls back to Email Scan Alert in Edge Function if no push tokens)
         if (profile.user_id) {

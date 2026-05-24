@@ -174,46 +174,99 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       }))
       .sort((a, b) => a.day.localeCompare(b.day));
 
-    // Calculate Week Sparklines
+    // Calculate Week Sparklines of daily unique physical scans
     const weekSparkline = Array(7).fill(0);
     const weekUniqueSparkline = Array(7).fill(0);
+    
+    // We also need the local IST date of today
+    const nowLocal = new Date();
+    const todayLocalStr = `${nowLocal.getFullYear()}-${String(nowLocal.getMonth() + 1).padStart(2, '0')}-${String(nowLocal.getDate()).padStart(2, '0')}`;
+
     for (let i = 0; i < 7; i++) {
       const d = new Date(); d.setDate(d.getDate() - (6 - i));
       // Use local date parts for bucket key
       const ds = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      
+      const uniqueScannersForDay = new Set();
+      
+      scans.forEach(s => {
+        const sd = new Date(s.scanned_at);
+        const sds = `${sd.getFullYear()}-${String(sd.getMonth() + 1).padStart(2, '0')}-${String(sd.getDate()).padStart(2, '0')}`;
+        const isPhysical = s.token_id !== null && s.token_id !== undefined;
+        if (sds === ds && isPhysical) {
+          uniqueScannersForDay.add(s.scanner_id || s.scanner_fp || s.id);
+        }
+      });
+      
+      views.forEach(v => {
+        const vd = new Date(v.viewed_at);
+        const vds = `${vd.getFullYear()}-${String(vd.getMonth() + 1).padStart(2, '0')}-${String(vd.getDate()).padStart(2, '0')}`;
+        const ref = (v.referrer || '').toLowerCase();
+        const isTshirt = ref === 'tshirt' || ref.includes('tshirt') || ref.includes('tee');
+        if (vds === ds && isTshirt) {
+          uniqueScannersForDay.add(v.viewer_id || v.visitor_fp || v.id);
+        }
+      });
+      
+      weekSparkline[i] = uniqueScannersForDay.size;
       const match = dailyStats.find(row => row.day === ds);
-      weekSparkline[i] = match ? match.total_views : 0;
       weekUniqueSparkline[i] = match ? match.unique_views : 0;
     }
 
-    // "People who discovered you today" = unique people who visited via ?src=tshirt today
-    // Source: profile_view_events with referrer='tshirt' (this table always works, no RLS issues)
-    // Rules:
-    //   - Only today's events (using local IST date)
-    //   - Same person visiting multiple times today = counts as 1
-    //   - Identity: viewer_id (account ID, stable) → visitor_fp (fingerprint) → row id
-    const nowLocal = new Date();
-    const todayLocalStr = `${nowLocal.getFullYear()}-${String(nowLocal.getMonth() + 1).padStart(2, '0')}-${String(nowLocal.getDate()).padStart(2, '0')}`;
-    
-    const uniqueScannersToday = new Set();
+    // "People who discovered you today" = Only Unique visitors daily who scans physical tshirt QR
+    const uniquePhysicalScannersToday = new Set();
+    scans.forEach(s => {
+      const d = new Date(s.scanned_at);
+      const localStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const isPhysical = s.token_id !== null && s.token_id !== undefined;
+      if (localStr === todayLocalStr && isPhysical) {
+        uniquePhysicalScannersToday.add(s.scanner_id || s.scanner_fp || s.id);
+      }
+    });
     views.forEach(v => {
       const d = new Date(v.viewed_at);
       const localStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
       const ref = (v.referrer || '').toLowerCase();
       const isTshirt = ref === 'tshirt' || ref.includes('tshirt') || ref.includes('tee');
       if (localStr === todayLocalStr && isTshirt) {
-        // Prefer stable account ID over rotating fingerprint
-        const identity = v.viewer_id || v.visitor_fp || v.id;
-        uniqueScannersToday.add(identity);
+        uniquePhysicalScannersToday.add(v.viewer_id || v.visitor_fp || v.id);
       }
     });
-    const realTimeToday = uniqueScannersToday.size;
+    const realTimeToday = uniquePhysicalScannersToday.size;
 
-    // Top Cities
+    // Top Cities: Deep Map Intelligence should count all kind of scans happened (total scans)
     const cityCounts = {};
-    [...views, ...scans].forEach(row => {
+    const scanKeys = new Set();
+    scans.forEach(s => {
+      const timeKey = Math.floor(new Date(s.scanned_at).getTime() / 5000);
+      const fp = s.scanner_fp || s.scanner_id || s.id;
+      scanKeys.add(`${fp}-${timeKey}`);
+    });
+    
+    const nonTshirtViews = views.filter(v => {
+      const ref = (v.referrer || '').toLowerCase();
+      const isTshirt = ref.includes('tshirt') || ref.includes('tee');
+      if (isTshirt) {
+        const timeKey = Math.floor(new Date(v.viewed_at).getTime() / 5000);
+        const fp = v.visitor_fp || v.viewer_id || v.id;
+        if (scanKeys.has(`${fp}-${timeKey}`)) {
+          return false; // Prevent double counting
+        }
+      }
+      return true;
+    });
+
+    [...nonTshirtViews, ...scans].forEach(row => {
       if (!row.city || row.city === 'Unknown') return;
-      cityCounts[row.city] = cityCounts[row.city] || { count: 0, country: row.country || 'Unknown' };
+      
+      let countryName = row.country || 'Unknown';
+      const normCountry = countryName.trim().toUpperCase();
+      if (normCountry === 'IN' || normCountry === 'INDIA') countryName = 'India';
+      else if (normCountry === 'US' || normCountry === 'USA' || normCountry === 'UNITED STATES') countryName = 'USA';
+      else if (normCountry === 'UK' || normCountry === 'GB' || normCountry === 'UNITED KINGDOM') countryName = 'United Kingdom';
+      else if (normCountry === 'AE' || normCountry === 'UAE' || normCountry === 'UNITED ARAB EMIRATES') countryName = 'UAE';
+      
+      cityCounts[row.city] = cityCounts[row.city] || { count: 0, country: countryName };
       cityCounts[row.city].count++;
     });
 
@@ -234,17 +287,34 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
     }).length;
 
     const effectiveQRScans = Math.max(totalQRScans, qrViewsCount);
-    // tshirtScans = unique people who arrived via QR T-shirt (from profile_view_events, referrer=tshirt)
-    const tshirtScanViews = views.filter(v => {
+    
+    // tshirtScans = All physical QR tshirt scans (total scans count)
+    const physicalScansList = scans.filter(s => s.token_id !== null && s.token_id !== undefined);
+    const physicalViewsList = views.filter(v => {
       const ref = (v.referrer || '').toLowerCase();
       return ref === 'tshirt' || ref.includes('tshirt') || ref.includes('tee');
     });
-    const uniqueTshirtScanners = new Set(tshirtScanViews.map(v => v.viewer_id || v.visitor_fp || v.id));
-    const tshirtScans = uniqueTshirtScanners.size;
+    const physicalScansCombined = new Set();
+    physicalScansList.forEach(s => {
+      const timeKey = Math.floor(new Date(s.scanned_at).getTime() / 5000);
+      const fp = s.scanner_fp || s.scanner_id || s.id;
+      physicalScansCombined.add(`${fp}-${timeKey}`);
+    });
+    physicalViewsList.forEach(v => {
+      const timeKey = Math.floor(new Date(v.viewed_at).getTime() / 5000);
+      const fp = v.visitor_fp || v.viewer_id || v.id;
+      physicalScansCombined.add(`${fp}-${timeKey}`);
+    });
+    const tshirtScans = Math.max(physicalScansList.length, physicalScansCombined.size);
 
+    // Profile QR Scans = Who scans the profile QR, link in bio scans (total views)
     const profileQRScans = views.filter(v => {
       const ref = (v.referrer || '').toLowerCase();
-      return (ref.includes('qr') || ref.includes('utm_source')) && !(ref.includes('tshirt') || ref.includes('tee'));
+      const isTshirt = ref.includes('tshirt') || ref.includes('tee');
+      if (isTshirt) return false;
+      const isQR = ref.includes('qr') || ref.includes('utm_source');
+      const isLinkInBio = ['instagram', 'linkedin', 'whatsapp', 'twitter', 'facebook', 'linktree', 'bio', 'social', 'share', 'github', 'threads', 'tiktok'].some(s => ref.includes(s));
+      return isQR || isLinkInBio;
     }).length;
 
     const qrScanRate = totalViews > 0 ? Math.round((effectiveQRScans / totalViews) * 100) : 0;
