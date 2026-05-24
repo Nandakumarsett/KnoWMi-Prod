@@ -2194,45 +2194,9 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-            {/* Location Insights - 3 columns */}
-            <div className="md:col-span-3 vibe-card overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.2s' }}>
-              <div className="p-8 border-b border-neutral-50 flex justify-between items-center bg-neutral-50/20">
-                <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900 flex items-center gap-2">
-                  Global Reach
-                  <MapPin size={16} className="text-orange-500" />
-                </h3>
-              </div>
-              <div className="p-8 space-y-6">
-                {vibeStats.topCities.length > 0 ? (
-                  vibeStats.topCities.map((loc, i) => (
-                    <div key={i} className="flex items-center justify-between group cursor-pointer">
-                      <div className="flex items-center gap-5">
-                         <div className="w-10 h-10 rounded-2xl bg-neutral-100 border border-neutral-200 flex items-center justify-center text-lg shadow-inner group-hover:bg-orange-50 group-hover:border-orange-200 transition-all">{loc.flag}</div>
-                         <div>
-                           <p className="text-xs font-black text-neutral-900">{loc.city}</p>
-                           <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">{loc.country}</p>
-                         </div>
-                      </div>
-                      <div className="text-right">
-                         <p className="text-xs font-black text-neutral-900">{loc.percentage}%</p>
-                         <div className="w-24 h-1.5 bg-neutral-100 rounded-full mt-2 overflow-hidden">
-                            <div className="h-full bg-orange-500 rounded-full" style={{ width: `${loc.barPct}%` }} />
-                         </div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="h-40 flex flex-col items-center justify-center text-center opacity-30">
-                     <Globe size={32} className="mb-4" />
-                     <p className="text-[10px] font-black uppercase tracking-widest">Awaiting Global Signals...</p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Referral Sources - 2 columns */}
-            <div className="md:col-span-2 vibe-card overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.3s' }}>
+          <div className="grid grid-cols-1 gap-6">
+            {/* Referral Sources - Full Width */}
+            <div className="vibe-card overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.3s' }}>
               <div className="p-8 border-b border-neutral-50 bg-neutral-50/20">
                 <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900">Referral Sources</h3>
               </div>
