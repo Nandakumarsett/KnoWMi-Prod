@@ -1,296 +1,156 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Loader2, QrCode, Sparkles, ArrowRight, ShieldCheck, Heart, Power } from 'lucide-react';
+import { Loader2, QrCode, Sparkles, ArrowRight, ShieldCheck, Heart, MapPin, X } from 'lucide-react';
 import AuthModal from '../components/AuthModal';
-import { buildFingerprint } from '../lib/analytics/fingerprint';
 
 export default function QRIntercept() {
   const { token } = useParams();
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
   const [isUnclaimed, setIsUnclaimed] = useState(false);
   const [isDeactivated, setIsDeactivated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [claimLoading, setClaimLoading] = useState(false);
+  
+  const [qrData, setQrData] = useState(null);
+  const [status, setStatus] = useState('fetching_qr');
 
   useEffect(() => {
-    const handleScan = async () => {
+    const fetchQR = async () => {
+      if (!token) return;
       try {
-        const { data: qrData, error: qrError } = await supabase
+        const { data: qData, error: qrError } = await supabase
           .from('qr_tokens')
           .select('id, profile_id, profile_slug, is_active')
           .eq('scan_token', token)
           .single();
 
-        if (qrError || !qrData) {
-          // Token is unclaimed or not generated in DB yet
+        if (qrError || !qData) {
           setIsUnclaimed(true);
           return;
         }
 
-        if (!qrData.is_active) {
-          // Token is deactivated
+        if (!qData.is_active) {
           setIsDeactivated(true);
           return;
         }
-
-        // Check if the current user is the owner of this QR token
-        const { data: { user } } = await supabase.auth.getUser();
-        let isOwner = false;
-        let viewerProfile = null;
         
-        if (user) {
-          // Get the profile for this user to check profile_id
-          const { data: userProfile } = await supabase
-            .from('profiles')
-            .select('id')
-            .eq('user_id', user.id)
-            .single();
-          
-          viewerProfile = userProfile;
-          if (userProfile && userProfile.id === qrData.profile_id) {
-            isOwner = true;
-          }
-        }
-
-        // Proactively establish browser fingerprint mapping if the scanner is logged in
-        if (viewerProfile) {
-          try {
-            const fp = await buildFingerprint();
-            const mapKey = `fp_mapped_${viewerProfile.id}`;
-            if (!localStorage.getItem(mapKey)) {
-              supabase
-                .from('profile_view_events')
-                .insert({
-                  profile_id: viewerProfile.id,
-                  visitor_fp: fp,
-                  viewer_id: viewerProfile.id,
-                  referrer: 'direct',
-                  device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
-                  browser: navigator.userAgent,
-                  is_repeat: true
-                })
-                .then(() => {
-                  localStorage.setItem(mapKey, 'true');
-                  console.log('Fingerprint mapping recorded successfully via QR Intercept.');
-                })
-                .catch(err => console.error('Failed to record fingerprint mapping via QR Intercept:', err));
-            }
-          } catch (fpErr) {
-            console.error('Failed to establish fingerprint mapping in QR Intercept:', fpErr);
-          }
-        }
-
-        // Determine device type
-        const userAgent = navigator.userAgent;
-        const isIOS = /iPad|iPhone|iPod/.test(userAgent);
-        const isAndroid = /Android/.test(userAgent);
-        let device = 'Desktop';
-        if (isIOS) device = 'iPhone';
-        else if (isAndroid) device = 'Android';
-        else if (window.innerWidth < 768) device = 'Mobile';
-
-        // Smart Geolocation Resolution (HTML5 Geolocation with IP API Fallback)
-        let resolvedCity = 'Unknown';
-        let resolvedCountry = 'India';
-        
-        const getBrowserLocation = () => {
-          return new Promise((resolve) => {
-            if (!navigator.geolocation) return resolve(null);
-            
-            navigator.geolocation.getCurrentPosition(
-              async (position) => {
-                try {
-                  const { latitude, longitude } = position.coords;
-                  // 1. Try BigDataCloud (fast, completely free, no headers block)
-                  const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
-                  if (res.ok) {
-                    const data = await res.json();
-                    const city = data.city || data.locality || 'Unknown';
-                    const country = data.countryName || 'India';
-                    if (city !== 'Unknown') return resolve({ city, country });
-                  }
-                  
-                  // 2. Try Nominatim as fallback
-                  const resNom = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`, {
-                    headers: { 'Accept-Language': 'en' }
-                  });
-                  if (resNom.ok) {
-                    const data = await resNom.json();
-                    const city = data.address?.city || data.address?.town || data.address?.suburb || data.address?.state_district || data.address?.state || 'Unknown';
-                    const country = data.address?.country || 'India';
-                    return resolve({ city, country });
-                  }
-                  resolve(null);
-                } catch (e) {
-                  console.warn('Reverse geocode failed:', e);
-                  resolve(null);
-                }
-              },
-              (err) => {
-                console.warn('Browser location permission failed or denied:', err);
-                resolve(null);
-              },
-              { timeout: 4000, enableHighAccuracy: true }
-            );
-          });
-        };
-
-        const getIpLocation = async () => {
-          // 1. Try geojs (Unlimited, highly accurate for Indian cellular networks)
-          try {
-            const res = await fetch('https://get.geojs.io/v1/ip/geo.json');
-            if (res.ok) {
-              const data = await res.json();
-              if (data.city && data.city !== 'Unknown') {
-                return { city: data.city, country: data.country || 'India' };
-              }
-            }
-          } catch (e) {
-            console.warn('geojs failed:', e);
-          }
-
-          // 2. Try freeipapi.com (reliable, high limits, HTTPS)
-          try {
-            const res = await fetch('https://freeipapi.com/api/json');
-            if (res.ok) {
-              const data = await res.json();
-              if (data.cityName && data.cityName !== 'Unknown') {
-                return { city: data.cityName, country: data.countryName || 'India' };
-              }
-            }
-          } catch (e) {
-            console.warn('freeipapi failed:', e);
-          }
-
-          // 2. Try ipwho.is (reliable, HTTPS)
-          try {
-            const res = await fetch('https://ipwho.is/');
-            if (res.ok) {
-              const data = await res.json();
-              if (data.success && data.city && data.city !== 'Unknown') {
-                return { city: data.city, country: data.country || 'India' };
-              }
-            }
-          } catch (e) {
-            console.warn('ipwho.is failed:', e);
-          }
-
-          // 3. Try ipapi.co (standard fallback)
-          try {
-            const res = await fetch('https://ipapi.co/json/');
-            if (res.ok) {
-              const data = await res.json();
-              if (data.city && data.city !== 'Unknown') {
-                return { city: data.city, country: data.country_name || 'India' };
-              }
-            }
-          } catch (e) {
-            console.warn('ipapi.co failed:', e);
-          }
-
-          return { city: 'Unknown', country: 'India' };
-        };
-
-        try {
-          const geoResult = await getBrowserLocation();
-          if (geoResult && geoResult.city && geoResult.city !== 'Unknown') {
-            resolvedCity = geoResult.city;
-            resolvedCountry = geoResult.country || 'India';
-          } else {
-            const ipResult = await getIpLocation();
-            if (ipResult && ipResult.city && ipResult.city !== 'Unknown') {
-              resolvedCity = ipResult.city;
-              resolvedCountry = ipResult.country || 'India';
-            }
-          }
-        } catch (e) {
-          console.warn('Geolocation resolution failed:', e);
-        }
-
-        // Log the scan to qr_scan_events
-        let currentFp = 'anonymous';
-        try {
-          currentFp = await buildFingerprint();
-        } catch (e) {}
-        
-        // Record the scan for ALL scanners
-        const { error: scanInsertError } = await supabase.from('qr_scan_events').insert({
-          profile_id: qrData.profile_id,
-          token_id: qrData.id,
-          device_type: device.toLowerCase(),
-          browser: navigator.userAgent.slice(0, 200),
-          os: navigator.platform,
-          scanner_fp: currentFp,
-          scanned_at: new Date().toISOString(),
-          scanner_id: user?.id || null,
-          city: resolvedCity,
-          country: resolvedCountry
-        });
-        
-        if (scanInsertError) {
-          console.error('Failed to insert qr_scan_events:', scanInsertError.message, '— check Supabase RLS.');
-        }
-
-        // Fetch owner's user_id to send push notification (try public_profiles first to respect RLS)
-        let ownerProfile = null;
-        try {
-          const { data: pubProfile } = await supabase
-            .from('public_profiles')
-            .select('user_id')
-            .eq('id', qrData.profile_id)
-            .single();
-          if (pubProfile?.user_id) {
-            ownerProfile = pubProfile;
-          }
-        } catch (e) {
-          console.warn('Failed to fetch from public_profiles view:', e);
-        }
-
-        if (!ownerProfile) {
-          try {
-            const { data: privProfile } = await supabase
-              .from('profiles')
-              .select('user_id')
-              .eq('id', qrData.profile_id)
-              .single();
-            if (privProfile?.user_id) {
-              ownerProfile = privProfile;
-            }
-          } catch (e) {
-            console.warn('Failed to fetch from profiles table:', e);
-          }
-        }
-
-        if (ownerProfile?.user_id && !isOwner) {
-          supabase.functions.invoke('send-push-notification', {
-            body: {
-              userId: ownerProfile.user_id,
-              title: 'T-Shirt Scan Alert! 👕',
-              body: `Someone just scanned your physical KnoWMi item using a ${device} in ${resolvedCity}!`,
-              url: '/dashboard',
-              metadata: {
-                device: device,
-                city: resolvedCity
-              }
-            }
-          }).catch(err => console.error('Failed to trigger push notification:', err));
-        }
-
-        // 6. Redirect to the actual profile, appending ?src=tshirt to ensure analytics picks it up
-        window.location.href = `/p/${qrData.profile_slug || qrData.profile_id}?src=tshirt`;
-
+        setQrData(qData);
+        setStatus('requesting_location');
       } catch (err) {
-        console.error('QR Intercept failed:', err);
         setIsUnclaimed(true);
       }
     };
-
-    if (token) {
-      handleScan();
-    }
+    
+    fetchQR();
   }, [token]);
+
+  const finishScan = async (resolvedCity, resolvedCountry) => {
+    setStatus('redirecting');
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      let isOwner = false;
+      let viewerProfile = null;
+      
+      if (user) {
+        const { data: userProfile } = await supabase.from('profiles').select('id').eq('user_id', user.id).single();
+        viewerProfile = userProfile;
+        if (userProfile && userProfile.id === qrData.profile_id) isOwner = true;
+      }
+
+      if (viewerProfile) {
+        try {
+          const { buildFingerprint } = await import('../lib/analytics/fingerprint');
+          const fp = await buildFingerprint();
+          const mapKey = `fp_mapped_${viewerProfile.id}`;
+          if (!localStorage.getItem(mapKey)) {
+            await supabase.from('profile_view_events').insert({
+              profile_id: viewerProfile.id, visitor_fp: fp, viewer_id: viewerProfile.id, referrer: 'direct',
+              device_type: window.innerWidth < 768 ? 'mobile' : 'desktop', browser: navigator.userAgent, is_repeat: true
+            });
+            localStorage.setItem(mapKey, 'true');
+          }
+        } catch (e) {}
+      }
+
+      const userAgent = navigator.userAgent;
+      const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+      const isAndroid = /Android/.test(userAgent);
+      let device = 'Desktop';
+      if (isIOS) device = 'iPhone';
+      else if (isAndroid) device = 'Android';
+      else if (window.innerWidth < 768) device = 'Mobile';
+
+      let currentFp = 'anonymous';
+      try {
+        const { buildFingerprint } = await import('../lib/analytics/fingerprint');
+        currentFp = await buildFingerprint();
+      } catch (e) {}
+      
+      await supabase.from('qr_scan_events').insert({
+        profile_id: qrData.profile_id, token_id: qrData.id, device_type: device.toLowerCase(),
+        browser: navigator.userAgent.slice(0, 200), os: navigator.platform, scanner_fp: currentFp,
+        scanned_at: new Date().toISOString(), scanner_id: user?.id || null, city: resolvedCity, country: resolvedCountry
+      });
+      
+      let ownerProfile = null;
+      try {
+        const { data: pubProfile } = await supabase.from('public_profiles').select('user_id').eq('id', qrData.profile_id).single();
+        if (pubProfile?.user_id) ownerProfile = pubProfile;
+      } catch (e) {}
+
+      if (!ownerProfile) {
+        try {
+          const { data: privProfile } = await supabase.from('profiles').select('user_id').eq('id', qrData.profile_id).single();
+          if (privProfile?.user_id) ownerProfile = privProfile;
+        } catch (e) {}
+      }
+
+      if (ownerProfile?.user_id && !isOwner) {
+        supabase.functions.invoke('send-push-notification', {
+          body: {
+            userId: ownerProfile.user_id, title: 'T-Shirt Scan Alert! 👕',
+            body: `Someone just scanned your physical KnoWMi item using a ${device} in ${resolvedCity}!`,
+            url: '/dashboard', metadata: { device, city: resolvedCity }
+          }
+        }).catch(() => {});
+      }
+
+      window.location.href = `/p/${qrData.profile_slug || qrData.profile_id}?src=tshirt`;
+    } catch (err) {
+      setIsUnclaimed(true);
+    }
+  };
+
+  const handleAllowLocation = () => {
+    setStatus('redirecting');
+    if (!navigator.geolocation) {
+      finishScan('Unknown', 'India');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
+          if (res.ok) {
+            const data = await res.json();
+            const city = data.city || data.locality || 'Unknown';
+            const country = data.countryName || 'India';
+            finishScan(city !== 'Unknown' ? city : 'Unknown', country);
+            return;
+          }
+          finishScan('Unknown', 'India');
+        } catch (e) {
+          finishScan('Unknown', 'India');
+        }
+      },
+      () => finishScan('Unknown', 'India'),
+      { timeout: 6000, enableHighAccuracy: true }
+    );
+  };
+
+  const handleSkipLocation = () => finishScan('Unknown', 'India');
 
   const handleClaim = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -301,7 +161,6 @@ export default function QRIntercept() {
 
     setClaimLoading(true);
     try {
-      // 1. Get profile of current logged-in user
       const { data: userProfile, error: profileError } = await supabase
         .from('profiles')
         .select('id, secure_slug')
@@ -314,7 +173,6 @@ export default function QRIntercept() {
         return;
       }
 
-      // 2. Claim the token
       const { error: claimError } = await supabase
         .from('qr_tokens')
         .update({
@@ -326,7 +184,6 @@ export default function QRIntercept() {
         .eq('scan_token', token);
 
       if (claimError) {
-        // Fallback: If update failed due to token not existing in db, create it
         const { error: insertError } = await supabase
           .from('qr_tokens')
           .insert({
@@ -354,7 +211,6 @@ export default function QRIntercept() {
   if (isUnclaimed) {
     return (
       <div className="min-h-screen bg-[#080808] flex flex-col items-center justify-center p-6 text-center text-white relative overflow-hidden">
-        {/* Background glow elements */}
         <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-orange-500/10 rounded-full blur-[120px]" />
         <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-gold/5 rounded-full blur-[120px]" />
 
@@ -409,6 +265,37 @@ export default function QRIntercept() {
     );
   }
 
+  if (status === 'requesting_location') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#080808] text-white p-6 relative overflow-hidden">
+        <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-orange-500/10 rounded-full blur-[120px]" />
+        <div className="relative z-10 max-w-md w-full bg-neutral-900/60 backdrop-blur-2xl border border-neutral-800 rounded-[32px] p-8 shadow-2xl text-center">
+          <div className="w-20 h-20 bg-neutral-800 border border-neutral-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <MapPin size={32} className="text-orange-500" />
+          </div>
+          <h2 className="text-2xl font-black mb-3">Accurate Analytics</h2>
+          <p className="text-sm text-neutral-400 mb-8 leading-relaxed">
+            To provide 100% accurate scan analytics to the creator as outlined in our Privacy Policy, we request your location.
+          </p>
+          <div className="space-y-3">
+            <button
+              onClick={handleAllowLocation}
+              className="w-full py-4 bg-orange-500 text-white font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-orange-600 transition-all flex items-center justify-center gap-2"
+            >
+              <ShieldCheck size={16} /> Allow Location
+            </button>
+            <button
+              onClick={handleSkipLocation}
+              className="w-full py-4 bg-transparent border border-neutral-700 text-neutral-400 font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-neutral-800 hover:text-white transition-all flex items-center justify-center gap-2"
+            >
+              <X size={16} /> Skip (Use Unknown)
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#080808] flex flex-col items-center justify-center p-6 text-center text-white">
       <div className="animate-pulse space-y-6">
@@ -417,7 +304,9 @@ export default function QRIntercept() {
         </div>
         <div>
           <h2 className="text-xl font-display font-black mb-2">Authenticating Identity</h2>
-          <p className="text-xs text-neutral-500 font-bold uppercase tracking-widest">KnoWMi Secure Link Processing...</p>
+          <p className="text-xs text-neutral-500 font-bold uppercase tracking-widest">
+            {status === 'redirecting' ? 'Finalizing...' : 'KnoWMi Secure Link Processing...'}
+          </p>
         </div>
       </div>
     </div>
