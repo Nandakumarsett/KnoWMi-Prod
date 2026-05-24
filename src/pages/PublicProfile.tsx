@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { fetchProfile } from '../lib/profile/fetch-profile'
 import { ProfileData } from '../types/profile'
-import { PersonaRouter } from '../components/profile/PersonaRouter'
+import { DynamicPersonaProfile } from '../components/profile/DynamicPersonaProfile'
 import ProfileViewTracker from '../components/analytics/ProfileViewTracker'
 import { Sparkles, X, UserPlus, Share2, ArrowLeft, Lock } from 'lucide-react'
 import { ProfileCTAs } from '../components/profile/shared/ProfileCTAs'
@@ -237,9 +237,9 @@ export default function PublicProfile() {
           </div>
         )}
 
-        {/* Full Mobile Persona Router below */}
+        {/* Full Mobile Persona Profile below */}
         <div className="px-2">
-          <PersonaRouter profile={profile} recentVisitors={recentVisitors} stats={stats} />
+          <DynamicPersonaProfile profile={profile} />
         </div>
 
         {/* QR Overlay Modal */}
@@ -453,8 +453,8 @@ export default function PublicProfile() {
             </div>
           </div>
 
-          <div className="flex-1 max-w-[680px] min-h-[600px] rounded-[24px] overflow-hidden border shadow-2xl p-6" style={{ background: cardBg, borderColor: borderColor }}>
-             <PersonaRouter profile={profile} recentVisitors={recentVisitors} stats={stats} />
+          <div className="flex-1 max-w-[680px] min-h-[600px] rounded-[24px] overflow-hidden shadow-2xl">
+            <DynamicPersonaProfile profile={profile} />
           </div>
 
         </div>

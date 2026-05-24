@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+﻿import React, { useState, useMemo, useEffect } from 'react';
 import Avatar from '../components/Avatar';
 import {
   Search, Trophy, Users, Activity, Clock,
@@ -36,10 +36,10 @@ const CATEGORIES = ['All', 'Professional', 'Creator', 'Business'];
 const BadgePill = ({ badge }: { badge: string | null }) => {
   if (!badge) return null;
   const styles: Record<string, string> = {
-    top1: 'bg-amber-100 text-amber-700 border-amber-200',
-    top1pct: 'bg-purple-100 text-purple-700 border-purple-200',
-    top10pct: 'bg-teal-100 text-teal-700 border-teal-200',
-    top100: 'bg-gray-100 text-gray-700 border-gray-200',
+    top1: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
+    top1pct: 'bg-violet-500/20 text-violet-400 border-violet-500/30',
+    top10pct: 'bg-teal-500/20 text-teal-400 border-teal-500/30',
+    top100: 'bg-white/10 text-white border-white/20',
   };
   const labels: Record<string, string> = {
     top1: 'Global #1',
@@ -49,7 +49,7 @@ const BadgePill = ({ badge }: { badge: string | null }) => {
   };
 
   return (
-    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${styles[badge] || styles.top100}`}>
+    <span className={px-2 py-0.5 rounded-full text-[10px] font-bold border \}>
       {labels[badge] || 'Top Member'}
     </span>
   );
@@ -65,9 +65,6 @@ export default function Leaderboard() {
 
   useEffect(() => {
     document.title = 'KnoWMi Elite | Global Rankings';
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute('content', 'See where you stand in the KnoWMi global rankings. Scan more, connect better, and climb the Elite leaderboard.');
-
     const timer = setTimeout(() => {
       document.body.classList.add('page-loaded');
     }, 100);
@@ -148,13 +145,12 @@ export default function Leaderboard() {
     const mins = Math.floor(diff / 60000);
     
     if (mins < 1) return 'Just Now';
-    if (mins < 60) return `${mins}m ago`;
+    if (mins < 60) return \\m ago\;
     const hours = Math.floor(mins / 60);
-    if (hours < 24) return `${hours}h ago`;
-    return `${Math.floor(hours / 24)}d ago`;
+    if (hours < 24) return \\h ago\;
+    return \\d ago\;
   };
 
-  // Live timer to refresh the "time ago" display every minute
   const [now, setNow] = useState(Date.now());
   useEffect(() => {
     const interval = setInterval(() => setNow(Date.now()), 60000);
@@ -168,7 +164,6 @@ export default function Leaderboard() {
       setShareStats(null);
       return;
     }
-
     async function fetchDetailedStats() {
       try {
         const { count: scanCount } = await supabase.from('qr_scan_events').select('*', { count: 'exact', head: true }).eq('profile_id', shareProfile!.id);
@@ -184,75 +179,81 @@ export default function Leaderboard() {
         console.error('Share stats fetch error:', err);
       }
     }
-
     fetchDetailedStats();
   }, [shareProfile]);
 
   if (loading) return (
-    <div className="min-h-screen bg-[#F8F9FA] flex flex-col items-center justify-center p-10">
-      <div className="animate-spin rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent mb-4" />
-      <p className="text-sm font-bold text-neutral-400 uppercase tracking-widest animate-pulse">Calculating Global Ranks...</p>
+    <div className="min-h-screen bg-[#0A0A0B] flex flex-col items-center justify-center p-10 relative overflow-hidden">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-orange-500/10 rounded-full blur-[120px]" />
+      <div className="animate-spin rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent mb-4 relative z-10" />
+      <p className="text-sm font-bold text-neutral-400 uppercase tracking-widest animate-pulse relative z-10">Calculating Global Ranks...</p>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] pb-32 font-sans">
-      <header className="h-20 bg-white border-b border-neutral-200 flex items-center px-8 sticky top-0 z-50">
+    <div className="min-h-screen bg-[#0A0A0B] text-white pb-32 font-sans relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-orange-500/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-violet-600/10 rounded-full blur-[150px] pointer-events-none" />
+      
+      <header className="h-20 bg-[#0A0A0B]/80 backdrop-blur-xl border-b border-white/5 flex items-center px-8 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
           <div className="flex flex-col">
-            <a href="/" className="font-display text-2xl tracking-tight text-[#111111] hover:text-orange-500 transition-colors">KnoWMi <span className="text-neutral-300 font-light text-xl">| Leaderboard</span></a>
+            <a href="/" className="font-display text-2xl tracking-tight text-white hover:text-orange-500 transition-colors">KnoWMi <span className="text-neutral-500 font-light text-xl">| Leaderboard</span></a>
             <p className="text-[10px] font-bold text-orange-500 uppercase tracking-[0.2em] leading-none mt-1">Scan Me. Know Me.</p>
           </div>
           <div className="flex items-center gap-3">
-            <a href="/dashboard" className="text-xs font-bold text-neutral-400 hover:text-neutral-900 transition-colors">← Back to Dashboard</a>
+            <a href="/dashboard" className="text-xs font-bold text-neutral-400 hover:text-white transition-colors">← Back to Dashboard</a>
           </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-12">
+      <main className="max-w-6xl mx-auto px-6 py-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-white p-6 rounded-3xl border border-neutral-200 shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-500"><Users size={24} /></div>
+          <div className="bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-xl flex items-center gap-4 hover:bg-white/10 transition-colors">
+            <div className="w-12 h-12 rounded-2xl bg-orange-500/20 flex items-center justify-center text-orange-400"><Users size={24} /></div>
             <div>
               <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Global Profiles</p>
-              <p className="text-2xl font-black text-neutral-900">{stats.totalProfiles.toLocaleString()}</p>
+              <p className="text-2xl font-black text-white">{stats.totalProfiles.toLocaleString()}</p>
             </div>
           </div>
-          <div className="bg-white p-6 rounded-3xl border border-neutral-200 shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-500"><Activity size={24} /></div>
+          <div className="bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-xl flex items-center gap-4 hover:bg-white/10 transition-colors">
+            <div className="w-12 h-12 rounded-2xl bg-teal-500/20 flex items-center justify-center text-teal-400"><Activity size={24} /></div>
             <div>
               <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Avg KnoWMi Score</p>
-              <p className="text-2xl font-black text-neutral-900">{stats.avgScore}</p>
+              <p className="text-2xl font-black text-white">{stats.avgScore}</p>
             </div>
           </div>
-          <div className="bg-white p-6 rounded-3xl border border-neutral-200 shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500"><Clock size={24} /></div>
+          <div className="bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-xl flex items-center gap-4 hover:bg-white/10 transition-colors">
+            <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center text-blue-400"><Clock size={24} /></div>
             <div>
               <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Last Updated</p>
-              <p className="text-2xl font-black text-blue-600">{formatTime(stats.lastUpdated)}</p>
+              <p className="text-2xl font-black text-blue-400">{formatTime(stats.lastUpdated)}</p>
             </div>
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
-          <h1 className="text-4xl font-black text-neutral-900 tracking-tight">Kno<span className="text-[#F97316]">WM</span>i <span className="text-[#F97316]">Elite</span></h1>
+          <h1 className="text-4xl font-black text-white tracking-tight flex items-center gap-3">
+             Kno<span className="text-orange-500">WM</span>i <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">Elite</span>
+             <Sparkles className="text-orange-500" size={28} />
+          </h1>
           <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
             <div className="relative group flex-1 sm:w-64">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-orange-500 transition-colors" size={18} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 group-focus-within:text-orange-500 transition-colors" size={18} />
               <input
                 type="text"
                 placeholder="Search by name..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-white border border-neutral-200 rounded-2xl py-3 pl-12 pr-4 outline-none focus:border-orange-500 shadow-sm transition-all"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-12 pr-4 outline-none focus:border-orange-500 focus:bg-white/10 text-white shadow-sm transition-all placeholder:text-neutral-600"
               />
             </div>
-            <div className="flex bg-white p-1 rounded-2xl border border-neutral-200 shadow-sm">
+            <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 shadow-sm backdrop-blur-md">
               {CATEGORIES.map(cat => (
                 <button
                   key={cat}
                   onClick={() => setCategory(cat)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${category === cat ? 'bg-neutral-900 text-white shadow-md' : 'text-neutral-500 hover:text-neutral-900'}`}
+                  className={\px-4 py-2 rounded-xl text-xs font-bold transition-all \\}
                 >
                   {cat}
                 </button>
@@ -271,43 +272,44 @@ export default function Leaderboard() {
                   key={p.username}
                   onClick={() => {
                     const slug = p.secure_slug || p.id;
-                    window.location.href = `/p/${slug}?src=leaderboard`;
+                    window.location.href = \/p/\?src=leaderboard\;
                   }}
-                  className={`relative group flex flex-col items-center pt-16 pb-10 px-8 rounded-[3rem] border transition-all duration-500 cursor-pointer shadow-2xl hover:-translate-y-2 w-full md:w-72
-                    ${isFirst ? 'bg-white border-teal-500 shadow-teal-500/10 md:h-[520px] z-20' : 'bg-white border-neutral-100 md:h-[440px] z-10'}`}
+                  className={\elative group flex flex-col items-center pt-16 pb-10 px-8 rounded-[3rem] border transition-all duration-500 cursor-pointer shadow-2xl hover:-translate-y-2 w-full md:w-72 backdrop-blur-xl
+                    \\}
                 >
-                  <div className={`relative p-1.5 rounded-full mb-8 transition-transform duration-500 group-hover:scale-110 shadow-lg
-                    ${isFirst ? 'bg-gradient-to-tr from-teal-500 via-teal-200 to-teal-500' : 'bg-neutral-100'}`}>
-                    <div className="rounded-full border-4 border-white overflow-hidden bg-white">
+                  {isFirst && <div className="absolute inset-0 bg-gradient-to-b from-orange-500/10 to-transparent rounded-[3rem] pointer-events-none" />}
+                  <div className={\elative p-1.5 rounded-full mb-8 transition-transform duration-500 group-hover:scale-110 shadow-lg
+                    \\}>
+                    <div className="rounded-full border-4 border-[#0A0A0B] overflow-hidden bg-[#0A0A0B]">
                       <Avatar src={p.avatar_url} name={p.display_name} username={p.username} size={isFirst ? "xl" : "lg"} />
                     </div>
                     {isFirst && (
-                      <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center text-white border-4 border-white shadow-lg">
+                      <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center text-white border-4 border-[#0A0A0B] shadow-lg">
                         <Trophy size={18} />
                       </div>
                     )}
                   </div>
-                  <div className="text-center mb-8 flex-1">
-                    <h3 className="text-2xl font-black text-neutral-900 line-clamp-1 mb-1 tracking-tight">{p.display_name}</h3>
+                  <div className="text-center mb-8 flex-1 relative z-10">
+                    <h3 className="text-2xl font-black text-white line-clamp-1 mb-1 tracking-tight">{p.display_name}</h3>
                     <p className="text-sm font-bold text-neutral-400 mb-3">@{p.username}</p>
-                    <div className={`inline-block px-4 py-1.5 rounded-full shadow-md font-black text-[10px] uppercase tracking-widest text-white mb-3
-                      ${isFirst ? 'bg-teal-500 shadow-teal-500/20' : isSecond ? 'bg-blue-500 shadow-blue-500/20' : 'bg-orange-500 shadow-orange-500/20'}`}>
+                    <div className={\inline-block px-4 py-1.5 rounded-full shadow-md font-black text-[10px] uppercase tracking-widest text-white mb-3
+                      \\}>
                       Global Rank #{p.rank}
                     </div>
                     <div className="flex justify-center">
                       <BadgePill badge={p.badge} />
                     </div>
                   </div>
-                  <div className={`w-full rounded-[2rem] p-5 flex items-center justify-between border ${isFirst ? 'border-teal-100 bg-teal-50/30' : 'border-neutral-100 bg-neutral-50/50'}`}>
+                  <div className={\w-full rounded-[2rem] p-5 flex items-center justify-between border relative z-10 \\}>
                     <div className="flex flex-col">
                       <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 mb-1">Score</span>
-                      <span className={`text-3xl font-black ${isFirst ? 'text-teal-600' : 'text-neutral-900'}`}>{p.knowmi_score}</span>
+                      <span className={\	ext-3xl font-black \\}>{p.knowmi_score}</span>
                     </div>
                     <div className="flex flex-col items-end">
                       <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 mb-1">Trend</span>
-                      <div className="flex items-center gap-1 text-teal-600 font-bold text-sm">
+                      <div className={\lex items-center gap-1 font-bold text-sm \\}>
                         <TrendingUp size={14} />
-                        <span>+12%</span>
+                        <span>+{Math.max(1, p.rank_delta || 12)}%</span>
                       </div>
                     </div>
                   </div>
@@ -324,23 +326,21 @@ export default function Leaderboard() {
               key={p.username}
               onClick={() => {
                 const slug = p.secure_slug || p.id;
-                window.location.href = `/p/${slug}?src=leaderboard`;
+                window.location.href = \/p/\?src=leaderboard\;
               }}
-              className="group bg-white hover:bg-neutral-50/50 p-5 md:p-6 rounded-[2rem] border border-neutral-100 shadow-sm transition-all duration-300 cursor-pointer flex flex-col md:flex-row items-center justify-between gap-6 hover:shadow-xl hover:shadow-teal-500/5 hover:-translate-y-1"
+              className="group bg-white/5 backdrop-blur-sm hover:bg-white/10 p-5 md:p-6 rounded-[2rem] border border-white/5 shadow-sm transition-all duration-300 cursor-pointer flex flex-col md:flex-row items-center justify-between gap-6 hover:shadow-xl hover:shadow-orange-500/10 hover:border-orange-500/30 hover:-translate-y-1"
             >
               <div className="flex flex-col md:flex-row items-center gap-6 w-full md:w-auto">
-                {/* Rank Badge */}
-                <div className="w-12 h-12 rounded-full bg-neutral-900 text-white flex items-center justify-center font-black text-lg shadow-lg group-hover:bg-teal-500 transition-colors">
+                <div className="w-12 h-12 rounded-full bg-white/10 text-white flex items-center justify-center font-black text-lg shadow-lg group-hover:bg-orange-500 transition-colors">
                   #{p.rank}
                 </div>
 
-                {/* Identity */}
                 <div className="flex items-center gap-4">
-                  <div className="relative p-1 rounded-full bg-neutral-50 border border-neutral-100 group-hover:border-teal-200 transition-colors">
+                  <div className="relative p-1 rounded-full bg-black/50 border border-white/10 group-hover:border-orange-400 transition-colors">
                     <Avatar src={p.avatar_url} name={p.display_name} username={p.username} size="md" />
                   </div>
                   <div>
-                    <h4 className="text-xl font-black text-neutral-900 leading-tight">{p.display_name}</h4>
+                    <h4 className="text-xl font-black text-white leading-tight">{p.display_name}</h4>
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-bold text-neutral-400">@{p.username}</span>
                       <BadgePill badge={p.badge} />
@@ -349,17 +349,16 @@ export default function Leaderboard() {
                 </div>
               </div>
 
-              {/* Stats & Actions */}
-              <div className="flex items-center justify-between md:justify-end gap-12 w-full md:w-auto border-t md:border-t-0 pt-4 md:pt-0 border-neutral-50">
+              <div className="flex items-center justify-between md:justify-end gap-12 w-full md:w-auto border-t border-white/5 md:border-t-0 pt-4 md:pt-0">
                 <div className="flex items-center gap-10">
                   <div className="flex flex-col">
                     <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Elite Score</span>
                     <div className="flex items-end gap-2">
-                      <span className="text-2xl font-black text-teal-600">{p.knowmi_score}</span>
-                      <div className="h-1.5 w-24 bg-neutral-100 rounded-full overflow-hidden mb-2 hidden sm:block">
+                      <span className="text-2xl font-black text-orange-400">{p.knowmi_score}</span>
+                      <div className="h-1.5 w-24 bg-white/10 rounded-full overflow-hidden mb-2 hidden sm:block">
                         <div 
-                          className="h-full bg-teal-500 rounded-full transition-all duration-1000"
-                          style={{ width: `${Math.min((p.knowmi_score / 500) * 100, 100)}%` }}
+                          className="h-full bg-orange-500 rounded-full transition-all duration-1000"
+                          style={{ width: \\%\ }}
                         />
                       </div>
                     </div>
@@ -367,7 +366,7 @@ export default function Leaderboard() {
 
                   <div className="flex flex-col items-end">
                     <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Status</span>
-                    <div className={`flex items-center gap-1 font-bold text-sm ${p.rank_delta >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+                    <div className={\lex items-center gap-1 font-bold text-sm \\}>
                       {p.rank_delta >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
                       <span>{p.rank_delta === 0 ? 'Steady' : Math.abs(p.rank_delta)}</span>
                     </div>
@@ -379,13 +378,13 @@ export default function Leaderboard() {
                       e.stopPropagation();
                       setShareProfile(p);
                     }}
-                    className="p-3 text-neutral-400 hover:text-orange-500 hover:bg-orange-50 rounded-2xl transition-all"
+                    className="p-3 text-neutral-400 hover:text-orange-400 hover:bg-orange-500/20 rounded-2xl transition-all"
                   >
                     <Share2 size={20} />
                   </button>
                   <a 
-                    href={`/p/${p.secure_slug || p.id}?src=leaderboard`} 
-                    className="p-3 text-neutral-400 hover:text-blue-500 hover:bg-blue-50 rounded-2xl transition-all"
+                    href={\/p/\?src=leaderboard\} 
+                    className="p-3 text-neutral-400 hover:text-blue-400 hover:bg-blue-500/20 rounded-2xl transition-all"
                   >
                     <Eye size={20} />
                   </a>
@@ -396,21 +395,21 @@ export default function Leaderboard() {
         </div>
 
         {shareProfile && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md transition-all duration-300">
-            <div className="bg-white rounded-[3rem] w-full max-w-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 border border-white/20">
-              <div className="p-8 border-b border-neutral-100 flex justify-between items-center">
-                <h2 className="text-2xl font-black text-neutral-900">Elite Achievement</h2>
-                <button onClick={() => setShareProfile(null)} className="p-2 hover:bg-neutral-100 rounded-full text-neutral-400 transition-colors"><X size={24} /></button>
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md transition-all duration-300">
+            <div className="bg-[#0A0A0B] rounded-[3rem] w-full max-w-xl overflow-hidden shadow-2xl shadow-orange-500/20 animate-in zoom-in-95 duration-300 border border-white/10">
+              <div className="p-8 border-b border-white/5 flex justify-between items-center">
+                <h2 className="text-2xl font-black text-white">Elite Achievement</h2>
+                <button onClick={() => setShareProfile(null)} className="p-2 hover:bg-white/10 rounded-full text-neutral-400 transition-colors"><X size={24} /></button>
               </div>
-              <div className="p-8 bg-[#F8F9FA]">
-                <div className="aspect-[4/5] bg-[#0A0A0B] rounded-[2.5rem] p-10 text-white relative overflow-hidden shadow-inner group">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/20 rounded-full blur-[100px] -mr-32 -mt-32" />
-                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-600/20 rounded-full blur-[100px] -ml-32 -mb-32" />
+              <div className="p-8">
+                <div className="aspect-[4/5] bg-black rounded-[2.5rem] p-10 text-white relative overflow-hidden shadow-inner group border border-white/10">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/30 rounded-full blur-[100px] -mr-32 -mt-32" />
+                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-600/30 rounded-full blur-[100px] -ml-32 -mb-32" />
                   <div className="absolute inset-0 border border-white/5 rounded-[2.5rem] pointer-events-none" />
                   <div className="relative z-10 flex justify-between items-start">
                     <div>
                       <h1 className="font-display text-3xl tracking-tighter font-black">Kno<span className="text-orange-500">WM</span>i</h1>
-                      <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-[0.3em]">Verified Identity</p>
+                      <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em]">Verified Identity</p>
                     </div>
                     <div className="bg-white/10 backdrop-blur-xl px-4 py-2 rounded-2xl border border-white/10 flex items-center gap-2">
                       <Sparkles size={14} className="text-orange-400" />
@@ -425,7 +424,7 @@ export default function Leaderboard() {
                     <Avatar src={shareProfile.avatar_url} name={shareProfile.display_name} username={shareProfile.username} size="lg" className="border-4 border-orange-500/30" />
                     <div>
                       <h3 className="text-3xl font-black tracking-tight">{shareProfile.display_name}</h3>
-                      <p className="text-neutral-500 font-bold">@{shareProfile.username}</p>
+                      <p className="text-neutral-400 font-bold">@{shareProfile.username}</p>
                     </div>
                   </div>
                   <div className="relative z-10 mt-12 grid grid-cols-2 gap-4">
@@ -442,13 +441,13 @@ export default function Leaderboard() {
                 <div className="mt-10 grid grid-cols-2 gap-5">
                   <button onClick={() => {
                     const slug = shareProfile.secure_slug || shareProfile.id;
-                    const fresh = `${window.location.origin}/p/${slug}?src=leaderboard_share`;
+                    const fresh = \\/p/\?src=leaderboard_share\;
                     navigator.clipboard.writeText(fresh);
                     alert('Share link copied!');
-                  }} className="flex items-center justify-center gap-3 py-5 bg-neutral-900 hover:bg-black text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
+                  }} className="flex items-center justify-center gap-3 py-5 bg-white/10 hover:bg-white/20 border border-white/10 text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
                     <Copy size={20} /> Copy Link
                   </button>
-                  <button onClick={() => alert('Download coming soon!')} className="flex items-center justify-center gap-3 py-5 bg-orange-500 hover:bg-orange-600 text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
+                  <button onClick={() => alert('Download coming soon!')} className="flex items-center justify-center gap-3 py-5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
                     <Download size={20} /> Save Poster
                   </button>
                 </div>
