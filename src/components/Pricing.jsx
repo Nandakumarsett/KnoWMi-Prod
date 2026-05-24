@@ -282,19 +282,41 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
               </div>
               
               <div className="bg-neutral-50 rounded-2xl p-4 border border-neutral-100 relative overflow-hidden min-h-[140px] flex flex-col justify-between">
-                <p className="text-[9px] font-black uppercase text-neutral-400 tracking-wider mb-3">Live Traffic Velocity</p>
+                <div className="flex justify-between items-center mb-3 relative z-20">
+                  <p className="text-[9px] font-black uppercase text-neutral-400 tracking-wider">Traffic Intelligence</p>
+                  <div className="flex gap-1.5">
+                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-sm"></div>
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-sm"></div>
+                  </div>
+                </div>
                 {simulatorTab === 'trial' ? (
-                  <div className="absolute inset-0 bg-white/80 backdrop-blur-[6px] flex flex-col items-center justify-center p-4 z-10">
+                  <div className="absolute inset-0 bg-white/80 backdrop-blur-[6px] flex flex-col items-center justify-center p-4 z-30">
                     <Lock size={16} className="text-orange-500 mb-1" />
                     <span className="text-[8px] font-black uppercase tracking-widest text-orange-500">Tee Activation Required</span>
                   </div>
                 ) : null}
-                <div className={`h-24 flex items-end gap-1.5 px-2 transition-all duration-500 ${simulatorTab === 'trial' ? 'blur-[4px] opacity-20' : ''}`}>
-                  {[40, 20, 60, 80, 50, 90, 70, 45, 85, 100, 65].map((h, idx) => (
-                    <div key={idx} className="flex-1 bg-orange-500/25 rounded-t-sm group-hover:bg-orange-500/35 transition-colors" style={{ height: `${h}%` }}>
-                      <div className="h-full w-full bg-orange-500 rounded-t-sm transition-all duration-1000" style={{ height: simulatorTab === 'unlocked' ? '100%' : '0%' }} />
-                    </div>
-                  ))}
+                <div className={`h-24 w-full relative transition-all duration-500 ${simulatorTab === 'trial' ? 'blur-[4px] opacity-20' : ''}`}>
+                  {/* Mock Area Chart for Total Views (Blue) and Unique (Green) */}
+                  <svg className="absolute bottom-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="blueGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
+                        <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                      </linearGradient>
+                      <linearGradient id="greenGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
+                        <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                    <g className="transition-all duration-1000 origin-bottom" style={{ transform: simulatorTab === 'unlocked' ? 'scaleY(1)' : 'scaleY(0.1)' }}>
+                      <path d="M0,70 Q10,50 25,60 T50,30 T75,40 T100,10 L100,100 L0,100 Z" fill="url(#blueGrad)"/>
+                      <path d="M0,70 Q10,50 25,60 T50,30 T75,40 T100,10" fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </g>
+                    <g className="transition-all duration-1000 origin-bottom" style={{ transform: simulatorTab === 'unlocked' ? 'scaleY(1)' : 'scaleY(0.1)', transitionDelay: '100ms' }}>
+                      <path d="M0,85 Q15,75 30,80 T60,55 T80,65 T100,40 L100,100 L0,100 Z" fill="url(#greenGrad)"/>
+                      <path d="M0,85 Q15,75 30,80 T60,55 T80,65 T100,40" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </g>
+                  </svg>
                 </div>
               </div>
             </div>
