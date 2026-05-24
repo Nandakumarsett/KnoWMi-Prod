@@ -2215,7 +2215,7 @@ export default function Dashboard() {
                          </div>
                       </div>
                       <div className="text-right">
-                         <p className="text-xs font-black text-neutral-900">{loc.count} Views</p>
+                         <p className="text-xs font-black text-neutral-900">{loc.percentage}%</p>
                          <div className="w-24 h-1.5 bg-neutral-100 rounded-full mt-2 overflow-hidden">
                             <div className="h-full bg-orange-500 rounded-full" style={{ width: `${loc.barPct}%` }} />
                          </div>
