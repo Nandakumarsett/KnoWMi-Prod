@@ -128,7 +128,7 @@ export default function ViralCard({ bestMoment }) {
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                         <span style={{
                           fontFamily: 'DM Sans, sans-serif',
-                          fontSize: 14,
+                          fontSize: 15,
                           fontWeight: 700,
                           color: isRegistered ? 'var(--coral)' : 'var(--text)',
                           lineHeight: 1.2,
@@ -139,7 +139,7 @@ export default function ViralCard({ bestMoment }) {
                         </span>
                         <span style={{
                           fontFamily: 'DM Sans, sans-serif',
-                          fontSize: 11,
+                          fontSize: 12,
                           color: 'var(--muted)',
                         }}>
                           Scanned on {new Date(viewer.viewedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} at {new Date(viewer.viewedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
