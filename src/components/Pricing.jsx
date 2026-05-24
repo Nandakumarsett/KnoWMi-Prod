@@ -301,7 +301,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                     <span className="text-[8px] font-black uppercase tracking-widest text-orange-500">Tee Activation Required</span>
                   </div>
                 ) : null}
-                <div className={`h-24 w-full relative transition-all duration-500 ${simulatorTab === 'trial' ? 'blur-[4px] opacity-20' : ''}`}>
+                <div className={`h-24 w-full relative transition-all duration-500 ${simulatorTab === 'trial' ? 'blur-[4px] opacity-30 scale-95' : 'scale-100 opacity-100'}`}>
                   {/* Mock Area Chart for Total Views (Blue) and Unique (Green) */}
                   <svg className="absolute bottom-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                     <defs>
@@ -314,11 +314,11 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                         <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
                       </linearGradient>
                     </defs>
-                    <g className="transition-all duration-1000 origin-bottom" style={{ transform: simulatorTab === 'unlocked' ? 'scaleY(1)' : 'scaleY(0.1)' }}>
+                    <g className="transition-all duration-1000 origin-bottom">
                       <path d="M0,70 Q10,50 25,60 T50,30 T75,40 T100,10 L100,100 L0,100 Z" fill="url(#blueGrad)"/>
                       <path d="M0,70 Q10,50 25,60 T50,30 T75,40 T100,10" fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </g>
-                    <g className="transition-all duration-1000 origin-bottom" style={{ transform: simulatorTab === 'unlocked' ? 'scaleY(1)' : 'scaleY(0.1)', transitionDelay: '100ms' }}>
+                    <g className="transition-all duration-1000 origin-bottom" style={{ transitionDelay: '100ms' }}>
                       <path d="M0,85 Q15,75 30,80 T60,55 T80,65 T100,40 L100,100 L0,100 Z" fill="url(#greenGrad)"/>
                       <path d="M0,85 Q15,75 30,80 T60,55 T80,65 T100,40" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </g>
