@@ -138,7 +138,20 @@ export default function QRIntercept() {
         };
 
         const getIpLocation = async () => {
-          // 1. Try freeipapi.com (reliable, high limits, HTTPS)
+          // 1. Try geojs (Unlimited, highly accurate for Indian cellular networks)
+          try {
+            const res = await fetch('https://get.geojs.io/v1/ip/geo.json');
+            if (res.ok) {
+              const data = await res.json();
+              if (data.city && data.city !== 'Unknown') {
+                return { city: data.city, country: data.country || 'India' };
+              }
+            }
+          } catch (e) {
+            console.warn('geojs failed:', e);
+          }
+
+          // 2. Try freeipapi.com (reliable, high limits, HTTPS)
           try {
             const res = await fetch('https://freeipapi.com/api/json');
             if (res.ok) {

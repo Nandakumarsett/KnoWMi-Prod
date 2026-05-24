@@ -293,11 +293,31 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       return true;
     });
 
+    const cityCounts = {};
+    
+    // DSA Algorithm: Build a hash map of device fingerprints to known cities
+    const fpToCityMap = {};
+    [...nonTshirtViews, ...scans].forEach(row => {
+      const city = row.city;
+      const fp = row.scanner_fp || row.visitor_fp;
+      if (city && city !== 'Unknown' && city !== '-' && fp) {
+        fpToCityMap[fp] = { city: city, country: row.country || 'India' };
+      }
+    });
+
+    // Second pass: Process cities, using the algorithm to resolve Unknowns
     [...nonTshirtViews, ...scans].forEach(row => {
       let city = row.city || 'Unknown';
-      if (city === '-') city = 'Unknown';
-      
       let countryName = row.country || 'Unknown';
+      const fp = row.scanner_fp || row.visitor_fp;
+
+      // Magically resolve Unknown cities if this device was previously seen in a known city
+      if ((city === 'Unknown' || city === '-') && fp && fpToCityMap[fp]) {
+        city = fpToCityMap[fp].city;
+        countryName = fpToCityMap[fp].country;
+      }
+
+      if (city === '-') city = 'Unknown';
       const normCountry = countryName.trim().toUpperCase();
       if (normCountry === 'IN' || normCountry === 'INDIA') countryName = 'India';
       else if (normCountry === 'US' || normCountry === 'USA' || normCountry === 'UNITED STATES') countryName = 'USA';
