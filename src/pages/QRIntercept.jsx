@@ -91,15 +91,66 @@ export default function QRIntercept() {
         else if (isAndroid) device = 'Android';
         else if (window.innerWidth < 768) device = 'Mobile';
 
+        // Smart Geolocation Resolution (HTML5 Geolocation with IP API Fallback)
+        let resolvedCity = 'Unknown';
+        
+        const getBrowserLocation = () => {
+          return new Promise((resolve) => {
+            if (!navigator.geolocation) return resolve(null);
+            
+            navigator.geolocation.getCurrentPosition(
+              async (position) => {
+                try {
+                  const { latitude, longitude } = position.coords;
+                  const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`, {
+                    headers: { 'Accept-Language': 'en' }
+                  });
+                  const data = await res.json();
+                  const city = data.address?.city || data.address?.town || data.address?.suburb || data.address?.state_district || data.address?.state || 'Unknown';
+                  resolve(city);
+                } catch (e) {
+                  console.warn('Nominatim reverse geocode failed:', e);
+                  resolve(null);
+                }
+              },
+              (err) => {
+                console.warn('Browser location permission failed or denied:', err);
+                resolve(null);
+              },
+              { timeout: 4000, enableHighAccuracy: true }
+            );
+          });
+        };
+
+        const getIpLocation = async () => {
+          try {
+            const res = await fetch('https://ipapi.co/json/');
+            const data = await res.json();
+            return data.city || 'Unknown';
+          } catch (e) {
+            console.warn('IP geolocation failed:', e);
+            return 'Unknown';
+          }
+        };
+
+        try {
+          const geoCity = await getBrowserLocation();
+          if (geoCity && geoCity !== 'Unknown') {
+            resolvedCity = geoCity;
+          } else {
+            resolvedCity = await getIpLocation();
+          }
+        } catch (e) {
+          console.warn('Geolocation resolution failed:', e);
+        }
+
         // Log the scan to qr_scan_events
         let currentFp = 'anonymous';
         try {
           currentFp = await buildFingerprint();
         } catch (e) {}
         
-        // Record the scan for ALL scanners — uniqueness is handled at display time, not here.
-        // This means the owner testing their own QR, other registered users, and strangers
-        // all get recorded. Daily deduplication (same person = 1 count) happens in analytics.
+        // Record the scan for ALL scanners
         const { error: scanInsertError } = await supabase.from('qr_scan_events').insert({
           profile_id: qrData.profile_id,
           device_type: device.toLowerCase(),
@@ -107,11 +158,12 @@ export default function QRIntercept() {
           os: navigator.platform,
           scanner_fp: currentFp,
           scanned_at: new Date().toISOString(),
-          scanner_id: user?.id || null
+          scanner_id: user?.id || null,
+          city: resolvedCity
         });
         
         if (scanInsertError) {
-          console.error('Failed to insert qr_scan_events:', scanInsertError.message, '— check Supabase RLS: qr_scan_events needs an INSERT policy for anon/authenticated roles.');
+          console.error('Failed to insert qr_scan_events:', scanInsertError.message, '— check Supabase RLS.');
         }
 
         // Fetch owner's user_id to send push notification (try public_profiles first to respect RLS)
@@ -149,8 +201,12 @@ export default function QRIntercept() {
             body: {
               userId: ownerProfile.user_id,
               title: 'T-Shirt Scan Alert! 👕',
-              body: `Someone just scanned your physical KnoWMi item using a ${device}!`,
-              url: '/dashboard'
+              body: `Someone just scanned your physical KnoWMi item using a ${device} in ${resolvedCity}!`,
+              url: '/dashboard',
+              metadata: {
+                device: device,
+                city: resolvedCity
+              }
             }
           }).catch(err => console.error('Failed to trigger push notification:', err));
         }

@@ -364,6 +364,43 @@ function deletionRequestTemplate(data: { firstName: string; email: string; reque
   return baseLayout(content, `Account deletion request ${data.requestId} — KnoWMi`)
 }
 
+// Template 7: Profile Scan Alert (omnichannel fallback)
+function scanAlertTemplate(data: { firstName: string; device: string; city: string }) {
+  const content = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+      <span class="badge" style="background:#FFEFD5;color:#D97706;">🔥 Scan Alert</span>
+    </div>
+    <p class="greeting">New Scan Detected, ${data.firstName}! 🚀</p>
+    <p class="subtext">Someone just scanned your physical KnoWMi profile using a <strong>${data.device}</strong> browser.</p>
+
+    <div class="divider"></div>
+
+    <div class="grid-2">
+      <div>
+        <div class="label">Device Info</div>
+        <div class="value">${data.device}</div>
+      </div>
+      <div>
+        <div class="label">Approx. Location</div>
+        <div class="value" style="color:#FF9933;">${data.city || 'Unknown'}</div>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      ⚡ Your live identity dashboard has logged this event! Open your dashboard to view your profile velocity, streak progress, and detailed geolocation history.
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="cta-center">
+      <a href="https://knowmi.in/dashboard" class="cta-btn">Open My Dashboard →</a>
+    </div>
+
+    <p style="font-size:12px;color:#94A3B8;text-align:center;margin-top:20px;">To manage notification alerts, visit your KnoWMi profile settings page.</p>
+  `
+  return baseLayout(content, `🔥 New KnoWMi Scan Alert from ${data.city || 'someone'}!`)
+}
+
 // ─── Main Handler ─────────────────────────────────────────
 
 serve(async (req) => {
@@ -413,6 +450,10 @@ serve(async (req) => {
       case 'deletion_request':
         subject = `Account deletion request received — KnoWMi`
         html = deletionRequestTemplate(data)
+        break
+      case 'scan_alert':
+        subject = `🔥 New KnoWMi Scan Alert from ${data.city || 'someone'}!`
+        html = scanAlertTemplate(data)
         break
       default:
         return new Response(JSON.stringify({ error: `Unknown email type: ${type}` }), {

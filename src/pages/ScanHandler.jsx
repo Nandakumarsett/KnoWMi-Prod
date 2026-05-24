@@ -80,7 +80,60 @@ export default function ScanHandler() {
         else if (isAndroid) device = 'Android'
         else if (isMobile) device = 'Mobile'
 
-        // 3. Log the scan in the database
+        // 3. Smart Geolocation Resolution (HTML5 Geolocation with IP API Fallback)
+        let resolvedCity = 'Unknown'
+        
+        const getBrowserLocation = () => {
+          return new Promise((resolve) => {
+            if (!navigator.geolocation) return resolve(null)
+            
+            navigator.geolocation.getCurrentPosition(
+              async (position) => {
+                try {
+                  const { latitude, longitude } = position.coords
+                  const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`, {
+                    headers: { 'Accept-Language': 'en' }
+                  })
+                  const data = await res.json()
+                  const city = data.address?.city || data.address?.town || data.address?.suburb || data.address?.state_district || data.address?.state || 'Unknown'
+                  resolve(city)
+                } catch (e) {
+                  console.warn('Nominatim reverse geocode failed:', e)
+                  resolve(null)
+                }
+              },
+              (err) => {
+                console.warn('Browser location permission failed or denied:', err)
+                resolve(null)
+              },
+              { timeout: 4000, enableHighAccuracy: true }
+            )
+          })
+        }
+
+        const getIpLocation = async () => {
+          try {
+            const res = await fetch('https://ipapi.co/json/')
+            const data = await res.json()
+            return data.city || 'Unknown'
+          } catch (e) {
+            console.warn('IP geolocation failed:', e)
+            return 'Unknown'
+          }
+        }
+
+        try {
+          const geoCity = await getBrowserLocation()
+          if (geoCity && geoCity !== 'Unknown') {
+            resolvedCity = geoCity
+          } else {
+            resolvedCity = await getIpLocation()
+          }
+        } catch (e) {
+          console.warn('Geolocation resolution pipeline failed:', e)
+        }
+
+        // 4. Log the scan in the database
         let fp = 'anonymous'
         try {
           const { buildFingerprint } = await import('../lib/analytics/fingerprint')
@@ -98,19 +151,24 @@ export default function ScanHandler() {
           os: navigator.platform,
           scanner_fp: fp,
           scanned_at: new Date().toISOString(),
-          scanner_id: user?.id
+          scanner_id: user?.id,
+          city: resolvedCity
         })
 
-        // 4. Trigger Push Notification asynchronously
+        // 5. Trigger Push Notification asynchronously (falls back to Email Scan Alert in Edge Function if no push tokens)
         if (profile.user_id) {
           supabase.functions.invoke('send-push-notification', {
             body: {
               userId: profile.user_id,
               title: 'New Scan Alert! 🔥',
-              body: `Someone just scanned your KnoWMi profile using a ${device}!`,
-              url: '/dashboard'
+              body: `Someone just scanned your KnoWMi profile using a ${device} in ${resolvedCity}!`,
+              url: '/dashboard',
+              metadata: {
+                device: device,
+                city: resolvedCity
+              }
             }
-          }).catch(err => console.error('Failed to trigger push notification:', err));
+          }).catch(err => console.error('Failed to trigger scan notification:', err));
         }
 
         // 5. Redirect to the randomized URL (safety first)

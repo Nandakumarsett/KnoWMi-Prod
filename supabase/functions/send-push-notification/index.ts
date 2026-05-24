@@ -35,7 +35,43 @@ serve(async (req) => {
 
     if (error) throw error
     if (!subscriptions || subscriptions.length === 0) {
-      return new Response(JSON.stringify({ message: 'No active push subscriptions for this user.' }), {
+      console.log('No active push subscriptions. Invoking Email Scan Alert Fallback...')
+      try {
+        const metadata = payload.metadata || {}
+        const device = metadata.device || 'Unknown Device'
+        const city = metadata.city || 'Unknown Location'
+
+        // 1. Fetch user's first_name
+        const { data: profile } = await supabaseClient
+          .from('profiles')
+          .select('first_name')
+          .eq('user_id', userId)
+          .single()
+
+        // 2. Fetch user's email address
+        const { data: authUser } = await supabaseClient.auth.admin.getUserById(userId)
+        const email = authUser?.user?.email
+
+        if (email) {
+          await supabaseClient.functions.invoke('send-email', {
+            body: {
+              type: 'scan_alert',
+              to: email,
+              toName: profile?.first_name || 'KnoWMi User',
+              data: {
+                firstName: profile?.first_name || 'KnoWMi User',
+                device: device,
+                city: city
+              }
+            }
+          })
+          console.log(`Scan alert email dispatched to ${email}`)
+        }
+      } catch (err) {
+        console.error('Failed to trigger scan alert email fallback:', err)
+      }
+
+      return new Response(JSON.stringify({ message: 'No active push subscriptions. Fallback alert email sent.' }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,
       })
