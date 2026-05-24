@@ -118,7 +118,10 @@ export default function Leaderboard() {
   }, [profiles]);
 
   const filteredProfiles = useMemo(() => {
-    let result = profiles;
+    // Filter out legacy dummy profiles (like gamer, fitness, developer, student, etc.)
+    const legacyCategories = ['dev', 'developer', 'student', 'gamer', 'gaming', 'fitness', 'gym', 'chef', 'musician', 'athlete', 'sports', 'education', 'coder', 'tech'];
+    let result = profiles.filter(p => !legacyCategories.includes(p.profile_category?.toLowerCase() || ''));
+
     if (category !== 'All') result = result.filter(p => p.profile_category?.toLowerCase() === category.toLowerCase());
     if (search) {
       const searchResults = trie.search(search);
