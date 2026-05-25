@@ -27,7 +27,10 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
     // Fetch analytics data via edge function (uses SERVICE ROLE, bypasses RLS)
     // This is critical: without this, Kishore's dashboard cannot see scans
     // by OTHER users (Rashmika, Owner, etc.) due to SELECT RLS policies.
-    let views = [], scans = [], links = [];
+    let views = [];
+    let scans = [];
+    let links = [];
+    let linksError = null;
 
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -47,8 +50,14 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
           const payload = await res.json();
           views = payload.views || [];
           scans = payload.scans || [];
-          links = payload.links || [];
-          console.log(`Analytics loaded via edge function: ${views.length} views, ${scans.length} scans`);
+          
+          // The edge function might not fetch link_click_events (if it hasn't been updated),
+          // so we fetch it directly here. Since the user owns the profile, RLS allows this.
+          const { data: directLinks, error: directLinksErr } = await supabase.from('link_click_events').select('*').eq('profile_id', profileId);
+          links = directLinks || payload.links || [];
+          if (directLinksErr) linksError = directLinksErr;
+
+          console.log(`Analytics loaded via edge function: ${views.length} views, ${scans.length} scans. Links fetched directly: ${links.length}`);
           
           // PATCH: Edge function might not return city/country if it's an older deployment.
           // Fetch them directly using RLS (since user is the owner, they can read their own analytics).
@@ -102,7 +111,8 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       const scanRes = await supabase.from('qr_scan_events').select('*').eq('profile_id', profileId);
       if (scanRes.error) console.error("Analytics: Error fetching scans:", scanRes.error.message);
 
-      const { data: linksData } = await supabase.from('link_click_events').select('*').eq('profile_id', profileId);
+      const { data: linksData, error: linksErr } = await supabase.from('link_click_events').select('*').eq('profile_id', profileId);
+      linksError = linksErr;
 
       views = viewRes.data || [];
       scans = scanRes.data || [];
@@ -681,7 +691,8 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
         totalLinkTaps: links.length,
         linkStats: {
           clicksByPlatform,
-          recentClicks: recentLinks
+          recentClicks: recentLinks,
+          error: linksError ? linksError.message : null
         }
       };
   } catch (err) {
