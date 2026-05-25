@@ -49,7 +49,7 @@ export default function QRStudioAdmin() {
       
       let csv = "id,claim_url\n";
       data.forEach(p => {
-        csv += `${p.id},${window.location.origin}/p/${p.id}\n`;
+        csv += `${p.id},${window.location.origin}/s/${p.id}\n`;
       });
       
       const blob = new Blob([csv], { type: 'text/csv' });

@@ -14,7 +14,8 @@ export default function ProfileViewTracker({ profileId }) {
       if (!profileId || tracked) return;
 
       const searchParams = new URLSearchParams(window.location.search);
-      const isTshirtScan = searchParams.get('src') === 'tshirt' || searchParams.get('src') === 'qr';
+      const isUUIDSlug = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(profile.username || '');
+      const isTshirtScan = searchParams.get('src') === 'tshirt' || searchParams.get('src') === 'qr' || isUUIDSlug;
       
       const { data: { user } } = await supabase.auth.getUser();
       let viewerProfile = null;
