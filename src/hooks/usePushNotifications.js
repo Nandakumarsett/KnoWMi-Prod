@@ -93,6 +93,7 @@ export function usePushNotifications(userId) {
       return true;
     } catch (err) {
       console.error('Failed to subscribe to push notifications:', err);
+      alert('Failed to enable scan alerts: ' + err.message);
       return false;
     } finally {
       setLoading(false);
