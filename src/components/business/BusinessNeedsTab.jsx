@@ -1,18 +1,53 @@
 import React, { useState } from 'react';
-import { Printer, Edit3, Image as ImageIcon, QrCode, Sparkles } from 'lucide-react';
+import { Printer, Edit3, Image as ImageIcon, QrCode, Sparkles, Loader2 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
+import { supabase } from '../../lib/supabase';
 import './PrintStyles.css';
 
 export default function BusinessNeedsTab({ profile }) {
   const [activeTemplate, setActiveTemplate] = useState('card15x10');
   const [customMessage, setCustomMessage] = useState('Hey, it was great meeting you! Scan my code to stay connected.');
   const [theme, setTheme] = useState('dark'); // 'dark' or 'light'
+  const [isPrinting, setIsPrinting] = useState(false);
+  const [dynamicUrl, setDynamicUrl] = useState(`https://knowmi.in/p/${profile?.secure_slug || ''}?src=business`);
 
-  const handlePrint = () => {
+  const handlePrint = async () => {
+    if (isPrinting) return;
+    setIsPrinting(true);
+    
+    try {
+      // 1. Generate a unique tracking token for this print batch
+      const { data: token, error } = await supabase
+        .from('qr_tokens')
+        .insert({
+          profile_id: profile?.id,
+          profile_slug: profile?.secure_slug,
+          label: `Printed ${activeTemplate.replace('_', ' ')}`,
+          is_active: true
+        })
+        .select('*')
+        .single();
+        
+      if (token && !error) {
+        // 2. Update the QR code URL to use the new tracking token
+        setDynamicUrl(`https://knowmi.in/q/${token.scan_token}?src=business`);
+        
+        // 3. Wait for React to re-render the QR code before opening the print dialog
+        setTimeout(() => {
+          window.print();
+          setIsPrinting(false);
+        }, 800);
+        return;
+      }
+    } catch (err) {
+      console.error("Failed to generate tracking token", err);
+    }
+    
+    // Fallback if token generation fails
     window.print();
+    setIsPrinting(false);
   };
 
-  const profileUrl = `https://knowmi.in/p/${profile?.secure_slug || ''}?src=tshirts`;
   const logoUrl = '/logo-square.png';
 
   const themeClasses = {
@@ -98,9 +133,11 @@ export default function BusinessNeedsTab({ profile }) {
 
           <button 
             onClick={handlePrint}
-            className="w-full bg-neutral-900 hover:bg-black text-white font-black uppercase tracking-widest text-xs py-5 rounded-2xl shadow-xl shadow-black/20 transition-all active:scale-95 flex items-center justify-center gap-3 group"
+            disabled={isPrinting}
+            className="w-full bg-neutral-900 hover:bg-black text-white font-black uppercase tracking-widest text-xs py-5 rounded-2xl shadow-xl shadow-black/20 transition-all active:scale-95 flex items-center justify-center gap-3 group disabled:opacity-70 disabled:active:scale-100"
           >
-            <Printer size={18} className="group-hover:-translate-y-1 transition-transform" /> Print Templates
+            {isPrinting ? <Loader2 size={18} className="animate-spin" /> : <Printer size={18} className="group-hover:-translate-y-1 transition-transform" />}
+            {isPrinting ? 'Activating Tracker...' : 'Print & Activate'}
           </button>
         </div>
 
@@ -136,7 +173,7 @@ export default function BusinessNeedsTab({ profile }) {
                   
                   <div className="flex items-center gap-8 mt-6 bg-white/5 backdrop-blur-xl rounded-3xl p-6 border border-white/10 shadow-lg">
                     <div className="bg-white p-3 rounded-2xl shadow-lg shrink-0">
-                      <QRCodeSVG value={profileUrl} size={90} level="H" fgColor="#000000" bgColor="#FFFFFF" />
+                      <QRCodeSVG value={dynamicUrl} size={90} level="H" fgColor="#000000" bgColor="#FFFFFF" />
                     </div>
                     <div className="flex-1">
                       <p className={`text-sm font-medium italic leading-relaxed border-l-4 pl-5 py-1 ${theme === 'accent' ? 'border-white/50 text-white' : 'border-orange-500'}`}>
@@ -167,7 +204,7 @@ export default function BusinessNeedsTab({ profile }) {
                 </div>
                 <div className={`w-[40%] p-4 flex flex-col items-center justify-center relative z-10 ${theme === 'light' ? 'bg-neutral-50' : 'bg-black/20'}`}>
                   <div className="bg-white p-2 rounded-xl shadow-xl">
-                    <QRCodeSVG value={profileUrl} size={65} level="M" fgColor="#000000" bgColor="#FFFFFF" />
+                    <QRCodeSVG value={dynamicUrl} size={65} level="M" fgColor="#000000" bgColor="#FFFFFF" />
                   </div>
                   <p className="text-[6px] font-black uppercase tracking-widest mt-3 opacity-60">Scan to Connect</p>
                 </div>
@@ -185,7 +222,7 @@ export default function BusinessNeedsTab({ profile }) {
                 <img src={logoUrl} alt="KnoWMi Logo" className="h-5 w-5 object-cover rounded bg-white p-0.5 absolute top-3" onError={(e) => e.target.style.display = 'none'} />
                 
                 <div className="bg-white p-2 rounded-xl shadow-xl mt-3">
-                  <QRCodeSVG value={profileUrl} size={80} level="M" fgColor="#000000" bgColor="#FFFFFF" />
+                  <QRCodeSVG value={dynamicUrl} size={80} level="M" fgColor="#000000" bgColor="#FFFFFF" />
                 </div>
                 
                 <p className={`text-[7px] font-black uppercase tracking-widest mt-3 ${theme === 'accent' ? 'text-white' : ''}`}>Scan me</p>
