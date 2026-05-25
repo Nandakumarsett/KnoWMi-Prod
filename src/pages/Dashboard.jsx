@@ -16,6 +16,7 @@ import {
 import { 
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, Cell
 } from 'recharts'
+import { formatDistanceToNow } from 'date-fns'
 import { useAuth } from '../context/AuthContext'
 import { supabase, getAssetUrl } from '../lib/supabase'
 import ViewsChart from '../components/analytics/ViewsChart'
@@ -2227,13 +2228,18 @@ export default function Dashboard() {
                            )}
                         </div>
                         <div className="flex-1">
-                           <p className="text-[11px] font-black text-neutral-900 leading-tight">
-                             {ev.visitor ? (
-                               <span className="text-orange-500">{ev.visitor.first_name}</span>
-                             ) : (
-                               ev.is_repeat ? 'Repeat Visit' : (ev.referrer === 'qr' ? 'QR Code Scan' : 'Direct Link')
-                             )}
-                           </p>
+                           <div className="flex justify-between items-start">
+                             <p className="text-[11px] font-black text-neutral-900 leading-tight">
+                               {ev.visitor ? (
+                                 <span className="text-orange-500">{ev.visitor.first_name}</span>
+                               ) : (
+                                 ev.is_repeat ? 'Repeat Visit' : (ev.referrer === 'qr' ? 'QR Code Scan' : 'Direct Link')
+                               )}
+                             </p>
+                             <span className="text-[9px] font-bold text-neutral-300 ml-2 whitespace-nowrap">
+                               {formatDistanceToNow(new Date(ev.viewed_at || ev.scanned_at), { addSuffix: true })}
+                             </span>
+                           </div>
                            <p className="text-[9px] font-bold text-neutral-400 uppercase tracking-tight mt-1">
                              {ev.visitor ? (ev.is_repeat ? 'Returned to see you' : 'Just discovered you') : `${ev.device_type} • ${ev.city || 'Unknown'}`}
                            </p>
