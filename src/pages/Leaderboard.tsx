@@ -72,6 +72,7 @@ export default function Leaderboard() {
   }, []);
 
   useEffect(() => {
+    async function fetchData() {
       // Fetch up to 1000 profiles so that Search and Category filters can find users outside the top 10
       const { data: profilesData } = await supabase.from('public_leaderboard').select('*').limit(1000);
       const { count } = await supabase.from('profile_scores').select('*', { count: 'exact', head: true });
