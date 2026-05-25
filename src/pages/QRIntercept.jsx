@@ -96,18 +96,18 @@ export default function QRIntercept() {
       
       let ownerProfile = null;
       try {
-        const { data: pubProfile } = await supabase.from('public_profiles').select('user_id').eq('id', qrData.profile_id).single();
+        const { data: pubProfile } = await supabase.from('public_profiles').select('user_id, secure_slug').eq('id', qrData.profile_id).single();
         if (pubProfile?.user_id) ownerProfile = pubProfile;
       } catch (e) {}
 
       if (!ownerProfile) {
         try {
-          const { data: privProfile } = await supabase.from('profiles').select('user_id').eq('id', qrData.profile_id).single();
+          const { data: privProfile } = await supabase.from('profiles').select('user_id, secure_slug').eq('id', qrData.profile_id).single();
           if (privProfile?.user_id) ownerProfile = privProfile;
         } catch (e) {}
       }
 
-      if (ownerProfile?.user_id && !isOwner) {
+      if (ownerProfile?.user_id) {
         supabase.functions.invoke('send-push-notification', {
           body: {
             userId: ownerProfile.user_id, title: 'T-Shirt Scan Alert! 👕',
@@ -117,7 +117,8 @@ export default function QRIntercept() {
         }).catch(() => {});
       }
 
-      window.location.href = `/p/${qrData.profile_slug || qrData.profile_id}?src=tshirt`;
+      const finalSlug = ownerProfile?.secure_slug || qrData.profile_slug || qrData.profile_id;
+      window.location.href = `/p/${finalSlug}?src=tshirt`;
     } catch (err) {
       setIsUnclaimed(true);
     }
