@@ -33,25 +33,25 @@ export default function ProfileViewTracker({ profileId }) {
       }
 
       const sessionKey = user ? `v_tracked_user_${profileId}` : `v_tracked_anon_${profileId}`;
-      if (localStorage.getItem(sessionKey)) {
-        console.log('Page refresh detected, skipping duplicate analytics tracking.');
-        setTracked(true);
-        return;
-      }
+      const isRepeatVisit = !!localStorage.getItem(sessionKey);
 
       // If they came from a QR scan, they already saw the prompt in ScanHandler.
       if (isTshirtScan) {
-        handleLocation(false, viewerProfile, true, true); // silent = true, skipGeo = true
+        handleLocation(false, viewerProfile, true, true, isRepeatVisit); // silent = true, skipGeo = true
       } else {
         // Normal web visit, show prompt
         setShowPrompt(true);
+        // We will need to store isRepeatVisit somewhere or pass it. 
+        // For now, let's just use it in the component state or attach it to the window.
+        window.__knowmi_is_repeat = isRepeatVisit;
       }
     };
 
     initTracking();
   }, [profileId, tracked]);
 
-  const handleLocation = async (allow, viewerProfile, silent = false, skipGeo = false) => {
+  const handleLocation = async (allow, viewerProfile, silent = false, skipGeo = false, isRepeatParam = null) => {
+    const isRepeat = isRepeatParam !== null ? isRepeatParam : !!window.__knowmi_is_repeat;
     setShowPrompt(false);
     
     let resolvedCity = 'Unknown';
@@ -99,7 +99,7 @@ export default function ProfileViewTracker({ profileId }) {
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}` },
           body: JSON.stringify({ 
             profileId, referrer, fp, source, utm_medium: utmMedium, utm_campaign: utmCampaign,
-            viewerId: viewerProfile?.id, city: resolvedCity, country: resolvedCountry
+            viewerId: viewerProfile?.id, city: resolvedCity, country: resolvedCountry, isRepeat
           }),
           keepalive: true,
         });
@@ -111,7 +111,7 @@ export default function ProfileViewTracker({ profileId }) {
           profile_id: profileId, visitor_fp: fp,
           referrer: isTshirtScan ? 'tshirt' : (source !== 'direct' ? source : referrer),
           device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
-          browser: navigator.userAgent, is_repeat: false, viewer_id: viewerProfile?.id,
+          browser: navigator.userAgent, is_repeat: isRepeat, viewer_id: viewerProfile?.id,
           city: resolvedCity, country: resolvedCountry
         });
       }
