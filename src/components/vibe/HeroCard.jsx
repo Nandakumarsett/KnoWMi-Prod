@@ -104,14 +104,10 @@ export default function HeroCard({ todayScans, isLive, weekSparkline }) {
         </div>
         <div style={{ display: 'flex', gap: 6, marginTop: 10, justifyContent: 'center' }}>
           {weekSparkline.map((_, i) => {
-            let label = 'T';
-            if (i === 6) {
-              label = 'T'; // Today
-            } else {
-              const d = new Date();
-              d.setDate(d.getDate() - (6 - i));
-              label = d.toLocaleDateString('en-US', { weekday: 'short' }).charAt(0);
-            }
+            const d = new Date();
+            d.setDate(d.getDate() - (6 - i));
+            const label = d.toLocaleDateString('en-US', { weekday: 'short' }).charAt(0);
+            
             return (
               <div key={i} style={{ width: 12, textAlign: 'center', fontSize: 9, color: 'var(--muted)', fontFamily: 'DM Sans, sans-serif', overflow: 'visible' }}>
                 {label}
