@@ -1624,11 +1624,9 @@ export default function Dashboard() {
     if (pendingClaimId && user && profile) {
       const claimTee = async () => {
         try {
-          // Strict RLS/Logic: Only update if user_id is null
-          await supabase.from('public_profiles')
-            .update({ user_id: user.id })
-            .eq('id', pendingClaimId)
-            .is('user_id', null);
+          // Use secure RPC to bind the factory tee ID to the user's digital identity
+          const { error } = await supabase.rpc('claim_factory_tee', { p_factory_id: pendingClaimId });
+          if (error) throw error;
             
           localStorage.removeItem('knowmi_pending_claim')
           alert("🎉 Tee claimed successfully! This physical product is now permanently paired to your digital identity.")

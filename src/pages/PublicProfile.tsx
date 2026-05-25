@@ -78,7 +78,7 @@ export default function PublicProfile() {
   const pAlias = (profile.persona || '').toLowerCase()
   const activeConfig = personaConfigs[pAlias] || personaConfigs.developer
   const fromSrc = searchParams.get('src')
-  const isClaimFlow = searchParams.get('claim') === 'true'
+  const isClaimFlow = searchParams.get('claim') === 'true' || !profile.user_id;
   const isGhostMode = searchParams.get('ghost') === 'true'
   const fromTab = searchParams.get('from') || 'analytics'
   const accentColor = activeConfig?.theme?.accent || '#C1440E'
