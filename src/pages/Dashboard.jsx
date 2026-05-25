@@ -2236,7 +2236,7 @@ export default function Dashboard() {
                                  ev.is_repeat ? 'Repeat Visit' : (ev.referrer === 'qr' ? 'QR Code Scan' : 'Direct Link')
                                )}
                              </p>
-                             <span className="text-[9px] font-bold text-neutral-300 ml-2 whitespace-nowrap">
+                             <span className="text-[9px] font-bold text-neutral-500 ml-2 whitespace-nowrap">
                                {formatDistanceToNow(new Date(ev.viewed_at || ev.scanned_at), { addSuffix: true })}
                              </span>
                            </div>
