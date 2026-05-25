@@ -33,15 +33,15 @@ export default function QRStudioAdmin() {
       const newProfiles = [];
       for (let i = 0; i < batchSize; i++) {
         newProfiles.push({
-          tier: 'Free',
           status: 'free',
           ghost_mode: false,
-          first_name: `${batchLabel} #${i+1}`
+          first_name: `${batchLabel} #${i+1}`,
+          secure_slug: Math.random().toString(36).substring(2, 12)
         });
       }
       
       const { data, error } = await supabase
-        .from('public_profiles')
+        .from('profiles')
         .insert(newProfiles)
         .select('id');
         
