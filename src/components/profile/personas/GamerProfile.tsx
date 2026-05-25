@@ -151,7 +151,7 @@ export function GamerProfile({ profile }: { profile: ProfileData }) {
 
         {/* Social Links Row */}
         <div className="mt-12 w-full">
-           <SocialGrid links={profile.social_links} style="row" />
+           <SocialGrid links={profile.social_links} style="row" profileId={profile.id} />
         </div>
 
         {/* Pulse Bar Footers (ENERGY version) */}

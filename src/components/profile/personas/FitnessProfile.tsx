@@ -167,7 +167,7 @@ export function FitnessProfile({ profile }: { profile: ProfileData }) {
         </div>
 
         <div className="mt-12 w-full">
-           <SocialGrid links={profile.social_links} style="row" />
+           <SocialGrid links={profile.social_links} style="row" profileId={profile.id} />
         </div>
 
         <PulseBar pulse={profile.pulse} tier={profile.tier} accentColor={accentRed} />
