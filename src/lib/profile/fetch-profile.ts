@@ -10,7 +10,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
   // 1. Fetch full record (safe because we filter before returning)
   let query = supabase.from('profiles').select('*')
   if (isUUID) {
-    query = query.eq('id', slug)
+    query = query.or(`id.eq."${slug}",secure_slug.eq."${slug}"`)
   } else {
     query = query.or(`secure_slug.eq."${slug}",first_name.eq."${slug}"`)
   }
@@ -22,7 +22,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     // 2. Fallback to public_profiles
     let fallbackQuery = supabase.from('public_profiles').select('*')
     if (isUUID) {
-      fallbackQuery = fallbackQuery.eq('id', slug)
+      fallbackQuery = fallbackQuery.or(`id.eq."${slug}",secure_slug.eq."${slug}"`)
     } else {
       fallbackQuery = fallbackQuery.or(`secure_slug.eq."${slug}",first_name.eq."${slug}"`)
     }

@@ -141,7 +141,7 @@ export default function Admin() {
   )
 
   const filtered = users.filter(u => (u.first_name || '').toLowerCase().includes(search.toLowerCase()))
-  const customers = filtered.filter(u => !u.role || u.role === 'customer')
+  const customers = filtered.filter(u => (!u.role || u.role === 'customer') && u.user_id !== null && !(u.first_name || '').startsWith('Factory Batch'))
   const staff = filtered.filter(u => u.role && u.role !== 'customer')
   const stats = { total: users.length, paid: users.filter(u => u.status === 'paid').length, free: users.filter(u => u.status === 'free').length, revenue: users.reduce((s, u) => s + (u.amount_paid || 0), 0) }
 
