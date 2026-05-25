@@ -109,7 +109,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
 
   return {
     id: publicProfile.id,
-    user_id: publicProfile.user_id || publicProfile.id,
+    user_id: publicProfile.user_id || null,
     username: publicProfile.secure_slug || fn.toLowerCase(),
     display_name: builtDisplayName,
     first_name: fn,
