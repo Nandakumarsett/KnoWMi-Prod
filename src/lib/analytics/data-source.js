@@ -162,10 +162,10 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       const fp = v.viewer_id || v.visitor_fp || v.id;
       fpCounts[fp] = (fpCounts[fp] || 0) + 1;
     });
-    let repeatCount = 0;
+    let repeatingUsers = 0;
     Object.values(fpCounts).forEach(count => {
       if (count > 1) {
-        repeatCount += (count - 1);
+        repeatingUsers++;
       }
     });
 
@@ -614,7 +614,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       tshirtScans,
       profileQRScans,
       qrScanRate,
-      repeatScore: totalViews > 0 ? Math.round((repeatCount / totalViews) * 100) : 0,
+      repeatScore: uniqueViews > 0 ? Math.round((repeatingUsers / uniqueViews) * 100) : 0,
       todayTotal: realTimeToday,
       todayUnique: weekUniqueSparkline[6] || 0,
       deviceBreakdown,

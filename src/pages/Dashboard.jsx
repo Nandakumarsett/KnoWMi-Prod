@@ -2141,7 +2141,7 @@ export default function Dashboard() {
               { label: 'QR Scan Rate', value: qrScanRateLabel, sub: 'Physical to Digital', trend: 'Calculated', color: 'text-orange-500', tooltip: 'The percentage of visitors who scanned physical QR products versus accessing direct links.' },
               { label: 'Repeat Score', value: `${repeatScore}%`, sub: repeatScoreLabel, trend: 'Active', color: 'text-emerald-500', tooltip: 'The percentage of users who returned to view your profile again after their first visit.' }
             ].map((stat, i) => (
-              <div key={i} className="p-6 vibe-card relative group overflow-hidden">
+              <div key={i} className="p-6 vibe-card relative group">
                 <div className="flex justify-between items-center mb-4">
                   <p className="text-xs font-black uppercase tracking-widest text-neutral-400">{stat.label}</p>
                   <div className="relative group/tooltip flex shrink-0">
