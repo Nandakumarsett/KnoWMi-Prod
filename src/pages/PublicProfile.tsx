@@ -26,6 +26,9 @@ export default function PublicProfile() {
   const [showQR, setShowQR] = useState(false)
   const [recentVisitors, setRecentVisitors] = useState<any[]>([])
   const [stats, setStats] = useState<any>(null)
+  const [showConnectModal, setShowConnectModal] = useState(false)
+  const [connectForm, setConnectForm] = useState({ name: '', email: '', social: '', message: '' })
+  const [connectStatus, setConnectStatus] = useState('')
 
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 768)
@@ -72,60 +75,47 @@ export default function PublicProfile() {
     )
   }
 
-  // Gate check if user is not signed in
-  if (!user && !authLoading) {
-    return (
-      <div className="min-h-screen bg-[#FDF6EC] flex flex-col items-center justify-center p-6 text-center text-[#1A1A1A] relative overflow-hidden selection:bg-orange-500/30">
-        <ProfileViewTracker profileId={profile.id} />
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-orange-500/10 rounded-full blur-[160px] pointer-events-none" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-orange-500/10 rounded-full blur-[160px] pointer-events-none" />
-
-        <div className="max-w-md w-full bg-white/60 border border-[#E5D5C4] p-8 sm:p-12 rounded-[24px] backdrop-blur-xl shadow-2xl relative z-10 space-y-8 flex flex-col items-center">
-          <div className="w-16 h-16 bg-[#C1440E]/10 border border-[#C1440E]/20 rounded-[12px] flex items-center justify-center text-[#C1440E]">
-            <Sparkles size={32} className="animate-pulse" />
-          </div>
-
-          <div className="space-y-3">
-            <h1 className="text-3xl font-black tracking-tight font-display uppercase tracking-tighter text-[#C1440E]">
-              Identity Locked
-            </h1>
-            <p className="text-sm text-[#5C5246] font-medium leading-relaxed">
-              Scan Detected! Please sign up or sign in to KnoWMi to unlock and view {profile.display_name}'s full persona profile.
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-3 w-full">
-            <button 
-              onClick={() => {
-                localStorage.setItem('return_to', window.location.pathname)
-                window.location.href = '/?auth=signin'
-              }} 
-              className="w-full py-4 bg-[#C1440E] hover:bg-[#A0350B] text-white rounded-[12px] font-black uppercase tracking-widest text-xs transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-[#C1440E]/20"
-            >
-              Sign In to View
-            </button>
-            <button 
-              onClick={() => {
-                localStorage.setItem('return_to', window.location.pathname)
-                window.location.href = '/?auth=signup'
-              }} 
-              className="w-full py-4 bg-white/40 hover:bg-white/60 text-[#1A1A1A] border border-[#E5D5C4] rounded-[12px] font-black uppercase tracking-widest text-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
-            >
-              Sign Up for KnoWMi
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   const pAlias = (profile.persona || '').toLowerCase()
   const activeConfig = personaConfigs[pAlias] || personaConfigs.developer
   const fromSrc = searchParams.get('src')
+  const isClaimFlow = searchParams.get('claim') === 'true'
+  const isGhostMode = searchParams.get('ghost') === 'true'
   const fromTab = searchParams.get('from') || 'analytics'
   const accentColor = activeConfig?.theme?.accent || '#C1440E'
   const isOwnerOfProfile = user && user.id === profile.user_id
   const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
+
+  if (isGhostMode) {
+    return (
+      <div className="min-h-screen bg-[#080808] flex flex-col items-center justify-center p-6 text-center text-white">
+        <Lock className="w-12 h-12 mb-6 text-neutral-600" />
+        <h1 className="text-3xl font-black mb-4 font-display uppercase tracking-tighter text-white">Ghost Mode Active</h1>
+        <p className="text-neutral-400 mb-8 max-w-sm leading-relaxed">This physical identity is currently offline for privacy. The owner has temporarily disabled public access.</p>
+      </div>
+    )
+  }
+
+  if (isClaimFlow) {
+    return (
+      <div className="min-h-screen bg-neutral-900 flex flex-col items-center justify-center p-6 text-center text-white relative overflow-hidden">
+        <div className="absolute inset-0 mesh-bg opacity-20 pointer-events-none" />
+        <div className="w-20 h-20 bg-orange-500/10 text-orange-500 rounded-full flex items-center justify-center mb-6 relative z-10 animate-pulse">
+          <Sparkles size={32} />
+        </div>
+        <h1 className="text-4xl font-black mb-4 font-display uppercase tracking-tighter text-white relative z-10">Unclaimed Tee</h1>
+        <p className="text-neutral-400 mb-10 max-w-sm leading-relaxed relative z-10">You've scanned a fresh, unclaimed KnoWMi physical product. Claim it now to lock your digital identity to this item.</p>
+        <button 
+          onClick={() => {
+            localStorage.setItem('knowmi_pending_claim', profile.id)
+            navigate('/?auth=signup')
+          }} 
+          className="px-10 py-5 bg-orange-500 text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-2xl shadow-orange-500/20 active:scale-95 transition-all relative z-10 hover:bg-orange-600"
+        >
+          Claim This Tee
+        </button>
+      </div>
+    )
+  }
 
   // Sanitize display_name — strip accidental username/persona prefix concatenation
   // e.g. "tester_personaTester Persona" → "Tester Persona"
@@ -191,7 +181,7 @@ export default function PublicProfile() {
         </header>
 
         {/* Small Button to view QR on Mobile */}
-        <div className="pt-20 px-6 flex justify-center mb-6">
+        <div className="pt-20 px-6 flex justify-center mb-6 gap-3">
           {isFreeProfile ? (
             <button 
               onClick={() => setShowQR(true)}
@@ -200,13 +190,21 @@ export default function PublicProfile() {
               🔒 Buy A Tee to Unlock your QR
             </button>
           ) : (
-            <button 
-              onClick={() => setShowQR(true)}
-              className="flex items-center gap-2 px-6 py-3 border rounded-[12px] font-black uppercase tracking-widest text-xs transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md"
-              style={{ background: cardBg, borderColor: borderColor, color: textPrimary }}
-            >
-              ✦ Tap to view QR
-            </button>
+            <>
+              <button 
+                onClick={() => setShowQR(true)}
+                className="flex items-center gap-2 px-6 py-3 border rounded-[12px] font-black uppercase tracking-widest text-xs transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md"
+                style={{ background: cardBg, borderColor: borderColor, color: textPrimary }}
+              >
+                ✦ Tap to view QR
+              </button>
+              <button 
+                onClick={() => setShowConnectModal(true)}
+                className="flex items-center gap-2 px-6 py-3 bg-[#C1440E] text-white rounded-[12px] font-black uppercase tracking-widest text-xs transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md"
+              >
+                <UserPlus size={16} /> Connect
+              </button>
+            </>
           )}
         </div>
 
@@ -301,6 +299,55 @@ export default function PublicProfile() {
             </div>
           </div>
         )}
+
+        {/* Connect Modal */}
+        {showConnectModal && (
+          <div className="fixed inset-0 z-[100] bg-[#1A1A1A]/60 backdrop-blur-md flex flex-col items-center justify-center p-6 select-none animate-fadeIn">
+            <div className="bg-white p-8 rounded-[32px] w-full max-w-[320px] shadow-2xl relative">
+              <button 
+                onClick={() => setShowConnectModal(false)}
+                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 text-neutral-500 hover:text-neutral-900"
+              >
+                <X size={16} />
+              </button>
+              <h3 className="text-xl font-black font-display text-neutral-900 mb-2">Leave your Card</h3>
+              <p className="text-xs text-neutral-500 mb-6 font-medium">Connect with {safeDisplayName}. They will see your details in their dashboard.</p>
+              
+              <div className="space-y-4">
+                <input type="text" placeholder="Your Name" value={connectForm.name} onChange={e => setConnectForm({...connectForm, name: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E]" />
+                <input type="email" placeholder="Your Email" value={connectForm.email} onChange={e => setConnectForm({...connectForm, email: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E]" />
+                <input type="text" placeholder="Instagram/LinkedIn Handle" value={connectForm.social} onChange={e => setConnectForm({...connectForm, social: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E]" />
+                <textarea placeholder="Message (optional)" value={connectForm.message} onChange={e => setConnectForm({...connectForm, message: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E] resize-none h-20" />
+                
+                {connectStatus === 'success' && <p className="text-emerald-500 text-xs font-bold text-center">Connection sent!</p>}
+                {connectStatus === 'error' && <p className="text-red-500 text-xs font-bold text-center">Failed to send.</p>}
+                
+                <button 
+                  onClick={async () => {
+                    if (!connectForm.name || !connectForm.email) return;
+                    setConnectStatus('sending')
+                    const { error } = await supabase.from('network_connections').insert({
+                      profile_id: profile.id,
+                      visitor_name: connectForm.name,
+                      visitor_email: connectForm.email,
+                      visitor_social: connectForm.social,
+                      visitor_message: connectForm.message
+                    });
+                    if (error) setConnectStatus('error')
+                    else {
+                      setConnectStatus('success')
+                      setTimeout(() => setShowConnectModal(false), 2000)
+                    }
+                  }}
+                  className="w-full py-3 bg-[#C1440E] text-white rounded-xl font-black uppercase tracking-widest text-xs hover:bg-[#A0350B]"
+                >
+                  {connectStatus === 'sending' ? 'Sending...' : 'Send Connection'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     )
   }
@@ -419,6 +466,15 @@ export default function PublicProfile() {
 
               <ProfileCTAs profile={profile} accentColor={accentColor} />
 
+              <div className="w-full mt-6 flex justify-center">
+                <button 
+                  onClick={() => setShowConnectModal(true)}
+                  className="flex items-center gap-2 px-6 py-3 bg-[#C1440E] text-white rounded-[12px] font-black uppercase tracking-widest text-xs transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md w-full justify-center"
+                >
+                  <UserPlus size={16} /> Leave Your Card
+                </button>
+              </div>
+
               <div className="w-full mt-10">
                 <SocialGrid links={profile.social_links} style="row" />
               </div>
@@ -486,6 +542,54 @@ export default function PublicProfile() {
             </div>
             <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white group-hover:bg-orange-500 transition-colors">
               <ArrowLeft size={14} className="rotate-180" />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Connect Modal for Desktop */}
+      {showConnectModal && (
+        <div className="fixed inset-0 z-[100] bg-[#1A1A1A]/60 backdrop-blur-md flex flex-col items-center justify-center p-6 select-none animate-fadeIn">
+          <div className="bg-white p-8 rounded-[32px] w-full max-w-[400px] shadow-2xl relative">
+            <button 
+              onClick={() => setShowConnectModal(false)}
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 text-neutral-500 hover:text-neutral-900"
+            >
+              <X size={16} />
+            </button>
+            <h3 className="text-xl font-black font-display text-neutral-900 mb-2">Leave your Card</h3>
+            <p className="text-xs text-neutral-500 mb-6 font-medium">Connect with {safeDisplayName}. They will see your details in their dashboard.</p>
+            
+            <div className="space-y-4">
+              <input type="text" placeholder="Your Name" value={connectForm.name} onChange={e => setConnectForm({...connectForm, name: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E]" />
+              <input type="email" placeholder="Your Email" value={connectForm.email} onChange={e => setConnectForm({...connectForm, email: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E]" />
+              <input type="text" placeholder="Instagram/LinkedIn Handle" value={connectForm.social} onChange={e => setConnectForm({...connectForm, social: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E]" />
+              <textarea placeholder="Message (optional)" value={connectForm.message} onChange={e => setConnectForm({...connectForm, message: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E] resize-none h-20" />
+              
+              {connectStatus === 'success' && <p className="text-emerald-500 text-xs font-bold text-center">Connection sent!</p>}
+              {connectStatus === 'error' && <p className="text-red-500 text-xs font-bold text-center">Failed to send.</p>}
+              
+              <button 
+                onClick={async () => {
+                  if (!connectForm.name || !connectForm.email) return;
+                  setConnectStatus('sending')
+                  const { error } = await supabase.from('network_connections').insert({
+                    profile_id: profile.id,
+                    visitor_name: connectForm.name,
+                    visitor_email: connectForm.email,
+                    visitor_social: connectForm.social,
+                    visitor_message: connectForm.message
+                  });
+                  if (error) setConnectStatus('error')
+                  else {
+                    setConnectStatus('success')
+                    setTimeout(() => setShowConnectModal(false), 2000)
+                  }
+                }}
+                className="w-full py-3 bg-[#C1440E] text-white rounded-xl font-black uppercase tracking-widest text-xs hover:bg-[#A0350B]"
+              >
+                {connectStatus === 'sending' ? 'Sending...' : 'Send Connection'}
+              </button>
             </div>
           </div>
         </div>

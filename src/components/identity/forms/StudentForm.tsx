@@ -192,13 +192,13 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
               <div>
                 <label className={labelClasses}>Campus Rank (%)</label>
                 <div className="relative">
-                  <input type="number" min={1} max={100} value={data.campus_rank_pct || ''} onChange={e => updateField('campus_rank_pct', Number(e.target.value))} placeholder="e.g. 5" className={inputBaseClasses} />
+                  <input type="number" onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()} min={1} max={100} value={data.campus_rank_pct || ''} onChange={e => updateField('campus_rank_pct', Number(e.target.value))} placeholder="e.g. 5" className={inputBaseClasses} />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-neutral-400">%</span>
                 </div>
               </div>
               <div>
                 <label className={labelClasses}>Study Buddies</label>
-                <input type="number" value={data.study_buddies || ''} onChange={e => updateField('study_buddies', Number(e.target.value))} placeholder="e.g. 15" className={inputBaseClasses} />
+                <input type="number" onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()} value={data.study_buddies || ''} onChange={e => updateField('study_buddies', Number(e.target.value))} placeholder="e.g. 15" className={inputBaseClasses} />
               </div>
             </div>
 

@@ -61,6 +61,7 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
               type="number"
               min={0}
               step={1}
+              onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()}
               value={data.streak_days || ''}
               onChange={e => updateField('streak_days', Number(e.target.value))}
               placeholder="e.g. 30"
@@ -73,6 +74,7 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
               type="number"
               min={0}
               step={1}
+              onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()}
               value={data.prs_count || ''}
               onChange={e => updateField('prs_count', Number(e.target.value))}
               placeholder="e.g. 14"
@@ -85,6 +87,7 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
               type="number"
               min={0}
               step={1}
+              onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()}
               value={data.total_workouts || ''}
               onChange={e => updateField('total_workouts', Number(e.target.value))}
               placeholder="e.g. 120"
@@ -130,6 +133,7 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
                   <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Current</label>
                   <input
                     type="number"
+                    onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()}
                     value={goal.current || 0}
                     onChange={e => {
                       const copy = [...(data.goals || [])]
@@ -143,6 +147,7 @@ export function FitnessForm({ data = {}, onChange }: FitnessFormProps) {
                   <label className="block text-[11px] font-black uppercase tracking-widest text-[#5C5246] mb-1">Target</label>
                   <input
                     type="number"
+                    onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()}
                     value={goal.target || 1}
                     onChange={e => {
                       const copy = [...(data.goals || [])]

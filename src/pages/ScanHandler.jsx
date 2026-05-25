@@ -22,7 +22,7 @@ export default function ScanHandler() {
         let profileError = null
 
         try {
-          let dbQuery = supabase.from('public_profiles').select('id, user_id, first_name, secure_slug')
+          let dbQuery = supabase.from('public_profiles').select('id, user_id, first_name, secure_slug, ghost_mode')
           if (isUUID) {
             dbQuery = dbQuery.or(`id.eq.${code},secure_slug.eq.${code}`)
           } else {
@@ -35,7 +35,7 @@ export default function ScanHandler() {
 
         if (!foundProfile) {
           try {
-            let fallbackQuery = supabase.from('public_profiles').select('id, first_name, secure_slug')
+            let fallbackQuery = supabase.from('public_profiles').select('id, user_id, first_name, secure_slug, ghost_mode')
             if (isUUID) {
               fallbackQuery = fallbackQuery.or(`id.eq.${code},secure_slug.eq.${code}`)
             } else {
@@ -56,7 +56,24 @@ export default function ScanHandler() {
         }
 
         setProfile(foundProfile)
-        setStatus('requesting_location')
+        
+        // Seamlessly resolve IP-based location without prompting
+        try {
+          const res = await fetch('https://api.bigdatacloud.net/data/reverse-geocode-client')
+          if (res.ok) {
+            const data = await res.json()
+            const city = data.city || data.locality || 'Unknown'
+            const country = data.countryName || 'India'
+            finishScan(foundProfile, city !== 'Unknown' ? city : 'Unknown', country)
+            return
+          }
+        } catch (e) {
+          console.error('IP location failed:', e)
+        }
+        
+        // Fallback if IP location fails
+        finishScan(foundProfile, 'Unknown', 'India')
+        
       } catch (err) {
         console.error('Error fetching profile:', err)
         navigate('/')
@@ -66,7 +83,7 @@ export default function ScanHandler() {
     fetchProfile()
   }, [code, navigate])
 
-  const finishScan = async (resolvedCity, resolvedCountry) => {
+  const finishScan = async (resolvedProfile, resolvedCity, resolvedCountry) => {
     setStatus('redirecting')
     try {
       const userAgent = navigator.userAgent
@@ -84,12 +101,26 @@ export default function ScanHandler() {
         const { buildFingerprint } = await import('../lib/analytics/fingerprint')
         fp = await buildFingerprint()
       } catch (e) {}
+
+      const finalSlug = resolvedProfile.secure_slug || resolvedProfile.id
+
+      // Factory Claim Flow: Unclaimed shirt
+      if (!resolvedProfile.user_id) {
+        navigate(`/p/${finalSlug}?claim=true`)
+        return
+      }
+
+      // Ghost Mode check
+      if (resolvedProfile.ghost_mode) {
+        navigate(`/p/${finalSlug}?ghost=true`)
+        return
+      }
       
       const { data: { user } } = await supabase.auth.getUser();
       
       try {
         await supabase.from('qr_scan_events').insert({
-          profile_id: profile.id,
+          profile_id: resolvedProfile.id,
           device_type: device.toLowerCase(),
           browser: 'Webview/Browser',
           os: navigator.platform,
@@ -101,10 +132,10 @@ export default function ScanHandler() {
         })
       } catch (e) {}
 
-      if (profile.user_id) {
+      if (resolvedProfile.user_id) {
         supabase.functions.invoke('send-push-notification', {
           body: {
-            userId: profile.user_id,
+            userId: resolvedProfile.user_id,
             title: 'New Scan Alert! 🔥',
             body: `Someone just scanned your KnoWMi profile using a ${device} in ${resolvedCity}!`,
             url: '/dashboard',
@@ -113,70 +144,11 @@ export default function ScanHandler() {
         }).catch(() => {});
       }
 
-      const finalSlug = profile.secure_slug || profile.id
+      const finalSlug = resolvedProfile.secure_slug || resolvedProfile.id
       navigate(`/p/${finalSlug}?src=qr`)
     } catch (e) {
       navigate('/')
     }
-  }
-
-  const handleAllowLocation = async () => {
-    setStatus('redirecting')
-    if (!navigator.geolocation) {
-      finishScan('Unknown', 'India')
-      return
-    }
-    
-    try {
-      const position = await getAccurateLocation({ timeout: 10000, maximumAge: 0, enableHighAccuracy: true })
-      const { latitude, longitude } = position.coords
-      const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`)
-      if (res.ok) {
-        const data = await res.json()
-        const city = data.city || data.locality || 'Unknown'
-        const country = data.countryName || 'India'
-        finishScan(city !== 'Unknown' ? city : 'Unknown', country)
-        return
-      }
-      finishScan('Unknown', 'India')
-    } catch (e) {
-      finishScan('Unknown', 'India')
-    }
-  }
-
-  const handleSkipLocation = () => {
-    finishScan('Unknown', 'India')
-  }
-
-  if (status === 'requesting_location') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#080808] text-white p-6 relative overflow-hidden">
-        <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-orange-500/10 rounded-full blur-[120px]" />
-        <div className="relative z-10 max-w-md w-full bg-neutral-900/60 backdrop-blur-2xl border border-neutral-800 rounded-[32px] p-8 shadow-2xl text-center">
-          <div className="w-20 h-20 bg-neutral-800 border border-neutral-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-            <MapPin size={32} className="text-orange-500" />
-          </div>
-          <h2 className="text-2xl font-black mb-3">Accurate Analytics</h2>
-          <p className="text-sm text-neutral-400 mb-8 leading-relaxed">
-            To provide 100% accurate scan analytics to the creator as outlined in our Privacy Policy, we request your location.
-          </p>
-          <div className="space-y-3">
-            <button
-              onClick={handleAllowLocation}
-              className="w-full py-4 bg-orange-500 text-white font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-orange-600 transition-all flex items-center justify-center gap-2"
-            >
-              <ShieldCheck size={16} /> Allow Location
-            </button>
-            <button
-              onClick={handleSkipLocation}
-              className="w-full py-4 bg-transparent border border-neutral-700 text-neutral-400 font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-neutral-800 hover:text-white transition-all flex items-center justify-center gap-2"
-            >
-              <X size={16} /> Skip (Use Unknown)
-            </button>
-          </div>
-        </div>
-      </div>
-    )
   }
 
   return (

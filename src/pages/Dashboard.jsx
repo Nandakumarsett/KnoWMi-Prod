@@ -871,7 +871,33 @@ const PersonaEditor = ({ profile, onUpdate }) => {
     const isCreator = profile?.status === 'paid' || profile?.role === 'owner'
     return (
       <div className="max-w-2xl mx-auto space-y-6">
-        <div className="flex items-center justify-between mb-2">
+        {/* Ghost Mode Toggle */}
+        <div className="card p-6 bg-neutral-900 text-white rounded-3xl flex items-center justify-between shadow-xl">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="font-display font-black text-lg text-white">Ghost Mode</h3>
+              {profile?.ghost_mode && <div className="px-2 py-0.5 bg-red-500/20 text-red-400 text-[9px] font-black uppercase rounded border border-red-500/30 animate-pulse">Offline</div>}
+            </div>
+            <p className="text-xs text-neutral-400 max-w-[250px]">
+              Instantly hide your public profile and disable analytics tracking.
+            </p>
+          </div>
+          <button 
+            onClick={async () => {
+              const newStatus = !profile?.ghost_mode;
+              try {
+                await supabase.from('public_profiles').update({ ghost_mode: newStatus }).eq('id', profile.id);
+                await supabase.from('persona_profiles').update({ ghost_mode: newStatus }).eq('id', profile.id);
+                if (onUpdate) await onUpdate();
+              } catch (e) { console.error('Ghost mode error', e); }
+            }}
+            className={`w-14 h-8 rounded-full transition-all relative ${profile?.ghost_mode ? 'bg-red-500' : 'bg-neutral-700'}`}
+          >
+            <div className={`w-6 h-6 bg-white rounded-full absolute top-1 transition-all ${profile?.ghost_mode ? 'left-7' : 'left-1'}`} />
+          </button>
+        </div>
+
+        <div className="flex items-center justify-between mb-2 mt-8">
           <h2 className="text-xl font-display font-black">My <span className="text-orange-500">Identities</span></h2>
           <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">{identities.length} / {isPaid ? 3 : 1} Slots Used</span>
         </div>
@@ -1591,6 +1617,30 @@ export default function Dashboard() {
       navigate('/?auth=signin')
     }
   }, [user, authLoading, navigate])
+
+  // Process Factory Claim Flow if user just logged in from a physical scan
+  useEffect(() => {
+    const pendingClaimId = localStorage.getItem('knowmi_pending_claim')
+    if (pendingClaimId && user && profile) {
+      const claimTee = async () => {
+        try {
+          // Strict RLS/Logic: Only update if user_id is null
+          await supabase.from('public_profiles')
+            .update({ user_id: user.id })
+            .eq('id', pendingClaimId)
+            .is('user_id', null);
+            
+          localStorage.removeItem('knowmi_pending_claim')
+          alert("🎉 Tee claimed successfully! This physical product is now permanently paired to your digital identity.")
+          if (refreshProfile) refreshProfile()
+        } catch (e) {
+          console.error("Claim error", e)
+        }
+      }
+      claimTee()
+    }
+  }, [user, profile])
+
   const [editorProgress, setEditorProgress] = useState(null)
   const [isNavVisible, setIsNavVisible] = useState(true)
   const [dailyStats, setDailyStats] = useState([])
@@ -1639,6 +1689,10 @@ export default function Dashboard() {
       // Fetch QR Tokens
       supabase.from('qr_tokens').select('*, stats:qr_token_stats(*)').eq('profile_id', profile.id).order('created_at', { ascending: false })
         .then(({data}) => { setQrTokens(data || []); setLoading(false) })
+
+      // Fetch network connections
+      supabase.from('network_connections').select('*').eq('profile_id', profile.id).order('created_at', { ascending: false })
+        .then(({data}) => { setConnections(data || []) })
     } else if (!authLoading) setLoading(false)
   }, [profile, authLoading])
 
@@ -2256,6 +2310,46 @@ export default function Dashboard() {
             {activeTab === 'profile' && <PersonaEditor profile={profile} onUpdate={refreshProfile} />}
           </div>
           
+          {/* Network Tab */}
+          <div className={`tab-transition ${activeTab === 'network' ? 'tab-visible' : 'tab-hidden'}`}>
+            {activeTab === 'network' && (
+              <div className="space-y-8 animate-slideUp pb-20 max-w-4xl mx-auto">
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p className="text-[11px] font-black uppercase text-orange-500 tracking-[0.2em] mb-2">Two-Way Networking</p>
+                    <h2 className="text-5xl font-display font-black tracking-tight">Your <span className="gradient-text">Network</span></h2>
+                  </div>
+                </div>
+
+                {connections.length === 0 ? (
+                  <div className="card p-20 text-center bg-white shadow-xl">
+                    <div className="w-20 h-20 bg-neutral-50 rounded-full flex items-center justify-center mx-auto mb-6 text-neutral-300">
+                      <Users size={40} />
+                    </div>
+                    <h3 className="text-xl font-bold mb-2">No connections yet</h3>
+                    <p className="text-sm text-neutral-400">When people leave their card on your profile, they will appear here.</p>
+                  </div>
+                ) : (
+                  <div className="grid gap-4">
+                    {connections.map((conn: any, idx: number) => (
+                      <div key={idx} className="card p-6 bg-white shadow-sm flex items-center justify-between border border-neutral-100 hover:border-orange-500 transition-colors">
+                        <div>
+                          <h4 className="text-lg font-black text-neutral-900">{conn.visitor_name}</h4>
+                          <p className="text-sm text-neutral-500">{conn.visitor_email}</p>
+                          {conn.visitor_social && <p className="text-xs text-orange-500 font-bold mt-1">{conn.visitor_social}</p>}
+                          {conn.visitor_message && <p className="text-sm italic text-neutral-400 mt-2">"{conn.visitor_message}"</p>}
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs text-neutral-400 font-bold">{new Date(conn.created_at).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          
           <div className={`tab-transition ${activeTab === 'pass' ? 'tab-visible' : 'tab-hidden'}`}>
             {activeTab === 'pass' && <IdentityPass profile={profile} />}
           </div>
@@ -2407,6 +2501,7 @@ export default function Dashboard() {
           {[
             { id: 'analytics', icon: Signal, label: 'Pulse' },
             { id: 'profile', icon: User, label: 'Identity' },
+            { id: 'network', icon: Users, label: 'Network' },
             { id: 'gamification', icon: Trophy, label: 'Badges' },
             { id: 'pass', icon: ShieldCheck, label: 'Pass' },
             { id: 'order-status', icon: Clock, label: 'Status' }

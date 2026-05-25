@@ -87,7 +87,7 @@ export default function Contact() {
 
                 <div>
                   <label htmlFor="contact-phone" className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-3">WhatsApp / Phone</label>
-                  <input id="contact-phone" type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                  <input id="contact-phone" type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value.replace(/[^0-9+\s()]/g, '') })}
                     className="w-full px-6 py-4 rounded-2xl bg-white border border-neutral-100 outline-none focus:border-orange-500 transition-all text-sm font-medium"
                     placeholder="+91 00000 00000" />
                 </div>

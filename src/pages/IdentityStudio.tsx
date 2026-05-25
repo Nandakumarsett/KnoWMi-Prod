@@ -371,6 +371,38 @@ export default function IdentityStudio() {
     }
   }
 
+  const handleAutoFill = (url: string) => {
+    if (!url) return;
+    try {
+      const parsedUrl = new URL(url);
+      const path = parsedUrl.pathname.split('/').filter(Boolean);
+      
+      if (parsedUrl.hostname.includes('instagram.com') && path[0]) {
+        updateField('instagram', url);
+        const handle = path[0].replace(/[_.]/g, ' ');
+        if (!data.first_name) {
+          updateField('first_name', handle.charAt(0).toUpperCase() + handle.slice(1));
+        }
+        alert("✨ Instagram connected and details pre-filled!");
+      } 
+      else if (parsedUrl.hostname.includes('linkedin.com') && path[0] === 'in' && path[1]) {
+        updateField('linkedin', url);
+        const handle = path[1].replace(/[-_]/g, ' ').split(' ');
+        if (!data.first_name && handle[0]) {
+          updateField('first_name', handle[0].charAt(0).toUpperCase() + handle[0].slice(1));
+        }
+        if (!data.last_name && handle[1]) {
+          updateField('last_name', handle[1].charAt(0).toUpperCase() + handle[1].slice(1));
+        }
+        alert("✨ LinkedIn connected and details pre-filled!");
+      } else {
+        alert("Please paste a valid Instagram or LinkedIn profile URL.");
+      }
+    } catch (e) {
+      alert("Invalid URL format.");
+    }
+  }
+
   const handleSave = async () => {
     console.log('🚀 handleSave triggered')
     if (!user) {
@@ -577,6 +609,36 @@ export default function IdentityStudio() {
 
             {activePersona && (
               <>
+                <section className="glass-card p-10 animate-slideUp mb-8" style={{ background: 'linear-gradient(to right, rgba(249, 115, 22, 0.05), transparent)' }}>
+                  <div className="flex items-center gap-5 mb-6">
+                    <div className="w-14 h-14 rounded-2xl bg-orange-500 text-white flex items-center justify-center shadow-lg shadow-orange-500/20"><Sparkles size={28} /></div>
+                    <div>
+                      <h3 className="text-xl font-black font-display tracking-tight text-orange-500">One-Click AI Profile</h3>
+                      <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mt-1">Paste a social link to instantly build your identity</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <input 
+                      type="url" 
+                      id="ai-autofill-input"
+                      placeholder="Paste your Instagram or LinkedIn profile URL..."
+                      className="input-field flex-1 !bg-white !border-orange-500/20 focus:!border-orange-500"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleAutoFill(e.currentTarget.value);
+                      }}
+                    />
+                    <button 
+                      onClick={() => {
+                        const input = document.getElementById('ai-autofill-input') as HTMLInputElement;
+                        if (input) handleAutoFill(input.value);
+                      }}
+                      className="px-6 py-3 bg-neutral-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-neutral-800 transition-all shadow-md"
+                    >
+                      Generate
+                    </button>
+                  </div>
+                </section>
+
                 <section id="tagline" className="glass-card p-10 animate-slideUp">
                   <div className="flex items-center justify-between mb-10">
                     <div className="flex items-center gap-5">

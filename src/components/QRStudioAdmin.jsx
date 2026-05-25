@@ -20,6 +20,55 @@ export default function QRStudioAdmin() {
   const [isCreating, setIsCreating] = useState(false);
   const [fetchingTokens, setFetchingTokens] = useState(false);
 
+  // Factory Mode State
+  const [factoryMode, setFactoryMode] = useState(false);
+  const [batchSize, setBatchSize] = useState(50);
+  const [batchLabel, setBatchLabel] = useState('Factory Batch');
+  const [generatingBatch, setGeneratingBatch] = useState(false);
+
+  const handleGenerateFactoryBatch = async (e) => {
+    e.preventDefault();
+    setGeneratingBatch(true);
+    try {
+      const newProfiles = [];
+      for (let i = 0; i < batchSize; i++) {
+        newProfiles.push({
+          tier: 'Free',
+          status: 'free',
+          ghost_mode: false,
+          first_name: `${batchLabel} #${i+1}`
+        });
+      }
+      
+      const { data, error } = await supabase
+        .from('public_profiles')
+        .insert(newProfiles)
+        .select('id');
+        
+      if (error) throw error;
+      
+      let csv = "id,claim_url\n";
+      data.forEach(p => {
+        csv += `${p.id},${window.location.origin}/p/${p.id}\n`;
+      });
+      
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `factory-batch-${Date.now()}.csv`;
+      a.click();
+      
+      alert(`Successfully generated ${batchSize} unclaimed tees!`);
+      setFactoryMode(false);
+    } catch (err) {
+      console.error(err);
+      alert('Error generating batch');
+    } finally {
+      setGeneratingBatch(false);
+    }
+  }
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -45,6 +94,7 @@ export default function QRStudioAdmin() {
 
   const handleSelectUser = (u) => {
     setSelectedUser(u);
+    setFactoryMode(false);
     setTokens([]);
     fetchUserTokens(u.id, u.secure_slug || u.id);
   };
@@ -146,6 +196,13 @@ export default function QRStudioAdmin() {
     <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-8 animate-fadeIn">
       {/* Search and Select User Sidebar */}
       <div className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-sm flex flex-col gap-4">
+        <button 
+          onClick={() => { setFactoryMode(true); setSelectedUser(null); }}
+          className={`w-full py-3 rounded-xl font-black uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-2 ${factoryMode ? 'bg-neutral-900 text-white shadow-xl' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'}`}
+        >
+          <Users size={16} /> Factory Bulk Generator
+        </button>
+        <div className="h-px bg-neutral-100 my-2 w-full" />
         <h3 className="text-sm font-black uppercase tracking-wider text-neutral-800">1. Select Customer</h3>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" size={16} />
@@ -184,7 +241,31 @@ export default function QRStudioAdmin() {
 
       {/* Admin QR Studio Generator UI */}
       <div className="flex flex-col gap-6">
-        {!selectedUser ? (
+        {factoryMode ? (
+          <div className="bg-white rounded-2xl p-8 border border-neutral-100 shadow-sm flex flex-col gap-6 animate-fadeIn h-full">
+            <div>
+              <div className="w-16 h-16 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center mb-4">
+                <Users size={32} />
+              </div>
+              <h2 className="text-2xl font-black font-display text-neutral-900">Factory Bulk Generator</h2>
+              <p className="text-sm text-neutral-500 mt-2">Generate blank, unclaimed physical tees. Download a CSV to provide to the factory for QR code printing. When a user scans the printed QR, they will be prompted to claim and pair the tee to their account.</p>
+            </div>
+            
+            <form onSubmit={handleGenerateFactoryBatch} className="space-y-6 mt-4">
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-2 block">Batch Label</label>
+                <input type="text" value={batchLabel} onChange={e => setBatchLabel(e.target.value)} className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-orange-500/20 transition-all outline-none" required />
+              </div>
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-2 block">Quantity</label>
+                <input type="number" min="1" max="1000" value={batchSize} onChange={e => setBatchSize(Number(e.target.value))} className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-orange-500/20 transition-all outline-none" required />
+              </div>
+              <button disabled={generatingBatch} type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-6 py-4 font-black uppercase text-[12px] tracking-widest transition-all shadow-lg shadow-orange-500/20 disabled:opacity-50">
+                {generatingBatch ? 'Generating...' : 'Generate & Download CSV'}
+              </button>
+            </form>
+          </div>
+        ) : !selectedUser ? (
           <div className="bg-white rounded-2xl p-20 text-center border-2 border-dashed border-neutral-200 flex flex-col items-center justify-center gap-4 h-full">
             <div className="w-16 h-16 bg-neutral-50 rounded-full flex items-center justify-center text-neutral-300">
               <QrCode size={32} />
