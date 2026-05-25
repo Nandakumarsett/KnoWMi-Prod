@@ -38,9 +38,9 @@ export default function ProfileViewTracker({ profileId }) {
 
       if (lastVisitStr) {
         const lastVisitTime = parseInt(lastVisitStr, 10);
-        // 5 minute cooldown to prevent refresh spam
-        if (Date.now() - lastVisitTime < 5 * 60 * 1000) {
-          console.log('Recent view detected within 5 minutes, skipping duplicate tracking.');
+        // 1 minute cooldown to prevent refresh spam
+        if (Date.now() - lastVisitTime < 1 * 60 * 1000) {
+          console.log('Recent view detected within 1 minute, skipping duplicate tracking.');
           setTracked(true);
           return;
         }
