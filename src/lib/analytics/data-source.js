@@ -607,6 +607,41 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       .slice(0, 5)
       .reduce((acc, [ref, count]) => ({ ...acc, [ref]: count }), {});
 
+    // Top Fans
+    const topFansRaw = Object.entries(fpCounts)
+      .filter(([fp, count]) => count > 1)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+
+    const topFanIds = topFansRaw.map(([fp]) => fp).filter(fp => fp && fp.length > 20); // roughly UUID length
+
+    let topFanProfiles = [];
+    if (topFanIds.length > 0) {
+      try {
+        const { data: profs } = await supabase
+          .from('profiles')
+          .select('id, user_id, first_name, last_name, avatar_url, secure_slug')
+          .or(`id.in.(${topFanIds.map(id => `"${id}"`).join(',')}),user_id.in.(${topFanIds.map(id => `"${id}"`).join(',')})`);
+        if (profs) topFanProfiles = profs;
+      } catch(e) {
+        console.warn("Analytics: Error fetching top fan profiles", e);
+      }
+    }
+
+    const topFans = topFansRaw.map(([fp, count]) => {
+      const prof = topFanProfiles.find(p => p.id === fp || p.user_id === fp);
+      
+      const relatedView = views.find(v => v.viewer_id === fp || v.visitor_fp === fp);
+      const location = relatedView ? [relatedView.city, relatedView.country].filter(Boolean).join(', ') : '';
+
+      return {
+        count,
+        name: prof ? [prof.first_name, prof.last_name].filter(Boolean).join(' ').trim() || 'KnoWMi Member' : (location ? `Guest from ${location}` : 'Anonymous Guest'),
+        avatar: prof ? prof.avatar_url : null,
+        secureSlug: prof ? prof.secure_slug : null
+      };
+    });
+
     return {
       totalViews,
       uniqueViews,
@@ -621,6 +656,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       topCities,
       totalCities: Object.keys(cityCounts).length,
       latestActivity,
+      topFans,
       topReferrers,
       dailyStats,
       weekSparkline,
@@ -643,6 +679,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       deviceBreakdown: { mobile: 0, desktop: 0, tablet: 0, hasData: false },
       topCities: [],
       latestActivity: [],
+      topFans: [],
       topReferrers: {},
       dailyStats: [],
       weekSparkline: [0,0,0,0,0,0,0],

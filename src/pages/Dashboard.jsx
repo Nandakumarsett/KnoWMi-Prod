@@ -2255,8 +2255,8 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-6">
-            {/* Referral Sources - Full Width */}
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Referral Sources */}
             <div className="vibe-card overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.3s' }}>
               <div className="p-8 border-b border-neutral-50 bg-neutral-50/20">
                 <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900">Referral Sources</h3>
@@ -2277,6 +2277,43 @@ export default function Dashboard() {
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center text-center opacity-30">
                      <p className="text-[10px] font-black uppercase tracking-widest">No Referral Data</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Top Fans */}
+            <div className="vibe-card overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.4s' }}>
+              <div className="p-8 border-b border-neutral-50 bg-neutral-50/20">
+                <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900">Top Returning Fans</h3>
+              </div>
+              <div className="p-8 space-y-6">
+                {vibeStats.topFans?.length > 0 ? (
+                  vibeStats.topFans.map((fan, i) => (
+                    <div key={i} className="flex items-center justify-between">
+                       <div className="flex items-center gap-4">
+                         {fan.avatar ? (
+                           <Avatar 
+                             src={fan.avatar} 
+                             name={fan.name} 
+                             size="w-10 h-10" 
+                             className="rounded-2xl" 
+                           />
+                         ) : (
+                           <div className="w-10 h-10 rounded-2xl bg-neutral-100 border border-neutral-200 flex items-center justify-center">
+                             <Activity size={16} className="text-neutral-500" />
+                           </div>
+                         )}
+                         <div className="flex flex-col">
+                           <span className="text-[13px] font-black text-neutral-800 capitalize">{fan.name}</span>
+                         </div>
+                       </div>
+                       <span className="text-[13px] font-black text-neutral-900">{fan.count} Views</span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="h-full flex flex-col items-center justify-center text-center opacity-30 pt-8">
+                     <p className="text-[10px] font-black uppercase tracking-widest">No Returning Fans Yet</p>
                   </div>
                 )}
               </div>
