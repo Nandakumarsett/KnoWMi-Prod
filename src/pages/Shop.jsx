@@ -284,7 +284,7 @@ export default function Shop() {
             </div>
           ) : (
             /* Single Design Customization View */
-            <div className="animate-fade-in">
+            <div className="animate-fade-in max-w-6xl mx-auto">
               <button 
                 onClick={() => {
                   setSelectedDesign(null)
@@ -293,45 +293,58 @@ export default function Shop() {
                   window.history.pushState({}, '', url);
                   window.scrollTo(0, 0)
                 }}
-                className="mb-6 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-neutral-400 hover:text-black transition-colors"
+                className="mb-8 flex items-center gap-2 text-xs font-bold text-neutral-500 hover:text-black transition-colors"
               >
-                <ChevronRight size={14} className="rotate-180" /> Back to all designs
+                <ChevronRight size={16} className="rotate-180" /> Back to Collection
               </button>
 
-              <div className="grid grid-cols-1 lg:grid-cols-[450px_450px] gap-16 items-start justify-center">
-                {/* Left: Preview - Smaller & Fixed-ish */}
-                <div className="bg-neutral-50 rounded-[40px] overflow-hidden border border-neutral-100 shadow-xl max-h-[500px]">
-                  <img 
-                    src={getAssetUrl(selectedDesign.model_image_url || selectedDesign.front_image_url)} 
-                    className="w-full h-full object-cover"
-                    alt="Selected Design"
-                  />
+              <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
+                {/* Left: Preview - Larger and Sleeker */}
+                <div className="w-full lg:w-1/2">
+                  <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden bg-gradient-to-b from-neutral-50 to-neutral-100/50 shadow-2xl shadow-neutral-200/50">
+                    {/* Add a subtle highlight border */}
+                    <div className="absolute inset-0 border border-white/50 rounded-[32px] pointer-events-none z-10" />
+                    <img 
+                      src={getAssetUrl(selectedDesign.model_image_url || selectedDesign.front_image_url)} 
+                      className="w-full h-full object-cover mix-blend-multiply"
+                      alt={selectedDesign.name}
+                    />
+                  </div>
                 </div>
 
-                {/* Right: Customization - More Compact & Constrained */}
-                <div className="py-0 max-w-[450px]">
-                  <div className="mb-4">
-                    <h2 className="text-3xl font-display font-black text-black mb-1 leading-tight tracking-tight-premium">{selectedDesign.name}</h2>
-                    <p className="text-xs text-neutral-400 font-bold uppercase tracking-widest">Premium Phygital Core</p>
+                {/* Right: Customization - Luxurious Typography & Controls */}
+                <div className="w-full lg:w-1/2 py-4 lg:py-10">
+                  <div className="mb-10">
+                    <div className="inline-block px-3 py-1 bg-orange-100 text-orange-600 font-bold text-[10px] uppercase tracking-widest rounded-full mb-4">
+                      Premium Phygital Core
+                    </div>
+                    <h2 className="text-4xl lg:text-5xl font-display font-black text-black mb-2 tracking-tight">{selectedDesign.name}</h2>
+                    <p className="text-sm text-neutral-500 leading-relaxed max-w-md">
+                      A next-generation digital smart tee. This physical garment serves as a secure gateway to your dynamic digital identity.
+                    </p>
                   </div>
 
                   {/* Size Selection */}
-                  <div className="mb-12">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="text-[10px] font-black uppercase tracking-luxury text-neutral-400">1. Choose Architecture</p>
+                  <div className="mb-10">
+                    <div className="flex items-center justify-between mb-4">
+                      <p className="text-xs font-bold text-black uppercase tracking-wider">Select Size</p>
                       <button 
                         onClick={() => setSizeGuideOpen(true)}
-                        className="text-[9px] font-bold text-orange-500 flex items-center gap-1 uppercase tracking-widest hover:underline"
+                        className="text-xs font-bold text-neutral-400 flex items-center gap-1.5 hover:text-orange-500 transition-colors"
                       >
-                        <Ruler size={10} /> Size Guide
+                        <Ruler size={14} /> Size Guide
                       </button>
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-3">
                       {SIZES.map(s => (
                         <button 
                           key={s}
                           onClick={() => setSelectedSize(s)}
-                          className={`w-11 h-11 rounded-xl font-black transition-all text-xs ${selectedSize === s ? 'bg-black text-white shadow-xl shadow-black/20' : 'bg-neutral-100 text-neutral-400 hover:bg-neutral-200'}`}
+                          className={`w-14 h-14 rounded-2xl font-black transition-all text-sm border-2 ${
+                            selectedSize === s 
+                              ? 'border-orange-500 bg-orange-500 text-white shadow-lg shadow-orange-500/20' 
+                              : 'border-neutral-100 bg-white text-neutral-500 hover:border-neutral-300'
+                          }`}
                         >
                           {s}
                         </button>
@@ -340,26 +353,34 @@ export default function Shop() {
                   </div>
 
                   {/* Plan Selection */}
-                  <div className="mb-6">
-                    <p className="text-[10px] font-black uppercase tracking-luxury text-neutral-400 mb-4">2. Identity Protocol Layer</p>
-                    <div className="grid grid-cols-1 gap-3">
+                  <div className="mb-10">
+                    <p className="text-xs font-bold text-black uppercase tracking-wider mb-4">Identity Protocol</p>
+                    <div className="grid grid-cols-1 gap-4">
                       {PLANS.map(p => (
                         <button 
                           key={p.id}
                           onClick={() => setSelectedPlan(p.id)}
-                          className={`w-full p-3 rounded-xl border-2 transition-all text-left flex items-center justify-between group ${selectedPlan === p.id ? 'border-orange-500 bg-orange-500/[0.03]' : 'border-neutral-100 hover:border-neutral-200 bg-white'}`}
+                          className={`w-full p-5 rounded-2xl border-2 transition-all text-left flex items-center justify-between group ${
+                            selectedPlan === p.id 
+                              ? 'border-black bg-[#111111] text-white shadow-2xl shadow-black/10' 
+                              : 'border-neutral-200 bg-white hover:border-neutral-300'
+                          }`}
                         >
-                          <div className="flex items-center gap-3">
-                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all ${selectedPlan === p.id ? 'border-orange-500 bg-orange-500' : 'border-neutral-200'}`}>
-                              {selectedPlan === p.id && <Check size={10} className="text-white" />}
+                          <div className="flex items-center gap-4">
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                              selectedPlan === p.id 
+                                ? 'border-orange-500 bg-orange-500' 
+                                : 'border-neutral-300 group-hover:border-neutral-400'
+                            }`}>
+                              {selectedPlan === p.id && <Check size={12} className="text-white" />}
                             </div>
                             <div>
-                              <p className="font-black text-black text-sm leading-tight">{p.name}</p>
-                              <p className="text-[9px] text-neutral-400 uppercase tracking-widest font-black mt-0.5">{p.gsm}</p>
+                              <p className={`font-black text-lg leading-tight ${selectedPlan === p.id ? 'text-white' : 'text-black'}`}>{p.name}</p>
+                              <p className={`text-[10px] uppercase tracking-widest font-bold mt-1 ${selectedPlan === p.id ? 'text-neutral-400' : 'text-neutral-500'}`}>{p.gsm}</p>
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className={`text-xl font-black transition-colors ${selectedPlan === p.id ? 'text-orange-500' : 'text-black'}`}>₹{p.price}</p>
+                            <p className={`text-2xl font-black ${selectedPlan === p.id ? 'text-white' : 'text-black'}`}>₹{p.price}</p>
                           </div>
                         </button>
                       ))}
@@ -367,21 +388,25 @@ export default function Shop() {
                   </div>
 
                   {/* Checkout */}
-                  <div className="pt-0">
-                    <div className="mb-4 bg-orange-50 border border-orange-100 rounded-xl p-3 flex flex-col items-center justify-center animate-pulse">
-                      <span className="text-orange-600 font-black text-sm flex items-center gap-1.5">
-                        <Zap size={14} className="fill-orange-600" /> Only {remainingSpots} Founding Spots Left!
+                  <div className="pt-2">
+                    <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100/50 border border-orange-200 rounded-2xl p-4 flex flex-col items-center justify-center">
+                      <span className="text-orange-600 font-black text-sm flex items-center gap-2">
+                        <span className="relative flex h-3 w-3">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
+                        </span>
+                        Only {remainingSpots} Founding Spots Left!
                       </span>
                     </div>
                     <button 
                       onClick={triggerCheckout}
                       disabled={checkoutLoading}
-                      className="w-full bg-black text-white py-4 rounded-xl font-black text-base hover:scale-[1.01] active:scale-[0.99] transition-all shadow-xl shadow-black/10 flex items-center justify-center gap-3 disabled:opacity-50"
+                      className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-5 rounded-2xl font-black text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_40px_-10px_rgba(249,115,22,0.5)] flex items-center justify-center gap-3 disabled:opacity-50 disabled:hover:scale-100"
                     >
                       {checkoutLoading ? (
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       ) : (
-                        <Lock size={18} />
+                        <Lock size={20} />
                       )}
                       {checkoutLoading
                         ? 'Initiating Secure Checkout...'
@@ -390,19 +415,20 @@ export default function Shop() {
                         : 'Secure Checkout'
                       }
                     </button>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-6">
+                    
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-8">
                       <div className="flex items-center gap-2">
-                        <Shield size={16} className="text-neutral-400" />
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">100% Secure via Razorpay</span>
+                        <Shield size={18} className="text-green-600" />
+                        <span className="text-[11px] font-bold uppercase tracking-widest text-neutral-600">100% Secure via Razorpay</span>
                       </div>
-                      <div className="hidden sm:block w-1 h-1 rounded-full bg-neutral-200" />
+                      <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-neutral-200" />
                       <div className="flex items-center gap-2">
-                        <Truck size={16} className="text-neutral-400" />
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Free Priority Shipping</span>
+                        <Truck size={18} className="text-blue-600" />
+                        <span className="text-[11px] font-bold uppercase tracking-widest text-neutral-600">Free Priority Shipping</span>
                       </div>
                     </div>
-                    <div className="mt-4 text-center">
-                      <p className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">7-Day Free Replacement Policy • 256-bit SSL Encrypted</p>
+                    <div className="mt-6 text-center border-t border-neutral-100 pt-6">
+                      <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">7-Day Free Replacement Policy • 256-bit SSL Encrypted</p>
                     </div>
                   </div>
                 </div>
