@@ -72,8 +72,8 @@ export default function Leaderboard() {
   }, []);
 
   useEffect(() => {
-    async function fetchData() {
-      const { data: profilesData } = await supabase.from('public_leaderboard').select('*').limit(10);
+      // Fetch up to 1000 profiles so that Search and Category filters can find users outside the top 10
+      const { data: profilesData } = await supabase.from('public_leaderboard').select('*').limit(1000);
       const { count } = await supabase.from('profile_scores').select('*', { count: 'exact', head: true });
       const { data: scoreData } = await supabase.from('profile_scores').select('knowmi_score');
 
@@ -101,7 +101,7 @@ export default function Leaderboard() {
       setStats({
         totalProfiles: count || 0,
         avgScore: Math.round(avg * 10) / 10,
-        lastUpdated: profilesData?.[0]?.updated_at || new Date().toISOString()
+        lastUpdated: 'Live' // Since the view counts from raw events, it is real-time
       });
       setLoading(false);
     }
@@ -131,15 +131,20 @@ export default function Leaderboard() {
     return result;
   }, [search, category, profiles, trie]);
 
-  const podium = filteredProfiles.filter(p => p.rank <= 3).sort((a, b) => {
+  // If searching or filtering, show all matches. Otherwise, strictly limit to Top 10 as requested.
+  const displayLimit = (search || category !== 'All') ? filteredProfiles.length : 10;
+  const top10Profiles = filteredProfiles.slice(0, displayLimit);
+
+  const podium = top10Profiles.filter(p => p.rank <= 3).sort((a, b) => {
     if (a.rank === 1) return 0;
     if (b.rank === 1) return 1;
     return a.rank === 2 ? -1 : 1;
   });
 
-  const tableRows = filteredProfiles.filter(p => p.rank > 3);
+  const tableRows = top10Profiles.filter(p => p.rank > 3);
 
-  const formatTime = (iso: string) => {
+  const formatTime = (iso) => {
+    if (iso === 'Live') return 'Real-time';
     if (!iso) return '---';
     const date = new Date(iso);
     if (isNaN(date.getTime())) return '---';
@@ -222,7 +227,7 @@ export default function Leaderboard() {
           <div className="bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-xl flex items-center gap-4 hover:bg-white/10 transition-colors">
             <div className="w-12 h-12 rounded-2xl bg-teal-500/20 flex items-center justify-center text-teal-400"><Activity size={24} /></div>
             <div>
-              <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Avg KnoWMi Score</p>
+              <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Avg Total Views</p>
               <p className="text-2xl font-black text-white">{stats.avgScore}</p>
             </div>
           </div>
