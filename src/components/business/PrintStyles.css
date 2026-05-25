@@ -1,14 +1,21 @@
 /* PrintStyles.css */
 
+.print-preview-container {
+  container-type: inline-size;
+}
+
 @media print {
+  /* Hide absolutely everything else */
   body * {
     visibility: hidden;
   }
   
+  /* Make only the print area visible */
   #printable-area, #printable-area * {
     visibility: visible;
   }
 
+  /* Reset positioning so it aligns with paper top-left */
   #printable-area {
     position: absolute;
     left: 0;
@@ -16,9 +23,10 @@
     width: 100%;
     margin: 0;
     padding: 0;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  /* Specific sizes */
   .print-15x10 {
     width: 150mm !important;
     height: 100mm !important;
