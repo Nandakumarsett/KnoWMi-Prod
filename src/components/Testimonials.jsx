@@ -1,4 +1,5 @@
 import { useReveal } from '../hooks/useReveal'
+import { CheckCircle } from 'lucide-react'
 
 const testimonials = [
   {
@@ -118,7 +119,13 @@ export default function Testimonials() {
                     {t.initial}
                   </div>
                   <div>
-                    <div className="text-sm font-bold" style={{ color: 'var(--ink)' }}>{t.name}</div>
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <div className="text-sm font-bold" style={{ color: 'var(--ink)' }}>{t.name}</div>
+                      <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-50 text-green-600 border border-green-100">
+                        <CheckCircle size={8} className="fill-green-600 text-white" />
+                        <span className="text-[8px] font-black uppercase tracking-widest">Verified Buyer</span>
+                      </div>
+                    </div>
                     <div className="text-xs" style={{ color: 'var(--ink4)' }}>{t.role}</div>
                   </div>
                 </div>

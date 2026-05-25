@@ -15,6 +15,7 @@ import PWABanner from '../components/PWABanner'
 import AuthModal from '../components/AuthModal'
 import Contact from '../components/Contact'
 import Collection from '../components/Collection'
+import LiveSalesPopup from '../components/LiveSalesPopup'
 import { ArrowRight } from 'lucide-react'
 
 export default function Home() {
@@ -31,33 +32,13 @@ export default function Home() {
     setAuthOpen(true)
   }
 
-  // Task: Forced Auth on Scroll
   useEffect(() => {
-    if (user) return; // Don't trigger for logged in users
-    
-    let timer;
-    let hasTriggered = false;
+    const handleScroll = () => setShowSticky(window.scrollY > 800);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    const handleScroll = () => {
-      setShowSticky(window.scrollY > 800)
-      
-      // If user scrolls > 100px and we haven't started a timer yet
-      if (window.scrollY > 100 && !timer && !hasTriggered) {
-        timer = setTimeout(() => {
-          if (!user && !hasTriggered) {
-            openAuth('signup');
-            hasTriggered = true; // Only show once per mount
-          }
-        }, 5000);
-      }
-    }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      if (timer) clearTimeout(timer)
-    }
-  }, [user])
 
   // Handle post-login redirects (especially for Google Login)
   useEffect(() => {
@@ -157,6 +138,7 @@ export default function Home() {
         redirectAfter={pendingRedirect}
         defaultTab={authTab}
       />
+      <LiveSalesPopup />
     </>
   )
 }

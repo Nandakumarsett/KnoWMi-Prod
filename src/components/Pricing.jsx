@@ -102,13 +102,12 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
         
         {/* Global Founding Banner */}
         <div className="mb-20 text-center reveal">
-          <div className="inline-flex flex-col md:flex-row items-center gap-4 p-1 pr-6 bg-white border border-orange-100 rounded-2xl md:rounded-full shadow-sm mx-auto mb-12 group hover:border-orange-200 transition-colors">
-             <div className="px-4 py-2 bg-orange-500 text-white rounded-xl md:rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-orange-200">
-               Founding 100 Perk
+          <div className="inline-flex flex-col md:flex-row items-center gap-4 p-1 pr-6 bg-white border border-orange-100 rounded-2xl md:rounded-full shadow-sm mx-auto mb-12 group hover:border-orange-200 transition-colors animate-pulse">
+             <div className="px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl md:rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-orange-500/30 flex items-center gap-2">
+               <Zap size={12} className="fill-white" /> Only {remainingSpots} Spots Left
              </div>
              <p className="text-sm font-medium text-neutral-600">
-               First 100 users get <span className="font-bold text-black">KnoWMi Pro Free for Life.</span>
-               <span className="hidden md:inline ml-2 text-neutral-400">Includes advanced analytics & future upgrades.</span>
+               Claim yours to get <span className="font-bold text-black">KnoWMi Pro Free for Life.</span>
              </p>
           </div>
           

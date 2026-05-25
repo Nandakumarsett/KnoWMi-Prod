@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { supabase, getAssetUrl } from '../lib/supabase'
 import Navbar from '../components/Navbar'
 import { Footer } from '../components/Footer'
-import { ShoppingBag, ChevronRight, Check, X, Ruler } from 'lucide-react'
+import { ShoppingBag, ChevronRight, Check, X, Ruler, Lock, Shield, Truck, Zap } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import AuthModal from '../components/AuthModal'
 import TeamCheckout from '../components/TeamCheckout'
+import LiveSalesPopup from '../components/LiveSalesPopup'
 
 const PLANS = [
   { id: 'starter', name: 'Starter', price: 799, gsm: '200 GSM' },
@@ -27,11 +28,23 @@ export default function Shop() {
   const [checkoutLoading, setCheckoutLoading] = useState(false)
   const [teamCheckoutOpen, setTeamCheckoutOpen] = useState(false)
   const [orderSuccess, setOrderSuccess] = useState(null)
+  const [remainingSpots, setRemainingSpots] = useState(100)
 
   useEffect(() => {
     window.scrollTo(0, 0)
     fetchDesigns()
+    fetchRemainingSpots()
   }, [])
+
+  const fetchRemainingSpots = async () => {
+    try {
+      const { count, error } = await supabase
+        .from('orders')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'shipped')
+      if (!error) setRemainingSpots(Math.max(0, 100 - (count || 0)))
+    } catch (err) { console.error(err) }
+  }
 
   const fetchDesigns = async () => {
     const { data } = await supabase.from('persona_designs').select('*').order('created_at', { ascending: false })
@@ -346,6 +359,11 @@ export default function Shop() {
 
                   {/* Checkout */}
                   <div className="pt-0">
+                    <div className="mb-4 bg-orange-50 border border-orange-100 rounded-xl p-3 flex flex-col items-center justify-center animate-pulse">
+                      <span className="text-orange-600 font-black text-sm flex items-center gap-1.5">
+                        <Zap size={14} className="fill-orange-600" /> Only {remainingSpots} Founding Spots Left!
+                      </span>
+                    </div>
                     <button 
                       onClick={triggerCheckout}
                       disabled={checkoutLoading}
@@ -354,7 +372,7 @@ export default function Shop() {
                       {checkoutLoading ? (
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       ) : (
-                        <ShoppingBag size={18} />
+                        <Lock size={18} />
                       )}
                       {checkoutLoading
                         ? 'Initiating Secure Checkout...'
@@ -363,19 +381,19 @@ export default function Shop() {
                         : 'Secure Checkout'
                       }
                     </button>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mt-10">
-                      <div className="flex items-center gap-3">
-                        <Check size={20} className="text-emerald-500" />
-                        <span className="text-[11px] font-black uppercase tracking-widest text-neutral-600">Instant Activation</span>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-6">
+                      <div className="flex items-center gap-2">
+                        <Shield size={16} className="text-neutral-400" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">100% Secure via Razorpay</span>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <Check size={20} className="text-emerald-500" />
-                        <span className="text-[11px] font-black uppercase tracking-widest text-neutral-600">Free Shipping</span>
+                      <div className="hidden sm:block w-1 h-1 rounded-full bg-neutral-200" />
+                      <div className="flex items-center gap-2">
+                        <Truck size={16} className="text-neutral-400" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Free Priority Shipping</span>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <Check size={20} className="text-emerald-500" />
-                        <span className="text-[11px] font-black uppercase tracking-widest text-neutral-600">Secure Process</span>
-                      </div>
+                    </div>
+                    <div className="mt-4 text-center">
+                      <p className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">7-Day Free Replacement Policy • 256-bit SSL Encrypted</p>
                     </div>
                   </div>
                 </div>
@@ -402,6 +420,7 @@ export default function Shop() {
           selectedDesign={selectedDesign}
         />
       )}
+      <LiveSalesPopup />
     </div>
   )
 }
