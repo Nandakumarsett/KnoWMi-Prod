@@ -302,7 +302,7 @@ export default function Leaderboard() {
                   </div>
                   <div className={`w-full rounded-[2rem] p-5 flex items-center justify-between border relative z-10 ${isFirst ? 'border-orange-500/30 bg-orange-500/10' : 'border-white/5 bg-black/20'}`}>
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 mb-1">Score</span>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 mb-1">Total Views</span>
                       <span className={`text-3xl font-black ${isFirst ? 'text-orange-400' : 'text-white'}`}>{p.knowmi_score}</span>
                     </div>
                     <div className="flex flex-col items-end">
@@ -319,8 +319,8 @@ export default function Leaderboard() {
           </div>
         )}
 
-        {/* Ranks 4+ List */}
-        <div className="space-y-4 mb-24">
+        {/* Ranks 4+ List (Horizontal Scrolling) */}
+        <div className="flex overflow-x-auto gap-6 pb-8 mb-24 snap-x snap-mandatory" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {tableRows.map((p) => (
             <div
               key={p.username}
@@ -328,65 +328,43 @@ export default function Leaderboard() {
                 const slug = p.secure_slug || p.id;
                 window.location.href = `/p/${slug}?src=leaderboard`;
               }}
-              className="group bg-white/5 backdrop-blur-sm hover:bg-white/10 p-5 md:p-6 rounded-[2rem] border border-white/5 shadow-sm transition-all duration-300 cursor-pointer flex flex-col md:flex-row items-center justify-between gap-6 hover:shadow-xl hover:shadow-orange-500/10 hover:border-orange-500/30 hover:-translate-y-1"
+              className="group min-w-[280px] w-[280px] flex-shrink-0 snap-start bg-white/5 backdrop-blur-sm hover:bg-white/10 p-6 rounded-[2.5rem] border border-white/5 shadow-sm transition-all duration-300 cursor-pointer flex flex-col items-center gap-6 hover:shadow-xl hover:shadow-orange-500/10 hover:border-orange-500/30 hover:-translate-y-1"
             >
-              <div className="flex flex-col md:flex-row items-center gap-6 w-full md:w-auto">
-                <div className="w-12 h-12 rounded-full bg-white/10 text-white flex items-center justify-center font-black text-lg shadow-lg group-hover:bg-orange-500 transition-colors">
+              <div className="w-full flex justify-between items-center">
+                <div className="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center font-black text-sm shadow-lg group-hover:bg-orange-500 transition-colors">
                   #{p.rank}
                 </div>
-
-                <div className="flex items-center gap-4">
-                  <div className="relative p-1 rounded-full bg-black/50 border border-white/10 group-hover:border-orange-400 transition-colors">
-                    <Avatar src={p.avatar_url} name={p.display_name} username={p.username} size="md" />
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-black text-white leading-tight">{p.display_name}</h4>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-neutral-400">@{p.username}</span>
-                      <BadgePill badge={p.badge} />
-                    </div>
-                  </div>
-                </div>
+                <BadgePill badge={p.badge} />
               </div>
 
-              <div className="flex items-center justify-between md:justify-end gap-12 w-full md:w-auto border-t border-white/5 md:border-t-0 pt-4 md:pt-0">
-                <div className="flex items-center gap-10">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Elite Score</span>
-                    <div className="flex items-end gap-2">
-                      <span className="text-2xl font-black text-orange-400">{p.knowmi_score}</span>
-                      <div className="h-1.5 w-24 bg-white/10 rounded-full overflow-hidden mb-2 hidden sm:block">
-                        <div 
-                          className="h-full bg-orange-500 rounded-full transition-all duration-1000"
-                          style={{ width: `${Math.min((p.knowmi_score / 500) * 100, 100)}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col items-end">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Status</span>
-                    <div className={`flex items-center gap-1 font-bold text-sm ${p.rank_delta >= 0 ? 'text-teal-400' : 'text-rose-400'}`}>
-                      {p.rank_delta >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
-                      <span>{p.rank_delta === 0 ? 'Steady' : Math.abs(p.rank_delta)}</span>
-                    </div>
-                  </div>
+              <div className="flex flex-col items-center text-center">
+                <div className="relative p-1 rounded-full bg-black/50 border border-white/10 group-hover:border-orange-400 transition-colors mb-4">
+                  <Avatar src={p.avatar_url} name={p.display_name} username={p.username} size="md" />
                 </div>
-                <div className="flex gap-2">
+                <h4 className="text-xl font-black text-white leading-tight mb-1">{p.display_name}</h4>
+                <span className="text-xs font-bold text-neutral-400">@{p.username}</span>
+              </div>
+
+              <div className="w-full border-t border-white/5 pt-5 flex items-center justify-between">
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Total Views</span>
+                  <span className="text-2xl font-black text-orange-400">{p.knowmi_score}</span>
+                </div>
+                <div className="flex gap-1">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setShareProfile(p);
                     }}
-                    className="p-3 text-neutral-400 hover:text-orange-400 hover:bg-orange-500/20 rounded-2xl transition-all"
+                    className="p-2.5 text-neutral-400 hover:text-orange-400 hover:bg-orange-500/20 rounded-2xl transition-all"
                   >
-                    <Share2 size={20} />
+                    <Share2 size={16} />
                   </button>
                   <a 
                     href={`/p/${p.secure_slug || p.id}?src=leaderboard`} 
-                    className="p-3 text-neutral-400 hover:text-blue-400 hover:bg-blue-500/20 rounded-2xl transition-all"
+                    className="p-2.5 text-neutral-400 hover:text-blue-400 hover:bg-blue-500/20 rounded-2xl transition-all"
                   >
-                    <Eye size={20} />
+                    <Eye size={16} />
                   </a>
                 </div>
               </div>
