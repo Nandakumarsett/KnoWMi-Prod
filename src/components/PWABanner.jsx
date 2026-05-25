@@ -29,14 +29,14 @@ export default function PWABanner() {
 
   return (
     <div
-      className="fixed bottom-6 left-1/2 z-50 flex items-center gap-4 px-5 py-4 rounded-2xl shadow-2xl"
+      className="fixed top-24 left-1/2 z-[150] flex items-center gap-4 px-5 py-4 rounded-2xl shadow-2xl"
       style={{
         transform: 'translateX(-50%)',
         background: 'var(--ink)',
         border: '1px solid rgba(255,255,255,0.08)',
         maxWidth: '420px',
         width: 'calc(100% - 32px)',
-        animation: 'fadeUp 0.5s ease',
+        animation: 'fadeDown 0.5s ease',
       }}
       role="banner"
       aria-label="Install KnoWMi app"
