@@ -91,6 +91,8 @@ export default function App() {
         <Route path="/q/:token" element={<QRIntercept />} />
         <Route path="/dashboard/vibe" element={<VibePage />} />
         <Route path="/insights" element={<InsightsPage />} />
+        {/* Catch-all route to prevent blank pages on invalid URLs */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <VerifyBubble />
     </Router>

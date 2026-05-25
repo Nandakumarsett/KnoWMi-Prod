@@ -1181,14 +1181,14 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                             placeholder={['Gym Name', 'University', 'League Rank', 'Club', 'Team'].some(kw => s.includes(kw)) ? `Enter Your ${s}` : "0"} 
                             value={data[s] || ''} 
                             onChange={e => {
-                              const val = e.target.value;
+                              let val = e.target.value;
                               const isTextStat = ['Gym Name', 'University', 'League Rank', 'Club', 'Team'].some(kw => s.includes(kw));
-                              if (!isTextStat && val && !/^\d*$/.test(val.replace(/[KM]/gi, '').replace(/[,. ]/g, ''))) {
-                                setStatErrors({...statErrors, [s]: true})
-                              } else {
-                                setStatErrors({...statErrors, [s]: false})
-                                setData({...data, [s]: val})
+                              if (!isTextStat) {
+                                // Strictly enforce numbers only
+                                val = val.replace(/\D/g, '');
                               }
+                              setStatErrors({...statErrors, [s]: false});
+                              setData({...data, [s]: val});
                             }} 
                           />
                           <p className={`text-[10px] font-bold mt-2 uppercase tracking-wider ${statErrors[s] ? 'text-ruby-500' : 'text-neutral-400'}`}>
