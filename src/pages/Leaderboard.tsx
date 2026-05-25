@@ -313,6 +313,20 @@ export default function Leaderboard() {
                       </div>
                     </div>
                   </div>
+                  <div className="flex justify-between w-full mt-4 relative z-10">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setShareProfile(p); }} 
+                      className="flex-1 mr-2 py-3 bg-white/5 hover:bg-white/10 rounded-2xl text-neutral-300 font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-white/5 hover:text-orange-400 hover:border-orange-500/30"
+                    >
+                      <Share2 size={16} /> Share
+                    </button>
+                    <a 
+                      href={`/p/${p.secure_slug || p.id}?src=leaderboard`} 
+                      className="flex-1 ml-2 py-3 bg-white/5 hover:bg-white/10 rounded-2xl text-neutral-300 font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-white/5 hover:text-blue-400 hover:border-blue-500/30"
+                    >
+                      <Eye size={16} /> View
+                    </a>
+                  </div>
                 </div>
               )
             })}
@@ -320,7 +334,7 @@ export default function Leaderboard() {
         )}
 
         {/* Ranks 4+ List (Horizontal Scrolling) */}
-        <div className="flex overflow-x-auto gap-6 pb-8 mb-24 snap-x snap-mandatory" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="flex overflow-x-auto gap-6 pb-8 mb-24 snap-x snap-mandatory max-w-[1400px] mx-auto px-4 md:px-8" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {tableRows.map((p) => (
             <div
               key={p.username}
@@ -373,8 +387,8 @@ export default function Leaderboard() {
         </div>
 
         {shareProfile && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md transition-all duration-300">
-            <div className="bg-[#0A0A0B] rounded-[3rem] w-full max-w-xl overflow-hidden shadow-2xl shadow-orange-500/20 animate-in zoom-in-95 duration-300 border border-white/10">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-all duration-300">
+            <div className="bg-[#0A0A0B] rounded-[3rem] w-full max-w-xl max-h-[95vh] overflow-y-auto shadow-2xl shadow-orange-500/20 animate-in zoom-in-95 duration-300 border border-white/10" style={{ scrollbarWidth: 'none' }}>
               <div className="p-8 border-b border-white/5 flex justify-between items-center">
                 <h2 className="text-2xl font-black text-white">Elite Achievement</h2>
                 <button onClick={() => setShareProfile(null)} className="p-2 hover:bg-white/10 rounded-full text-neutral-400 transition-colors"><X size={24} /></button>
