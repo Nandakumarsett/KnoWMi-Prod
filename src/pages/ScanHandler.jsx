@@ -144,7 +144,6 @@ export default function ScanHandler() {
         }).catch(() => {});
       }
 
-      const finalSlug = resolvedProfile.secure_slug || resolvedProfile.id
       navigate(`/p/${finalSlug}?src=qr`)
     } catch (e) {
       navigate('/')
