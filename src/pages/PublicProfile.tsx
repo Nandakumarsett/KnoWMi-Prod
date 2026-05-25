@@ -476,7 +476,7 @@ export default function PublicProfile() {
               </div>
 
               <div className="w-full mt-10">
-                <SocialGrid links={profile.social_links} style="row" />
+                <SocialGrid links={profile.social_links} style="row" profileId={profile.id} />
               </div>
 
               <div className="w-full mt-10">

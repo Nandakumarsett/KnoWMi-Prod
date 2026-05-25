@@ -1,0 +1,40 @@
+/* PrintStyles.css */
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  #printable-area, #printable-area * {
+    visibility: visible;
+  }
+
+  #printable-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Specific sizes */
+  .print-15x10 {
+    width: 150mm !important;
+    height: 100mm !important;
+    page-break-after: always;
+  }
+  
+  .print-business-card {
+    width: 85mm !important;
+    height: 55mm !important;
+    page-break-after: always;
+  }
+
+  .print-sticker {
+    width: 50mm !important;
+    height: 50mm !important;
+    border-radius: 50% !important;
+    page-break-after: always;
+  }
+}

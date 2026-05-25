@@ -10,8 +10,7 @@ import {
   ArrowUpRight, ChevronRight, Clock, MapPin, Smartphone, BarChart3,
   Flame, Share2, Download, Award, Palette, GripVertical, Trash2,
   Upload, Loader2, Camera, Paintbrush, ArrowRight, CheckCircle2,
-  Edit3, ChevronLeft, Lock, Crown, QrCode, ShoppingBag, UserPlus, ShieldCheck,
-  ArrowLeft, ChevronDown, Wand2, Info
+  ArrowLeft, ChevronDown, Wand2, Info, Printer
 } from 'lucide-react'
 import { 
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, Cell
@@ -43,6 +42,7 @@ import { DeveloperForm } from '../components/identity/forms/DeveloperForm'
 import { StudentForm } from '../components/identity/forms/StudentForm'
 import { CreatorForm } from '../components/identity/forms/CreatorForm'
 import { GamerForm } from '../components/identity/forms/GamerForm'
+import BusinessNeedsTab from '../components/business/BusinessNeedsTab'
 
 
 // ─── Dashboard Support Components ──────────────────────────
@@ -2001,6 +2001,17 @@ export default function Dashboard() {
                   >
                     📊 Reports
                   </button>
+                  <button
+                    onClick={() => setAnalyticsView('links')}
+                    className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300`}
+                    style={{
+                      background: analyticsView === 'links' ? (isVibeDark ? '#ffffff' : '#111111') : 'transparent',
+                      color: analyticsView === 'links' ? (isVibeDark ? '#111111' : '#ffffff') : (isVibeDark ? 'rgba(255,255,255,0.5)' : '#888888'),
+                      boxShadow: analyticsView === 'links' ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
+                    }}
+                  >
+                    Link Stats
+                  </button>
                 </div>
                 <button
                   onClick={() => setVibeTheme(vibeTheme === 'light' ? 'dark' : 'light')}
@@ -2341,6 +2352,51 @@ export default function Dashboard() {
           </div>
         )}
 
+              {analyticsView === 'links' && vibeStats && (
+                <div className={`space-y-8 animate-slideUp ${isVibeDark ? 'dark' : ''}`}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="vibe-card p-8">
+                      <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900 mb-6">Clicks by Platform</h3>
+                      <div className="space-y-4">
+                        {vibeStats.linkStats?.clicksByPlatform && Object.keys(vibeStats.linkStats.clicksByPlatform).length > 0 ? (
+                          Object.entries(vibeStats.linkStats.clicksByPlatform).map(([platform, count], i) => (
+                            <div key={i} className="flex items-center justify-between border-b border-neutral-100 pb-3 last:border-0 last:pb-0">
+                              <span className="text-[13px] font-black text-neutral-800 capitalize">{platform}</span>
+                              <span className="text-[13px] font-black text-neutral-900 bg-neutral-100 px-3 py-1 rounded-full">{count}</span>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-center opacity-30 pt-4">
+                            <p className="text-[10px] font-black uppercase tracking-widest">No clicks yet</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="vibe-card p-8">
+                      <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900 mb-6">Recent Clicks</h3>
+                      <div className="space-y-4">
+                        {vibeStats.linkStats?.recentClicks?.length > 0 ? (
+                          vibeStats.linkStats.recentClicks.map((click, i) => (
+                            <div key={i} className="flex items-center justify-between border-b border-neutral-100 pb-3 last:border-0 last:pb-0">
+                              <div>
+                                <span className="text-[13px] font-black text-neutral-800 capitalize">{click.platform}</span>
+                                <p className="text-[10px] text-neutral-500 font-bold mt-1">{new Date(click.clicked_at).toLocaleString()}</p>
+                              </div>
+                              <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest bg-orange-50 px-2 py-1 rounded">Guest</span>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-center opacity-30 pt-4">
+                            <p className="text-[10px] font-black uppercase tracking-widest">No recent clicks</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               </div>
             </div>
     )}
@@ -2517,9 +2573,9 @@ export default function Dashboard() {
             )}
           </div>
           
-          <div className={`tab-transition ${activeTab === 'gamification' ? 'tab-visible' : 'tab-hidden'}`}>
-            {activeTab === 'gamification' && (
-              <GamificationTab profile={profile} completion={profileCompletion} stats={{scans: scans.length}} />
+          <div className={`tab-transition ${activeTab === 'business' ? 'tab-visible' : 'tab-hidden'}`}>
+            {activeTab === 'business' && (
+              <BusinessNeedsTab profile={profile} />
             )}
           </div>
         </main>
@@ -2543,7 +2599,7 @@ export default function Dashboard() {
             { id: 'analytics', icon: Signal, label: 'Pulse' },
             { id: 'profile', icon: User, label: 'Identity' },
             { id: 'network', icon: Users, label: 'Network' },
-            { id: 'gamification', icon: Trophy, label: 'Badges' },
+            { id: 'business', icon: Printer, label: 'Business' },
             { id: 'pass', icon: ShieldCheck, label: 'Pass' },
             { id: 'order-status', icon: Clock, label: 'Status' }
           ].map(tab => (

@@ -642,30 +642,48 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       };
     });
 
-    return {
-      totalViews,
-      uniqueViews,
-      totalQRScans: effectiveQRScans,
-      tshirtScans,
-      profileQRScans,
-      qrScanRate,
-      repeatScore: uniqueViews > 0 ? Math.round((repeatingUsers / uniqueViews) * 100) : 0,
-      todayTotal: realTimeToday,
-      todayUnique: weekUniqueSparkline[6] || 0,
-      deviceBreakdown,
-      topCities,
-      totalCities: Object.keys(cityCounts).length,
-      latestActivity,
-      topFans,
-      topReferrers,
-      dailyStats,
-      weekSparkline,
-      streak: { current: currentStreak, best: currentStreak, status: currentStreak > 0 ? 'Active' : 'Building' },
-      bestDay,
-      bestMoment,
-      peakHour,
-      totalLinkTaps: links.length
-    };
+      const clicksByPlatform = links.reduce((acc, l) => {
+        const plat = (l.platform || 'unknown').toLowerCase();
+        acc[plat] = (acc[plat] || 0) + 1;
+        return acc;
+      }, {});
+
+      const sortedLinks = [...links].sort((a, b) => new Date(b.clicked_at).getTime() - new Date(a.clicked_at).getTime());
+      const recentLinks = sortedLinks.slice(0, 10).map(l => {
+        // Try to find if this fp belongs to a known user from our views resolution
+        // (Wait, we need to pass fpToViewerMap and viewerProfilesMap here, but they are scoped inside latestActivity calculation. 
+        // For simplicity, we will just pass the raw data, and Dashboard can render it or we can resolve it later.)
+        return l;
+      });
+
+      return {
+        totalViews,
+        uniqueViews,
+        totalQRScans: effectiveQRScans,
+        tshirtScans,
+        profileQRScans,
+        qrScanRate,
+        repeatScore: uniqueViews > 0 ? Math.round((repeatingUsers / uniqueViews) * 100) : 0,
+        todayTotal: realTimeToday,
+        todayUnique: weekUniqueSparkline[6] || 0,
+        deviceBreakdown,
+        topCities,
+        totalCities: Object.keys(cityCounts).length,
+        latestActivity,
+        topFans,
+        topReferrers,
+        dailyStats,
+        weekSparkline,
+        streak: { current: currentStreak, best: currentStreak, status: currentStreak > 0 ? 'Active' : 'Building' },
+        bestDay,
+        bestMoment,
+        peakHour,
+        totalLinkTaps: links.length,
+        linkStats: {
+          clicksByPlatform,
+          recentClicks: recentLinks
+        }
+      };
   } catch (err) {
     console.error('getAnalyticsData error:', err);
     return {

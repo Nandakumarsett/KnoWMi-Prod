@@ -4,6 +4,7 @@ import { SocialLink } from '../../../types/profile'
 interface SocialGridProps {
   links: SocialLink[]
   style?: 'row' | 'grid'
+  profileId?: string
 }
 
 const PLATFORM_META: Record<string, any> = {
@@ -21,8 +22,28 @@ const PLATFORM_META: Record<string, any> = {
   website: { icon: Globe, color: '#444444' }
 }
 
-export function SocialGrid({ links, style = 'row' }: SocialGridProps) {
+import { supabase } from '../../../lib/supabase'
+
+export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps) {
   if (!links || links.length === 0) return null
+
+  const handleLinkClick = async (e: React.MouseEvent<HTMLAnchorElement>, platform: string, url: string) => {
+    e.preventDefault();
+    if (profileId) {
+      try {
+        const fp = localStorage.getItem('knowmi_fp') || 'unknown';
+        await supabase.from('link_click_events').insert({
+          profile_id: profileId,
+          platform,
+          url,
+          visitor_fp: fp
+        });
+      } catch (err) {
+        console.error('Failed to track link click:', err);
+      }
+    }
+    window.open(url, '_blank');
+  };
 
   if (style === 'grid') {
     return (
@@ -34,6 +55,7 @@ export function SocialGrid({ links, style = 'row' }: SocialGridProps) {
             <a 
               key={link.platform}
               href={link.url}
+              onClick={(e) => handleLinkClick(e, link.platform, link.url)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10 transition-all hover:bg-white/10 active:scale-[0.98]"
@@ -64,6 +86,7 @@ export function SocialGrid({ links, style = 'row' }: SocialGridProps) {
           <a 
             key={link.platform}
             href={link.url}
+            onClick={(e) => handleLinkClick(e, link.platform, link.url)}
             target="_blank"
             rel="noopener noreferrer"
             className="w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 shadow-xl"
