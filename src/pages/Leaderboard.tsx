@@ -266,19 +266,20 @@ export default function Leaderboard() {
         </div>
 
         {podium.length > 0 && (
-          <div className="flex flex-col md:flex-row items-end justify-center gap-6 mb-24 px-4">
-            {podium.map((p) => {
-              const isFirst = p.rank === 1;
-              const isSecond = p.rank === 2;
-              return (
-                <div
-                  key={p.username}
-                  onClick={() => {
-                    const slug = p.secure_slug || p.id;
-                    window.location.href = `/p/${slug}?src=leaderboard`;
-                  }}
-                  className={`relative group flex flex-col items-center pt-16 pb-10 px-8 rounded-[3rem] border transition-all duration-500 cursor-pointer shadow-2xl hover:-translate-y-2 w-full md:w-72 backdrop-blur-xl ${isFirst ? 'bg-white/10 border-orange-500/50 shadow-orange-500/20 md:h-[520px] z-20' : 'bg-white/5 border-white/10 md:h-[440px] z-10'}`}
-                >
+          <div className="max-w-5xl mx-auto w-full">
+            <div className="flex flex-col md:flex-row items-end justify-center gap-6 mb-24 px-4 md:px-0">
+              {podium.map((p) => {
+                const isFirst = p.rank === 1;
+                const isSecond = p.rank === 2;
+                return (
+                  <div
+                    key={p.username}
+                    onClick={() => {
+                      const slug = p.secure_slug || p.id;
+                      window.location.href = `/p/${slug}?src=leaderboard`;
+                    }}
+                    className={`relative group flex flex-col items-center pt-16 pb-10 px-8 rounded-[3rem] border transition-all duration-500 cursor-pointer shadow-2xl hover:-translate-y-2 w-full md:w-72 backdrop-blur-xl ${isFirst ? 'bg-white/10 border-orange-500/50 shadow-orange-500/20 h-auto md:min-h-[540px] z-20' : 'bg-white/5 border-white/10 h-auto md:min-h-[460px] z-10'}`}
+                  >
                   {isFirst && <div className="absolute inset-0 bg-gradient-to-b from-orange-500/10 to-transparent rounded-[3rem] pointer-events-none" />}
                   <div className={`relative p-1.5 rounded-full mb-8 transition-transform duration-500 group-hover:scale-110 shadow-lg ${isFirst ? 'bg-gradient-to-tr from-orange-400 via-amber-300 to-orange-500 shadow-orange-500/50' : isSecond ? 'bg-gradient-to-tr from-slate-300 to-slate-500' : 'bg-gradient-to-tr from-orange-800 to-orange-900'}`}>
                     <div className="rounded-full border-4 border-[#0A0A0B] overflow-hidden bg-[#0A0A0B]">
@@ -313,28 +314,29 @@ export default function Leaderboard() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex justify-between w-full mt-4 relative z-10">
+                  <div className="flex justify-between w-full mt-5 relative z-10 gap-3">
                     <button 
                       onClick={(e) => { e.stopPropagation(); setShareProfile(p); }} 
-                      className="flex-1 mr-2 py-3 bg-white/5 hover:bg-white/10 rounded-2xl text-neutral-300 font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-white/5 hover:text-orange-400 hover:border-orange-500/30"
+                      className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-2xl text-neutral-300 font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-white/5 hover:text-orange-400 hover:border-orange-500/30"
                     >
                       <Share2 size={16} /> Share
                     </button>
                     <a 
                       href={`/p/${p.secure_slug || p.id}?src=leaderboard`} 
-                      className="flex-1 ml-2 py-3 bg-white/5 hover:bg-white/10 rounded-2xl text-neutral-300 font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-white/5 hover:text-blue-400 hover:border-blue-500/30"
+                      className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-2xl text-neutral-300 font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-white/5 hover:text-blue-400 hover:border-blue-500/30"
                     >
                       <Eye size={16} /> View
                     </a>
                   </div>
                 </div>
               )
-            })}
+              })}
+            </div>
           </div>
         )}
 
         {/* Ranks 4+ List (Horizontal Scrolling) */}
-        <div className="flex overflow-x-auto gap-6 pb-8 mb-24 snap-x snap-mandatory max-w-[1400px] mx-auto px-4 md:px-8" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="flex overflow-x-auto gap-6 pb-8 mb-24 snap-x snap-mandatory px-4 md:px-0 max-w-5xl mx-auto w-full" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {tableRows.map((p) => (
             <div
               key={p.username}
@@ -364,7 +366,7 @@ export default function Leaderboard() {
                   <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Total Views</span>
                   <span className="text-2xl font-black text-orange-400">{p.knowmi_score}</span>
                 </div>
-                <div className="flex gap-1">
+                <div className="flex gap-3">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
