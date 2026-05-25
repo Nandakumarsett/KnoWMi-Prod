@@ -3,10 +3,11 @@ import Avatar from '../components/Avatar';
 import {
   Search, Trophy, Users, Activity, Clock,
   TrendingUp, TrendingDown, Minus, Share2,
-  X, Copy, Linkedin, Eye, Sparkles, QrCode, Star, Download
+  X, Copy, Linkedin, Eye, Sparkles, QrCode, Star, Download, Flame, MapPin, Medal, Globe
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { Trie } from '../lib/leaderboard/trie';
+import { getAnalyticsData } from '../lib/analytics/data-source';
 
 interface Profile {
   id: string;
@@ -166,7 +167,7 @@ export default function Leaderboard() {
     return () => clearInterval(interval);
   }, []);
 
-  const [shareStats, setShareStats] = useState<{ scans: number; views: number; connections: number } | null>(null);
+  const [shareStats, setShareStats] = useState<any>(null);
 
   useEffect(() => {
     if (!shareProfile) {
@@ -175,15 +176,8 @@ export default function Leaderboard() {
     }
     async function fetchDetailedStats() {
       try {
-        const { count: scanCount } = await supabase.from('qr_scan_events').select('*', { count: 'exact', head: true }).eq('profile_id', shareProfile!.id);
-        const { data: viewData } = await supabase.from('profile_view_daily').select('total_views').eq('profile_id', shareProfile!.id);
-        const totalViews = viewData?.reduce((sum, day) => sum + (day.total_views || 0), 0) || 0;
-
-        setShareStats({
-          scans: scanCount || 0,
-          views: totalViews || 0,
-          connections: Math.max(Math.ceil((scanCount || 0) * 1.5), 1)
-        });
+        const data = await getAnalyticsData(shareProfile.id, 'all');
+        setShareStats(data);
       } catch (err) {
         console.error('Share stats fetch error:', err);
       }
@@ -412,13 +406,48 @@ export default function Leaderboard() {
                     </div>
                   </div>
                   <div className="relative z-10 mt-12 grid grid-cols-2 gap-4">
-                    <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-5 border border-white/10 flex flex-col justify-between h-32">
-                      <Activity size={20} className="text-teal-400" />
-                      <div><p className="text-3xl font-black">{shareStats?.views.toLocaleString() || '...'}</p><p className="text-[10px] font-bold text-neutral-400 uppercase">Views</p></div>
+                    {/* Total Views */}
+                    <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-5 border border-white/10 flex flex-col justify-between h-32 hover:bg-white/10 transition-colors">
+                      <div className="flex justify-between items-center">
+                        <Activity size={20} className="text-teal-400" />
+                      </div>
+                      <div>
+                        <p className="text-3xl font-black">{shareStats?.totalViews?.toLocaleString() || '0'}</p>
+                        <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Total Views</p>
+                      </div>
                     </div>
+                    
+                    {/* Unique Visitors */}
+                    <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-5 border border-white/10 flex flex-col justify-between h-32 hover:bg-white/10 transition-colors">
+                      <div className="flex justify-between items-center">
+                        <Users size={20} className="text-violet-400" />
+                      </div>
+                      <div>
+                        <p className="text-3xl font-black">{shareStats?.uniqueViews?.toLocaleString() || '0'}</p>
+                        <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Unique Visitors</p>
+                      </div>
+                    </div>
+
+                    {/* Streak Record */}
                     <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl p-5 flex flex-col justify-between h-32 shadow-lg shadow-orange-500/20">
-                      <Star size={20} className="text-white" />
-                      <div><p className="text-3xl font-black">{shareProfile.knowmi_score}</p><p className="text-[10px] font-bold text-white/70 uppercase">Score</p></div>
+                      <div className="flex justify-between items-center">
+                        <Flame size={20} className="text-white" />
+                      </div>
+                      <div>
+                        <p className="text-3xl font-black">{shareStats?.streak?.best || '0'}</p>
+                        <p className="text-[10px] font-bold text-white/80 uppercase tracking-wider">Best Streak Days</p>
+                      </div>
+                    </div>
+
+                    {/* Top City */}
+                    <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-5 border border-white/10 flex flex-col justify-between h-32 hover:bg-white/10 transition-colors">
+                      <div className="flex justify-between items-center">
+                        <MapPin size={20} className="text-blue-400" />
+                      </div>
+                      <div>
+                        <p className="text-xl font-black truncate">{shareStats?.topCities?.[0]?.city || 'Global'}</p>
+                        <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mt-1">{shareStats?.topCities?.[0]?.flag || '🌍'} Top Location</p>
+                      </div>
                     </div>
                   </div>
                 </div>
