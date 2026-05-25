@@ -33,7 +33,7 @@ export default function ProfileViewTracker({ profileId }) {
       }
 
       const sessionKey = user ? `v_tracked_user_${profileId}` : `v_tracked_anon_${profileId}`;
-      if (!isTshirtScan && localStorage.getItem(sessionKey)) {
+      if (localStorage.getItem(sessionKey)) {
         console.log('Page refresh detected, skipping duplicate analytics tracking.');
         setTracked(true);
         return;
@@ -90,7 +90,7 @@ export default function ProfileViewTracker({ profileId }) {
       const fp = await buildFingerprint();
       const referrer = categoriseReferrer(document.referrer);
 
-      if (!isTshirtScan) localStorage.setItem(sessionKey, '1');
+      localStorage.setItem(sessionKey, '1');
 
       let edgeSuccess = false;
       try {
