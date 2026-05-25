@@ -10,6 +10,7 @@ import {
   ArrowUpRight, ChevronRight, Clock, MapPin, Smartphone, BarChart3,
   Flame, Share2, Download, Award, Palette, GripVertical, Trash2,
   Upload, Loader2, Camera, Paintbrush, ArrowRight, CheckCircle2,
+  Edit3, ChevronLeft, Lock, Crown, QrCode, ShoppingBag, UserPlus, ShieldCheck,
   ArrowLeft, ChevronDown, Wand2, Info, Printer
 } from 'lucide-react'
 import { 
