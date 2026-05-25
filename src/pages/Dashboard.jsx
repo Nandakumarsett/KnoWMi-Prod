@@ -2331,7 +2331,7 @@ export default function Dashboard() {
                   </div>
                 ) : (
                   <div className="grid gap-4">
-                    {connections.map((conn: any, idx: number) => (
+                    {connections.map((conn, idx) => (
                       <div key={idx} className="card p-6 bg-white shadow-sm flex items-center justify-between border border-neutral-100 hover:border-orange-500 transition-colors">
                         <div>
                           <h4 className="text-lg font-black text-neutral-900">{conn.visitor_name}</h4>
