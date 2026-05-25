@@ -12,7 +12,7 @@ export default function BusinessNeedsTab({ profile }) {
     window.print();
   };
 
-  const profileUrl = `https://knowmi.co/${profile?.secure_slug || ''}`;
+  const profileUrl = `https://knowmi.in/${profile?.secure_slug || ''}?src=tshirts`;
   const logoUrl = '/logo-square.png';
 
   const themeClasses = {
