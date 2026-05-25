@@ -33,7 +33,19 @@ export default function ProfileViewTracker({ profileId }) {
       }
 
       const sessionKey = user ? `v_tracked_user_${profileId}` : `v_tracked_anon_${profileId}`;
-      const isRepeatVisit = !!localStorage.getItem(sessionKey);
+      const lastVisitStr = localStorage.getItem(sessionKey);
+      let isRepeatVisit = false;
+
+      if (lastVisitStr) {
+        const lastVisitTime = parseInt(lastVisitStr, 10);
+        // 5 minute cooldown to prevent refresh spam
+        if (Date.now() - lastVisitTime < 5 * 60 * 1000) {
+          console.log('Recent view detected within 5 minutes, skipping duplicate tracking.');
+          setTracked(true);
+          return;
+        }
+        isRepeatVisit = true;
+      }
 
       // If they came from a QR scan, they already saw the prompt in ScanHandler.
       if (isTshirtScan) {
@@ -90,7 +102,7 @@ export default function ProfileViewTracker({ profileId }) {
       const fp = await buildFingerprint();
       const referrer = categoriseReferrer(document.referrer);
 
-      localStorage.setItem(sessionKey, '1');
+      localStorage.setItem(sessionKey, Date.now().toString());
 
       let edgeSuccess = false;
       try {
