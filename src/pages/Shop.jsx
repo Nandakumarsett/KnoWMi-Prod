@@ -64,6 +64,9 @@ export default function Shop() {
   const handleSelect = (d) => {
     setSelectedDesign(d)
     setModalOpen(true)
+    const url = new URL(window.location.href);
+    url.searchParams.set('design', d.id);
+    window.history.pushState({}, '', url);
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -268,6 +271,9 @@ export default function Shop() {
                   onClick={() => {
                     setOrderSuccess(null)
                     setSelectedDesign(null)
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete('design');
+                    window.history.pushState({}, '', url);
                     window.scrollTo(0, 0)
                   }}
                   className="px-8 py-4 bg-black text-white rounded-xl font-black uppercase tracking-widest text-xs hover:bg-neutral-800 transition-colors"
@@ -282,6 +288,9 @@ export default function Shop() {
               <button 
                 onClick={() => {
                   setSelectedDesign(null)
+                  const url = new URL(window.location.href);
+                  url.searchParams.delete('design');
+                  window.history.pushState({}, '', url);
                   window.scrollTo(0, 0)
                 }}
                 className="mb-6 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-neutral-400 hover:text-black transition-colors"
