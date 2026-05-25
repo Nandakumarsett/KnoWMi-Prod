@@ -307,9 +307,9 @@ export default function Leaderboard() {
                     </div>
                     <div className="flex flex-col items-end">
                       <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 mb-1">Trend</span>
-                      <div className={`flex items-center gap-1 font-bold text-sm ${isFirst ? 'text-orange-400' : 'text-teal-400'}`}>
-                        <TrendingUp size={14} />
-                        <span>+{Math.max(1, p.rank_delta || 12)}%</span>
+                      <div className={`flex items-center gap-1 font-bold text-sm ${p.rank_delta >= 0 ? (isFirst ? 'text-orange-400' : 'text-teal-400') : 'text-rose-400'}`}>
+                        {p.rank_delta >= 0 ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
+                        <span>{p.rank_delta === 0 ? 'Steady' : `${p.rank_delta > 0 ? '+' : ''}${p.rank_delta}%`}</span>
                       </div>
                     </div>
                   </div>
