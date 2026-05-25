@@ -62,7 +62,16 @@ export function usePushNotifications(userId) {
         throw new Error('Notification permission denied');
       }
 
-      // Subscribe to PushManager
+      // If a subscription already exists for this browser, it might belong to a DIFFERENT user_id 
+      // (e.g. if they logged out and logged into a newly claimed Tee account).
+      // Since Supabase RLS prevents us from overwriting another user's subscription,
+      // we must force the browser to unsubscribe first, which generates a fresh, unique endpoint.
+      let existingSubscription = await registration.pushManager.getSubscription();
+      if (existingSubscription) {
+        await existingSubscription.unsubscribe();
+      }
+
+      // Subscribe to PushManager with a fresh endpoint
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
