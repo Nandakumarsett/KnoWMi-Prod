@@ -213,7 +213,7 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
 
               {/* Standalone Avatar circle */}
               <a 
-                href={profile?.username ? `/p/${profile.username}` : '#'}
+                href={profile ? `/p/${profile.secure_slug || profile.username || profile.id}` : '#'}
                 className="hover:scale-105 transition-transform shrink-0"
                 title="View Profile"
               >
