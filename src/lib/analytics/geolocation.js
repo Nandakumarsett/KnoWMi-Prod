@@ -6,6 +6,19 @@
  */
 export const getAccurateLocation = (options = { timeout: 10000, maximumAge: 0, enableHighAccuracy: true }) => {
   return new Promise((resolve, reject) => {
+    // Check Cache first (Valid for 2 hours)
+    try {
+      const cachedStr = localStorage.getItem('knowmi_location_cache');
+      if (cachedStr) {
+        const cached = JSON.parse(cachedStr);
+        if (Date.now() - cached.timestamp < 2 * 60 * 60 * 1000) {
+          return resolve(cached.position);
+        }
+      }
+    } catch (e) {
+      // Ignore cache errors
+    }
+
     if (!navigator.geolocation) {
       return reject(new Error('Geolocation not supported'));
     }
@@ -19,6 +32,25 @@ export const getAccurateLocation = (options = { timeout: 10000, maximumAge: 0, e
       if (timeoutId !== undefined) clearTimeout(timeoutId);
     };
 
+    const saveAndResolve = (position) => {
+      // Ensure we only cache serializable data
+      const posObj = {
+        coords: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy
+        },
+        timestamp: position.timestamp || Date.now()
+      };
+      try {
+        localStorage.setItem('knowmi_location_cache', JSON.stringify({
+          position: posObj,
+          timestamp: Date.now()
+        }));
+      } catch (e) {}
+      resolve(posObj);
+    };
+
     watchId = navigator.geolocation.watchPosition(
       (position) => {
         // If it's the first ping or if this ping is more accurate (smaller accuracy radius)
@@ -29,14 +61,14 @@ export const getAccurateLocation = (options = { timeout: 10000, maximumAge: 0, e
         // If accuracy is very high (under 100 meters), we don't need to wait for the timeout
         if (position.coords.accuracy <= 100) {
           cleanup();
-          resolve(bestPosition);
+          saveAndResolve(bestPosition);
         }
       },
       (err) => {
         // If we get an error but already found a decent position, use it. Otherwise reject.
         if (bestPosition) {
           cleanup();
-          resolve(bestPosition);
+          saveAndResolve(bestPosition);
         } else {
           cleanup();
           reject(err);
@@ -49,7 +81,7 @@ export const getAccurateLocation = (options = { timeout: 10000, maximumAge: 0, e
     timeoutId = setTimeout(() => {
       cleanup();
       if (bestPosition) {
-        resolve(bestPosition);
+        saveAndResolve(bestPosition);
       } else {
         reject(new Error('Geolocation timeout'));
       }
