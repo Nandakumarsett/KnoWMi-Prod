@@ -878,7 +878,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <h3 className="font-display font-black text-lg text-white">Privacy Mode</h3>
-              {profile?.ghost_mode && <div className="px-2 py-0.5 bg-red-500/20 text-red-400 text-[9px] font-black uppercase rounded border border-red-500/30 animate-pulse">Offline</div>}
+              {profile?.ghost_mode && <div className="px-2 py-0.5 bg-red-500/20 text-red-400 text-[9px] font-black uppercase rounded border border-red-500/30 animate-pulse">Privacy Active</div>}
             </div>
             <p className="text-xs text-neutral-400 max-w-[250px]">
               Instantly hide your social links and profile picture for privacy.
