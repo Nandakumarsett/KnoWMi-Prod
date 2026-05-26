@@ -9,7 +9,7 @@ import {
   Share2, Sparkles, TrendingUp, Camera, Play, Film, MapPin, 
   Trophy, Mail, MessageCircle, Facebook, Linkedin, Globe, Activity, X
 } from 'lucide-react'
-
+import { trackLinkClick } from '../../../lib/analytics/track'
 const PLATFORM_ICONS: Record<string, any> = {
   instagram: Instagram,
   youtube: Youtube,
@@ -314,6 +314,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                         href={ensureAbsoluteUrl(p.url)}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => trackLinkClick(profile.id, p.platform || 'unknown', p.url)}
                         className="group flex flex-col items-center gap-3 transition-transform hover:scale-105 shrink-0"
                       >
                         <div className={`w-11 h-11 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shadow-lg ${style} transition-shadow group-hover:shadow-xl p-3 sm:p-3.5 relative overflow-hidden`}>

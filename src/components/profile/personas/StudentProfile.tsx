@@ -10,6 +10,7 @@ import {
 import { getAssetUrl } from '../../../lib/supabase'
 import { QRCodeSVG } from 'qrcode.react'
 import { ProfileCTAs } from '../shared/ProfileCTAs'
+import { trackLinkClick } from '../../../lib/analytics/track'
 
 export function StudentProfile({ profile, stats }: { profile: ProfileData, stats?: any }) {
   const data = (profile.persona_data || {}) as StudentData
@@ -284,6 +285,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                     href={ensureAbsoluteUrl(p.url)} 
                     target="_blank" 
                     rel="noopener noreferrer"
+                    onClick={() => trackLinkClick(profile.id, p.platform || 'unknown', p.url)}
                     className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-5 rounded-2xl sm:rounded-[2rem] bg-white border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] ${pData.hoverBorder} transition-all duration-300 group`}
                   >
                     <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center ${pData.bg} ${pData.text} group-hover:scale-110 transition-transform duration-300`}>

@@ -6,7 +6,7 @@ import { SocialGrid } from '../shared/SocialGrid'
 import { VerifiedBadge } from '../shared/VerifiedBadge'
 import { ProfileAvatar } from '../shared/ProfileAvatar'
 import { Instagram, Youtube, Share2, CheckCircle2, TrendingUp, Play } from 'lucide-react'
-
+import { trackLinkClick } from '../../../lib/analytics/track'
 export function InfluencerProfile({ profile }: { profile: ProfileData }) {
   const data = profile.persona_data as InfluencerData
   const accent = '#F97316'
@@ -101,7 +101,14 @@ export function InfluencerProfile({ profile }: { profile: ProfileData }) {
                </div>
                <div className="space-y-3">
                   {data.platforms.map(p => (
-                    <div key={p.platform} className="p-5 rounded-[28px] bg-[#F8F8F8] border border-[#EEEEEE] flex items-center justify-between hover:bg-white transition-all hover:shadow-lg group">
+                    <a 
+                      key={p.platform} 
+                      href={p.url?.startsWith('http') ? p.url : `https://${p.url}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackLinkClick(profile.id, p.platform || 'unknown', p.url)}
+                      className="block p-5 rounded-[28px] bg-[#F8F8F8] border border-[#EEEEEE] flex items-center justify-between hover:bg-white transition-all hover:shadow-lg group"
+                    >
                        <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
                              {p.platform === 'instagram' ? <Instagram size={22} className="text-[#E84393]" /> : p.platform === 'youtube' ? <Youtube size={22} className="text-[#FF0000]" /> : <Share2 size={22} className="text-black" />}
@@ -114,7 +121,7 @@ export function InfluencerProfile({ profile }: { profile: ProfileData }) {
                        <div className="w-8 h-8 rounded-full border border-[#EEEEEE] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                           <Play size={12} fill="currentColor" />
                        </div>
-                    </div>
+                    </a>
                   ))}
                </div>
             </section>

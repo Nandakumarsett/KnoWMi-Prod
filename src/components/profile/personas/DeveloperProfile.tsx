@@ -3,7 +3,7 @@ import { ProfileData, DeveloperData } from '../../../types/profile'
 import { getAssetUrl } from '../../../lib/supabase'
 import { UserPlus, Share2, X, Github, Twitter, Linkedin, Monitor, Code2, Database, Layout, Box, Globe, ExternalLink, FileText, Star, Terminal, Mail, Calendar } from 'lucide-react'
 import { ProfileCTAs } from '../shared/ProfileCTAs'
-
+import { trackLinkClick } from '../../../lib/analytics/track'
 // Simple helper to pick an icon and color for tech stack items
 function getTechIcon(name: string) {
   const n = name.toLowerCase();
@@ -168,6 +168,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                   href={p.url.startsWith('http') ? p.url : `https://${p.url}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackLinkClick(profile.id, p.platform || 'unknown', p.url)}
                   className="hover:scale-110 transition-transform duration-300 text-neutral-500 hover:text-neutral-900"
                   style={{ color: displayColor }}
                   aria-label={p.platform}

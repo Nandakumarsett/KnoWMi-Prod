@@ -2369,6 +2369,9 @@ export default function Dashboard() {
                         ) : (
                           <div className="text-center opacity-30 pt-4">
                             <p className="text-[10px] font-black uppercase tracking-widest">No clicks yet</p>
+                            {vibeStats.linkStats?.error && (
+                              <p className="text-red-500 mt-2 text-xs">Error: {vibeStats.linkStats.error}</p>
+                            )}
                           </div>
                         )}
                       </div>
