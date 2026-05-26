@@ -296,8 +296,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                     <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center ${pData.bg} ${pData.text} group-hover:scale-110 transition-transform duration-300 relative overflow-hidden`}>
                       {pData.icon}
                       {isGated && (
-                        <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-black/65 backdrop-blur-[1px] flex items-center justify-center">
-                          <Lock size={16} className="text-orange-400 drop-shadow-lg" strokeWidth={2.5} />
+                        <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center">
+                          <Lock size={16} className="text-neutral-800 drop-shadow-[0_1px_4px_rgba(255,255,255,0.8)]" strokeWidth={2.5} />
                         </div>
                       )}
                     </div>

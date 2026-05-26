@@ -127,10 +127,10 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
                   className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg relative overflow-hidden"
                   style={{ background: meta.color }}
                 >
-                  <Icon size={20} className={isGated ? 'opacity-30' : ''} />
+                  <Icon size={20} />
                   {isGated && (
-                    <div className="absolute inset-0 bg-black/65 backdrop-blur-[1px] rounded-xl flex items-center justify-center">
-                      <Lock size={14} className="text-orange-400 drop-shadow-lg" strokeWidth={2.5} />
+                    <div className="absolute inset-0 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center">
+                      <Lock size={14} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
                     </div>
                   )}
                 </div>
@@ -164,10 +164,10 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
               style={{ background: meta.color }}
               title={link.platform}
             >
-              <Icon size={24} className={isGated ? 'opacity-30' : ''} />
+              <Icon size={24} />
               {isGated && (
-                <div className="absolute inset-0 rounded-2xl bg-black/65 backdrop-blur-[1px] flex flex-col items-center justify-center gap-0.5">
-                  <Lock size={16} className="text-orange-400 drop-shadow-lg" strokeWidth={2.5} />
+                <div className="absolute inset-0 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center">
+                  <Lock size={18} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
                 </div>
               )}
             </a>
