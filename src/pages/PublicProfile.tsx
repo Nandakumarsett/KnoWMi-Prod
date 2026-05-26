@@ -392,8 +392,8 @@ export default function PublicProfile() {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto pt-28 pb-12 px-8">
-        <div className="flex gap-12 items-start justify-center">
+      <main className="max-w-6xl mx-auto pt-28 pb-12 px-4 sm:px-8">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center lg:items-start justify-center">
           
           {/* Left Column - Fixed Identity Card */}
           <div className="w-[380px] shrink-0 sticky top-28">
