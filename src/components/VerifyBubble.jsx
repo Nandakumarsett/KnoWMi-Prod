@@ -11,7 +11,7 @@ export default function VerifyBubble() {
   const whatsappUrl = `https://wa.me/917981325397?text=${encodeURIComponent(`Hi KnoWMi! I'm ${firstName}. I'd like to verify my account.\nEmail: ${user?.email}`)}`
 
   return (
-    <div className="fixed bottom-6 right-6 z-[9999] animate-bounce-slow will-change-transform">
+    <div className="fixed bottom-28 md:bottom-6 right-6 z-[9999] animate-bounce-slow will-change-transform">
       <a 
         href={whatsappUrl}
         target="_blank"
