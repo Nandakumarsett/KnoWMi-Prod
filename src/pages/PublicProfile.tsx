@@ -87,8 +87,12 @@ export default function PublicProfile() {
 
   const displayProfile = {
     ...profile,
-    avatar_url: isGhostMode ? null : profile.avatar_url,
-    social_links: isGhostMode ? [] : profile.social_links
+    avatar_url: profile.avatar_url,
+    social_links: (isGhostMode && !isOwnerOfProfile) ? [] : profile.social_links,
+    persona_data: (isGhostMode && !isOwnerOfProfile) ? {
+      ...profile.persona_data,
+      platforms: []
+    } : profile.persona_data
   };
 
   if (isClaimFlow) {
@@ -344,12 +348,8 @@ export default function PublicProfile() {
           </div>
         )}
 
-      </div>
-    )
-  }
-
   return (
-    <div className="min-h-screen font-sans selection:bg-orange-500/30" style={{ background: pageBg, color: textPrimary }}>
+    <div className={`min-h-screen font-sans selection:bg-orange-500/30 ${(isGhostMode && !isOwnerOfProfile) ? 'ghost-protection' : ''}`} style={{ background: pageBg, color: textPrimary }}>
       <ProfileViewTracker profileId={profile.id} />
       
       <header className="fixed top-0 w-full z-[120] border-b px-8 py-4 backdrop-blur-md" style={{ background: headerBg, borderColor: borderColor }}>
