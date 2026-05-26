@@ -528,7 +528,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
 
   const [isEditing, setIsEditing] = useState(() => searchParams.get('mode') === 'edit')
   const [showDetailedPersona, setShowDetailedPersona] = useState(false)
-  const [activeTab, setActiveTab] = useState(initialTab)
+  const [saving, setSaving] = useState(false)
   const [showToast, setShowToast] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [extractedColor, setExtractedColor] = useState(null)
