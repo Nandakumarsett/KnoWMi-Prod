@@ -8,7 +8,8 @@ export const trackLinkClick = async (profileId, platform, url) => {
       profile_id: profileId,
       platform: platform.toLowerCase(),
       url: url || '',
-      visitor_fp: fp
+      visitor_fp: fp,
+      link_type: 'social'
     });
     if (error) {
       console.error('Supabase Error tracking link:', error);
