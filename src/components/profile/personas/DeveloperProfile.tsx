@@ -169,7 +169,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackLinkClick(profile.id, p.platform || 'unknown', p.url)}
-                  className="hover:scale-110 transition-transform duration-300 text-neutral-500 hover:text-neutral-900"
+                  className="hover:scale-110 transition-transform duration-300 text-neutral-500 hover:text-neutral-900 social-link-item"
                   style={{ color: displayColor }}
                   aria-label={p.platform}
                 >

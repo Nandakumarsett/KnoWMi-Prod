@@ -85,14 +85,25 @@ export default function PublicProfile() {
   const isOwnerOfProfile = user && user.id === profile.user_id
   const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
 
+  // Sort platforms in persona_data so youtube is next to instagram
+  let modifiedPersonaData = { ...profile.persona_data };
+  if (modifiedPersonaData.platforms && Array.isArray(modifiedPersonaData.platforms)) {
+    let sortedPlatforms = [...modifiedPersonaData.platforms];
+    const instaIdx = sortedPlatforms.findIndex((l: any) => l.platform?.toLowerCase() === 'instagram');
+    const ytIdx = sortedPlatforms.findIndex((l: any) => l.platform?.toLowerCase() === 'youtube');
+    if (instaIdx !== -1 && ytIdx !== -1 && ytIdx !== instaIdx + 1) {
+      const ytPlatform = sortedPlatforms.splice(ytIdx, 1)[0];
+      const newInstaIdx = sortedPlatforms.findIndex((l: any) => l.platform?.toLowerCase() === 'instagram');
+      sortedPlatforms.splice(newInstaIdx + 1, 0, ytPlatform);
+    }
+    modifiedPersonaData.platforms = sortedPlatforms;
+  }
+
   const displayProfile = {
     ...profile,
     avatar_url: profile.avatar_url,
-    social_links: (isGhostMode && !isOwnerOfProfile) ? [] : profile.social_links,
-    persona_data: (isGhostMode && !isOwnerOfProfile) ? {
-      ...profile.persona_data,
-      platforms: []
-    } : profile.persona_data
+    social_links: profile.social_links,
+    persona_data: modifiedPersonaData
   };
 
   if (isClaimFlow) {
@@ -474,7 +485,7 @@ export default function PublicProfile() {
                 </button>
               </div>
 
-              <div className="w-full mt-10">
+              <div className={`w-full mt-10 ${(isGhostMode && !isOwnerOfProfile) ? 'ghost-blur-socials' : ''}`}>
                 <SocialGrid links={displayProfile.social_links} style="row" profileId={profile.id} />
               </div>
 
@@ -508,7 +519,7 @@ export default function PublicProfile() {
             </div>
           </div>
 
-          <div className="flex-1 max-w-[680px] min-h-[600px] rounded-[24px] overflow-hidden border shadow-2xl p-6" style={{ background: cardBg, borderColor: borderColor }}>
+          <div className={`flex-1 max-w-[680px] min-h-[600px] rounded-[24px] overflow-hidden border shadow-2xl p-6 ${(isGhostMode && !isOwnerOfProfile) ? 'ghost-blur-socials' : ''}`} style={{ background: cardBg, borderColor: borderColor }}>
              <PersonaRouter profile={displayProfile} recentVisitors={recentVisitors} stats={stats} />
           </div>
 

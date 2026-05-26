@@ -315,7 +315,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => trackLinkClick(profile.id, p.platform || 'unknown', p.url)}
-                        className="group flex flex-col items-center gap-3 transition-transform hover:scale-105 shrink-0"
+                        className="group flex flex-col items-center gap-3 transition-transform hover:scale-105 shrink-0 social-link-item"
                       >
                         <div className={`w-11 h-11 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shadow-lg ${style} transition-shadow group-hover:shadow-xl p-3 sm:p-3.5 relative overflow-hidden`}>
                           {logo ? (

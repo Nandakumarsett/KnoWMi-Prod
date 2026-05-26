@@ -68,7 +68,7 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
               onClick={(e) => handleLinkClick(e, link.platform, link.url)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10 transition-all hover:bg-white/10 active:scale-[0.98]"
+              className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10 transition-all hover:bg-white/10 active:scale-[0.98] social-link-item"
             >
               <div 
                 className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg"
@@ -99,7 +99,7 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
             onClick={(e) => handleLinkClick(e, link.platform, link.url)}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 shadow-xl"
+            className="w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 shadow-xl social-link-item"
             style={{ background: meta.color }}
             title={link.platform}
           >
