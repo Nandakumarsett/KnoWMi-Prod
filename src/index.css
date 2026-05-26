@@ -655,4 +655,4 @@ img {
 
 .ghost-protection {-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;-webkit-touch-callout: none;}
 .ghost-protection img {pointer-events: none;-webkit-user-drag: none;}
-.ghost-blur-socials .social-link-item { filter: blur(6px); pointer-events: none; user-select: none; opacity: 0.7; }
+.ghost-blur-socials .social-link-item { filter: blur(3px); pointer-events: none; user-select: none; opacity: 0.5; }
