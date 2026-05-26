@@ -5,15 +5,17 @@ import {
   GraduationCap, BookOpen, Rocket, FileText, 
   Globe, Music, Sparkles, Heart, Star, Users,
   Share2, UserPlus, QrCode, ExternalLink, Github, Linkedin, Twitter, Instagram,
-  MessageCircle, Link as LinkIcon, Trophy, Target, Briefcase, Zap, Mail, Calendar, Ghost, Activity, X
+  MessageCircle, Link as LinkIcon, Trophy, Target, Briefcase, Zap, Mail, Calendar, Ghost, Activity, X, Lock
 } from 'lucide-react'
 import { getAssetUrl } from '../../../lib/supabase'
 import { QRCodeSVG } from 'qrcode.react'
 import { ProfileCTAs } from '../shared/ProfileCTAs'
 import { trackLinkClick } from '../../../lib/analytics/track'
+import { useGatedLink } from '../../../hooks/useGatedLink'
 
 export function StudentProfile({ profile, stats }: { profile: ProfileData, stats?: any }) {
   const data = (profile.persona_data || {}) as StudentData
+  const { isGated, handleGatedClick, GateModal } = useGatedLink();
   const liveViews = stats?.totalViews || 0;
   const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
   const [showFomoModal, setShowFomoModal] = React.useState(false);
@@ -285,11 +287,19 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                     href={ensureAbsoluteUrl(p.url)} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    onClick={() => trackLinkClick(profile.id, p.platform || 'unknown', p.url)}
-                    className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-5 rounded-2xl sm:rounded-[2rem] bg-white border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] ${pData.hoverBorder} transition-all duration-300 group`}
+                    onClick={(e) => {
+                      handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                      if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                    }}
+                    className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-5 rounded-2xl sm:rounded-[2rem] bg-white border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] ${pData.hoverBorder} transition-all duration-300 group relative`}
                   >
-                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center ${pData.bg} ${pData.text} group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center ${pData.bg} ${pData.text} group-hover:scale-110 transition-transform duration-300 relative`}>
                       {pData.icon}
+                      {isGated && (
+                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-black rounded-full flex items-center justify-center border-2 border-orange-500 shadow-lg">
+                          <Lock size={9} className="text-orange-400" />
+                        </div>
+                      )}
                     </div>
                     <span className={`text-[10px] font-black uppercase tracking-widest text-neutral-500 group-hover:${pData.text} transition-colors`}>{p.platform}</span>
                   </a>
@@ -596,6 +606,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           animation: zoomIn 0.3s ease-out forwards;
         }
       `}</style>
+      <GateModal />
     </div>
   )
 }

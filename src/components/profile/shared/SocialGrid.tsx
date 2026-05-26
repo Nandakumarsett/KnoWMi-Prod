@@ -26,9 +26,11 @@ const PLATFORM_META: Record<string, any> = {
 }
 
 export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps) {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const [showGate, setShowGate] = useState(false)
-  const isGated = !user; // If no user is logged in, the links are gated.
+  // Wait for auth to resolve before deciding. During loading, assume not gated to avoid flicker.
+  // After loading completes, gate if no user is logged in.
+  const isGated = !authLoading && !user;
 
   if (!links || links.length === 0) return null
   
@@ -126,7 +128,11 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
                   style={{ background: meta.color }}
                 >
                   <Icon size={20} />
-                  {isGated && <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-neutral-900 rounded-full flex items-center justify-center border border-neutral-700 shadow-sm"><Lock size={10} className="text-orange-500" /></div>}
+                  {isGated && (
+                    <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-black rounded-full flex items-center justify-center border-2 border-orange-500 shadow-lg">
+                      <Lock size={10} className="text-orange-400" />
+                    </div>
+                  )}
                 </div>
                 <div className="flex flex-col min-w-0">
                   <span className="text-[10px] font-black uppercase opacity-40 truncate">{link.platform}</span>
@@ -159,7 +165,11 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
               title={link.platform}
             >
               <Icon size={24} />
-              {isGated && <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-neutral-900 rounded-full flex items-center justify-center border border-neutral-700 shadow-sm"><Lock size={12} className="text-orange-500" /></div>}
+              {isGated && (
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-black rounded-full flex items-center justify-center border-2 border-orange-500 shadow-xl">
+                  <Lock size={12} className="text-orange-400" />
+                </div>
+              )}
             </a>
           )
         })}

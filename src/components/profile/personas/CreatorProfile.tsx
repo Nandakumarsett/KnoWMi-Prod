@@ -7,9 +7,10 @@ import { getAssetUrl } from '../../../lib/supabase'
 import { 
   LayoutGrid, Instagram, Youtube, Twitter, Github, 
   Share2, Sparkles, TrendingUp, Camera, Play, Film, MapPin, 
-  Trophy, Mail, MessageCircle, Facebook, Linkedin, Globe, Activity, X
+  Trophy, Mail, MessageCircle, Facebook, Linkedin, Globe, Activity, X, Lock
 } from 'lucide-react'
 import { trackLinkClick } from '../../../lib/analytics/track'
+import { useGatedLink } from '../../../hooks/useGatedLink'
 const PLATFORM_ICONS: Record<string, any> = {
   instagram: Instagram,
   youtube: Youtube,
@@ -29,6 +30,7 @@ const PLATFORM_ICONS: Record<string, any> = {
 export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats?: any }) {
   const data = profile.persona_data as CreatorData
   const accent = '#F97316'
+  const { isGated, handleGatedClick, GateModal } = useGatedLink();
   const [selectedWork, setSelectedWork] = React.useState<any>(null);
   const [showFomoModal, setShowFomoModal] = React.useState(false);
   
@@ -314,7 +316,10 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                         href={ensureAbsoluteUrl(p.url)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        onClick={() => trackLinkClick(profile.id, p.platform || 'unknown', p.url)}
+                        onClick={(e) => {
+                          handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                          if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                        }}
                         className="group flex flex-col items-center gap-3 transition-transform hover:scale-105 shrink-0 social-link-item"
                       >
                         <div className={`w-11 h-11 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shadow-lg ${style} transition-shadow group-hover:shadow-xl p-3 sm:p-3.5 relative overflow-hidden`}>
@@ -332,6 +337,11 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                           ) : null}
                           <Icon size={24} className={logo ? 'hidden' : `sm:hidden ${logo ? '' : 'sm:block'}`} />
                           <Icon size={28} className={logo ? 'hidden' : 'hidden sm:block'} />
+                          {isGated && (
+                            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-black rounded-full flex items-center justify-center border-2 border-orange-500 shadow-lg">
+                              <Lock size={9} className="text-orange-400" />
+                            </div>
+                          )}
                         </div>
                         <div className="text-center hidden sm:block">
                           <p className="text-[10px] font-black uppercase text-neutral-900 tracking-tighter">{p.platform}</p>
@@ -580,6 +590,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
           animation: zoomIn 0.3s ease-out forwards;
         }
       `}</style>
+      <GateModal />
     </div>
   )
 }
