@@ -1,3 +1,4 @@
+import { DashboardErrorBoundary } from './DashboardErrorBoundary';
 import { useState, useEffect, useMemo, useRef } from 'react'
 import Avatar from '../components/Avatar'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -2675,5 +2676,6 @@ export default function Dashboard() {
       </div>
     )
   }
+
 
 
