@@ -88,7 +88,7 @@ export default function BusinessNeedsTab({ profile }) {
                 onClick={() => setActiveTemplate('sticker')}
                 className={`w-full flex items-center justify-between px-5 py-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-300 ${activeTemplate === 'sticker' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30 scale-[1.02]' : 'bg-neutral-50 text-neutral-500 hover:bg-neutral-100'}`}
               >
-                <span>Circle Sticker</span>
+                <span>Laptop Sticker</span>
                 {activeTemplate === 'sticker' && <div className="w-2 h-2 rounded-full bg-white animate-pulse" />}
               </button>
             </div>
@@ -211,21 +211,41 @@ export default function BusinessNeedsTab({ profile }) {
               </div>
             )}
 
-            {/* Sticker Template */}
+            {/* Laptop Sticker Template */}
             {activeTemplate === 'sticker' && (
               <div 
-                className={`print-sticker shadow-2xl relative overflow-hidden flex flex-col items-center justify-center transition-all duration-500 ${themeClasses[theme]}`} 
-                style={{ width: '50mm', height: '50mm', borderRadius: '50%' }}
+                className="print-sticker relative flex items-center justify-center transition-all duration-500 hover:scale-[1.05] hover:rotate-1" 
+                style={{ width: '65mm', height: '65mm', filter: 'drop-shadow(0 15px 25px rgba(0,0,0,0.15))' }}
               >
-                <div className={`absolute inset-0 border-[6px] rounded-full pointer-events-none ${theme === 'light' ? 'border-orange-500' : 'border-white/20'}`}></div>
-                
-                <img src={logoUrl} alt="KnoWMi Logo" className="h-5 w-5 object-cover rounded bg-white p-0.5 absolute top-3" onError={(e) => e.target.style.display = 'none'} />
-                
-                <div className="bg-white p-2 rounded-xl shadow-xl mt-3">
-                  <QRCodeSVG value={dynamicUrl} size={80} level="M" fgColor="#000000" bgColor="#FFFFFF" />
+                {/* Physical sticker white border (die-cut effect) */}
+                <div className="w-full h-full rounded-[32px] p-2 bg-white flex items-center justify-center relative overflow-hidden">
+                  
+                  {/* Printed interior with theme */}
+                  <div className={`w-full h-full rounded-[24px] flex flex-col items-center justify-center relative overflow-hidden ${themeClasses[theme]}`}>
+                    
+                    {/* Trendy background pattern */}
+                    <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(45deg, currentColor 0, currentColor 2px, transparent 2px, transparent 8px)' }}></div>
+                    
+                    <div className="relative z-10 flex flex-col items-center justify-center w-full px-4 mt-2">
+                      {/* Bold Rotated Typography Header */}
+                      <div className={`px-4 py-1.5 transform -rotate-3 rounded shadow-lg mb-5 ${theme === 'light' ? 'bg-black text-white' : 'bg-white text-black'}`}>
+                        <span className="text-[14px] font-black uppercase tracking-widest">SCAN TO CONNECT</span>
+                      </div>
+                      
+                      {/* QR Code Container */}
+                      <div className="bg-white p-2.5 rounded-2xl shadow-xl transform rotate-2">
+                        <QRCodeSVG value={dynamicUrl} size={110} level="H" fgColor="#000000" bgColor="#FFFFFF" />
+                      </div>
+                      
+                      {/* Profile Name Badge */}
+                      <div className="mt-5 flex items-center gap-2 px-4 py-2 bg-white rounded-xl shadow-md transform -rotate-1 border border-neutral-100">
+                        <img src={logoUrl} alt="KnoWMi" className="h-4 w-4 object-cover rounded bg-neutral-100 p-0.5" onError={(e) => e.target.style.display = 'none'} />
+                        <span className="text-[10px] font-black text-neutral-900 uppercase tracking-widest">{profile?.first_name}</span>
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
-                
-                <p className={`text-[7px] font-black uppercase tracking-widest mt-3 ${theme === 'accent' ? 'text-white' : ''}`}>Scan me</p>
               </div>
             )}
 
