@@ -42,14 +42,19 @@ export function useRealtimeAnalytics(profileId, onNewScan) {
             onNewScan();
           }
         }
-      )
-      .subscribe((status) => {
+      );
+      
+    try {
+      channel.subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           console.log(`✅ Heartbeat: Live Engine Connected for ${profileId}`);
         } else {
           console.warn(`⚠️ Heartbeat Status: ${status}`);
         }
       });
+    } catch (err) {
+      console.warn('Realtime WebSocket blocked (likely Private Tab):', err);
+    }
 
     return () => {
       supabase.removeChannel(channel);

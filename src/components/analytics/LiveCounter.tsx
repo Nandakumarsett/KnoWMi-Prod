@@ -30,8 +30,12 @@ export default function LiveCounter({ profileId }: { profileId: string }) {
         filter: `profile_id=eq.${profileId}`,
       }, () => {
         setLiveCount(c => c + 1);
-      })
-      .subscribe();
+      });
+      try { 
+        channel.subscribe();
+      } catch (err) {
+        console.warn('LiveCounter WebSocket blocked by browser security (likely Private Tab):', err);
+      }
 
     return () => {
       supabase.removeChannel(channel);
@@ -50,3 +54,4 @@ export default function LiveCounter({ profileId }: { profileId: string }) {
     </div>
   );
 }
+
