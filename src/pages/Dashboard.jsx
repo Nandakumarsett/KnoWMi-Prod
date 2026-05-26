@@ -1901,8 +1901,9 @@ function Dashboard() {
 
       <main className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 pb-48">
         {/* Sleek Profile Completion Progress Bar */}
-        <div className="mb-10 w-full animate-slideUp">
-          <div className="bg-white border border-neutral-100 rounded-[28px] p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+        {activeTab === 'profile' && (
+          <div className="mb-10 w-full animate-slideUp">
+            <div className="bg-white border border-neutral-100 rounded-[28px] p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4 w-full md:w-auto">
               <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center shrink-0 shadow-inner">
                 <Target size={24} className="animate-pulse" />
@@ -1941,6 +1942,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
+        )}
 
         <div className={`tab-transition ${activeTab === 'analytics' ? 'tab-visible' : 'tab-hidden'}`}>
           {activeTab === 'analytics' && (
@@ -2681,4 +2683,5 @@ function Dashboard() {
 
 
 export default function DashboardWrapper(props) { return <DashboardErrorBoundary><Dashboard {...props} /></DashboardErrorBoundary>; }
+
 
