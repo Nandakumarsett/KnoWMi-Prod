@@ -890,7 +890,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
               const newStatus = !profile?.ghost_mode;
               try {
                 await supabase.from('profiles').update({ ghost_mode: newStatus }).eq('id', profile.id);
-                if (onUpdate) await onUpdate();
+                refreshProfile();
               } catch (e) { console.error('Ghost mode error', e); }
             }}
             className={`w-14 h-8 rounded-full transition-all relative ${profile?.ghost_mode ? 'bg-red-500' : 'bg-neutral-700'}`}
