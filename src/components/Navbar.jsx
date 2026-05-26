@@ -139,10 +139,10 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
               <div className="relative">
                 <button
                   onClick={e => { e.stopPropagation(); setDropdownOpen(!dropdownOpen) }}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all duration-200 hover:bg-[var(--off)]"
+                  className="flex items-center gap-2.5 px-4 h-10 rounded-xl transition-all duration-200 hover:bg-[var(--off)]"
                   style={{ border: '1.5px solid var(--border)' }}
                 >
-                  <span className="text-sm font-semibold" style={{ color: 'var(--ink)' }}>{firstName}</span>
+                  <span className="text-base font-bold" style={{ color: 'var(--ink)' }}>{firstName}</span>
                   {profile ? (
                     role === 'owner' ? (
                       <span
