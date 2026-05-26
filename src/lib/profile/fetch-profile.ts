@@ -43,7 +43,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     'role', 'is_verified', 'created_at', 'wm_code', 'member_id',
     'instagram', 'instagram_url', 'linkedin', 'linkedin_url', 'github',
     'github_url', 'twitter', 'twitter_url', 'youtube', 'youtube_url',
-    'website', 'website_url', 'whatsapp', 'whatsapp_number', 'views', 'top_location'
+    'website', 'website_url', 'whatsapp', 'whatsapp_number', 'views', 'top_location', 'ghost_mode'
   ]
 
   // Create a clean public object
@@ -133,6 +133,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     joined_at: publicProfile.created_at,
     views: publicProfile.views || 0,
     top_location: publicProfile.top_location || 'Global',
+    ghost_mode: publicProfile.ghost_mode || false,
     social_links,
     persona_data: (() => {
       if (activeIdentity) {

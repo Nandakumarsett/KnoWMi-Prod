@@ -89,7 +89,7 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
 
   return (
     <div className="flex flex-wrap gap-4 justify-center py-4">
-      {links.map((link) => {
+      {sortedLinks.map((link) => {
         const meta = PLATFORM_META[link.platform] || { icon: Globe, color: '#444444' }
         const Icon = meta.icon
         return (
