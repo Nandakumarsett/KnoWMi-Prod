@@ -293,11 +293,11 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                     }}
                     className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-5 rounded-2xl sm:rounded-[2rem] bg-white border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] ${pData.hoverBorder} transition-all duration-300 group relative`}
                   >
-                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center ${pData.bg} ${pData.text} group-hover:scale-110 transition-transform duration-300 relative`}>
+                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center ${pData.bg} ${pData.text} group-hover:scale-110 transition-transform duration-300 relative overflow-hidden`}>
                       {pData.icon}
                       {isGated && (
-                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-black rounded-full flex items-center justify-center border-2 border-orange-500 shadow-lg">
-                          <Lock size={9} className="text-orange-400" />
+                        <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-black/65 backdrop-blur-[1px] flex items-center justify-center">
+                          <Lock size={16} className="text-orange-400 drop-shadow-lg" strokeWidth={2.5} />
                         </div>
                       )}
                     </div>

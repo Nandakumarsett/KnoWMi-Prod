@@ -338,8 +338,8 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                           <Icon size={24} className={logo ? 'hidden' : `sm:hidden ${logo ? '' : 'sm:block'}`} />
                           <Icon size={28} className={logo ? 'hidden' : 'hidden sm:block'} />
                           {isGated && (
-                            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-black rounded-full flex items-center justify-center border-2 border-orange-500 shadow-lg">
-                              <Lock size={9} className="text-orange-400" />
+                            <div className="absolute inset-0 rounded-2xl bg-black/65 backdrop-blur-[1px] flex items-center justify-center">
+                              <Lock size={16} className="text-orange-400 drop-shadow-lg" strokeWidth={2.5} />
                             </div>
                           )}
                         </div>

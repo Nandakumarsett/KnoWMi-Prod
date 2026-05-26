@@ -124,13 +124,13 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
                 className={`flex items-center gap-3 p-4 rounded-2xl bg-white/5 border transition-all hover:bg-white/10 active:scale-[0.98] social-link-item cursor-pointer ${isGated ? 'border-orange-500/30' : 'border-white/10'}`}
               >
                 <div 
-                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg relative"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg relative overflow-hidden"
                   style={{ background: meta.color }}
                 >
-                  <Icon size={20} />
+                  <Icon size={20} className={isGated ? 'opacity-30' : ''} />
                   {isGated && (
-                    <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-black rounded-full flex items-center justify-center border-2 border-orange-500 shadow-lg">
-                      <Lock size={10} className="text-orange-400" />
+                    <div className="absolute inset-0 bg-black/65 backdrop-blur-[1px] rounded-xl flex items-center justify-center">
+                      <Lock size={14} className="text-orange-400 drop-shadow-lg" strokeWidth={2.5} />
                     </div>
                   )}
                 </div>
@@ -164,10 +164,10 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
               style={{ background: meta.color }}
               title={link.platform}
             >
-              <Icon size={24} />
+              <Icon size={24} className={isGated ? 'opacity-30' : ''} />
               {isGated && (
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-black rounded-full flex items-center justify-center border-2 border-orange-500 shadow-xl">
-                  <Lock size={12} className="text-orange-400" />
+                <div className="absolute inset-0 rounded-2xl bg-black/65 backdrop-blur-[1px] flex flex-col items-center justify-center gap-0.5">
+                  <Lock size={16} className="text-orange-400 drop-shadow-lg" strokeWidth={2.5} />
                 </div>
               )}
             </a>
