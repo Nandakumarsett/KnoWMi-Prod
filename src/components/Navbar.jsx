@@ -218,7 +218,7 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
                 className="hover:scale-105 transition-transform shrink-0 block relative z-10 cursor-pointer"
                 title="View Profile"
               >
-                <Avatar src={profile?.avatar_url} name={firstName} size="w-10 h-10 border border-neutral-200 shadow-sm" />
+                <Avatar src={profile?.avatar_url} name={firstName} size="w-10 h-10 ring-2 ring-orange-500 ring-offset-2 shadow-sm" />
               </Link>
             </div>
           ) : (
@@ -232,9 +232,10 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
               </button>
               <button
                 onClick={() => onAuthClick?.('signup')}
-                className="btn-primary btn-base px-5 py-2.5 text-[13px] rounded-xl"
+                className="btn-primary btn-base px-5 py-2.5 text-[13px] rounded-xl font-bold flex items-center gap-2"
+                style={{ background: 'var(--brand)', color: '#fff' }}
               >
-                Sign Up Free ↗
+                Sign Up Free
               </button>
             </>
           )}
@@ -281,7 +282,7 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
                 {/* User info */}
                 <div className="flex items-center gap-3 px-3 py-2">
                   <Link to={profile ? `/p/${profile.secure_slug || profile.username || profile.id}` : '/dashboard'} onClick={() => setMobileOpen(false)} className="block shrink-0">
-                    <Avatar src={profile?.avatar_url} name={firstName} size="w-9 h-9" />
+                    <Avatar src={profile?.avatar_url} name={firstName} size="w-9 h-9 ring-2 ring-orange-500 ring-offset-2" />
                   </Link>
                   <div>
                     <div className="text-sm font-semibold" style={{ color: 'var(--ink)' }}>{firstName}</div>
