@@ -666,6 +666,9 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
         return l;
       });
 
+      const uniqueClickers = new Set(links.map(l => l.visitor_fp || l.id)).size;
+      const engagementIntentRate = uniqueViews > 0 ? Math.round((uniqueClickers / uniqueViews) * 100) : 0;
+
       return {
         totalViews,
         uniqueViews,
@@ -692,6 +695,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
         linkStats: {
           clicksByPlatform,
           recentClicks: recentLinks,
+          engagementIntentRate,
           error: linksError ? linksError.message : null
         }
       };

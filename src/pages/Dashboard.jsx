@@ -2355,8 +2355,16 @@ export default function Dashboard() {
 
               {analyticsView === 'links' && vibeStats && (
                 <div className={`space-y-8 animate-slideUp ${isVibeDark ? 'dark' : ''}`}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="vibe-card p-8">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="vibe-card p-8 flex flex-col items-center justify-center text-center">
+                      <div className="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-500 flex items-center justify-center mb-6 shadow-inner">
+                        <Target size={24} strokeWidth={2.5} />
+                      </div>
+                      <p className="text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-2">Intent Rate</p>
+                      <h3 className="text-5xl font-black font-display text-neutral-900 tracking-tight">{vibeStats.linkStats?.engagementIntentRate || 0}%</h3>
+                      <p className="text-xs text-neutral-500 font-medium mt-4">of profile viewers tapped a link.</p>
+                    </div>
+                    <div className="vibe-card p-8 md:col-span-2">
                       <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900 mb-6">Clicks by Platform</h3>
                       <div className="space-y-4">
                         {vibeStats.linkStats?.clicksByPlatform && Object.keys(vibeStats.linkStats.clicksByPlatform).length > 0 ? (
