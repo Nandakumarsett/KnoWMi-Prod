@@ -530,7 +530,6 @@ const PersonaEditor = ({ profile, onUpdate }) => {
   const [showDetailedPersona, setShowDetailedPersona] = useState(false)
   const [activeTab, setActiveTab] = useState(initialTab)
   const [showToast, setShowToast] = useState(false)
-  const [showComingSoon, setShowComingSoon] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [extractedColor, setExtractedColor] = useState(null)
   const colorCache = useRef({})
@@ -1309,7 +1308,6 @@ const PersonaEditor = ({ profile, onUpdate }) => {
         </div>
       </div>
       {showToast && <div className="toast"><CheckCircle2 size={16} /> Identity Updated!</div>}
-      {showComingSoon && <div className="toast" style={{ background: '#ea580c', color: 'white' }}><Lock size={16} /> Print Studio Coming Soon!</div>}
     </div>
 
   )
@@ -1541,6 +1539,7 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const { profile, user, loading: authLoading, refreshProfile, isVerified, role } = useAuth()
+  const [showComingSoon, setShowComingSoon] = useState(false)
   const isFree = profile?.status === 'free' || (!profile?.status && (!profile?.tier || profile?.tier === 'Starter' || profile?.tier === 'Free')) || profile?.tier === 'Free' || profile?.tier === 'Starter';
   const isPaid = !isFree || role === 'owner';
 
@@ -2673,7 +2672,7 @@ export default function Dashboard() {
           ))}
         </nav>
 
-
+      {showComingSoon && <div className="toast" style={{ background: '#ea580c', color: 'white', zIndex: 9999 }}><Lock size={16} /> Print Studio Coming Soon!</div>}
       </div>
     )
   }
