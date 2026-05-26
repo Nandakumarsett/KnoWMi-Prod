@@ -5,7 +5,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceL
 
 export default function ScoreTrendChart({ history }: { history: any[] }) {
   const formattedData = history.map(h => ({
-    date: new Date(h.day).toLocaleDateString('en', { day: 'numeric', month: 'short' }),
+    date: new Date(typeof h.day === 'string' ? h.day.replace(' ', 'T') : h.day).toLocaleDateString('en', { day: 'numeric', month: 'short' }),
     score: h.knowmi_score,
     rank: h.rank
   }));
@@ -52,3 +52,4 @@ export default function ScoreTrendChart({ history }: { history: any[] }) {
     </ResponsiveContainer>
   );
 }
+

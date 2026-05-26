@@ -50,9 +50,10 @@ export default function TokenScanCard({ stats }: TokenScanCardProps) {
           <span>Last Scan</span>
         </div>
         <p className="text-[10px] font-bold text-neutral-400 uppercase">
-          {last_scanned ? `${formatDistanceToNow(new Date(last_scanned))} ago` : 'Never'}
+          {last_scanned ? `${formatDistanceToNow(new Date(typeof last_scanned === 'string' ? last_scanned.replace(' ', 'T') : last_scanned))} ago` : 'Never'}
         </p>
       </div>
     </div>
   );
 }
+

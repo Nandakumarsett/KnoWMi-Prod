@@ -6,7 +6,7 @@ export default function RecentVisitors({ events }: { events: any[] }) {
   const rtf = useMemo(() => new Intl.RelativeTimeFormat('en', { numeric: 'auto' }), []);
 
   const getRelativeTime = (date: string) => {
-    const diff = new Date(date).getTime() - new Date().getTime();
+    const diff = new Date(typeof date === 'string' ? date.replace(' ', 'T') : date).getTime() - new Date().getTime();
     const minutes = Math.round(diff / (1000 * 60));
     const hours = Math.round(diff / (1000 * 60 * 60));
     const days = Math.round(diff / (1000 * 60 * 60 * 24));
@@ -84,3 +84,4 @@ export default function RecentVisitors({ events }: { events: any[] }) {
     </div>
   );
 }
+

@@ -4,7 +4,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianG
 export default function ViewsChart({ data }: { data: any[] }) {
   const formattedData = data.map(d => ({
     ...d,
-    formattedDate: new Date(d.day).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    formattedDate: new Date(typeof d.day === 'string' ? d.day.replace(' ', 'T') : d.day).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }));
 
   return (
@@ -64,3 +64,4 @@ export default function ViewsChart({ data }: { data: any[] }) {
     </div>
   );
 }
+

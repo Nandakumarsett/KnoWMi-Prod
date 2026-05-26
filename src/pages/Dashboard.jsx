@@ -1475,7 +1475,7 @@ const GamificationTab = ({ profile, completion, stats }) => {
     { id: 'first_scan', name: 'First Contact', desc: 'Got your first physical scan', icon: Zap, unlocked: totalScans > 0, color: 'text-orange-500', bg: 'bg-orange-500/10' },
     { id: 'popular', name: 'Rising Star', desc: 'Reached 50+ total scans', icon: TrendingUp, unlocked: totalScans >= 50, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
     { id: 'pro', name: 'Verified Creator', desc: 'Active Premium Subscription', icon: ShieldCheck, unlocked: profile?.status !== 'free' || profile?.role === 'owner', color: 'text-blue-500', bg: 'bg-blue-500/10' },
-    { id: 'early', name: 'Early Adopter', desc: 'Joined during Beta phase', icon: Rocket, unlocked: new Date(profile?.created_at || Date.now()) < new Date('2026-08-01'), color: 'text-purple-500', bg: 'bg-purple-500/10' },
+    { id: 'early', name: 'Early Adopter', desc: 'Joined during Beta phase', icon: Rocket, unlocked: new Date(typeof profile?.created_at || Date.now() === 'string' ? profile?.created_at || Date.now().replace(' ', 'T') : profile?.created_at || Date.now()) < new Date('2026-08-01'), color: 'text-purple-500', bg: 'bg-purple-500/10' },
   ];
 
   const unlockedCount = badges.filter(b => b.unlocked).length;
@@ -1734,7 +1734,7 @@ export default function Dashboard() {
     
     function formatSafeDate(dateStr, opts) {
       if (!dateStr) return null;
-      const d = new Date(dateStr);
+      const d = new Date(typeof dateStr === 'string' ? dateStr.replace(' ', 'T') : dateStr);
       return isNaN(d.getTime()) ? null : d.toLocaleDateString('en-US', opts);
     }
 
@@ -1771,7 +1771,7 @@ export default function Dashboard() {
 
     // Add recent event as a moment if it's very recent
     const latest = vibeStats.latestActivity?.[0];
-    if (latest && (Date.now() - new Date(latest.viewed_at).getTime()) < 3600000) {
+    if (latest && (Date.now() - new Date(typeof latest.viewed_at === 'string' ? latest.viewed_at.replace(' ', 'T') : latest.viewed_at).getTime()) < 3600000) {
       m.push({
         emoji: '🆕',
         title: latest.city || 'Unknown Location',
@@ -2249,7 +2249,7 @@ export default function Dashboard() {
                                )}
                              </p>
                              <span className="text-[9px] font-bold text-neutral-500 ml-2 whitespace-nowrap">
-                               {formatDistanceToNow(new Date(ev.viewed_at || ev.scanned_at), { addSuffix: true })}
+                               {formatDistanceToNow(new Date(typeof ev.viewed_at || ev.scanned_at === 'string' ? ev.viewed_at || ev.scanned_at.replace(' ', 'T') : ev.viewed_at || ev.scanned_at), { addSuffix: true })}
                              </span>
                            </div>
                            <p className="text-[9px] font-bold text-neutral-400 uppercase tracking-tight mt-1">
@@ -2422,7 +2422,7 @@ export default function Dashboard() {
                             <div key={i} className="flex items-center justify-between border-b border-neutral-100 pb-3 last:border-0 last:pb-0">
                               <div>
                                 <span className="text-[13px] font-black text-neutral-800 capitalize">{click.platform}</span>
-                                <p className="text-[10px] text-neutral-500 font-bold mt-1">{new Date(click.clicked_at).toLocaleString()}</p>
+                                <p className="text-[10px] text-neutral-500 font-bold mt-1">{new Date(typeof click.clicked_at === 'string' ? click.clicked_at.replace(' ', 'T') : click.clicked_at).toLocaleString()}</p>
                               </div>
                               <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest bg-orange-50 px-2 py-1 rounded">Guest</span>
                             </div>
@@ -2478,7 +2478,7 @@ export default function Dashboard() {
                           {conn.visitor_message && <p className="text-sm italic text-neutral-400 mt-2">"{conn.visitor_message}"</p>}
                         </div>
                         <div className="text-right">
-                          <p className="text-xs text-neutral-400 font-bold">{new Date(conn.created_at).toLocaleDateString()}</p>
+                          <p className="text-xs text-neutral-400 font-bold">{new Date(typeof conn.created_at === 'string' ? conn.created_at.replace(' ', 'T') : conn.created_at).toLocaleDateString()}</p>
                         </div>
                       </div>
                     ))}
@@ -2516,7 +2516,7 @@ export default function Dashboard() {
                         <div className="flex justify-between items-start mb-10">
                           <div>
                             <p className="text-[10px] font-black uppercase text-neutral-400 mb-1">Order Placed</p>
-                            <p className="text-lg font-bold">{new Date(latestOrder.order_date || latestOrder.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                            <p className="text-lg font-bold">{new Date(typeof latestOrder.order_date || latestOrder.created_at === 'string' ? latestOrder.order_date || latestOrder.created_at.replace(' ', 'T') : latestOrder.order_date || latestOrder.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                           </div>
                           <div className="text-right">
                             <p className="text-[10px] font-black uppercase text-neutral-400 mb-1">Order ID</p>
@@ -2675,3 +2675,4 @@ export default function Dashboard() {
       </div>
     )
   }
+
