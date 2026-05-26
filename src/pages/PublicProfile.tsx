@@ -363,7 +363,7 @@ export default function PublicProfile() {
   }
 
   return (
-    <div className={`min-h-screen font-sans selection:bg-orange-500/30 ${(isGhostMode && !isOwnerOfProfile) ? 'ghost-protection' : ''}`} style={{ background: pageBg, color: textPrimary }}>
+    <div className={`min-h-screen font-sans selection:bg-orange-500/30 ${isGhostMode ? 'ghost-protection' : ''}`} style={{ background: pageBg, color: textPrimary }}>
       <ProfileViewTracker profileId={profile.id} />
       
       <header className="fixed top-0 w-full z-[120] border-b px-8 py-4 backdrop-blur-md" style={{ background: headerBg, borderColor: borderColor }}>
@@ -485,7 +485,7 @@ export default function PublicProfile() {
                 </button>
               </div>
 
-              <div className={`w-full mt-10 ${(isGhostMode && !isOwnerOfProfile) ? 'ghost-blur-socials' : ''}`}>
+              <div className={`w-full mt-10 ${isGhostMode ? 'ghost-blur-socials' : ''}`}>
                 <SocialGrid links={displayProfile.social_links} style="row" profileId={profile.id} />
               </div>
 
@@ -519,7 +519,7 @@ export default function PublicProfile() {
             </div>
           </div>
 
-          <div className={`flex-1 max-w-[680px] min-h-[600px] rounded-[24px] overflow-hidden border shadow-2xl p-6 ${(isGhostMode && !isOwnerOfProfile) ? 'ghost-blur-socials' : ''}`} style={{ background: cardBg, borderColor: borderColor }}>
+          <div className={`flex-1 max-w-[680px] min-h-[600px] rounded-[24px] overflow-hidden border shadow-2xl p-6 ${isGhostMode ? 'ghost-blur-socials' : ''}`} style={{ background: cardBg, borderColor: borderColor }}>
              <PersonaRouter profile={displayProfile} recentVisitors={recentVisitors} stats={stats} />
           </div>
 
