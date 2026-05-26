@@ -129,8 +129,8 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
                 >
                   <Icon size={20} />
                   {isGated && (
-                    <div className="absolute inset-0 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center">
-                      <Lock size={14} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
+                    <div className="absolute inset-0 rounded-xl bg-black/30 backdrop-blur-[2px] flex items-center justify-center">
+                      <Lock size={16} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
                     </div>
                   )}
                 </div>
@@ -166,7 +166,7 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
             >
               <Icon size={24} />
               {isGated && (
-                <div className="absolute inset-0 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center">
+                <div className="absolute inset-0 rounded-2xl bg-black/30 backdrop-blur-[2px] flex items-center justify-center">
                   <Lock size={18} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
                 </div>
               )}
