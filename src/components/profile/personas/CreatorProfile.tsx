@@ -265,7 +265,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             {data.platforms && data.platforms.length > 0 && (
               <div className="mb-12">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6">Where you can find me</p>
-                <div className="flex flex-wrap sm:flex-nowrap items-center justify-center sm:justify-start gap-3 sm:gap-8 overflow-x-auto no-scrollbar pb-2">
+                <div className="flex flex-wrap sm:flex-nowrap items-center justify-start gap-3 sm:gap-8 overflow-x-auto no-scrollbar pb-2">
                   {data.platforms.map(p => {
                     const platform = p.platform?.toLowerCase();
                     const Icon = PLATFORM_ICONS[platform] || Share2;
