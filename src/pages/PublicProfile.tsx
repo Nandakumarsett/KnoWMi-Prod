@@ -79,21 +79,17 @@ export default function PublicProfile() {
   const activeConfig = personaConfigs[pAlias] || personaConfigs.developer
   const fromSrc = searchParams.get('src')
   const isClaimFlow = searchParams.get('claim') === 'true' || !profile.user_id;
-  const isGhostMode = searchParams.get('ghost') === 'true'
+  const isGhostMode = searchParams.get('ghost') === 'true' || profile?.ghost_mode === true
   const fromTab = searchParams.get('from') || 'analytics'
   const accentColor = activeConfig?.theme?.accent || '#C1440E'
   const isOwnerOfProfile = user && user.id === profile.user_id
   const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
 
-  if (isGhostMode) {
-    return (
-      <div className="min-h-screen bg-[#080808] flex flex-col items-center justify-center p-6 text-center text-white">
-        <Lock className="w-12 h-12 mb-6 text-neutral-600" />
-        <h1 className="text-3xl font-black mb-4 font-display uppercase tracking-tighter text-white">Ghost Mode Active</h1>
-        <p className="text-neutral-400 mb-8 max-w-sm leading-relaxed">This physical identity is currently offline for privacy. The owner has temporarily disabled public access.</p>
-      </div>
-    )
-  }
+  const displayProfile = {
+    ...profile,
+    avatar_url: isGhostMode ? null : profile.avatar_url,
+    social_links: isGhostMode ? {} : profile.social_links
+  };
 
   if (isClaimFlow) {
     return (
@@ -237,7 +233,7 @@ export default function PublicProfile() {
 
         {/* Full Mobile Persona Router below */}
         <div className="px-2">
-          <PersonaRouter profile={profile} recentVisitors={recentVisitors} stats={stats} />
+          <PersonaRouter profile={displayProfile} recentVisitors={recentVisitors} stats={stats} />
         </div>
 
         {/* QR Overlay Modal */}
@@ -427,7 +423,7 @@ export default function PublicProfile() {
                            )
                          ) : (
                            <ProfileAvatar
-                              src={profile.avatar_url}
+                              src={displayProfile.avatar_url}
                               name={safeDisplayName}
                               size={176}
                               shape="circle"
@@ -464,7 +460,7 @@ export default function PublicProfile() {
                 "{profile.bio || 'Creating digital value.'}"
               </p>
 
-              <ProfileCTAs profile={profile} accentColor={accentColor} />
+              <ProfileCTAs profile={displayProfile} accentColor={accentColor} />
 
               <div className="w-full mt-6 flex justify-center">
                 <button 
@@ -476,7 +472,7 @@ export default function PublicProfile() {
               </div>
 
               <div className="w-full mt-10">
-                <SocialGrid links={profile.social_links} style="row" profileId={profile.id} />
+                <SocialGrid links={displayProfile.social_links} style="row" profileId={profile.id} />
               </div>
 
               <div className="w-full mt-10">
@@ -510,7 +506,7 @@ export default function PublicProfile() {
           </div>
 
           <div className="flex-1 max-w-[680px] min-h-[600px] rounded-[24px] overflow-hidden border shadow-2xl p-6" style={{ background: cardBg, borderColor: borderColor }}>
-             <PersonaRouter profile={profile} recentVisitors={recentVisitors} stats={stats} />
+             <PersonaRouter profile={displayProfile} recentVisitors={recentVisitors} stats={stats} />
           </div>
 
         </div>
