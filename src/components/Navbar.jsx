@@ -134,43 +134,42 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
         <div className="hidden lg:flex items-center gap-2.5 flex-shrink-0 justify-end">
           {user ? (
             /* Logged in: show name + badge */
-            <div className="relative">
-              <button
-                onClick={e => { e.stopPropagation(); setDropdownOpen(!dropdownOpen) }}
-                className="flex items-center gap-2.5 px-4 py-2 rounded-xl transition-all duration-200 hover:bg-[var(--off)]"
-                style={{ border: '1.5px solid var(--border)' }}
-              >
-                <span className="text-sm font-semibold" style={{ color: 'var(--ink)' }}>{firstName}</span>
-                {profile ? (
-                  role === 'owner' ? (
-                    <span
-                      className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider"
-                      style={{ background: 'var(--navy)', color: '#fff', border: '1px solid var(--navy)' }}
-                    >
-                      Owner
-                    </span>
+            <div className="flex items-center gap-3 relative">
+              <div className="relative">
+                <button
+                  onClick={e => { e.stopPropagation(); setDropdownOpen(!dropdownOpen) }}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all duration-200 hover:bg-[var(--off)]"
+                  style={{ border: '1.5px solid var(--border)' }}
+                >
+                  <span className="text-sm font-semibold" style={{ color: 'var(--ink)' }}>{firstName}</span>
+                  {profile ? (
+                    role === 'owner' ? (
+                      <span
+                        className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider"
+                        style={{ background: 'var(--navy)', color: '#fff', border: '1px solid var(--navy)' }}
+                      >
+                        Owner
+                      </span>
+                    ) : (
+                      <span
+                        className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                        style={{
+                          background: status === 'paid' ? 'rgba(19,136,8,0.1)' : 'rgba(255,153,51,0.1)',
+                          color: status === 'paid' ? '#138808' : '#E07A00',
+                          border: `1px solid ${status === 'paid' ? 'rgba(19,136,8,0.2)' : 'rgba(255,153,51,0.2)'}`,
+                        }}
+                      >
+                        {status === 'paid' ? '✓ Paid' : 'Free'}
+                      </span>
+                    )
                   ) : (
-                    <span
-                      className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
-                      style={{
-                        background: status === 'paid' ? 'rgba(19,136,8,0.1)' : 'rgba(255,153,51,0.1)',
-                        color: status === 'paid' ? '#138808' : '#E07A00',
-                        border: `1px solid ${status === 'paid' ? 'rgba(19,136,8,0.2)' : 'rgba(255,153,51,0.2)'}`,
-                      }}
-                    >
-                      {status === 'paid' ? '✓ Paid' : 'Free'}
-                    </span>
-                  )
-                ) : (
-                  <div className="w-[52px] h-[18px] rounded-full bg-neutral-200 animate-pulse opacity-40" />
-                )}
-                {/* Avatar circle */}
-                <Avatar src={profile?.avatar_url} name={firstName} size="w-8 h-8" />
-                {/* Caret */}
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ color: 'var(--muted)' }}>
-                  <path d="M3 5L6 8L9 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
+                    <div className="w-[52px] h-[18px] rounded-full bg-neutral-200 animate-pulse opacity-40" />
+                  )}
+                  {/* Caret */}
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ color: 'var(--muted)' }}>
+                    <path d="M3 5L6 8L9 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
 
               {/* Dropdown menu */}
               {dropdownOpen && (
@@ -210,6 +209,16 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
                   </button>
                 </div>
               )}
+              </div>
+
+              {/* Standalone Avatar circle */}
+              <a 
+                href={profile?.username ? `/p/${profile.username}` : '#'}
+                className="hover:scale-105 transition-transform shrink-0"
+                title="View Profile"
+              >
+                <Avatar src={profile?.avatar_url} name={firstName} size="w-10 h-10 border border-neutral-200 shadow-sm" />
+              </a>
             </div>
           ) : (
             /* Not logged in: show Sign Up / Sign In */
