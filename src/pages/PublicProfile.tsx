@@ -347,6 +347,9 @@ export default function PublicProfile() {
             </div>
           </div>
         )}
+      </div>
+    )
+  }
 
   return (
     <div className={`min-h-screen font-sans selection:bg-orange-500/30 ${(isGhostMode && !isOwnerOfProfile) ? 'ghost-protection' : ''}`} style={{ background: pageBg, color: textPrimary }}>
