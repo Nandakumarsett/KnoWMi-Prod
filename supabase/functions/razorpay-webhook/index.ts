@@ -140,6 +140,35 @@ serve(async (req) => {
           }),
         })
       }
+
+      // 5. Send Telegram Notification to Owner
+      const telegramBotToken = Deno.env.get('TELEGRAM_BOT_TOKEN')
+      const telegramChatId = Deno.env.get('TELEGRAM_CHAT_ID')
+
+      if (telegramBotToken && telegramChatId) {
+        const amountRs = (amountPaise / 100).toFixed(2)
+        const message = `🎉 *New Order Received!*\n\n` +
+          `*Order ID:* \`${orderId}\`\n` +
+          `*Amount:* ₹${amountRs}\n` +
+          `*Customer Name:* ${customerName}\n` +
+          `*Customer Email:* ${customerEmail}\n` +
+          `*Phone:* ${razorpayContact || 'N/A'}\n` +
+          `*Items:*\n` + items.map(i => `- ${i.qty}x ${i.name} (Size: ${i.size || 'N/A'})`).join('\n')
+
+        try {
+          await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: telegramChatId,
+              text: message,
+              parse_mode: 'Markdown',
+            }),
+          })
+        } catch (err) {
+          console.error('Failed to send Telegram notification:', err)
+        }
+      }
     }
 
     return new Response(JSON.stringify({ status: 'ok' }), {

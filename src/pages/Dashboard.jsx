@@ -418,41 +418,65 @@ const PERSONAS = {
 
 
 
-const VerificationLock = ({ profile, user }) => (
-  <div className="min-h-[80vh] flex flex-col items-center justify-center p-6 text-center">
-    <div className="card p-10 max-w-md w-full glass shadow-2xl relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1" style={{ background: 'linear-gradient(90deg, var(--sf), var(--gold))' }} />
-      <div className="w-20 h-20 bg-orange-50 text-orange-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-inner">
-        <Lock size={40} strokeWidth={1.5} />
-      </div>
-      <h2 className="text-3xl font-display font-black text-neutral-900 mb-4 leading-tight">Identity <span className="text-orange-500 italic">Pending</span></h2>
-      <p className="text-sm text-neutral-500 mb-10 leading-relaxed font-medium">
-        Welcome to KnoWMi, <span className="font-bold text-neutral-800">{profile?.first_name}</span>! Your Analytics Pulse and Phygital Profile are currently locked while we verify your account.
-      </p>
-      <div className="space-y-4">
-        <a
-          href={`https://wa.me/917981325397?text=${encodeURIComponent(`Hi KnoWMi! I'm ${profile?.first_name}. I've signed up and would like to verify my account.\nEmail: ${user?.email}`)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          title="Opens in a new tab"
-          className="w-full btn-primary py-4 flex items-center justify-center gap-3 shadow-xl"
-        >
-          <MessageCircle size={20} className="fill-white/20" />
-          Verify via WhatsApp
-        </a>
-        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
-          Verification typically takes 5-10 minutes.
+const VerificationLock = ({ profile, user }) => {
+  const [resending, setResending] = useState(false)
+  const [msg, setMsg] = useState('')
+
+  const handleResend = async () => {
+    setResending(true)
+    setMsg('')
+    // Ensure supabase is available, it is imported at the top of Dashboard.jsx
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email: user?.email,
+    })
+    if (error) {
+      setMsg(error.message)
+    } else {
+      setMsg('✅ Verification email sent! Please check your inbox.')
+    }
+    setResending(false)
+  }
+
+  return (
+    <div className="min-h-[80vh] flex flex-col items-center justify-center p-6 text-center">
+      <div className="card p-10 max-w-md w-full glass shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1" style={{ background: 'linear-gradient(90deg, var(--sf), var(--gold))' }} />
+        <div className="w-20 h-20 bg-orange-50 text-orange-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-inner">
+          <Lock size={40} strokeWidth={1.5} />
+        </div>
+        <h2 className="text-3xl font-display font-black text-neutral-900 mb-4 leading-tight">Identity <span className="text-orange-500 italic">Pending</span></h2>
+        <p className="text-sm text-neutral-500 mb-10 leading-relaxed font-medium">
+          Welcome to KnoWMi, <span className="font-bold text-neutral-800">{profile?.first_name}</span>! Your Analytics Pulse and Phygital Profile are currently locked while we verify your email address.
         </p>
+        <div className="space-y-4">
+          <button
+            onClick={handleResend}
+            disabled={resending}
+            className="w-full btn-primary py-4 flex items-center justify-center gap-3 shadow-xl disabled:opacity-50"
+          >
+            <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            {resending ? 'Sending...' : 'Resend Verification Email'}
+          </button>
+          {msg && (
+            <p className={`text-sm font-bold ${msg.includes('✅') ? 'text-green-600' : 'text-red-500'} mt-2`}>
+              {msg}
+            </p>
+          )}
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
+            Check your spam folder if you don't see it.
+          </p>
+        </div>
+      </div>
+      <div className="mt-12 flex items-center gap-6 opacity-30 grayscale pointer-events-none">
+         <BarChart3 size={32} />
+         <Users size={32} />
+         <Trophy size={32} />
+         <MapPin size={32} />
       </div>
     </div>
-    <div className="mt-12 flex items-center gap-6 opacity-30 grayscale pointer-events-none">
-       <BarChart3 size={32} />
-       <Users size={32} />
-       <Trophy size={32} />
-       <MapPin size={32} />
-    </div>
-  </div>
-)
+  )
+}
 
 const FIELD_META = {
   github:    { emoji: '🐙', label: 'GitHub', prefix: 'github.com/' },
