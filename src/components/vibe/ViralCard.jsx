@@ -142,7 +142,7 @@ export default function ViralCard({ bestMoment }) {
                           fontSize: 12,
                           color: 'var(--muted)',
                         }}>
-                          Scanned on {new Date(viewer.viewedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} at {new Date(viewer.viewedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                          Scanned on {new Date(typeof viewer.viewedAt === 'string' ? viewer.viewedAt.replace(' ', 'T') : viewer.viewedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} at {new Date(typeof viewer.viewedAt === 'string' ? viewer.viewedAt.replace(' ', 'T') : viewer.viewedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
                         </span>
                       </div>
                     </div>
@@ -176,3 +176,4 @@ export default function ViralCard({ bestMoment }) {
     </div>
   );
 }
+

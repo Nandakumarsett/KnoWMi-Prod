@@ -47,7 +47,7 @@ export function DynamicPersonaProfile({ profile }: DynamicPersonaProfileProps) {
 
           <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest opacity-60">
             <Calendar size={14} />
-            <span>Joined {new Date(profile.joined_at || Date.now()).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</span>
+            <span>Joined {new Date(typeof profile.joined_at === 'string' ? profile.joined_at.replace(' ', 'T') : (profile.joined_at || Date.now())).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</span>
           </div>
         </div>
 
@@ -195,3 +195,4 @@ export function DynamicPersonaProfile({ profile }: DynamicPersonaProfileProps) {
     </div>
   )
 }
+

@@ -292,8 +292,8 @@ export async function fetchVibeStats(profileId) {
     if (sortedDaily.length > 0 && (sortedDaily[0].day === todayStr || sortedDaily[0].day === yesterdayStr)) {
       currentStreak = 1;
       for (let i = 1; i < sortedDaily.length; i++) {
-        const d1 = new Date(sortedDaily[i - 1].day);
-        const d2 = new Date(sortedDaily[i].day);
+        const d1 = new Date(typeof sortedDaily[i - 1].day === 'string' ? sortedDaily[i - 1].day.replace(' ', 'T') : sortedDaily[i - 1].day);
+        const d2 = new Date(typeof sortedDaily[i].day === 'string' ? sortedDaily[i].day.replace(' ', 'T') : sortedDaily[i].day);
         if (Math.round((d1 - d2) / (1000 * 3600 * 24)) === 1) currentStreak++;
         else break;
       }
@@ -319,7 +319,7 @@ export async function fetchVibeStats(profileId) {
       const sortedByViews = [...sortedDaily].sort((a, b) => b.total_views - a.total_views);
       bestMoment = {
         maxScansInDay: sortedByViews[0].total_views,
-        bestDate: new Date(sortedByViews[0].day).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })
+        bestDate: new Date(typeof sortedByViews[0].day === 'string' ? sortedByViews[0].day.replace(' ', 'T') : sortedByViews[0].day).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })
       };
     }
 
@@ -379,3 +379,4 @@ export async function fetchVibeStats(profileId) {
     return fallback;
   }
 }
+

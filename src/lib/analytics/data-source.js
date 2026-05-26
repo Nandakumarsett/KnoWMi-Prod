@@ -417,8 +417,8 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
     if (sortedDaily.length > 0 && (sortedDaily[0].day === todayStr || sortedDaily[0].day === yesterdayStr)) {
       currentStreak = 1;
       for (let i = 1; i < sortedDaily.length; i++) {
-        const d1 = new Date(sortedDaily[i - 1].day);
-        const d2 = new Date(sortedDaily[i].day);
+        const d1 = new Date(typeof sortedDaily[i - 1].day === 'string' ? sortedDaily[i - 1].day.replace(' ', 'T') : sortedDaily[i - 1].day);
+        const d2 = new Date(typeof sortedDaily[i].day === 'string' ? sortedDaily[i].day.replace(' ', 'T') : sortedDaily[i].day);
         if (Math.round((d1 - d2) / (1000 * 3600 * 24)) === 1) currentStreak++;
         else break;
       }
@@ -551,7 +551,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
 
       bestMoment = {
         maxScansInDay: bestDay.total_views,
-        bestDate: new Date(bestDay.day).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }),
+        bestDate: new Date(typeof bestDay.day === 'string' ? bestDay.day.replace(' ', 'T') : bestDay.day).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }),
         viewers
       };
     }
@@ -735,3 +735,4 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
     };
   }
 }
+

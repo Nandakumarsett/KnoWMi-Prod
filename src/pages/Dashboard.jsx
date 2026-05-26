@@ -2516,7 +2516,7 @@ export default function Dashboard() {
                         <div className="flex justify-between items-start mb-10">
                           <div>
                             <p className="text-[10px] font-black uppercase text-neutral-400 mb-1">Order Placed</p>
-                            <p className="text-lg font-bold">{new Date(typeof latestOrder.order_date || latestOrder.created_at === 'string' ? latestOrder.order_date || latestOrder.created_at.replace(' ', 'T') : latestOrder.order_date || latestOrder.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                            <p className="text-lg font-bold">{new Date((typeof (latestOrder.order_date || latestOrder.created_at) === 'string' ? (latestOrder.order_date || latestOrder.created_at).replace(' ', 'T') : (latestOrder.order_date || latestOrder.created_at))).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                           </div>
                           <div className="text-right">
                             <p className="text-[10px] font-black uppercase text-neutral-400 mb-1">Order ID</p>
@@ -2675,4 +2675,5 @@ export default function Dashboard() {
       </div>
     )
   }
+
 
