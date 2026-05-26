@@ -86,7 +86,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
     }
     
     // 3. Create user in Supabase Auth (Trigger handles profile creation)
-    const { error: signUpError } = await supabase.auth.signUp({
+    const response = await supabase.auth.signUp({
       email: email.trim(),
       password,
       options: { 
@@ -96,8 +96,12 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
         } 
       }
     })
+    
+    console.log("Supabase Auth SignUp Response:", response)
+    const { data: authData, error: signUpError } = response
 
     if (signUpError) {
+      console.error("SignUp Error:", signUpError)
       setError(signUpError.message)
       setLoading(false)
       return

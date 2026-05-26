@@ -426,10 +426,13 @@ const VerificationLock = ({ profile, user }) => {
     setResending(true)
     setMsg('')
     // Ensure supabase is available, it is imported at the top of Dashboard.jsx
-    const { error } = await supabase.auth.resend({
+    const response = await supabase.auth.resend({
       type: 'signup',
       email: user?.email,
     })
+    console.log("Supabase Auth Resend Response:", response)
+    const { error } = response
+    
     if (error) {
       setMsg(error.message)
     } else {
