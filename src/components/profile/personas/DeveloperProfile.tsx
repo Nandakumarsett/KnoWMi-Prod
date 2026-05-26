@@ -180,7 +180,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                 >
                   {icon}
                   {isGated && (
-                    <div className="absolute inset-0 rounded-full bg-black/30 backdrop-blur-[2px] flex items-center justify-center">
+                    <div className="absolute inset-0 rounded-full bg-black/20 flex items-center justify-center">
                       <Lock size={16} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
                     </div>
                   )}
