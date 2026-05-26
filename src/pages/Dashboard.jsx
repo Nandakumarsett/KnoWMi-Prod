@@ -877,11 +877,11 @@ const PersonaEditor = ({ profile, onUpdate }) => {
         <div className="card p-6 bg-neutral-900 text-white rounded-3xl flex items-center justify-between shadow-xl">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <h3 className="font-display font-black text-lg text-white">Ghost Mode</h3>
+              <h3 className="font-display font-black text-lg text-white">Privacy Mode</h3>
               {profile?.ghost_mode && <div className="px-2 py-0.5 bg-red-500/20 text-red-400 text-[9px] font-black uppercase rounded border border-red-500/30 animate-pulse">Offline</div>}
             </div>
             <p className="text-xs text-neutral-400 max-w-[250px]">
-              Instantly hide your public profile and disable analytics tracking.
+              Instantly hide your social links and profile picture for privacy.
             </p>
           </div>
           <button 
