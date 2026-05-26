@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
+import Avatar from './Avatar'
 
 const navLinks = [
   { label: 'How It Works', href: '/#how-it-works' },
@@ -139,11 +140,6 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
                 className="flex items-center gap-2.5 px-4 py-2 rounded-xl transition-all duration-200 hover:bg-[var(--off)]"
                 style={{ border: '1.5px solid var(--border)' }}
               >
-                {/* Avatar circle */}
-                <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold"
-                  style={{ background: 'linear-gradient(135deg, var(--sf), var(--gold))' }}>
-                  {firstName.charAt(0).toUpperCase()}
-                </div>
                 <span className="text-sm font-semibold" style={{ color: 'var(--ink)' }}>{firstName}</span>
                 {profile ? (
                   role === 'owner' ? (
@@ -168,6 +164,8 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
                 ) : (
                   <div className="w-[52px] h-[18px] rounded-full bg-neutral-200 animate-pulse opacity-40" />
                 )}
+                {/* Avatar circle */}
+                <Avatar src={profile?.avatar_url} name={firstName} size="w-8 h-8" />
                 {/* Caret */}
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ color: 'var(--muted)' }}>
                   <path d="M3 5L6 8L9 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -272,10 +270,7 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
               <>
                 {/* User info */}
                 <div className="flex items-center gap-3 px-3 py-2">
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold"
-                    style={{ background: 'linear-gradient(135deg, var(--sf), var(--gold))' }}>
-                    {firstName.charAt(0).toUpperCase()}
-                  </div>
+                  <Avatar src={profile?.avatar_url} name={firstName} size="w-9 h-9" />
                   <div>
                     <div className="text-sm font-semibold" style={{ color: 'var(--ink)' }}>{firstName}</div>
                     <span
