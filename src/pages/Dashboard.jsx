@@ -1535,7 +1535,7 @@ const GamificationTab = ({ profile, completion, stats }) => {
   );
 };
 
-export default function Dashboard() {
+function Dashboard() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const { profile, user, loading: authLoading, refreshProfile, isVerified, role } = useAuth()
@@ -2678,4 +2678,7 @@ export default function Dashboard() {
   }
 
 
+
+
+export default function DashboardWrapper(props) { return <DashboardErrorBoundary><Dashboard {...props} /></DashboardErrorBoundary>; }
 
