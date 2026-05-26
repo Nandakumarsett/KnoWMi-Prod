@@ -1,5 +1,8 @@
-import { Instagram, Github, Linkedin, Twitter, Youtube, Music, Globe, MessageCircle, Twitch, Briefcase, Dribbble, PenTool } from 'lucide-react'
+import { useState } from 'react'
+import { Instagram, Github, Linkedin, Twitter, Youtube, Music, Globe, MessageCircle, Twitch, Briefcase, Dribbble, PenTool, Lock, X } from 'lucide-react'
 import { SocialLink } from '../../../types/profile'
+import { useAuth } from '../../../context/AuthContext'
+import { supabase } from '../../../lib/supabase'
 
 interface SocialGridProps {
   links: SocialLink[]
@@ -22,9 +25,11 @@ const PLATFORM_META: Record<string, any> = {
   website: { icon: Globe, color: '#444444' }
 }
 
-import { supabase } from '../../../lib/supabase'
-
 export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps) {
+  const { user } = useAuth()
+  const [showGate, setShowGate] = useState(false)
+  const isGated = !user; // If no user is logged in, the links are gated.
+
   if (!links || links.length === 0) return null
   
   // Custom sorting: move youtube immediately after instagram if both exist
@@ -39,6 +44,10 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
 
   const handleLinkClick = async (e: React.MouseEvent<HTMLAnchorElement>, platform: string, url: string) => {
     e.preventDefault();
+    if (isGated) {
+      setShowGate(true);
+      return;
+    }
     if (profileId) {
       try {
         const fp = localStorage.getItem('knowmi_fp') || 'unknown';
@@ -55,10 +64,87 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
     window.open(url, '_blank');
   };
 
+  const renderGateModal = () => {
+    if (!showGate) return null;
+    return (
+      <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="bg-neutral-900 border border-neutral-800 rounded-[32px] p-8 max-w-sm w-full text-center relative shadow-2xl">
+          <button 
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowGate(false) }}
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white/5 rounded-full hover:bg-white/10 text-white transition-colors cursor-pointer"
+          >
+            <X size={16} />
+          </button>
+          <div className="w-16 h-16 bg-orange-500/10 text-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Lock size={32} />
+          </div>
+          <h3 className="text-2xl font-display font-black text-white mb-2 tracking-tight">Locked Network</h3>
+          <p className="text-sm text-neutral-400 mb-8 leading-relaxed">
+            Create a free KnoWMi account to unlock these links and securely save this connection.
+          </p>
+          <button 
+            onClick={() => {
+              localStorage.setItem('return_to', window.location.pathname + window.location.search);
+              window.location.href = '/?auth=signup';
+            }}
+            className="w-full py-4 bg-orange-500 text-white font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20 active:scale-95 cursor-pointer"
+          >
+            Create Free Account
+          </button>
+          <button 
+            onClick={() => {
+              localStorage.setItem('return_to', window.location.pathname + window.location.search);
+              window.location.href = '/?auth=login';
+            }}
+            className="w-full mt-3 py-3 bg-transparent text-neutral-300 font-bold text-xs hover:text-white transition-colors cursor-pointer"
+          >
+            Already have an account? Login
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   if (style === 'grid') {
     return (
-      <div className="grid grid-cols-2 gap-3 w-full">
-        {sortedLinks.map((link, idx) => {
+      <>
+        <div className="grid grid-cols-2 gap-3 w-full">
+          {sortedLinks.map((link, idx) => {
+            const meta = PLATFORM_META[link.platform] || { icon: Globe, color: '#444444' }
+            const Icon = meta.icon
+            return (
+              <a 
+                key={link.platform}
+                href={link.url}
+                onClick={(e) => handleLinkClick(e, link.platform, link.url)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center gap-3 p-4 rounded-2xl bg-white/5 border transition-all hover:bg-white/10 active:scale-[0.98] social-link-item cursor-pointer ${isGated ? 'border-orange-500/30' : 'border-white/10'}`}
+              >
+                <div 
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg relative"
+                  style={{ background: meta.color }}
+                >
+                  <Icon size={20} />
+                  {isGated && <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-neutral-900 rounded-full flex items-center justify-center border border-neutral-700 shadow-sm"><Lock size={10} className="text-orange-500" /></div>}
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[10px] font-black uppercase opacity-40 truncate">{link.platform}</span>
+                  <span className="text-xs font-bold truncate">{link.url}</span>
+                </div>
+              </a>
+            )
+          })}
+        </div>
+        {renderGateModal()}
+      </>
+    )
+  }
+
+  return (
+    <>
+      <div className="flex flex-wrap gap-4 justify-center py-4">
+        {sortedLinks.map((link) => {
           const meta = PLATFORM_META[link.platform] || { icon: Globe, color: '#444444' }
           const Icon = meta.icon
           return (
@@ -68,45 +154,17 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
               onClick={(e) => handleLinkClick(e, link.platform, link.url)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10 transition-all hover:bg-white/10 active:scale-[0.98] social-link-item"
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 shadow-xl social-link-item relative cursor-pointer ${isGated ? 'ring-2 ring-orange-500/30 ring-offset-2 ring-offset-transparent' : ''}`}
+              style={{ background: meta.color }}
+              title={link.platform}
             >
-              <div 
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg"
-                style={{ background: meta.color }}
-              >
-                <Icon size={20} />
-              </div>
-              <div className="flex flex-col min-w-0">
-                <span className="text-[10px] font-black uppercase opacity-40 truncate">{link.platform}</span>
-                <span className="text-xs font-bold truncate">{link.url}</span>
-              </div>
+              <Icon size={24} />
+              {isGated && <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-neutral-900 rounded-full flex items-center justify-center border border-neutral-700 shadow-sm"><Lock size={12} className="text-orange-500" /></div>}
             </a>
           )
         })}
       </div>
-    )
-  }
-
-  return (
-    <div className="flex flex-wrap gap-4 justify-center py-4">
-      {sortedLinks.map((link) => {
-        const meta = PLATFORM_META[link.platform] || { icon: Globe, color: '#444444' }
-        const Icon = meta.icon
-        return (
-          <a 
-            key={link.platform}
-            href={link.url}
-            onClick={(e) => handleLinkClick(e, link.platform, link.url)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 shadow-xl social-link-item"
-            style={{ background: meta.color }}
-            title={link.platform}
-          >
-            <Icon size={24} />
-          </a>
-        )
-      })}
-    </div>
+      {renderGateModal()}
+    </>
   )
 }
