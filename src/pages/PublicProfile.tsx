@@ -79,10 +79,11 @@ export default function PublicProfile() {
   const activeConfig = personaConfigs[pAlias] || personaConfigs.developer
   const fromSrc = searchParams.get('src')
   const isClaimFlow = searchParams.get('claim') === 'true' || !profile.user_id;
-  const isGhostMode = searchParams.get('ghost') === 'true' || profile?.ghost_mode === true
+  const isOwnerOfProfile = user && user.id === profile.user_id
+  const isScanner = !isOwnerOfProfile
+  const isGhostMode = isScanner && (searchParams.get('ghost') === 'true' || profile?.ghost_mode === true)
   const fromTab = searchParams.get('from') || 'analytics'
   const accentColor = activeConfig?.theme?.accent || '#C1440E'
-  const isOwnerOfProfile = user && user.id === profile.user_id
   const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
 
   // Sort platforms in persona_data so youtube is next to instagram
@@ -163,7 +164,11 @@ export default function PublicProfile() {
   // Mobile View
   if (!isDesktop) {
     return (
-      <div className="min-h-screen text-[#1A1A1A] font-sans selection:bg-orange-500/30 pb-12" style={{ background: pageBg, color: textPrimary }}>
+      <div 
+        className={`min-h-screen text-[#1A1A1A] font-sans selection:bg-orange-500/30 pb-12 ${isScanner ? 'ghost-protection' : ''}`} 
+        style={{ background: pageBg, color: textPrimary }}
+        onContextMenu={(e) => isScanner && e.preventDefault()}
+      >
         <ProfileViewTracker profileId={profile.id} />
         
         {/* Top Header */}
@@ -363,7 +368,11 @@ export default function PublicProfile() {
   }
 
   return (
-    <div className={`min-h-screen font-sans selection:bg-orange-500/30 ${isGhostMode ? 'ghost-protection' : ''}`} style={{ background: pageBg, color: textPrimary }}>
+    <div 
+      className={`min-h-screen font-sans selection:bg-orange-500/30 ${isScanner ? 'ghost-protection' : ''}`} 
+      style={{ background: pageBg, color: textPrimary }}
+      onContextMenu={(e) => isScanner && e.preventDefault()}
+    >
       <ProfileViewTracker profileId={profile.id} />
       
       <header className="fixed top-0 w-full z-[120] border-b px-8 py-4 backdrop-blur-md" style={{ background: headerBg, borderColor: borderColor }}>
