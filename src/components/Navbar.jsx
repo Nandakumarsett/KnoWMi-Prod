@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Avatar from './Avatar'
 
@@ -212,13 +213,13 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
               </div>
 
               {/* Standalone Avatar circle */}
-              <a 
-                href={profile ? `/p/${profile.secure_slug || profile.username || profile.id}` : '#'}
-                className="hover:scale-105 transition-transform shrink-0"
+              <Link 
+                to={profile ? `/p/${profile.secure_slug || profile.username || profile.id}` : '/dashboard'}
+                className="hover:scale-105 transition-transform shrink-0 block relative z-10 cursor-pointer"
                 title="View Profile"
               >
                 <Avatar src={profile?.avatar_url} name={firstName} size="w-10 h-10 border border-neutral-200 shadow-sm" />
-              </a>
+              </Link>
             </div>
           ) : (
             /* Not logged in: show Sign Up / Sign In */
@@ -279,7 +280,9 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
               <>
                 {/* User info */}
                 <div className="flex items-center gap-3 px-3 py-2">
-                  <Avatar src={profile?.avatar_url} name={firstName} size="w-9 h-9" />
+                  <Link to={profile ? `/p/${profile.secure_slug || profile.username || profile.id}` : '/dashboard'} onClick={() => setMobileOpen(false)} className="block shrink-0">
+                    <Avatar src={profile?.avatar_url} name={firstName} size="w-9 h-9" />
+                  </Link>
                   <div>
                     <div className="text-sm font-semibold" style={{ color: 'var(--ink)' }}>{firstName}</div>
                     <span
