@@ -314,10 +314,10 @@ export default function PublicProfile() {
               <p className="text-xs text-neutral-500 mb-6 font-medium">Connect with {safeDisplayName}. They will see your details in their dashboard.</p>
               
               <div className="space-y-4">
-                <input type="text" placeholder="Your Name" value={connectForm.name} onChange={e => setConnectForm({...connectForm, name: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E]" />
-                <input type="email" placeholder="Your Email" value={connectForm.email} onChange={e => setConnectForm({...connectForm, email: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E]" />
-                <input type="text" placeholder="Instagram/LinkedIn Handle" value={connectForm.social} onChange={e => setConnectForm({...connectForm, social: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E]" />
-                <textarea placeholder="Message (optional)" value={connectForm.message} onChange={e => setConnectForm({...connectForm, message: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E] resize-none h-20" />
+                <input type="text" placeholder="Your Name" value={connectForm.name} onChange={e => setConnectForm({...connectForm, name: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 outline-none focus:border-[#C1440E]" />
+                <input type="email" placeholder="Your Email" value={connectForm.email} onChange={e => setConnectForm({...connectForm, email: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 outline-none focus:border-[#C1440E]" />
+                <input type="text" placeholder="Instagram/LinkedIn Handle" value={connectForm.social} onChange={e => setConnectForm({...connectForm, social: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 outline-none focus:border-[#C1440E]" />
+                <textarea placeholder="Message (optional)" value={connectForm.message} onChange={e => setConnectForm({...connectForm, message: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 outline-none focus:border-[#C1440E] resize-none h-20" />
                 
                 {connectStatus === 'success' && <p className="text-emerald-500 text-xs font-bold text-center">Connection sent!</p>}
                 {connectStatus === 'error' && <p className="text-red-500 text-xs font-bold text-center">Failed to send.</p>}
@@ -561,10 +561,10 @@ export default function PublicProfile() {
             <p className="text-xs text-neutral-500 mb-6 font-medium">Connect with {safeDisplayName}. They will see your details in their dashboard.</p>
             
             <div className="space-y-4">
-              <input type="text" placeholder="Your Name" value={connectForm.name} onChange={e => setConnectForm({...connectForm, name: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E]" />
-              <input type="email" placeholder="Your Email" value={connectForm.email} onChange={e => setConnectForm({...connectForm, email: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E]" />
-              <input type="text" placeholder="Instagram/LinkedIn Handle" value={connectForm.social} onChange={e => setConnectForm({...connectForm, social: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E]" />
-              <textarea placeholder="Message (optional)" value={connectForm.message} onChange={e => setConnectForm({...connectForm, message: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:border-[#C1440E] resize-none h-20" />
+              <input type="text" placeholder="Your Name" value={connectForm.name} onChange={e => setConnectForm({...connectForm, name: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 outline-none focus:border-[#C1440E]" />
+              <input type="email" placeholder="Your Email" value={connectForm.email} onChange={e => setConnectForm({...connectForm, email: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 outline-none focus:border-[#C1440E]" />
+              <input type="text" placeholder="Instagram/LinkedIn Handle" value={connectForm.social} onChange={e => setConnectForm({...connectForm, social: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 outline-none focus:border-[#C1440E]" />
+              <textarea placeholder="Message (optional)" value={connectForm.message} onChange={e => setConnectForm({...connectForm, message: e.target.value})} className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-sm text-neutral-900 outline-none focus:border-[#C1440E] resize-none h-20" />
               
               {connectStatus === 'success' && <p className="text-emerald-500 text-xs font-bold text-center">Connection sent!</p>}
               {connectStatus === 'error' && <p className="text-red-500 text-xs font-bold text-center">Failed to send.</p>}
