@@ -528,8 +528,9 @@ const PersonaEditor = ({ profile, onUpdate }) => {
 
   const [isEditing, setIsEditing] = useState(() => searchParams.get('mode') === 'edit')
   const [showDetailedPersona, setShowDetailedPersona] = useState(false)
-  const [saving, setSaving] = useState(false)
+  const [activeTab, setActiveTab] = useState(initialTab)
   const [showToast, setShowToast] = useState(false)
+  const [showComingSoon, setShowComingSoon] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [extractedColor, setExtractedColor] = useState(null)
   const colorCache = useRef({})
@@ -1308,6 +1309,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
         </div>
       </div>
       {showToast && <div className="toast"><CheckCircle2 size={16} /> Identity Updated!</div>}
+      {showComingSoon && <div className="toast" style={{ background: '#ea580c', color: 'white' }}><Lock size={16} /> Print Studio Coming Soon!</div>}
     </div>
 
   )
@@ -2640,13 +2642,18 @@ export default function Dashboard() {
             { id: 'analytics', icon: Signal, label: 'Pulse' },
             { id: 'profile', icon: User, label: 'Identity' },
             { id: 'network', icon: Users, label: 'Network' },
-            { id: 'business', icon: Printer, label: 'Business' },
+            { id: 'business', icon: Lock, label: 'Business' },
             { id: 'pass', icon: ShieldCheck, label: 'Pass' },
             { id: 'order-status', icon: Clock, label: 'Status' }
           ].map(tab => (
             <button 
               key={tab.id} 
               onClick={() => {
+                if (tab.id === 'business') {
+                  setShowComingSoon(true);
+                  setTimeout(() => setShowComingSoon(false), 3000);
+                  return;
+                }
                 setActiveTab(tab.id);
                 const newParams = new URLSearchParams(window.location.search);
                 newParams.set('tab', tab.id);
