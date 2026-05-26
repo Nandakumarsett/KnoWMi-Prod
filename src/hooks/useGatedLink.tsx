@@ -63,7 +63,7 @@ export function useGatedLink() {
           <button
             onClick={() => {
               localStorage.setItem('return_to', window.location.pathname + window.location.search)
-              window.location.href = '/?auth=login'
+              window.location.href = '/?auth=signin'
             }}
             className="w-full mt-3 py-3 bg-white/5 text-neutral-300 font-bold text-xs rounded-2xl hover:bg-white/10 transition-all active:scale-95"
           >
