@@ -309,6 +309,14 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           </div>
         )}
 
+        {profile.ghost_mode && (
+          <div className="w-full text-center mt-2 mb-8 animate-fadeIn">
+            <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[9px] font-black uppercase tracking-widest shadow-sm">
+              <Lock size={12} /> Private Mode activated by Owner
+            </p>
+          </div>
+        )}
+
         {/* INNOVATION LAB */}
         {data?.projects && data?.projects?.length > 0 && (
           <div className="w-full mb-10">

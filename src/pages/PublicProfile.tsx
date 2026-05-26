@@ -256,14 +256,6 @@ export default function PublicProfile() {
           <PersonaRouter profile={displayProfile} recentVisitors={recentVisitors} stats={stats} />
         </div>
 
-        {profile.ghost_mode && (
-          <div className="w-full text-center mt-8 mb-4 px-6 animate-fadeIn">
-            <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[9px] font-black uppercase tracking-widest shadow-sm">
-              <Lock size={12} /> Private Mode activated by Owner
-            </p>
-          </div>
-        )}
-
         {/* QR Overlay Modal */}
         {showQR && (
           <div className="fixed inset-0 z-[100] bg-[#1A1A1A]/60 backdrop-blur-md flex flex-col items-center justify-center p-6 select-none animate-fadeIn">
@@ -506,6 +498,14 @@ export default function PublicProfile() {
                 <SocialGrid links={displayProfile.social_links} style="row" profileId={profile.id} />
               </div>
 
+              {profile.ghost_mode && (
+                <div className="w-full text-center mt-4 mb-2 animate-fadeIn">
+                  <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[9px] font-black uppercase tracking-widest shadow-sm">
+                    <Lock size={12} /> Private Mode activated by Owner
+                  </p>
+                </div>
+              )}
+
               <div className="w-full mt-10">
                  <PulseBar pulse={profile.pulse} tier={profile.tier} accentColor={accentColor} />
               </div>
@@ -541,14 +541,6 @@ export default function PublicProfile() {
           </div>
 
         </div>
-
-        {profile.ghost_mode && (
-          <div className="w-full text-center mt-12 mb-4 animate-fadeIn">
-            <p className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
-              <Lock size={14} /> Private Mode activated by Owner
-            </p>
-          </div>
-        )}
       </main>
 
       <footer className="max-w-7xl mx-auto px-8 py-12 border-t flex justify-between items-center opacity-40" style={{ borderColor: borderColor }}>

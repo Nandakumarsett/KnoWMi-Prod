@@ -190,6 +190,14 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           </div>
         )}
 
+        {profile.ghost_mode && (
+          <div className="w-full text-center mt-2 mb-4 animate-fadeIn">
+            <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[9px] font-black uppercase tracking-widest shadow-sm">
+              <Lock size={12} /> Private Mode activated by Owner
+            </p>
+          </div>
+        )}
+
         {/* Status Badge - TIGHT SPACING */}
         {data.about?.status && (
           <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-xl bg-green-100 border-2 border-green-300 text-green-950 font-mono text-[13px] sm:text-[14px] font-black uppercase tracking-widest mt-2 shadow-sm">
