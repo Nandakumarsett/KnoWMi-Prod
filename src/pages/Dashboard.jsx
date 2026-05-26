@@ -2355,7 +2355,7 @@ export default function Dashboard() {
 
               {analyticsView === 'links' && vibeStats && (
                 <div className={`space-y-8 animate-slideUp ${isVibeDark ? 'dark' : ''}`}>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                     <div className="vibe-card p-8 flex flex-col items-center justify-center text-center">
                       <div className="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-500 flex items-center justify-center mb-6 shadow-inner">
                         <Target size={24} strokeWidth={2.5} />
@@ -2364,16 +2364,45 @@ export default function Dashboard() {
                       <h3 className="text-5xl font-black font-display text-neutral-900 tracking-tight">{vibeStats.linkStats?.engagementIntentRate || 0}%</h3>
                       <p className="text-xs text-neutral-500 font-medium mt-4">of profile viewers tapped a link.</p>
                     </div>
-                    <div className="vibe-card p-8 md:col-span-2">
+
+                    <div className="vibe-card p-8 flex flex-col items-center justify-center text-center">
+                      <div className="w-12 h-12 rounded-2xl bg-red-500/10 text-red-500 flex items-center justify-center mb-6 shadow-inner">
+                        <TrendingDown size={24} strokeWidth={2.5} />
+                      </div>
+                      <p className="text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-2">Bounce Rate</p>
+                      <h3 className="text-5xl font-black font-display text-neutral-900 tracking-tight">{vibeStats.linkStats?.bounceRate || 0}%</h3>
+                      <p className="text-xs text-neutral-500 font-medium mt-4">viewed but left without clicking.</p>
+                    </div>
+
+                    <div className="vibe-card p-8 flex flex-col items-center justify-center text-center">
+                      <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center mb-6 shadow-inner">
+                        <Crown size={24} strokeWidth={2.5} />
+                      </div>
+                      <p className="text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-2">Top Link</p>
+                      <h3 className="text-4xl font-black font-display text-neutral-900 tracking-tight capitalize truncate w-full px-4">{vibeStats.linkStats?.topLink || 'None'}</h3>
+                      <p className="text-xs text-neutral-500 font-medium mt-4">most popular destination.</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="vibe-card p-8">
                       <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900 mb-6">Clicks by Platform</h3>
                       <div className="space-y-4">
                         {vibeStats.linkStats?.clicksByPlatform && Object.keys(vibeStats.linkStats.clicksByPlatform).length > 0 ? (
-                          Object.entries(vibeStats.linkStats.clicksByPlatform).map(([platform, count], i) => (
-                            <div key={i} className="flex items-center justify-between border-b border-neutral-100 pb-3 last:border-0 last:pb-0">
-                              <span className="text-[13px] font-black text-neutral-800 capitalize">{platform}</span>
-                              <span className="text-[13px] font-black text-neutral-900 bg-neutral-100 px-3 py-1 rounded-full">{count}</span>
+                          Object.entries(vibeStats.linkStats.clicksByPlatform).map(([platform, count], i) => {
+                            const ctr = vibeStats.uniqueViews > 0 ? Math.round((count / vibeStats.uniqueViews) * 100) : 0;
+                            return (
+                            <div key={i} className="flex flex-col border-b border-neutral-100 pb-4 last:border-0 last:pb-0 pt-2">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-[13px] font-black text-neutral-800 capitalize">{platform}</span>
+                                <span className="text-[13px] font-black text-neutral-900 bg-neutral-100 px-3 py-1 rounded-full">{count} clicks</span>
+                              </div>
+                              <div className="w-full bg-neutral-100 rounded-full h-1.5 overflow-hidden">
+                                <div className="bg-neutral-900 h-full rounded-full transition-all duration-1000 ease-out" style={{ width: `${Math.min(ctr, 100)}%` }} />
+                              </div>
+                              <div className="text-[10px] font-bold text-neutral-400 mt-2 tracking-wider uppercase">{ctr}% Click-Through Rate</div>
                             </div>
-                          ))
+                          )})
                         ) : (
                           <div className="text-center opacity-30 pt-4">
                             <p className="text-[10px] font-black uppercase tracking-widest">No clicks yet</p>

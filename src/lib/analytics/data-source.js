@@ -668,6 +668,16 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
 
       const uniqueClickers = new Set(links.map(l => l.visitor_fp || l.id)).size;
       const engagementIntentRate = uniqueViews > 0 ? Math.round((uniqueClickers / uniqueViews) * 100) : 0;
+      const bounceRate = uniqueViews > 0 ? 100 - engagementIntentRate : 0;
+
+      let topLink = null;
+      let topLinkCount = 0;
+      Object.entries(clicksByPlatform).forEach(([platform, count]) => {
+        if (count > topLinkCount) {
+          topLinkCount = count;
+          topLink = platform;
+        }
+      });
 
       return {
         totalViews,
@@ -696,6 +706,8 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
           clicksByPlatform,
           recentClicks: recentLinks,
           engagementIntentRate,
+          bounceRate,
+          topLink,
           error: linksError ? linksError.message : null
         }
       };
