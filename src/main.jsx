@@ -2,34 +2,37 @@
 const NativeDate = globalThis.Date;
 
 function PatchedDate(...args) {
-  // If called without 'new', return the string representation (standard JS behavior)
   if (!new.target) {
     return NativeDate();
   }
   
-  // If called with a SQL string, fix it
   if (args.length === 1 && typeof args[0] === 'string') {
-    if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(args[0])) {
-      return new NativeDate(args[0].replace(' ', 'T'));
+    if (/^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}/.test(args[0])) {
+      let s = args[0].replace(' ', 'T');
+      s = s.replace(/(\.\d{3})\d+/, '$1');
+      if (s.endsWith('+00')) s += ':00';
+      
+      const d = new NativeDate(s);
+      if (!isNaN(d.getTime())) return d;
     }
   }
   
-  // Construct normally
   return new NativeDate(...args);
 }
 
-// Copy static methods
 PatchedDate.now = NativeDate.now;
 PatchedDate.UTC = NativeDate.UTC;
 
 PatchedDate.parse = function(s) {
-  if (typeof s === 'string' && /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(s)) {
-    return NativeDate.parse(s.replace(' ', 'T'));
+  if (typeof s === 'string' && /^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}/.test(s)) {
+    let str = s.replace(' ', 'T');
+    str = str.replace(/(\.\d{3})\d+/, '$1');
+    if (str.endsWith('+00')) str += ':00';
+    return NativeDate.parse(str);
   }
   return NativeDate.parse(s);
 };
 
-// Prototype chain maintenance
 PatchedDate.prototype = NativeDate.prototype;
 PatchedDate.prototype.constructor = PatchedDate;
 
@@ -58,4 +61,5 @@ if ('serviceWorker' in navigator) {
     })
   })
 }
+
 
