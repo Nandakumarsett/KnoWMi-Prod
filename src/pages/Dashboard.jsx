@@ -889,9 +889,17 @@ const PersonaEditor = ({ profile, onUpdate }) => {
             onClick={async () => {
               const newStatus = !profile?.ghost_mode;
               try {
-                await supabase.from('profiles').update({ ghost_mode: newStatus }).eq('id', profile.id);
-                refreshProfile();
-              } catch (e) { console.error('Ghost mode error', e); }
+                const { error } = await supabase.from('profiles').update({ ghost_mode: newStatus }).eq('id', profile.id);
+                if (error) {
+                  console.error('Supabase update error:', error);
+                  alert(`Failed to update privacy mode: ${error.message}`);
+                } else {
+                  refreshProfile();
+                }
+              } catch (e) { 
+                console.error('Ghost mode error', e); 
+                alert(`Error: ${e.message}`);
+              }
             }}
             className={`w-14 h-8 rounded-full transition-all relative ${profile?.ghost_mode ? 'bg-red-500' : 'bg-neutral-700'}`}
           >
