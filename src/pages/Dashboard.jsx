@@ -2671,7 +2671,7 @@ export default function Dashboard() {
           ))}
         </nav>
 
-      {showComingSoon && <div className="toast" style={{ background: '#ea580c', color: 'white', zIndex: 9999 }}><Lock size={16} /> Print Studio Coming Soon!</div>}
+      {showComingSoon && <div className="fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full flex items-center gap-2 shadow-2xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-5 font-bold text-sm whitespace-nowrap" style={{ background: '#ea580c', color: 'white', zIndex: 9999 }}><Lock size={16} /> Business Center Coming Soon!</div>}
       </div>
     )
   }
