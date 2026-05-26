@@ -88,7 +88,7 @@ export default function PublicProfile() {
   const displayProfile = {
     ...profile,
     avatar_url: isGhostMode ? null : profile.avatar_url,
-    social_links: isGhostMode ? {} : profile.social_links
+    social_links: isGhostMode ? [] : profile.social_links
   };
 
   if (isClaimFlow) {

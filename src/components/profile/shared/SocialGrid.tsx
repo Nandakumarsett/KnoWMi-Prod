@@ -26,6 +26,16 @@ import { supabase } from '../../../lib/supabase'
 
 export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps) {
   if (!links || links.length === 0) return null
+  
+  // Custom sorting: move youtube immediately after instagram if both exist
+  let sortedLinks = [...links];
+  const instaIdx = sortedLinks.findIndex(l => l.platform.toLowerCase() === 'instagram');
+  const ytIdx = sortedLinks.findIndex(l => l.platform.toLowerCase() === 'youtube');
+  if (instaIdx !== -1 && ytIdx !== -1 && ytIdx !== instaIdx + 1) {
+    const ytLink = sortedLinks.splice(ytIdx, 1)[0];
+    const newInstaIdx = sortedLinks.findIndex(l => l.platform.toLowerCase() === 'instagram');
+    sortedLinks.splice(newInstaIdx + 1, 0, ytLink);
+  }
 
   const handleLinkClick = async (e: React.MouseEvent<HTMLAnchorElement>, platform: string, url: string) => {
     e.preventDefault();
@@ -48,7 +58,7 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
   if (style === 'grid') {
     return (
       <div className="grid grid-cols-2 gap-3 w-full">
-        {links.map((link) => {
+        {sortedLinks.map((link, idx) => {
           const meta = PLATFORM_META[link.platform] || { icon: Globe, color: '#444444' }
           const Icon = meta.icon
           return (

@@ -888,8 +888,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
             onClick={async () => {
               const newStatus = !profile?.ghost_mode;
               try {
-                await supabase.from('public_profiles').update({ ghost_mode: newStatus }).eq('id', profile.id);
-                await supabase.from('persona_profiles').update({ ghost_mode: newStatus }).eq('id', profile.id);
+                await supabase.from('profiles').update({ ghost_mode: newStatus }).eq('id', profile.id);
                 if (onUpdate) await onUpdate();
               } catch (e) { console.error('Ghost mode error', e); }
             }}
