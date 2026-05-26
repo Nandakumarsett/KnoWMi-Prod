@@ -233,7 +233,6 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
               <button
                 onClick={() => onAuthClick?.('signup')}
                 className="btn-primary btn-base px-5 py-2.5 text-[13px] rounded-xl font-bold flex items-center gap-2"
-                style={{ background: 'var(--brand)', color: '#fff' }}
               >
                 Sign Up Free
               </button>
