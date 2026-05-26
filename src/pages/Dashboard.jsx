@@ -894,7 +894,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                   console.error('Supabase update error:', error);
                   alert(`Failed to update privacy mode: ${error.message}`);
                 } else {
-                  refreshProfile();
+                  if (onUpdate) await onUpdate();
                 }
               } catch (e) { 
                 console.error('Ghost mode error', e); 
