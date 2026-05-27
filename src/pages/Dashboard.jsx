@@ -1627,9 +1627,11 @@ function Dashboard() {
     }
   }, [searchParams])
 
+  const hasEnforcedProfileTab = useRef(false)
   // If the profile loads and the user has no identities, default to the 'profile' (Identity Studio) tab so they aren't greeted by a blurred analytics lock screen.
   useEffect(() => {
-    if (profile && !authLoading) {
+    if (profile && !authLoading && !hasEnforcedProfileTab.current) {
+      hasEnforcedProfileTab.current = true
       const stored = profile?.persona_data?.identities || []
       const hasTabParam = searchParams.get('tab')
       if (stored.length === 0 && !hasTabParam) {
