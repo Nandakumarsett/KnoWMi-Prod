@@ -136,19 +136,27 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     ghost_mode: publicProfile.ghost_mode || false,
     social_links,
     persona_data: (() => {
+      let finalData: any = {}
       if (activeIdentity) {
-        return {
+        finalData = {
           ...activeIdentity.data,
           type: activeIdentity.data?.type || activeIdentity.persona_type
         }
       } else if (rawPersonaData[publicProfile.persona || publicProfile.persona_type || 'developer']) {
         const legacyData = rawPersonaData[publicProfile.persona || publicProfile.persona_type || 'developer'] || {}
-        return {
+        finalData = {
           ...legacyData,
           type: publicProfile.persona_type || 'developer'
         }
+      } else {
+        finalData = { type: publicProfile.persona_type || 'developer' }
       }
-      return { type: publicProfile.persona_type || 'developer' }
+      
+      if (rawPersonaData.identities) {
+        finalData.identities = rawPersonaData.identities
+      }
+      
+      return finalData
     })()
   }
 }
