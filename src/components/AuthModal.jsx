@@ -108,8 +108,8 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
     }
 
     setLoading(false)
-    setTab('signin')
-    setSuccessMsg('✅ Account created! Please check your email for the verification link.')
+    handleClose()
+    onSuccess?.(redirectAfter)
   }
 
   const handleSignIn = async (e) => {

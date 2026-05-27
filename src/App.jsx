@@ -17,7 +17,7 @@ import QRIntercept from './pages/QRIntercept'
 import IdentityStudio from './pages/IdentityStudio'
 import VibePage from './pages/VibePage'
 import InsightsPage from './pages/InsightsPage'
-import VerifyBubble from './components/VerifyBubble'
+
 
 export default function App() {
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function App() {
         {/* Catch-all route to prevent blank pages on invalid URLs */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <VerifyBubble />
+
     </Router>
   )
 }
