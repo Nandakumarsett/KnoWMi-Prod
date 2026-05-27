@@ -129,6 +129,44 @@ export default function PublicProfile() {
     )
   }
 
+  if (!profile.persona) {
+    if (isOwnerOfProfile) {
+      return (
+        <div className="min-h-screen bg-neutral-900 flex flex-col items-center justify-center p-6 text-center text-white relative overflow-hidden">
+          <div className="absolute inset-0 mesh-bg opacity-20 pointer-events-none" />
+          <div className="w-20 h-20 bg-orange-500/10 text-orange-500 rounded-full flex items-center justify-center mb-6 relative z-10 animate-pulse">
+            <Sparkles size={32} />
+          </div>
+          <h1 className="text-4xl font-black mb-4 font-display uppercase tracking-tighter text-white relative z-10">Setup your Identity</h1>
+          <p className="text-neutral-400 mb-10 max-w-sm leading-relaxed relative z-10">You haven't set up your digital identity yet. Create one now to make this profile yours.</p>
+          <button 
+            onClick={() => navigate('/dashboard?tab=profile')} 
+            className="px-10 py-5 bg-orange-500 text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-2xl shadow-orange-500/20 active:scale-95 transition-all relative z-10 hover:bg-orange-600"
+          >
+            Setup Identity
+          </button>
+        </div>
+      )
+    } else {
+      return (
+        <div className="min-h-screen bg-neutral-900 flex flex-col items-center justify-center p-6 text-center text-white relative overflow-hidden">
+          <div className="absolute inset-0 mesh-bg opacity-20 pointer-events-none" />
+          <div className="w-20 h-20 bg-neutral-800 text-neutral-500 rounded-full flex items-center justify-center mb-6 relative z-10">
+            <UserPlus size={32} />
+          </div>
+          <h1 className="text-4xl font-black mb-4 font-display uppercase tracking-tighter text-white relative z-10">Identity Pending</h1>
+          <p className="text-neutral-400 mb-10 max-w-sm leading-relaxed relative z-10">This user hasn't set up their digital identity yet.</p>
+          <button 
+            onClick={() => navigate('/')} 
+            className="px-8 py-3 bg-neutral-800 text-white rounded-xl font-black uppercase tracking-widest text-xs hover:bg-neutral-700 transition-colors relative z-10"
+          >
+            Return Home
+          </button>
+        </div>
+      )
+    }
+  }
+
   // Sanitize display_name — strip accidental username/persona prefix concatenation
   // e.g. "tester_personaTester Persona" → "Tester Persona"
   const rawName = profile.display_name || ''
