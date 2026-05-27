@@ -66,13 +66,14 @@ export default function VibePage() {
     }, [navigate]);
 
     useRealtimeAnalytics(profile?.id, async () => {
+        if (!profile?.id) return;
         setIsLive(true);
         setTimeout(() => setIsLive(false), 30000);
         const s = await getAnalyticsData(profile.id);
         setStats(s);
     });
 
-    if (loading || !profile) {
+    if (loading || !profile || !stats) {
         return (
             <div style={{ background: 'var(--bg)', minHeight: '100vh', maxWidth: 420, margin: '0 auto' }}>
                 <div style={{ padding: '28px 20px 0', height: 66 }} />

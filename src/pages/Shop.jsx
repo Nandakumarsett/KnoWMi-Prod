@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import toast from 'react-hot-toast'
 import { supabase, getAssetUrl } from '../lib/supabase'
 import Navbar from '../components/Navbar'
 import { Footer } from '../components/Footer'
@@ -95,7 +96,7 @@ export default function Shop() {
     })
 
     if (!res) {
-      alert('Razorpay SDK failed to load. Are you connected to the internet?')
+      toast.error('Razorpay SDK failed to load. Are you connected to the internet?')
       setCheckoutLoading(false)
       return
     }
@@ -134,13 +135,13 @@ export default function Shop() {
 
       const paymentObject = new window.Razorpay(options)
       paymentObject.on('payment.failed', function (response) {
-        alert("Payment Failed. Reason: " + response.error.description)
+        toast.error("Payment Failed. Reason: " + response.error.description)
       })
       paymentObject.open()
       
     } catch (error) {
       console.error(error)
-      alert("Error initiating checkout: " + error.message)
+      toast.error("Error initiating checkout: " + error.message)
     } finally {
       setCheckoutLoading(false)
     }

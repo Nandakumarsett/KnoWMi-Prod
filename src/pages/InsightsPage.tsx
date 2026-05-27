@@ -34,41 +34,34 @@ export default function InsightsPage() {
       try {
         setLoading(true);
         const { data: { user } } = await supabase.auth.getUser();
-        let profId = '';
-        if (user) {
-          const { data: prof } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('user_id', user.id)
-            .maybeSingle();
 
-          if (prof) {
-            const identities = prof.persona_data?.identities || [];
-            const activeIden = identities.find((i: any) => i.active);
-            
-            if (activeIden) {
-              setProfile({
-                ...prof,
-                first_name: activeIden.first_name || prof.first_name,
-                avatar_url: activeIden.avatar_url || prof.avatar_url
-              });
-            } else {
-              setProfile(prof);
-            }
-            profId = prof.id;
-          }
+        // Auth guard — never show another user's data
+        if (!user) {
+          navigate('/');
+          return;
         }
 
-        if (!profId) {
-          const { data: allProfs } = await supabase
-            .from('profiles')
-            .select('*')
-            .limit(1);
+        let profId = '';
+        const { data: prof } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
 
-          if (allProfs && allProfs.length > 0) {
-            setProfile(allProfs[0]);
-            profId = allProfs[0].id;
+        if (prof) {
+          const identities = prof.persona_data?.identities || [];
+          const activeIden = identities.find((i: any) => i.active);
+          
+          if (activeIden) {
+            setProfile({
+              ...prof,
+              first_name: activeIden.first_name || prof.first_name,
+              avatar_url: activeIden.avatar_url || prof.avatar_url
+            });
+          } else {
+            setProfile(prof);
           }
+          profId = prof.id;
         }
 
         if (profId) {
@@ -84,7 +77,7 @@ export default function InsightsPage() {
           }
         }
       } catch (err) {
-        console.error('Error loading insights page:', err);
+        // silently fail — no console in prod
       } finally {
         if (active) setLoading(false);
       }
@@ -296,8 +289,8 @@ export default function InsightsPage() {
             <div>
               <h4 className="text-lg font-display font-black text-neutral-900 mb-2">Insight Summary</h4>
               <p className="text-sm text-neutral-500 leading-relaxed font-medium">
-                {ctx?.profile?.completionScore < 70 
-                  ? `Your profile is ${ctx.profile.completionScore}% optimized. Complete your identity sections to unlock professional credibility and advanced analytics.`
+                {(ctx?.profile?.completionScore || 0) < 70 
+                  ? `Your profile is ${ctx?.profile?.completionScore || 0}% optimized. Complete your identity sections to unlock professional credibility and advanced analytics.`
                   : "Excellent optimization! Your identity is sharp and ready for professional discovery."}
               </p>
             </div>

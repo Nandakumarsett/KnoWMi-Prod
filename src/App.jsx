@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import toast from 'react-hot-toast'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { supabase } from './lib/supabase'
 import Home from './pages/Home'
@@ -27,7 +28,8 @@ export default function App() {
         const isNewUser = (new Date() - new Date(session.user.created_at)) < 10000 // Created in last 10s
 
         if (pendingAuthType === 'signup' && !isNewUser) {
-          alert('Hurry! You are already a Customer to Us')
+          toast('Welcome back! You already have an account. Taking you to your dashboard...', { icon: '👋' })
+          setTimeout(() => { window.location.href = '/dashboard' }, 1500)
         }
         
         localStorage.removeItem('pending_auth_type')

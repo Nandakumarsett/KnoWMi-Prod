@@ -29,24 +29,13 @@ export default function ScanHandler() {
             dbQuery = dbQuery.or(`wm_code.ilike.${code},wm_code.ilike.WM-${code},wm_code.ilike.PT-${code},secure_slug.eq.${code}`)
           }
           const res = await dbQuery.single()
-          if (!res.error && res.data) foundProfile = res.data
-          else profileError = res.error
-        } catch (e) {}
-
-        if (!foundProfile) {
-          try {
-            let fallbackQuery = supabase.from('public_profiles').select('id, user_id, first_name, secure_slug, ghost_mode')
-            if (isUUID) {
-              fallbackQuery = fallbackQuery.or(`id.eq.${code},secure_slug.eq.${code}`)
-            } else {
-              fallbackQuery = fallbackQuery.or(`wm_code.ilike.${code},wm_code.ilike.WM-${code},wm_code.ilike.PT-${code},secure_slug.eq.${code}`)
-            }
-            const res = await fallbackQuery.single()
-            if (!res.error && res.data) foundProfile = res.data
-            else profileError = res.error || new Error('Profile not found')
-          } catch (e) {
-            profileError = e
+          if (!res.error && res.data) {
+            foundProfile = res.data
+          } else {
+            profileError = res.error || new Error('Profile not found')
           }
+        } catch (e) {
+          profileError = e
         }
 
         if (profileError || !foundProfile) {

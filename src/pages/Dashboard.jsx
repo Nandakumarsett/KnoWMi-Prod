@@ -1,5 +1,6 @@
 import { DashboardErrorBoundary } from './DashboardErrorBoundary';
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import toast from 'react-hot-toast'
 import Avatar from '../components/Avatar'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { 
@@ -418,68 +419,7 @@ const PERSONAS = {
 
 
 
-const VerificationLock = ({ profile, user }) => {
-  const [resending, setResending] = useState(false)
-  const [msg, setMsg] = useState('')
 
-  const handleResend = async () => {
-    setResending(true)
-    setMsg('')
-    // Ensure supabase is available, it is imported at the top of Dashboard.jsx
-    const response = await supabase.auth.resend({
-      type: 'signup',
-      email: user?.email,
-    })
-    console.log("Supabase Auth Resend Response:", response)
-    const { error } = response
-    
-    if (error) {
-      setMsg(error.message)
-    } else {
-      setMsg('✅ Verification email sent! Please check your inbox.')
-    }
-    setResending(false)
-  }
-
-  return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center p-6 text-center">
-      <div className="card p-10 max-w-md w-full glass shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1" style={{ background: 'linear-gradient(90deg, var(--sf), var(--gold))' }} />
-        <div className="w-20 h-20 bg-orange-50 text-orange-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-inner">
-          <Lock size={40} strokeWidth={1.5} />
-        </div>
-        <h2 className="text-3xl font-display font-black text-neutral-900 mb-4 leading-tight">Identity <span className="text-orange-500 italic">Pending</span></h2>
-        <p className="text-sm text-neutral-500 mb-10 leading-relaxed font-medium">
-          Welcome to KnoWMi, <span className="font-bold text-neutral-800">{profile?.first_name}</span>! Your Analytics Pulse and Phygital Profile are currently locked while we verify your email address.
-        </p>
-        <div className="space-y-4">
-          <button
-            onClick={handleResend}
-            disabled={resending}
-            className="w-full btn-primary py-4 flex items-center justify-center gap-3 shadow-xl disabled:opacity-50"
-          >
-            <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-            {resending ? 'Sending...' : 'Resend Verification Email'}
-          </button>
-          {msg && (
-            <p className={`text-sm font-bold ${msg.includes('✅') ? 'text-green-600' : 'text-red-500'} mt-2`}>
-              {msg}
-            </p>
-          )}
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
-            Check your spam folder if you don't see it.
-          </p>
-        </div>
-      </div>
-      <div className="mt-12 flex items-center gap-6 opacity-30 grayscale pointer-events-none">
-         <BarChart3 size={32} />
-         <Users size={32} />
-         <Trophy size={32} />
-         <MapPin size={32} />
-      </div>
-    </div>
-  )
-}
 
 const FIELD_META = {
   github:    { emoji: '🐙', label: 'GitHub', prefix: 'github.com/' },
@@ -677,7 +617,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
     e.stopPropagation()
     const identity = identities.find(i => i.id === id)
     if (identity?.active) {
-      alert("You cannot delete your active identity. Please activate another one first.")
+      toast.error("You cannot delete your active identity. Please activate another one first.")
       return
     }
 
@@ -710,11 +650,10 @@ const PersonaEditor = ({ profile, onUpdate }) => {
       setIdentities(updatedIdentities)
       if (onUpdate) await onUpdate()
       
-      alert("Identity deleted successfully.")
-      window.location.reload()
+      toast.success("Identity deleted successfully.")
     } catch (err) {
       console.error('❌ DELETION FATAL ERROR:', err)
-      alert("CRITICAL ERROR: Failed to delete. " + (err.message || "Please check console (F12)"))
+      toast.error("Failed to delete identity: " + (err.message || "Please try again."))
     }
   }
 
@@ -795,7 +734,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
 
   const handleSave = async () => {
     if (!profile?.id) {
-      alert("Error: Profile not loaded. Please refresh the page.")
+      toast.error("Error: Profile not loaded. Please refresh the page.")
       return
     }
 
@@ -818,7 +757,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
     if (Object.keys(fieldErrors).length > 0 || Object.keys(sErrors).length > 0) {
       setErrors(fieldErrors);
       setStatErrors(sErrors);
-      alert("Please fix the errors highlighted in red before saving. (Check that social handles are correct and stats are numbers)");
+      toast.error("Please fix the errors highlighted in red before saving. (Check that social handles are correct and stats are numbers)");
       return;
     }
 
@@ -891,7 +830,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
       }, 1000)
     } catch (err) {
       console.error('Save error:', err)
-      alert(`Save failed: ${err.message || 'Unknown error'}`)
+      toast.error(`Save failed: ${err.message || 'Unknown error'}`)
     } finally {
       setSaving(false)
     }
@@ -919,13 +858,14 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                 const { error } = await supabase.from('profiles').update({ ghost_mode: newStatus }).eq('id', profile.id);
                 if (error) {
                   console.error('Supabase update error:', error);
-                  alert(`Failed to update privacy mode: ${error.message}`);
+                  toast.error(`Failed to update privacy mode: ${error.message}`);
                 } else {
+                  toast.success(newStatus ? "Privacy Mode activated!" : "Privacy Mode deactivated!");
                   if (onUpdate) await onUpdate();
                 }
               } catch (e) { 
                 console.error('Ghost mode error', e); 
-                alert(`Error: ${e.message}`);
+                toast.error(`Error: ${e.message}`);
               }
             }}
             className={`w-14 h-8 rounded-full transition-all relative ${profile?.ghost_mode ? 'bg-red-500' : 'bg-neutral-700'}`}
@@ -1014,7 +954,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
               <Lock size={32} className="mx-auto mb-4 text-orange-500 opacity-50" />
               <h3 className="text-lg font-bold mb-1">Upgrade to Creator Plan</h3>
               <p className="text-xs text-neutral-500 mb-6">Unlock up to 3 different identities for your phygital scans.</p>
-              <button onClick={() => window.location.href = '/#pricing'} className="btn-primary px-8 py-3 text-sm">Upgrade Now</button>
+              <button onClick={() => navigate('/shop')} className="btn-primary px-8 py-3 text-sm">Upgrade Now</button>
             </div>
           ) : (
             <div className="text-center py-4 px-6 bg-neutral-50 rounded-2xl border border-neutral-100">
@@ -1387,14 +1327,25 @@ const IdentityPass = ({ profile }) => {
         <div className="flex gap-2">
           <button 
             onClick={() => {
+              const slug = profile?.secure_slug || profile?.first_name || profile?.id;
+              const profileLink = `${window.location.origin}/p/${slug}`;
+              navigator.clipboard.writeText(profileLink);
+              toast.success("Profile link copied to clipboard! 🔗");
+            }} 
+            className="h-12 px-8 text-sm font-black bg-neutral-900 text-white rounded-2xl hover:bg-neutral-800 flex items-center gap-2 transition-all active:scale-95 shadow-md shrink-0"
+          >
+            <Share2 size={18}/> Share My Profile
+          </button>
+          <button 
+            onClick={() => {
               if (isPaid) {
                 window.print()
               } else {
-                alert("Upgrade to Premium to print or export your official Identity Pass! 🚀")
-                window.location.href = '/#pricing'
+                toast("Upgrade to Premium to print or export your official Identity Pass! 🚀", { icon: '👑' })
+                navigate('/shop')
               }
             }} 
-            className="btn-primary h-12 px-8 text-sm flex items-center gap-2"
+            className="btn-primary h-12 px-8 text-sm flex items-center gap-2 shrink-0"
           >
             <Download size={18}/> Print / Download Pass
           </button>
@@ -1404,7 +1355,7 @@ const IdentityPass = ({ profile }) => {
       <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-10">
         <div className="relative group">
           <div 
-            onClick={() => window.location.href = `/p/${profile?.secure_slug || profile?.first_name || profile?.id}`}
+            onClick={() => navigate(`/p/${profile?.secure_slug || profile?.first_name || profile?.id}`)}
             className="qr-print-card card p-12 flex flex-col items-center bg-white shadow-2xl relative overflow-hidden cursor-pointer hover:shadow-orange-500/10 transition-all border-none"
           >
             <div className="absolute top-6 right-8 flex items-center gap-1.5 bg-emerald-50/50 px-2.5 py-1.5 rounded-xl backdrop-blur-sm border border-emerald-500/10">
@@ -1469,7 +1420,7 @@ const IdentityPass = ({ profile }) => {
                     ? 'Your physical identity is active. Enjoy unmasked QR access, detailed scan locations, and advanced persona statistics.' 
                     : 'Buy A Tee to unlock QR Analytics, location tracking, and advanced persona profile statistics.'}
                 </p>
-                {!isPaid && <button onClick={() => window.location.href = '/#pricing'} className="btn-primary px-8 py-3 text-sm">Buy A Tee — View Plans</button>}
+                {!isPaid && <button onClick={() => navigate('/shop')} className="btn-primary px-8 py-3 text-sm">Buy A Tee — View Plans</button>}
               </div>
             </div>
           </div>
@@ -1511,7 +1462,7 @@ const GamificationTab = ({ profile, completion, stats }) => {
     { id: 'first_scan', name: 'First Contact', desc: 'Got your first physical scan', icon: Zap, unlocked: totalScans > 0, color: 'text-orange-500', bg: 'bg-orange-500/10' },
     { id: 'popular', name: 'Rising Star', desc: 'Reached 50+ total scans', icon: TrendingUp, unlocked: totalScans >= 50, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
     { id: 'pro', name: 'Verified Creator', desc: 'Active Premium Subscription', icon: ShieldCheck, unlocked: profile?.status !== 'free' || profile?.role === 'owner', color: 'text-blue-500', bg: 'bg-blue-500/10' },
-    { id: 'early', name: 'Early Adopter', desc: 'Joined during Beta phase', icon: Rocket, unlocked: new Date(typeof profile?.created_at || Date.now() === 'string' ? profile?.created_at || Date.now().replace(' ', 'T') : profile?.created_at || Date.now()) < new Date('2026-08-01'), color: 'text-purple-500', bg: 'bg-purple-500/10' },
+    { id: 'early', name: 'Early Adopter', desc: 'Joined during Beta phase', icon: Rocket, unlocked: (profile?.created_at ? new Date(String(profile.created_at).replace(' ', 'T')) : new Date()) < new Date('2026-08-01'), color: 'text-purple-500', bg: 'bg-purple-500/10' },
   ];
 
   const unlockedCount = badges.filter(b => b.unlocked).length;
@@ -1610,6 +1561,12 @@ function Dashboard() {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   
+  // Onboarding Wizard State
+  const [showOnboardingModal, setShowOnboardingModal] = useState(false)
+  const [onboardingDismissed, setOnboardingDismissed] = useState(() => localStorage.getItem('knowmi_onboarding_dismissed') === 'true')
+  const [hasPreviewed, setHasPreviewed] = useState(() => localStorage.getItem('knowmi_onboarding_previewed') === 'true')
+  const [hasShared, setHasShared] = useState(() => localStorage.getItem('knowmi_onboarding_shared') === 'true')
+
   const { isSupported: pushSupported, isSubscribed: pushSubscribed, loading: pushLoading, subscribe: pushSubscribe, unsubscribe: pushUnsubscribe } = usePushNotifications(user?.id);
   const [activeTab, setActiveTab] = useState(() => {
     const tab = searchParams.get('tab')
@@ -1624,6 +1581,8 @@ function Dashboard() {
       setActiveTab(tab)
     } else if (searchParams.get('mode') === 'edit') {
       setActiveTab('profile')
+    } else {
+      setActiveTab('analytics')
     }
   }, [searchParams])
 
@@ -1669,7 +1628,7 @@ function Dashboard() {
           if (error) throw error;
             
           localStorage.removeItem('knowmi_pending_claim')
-          alert("🎉 Tee claimed successfully! This physical product is now permanently paired to your digital identity.")
+          toast.success("🎉 Tee claimed successfully! This physical product is now permanently paired to your digital identity.", { duration: 5000 })
           if (refreshProfile) refreshProfile()
         } catch (e) {
           console.error("Claim error", e)
@@ -1694,7 +1653,7 @@ function Dashboard() {
 
   const [connections, setConnections] = useState([])
   
-  const refreshAnalytics = useMemo(() => async () => {
+  const refreshAnalytics = useCallback(async () => {
     if (!profile?.id) return;
     const rangeToUse = analyticsView === 'classic' ? selectedRange : 'all';
     const data = await getAnalyticsData(profile.id, rangeToUse);
@@ -1709,7 +1668,7 @@ function Dashboard() {
     }
   }, [profile?.id, refreshAnalytics]);
 
-  const handleNewEvent = useMemo(() => () => {
+  const handleNewEvent = useCallback(() => {
     console.log('✅ LIVE EVENT RECEIVED');
     setIsLive(true);
     setTimeout(() => setIsLive(false), 20000);
@@ -1901,6 +1860,12 @@ function Dashboard() {
           </div>
           
           <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setShowOnboardingModal(true)}
+              className="px-3.5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all select-none border border-orange-500/30 bg-orange-500/10 text-orange-500 hover:bg-orange-500 hover:text-white mr-2"
+            >
+              Onboarding Guide
+            </button>
             {(() => {
               const pData = profile?.persona_data || {};
               const activeIdentity = (pData.identities && Array.isArray(pData.identities)) 
@@ -1937,6 +1902,7 @@ function Dashboard() {
       </header>
 
       <main className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 pb-48">
+        {/* Onboarding Guide is now moved to the header/modal */}
         {/* Sleek Profile Completion Progress Bar */}
         {activeTab === 'profile' && (
           <div className="mb-10 w-full animate-slideUp">
@@ -1970,7 +1936,7 @@ function Dashboard() {
               </div>
               {profileCompletion < 100 && (
                 <button 
-                  onClick={() => window.location.href = '/#pricing'}
+                  onClick={() => navigate('/shop')}
                   className="px-5 py-3 bg-orange-500 hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95 whitespace-nowrap"
                 >
                   Unlock 100% 🚀
@@ -2547,7 +2513,7 @@ function Dashboard() {
                     </div>
                     <h3 className="text-xl font-bold mb-2">No active orders</h3>
                     <p className="text-sm text-neutral-400 mb-8">Browse the collection to get your Signature Tee.</p>
-                    <button onClick={() => window.location.href = '/#collection'} className="btn-primary px-8 py-3 text-sm">Browse Collection</button>
+                    <button onClick={() => navigate('/shop')} className="btn-primary px-8 py-3 text-sm">Browse Collection</button>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -2711,6 +2677,127 @@ function Dashboard() {
           ))}
         </nav>
 
+      {showOnboardingModal && (
+        <div className="fixed inset-0 z-[150] bg-black/70 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn text-white select-none">
+          <div className="bg-gradient-to-r from-neutral-900 to-neutral-950 text-white rounded-[32px] p-8 md:p-10 shadow-2xl relative overflow-hidden border border-white/5 max-w-4xl w-full">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-[100px] -mr-20 -mt-20 pointer-events-none" />
+            
+            <button 
+              onClick={() => setShowOnboardingModal(false)} 
+              className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white transition-colors"
+              title="Close guide"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="relative z-10 max-w-3xl">
+              <span className="px-3 py-1 bg-orange-500/15 text-orange-400 font-black text-[9px] uppercase tracking-widest rounded-lg">
+                Onboarding Guide
+              </span>
+              <h2 className="text-3xl font-display font-black tracking-tight mt-3 mb-2 text-white">
+                Activate your <span className="gradient-text">KnoWMi Presence</span>
+              </h2>
+              <p className="text-sm text-neutral-400 mb-8 font-medium">
+                Follow these 3 simple steps to fully configure, preview, and launch your dynamic digital identity to the world.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-white">
+                {/* Step 1 */}
+                <div className={`p-6 rounded-2xl border transition-all duration-300 ${profile?.persona_type ? 'bg-white/5 border-emerald-500/20' : 'bg-white/[0.02] border-white/5'}`}>
+                  <div className="flex justify-between items-start mb-4">
+                    <span className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${profile?.persona_type ? 'bg-emerald-500/15 text-emerald-400' : 'bg-orange-500/15 text-orange-400'}`}>
+                      {profile?.persona_type ? '✓' : '1'}
+                    </span>
+                    <span className={`text-[9px] font-black uppercase tracking-widest ${profile?.persona_type ? 'text-emerald-400' : 'text-orange-400'}`}>
+                      {profile?.persona_type ? 'Completed' : 'Action Required'}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-bold mb-2 text-white">Create Identity</h3>
+                  <p className="text-xs text-neutral-400 mb-6 leading-relaxed">Customize your dynamic persona tabs, social channels, and unique stats.</p>
+                  {!profile?.persona_type ? (
+                    <button 
+                      onClick={() => { setActiveTab('profile'); setShowOnboardingModal(false); }} 
+                      className="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-[10px] uppercase tracking-widest rounded-xl transition-all"
+                    >
+                      Create Now
+                    </button>
+                  ) : (
+                    <div className="text-emerald-400 text-xs font-black uppercase tracking-widest flex items-center gap-1.5 py-2.5">
+                      ✦ Ready
+                    </div>
+                  )}
+                </div>
+
+                {/* Step 2 */}
+                <div className={`p-6 rounded-2xl border transition-all duration-300 ${hasPreviewed ? 'bg-white/5 border-emerald-500/20' : 'bg-white/[0.02] border-white/5'}`}>
+                  <div className="flex justify-between items-start mb-4">
+                    <span className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${hasPreviewed ? 'bg-emerald-500/15 text-emerald-400' : 'bg-orange-500/15 text-orange-400'}`}>
+                      {hasPreviewed ? '✓' : '2'}
+                    </span>
+                    <span className={`text-[9px] font-black uppercase tracking-widest ${hasPreviewed ? 'text-emerald-400' : 'text-orange-400'}`}>
+                      {hasPreviewed ? 'Completed' : 'Action Required'}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-bold mb-2 text-white">Preview Profile</h3>
+                  <p className="text-xs text-neutral-400 mb-6 leading-relaxed">Check out how your live profile looks to others when they scan your QR code.</p>
+                  {!hasPreviewed ? (
+                    <button 
+                      onClick={() => {
+                        const slug = profile?.secure_slug || profile?.first_name || profile?.id;
+                        window.open(`/p/${slug}`, '_blank');
+                        localStorage.setItem('knowmi_onboarding_previewed', 'true');
+                        setHasPreviewed(true);
+                      }} 
+                      disabled={!profile?.persona_type}
+                      className="w-full py-2.5 bg-white/5 hover:bg-white/10 text-white border border-white/10 font-black text-[10px] uppercase tracking-widest rounded-xl transition-all disabled:opacity-30 disabled:hover:bg-transparent"
+                    >
+                      Preview live
+                    </button>
+                  ) : (
+                    <div className="text-emerald-400 text-xs font-black uppercase tracking-widest flex items-center gap-1.5 py-2.5">
+                      ✦ Visualized
+                    </div>
+                  )}
+                </div>
+
+                {/* Step 3 */}
+                <div className={`p-6 rounded-2xl border transition-all duration-300 ${hasShared ? 'bg-white/5 border-emerald-500/20' : 'bg-white/[0.02] border-white/5'}`}>
+                  <div className="flex justify-between items-start mb-4">
+                    <span className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${hasShared ? 'bg-emerald-500/15 text-emerald-400' : 'bg-orange-500/15 text-orange-400'}`}>
+                      {hasShared ? '✓' : '3'}
+                    </span>
+                    <span className={`text-[9px] font-black uppercase tracking-widest ${hasShared ? 'text-emerald-400' : 'text-orange-400'}`}>
+                      {hasShared ? 'Completed' : 'Action Required'}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-bold mb-2 text-white">Share Presence</h3>
+                  <p className="text-xs text-neutral-400 mb-6 leading-relaxed">Copy your secure link to share on social channels and bio descriptions.</p>
+                  {!hasShared ? (
+                    <button 
+                      onClick={() => {
+                        const slug = profile?.secure_slug || profile?.first_name || profile?.id;
+                        const profileLink = `${window.location.origin}/p/${slug}`;
+                        navigator.clipboard.writeText(profileLink);
+                        localStorage.setItem('knowmi_onboarding_shared', 'true');
+                        setHasShared(true);
+                        toast.success("Profile link copied! 🔗");
+                      }} 
+                      disabled={!profile?.persona_type || !hasPreviewed}
+                      className="w-full py-2.5 bg-white/5 hover:bg-white/10 text-white border border-white/10 font-black text-[10px] uppercase tracking-widest rounded-xl transition-all disabled:opacity-30 disabled:hover:bg-transparent"
+                    >
+                      Copy Share Link
+                    </button>
+                  ) : (
+                    <div className="text-emerald-400 text-xs font-black uppercase tracking-widest flex items-center gap-1.5 py-2.5">
+                      ✦ Shared
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {showComingSoon && <div className="fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full flex items-center gap-2 shadow-2xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-5 font-bold text-sm whitespace-nowrap" style={{ background: '#ea580c', color: 'white', zIndex: 9999 }}><Lock size={16} /> Business Center Coming Soon!</div>}
       </div>
     )

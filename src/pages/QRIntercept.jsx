@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { getAccurateLocation } from '../lib/analytics/geolocation';
@@ -118,7 +119,7 @@ export default function QRIntercept() {
       }
 
       const finalSlug = ownerProfile?.secure_slug || qrData.profile_slug || qrData.profile_id;
-      window.location.href = `/p/${finalSlug}?src=tshirt`;
+      navigate(`/p/${finalSlug}?src=tshirt`);
     } catch (err) {
       setIsUnclaimed(true);
     }
@@ -165,7 +166,7 @@ export default function QRIntercept() {
         .single();
 
       if (profileError || !userProfile) {
-        alert('Could not find an active KnoWMi profile. Redirecting to Identity Studio to create one.');
+        toast.error('Could not find an active KnoWMi profile. Redirecting to Identity Studio to create one.');
         navigate('/studio');
         return;
       }
@@ -194,12 +195,12 @@ export default function QRIntercept() {
         if (insertError) throw insertError;
       }
 
-      alert('🎉 Congratulations! Your physical KnoWMi is now bound and activated.');
+      toast.success('🎉 Congratulations! Your physical KnoWMi is now bound and activated.');
       navigate('/studio');
 
     } catch (err) {
       console.error('Claiming failed:', err);
-      alert('Activation failed. Please make sure you have a profile in the Identity Studio.');
+      toast.error('Activation failed. Please make sure you have a profile in the Identity Studio.');
     } finally {
       setClaimLoading(false);
     }

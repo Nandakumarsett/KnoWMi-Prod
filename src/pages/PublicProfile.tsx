@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { fetchProfile } from '../lib/profile/fetch-profile'
 import { ProfileData } from '../types/profile'
@@ -30,6 +30,23 @@ export default function PublicProfile() {
   const [connectForm, setConnectForm] = useState({ name: '', email: '', social: '', message: '' })
   const [connectStatus, setConnectStatus] = useState('')
 
+  // Sanitize display_name — strip accidental username/persona prefix concatenation
+  // e.g. "tester_personaTester Persona" → "Tester Persona"
+  const safeDisplayName = useMemo(() => {
+    if (!profile) return 'KnoWMi User'
+    const rawName = profile.display_name || ''
+    const usernameRaw = profile.username || ''
+    const personaRaw = profile.persona || ''
+
+    let cleanDisplayName = rawName
+    if (usernameRaw && rawName.toLowerCase().startsWith(usernameRaw.toLowerCase())) {
+      cleanDisplayName = rawName.slice(usernameRaw.length).trim()
+    } else if (personaRaw && rawName.toLowerCase().startsWith(personaRaw.toLowerCase())) {
+      cleanDisplayName = rawName.slice(personaRaw.length).trim()
+    }
+    return cleanDisplayName || rawName || profile.username || 'KnoWMi User'
+  }, [profile])
+
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 768)
     window.addEventListener('resize', handleResize)
@@ -51,6 +68,54 @@ export default function PublicProfile() {
     }
     loadProfile()
   }, [username])
+
+  useEffect(() => {
+    if (profile) {
+      document.title = `${safeDisplayName} | KnoWMi`;
+      
+      // Update or create meta description
+      let descMeta = document.querySelector('meta[name="description"]');
+      const descContent = profile.bio || `Connect with ${safeDisplayName} on KnoWMi. Check out their verified digital persona and official physical scans.`;
+      if (!descMeta) {
+        descMeta = document.createElement('meta');
+        descMeta.setAttribute('name', 'description');
+        document.head.appendChild(descMeta);
+      }
+      descMeta.setAttribute('content', descContent);
+
+      // Open Graph / Twitter Card Tags
+      const ogTitle = `${safeDisplayName} | KnoWMi`;
+      const ogDesc = descContent;
+      const ogUrl = window.location.href;
+      const ogImage = profile.avatar_url || `${window.location.origin}/logo-square.png`;
+
+      const tags = {
+        'og:title': ogTitle,
+        'og:description': ogDesc,
+        'og:url': ogUrl,
+        'og:image': ogImage,
+        'og:type': 'profile',
+        'twitter:card': 'summary_large_image',
+        'twitter:title': ogTitle,
+        'twitter:description': ogDesc,
+        'twitter:image': ogImage
+      };
+
+      Object.entries(tags).forEach(([property, value]) => {
+        let metaTag = document.querySelector(`meta[property="${property}"]`) || document.querySelector(`meta[name="${property}"]`);
+        if (!metaTag) {
+          metaTag = document.createElement('meta');
+          if (property.startsWith('og:')) {
+            metaTag.setAttribute('property', property);
+          } else {
+            metaTag.setAttribute('name', property);
+          }
+          document.head.appendChild(metaTag);
+        }
+        metaTag.setAttribute('content', value);
+      });
+    }
+  }, [profile, safeDisplayName]);
 
   if (loading) {
     return (
@@ -169,22 +234,7 @@ export default function PublicProfile() {
     }
   }
 
-  // Sanitize display_name — strip accidental username/persona prefix concatenation
-  // e.g. "tester_personaTester Persona" → "Tester Persona"
-  const rawName = profile.display_name || ''
-  const usernameRaw = profile.username || ''
-  const personaRaw = profile.persona || ''
-
-  let cleanDisplayName = rawName
-  // Strip username prefix first (most common case)
-  if (usernameRaw && rawName.toLowerCase().startsWith(usernameRaw.toLowerCase())) {
-    cleanDisplayName = rawName.slice(usernameRaw.length).trim()
-  } else if (personaRaw && rawName.toLowerCase().startsWith(personaRaw.toLowerCase())) {
-    // Strip persona prefix as fallback
-    cleanDisplayName = rawName.slice(personaRaw.length).trim()
-  }
-  // If stripping left nothing, fall back to original
-  const safeDisplayName = cleanDisplayName || rawName || profile.username || 'KnoWMi User'
+  // Legacy safeDisplayName calculations removed
 
   // Friendly persona label from config
   const customType = profile.persona_data?.type;

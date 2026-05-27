@@ -1,4 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import Avatar from '../components/Avatar';
 import {
   Search, Trophy, Users, Activity, Clock,
@@ -57,6 +59,7 @@ const BadgePill = ({ badge }: { badge: string | null }) => {
 };
 
 export default function Leaderboard() {
+  const navigate = useNavigate();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [stats, setStats] = useState<Stats>({ totalProfiles: 0, avgScore: 0, lastUpdated: new Date().toISOString() });
   const [loading, setLoading] = useState(true);
@@ -83,13 +86,14 @@ export default function Leaderboard() {
 
       if (profilesData) {
         const usernames = profilesData.map(p => p.username).filter(Boolean);
+        // Fix: query by secure_slug not first_name
         const { data: slugData } = await supabase
           .from('public_profiles')
-          .select('id, first_name, secure_slug')
-          .in('first_name', usernames);
+          .select('id, secure_slug')
+          .in('secure_slug', usernames);
 
         const mapped = profilesData.map(p => {
-          const extra = slugData?.find(s => s.first_name === p.username);
+          const extra = slugData?.find(s => s.secure_slug === p.username);
           return {
             ...p,
             id: extra?.id || p.id,
@@ -161,12 +165,6 @@ export default function Leaderboard() {
     return `${Math.floor(hours / 24)}d ago`;
   };
 
-  const [now, setNow] = useState(Date.now());
-  useEffect(() => {
-    const interval = setInterval(() => setNow(Date.now()), 60000);
-    return () => clearInterval(interval);
-  }, []);
-
   const [shareStats, setShareStats] = useState<any>(null);
 
   useEffect(() => {
@@ -179,7 +177,7 @@ export default function Leaderboard() {
         const data = await getAnalyticsData(shareProfile.id, 'all');
         setShareStats(data);
       } catch (err) {
-        console.error('Share stats fetch error:', err);
+        // silently fail
       }
     }
     fetchDetailedStats();
@@ -274,9 +272,9 @@ export default function Leaderboard() {
                 return (
                   <div
                     key={p.username}
-                    onClick={() => {
+                          onClick={() => {
                       const slug = p.secure_slug || p.id;
-                      window.location.href = `/p/${slug}?src=leaderboard`;
+                      navigate(`/p/${slug}?src=leaderboard`);
                     }}
                     className={`relative group flex flex-col items-center pt-16 pb-10 px-8 rounded-[3rem] border transition-all duration-500 cursor-pointer shadow-2xl hover:-translate-y-2 w-full md:w-72 backdrop-blur-xl ${isFirst ? 'bg-white/10 border-orange-500/50 shadow-orange-500/20 h-auto md:min-h-[540px] z-20' : 'bg-white/5 border-white/10 h-auto md:min-h-[460px] z-10'}`}
                   >
@@ -472,11 +470,11 @@ export default function Leaderboard() {
                     const slug = shareProfile.secure_slug || shareProfile.id;
                     const fresh = `${window.location.origin}/p/${slug}?src=leaderboard_share`;
                     navigator.clipboard.writeText(fresh);
-                    alert('Share link copied!');
+                    toast.success('Link copied to clipboard!');
                   }} className="flex items-center justify-center gap-3 py-5 bg-white/10 hover:bg-white/20 border border-white/10 text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
                     <Copy size={20} /> Copy Link
                   </button>
-                  <button onClick={() => alert('Download coming soon!')} className="flex items-center justify-center gap-3 py-5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
+                  <button onClick={() => toast('Download feature coming soon! 🎨', { icon: '🚀' })} className="flex items-center justify-center gap-3 py-5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
                     <Download size={20} /> Save Poster
                   </button>
                 </div>

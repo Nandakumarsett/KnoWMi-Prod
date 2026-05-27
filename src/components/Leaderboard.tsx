@@ -1,4 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '../components/Avatar';
 import {
   Search, Trophy, Users, Activity, Clock,
@@ -56,6 +58,7 @@ const BadgePill = ({ badge }: { badge: string | null }) => {
 };
 
 export default function Leaderboard() {
+  const navigate = useNavigate();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [stats, setStats] = useState<Stats>({ totalProfiles: 0, avgScore: 0, lastUpdated: new Date().toISOString() });
   const [loading, setLoading] = useState(true);
@@ -83,22 +86,7 @@ export default function Leaderboard() {
       const avg = scoreData?.length ? scoreData.reduce((acc, curr) => acc + Number(curr.knowmi_score), 0) / scoreData.length : 0;
 
       if (profilesData) {
-        const usernames = profilesData.map(p => p.username).filter(Boolean);
-        const { data: slugData } = await supabase
-          .from('public_profiles')
-          .select('id, first_name, secure_slug')
-          .in('first_name', usernames);
-
-        const mapped = profilesData.map(p => {
-          const extra = slugData?.find(s => s.first_name === p.username);
-          return {
-            ...p,
-            id: extra?.id || p.id,
-            secure_slug: extra?.secure_slug || p.secure_slug
-          };
-        });
-
-        setProfiles(mapped);
+        setProfiles(profilesData);
       }
 
       setStats({
@@ -257,7 +245,7 @@ export default function Leaderboard() {
                   key={p.username}
                   onClick={() => {
                     const slug = p.secure_slug || p.id;
-                    window.location.href = `/p/${slug}?src=leaderboard`;
+                    navigate(`/p/${slug}?src=leaderboard`);
                   }}
                   className={`relative group flex flex-col items-center pt-16 pb-10 px-8 rounded-[3rem] border transition-all duration-500 cursor-pointer shadow-2xl hover:-translate-y-2 w-full md:w-72
                     ${isFirst ? 'bg-white border-teal-500 shadow-teal-500/10 md:h-[520px] z-20' : 'bg-white border-neutral-100 md:h-[440px] z-10'}`}
@@ -306,7 +294,7 @@ export default function Leaderboard() {
               key={p.username}
               onClick={() => {
                 const slug = p.secure_slug || p.id;
-                window.location.href = `/p/${slug}?src=leaderboard`;
+                navigate(`/p/${slug}?src=leaderboard`);
               }}
               className="group bg-white hover:bg-neutral-50/50 p-5 md:p-6 rounded-[2rem] border border-neutral-100 shadow-sm transition-all duration-300 cursor-pointer flex flex-col md:flex-row items-center justify-between gap-6 hover:shadow-xl hover:shadow-teal-500/5 hover:-translate-y-1"
             >
@@ -426,11 +414,11 @@ export default function Leaderboard() {
                     const slug = shareProfile.secure_slug || shareProfile.id;
                     const fresh = `${window.location.origin}/p/${slug}?src=leaderboard_share`;
                     navigator.clipboard.writeText(fresh);
-                    alert('Share link copied!');
+                    toast.success('Share link copied!');
                   }} className="flex items-center justify-center gap-3 py-5 bg-neutral-900 hover:bg-black text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
                     <Copy size={20} /> Copy Link
                   </button>
-                  <button onClick={() => alert('Download coming soon!')} className="flex items-center justify-center gap-3 py-5 bg-orange-500 hover:bg-orange-600 text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
+                  <button onClick={() => toast('Download coming soon!', { icon: '⏳' })} className="flex items-center justify-center gap-3 py-5 bg-orange-500 hover:bg-orange-600 text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
                     <Download size={20} /> Save Poster
                   </button>
                 </div>

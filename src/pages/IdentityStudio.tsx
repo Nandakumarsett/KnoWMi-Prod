@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import toast from 'react-hot-toast'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
   ArrowLeft, Sparkles, CheckCircle2, AlertCircle, TrendingUp,
@@ -9,7 +10,6 @@ import {
   Zap, Github, Linkedin, Mail, Calendar, MapPin, Star
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-import { supabase } from '../lib/supabase'
 import { computeCompletionScore } from '../lib/identity/completion-score'
 import { TagInput } from '../components/identity/TagInput'
 import { EmojiPicker } from '../components/identity/EmojiPicker'
@@ -192,7 +192,7 @@ const INITIAL_STATE = {
 export default function IdentityStudio() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const { user } = useAuth()
+  const { user, refreshProfile } = useAuth()
 
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -281,7 +281,7 @@ export default function IdentityStudio() {
           }
         }
       } catch (err) {
-        console.error('Error loading studio data:', err)
+        // silently fail in production
       } finally {
         setLoading(false)
       }
@@ -305,11 +305,11 @@ export default function IdentityStudio() {
 
   const handleAvatarUpload = async (file: File) => {
     if (!file || file.size > 2 * 1024 * 1024) {
-      alert("Image must be less than 2MB")
+      toast.error('Image must be less than 2MB')
       return
     }
     if (!user?.id) {
-      alert("Please log in to upload an image")
+      toast.error('Please log in to upload an image')
       return
     }
 
@@ -327,7 +327,7 @@ export default function IdentityStudio() {
       const maskedUrl = `/content/avatars/${filePath}`
       updateField('avatar_url', maskedUrl)
     } catch (err: any) {
-      alert('Upload failed: ' + err.message)
+      toast.error('Upload failed: ' + err.message)
     } finally {
       setUploading(false)
     }
@@ -335,11 +335,11 @@ export default function IdentityStudio() {
 
   const handleFileUpload = async (file: File, type: string): Promise<string | null> => {
     if (!file || file.size > 50 * 1024 * 1024) {
-      alert("File must be less than 50MB")
+      toast.error('File must be less than 50MB')
       return null
     }
     if (!user?.id) {
-      alert("Please log in to upload a file")
+      toast.error('Please log in to upload a file')
       return null
     }
 
@@ -363,8 +363,7 @@ export default function IdentityStudio() {
       
       return maskedUrl
     } catch (err: any) {
-      console.error('Upload failed:', err)
-      alert('Upload failed: ' + err.message)
+      toast.error('Upload failed: ' + err.message)
       return null
     } finally {
       setUploading(false)
@@ -383,7 +382,7 @@ export default function IdentityStudio() {
         if (!data.first_name) {
           updateField('first_name', handle.charAt(0).toUpperCase() + handle.slice(1));
         }
-        alert("✨ Instagram connected and details pre-filled!");
+        toast.success('✨ Instagram connected and details pre-filled!')
       } 
       else if (parsedUrl.hostname.includes('linkedin.com') && path[0] === 'in' && path[1]) {
         updateField('linkedin', url);
@@ -394,20 +393,18 @@ export default function IdentityStudio() {
         if (!data.last_name && handle[1]) {
           updateField('last_name', handle[1].charAt(0).toUpperCase() + handle[1].slice(1));
         }
-        alert("✨ LinkedIn connected and details pre-filled!");
+        toast.success('✨ LinkedIn connected and details pre-filled!')
       } else {
-        alert("Please paste a valid Instagram or LinkedIn profile URL.");
+        toast.error('Please paste a valid Instagram or LinkedIn profile URL.')
       }
     } catch (e) {
-      alert("Invalid URL format.");
+      toast.error('Invalid URL format.')
     }
   }
 
   const handleSave = async () => {
-    console.log('🚀 handleSave triggered')
     if (!user) {
-      console.warn('❌ No user found in AuthContext')
-      alert("You must be logged in to save.")
+      toast.error('You must be logged in to save.')
       return
     }
 
@@ -458,12 +455,9 @@ export default function IdentityStudio() {
       }).eq('user_id', user.id)
 
       if (error) {
-        console.error('❌ Database Save Error (profiles):', error)
-        alert('Failed to save: ' + error.message)
+        toast.error('Failed to save: ' + error.message)
         return
       }
-
-      console.log('✅ Main profile save SUCCESS')
 
       setProfile({
         ...profile,
@@ -472,10 +466,11 @@ export default function IdentityStudio() {
         persona_data: { ...(profile?.persona_data || {}), identities: newIdentities }
       })
       sessionStorage.removeItem(`draft_persona_${activePersona}`)
-      alert('Changes saved successfully!')
-      window.location.reload()
+      toast.success('Changes saved successfully! 🎉')
+      // Refresh global profile state instead of hard reload
+      if (refreshProfile) refreshProfile()
     } catch (err: any) {
-      alert('Runtime error: ' + err.message)
+      toast.error('Save failed: ' + err.message)
     } finally {
       setSaving(false)
     }
@@ -519,7 +514,7 @@ export default function IdentityStudio() {
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-neutral-100">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 min-h-[80px] py-4 flex flex-row items-center justify-between gap-2 sm:gap-4">
           <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-            <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-xl bg-neutral-50 sm:bg-transparent hover:bg-neutral-100 flex items-center justify-center transition-all">
+            <button onClick={() => navigate('/dashboard')} className="w-10 h-10 shrink-0 rounded-xl bg-neutral-50 sm:bg-transparent hover:bg-neutral-100 flex items-center justify-center transition-all">
               <ArrowLeft size={20} className="text-neutral-600" />
             </button>
             <div className="flex-1 min-w-0">
