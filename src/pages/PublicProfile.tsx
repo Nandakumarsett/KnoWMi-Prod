@@ -129,7 +129,9 @@ export default function PublicProfile() {
     )
   }
 
-  if (!profile.persona) {
+  const hasIdentity = profile.persona_data?.identities && profile.persona_data.identities.length > 0;
+
+  if (!hasIdentity) {
     if (isOwnerOfProfile) {
       return (
         <div className="min-h-screen bg-neutral-900 flex flex-col items-center justify-center p-6 text-center text-white relative overflow-hidden">

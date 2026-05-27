@@ -214,7 +214,7 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
 
               {/* Standalone Avatar circle */}
               <Link 
-                to={profile ? `/p/${profile.secure_slug || profile.username || profile.id}` : '/dashboard'}
+                to={profile ? (profile.persona_data?.identities?.length > 0 ? `/p/${profile.secure_slug || profile.username || profile.id}` : '/dashboard?tab=profile') : '/dashboard'}
                 className="hover:scale-105 transition-transform shrink-0 block relative z-10 cursor-pointer"
                 title="View Profile"
               >
@@ -280,7 +280,7 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
               <>
                 {/* User info */}
                 <div className="flex items-center gap-3 px-3 py-2">
-                  <Link to={profile ? `/p/${profile.secure_slug || profile.username || profile.id}` : '/dashboard'} onClick={() => setMobileOpen(false)} className="block shrink-0">
+                  <Link to={profile ? (profile.persona_data?.identities?.length > 0 ? `/p/${profile.secure_slug || profile.username || profile.id}` : '/dashboard?tab=profile') : '/dashboard'} onClick={() => setMobileOpen(false)} className="block shrink-0">
                     <Avatar src={profile?.avatar_url} name={firstName} size="w-9 h-9 ring-2 ring-orange-500 ring-offset-2" />
                   </Link>
                   <div>
