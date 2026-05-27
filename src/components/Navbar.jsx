@@ -190,18 +190,6 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h7" /><path d="M16 5l-4 4-4-4" /><path d="M22 17l-3 3-3-3" /><path d="M19 14v6" /></svg>
                         Analytics Dashboard
                       </a>
-                      {profile && (
-                        <a href={`/p/${profile.secure_slug || profile.username || profile.id}`} className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                          Public Profile
-                        </a>
-                      )}
-                      {profile && !profile.persona && (
-                        <a href="/dashboard?tab=profile" className="flex items-center gap-2 px-4 py-3 text-sm font-bold transition-colors bg-orange-50 hover:bg-orange-100" style={{ color: '#ea580c', borderBottom: '1px solid var(--border)' }}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                          Setup your Identity
-                        </a>
-                      )}
                     </>
                   ) : (
                     <a href="/dashboard" className="flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
@@ -225,13 +213,13 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
               </div>
 
               {/* Standalone Avatar circle */}
-              <button 
-                onClick={e => { e.stopPropagation(); setDropdownOpen(!dropdownOpen) }}
+              <Link 
+                to={profile ? `/p/${profile.secure_slug || profile.username || profile.id}` : '/dashboard'}
                 className="hover:scale-105 transition-transform shrink-0 block relative z-10 cursor-pointer"
-                title="Profile Menu"
+                title="View Profile"
               >
                 <Avatar src={profile?.avatar_url} name={firstName} size="w-10 h-10 ring-2 ring-orange-500 ring-offset-2 shadow-sm" />
-              </button>
+              </Link>
             </div>
           ) : (
             /* Not logged in: show Sign Up / Sign In */

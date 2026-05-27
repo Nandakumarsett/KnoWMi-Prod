@@ -206,7 +206,7 @@ export default function PublicProfile() {
                 <p className="text-[10px] opacity-80 mt-1 text-orange-600">Create your Digital Identity to make it yours.</p>
               </div>
               <button 
-                onClick={() => navigate('/dashboard?tab=profile')}
+                onClick={() => navigate('/dashboard?tab=identity')}
                 className="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all"
               >
                 Setup Identity
@@ -433,7 +433,7 @@ export default function PublicProfile() {
               </div>
             </div>
             <button 
-              onClick={() => navigate('/dashboard?tab=profile')}
+              onClick={() => navigate('/dashboard?tab=identity')}
               className="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap"
             >
               Setup Identity
