@@ -196,8 +196,27 @@ export default function PublicProfile() {
           )}
         </header>
 
+        {/* Identity Setup Banner for Owner */}
+        {isOwnerOfProfile && (
+          <div className="pt-20 px-6 pb-2">
+            <div className="w-full bg-orange-500/10 border border-orange-500/30 text-orange-600 rounded-2xl p-4 flex flex-col items-center gap-3 shadow-sm backdrop-blur-sm text-center">
+              <Sparkles className="w-5 h-5 shrink-0 text-orange-500" />
+              <div>
+                <p className="text-sm font-bold text-orange-600">This is your public profile.</p>
+                <p className="text-[10px] opacity-80 mt-1 text-orange-600">Create your Digital Identity to make it yours.</p>
+              </div>
+              <button 
+                onClick={() => navigate('/dashboard?tab=identity')}
+                className="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all"
+              >
+                Setup Identity
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Small Button to view QR on Mobile */}
-        <div className="pt-20 px-6 flex justify-center mb-6 gap-3">
+        <div className={`${isOwnerOfProfile ? 'pt-4' : 'pt-20'} px-6 flex justify-center mb-6 gap-3`}>
           {isFreeProfile ? (
             <button 
               onClick={() => setShowQR(true)}
@@ -402,6 +421,26 @@ export default function PublicProfile() {
       </header>
 
       <main className="max-w-6xl mx-auto pt-28 pb-12 px-4 sm:px-8">
+        
+        {/* Identity Setup Banner for Owner */}
+        {isOwnerOfProfile && (
+          <div className="w-full bg-orange-500/10 border border-orange-500/30 text-orange-600 rounded-2xl p-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm backdrop-blur-sm">
+            <div className="flex items-center gap-3">
+              <Sparkles className="w-5 h-5 shrink-0 text-orange-500" />
+              <div className="text-left">
+                <p className="text-sm font-bold text-orange-600">This is your public profile.</p>
+                <p className="text-xs opacity-80 mt-0.5 text-orange-600">Create your Digital Identity to make it yours.</p>
+              </div>
+            </div>
+            <button 
+              onClick={() => navigate('/dashboard?tab=identity')}
+              className="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap"
+            >
+              Setup Identity
+            </button>
+          </div>
+        )}
+
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center lg:items-start justify-center">
           
           {/* Left Column - Fixed Identity Card */}
