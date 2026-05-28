@@ -59,6 +59,24 @@ export default function QRStudioAdmin() {
       a.download = `factory-batch-${Date.now()}.csv`;
       a.click();
       
+      // Google Sheets Webhook Auto-Append
+      const sheetsWebhookUrl = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL;
+      if (sheetsWebhookUrl) {
+        const rows = data.map(p => ({
+          date: new Date().toISOString().split('T')[0],
+          id: p.id,
+          claimUrl: `${window.location.origin}/s/${p.id}`,
+          status: "Unclaimed"
+        }));
+        
+        await fetch(sheetsWebhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          mode: "no-cors",
+          body: JSON.stringify({ action: "append", rows })
+        }).catch(err => console.error("Google Sheets sync failed:", err));
+      }
+      
       alert(`Successfully generated ${batchSize} unclaimed tees!`);
       setFactoryMode(false);
     } catch (err) {
