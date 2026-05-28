@@ -10,6 +10,7 @@ import {
   Zap, Github, Linkedin, Mail, Calendar, MapPin, Star
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { supabase } from '../lib/supabase'
 import { computeCompletionScore } from '../lib/identity/completion-score'
 import { TagInput } from '../components/identity/TagInput'
 import { EmojiPicker } from '../components/identity/EmojiPicker'
