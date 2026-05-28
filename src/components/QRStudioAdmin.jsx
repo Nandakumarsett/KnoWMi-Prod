@@ -47,18 +47,7 @@ export default function QRStudioAdmin() {
         
       if (error) throw error;
       
-      let csv = "id,claim_url\n";
-      data.forEach(p => {
-        csv += `${p.id},${window.location.origin}/s/${p.id}\n`;
-      });
-      
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `factory-batch-${Date.now()}.csv`;
-      a.click();
-      
+
       // Google Sheets Webhook Auto-Append
       const sheetsWebhookUrl = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL;
       if (sheetsWebhookUrl) {
