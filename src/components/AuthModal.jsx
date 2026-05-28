@@ -22,7 +22,8 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
       setError(''); 
       setSuccessMsg('');
       setPassword(''); 
-      setTab(defaultTab) 
+      const isClaiming = localStorage.getItem('knowmi_pending_claim');
+      setTab(isClaiming ? 'signin' : defaultTab) 
     }
   }, [open, defaultTab])
 
@@ -229,7 +230,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
 
           <>
             {/* Tab toggle */}
-          {tab !== 'forgot' && (
+          {tab !== 'forgot' && !localStorage.getItem('knowmi_pending_claim') && (
             <div className="flex rounded-xl overflow-hidden mb-6" style={{ border: '1.5px solid var(--border)', background: 'var(--paper2)' }}>
               {['signup', 'signin'].map(t => (
                 <button key={t} onClick={() => { setTab(t); setError(''); setSuccessMsg('') }}

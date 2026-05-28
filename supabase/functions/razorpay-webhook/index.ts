@@ -69,14 +69,16 @@ serve(async (req) => {
       let customerName = 'Valued Customer'
       let customerEmail = razorpayEmail
 
+      let profileId = null
       if (orderRow?.user_id) {
         const { data: profileData } = await supabaseClient
           .from('profiles')
-          .select('first_name, last_name')
+          .select('id, first_name, last_name')
           .eq('user_id', orderRow.user_id)
           .single()
 
         if (profileData) {
+          profileId = profileData.id
           customerName = [profileData.first_name, profileData.last_name].filter(Boolean).join(' ') || customerName
         }
 
@@ -111,6 +113,53 @@ serve(async (req) => {
         .from('payment_orders')
         .update({ receipt_number: receiptNumber })
         .eq('razorpay_order_id', orderId)
+
+      // 3.5. Insert successful order into public.orders table for dashboard tracking
+      if (profileId) {
+        let itemName = 'KnoWMi Identity Tee'
+        let modelImageUrl = null
+        
+        if (customerDetails?.design) {
+          const { data: designData } = await supabaseClient
+            .from('persona_designs')
+            .select('name, model_image_url, front_image_url')
+            .eq('id', customerDetails.design)
+            .maybeSingle()
+            
+          if (designData) {
+            itemName = designData.name
+            modelImageUrl = designData.model_image_url || designData.front_image_url
+          }
+        } else if (orderRow?.items && orderRow.items[0]?.plan_id === 'team') {
+          itemName = `Team Order — ${customerDetails?.team_name || 'My Team'} (${customerDetails?.quantity || 1} Tees)`
+        }
+
+        const notes = paymentEntity.notes || {}
+        const shippingAddress = notes.shipping_address || notes.address || paymentEntity.shipping_address || customerDetails?.delivery_address || 'Collected via Razorpay'
+        const deliveryCity = notes.city || notes.delivery_city || customerDetails?.delivery_city || 'Delhi'
+
+        const { error: insertOrderError } = await supabaseClient
+          .from('orders')
+          .insert({
+            profile_id: profileId,
+            order_number: receiptNumber,
+            item_name: itemName,
+            item_type: orderRow?.items && orderRow.items[0]?.plan_id === 'team' ? 'team' : 'tshirt',
+            size: customerDetails?.size || 'M',
+            amount: Math.round(amountPaise / 100),
+            status: 'paid',
+            shipping_address: shippingAddress,
+            delivery_city: deliveryCity,
+            estimated_delivery: '5-7 Business Days',
+            model_image_url: modelImageUrl,
+          })
+          
+        if (insertOrderError) {
+          console.error('Failed to insert order into orders table:', insertOrderError)
+        } else {
+          console.log(`Successfully created order ${receiptNumber} for profile ${profileId}`)
+        }
+      }
 
       // 4. Send order confirmation + receipt email
       if (customerEmail) {

@@ -54,6 +54,11 @@ export default function Home() {
   const handleAuthSuccess = () => {
     setAuthOpen(false)
     
+    if (localStorage.getItem('knowmi_pending_claim')) {
+      navigate('/dashboard')
+      return
+    }
+    
     // Check for pending redirect after login (e.g. from a QR scan gate)
     const returnTo = localStorage.getItem('return_to')
     if (returnTo) {

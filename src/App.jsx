@@ -24,6 +24,11 @@ export default function App() {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
+        if (localStorage.getItem('knowmi_pending_claim')) {
+          window.location.href = '/dashboard'
+          return
+        }
+
         const pendingAuthType = localStorage.getItem('pending_auth_type')
         const isNewUser = (new Date() - new Date(session.user.created_at)) < 10000 // Created in last 10s
 
