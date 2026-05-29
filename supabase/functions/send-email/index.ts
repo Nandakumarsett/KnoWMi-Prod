@@ -61,7 +61,7 @@ function baseLayout(content: string, previewText = '') {
       <div class="footer">
         <p>
           KnoWMi — India's first QR-enabled identity t-shirt<br/>
-          Questions? <a href="mailto:business@knowmi.in">business@knowmi.in</a> ·
+          Questions? <a href="mailto:bussiness@knowmi.in">bussiness@knowmi.in</a> ·
           <a href="https://wa.me/917981325397">WhatsApp</a><br/>
           <a href="https://knowmi.in/legal#privacy">Privacy Policy</a> ·
           <a href="https://knowmi.in/legal#terms">Terms of Service</a><br/>
@@ -519,7 +519,7 @@ serve(async (req) => {
           body: JSON.stringify({
             from: 'KnoWMi Alerts <alerts@knowmi.in>',
             reply_to: data.email,
-            to: ['business@knowmi.in'],
+            to: ['bussiness@knowmi.in'],
             subject: `🚨 [ACTION REQUIRED] Account deletion request ${data.requestId} — ${data.email}`,
             html: adminHtml,
           }),
@@ -537,7 +537,7 @@ serve(async (req) => {
     }
 
     // Send via Resend — using verified knowmi.in domain
-    // FROM addresses are virtual (no inbox needed), replies route to business@knowmi.in
+    // FROM addresses are virtual (no inbox needed), replies route to bussiness@knowmi.in
     const fromAddress = (() => {
       switch (type) {
         case 'order_confirmation': return 'KnoWMi Orders <orders@knowmi.in>'
@@ -553,7 +553,7 @@ serve(async (req) => {
 
     const resendPayload = {
       from: fromAddress,
-      reply_to: 'business@knowmi.in',
+      reply_to: 'bussiness@knowmi.in',
       to: [to],
       subject,
       html,
