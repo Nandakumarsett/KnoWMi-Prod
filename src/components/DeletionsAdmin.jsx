@@ -36,6 +36,21 @@ export default function DeletionsAdmin() {
 
     setActioning(reqId)
     try {
+      // 1. Send confirmation email to user before permanent deletion
+      try {
+        await supabase.functions.invoke('send-email', {
+          body: {
+            type: 'deletion_completed',
+            to: userEmail,
+            toName: '',
+            data: { email: userEmail }
+          }
+        })
+      } catch (emailErr) {
+        console.error('Failed to send deletion confirmation email:', emailErr)
+      }
+
+      // 2. Perform the database deletion RPC
       const { error } = await supabase.rpc('delete_user_admin', { 
         p_user_id: userId, 
         p_request_id: reqId 

@@ -417,6 +417,30 @@ function adminDeletionAlertTemplate(data: { email: string; requestId: string; re
   return baseLayout(content, `🚨 Deletion request ${data.requestId} — Action required within 7 days`)
 }
 
+// Template 6c: Account Deletion Completed
+function deletionCompletedTemplate(data: { email: string }) {
+  const content = `
+    <p class="greeting">Your account has been deleted</p>
+    <p class="subtext">This is to confirm that your KnoWMi account associated with <strong>${data.email}</strong> and all of your personal data have been permanently removed from our systems.</p>
+
+    <div class="divider"></div>
+
+    <div style="background:#F8FAFC;border-left:3px solid #64748B;padding:14px 18px;border-radius:0 10px 10px 0;font-size:13px;color:#334155;line-height:1.5;margin:20px 0;">
+      <strong>What was removed:</strong>
+      <ul style="margin:6px 0 0;padding-left:20px;">
+        <li>Your digital profile, bio, and social links.</li>
+        <li>Your historical scan analytics and geolocations.</li>
+        <li>All active QR token associations linked to your physical items.</li>
+      </ul>
+    </div>
+
+    <p style="font-size:13px;color:#64748B;line-height:1.7;">If you ever decide to return, you can create a new account at any time. Any printed QR codes on your KnoWMi products are now free and can be claimed by a new account.</p>
+    
+    <p style="font-size:13px;color:#64748B;line-height:1.7;">Thank you for being a part of KnoWMi.</p>
+  `
+  return baseLayout(content, `Account permanently deleted — KnoWMi`)
+}
+
 // Template 7: Profile Scan Alert (omnichannel fallback)
 function scanAlertTemplate(data: { firstName: string; device: string; city: string }) {
   const content = `
@@ -530,6 +554,10 @@ serve(async (req) => {
         subject = `🔥 New KnoWMi Scan Alert from ${data.city || 'someone'}!`
         html = scanAlertTemplate(data)
         break
+      case 'deletion_completed':
+        subject = `Account permanently deleted — KnoWMi`
+        html = deletionCompletedTemplate(data)
+        break
       default:
         return new Response(JSON.stringify({ error: `Unknown email type: ${type}` }), {
           status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -547,6 +575,7 @@ serve(async (req) => {
         case 'deletion_request':   return 'KnoWMi Support <support@knowmi.in>'
         case 'policy_change':      return 'KnoWMi Legal <legal@knowmi.in>'
         case 'scan_alert':         return 'KnoWMi Alerts <alerts@knowmi.in>'
+        case 'deletion_completed': return 'KnoWMi Support <support@knowmi.in>'
         default:                   return 'KnoWMi <hello@knowmi.in>'
       }
     })()
