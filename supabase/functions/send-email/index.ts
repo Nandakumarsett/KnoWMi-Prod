@@ -356,7 +356,7 @@ function deletionRequestTemplate(data: { firstName: string; email: string; reque
     </div>
 
     <div style="background:#FEF2F2;border-left:3px solid #EF4444;padding:14px 18px;border-radius:0 10px 10px 0;font-size:13px;color:#7F1D1D;line-height:1.5;margin:20px 0;">
-      <strong>What happens next:</strong> Our team will process your deletion request within 15 business days. We'll permanently remove your profile, analytics data, and personal information. Order records will be retained for 7 years for tax compliance as required by Indian law.
+      <strong>What happens next:</strong> Our team will process your deletion request within <strong>7 working days</strong>. We'll permanently remove your profile, analytics data, and personal information. Any QR links associated with your Tee will automatically redirect visitors to KnoWMi's "Claim Your Tee" page. Order records will be retained for 7 years for tax compliance as required by Indian law.
     </div>
 
     <p style="font-size:13px;color:#64748B;line-height:1.7;">Changed your mind? Reply to this email or contact us at <a href="mailto:support.knowmi@gmail.com" style="color:#FF9933;font-weight:700;">support.knowmi@gmail.com</a> before we process the deletion and we'll cancel the request.</p>

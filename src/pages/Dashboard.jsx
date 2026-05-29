@@ -162,7 +162,7 @@ function AccountDeletionButton({ user, supabaseClient }) {
 
   if (done) return (
     <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-sm text-red-700 font-medium">
-      ✓ Deletion request submitted. We'll process it within 15 business days and send a confirmation email.
+      ✓ Deletion request submitted. Your account will be permanently deleted within <strong>7 working days</strong>. You'll receive a confirmation email once done. All QR links associated with your Tee will redirect to KnoWMi's "Claim Your Tee" page.
     </div>
   )
 
@@ -175,7 +175,7 @@ function AccountDeletionButton({ user, supabaseClient }) {
 
   return (
     <div className="space-y-3 p-4 bg-red-50 rounded-2xl border border-red-100">
-      <p className="text-sm font-bold text-red-700">Are you sure? This will permanently delete your profile and data.</p>
+      <p className="text-sm font-bold text-red-700">Are you sure? This will permanently delete your profile and all associated data within 7 working days. All QR links linked to your Tee will redirect to KnoWMi's "Claim Your Tee" page.</p>
       <textarea value={reason} onChange={e => setReason(e.target.value)} rows={2}
         placeholder="Optional: reason for leaving"
         className="w-full px-3 py-2 rounded-xl text-sm border border-red-200 bg-white resize-none outline-none" />

@@ -127,14 +127,41 @@ export default function PublicProfile() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-[#FDF6EC] flex flex-col items-center justify-center p-6 text-center text-[#1A1A1A]">
-        <h1 className="text-4xl font-black mb-4 font-display uppercase tracking-tighter text-[#C1440E]">404 Vibe Missing</h1>
-        <p className="text-[#5C5246] mb-8 max-w-xs">This digital identity hasn't been established on the protocol yet.</p>
-        <button 
-          onClick={() => navigate('/')} 
-          className="px-8 py-3 bg-[#C1440E] hover:bg-[#A0350B] text-white rounded-[12px] font-black uppercase tracking-widest hover:scale-105 transition-transform"
+      <div className="min-h-screen bg-neutral-900 flex flex-col items-center justify-center p-6 text-center text-white relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.15) 0%, transparent 70%)' }} />
+        {/* Animated ring */}
+        <div className="relative z-10 mb-8">
+          <div className="w-24 h-24 rounded-full border-2 border-orange-500/30 flex items-center justify-center animate-pulse">
+            <div className="w-16 h-16 bg-orange-500/10 rounded-full flex items-center justify-center">
+              <Sparkles size={32} className="text-orange-500" />
+            </div>
+          </div>
+        </div>
+        <span className="relative z-10 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-orange-500/15 text-orange-400 mb-6 border border-orange-500/20">
+          Unclaimed Tee
+        </span>
+        <h1 className="relative z-10 text-4xl font-black mb-4 font-display uppercase tracking-tighter text-white">
+          This Tee is Available
+        </h1>
+        <p className="relative z-10 text-neutral-400 mb-3 max-w-sm leading-relaxed">
+          The account linked to this KnoWMi Tee has been removed. This Tee is now free to be claimed.
+        </p>
+        <p className="relative z-10 text-neutral-500 text-xs mb-10 max-w-xs leading-relaxed">
+          If you own this Tee, sign in and claim it to lock your digital identity to it.
+        </p>
+        <button
+          onClick={() => {
+            navigate('/?auth=signin')
+          }}
+          className="relative z-10 px-10 py-5 bg-orange-500 text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-2xl shadow-orange-500/20 active:scale-95 transition-all hover:bg-orange-600"
         >
-          Return to Base
+          Claim Your Tee
+        </button>
+        <button
+          onClick={() => navigate('/')}
+          className="relative z-10 mt-4 px-6 py-3 text-neutral-500 text-xs font-bold uppercase tracking-widest hover:text-neutral-300 transition-colors"
+        >
+          Return to KnoWMi
         </button>
       </div>
     )
