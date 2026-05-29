@@ -163,31 +163,32 @@ serve(async (req) => {
 
       // 4. Send order confirmation + receipt email
       if (customerEmail) {
-        const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? ''
-        const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
-
-        await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            type: 'order_confirmation',
-            to: customerEmail,
-            toName: customerName,
-            data: {
-              firstName: customerName.split(' ')[0],
-              orderId,
-              receiptNumber,
-              items,
-              amountPaise,
-              paymentId,
-              paymentDate,
-              deliveryAddress: customerDetails?.delivery_address || null,
+        try {
+          const { data: emailRes, error: emailErr } = await supabaseClient.functions.invoke('send-email', {
+            body: {
+              type: 'order_confirmation',
+              to: customerEmail,
+              toName: customerName,
+              data: {
+                firstName: customerName.split(' ')[0],
+                orderId,
+                receiptNumber,
+                items,
+                amountPaise,
+                paymentId,
+                paymentDate,
+                deliveryAddress: customerDetails?.delivery_address || null,
+              }
             }
-          }),
-        })
+          })
+          if (emailErr) {
+            console.error('Failed to send order confirmation email:', emailErr)
+          } else {
+            console.log('Order confirmation email response:', emailRes)
+          }
+        } catch (err) {
+          console.error('Error invoking send-email from razorpay-webhook:', err)
+        }
       }
 
       // 5. Send Telegram Notification to Owner

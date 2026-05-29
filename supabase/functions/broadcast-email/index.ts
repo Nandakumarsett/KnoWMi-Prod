@@ -51,9 +51,6 @@ serve(async (req) => {
       })
     }
 
-    const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? ''
-    const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
-
     let sent = 0
     let failed = 0
 
@@ -65,13 +62,8 @@ serve(async (req) => {
         if (!user.email) return
 
         try {
-          const res = await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
+          const { data: emailRes, error: emailErr } = await supabase.functions.invoke('send-email', {
+            body: {
               type: 'policy_change',
               to: user.email,
               toName: user.user_metadata?.first_name || '',
@@ -81,10 +73,10 @@ serve(async (req) => {
                 summary,
                 policyUrl: policy_url || `https://knowmi.in/legal`,
               }
-            }),
+            }
           })
           
-          if (res.ok) sent++
+          if (!emailErr) sent++
           else failed++
         } catch {
           failed++

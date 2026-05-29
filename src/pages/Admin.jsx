@@ -10,6 +10,7 @@ import HomepagePreviewsAdmin from '../components/HomepagePreviewsAdmin'
 import ReturnRequestsAdmin from '../components/ReturnRequestsAdmin'
 import BroadcastAdmin from '../components/BroadcastAdmin'
 import TestCenterAdmin from '../components/TestCenterAdmin'
+import DeletionsAdmin from '../components/DeletionsAdmin'
 import { createClient } from '@supabase/supabase-js'
 
 // Separate client for creating users without logging the Owner out
@@ -189,6 +190,7 @@ export default function Admin() {
               { k: 'users', l: '👥 Customers' }, 
               { k: 'orders', l: '📦 Orders' },
               { k: 'returns', l: '↩️ Returns' },
+              { k: 'deletions', l: '🚨 Deletions' },
               { k: 'broadcast', l: '📢 Broadcast' },
               { k: 'qr_studio', l: '🖨️ QR Studio' },
               { k: 'team', l: '🛡️ Team' }, 
@@ -441,6 +443,11 @@ export default function Admin() {
         {/* Returns tab (Owner Only) */}
         {tab === 'returns' && isOwner && (
           <ReturnRequestsAdmin />
+        )}
+
+        {/* Deletions tab (Owner Only) */}
+        {tab === 'deletions' && isOwner && (
+          <DeletionsAdmin />
         )}
 
         {/* Policy Broadcast tab (Owner Only) */}

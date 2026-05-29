@@ -132,20 +132,63 @@ function ReturnRequestForm({ user, latestOrder, supabaseClient }) {
   )
 }
 
-function AccountDeletionButton({ user, supabaseClient }) {
+function AccountDeletionButton({ user, supabaseClient, profile }) {
   const [confirming, setConfirming] = useState(false)
   const [reason, setReason] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [done, setDone] = useState(false)
+  const [pendingRequest, setPendingRequest] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [cancelling, setCancelling] = useState(false)
+
+  useEffect(() => {
+    if (user) {
+      const checkPending = async () => {
+        const { data, error } = await supabaseClient
+          .from('deletion_requests')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('status', 'pending')
+          .maybeSingle()
+        if (!error && data) {
+          setPendingRequest(data)
+        }
+        setLoading(false)
+      }
+      checkPending()
+    } else {
+      setLoading(false)
+    }
+  }, [user, supabaseClient])
 
   const handleRequest = async () => {
     setSubmitting(true)
     const requestId = 'DEL-' + Date.now().toString().slice(-6)
-    await supabaseClient.from('deletion_requests').insert({
+    
+    // 1. Insert deletion request
+    const { error: insertErr } = await supabaseClient.from('deletion_requests').insert({
       user_id: user?.id,
       email: user?.email,
       reason: reason || null,
+      status: 'pending'
     })
+
+    if (insertErr) {
+      console.error(insertErr)
+      alert("Failed to submit request")
+      setSubmitting(false)
+      return
+    }
+
+    // 2. Immediately deactivate all QR tokens associated with this user's profile
+    if (profile?.id) {
+      await supabaseClient
+        .from('qr_tokens')
+        .update({ is_active: false })
+        .eq('profile_id', profile.id)
+    }
+
+    // 3. Send email
     await supabaseClient.functions.invoke('send-email', {
       body: {
         type: 'deletion_request',
@@ -159,7 +202,68 @@ function AccountDeletionButton({ user, supabaseClient }) {
         }
       }
     })
-    setDone(true); setSubmitting(false)
+    
+    setPendingRequest({ requestId, email: user?.email, reason })
+    setDone(true)
+    setSubmitting(false)
+  }
+
+  const handleCancel = async () => {
+    setCancelling(true)
+    try {
+      // 1. Update status to 'cancelled' in deletion_requests
+      const { error: updateErr } = await supabaseClient
+        .from('deletion_requests')
+        .update({ status: 'cancelled' })
+        .eq('user_id', user.id)
+        .eq('status', 'pending')
+
+      if (updateErr) throw updateErr
+
+      // 2. Re-activate all QR tokens
+      if (profile?.id) {
+        await supabaseClient
+          .from('qr_tokens')
+          .update({ is_active: true })
+          .eq('profile_id', profile.id)
+      }
+
+      setPendingRequest(null)
+      setDone(false)
+      setConfirming(false)
+      setReason('')
+      toast.success("🎉 Deletion request cancelled! Your profile and T-shirt links are now fully active.", { duration: 5000 })
+    } catch (e) {
+      console.error(e)
+      toast.error("Failed to cancel deletion request. Please contact support.")
+    } finally {
+      setCancelling(false)
+    }
+  }
+
+  if (loading) {
+    return <div className="text-xs text-neutral-400 font-bold uppercase tracking-wider">Loading...</div>
+  }
+
+  if (pendingRequest) {
+    return (
+      <div className="space-y-4 p-5 bg-red-50 border border-red-100 rounded-2xl animate-fadeIn">
+        <p className="text-sm font-bold text-red-700">
+          ⚠️ Deletion Request Pending (Request ID: {pendingRequest.requestId || pendingRequest.id?.slice(0, 8)})
+        </p>
+        <p className="text-xs text-red-600 leading-relaxed">
+          Your account is scheduled for permanent deletion in <strong>7 working days</strong>. 
+          Your physical T-shirt QR codes are currently deactivated and redirect to the "Claim your Tee" page.
+        </p>
+        <button
+          onClick={handleCancel}
+          disabled={cancelling}
+          className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-60 shadow-md active:scale-95"
+        >
+          {cancelling ? 'Restoring...' : 'Cancel Deletion Request & Restore Account'}
+        </button>
+      </div>
+    )
   }
 
   if (done) return (
@@ -176,7 +280,7 @@ function AccountDeletionButton({ user, supabaseClient }) {
   )
 
   return (
-    <div className="space-y-3 p-4 bg-red-50 rounded-2xl border border-red-100">
+    <div className="space-y-3 p-4 bg-red-50 rounded-2xl border border-red-100 animate-fadeIn">
       <p className="text-sm font-bold text-red-700">Are you sure? This will permanently delete your profile and all associated data within 7 working days. All QR links linked to your Tee will redirect to KnoWMi's "Claim Your Tee" page.</p>
       <textarea value={reason} onChange={e => setReason(e.target.value)} rows={2}
         placeholder="Optional: reason for leaving"
@@ -1631,6 +1735,24 @@ function Dashboard() {
             
           localStorage.removeItem('knowmi_pending_claim')
           toast.success("🎉 Tee claimed successfully! This physical product is now permanently paired to your digital identity.", { duration: 5000 })
+          
+          // Google Sheets Webhook Sync
+          const sheetsWebhookUrl = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL;
+          if (sheetsWebhookUrl) {
+            fetch(sheetsWebhookUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              mode: "no-cors",
+              body: JSON.stringify({
+                action: "claim",
+                id: pendingClaimId,
+                status: "Claimed",
+                email: user.email,
+                wm_code: profile.wm_code
+              })
+            }).catch(err => console.error("Google Sheets sync failed:", err));
+          }
+
           if (refreshProfile) refreshProfile()
         } catch (e) {
           console.error("Claim error", e)
@@ -2605,7 +2727,7 @@ function Dashboard() {
                   <p className="text-[11px] font-black uppercase text-red-400 tracking-[0.2em] mb-1">Danger Zone</p>
                   <h3 className="text-xl font-display font-black tracking-tight text-neutral-800 mb-2">Delete My Account</h3>
                   <p className="text-sm text-neutral-400 mb-5 leading-relaxed">Request permanent deletion of your KnoWMi account and personal data. This cannot be undone. Order records are retained for 7 years for tax compliance.</p>
-                  <AccountDeletionButton user={user} supabaseClient={supabase} />
+                  <AccountDeletionButton user={user} supabaseClient={supabase} profile={profile} />
                 </div>
               </div>
             )}

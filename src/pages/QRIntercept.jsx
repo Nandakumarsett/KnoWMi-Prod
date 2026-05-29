@@ -27,7 +27,7 @@ export default function QRIntercept() {
           .eq('scan_token', token)
           .single();
 
-        if (qrError || !qData) {
+        if (qrError || !qData || !qData.profile_id) {
           setIsUnclaimed(true);
           return;
         }
@@ -206,7 +206,7 @@ export default function QRIntercept() {
     }
   };
 
-  if (isUnclaimed) {
+  if (isUnclaimed || isDeactivated) {
     return (
       <div className="min-h-screen bg-[#080808] flex flex-col items-center justify-center p-6 text-center text-white relative overflow-hidden">
         <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-orange-500/10 rounded-full blur-[120px]" />
