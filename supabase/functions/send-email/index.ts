@@ -61,7 +61,7 @@ function baseLayout(content: string, previewText = '') {
       <div class="footer">
         <p>
           KnoWMi — India's first QR-enabled identity t-shirt<br/>
-          Questions? <a href="mailto:support.knowmi@gmail.com">support.knowmi@gmail.com</a> ·
+          Questions? <a href="mailto:business@knowmi.in">business@knowmi.in</a> ·
           <a href="https://wa.me/917981325397">WhatsApp</a><br/>
           <a href="https://knowmi.in/legal#privacy">Privacy Policy</a> ·
           <a href="https://knowmi.in/legal#terms">Terms of Service</a><br/>
@@ -517,9 +517,9 @@ serve(async (req) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'KnoWMi Alerts <onboarding@resend.dev>',
+            from: 'KnoWMi Alerts <alerts@knowmi.in>',
             reply_to: data.email,
-            to: ['support.knowmi@gmail.com'],
+            to: ['business@knowmi.in'],
             subject: `🚨 [ACTION REQUIRED] Account deletion request ${data.requestId} — ${data.email}`,
             html: adminHtml,
           }),
@@ -536,13 +536,24 @@ serve(async (req) => {
         })
     }
 
-    // Send via Resend
-    // NOTE: FROM is set to onboarding@resend.dev (Resend's shared domain, works without DNS setup)
-    // REPLY-TO is set to support.knowmi@gmail.com so replies reach you
-    // To use a custom from (e.g. orders@knowmi.in), verify your domain at resend.com/domains
+    // Send via Resend — using verified knowmi.in domain
+    // FROM addresses are virtual (no inbox needed), replies route to business@knowmi.in
+    const fromAddress = (() => {
+      switch (type) {
+        case 'order_confirmation': return 'KnoWMi Orders <orders@knowmi.in>'
+        case 'dispatch':           return 'KnoWMi Orders <orders@knowmi.in>'
+        case 'welcome':            return 'KnoWMi <hello@knowmi.in>'
+        case 'return_request':     return 'KnoWMi Support <support@knowmi.in>'
+        case 'deletion_request':   return 'KnoWMi Support <support@knowmi.in>'
+        case 'policy_change':      return 'KnoWMi Legal <legal@knowmi.in>'
+        case 'scan_alert':         return 'KnoWMi Alerts <alerts@knowmi.in>'
+        default:                   return 'KnoWMi <hello@knowmi.in>'
+      }
+    })()
+
     const resendPayload = {
-      from: 'KnoWMi <onboarding@resend.dev>',
-      reply_to: 'support.knowmi@gmail.com',
+      from: fromAddress,
+      reply_to: 'business@knowmi.in',
       to: [to],
       subject,
       html,
