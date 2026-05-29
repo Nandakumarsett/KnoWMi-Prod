@@ -140,6 +140,7 @@ function AccountDeletionButton({ user, supabaseClient }) {
 
   const handleRequest = async () => {
     setSubmitting(true)
+    const requestId = 'DEL-' + Date.now().toString().slice(-6)
     await supabaseClient.from('deletion_requests').insert({
       user_id: user?.id,
       email: user?.email,
@@ -153,7 +154,8 @@ function AccountDeletionButton({ user, supabaseClient }) {
         data: {
           firstName: '',
           email: user?.email,
-          requestId: 'DEL-' + Date.now().toString().slice(-6),
+          requestId,
+          reason: reason || null,
         }
       }
     })

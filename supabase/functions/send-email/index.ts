@@ -364,6 +364,59 @@ function deletionRequestTemplate(data: { firstName: string; email: string; reque
   return baseLayout(content, `Account deletion request ${data.requestId} — KnoWMi`)
 }
 
+// Template 6b: Admin Alert — Account Deletion Request
+function adminDeletionAlertTemplate(data: { email: string; requestId: string; reason?: string; submittedAt: string }) {
+  const content = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+      <span class="badge" style="background:#FEE2E2;color:#991B1B;">🚨 Action Required</span>
+    </div>
+    <p class="greeting">A user has requested account deletion</p>
+    <p class="subtext">You have 7 working days to process this request. Once done, delete the user from Supabase Auth Dashboard to complete the deletion.</p>
+
+    <div class="divider"></div>
+
+    <div class="grid-2">
+      <div>
+        <div class="label">Request ID</div>
+        <div class="value-mono">${data.requestId}</div>
+      </div>
+      <div>
+        <div class="label">Submitted At</div>
+        <div class="value">${data.submittedAt}</div>
+      </div>
+      <div>
+        <div class="label">User Email</div>
+        <div class="value" style="font-size:13px;color:#EF4444;font-weight:800;">${data.email}</div>
+      </div>
+      <div>
+        <div class="label">Deadline</div>
+        <div class="value" style="color:#EF4444;">Within 7 working days</div>
+      </div>
+    </div>
+
+    ${data.reason ? `
+    <div style="background:#F8FAFC;border-radius:12px;padding:16px;margin:16px 0;">
+      <div class="label" style="margin-bottom:6px;">Reason Given by User</div>
+      <div style="font-size:14px;color:#334155;">${data.reason}</div>
+    </div>
+    ` : '<p style="font-size:13px;color:#94A3B8;">No reason provided by user.</p>'}
+
+    <div class="tip-box">
+      <strong>Steps to process:</strong>
+      <ol style="margin:8px 0 0;padding-left:20px;font-size:13px;line-height:2;">
+        <li>Go to <a href="https://supabase.com/dashboard" style="color:#EA580C;font-weight:700;">Supabase Dashboard → Authentication → Users</a></li>
+        <li>Search for <strong>${data.email}</strong> and delete the user</li>
+        <li>Update the deletion_requests table status to <strong>completed</strong></li>
+      </ol>
+    </div>
+
+    <div class="cta-center">
+      <a href="https://supabase.com/dashboard" class="cta-btn" style="background:linear-gradient(135deg,#EF4444,#DC2626);">Go to Supabase Dashboard →</a>
+    </div>
+  `
+  return baseLayout(content, `🚨 Deletion request ${data.requestId} — Action required within 7 days`)
+}
+
 // Template 7: Profile Scan Alert (omnichannel fallback)
 function scanAlertTemplate(data: { firstName: string; device: string; city: string }) {
   const content = `
@@ -447,10 +500,32 @@ serve(async (req) => {
         subject = `Return request received — ${data.requestId} | KnoWMi`
         html = returnRequestTemplate(data)
         break
-      case 'deletion_request':
+      case 'deletion_request': {
         subject = `Account deletion request received — KnoWMi`
         html = deletionRequestTemplate(data)
+        // Also fire an admin alert email immediately
+        const adminHtml = adminDeletionAlertTemplate({
+          email: data.email,
+          requestId: data.requestId,
+          reason: data.reason || null,
+          submittedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' })
+        })
+        await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: 'KnoWMi Alerts <onboarding@resend.dev>',
+            reply_to: data.email,
+            to: ['support.knowmi@gmail.com'],
+            subject: `🚨 [ACTION REQUIRED] Account deletion request ${data.requestId} — ${data.email}`,
+            html: adminHtml,
+          }),
+        })
         break
+      }
       case 'scan_alert':
         subject = `🔥 New KnoWMi Scan Alert from ${data.city || 'someone'}!`
         html = scanAlertTemplate(data)
