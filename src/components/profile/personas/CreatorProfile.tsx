@@ -188,7 +188,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
               </div>
 
               <div 
-                className={`mb-16 animate-fadeIn w-full -mt-6 ${isFreeProfile ? 'cursor-pointer hover:opacity-85 transition-all' : ''}`}
+                className={`mb-16 animate-fadeIn w-full -mt-6 ${isFreeProfile ? 'cursor-pointer hover:opacity-85 transition-opacity' : ''}`}
                 onClick={() => isFreeProfile && setShowFomoModal(true)}
               >
                 <div className="flex justify-evenly items-start w-full">
@@ -336,7 +336,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
   // ----------------------------------------------------
   if (activeTheme === 'minimal') {
     return (
-      <div className="w-full pb-24 relative bg-[#F5F5F5] text-black font-mono selection:bg-yellow-300 selection:text-black min-h-screen">
+      <div className="w-full pb-24 relative bg-[#F3F4F6] text-black font-mono selection:bg-yellow-300 selection:text-black min-h-screen">
         <style dangerouslySetInnerHTML={{ __html: `
           .brutalist-block {
             background: white;
@@ -349,7 +349,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             box-shadow: 11px 11px 0px 0px rgba(0,0,0,1);
           }
           .brutalist-accent {
-            background: #FACC15;
+            background: #FDE047;
             border: 4px solid black;
             box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
           }
@@ -360,18 +360,17 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             transition: all 0.1s ease;
           }
           .brutalist-btn:hover {
-            background: #FACC15;
+            background: #FDE047;
             transform: translate(-2px, -2px);
             box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
           }
         `}} />
 
-        {/* Massive Brutalist Header Banner */}
         <section className="relative border-b-4 border-black h-56 bg-neutral-200 overflow-hidden flex items-center justify-center">
           {data.featured_work_url ? (
             <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover grayscale contrast-150 brightness-95" alt="Banner" />
           ) : (
-            <div className="absolute inset-0 bg-[#FACC15] flex items-center justify-center font-black text-4xl uppercase tracking-widest">
+            <div className="absolute inset-0 bg-[#FDE047] flex items-center justify-center font-black text-4xl uppercase tracking-widest">
               CREATIVE LAB
             </div>
           )}
@@ -380,7 +379,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
           </div>
         </section>
 
-        {/* Asymmetrical Overlapping Square Avatar */}
         <div className="relative h-12 px-6 sm:px-12 z-30 flex justify-start">
           <div className="absolute -top-20 w-36 h-36 border-4 border-black bg-white overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-none">
             <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover grayscale contrast-125" />
@@ -388,13 +386,10 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
         </div>
 
         <div className="px-6 sm:px-12 pt-14 max-w-5xl mx-auto">
-          {/* Stark Identity Grid Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-            
-            {/* Bio Column */}
             <div className="lg:col-span-8 space-y-6 text-left">
               <div className="brutalist-block p-6 sm:p-8">
-                <span className="inline-block bg-[#FACC15] text-black px-3 py-1 font-black text-xs uppercase tracking-widest border-2 border-black mb-4">
+                <span className="inline-block bg-[#FDE047] text-black px-3 py-1 font-black text-xs uppercase tracking-widest border-2 border-black mb-4">
                   {data.type || 'CREATIVE DIRECTOR'}
                 </span>
                 <h1 className="text-3xl sm:text-5xl font-black tracking-tighter uppercase mb-4 leading-none">{profile.display_name}</h1>
@@ -405,7 +400,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                 )}
               </div>
 
-              {/* Statement */}
               {data.about && (
                 <div className="brutalist-block p-6 bg-white">
                   <h3 className="font-black uppercase tracking-widest text-xs border-b-2 border-black pb-2 mb-4">// CORE NARRATIVE</h3>
@@ -416,7 +410,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
               )}
             </div>
 
-            {/* Metrics column */}
             <div className="lg:col-span-4 flex flex-col gap-6">
               <div className="brutalist-accent p-6 text-left">
                 <span className="text-[10px] font-black uppercase tracking-widest text-neutral-800 block mb-1">TOTAL_SCANS</span>
@@ -428,7 +421,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                 <span className={`text-lg font-black block uppercase truncate ${isFreeProfile ? 'blur-[6px]' : ''}`}>{isFreeProfile ? 'New York' : topCity}</span>
               </div>
 
-              {/* Contact Block */}
               <div className="brutalist-block p-6 bg-white text-left flex flex-col gap-3">
                 <span className="text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-2">// PING CHANNEL</span>
                 {data.contact_email && (
@@ -443,10 +435,8 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                 )}
               </div>
             </div>
-
           </div>
 
-          {/* Connective Nodes */}
           {data.platforms && data.platforms.length > 0 && (
             <div className="mb-12 text-left">
               <h3 className="font-black text-lg uppercase tracking-widest mb-6 flex items-center gap-2">
@@ -484,11 +474,10 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          {/* Staggered Portfolio Works */}
           {data.works && data.works.length > 0 && (
             <div className="mb-12 text-left">
               <h3 className="font-black text-lg uppercase tracking-widest mb-6 flex items-center gap-2">
-                <span className="w-4 h-4 bg-[#FACC15] border-2 border-black"></span> SELECTED WORKS Showcase
+                <span className="w-4 h-4 bg-[#FDE047] border-2 border-black"></span> SELECTED WORKS
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 {data.works.map((w, i) => {
@@ -511,7 +500,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          {/* Specialized Brutalist tags */}
           {data.content_formats && data.content_formats.length > 0 && (
             <div className="mb-12 text-left">
               <span className="text-[10px] font-black uppercase tracking-widest text-neutral-500 block mb-4">// SPECIALIZED FORMATS</span>
@@ -525,7 +513,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          {/* Collab Banner */}
           <section className="brutalist-accent p-8 text-left mb-12">
             <h3 className="font-black text-xl uppercase tracking-widest mb-2 flex items-center gap-2">
               <Sparkles size={22} /> COLLABORATION INQUIRY
@@ -541,7 +528,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
               )}
             </div>
           </section>
-
         </div>
         <GateModal />
       </div>
@@ -553,9 +539,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
   // ----------------------------------------------------
   if (activeTheme === 'neon') {
     return (
-      <div className="w-full pb-24 relative bg-[#07020E] text-white font-sans overflow-hidden min-h-screen selection:bg-fuchsia-500 selection:text-white">
-        
-        {/* Deep Synthwave Laser grid overlay */}
+      <div className="w-full pb-24 relative bg-[#090214] text-white font-sans overflow-hidden min-h-screen selection:bg-fuchsia-500 selection:text-white">
         <div 
           className="absolute inset-0 pointer-events-none opacity-25 z-0" 
           style={{
@@ -565,25 +549,21 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
           }}
         />
 
-        {/* Ambient Neon Glow balls */}
         <div className="absolute top-[80px] left-[-150px] w-[400px] h-[400px] bg-fuchsia-600/20 rounded-full blur-[120px] pointer-events-none animate-pulse" />
         <div className="absolute bottom-[100px] right-[-150px] w-[400px] h-[400px] bg-cyan-600/20 rounded-full blur-[120px] pointer-events-none" />
 
-        {/* Neon Cyber Header cover */}
         <section className="relative z-10 h-60 sm:h-72 overflow-hidden border-b-2 border-fuchsia-500 shadow-[0_0_20px_rgba(240,46,170,0.4)]">
           {data.featured_work_url ? (
             <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover brightness-75 contrast-125" alt="Banner" />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-900 via-purple-950 to-[#0c0421]" />
           )}
-          {/* Scanlines layer */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.3)_50%)] bg-[length:100%_4px] pointer-events-none" />
           <div className="absolute bottom-6 right-6 bg-black/80 border border-fuchsia-500/60 px-4 py-2 rounded-md text-[10px] font-black text-fuchsia-400 tracking-widest backdrop-blur-md">
             SYSTEM // MODE: NEON_SYNTH
           </div>
         </section>
 
-        {/* Overlapping glowing capsule avatar */}
         <div className="relative h-12 px-8 z-30 flex justify-center">
           <div className="absolute -top-20 w-36 h-36 rounded-full p-[2.5px] bg-gradient-to-tr from-fuchsia-500 via-purple-600 to-cyan-400 shadow-[0_0_25px_rgba(240,46,170,0.6)]">
             <div className="w-full h-full bg-[#0D0721] rounded-full overflow-hidden p-1.5">
@@ -593,10 +573,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
         </div>
 
         <div className="px-6 sm:px-12 pt-16 max-w-4xl mx-auto relative z-20">
-          
-          {/* Main Cyber Console block */}
           <div className="text-center mb-12 bg-neutral-950/80 border border-fuchsia-500/40 p-8 rounded-3xl backdrop-blur-md shadow-[0_0_20px_rgba(240,46,170,0.1)] relative">
-            <div className="absolute top-3 left-6 text-[8px] font-black tracking-widest text-fuchsia-500/50 uppercase">// USER CONFIG ID</div>
             <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-fuchsia-400 via-purple-300 to-cyan-400 bg-clip-text text-transparent uppercase italic mb-3 mt-2">
               {profile.display_name}
             </h1>
@@ -608,7 +585,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             )}
           </div>
 
-          {/* Glowing Metrics Console */}
           <div className="grid grid-cols-2 gap-6 max-w-xl mx-auto mb-12">
             <div className="bg-[#0f041d] border border-fuchsia-500/40 p-6 rounded-2xl text-center shadow-[0_0_15px_rgba(240,46,170,0.15)] hover:border-fuchsia-400 transition-colors">
               <span className={`text-4xl font-extrabold block text-fuchsia-400 tracking-wider ${isFreeProfile ? 'blur-[6px]' : ''}`}>{isFreeProfile ? '8,204' : liveViews}</span>
@@ -620,9 +596,8 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           </div>
 
-          {/* Statement console */}
           {data.about && (
-            <div className="mb-12 bg-neutral-950/70 border border-purple-900/40 p-6 rounded-3xl text-left shadow-[inset_0_0_15px_rgba(240,46,170,0.05)]">
+            <div className="mb-12 bg-neutral-950/70 border border-purple-900/40 p-6 rounded-3xl text-left">
               <span className="text-[9px] font-black tracking-widest text-fuchsia-400 block mb-3">// CREATIVE MANUAL DIALOGUE</span>
               <p className="text-base text-purple-100 leading-relaxed italic">
                 "{data.about}"
@@ -630,7 +605,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          {/* Cyber Nodes Grid */}
           {data.platforms && data.platforms.length > 0 && (
             <div className="mb-12 text-left">
               <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-fuchsia-400 mb-6">// ACTIVE NODE SHUNTS</h4>
@@ -666,7 +640,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          {/* Portfolio grid with glowing tags */}
           {data.works && data.works.length > 0 && (
             <div className="mb-12 text-left">
               <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-fuchsia-400 mb-6">// VISUAL CORE SHOWCASE</h4>
@@ -683,9 +656,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent p-5 flex flex-col justify-end text-left">
                         <span className="text-xs font-black uppercase tracking-wider text-white shadow-sm">{w.title}</span>
                       </div>
-                      <div className="absolute top-4 right-4 bg-black/80 border border-fuchsia-500 px-2 py-0.5 rounded text-[8px] font-black tracking-widest text-fuchsia-400">
-                        PLAYBACK
-                      </div>
                     </div>
                   )
                 })}
@@ -693,7 +663,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          {/* Specialty tags */}
           {data.content_formats && data.content_formats.length > 0 && (
             <div className="mb-12 text-left">
               <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-fuchsia-400 mb-4">// CORE PROTOCOLS</h4>
@@ -707,7 +676,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          {/* Collab Console */}
           <section className="bg-neutral-950/80 border border-fuchsia-500 p-8 rounded-3xl text-left shadow-[0_0_30px_rgba(240,46,170,0.15)] mb-10">
             <h3 className="font-extrabold text-xl uppercase tracking-widest mb-2 text-fuchsia-400 flex items-center gap-2">
               <Sparkles size={20} className="animate-pulse" /> CORE COLLABORATIVE INTERACTION
@@ -721,14 +689,8 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                   DISPATCH EMAIL
                 </a>
               )}
-              {data.contact_whatsapp && (
-                <a href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" className="px-6 py-3.5 bg-[#120524] border border-cyan-500 text-cyan-400 font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-[0_0_15px_rgba(6,182,212,0.4)] active:scale-95">
-                  WHATSAPP SYNC
-                </a>
-              )}
             </div>
           </section>
-
         </div>
         <GateModal />
       </div>
@@ -739,13 +701,10 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
   // LAYOUT 3: GLOW EDITORIAL MAGAZINE (Default / Glow Theme)
   // ----------------------------------------------------
   return (
-    <div className="w-full pb-24 relative overflow-hidden bg-[#FAF7F2] rounded-[48px] border border-[#E9DFCE] shadow-2xl min-h-screen">
-      
-      {/* Floating Organic Warm Flares */}
-      <div className="absolute top-[10%] left-[5%] w-[400px] h-[400px] bg-gradient-to-tr from-rose-200/30 via-amber-100/20 to-transparent rounded-full blur-[100px] pointer-events-none" />
+    <div className="w-full pb-24 relative overflow-hidden bg-[#FDFBF7] rounded-[48px] border border-[#E9DFCE] shadow-2xl min-h-screen">
+      <div className="absolute top-[10%] left-[5%] w-[400px] h-[400px] bg-gradient-to-tr from-rose-200/30 via-amber-100/20 to-transparent rounded-full blur-[100px] pointer-events-none animate-pulse" style={{ animationDuration: '8s' }} />
       <div className="absolute bottom-[15%] right-[5%] w-[400px] h-[400px] bg-gradient-to-tr from-amber-100/30 via-orange-100/20 to-transparent rounded-full blur-[100px] pointer-events-none" />
 
-      {/* Floating Sparkles Background */}
       <div className="absolute inset-0 pointer-events-none z-0">
         {[...Array(12)].map((_, i) => (
           <div 
@@ -763,7 +722,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
         ))}
       </div>
 
-      {/* Premium Hero Banner Cover */}
       <section className="relative z-10">
         <div className="w-full h-56 sm:h-72 relative bg-neutral-900 overflow-hidden rounded-t-[48px]">
           {data.featured_work_url ? (
@@ -771,50 +729,62 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-rose-500 to-amber-500" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#FAF7F2] via-[#FAF7F2]/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/10 to-transparent" />
         </div>
 
-        {/* Centered Overlapping Circle Avatar with Thick Cream Border */}
         <div className="relative h-12 px-8 z-30">
           <div className="absolute -top-24 sm:-top-32 left-1/2 -translate-x-1/2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.15)]">
             <div 
               className="w-44 h-44 sm:w-52 sm:h-52 p-2 rounded-full"
               style={{ background: 'linear-gradient(135deg, #C1440E, #F97316)' }}
             >
-              <div className="w-full h-full bg-[#FAF7F2] p-1.5 rounded-full overflow-hidden">
+              <div className="w-full h-full bg-[#FDFBF7] p-1.5 rounded-full overflow-hidden">
                 <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" />
               </div>
             </div>
             {profile.is_verified && (
-              <div className="absolute bottom-2 right-2 w-11 h-11 bg-[#FAF7F2] rounded-full shadow-lg flex items-center justify-center border border-[#E9DFCE]">
+              <div className="absolute bottom-2 right-2 w-11 h-11 bg-[#FDFBF7] rounded-full shadow-lg flex items-center justify-center border border-[#E9DFCE]">
                 <VerifiedBadge isVerified={profile.is_verified} accentColor="#C1440E" />
               </div>
             )}
           </div>
         </div>
 
-        <div className="px-6 sm:px-12 pt-16 max-w-5xl mx-auto relative z-20">
-          
-          {/* Identity Grid: Left Title Block, Right Profile Narrative */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 items-start">
+        {/* Asymmetrical Premium Editorial Grid */}
+        <div className="px-6 sm:px-12 pt-16 max-w-6xl mx-auto relative z-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mb-16">
             
-            {/* Title / Name details block */}
-            <div className="lg:col-span-6 text-center lg:text-left">
+            {/* Sticky Card Info Panel */}
+            <div className="lg:col-span-5 bg-white/50 border border-[#E9DFCE] p-8 rounded-[36px] shadow-sm backdrop-blur-md text-center lg:text-left lg:sticky lg:top-8">
               <span className="inline-block bg-orange-600/10 text-orange-700 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.25em] mb-4">
                 {data.type || 'CREATIVE PROFESSIONAL'}
               </span>
-              <h1 className="text-4xl sm:text-6xl font-serif font-black tracking-tight text-neutral-900 uppercase italic leading-tight">
+              <h1 className="text-4xl sm:text-5xl font-serif font-black tracking-tight text-neutral-900 uppercase italic leading-tight mb-4">
                 {profile.display_name}
               </h1>
               {profile.bio && (
-                <p className="text-base text-neutral-600 leading-relaxed font-sans italic mt-6 border-l-4 border-orange-500 pl-4 text-left max-w-lg mx-auto lg:mx-0">
+                <p className="text-sm text-neutral-600 leading-relaxed font-sans italic border-l-4 border-orange-500 pl-4 mt-6">
                   {profile.bio}
                 </p>
               )}
+              
+              <div className="mt-8 flex flex-col gap-3">
+                {data.contact_email && (
+                  <a href={`mailto:${data.contact_email}`} className="flex items-center justify-center gap-2 px-8 py-3.5 bg-white border border-[#E9DFCE] rounded-2xl hover:border-orange-500 hover:text-orange-600 transition-all text-xs font-black uppercase tracking-widest text-neutral-900 shadow-sm">
+                    <Mail size={16} /> Send Dispatch
+                  </a>
+                )}
+                {data.contact_whatsapp && (
+                  <a href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-8 py-3.5 bg-neutral-900 rounded-2xl hover:bg-orange-600 transition-all text-xs font-black uppercase tracking-widest text-white shadow-lg">
+                    <MessageCircle size={16} /> WhatsApp Sync
+                  </a>
+                )}
+              </div>
             </div>
 
-            {/* Metrics & Mini-Narrative Card block */}
-            <div className="lg:col-span-6 space-y-6">
+            {/* Scrolling Dynamic Details Panel */}
+            <div className="lg:col-span-7 space-y-10 text-left">
+              
               {/* Premium Analytics grid */}
               <div 
                 className={`grid grid-cols-2 gap-4 ${isFreeProfile ? 'cursor-pointer hover:opacity-85 transition-all' : ''}`}
@@ -830,133 +800,116 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                 </div>
               </div>
 
-              {/* Curated About Statement */}
+              {/* Narrative Statement */}
               {data.about && (
-                <div className="bg-white/60 border border-[#E9DFCE] p-6 rounded-3xl text-left backdrop-blur-sm">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 block mb-2">Narrative Profile</span>
-                  <p className="text-sm text-neutral-700 leading-relaxed font-medium italic">
+                <div className="bg-white/60 border border-[#E9DFCE] p-8 rounded-[32px]">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 block mb-3">// CREATOR DIALOGUE</span>
+                  <p className="text-base text-neutral-700 leading-relaxed font-medium italic">
                     "{data.about}"
                   </p>
                 </div>
               )}
-            </div>
 
-          </div>
-
-          {/* Social Platforms Row (High-End icons) */}
-          {data.platforms && data.platforms.length > 0 && (
-            <div className="mb-16 text-left">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 block mb-6">// SOCIAL MATRIX CONNECTOR</span>
-              <div className="flex flex-wrap items-center justify-start gap-4">
-                {data.platforms.map(p => {
-                  const platform = p.platform?.toLowerCase()
-                  const Icon = PLATFORM_ICONS[platform] || Share2
-                  const style = brandStyles[platform] || 'bg-neutral-950 text-white'
-                  const logo = logoNames[platform]
-
-                  return (
-                    <a 
-                      key={p.platform} 
-                      href={ensureAbsoluteUrl(p.url)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => {
-                        handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
-                        if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
-                      }}
-                      className="group flex items-center gap-3 transition-all hover:scale-105 shrink-0 cursor-pointer"
-                    >
-                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg ${style} transition-shadow group-hover:shadow-xl p-4 relative overflow-hidden`}>
-                        {logo ? (
-                          <img 
-                            src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
-                            className="w-full h-full object-contain filter invert"
-                            alt={p.platform}
-                            style={{ filter: 'brightness(0) invert(1)' }}
-                          />
-                        ) : (
-                          <Icon size={24} />
-                        )}
-                        {isGated && (
-                          <div className="absolute inset-0 rounded-2xl bg-black/20 flex items-center justify-center">
-                            <Lock size={16} className="text-white drop-shadow-md" strokeWidth={2.5} />
+              {/* Curated showcase with masonry offset */}
+              {data.works && data.works.length > 0 && (
+                <div className="space-y-6">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 block">// VISUAL MASTERPIECES</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {data.works.map((w, i) => {
+                      const thumb = getThumbnail(w)
+                      return (
+                        <div 
+                          key={i} 
+                          onClick={() => setSelectedWork(w)}
+                          className="group relative rounded-[32px] overflow-hidden bg-neutral-100 border border-[#E9DFCE] shadow-sm hover:shadow-xl transition-all aspect-video cursor-pointer"
+                        >
+                          <img src={thumb || 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=2070'} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={w.title} />
+                          <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/80 to-transparent flex justify-between items-center">
+                            <span className="text-xs font-black text-white uppercase tracking-wider">{w.title}</span>
+                            <Play size={14} className="text-white" />
                           </div>
-                        )}
-                      </div>
-                    </a>
-                  )
-                })}
-              </div>
-            </div>
-          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
 
-          {/* Showcase works responsive grid */}
-          {data.works && data.works.length > 0 && (
-            <div className="mb-16 text-left">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 block mb-6">// SELECTED SHOWCASE PROJECTS</span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                {data.works.map((w, i) => {
-                  const thumb = getThumbnail(w)
-                  return (
-                    <div 
-                      key={i} 
-                      onClick={() => setSelectedWork(w)}
-                      className="group relative rounded-[36px] overflow-hidden bg-neutral-100 border border-[#E9DFCE] shadow-md hover:shadow-2xl transition-all aspect-video cursor-pointer"
-                    >
-                      <img src={thumb || 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=2070'} className="w-full h-full object-cover transition-transform duration-[800ms] group-hover:scale-105" alt={w.title} />
-                      <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex justify-between items-center text-left">
-                        <span className="text-xs font-black text-white uppercase tracking-wider">{w.title}</span>
-                        <Play size={16} className="text-white opacity-70 group-hover:opacity-100 transition-opacity" />
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          )}
+              {/* Specialties */}
+              {data.content_formats && data.content_formats.length > 0 && (
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 block mb-4">// PRODUCTION FORMATS</span>
+                  <div className="flex flex-wrap gap-2">
+                    {data.content_formats.map(format => (
+                      <span key={format} className="px-4 py-2 rounded-xl bg-orange-50/70 border border-[#E9DFCE] text-xs font-black uppercase tracking-widest text-orange-700">
+                        {format}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-          {/* Core Specialization badges */}
-          {data.content_formats && data.content_formats.length > 0 && (
-            <div className="mb-16 text-left">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 block mb-4">// CORE SKILLS & CHANNELS</span>
-              <div className="flex flex-wrap gap-2">
-                {data.content_formats.map(format => (
-                  <span key={format} className="px-4 py-2.5 rounded-full bg-orange-50/70 border border-[#E9DFCE] text-xs font-black uppercase tracking-widest text-orange-700 shadow-sm">
-                    {format}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+              {/* Social platform directory */}
+              {data.platforms && data.platforms.length > 0 && (
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 block mb-6">// INTEGRATED HUBS</span>
+                  <div className="flex flex-wrap gap-3">
+                    {data.platforms.map(p => {
+                      const platform = p.platform?.toLowerCase()
+                      const Icon = PLATFORM_ICONS[platform] || Share2
+                      const style = brandStyles[platform] || 'bg-neutral-900 text-white'
+                      const logo = logoNames[platform]
 
-          {/* Elegant Contact / Collab block */}
-          <section className="relative z-10 mb-12">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-8 bg-white/70 border border-[#E9DFCE] p-8 sm:p-10 rounded-[36px] backdrop-blur-md">
-              <div className="text-left flex-1">
+                      return (
+                        <a 
+                          key={p.platform} 
+                          href={ensureAbsoluteUrl(p.url)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => {
+                            handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                            if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                          }}
+                          className="group flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
+                        >
+                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-md ${style} transition-shadow p-3 relative overflow-hidden`}>
+                            {logo ? (
+                              <img 
+                                src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
+                                className="w-full h-full object-contain filter invert"
+                                alt={p.platform}
+                                style={{ filter: 'brightness(0) invert(1)' }}
+                              />
+                            ) : (
+                              <Icon size={18} />
+                            )}
+                            {isGated && (
+                              <div className="absolute inset-0 rounded-xl bg-black/20 flex items-center justify-center">
+                                <Lock size={14} className="text-white" />
+                              </div>
+                            )}
+                          </div>
+                        </a>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Collaboration strategy */}
+              <section className="bg-[#FAF6F0] border border-[#E9DFCE] p-8 rounded-[32px] text-left">
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles size={16} className="text-orange-500" />
                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-900">Collaboration Engine</span>
                 </div>
-                <p className="text-xs text-neutral-500 font-medium italic">
+                <p className="text-xs text-neutral-500 font-medium italic leading-relaxed">
                   {data.collab_types || 'Open for high-end artistic direction, photography campaigns, and strategic creative partnerships.'}
                 </p>
-              </div>
-              
-              <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
-                {data.contact_email && (
-                  <a href={`mailto:${data.contact_email}`} className="flex items-center justify-center gap-2 px-8 py-4 bg-white border border-[#E9DFCE] rounded-2xl hover:border-orange-500 hover:text-orange-600 transition-all text-xs font-black uppercase tracking-widest text-neutral-900 shadow-sm flex-1 sm:flex-initial">
-                    <Mail size={16} /> Send Mail
-                  </a>
-                )}
-                {data.contact_whatsapp && (
-                  <a href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-8 py-4 bg-neutral-900 rounded-2xl hover:bg-orange-600 transition-all text-xs font-black uppercase tracking-widest text-white shadow-lg flex-1 sm:flex-initial">
-                    <MessageCircle size={16} /> WhatsApp
-                  </a>
-                )}
-              </div>
-            </div>
-          </section>
+              </section>
 
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -991,7 +944,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
       {/* FOMO Modal */}
       {showFomoModal && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fadeIn">
-          <div className="bg-[#FAF7F2] border border-[#E9DFCE] rounded-[36px] p-8 max-w-sm w-full shadow-2xl relative animate-zoomIn text-center">
+          <div className="bg-[#FDFBF7] border border-[#E9DFCE] rounded-[36px] p-8 max-w-sm w-full shadow-2xl relative animate-zoomIn text-center">
             <button onClick={() => setShowFomoModal(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-600 rounded-full hover:bg-neutral-50 transition-all">
               <X size={20} />
             </button>

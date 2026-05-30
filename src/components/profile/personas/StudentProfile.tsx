@@ -294,38 +294,56 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   // ----------------------------------------------------
   if (activeTheme === 'campus') {
     return (
-      <div className="w-full min-h-screen bg-[#F1F5F9] text-blue-950 transition-colors duration-300 pb-24 p-4 sm:p-8 relative">
+      <div className="w-full min-h-screen bg-[#E2D4C9] text-blue-950 pb-24 p-4 sm:p-8 relative selection:bg-amber-100">
         
-        {/* Cork Bulletin notice board overlay */}
-        <div className="absolute top-[8%] left-1/2 -translate-x-1/2 opacity-[0.03] pointer-events-none z-0">
-          <GraduationCap size={450} />
-        </div>
+        {/* CSS styles for Campus notice board */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            .cork-texture {
+              background-image: 
+                radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 0),
+                radial-gradient(rgba(0, 0, 0, 0.08) 2px, transparent 0);
+              background-size: 8px 8px, 16px 16px;
+              background-position: 0 0, 4px 4px;
+            }
+            .varsity-title {
+              text-shadow: 2px 2px 0px #1E3A8A, -1px -1px 0px #1E3A8A, 1px -1px 0px #1E3A8A, -1px 1px 0px #1E3A8A;
+            }
+          `
+        }} />
+
+        {/* Cork noticeboard background */}
+        <div className="fixed inset-0 cork-texture bg-[#CBB59F] border-[16px] border-[#8C6D58] shadow-inner pointer-events-none z-0" />
 
         <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center">
           
-          {/* Varsity Letter block Frame Avatar */}
-          <div className="relative mb-8">
-            <div className="w-40 h-40 rounded-[2.5rem] border-4 border-blue-900 bg-white overflow-hidden shadow-2xl p-2 flex items-center justify-center relative">
-              <img 
-                src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=1e3a8a&color=ffffff`} 
-                alt={profile.display_name} 
-                className="w-full h-full object-cover rounded-[2rem]" 
-              />
-              <div className="absolute -top-1 -right-1 bg-amber-500 text-blue-950 w-8 h-8 rounded-full border-2 border-blue-900 flex items-center justify-center font-black text-xs">A+</div>
+          {/* Main Pinned Roster Card */}
+          <div className="w-full bg-white border-4 border-blue-900 rounded-none p-8 text-center shadow-[8px_8px_0px_0px_#1E3A8A] mb-8 relative rotate-[-1deg] mt-6">
+            {/* Red plastic push pin at the top */}
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center">
+              <div className="w-4 h-4 rounded-full bg-red-600 border border-red-800 shadow-md" />
+              <div className="w-1.5 h-4 bg-zinc-400 border border-zinc-500 -mt-1 shadow-sm" />
             </div>
-          </div>
 
-          {/* Academic Banner Title Block */}
-          <div className="w-full bg-white border-4 border-blue-900 p-8 rounded-[2.5rem] text-center shadow-xl mb-8 relative">
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-900 text-amber-400 px-6 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border-2 border-white shadow-md">
-              CAMPUS ROSTER // ACTIVE
-            </div>
+            <div className="absolute top-3 right-6 text-[8px] font-black tracking-widest text-blue-900/60 uppercase">// ROSTER SHEET</div>
             
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-blue-950 uppercase mb-2 mt-2 leading-none">
+            {/* Varsity Letter block Frame Avatar */}
+            <div className="relative mb-6 mt-4 flex justify-center">
+              <div className="w-36 h-36 rounded-2xl border-4 border-blue-900 bg-white overflow-hidden shadow-lg p-1.5 flex items-center justify-center relative rotate-[2deg]">
+                <img 
+                  src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=1e3a8a&color=ffffff`} 
+                  alt={profile.display_name} 
+                  className="w-full h-full object-cover rounded-xl" 
+                />
+                <div className="absolute -top-2 -right-2 bg-amber-400 text-blue-900 w-8 h-8 rounded-full border-2 border-blue-900 flex items-center justify-center font-black text-xs shadow-md">A+</div>
+              </div>
+            </div>
+
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white varsity-title uppercase mb-2 leading-none">
               {profile.display_name}
             </h1>
             
-            <p className="text-blue-600 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-1.5 border-t border-neutral-100 pt-4 mt-4">
+            <p className="text-blue-900 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-1.5 border-t-2 border-dashed border-blue-900/20 pt-4 mt-4">
               <GraduationCap size={16} /> {data.university ? `VARSITY CLASS @ ${data.university}` : 'UNIVERSITY LEAGUE'}
             </p>
             {profile.bio && (
@@ -335,48 +353,70 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             )}
           </div>
 
-          {/* Core Analytics parameters */}
+          {/* Academic Stats (Pinned Page Note) */}
           {(data.campus_rank_pct || data.study_buddies || stats) && (
-            <div className="grid grid-cols-2 gap-4 w-full mb-8">
-              <div 
-                className={`bg-white p-5 rounded-3xl border-2 border-blue-900/10 text-center shadow-md relative hover:border-blue-900/30 transition-all ${isFreeProfile ? 'cursor-pointer hover:opacity-85' : ''}`}
-                onClick={() => isFreeProfile && setShowFomoModal(true)}
-              >
-                <span className="text-[9px] font-black uppercase tracking-widest text-neutral-400 block mb-1">Varsity Scans</span>
-                <span className={`text-2xl font-black text-blue-950 flex justify-center items-center gap-1 ${isFreeProfile ? 'blur-[6px]' : ''}`}>
-                  {isFreeProfile ? '8,204' : liveViews} <Activity size={16} className="text-blue-500" />
-                </span>
+            <div className="w-full bg-[#FCF6BD] border-2 border-[#1E3A8A] p-6 rounded-none shadow-[5px_5px_0px_0px_#1E3A8A] mb-8 relative rotate-[1.5deg]">
+              {/* Blue push pin */}
+              <div className="absolute -top-3 left-10 z-30 flex flex-col items-center">
+                <div className="w-3.5 h-3.5 rounded-full bg-blue-600 border border-blue-800 shadow-md" />
+                <div className="w-1 h-3.5 bg-zinc-400 border border-zinc-500 -mt-1 shadow-sm" />
               </div>
               
-              {data.campus_rank_pct && (
-                <div className="bg-white p-5 rounded-3xl border-2 border-blue-900/10 text-center shadow-md hover:border-blue-900/30 transition-all">
-                  <span className="text-[9px] font-black uppercase tracking-widest text-neutral-400 block mb-1">Academic Rank</span>
-                  <span className="text-2xl font-black text-blue-950 flex justify-center items-center gap-1">
-                    Top {data.campus_rank_pct}% <Trophy size={16} className="text-amber-500" />
+              <h3 className="text-xs font-black uppercase text-blue-900 tracking-[0.2em] mb-4 border-b border-blue-900/10 pb-2">
+                ACADEMIC CREDENTIALS
+              </h3>
+
+              <div className="grid grid-cols-2 gap-4 text-center">
+                <div 
+                  className={`bg-white p-4 border border-blue-900/20 shadow-inner ${isFreeProfile ? 'cursor-pointer hover:opacity-85' : ''}`}
+                  onClick={() => isFreeProfile && setShowFomoModal(true)}
+                >
+                  <span className="text-[9px] font-black uppercase tracking-widest text-neutral-400 block mb-1">Campus Scans</span>
+                  <span className={`text-2xl font-black text-blue-950 flex justify-center items-center gap-1 ${isFreeProfile ? 'blur-[6px]' : ''}`}>
+                    {isFreeProfile ? '8,204' : liveViews} <Activity size={16} className="text-blue-500" />
                   </span>
                 </div>
-              )}
+                
+                {data.campus_rank_pct && (
+                  <div className="bg-white p-4 border border-blue-900/20 shadow-inner">
+                    <span className="text-[9px] font-black uppercase tracking-widest text-neutral-400 block mb-1">Honor Roll</span>
+                    <span className="text-2xl font-black text-blue-950 flex justify-center items-center gap-1">
+                      Top {data.campus_rank_pct}% <Trophy size={16} className="text-amber-500" />
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
           {/* Ruled Bulletin noticeboard Bio */}
           {data.about_me && (
-            <div className="w-full mb-8">
-              <div className="bg-white p-6 rounded-[2rem] border-2 border-blue-900/10 text-left shadow-md">
-                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-800 mb-4 flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-blue-900" /> ACADEMIC SUMMARY & VIBE
-                </h4>
-                <p className="text-sm text-neutral-700 leading-relaxed font-semibold">
-                  {data.about_me}
-                </p>
+            <div className="w-full bg-[#FAF9F5] p-6 border-2 border-blue-900 rounded-none shadow-[5px_5px_0px_0px_#1E3A8A] mb-8 relative rotate-[-1.5deg]">
+              {/* Green push pin */}
+              <div className="absolute -top-3 right-10 z-30 flex flex-col items-center">
+                <div className="w-3.5 h-3.5 rounded-full bg-emerald-600 border border-emerald-800 shadow-md" />
+                <div className="w-1 h-3.5 bg-zinc-400 border border-zinc-500 -mt-1 shadow-sm" />
               </div>
+
+              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-900 mb-4 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-900" /> ACADEMIC SUMMARY & VIBE
+              </h4>
+              <p className="text-xs text-neutral-700 leading-relaxed font-semibold text-left">
+                {data.about_me}
+              </p>
             </div>
           )}
 
           {/* Social connections */}
           {data?.platforms && data?.platforms?.length > 0 && (
-            <div className="w-full mb-8 text-left">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-neutral-400 mb-4 text-center">// CAMPUS SHUNTS //</h4>
+            <div className="w-full bg-[#FAF9F5] p-6 border-2 border-blue-900 rounded-none shadow-[5px_5px_0px_0px_#1E3A8A] mb-8 relative rotate-[1deg]">
+              {/* Yellow push pin */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center">
+                <div className="w-3.5 h-3.5 rounded-full bg-amber-500 border border-amber-600 shadow-md" />
+                <div className="w-1 h-3.5 bg-zinc-400 border border-zinc-500 -mt-1 shadow-sm" />
+              </div>
+
+              <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-900 mb-6 text-center border-b border-blue-900/10 pb-2">// CAMPUS DIRECTORY //</h4>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {data.platforms.map((p: any, i: number) => {
                   const pData = getPlatformData(p.platform)
@@ -390,7 +430,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
-                      className="bg-white border-2 border-blue-900/15 p-4 rounded-2xl flex flex-col items-center justify-center gap-2 hover:shadow-md hover:border-blue-900 transition-all cursor-pointer social-link-item"
+                      className="bg-white border-2 border-blue-900 p-4 rounded-none flex flex-col items-center justify-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer social-link-item"
                     >
                       <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-900 flex items-center justify-center relative">
                         {pData.logo ? (
@@ -409,7 +449,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                           </div>
                         )}
                       </div>
-                      <span className="text-[9px] font-black uppercase text-neutral-700">{p.platform}</span>
+                      <span className="text-[9px] font-black uppercase text-blue-950">{p.platform}</span>
                     </a>
                   )
                 })}
@@ -419,12 +459,18 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
           {/* Availability badge */}
           {data.availability && (
-            <div className="w-full max-w-md mb-8">
-              <div className="bg-blue-900 text-white rounded-[2rem] p-6 flex items-center gap-4 shadow-xl border-2 border-white">
-                <Briefcase size={22} className="text-amber-400 animate-pulse shrink-0" />
-                <div className="text-left">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-blue-200">// ACTIVE ENGAGEMENTS //</p>
-                  <p className="text-xs font-black tracking-wide leading-relaxed mt-1">{data.availability}</p>
+            <div className="w-full bg-[#EAE2B7] border-2 border-blue-900 p-5 rounded-none shadow-[5px_5px_0px_0px_#1E3A8A] mb-8 relative rotate-[-1deg]">
+              {/* Red push pin */}
+              <div className="absolute -top-3 left-8 z-30 flex flex-col items-center">
+                <div className="w-3.5 h-3.5 rounded-full bg-red-600 border border-red-800 shadow-md" />
+                <div className="w-1 h-3.5 bg-zinc-400 border border-zinc-500 -mt-1 shadow-sm" />
+              </div>
+
+              <div className="flex items-center gap-4 text-left">
+                <Briefcase size={22} className="text-blue-900 animate-pulse shrink-0" />
+                <div>
+                  <p className="text-[9px] font-black uppercase tracking-widest text-blue-900/60">// ACTIVE ENGAGEMENTS //</p>
+                  <p className="text-xs font-black tracking-wide leading-relaxed mt-1 text-blue-950">{data.availability}</p>
                 </div>
               </div>
             </div>
@@ -446,7 +492,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   // ----------------------------------------------------
   if (activeTheme === 'night owl') {
     return (
-      <div className="w-full min-h-screen bg-[#060412] text-indigo-100 transition-colors duration-300 pb-24 p-4 sm:p-8 relative">
+      <div className="w-full min-h-screen bg-[#040209] text-indigo-100 pb-24 p-4 sm:p-8 relative selection:bg-amber-500 selection:text-black">
         
         {/* Soft Cozy Glowing Study Desk Lamps */}
         <div className="absolute top-[60px] right-[-100px] w-[350px] h-[350px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
@@ -455,8 +501,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center">
           
           {/* Glowing Starry Avatar frame */}
-          <div className="relative mb-8">
-            <div className="w-40 h-40 rounded-full border-4 border-indigo-500 bg-slate-950 overflow-hidden shadow-[0_0_20px_rgba(99,102,241,0.4)] p-1.5 flex items-center justify-center">
+          <div className="relative mb-8 mt-6">
+            <div className="w-40 h-40 rounded-full border-4 border-indigo-500 bg-slate-950 overflow-hidden shadow-[0_0_25px_rgba(99,102,241,0.5)] p-1.5 flex items-center justify-center">
               <img 
                 src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=020617&color=6366f1`} 
                 alt={profile.display_name} 
@@ -466,10 +512,12 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           </div>
 
           {/* Cozy Workspace Panel */}
-          <div className="w-full bg-slate-950/80 border border-indigo-950 p-8 rounded-[2.5rem] text-center shadow-2xl mb-8 backdrop-blur-md relative">
-            <div className="absolute top-3 right-6 text-[8px] font-black tracking-widest text-indigo-400/50 uppercase">// NIGHT STUDY DECK</div>
+          <div className="w-full bg-slate-950/80 border border-indigo-950 p-8 rounded-[2.5rem] text-center shadow-[0_0_30px_rgba(0,0,0,0.8)] mb-8 backdrop-blur-md relative overflow-hidden">
+            {/* Lamp light reflection overlay */}
+            <div className="absolute -top-[120px] left-1/2 -translate-x-1/2 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-3 right-6 text-[8px] font-black tracking-widest text-indigo-400/60 uppercase">// NIGHT STUDY DECK</div>
             
-            <h1 className="text-3xl font-extrabold tracking-tight text-white uppercase mb-2">
+            <h1 className="text-3xl font-extrabold tracking-widest text-white uppercase mb-2 drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]">
               {profile.display_name}
             </h1>
             
@@ -487,17 +535,21 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           {(data.campus_rank_pct || data.study_buddies || stats) && (
             <div className="grid grid-cols-2 gap-4 w-full mb-8">
               <div 
-                className={`bg-slate-950/60 border border-indigo-950/60 p-5 rounded-3xl text-center shadow-lg transition-all hover:border-indigo-500/50 ${isFreeProfile ? 'cursor-pointer hover:opacity-85' : ''}`}
+                className={`bg-slate-950/70 border border-indigo-950/80 p-5 rounded-3xl text-center shadow-lg transition-all hover:border-indigo-500/50 ${isFreeProfile ? 'cursor-pointer hover:opacity-85' : ''}`}
                 onClick={() => isFreeProfile && setShowFomoModal(true)}
               >
                 <span className="text-[9px] font-black uppercase tracking-widest text-indigo-400/50 block mb-1">Session Scans</span>
-                <span className={`text-2xl font-black text-indigo-200 ${isFreeProfile ? 'blur-[6px]' : ''}`}>{isFreeProfile ? '8,204' : liveViews}</span>
+                <span className={`text-2xl font-black text-indigo-200 flex justify-center items-center gap-1.5 ${isFreeProfile ? 'blur-[6px]' : ''}`}>
+                  {isFreeProfile ? '8,204' : liveViews} <Activity size={16} className="text-indigo-500" />
+                </span>
               </div>
               
               {data.campus_rank_pct && (
-                <div className="bg-slate-950/60 border border-indigo-950/60 p-5 rounded-3xl text-center shadow-lg transition-all hover:border-indigo-500/50">
+                <div className="bg-slate-950/70 border border-indigo-950/80 p-5 rounded-3xl text-center shadow-lg transition-all hover:border-indigo-500/50">
                   <span className="text-[9px] font-black uppercase tracking-widest text-indigo-400/50 block mb-1">Academic Rank</span>
-                  <span className="text-2xl font-black text-indigo-200">Top {data.campus_rank_pct}%</span>
+                  <span className="text-2xl font-black text-indigo-200 flex justify-center items-center gap-1.5">
+                    Top {data.campus_rank_pct}% <Trophy size={16} className="text-amber-500" />
+                  </span>
                 </div>
               )}
             </div>
@@ -506,11 +558,14 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           {/* Story Narrative */}
           {data.about_me && (
             <div className="w-full mb-8">
-              <div className="bg-slate-950/50 border border-indigo-950 p-6 rounded-3xl text-left shadow-lg">
+              <div className="bg-slate-950/60 border border-indigo-950 p-6 rounded-[2rem] text-left shadow-lg backdrop-blur-sm relative">
+                <div className="absolute top-0 right-0 p-6 opacity-5">
+                  <BookOpen size={80} />
+                </div>
                 <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-400 mb-3 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" /> BIO PROFILE SUMMARY
                 </h4>
-                <p className="text-sm text-indigo-100/90 leading-relaxed font-semibold">
+                <p className="text-xs text-indigo-100/90 leading-relaxed font-semibold">
                   {data.about_me}
                 </p>
               </div>
@@ -534,7 +589,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
-                      className="bg-slate-950 border border-indigo-950 hover:border-indigo-500 p-4 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer social-link-item"
+                      className="bg-slate-950 border border-indigo-950 hover:border-indigo-500 p-4 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer social-link-item hover:shadow-[0_0_15px_rgba(99,102,241,0.2)]"
                     >
                       <div className="w-10 h-10 rounded-xl bg-slate-900 text-indigo-400 flex items-center justify-center relative">
                         {pData.logo ? (
@@ -563,12 +618,12 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
           {/* Availability openings */}
           {data.availability && (
-            <div className="w-full max-w-md mb-8">
-              <div className="bg-gradient-to-tr from-indigo-950 to-slate-950 border border-indigo-500/30 text-white rounded-3xl p-6 flex items-center gap-4 shadow-xl">
+            <div className="w-full mb-8">
+              <div className="bg-gradient-to-tr from-indigo-950/60 to-slate-950/80 border border-indigo-500/30 text-white rounded-3xl p-6 flex items-center gap-4 shadow-xl backdrop-blur-sm">
                 <Zap size={22} className="text-amber-400 animate-pulse shrink-0" />
                 <div className="text-left">
                   <p className="text-[9px] font-black uppercase tracking-widest text-indigo-400">// WORKSPACE STATUS //</p>
-                  <p className="text-xs font-black tracking-wide leading-relaxed mt-1">{data.availability}</p>
+                  <p className="text-xs font-black tracking-wide leading-relaxed mt-1 text-indigo-100">{data.availability}</p>
                 </div>
               </div>
             </div>
@@ -589,7 +644,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   // LAYOUT 3: SKETCHED RULED NOTEBOOK (Default / Notebook Theme)
   // ----------------------------------------------------
   return (
-    <div className="w-full min-h-screen relative overflow-x-hidden bg-[#FCFAF5] text-neutral-800 transition-colors duration-300 pb-24 p-4 sm:p-8 selection:bg-emerald-100">
+    <div className="w-full min-h-screen relative overflow-x-hidden bg-[#FAF6EE] text-[#2C2925] transition-colors duration-300 pb-24 p-4 sm:p-8 selection:bg-emerald-100">
       
       {/* Hand drawn horizontal lined paper rules */}
       <div 
@@ -619,21 +674,21 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 className="w-full h-full object-cover grayscale brightness-95" 
               />
             </div>
-            <span className="text-[9px] font-black uppercase text-neutral-400 tracking-wider mt-2.5 font-serif">polaroid_snapshot</span>
+            <span className="text-[9px] font-black uppercase text-neutral-400 tracking-wider mt-2.5 font-serif select-none">polaroid_snapshot</span>
           </div>
         </div>
 
         {/* Post-It Yellow Sticky Note Card block */}
-        <div className="w-full bg-[#FCF6BD] border-2 border-emerald-950 p-8 rounded-none text-center shadow-xl mb-8 relative rotate-[1.5deg]">
+        <div className="w-full bg-[#FCF6BD] border-2 border-emerald-950 p-8 rounded-none text-center shadow-xl mb-8 relative rotate-[1.5deg] max-w-[94%]">
           {/* Glossy transparent sticky tape on top margin */}
           <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-24 h-6 bg-white/40 border border-neutral-300/25 backdrop-blur-[1.5px] pointer-events-none" />
           <div className="absolute top-2 right-4 text-emerald-800 font-sans text-xs select-none">No. 1 // LOG</div>
           
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-emerald-950 mb-3 font-serif leading-none">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-emerald-955 mb-3 font-serif leading-none">
             {profile.display_name}
           </h1>
           
-          <p className="text-emerald-800 font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-1.5 border-t border-emerald-950/20 pt-4 mt-4">
+          <p className="text-emerald-800 font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-1.5 border-t border-emerald-955/20 pt-4 mt-4">
             <BookOpen size={16} /> {data.university ? `STUDENT DECK // ${data.university}` : 'CLASS ROSTER REGISTER'}
           </p>
           {profile.bio && (
@@ -645,12 +700,17 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
         {/* Handcrafted story bio notes */}
         {data.about_me && (
-          <div className="w-full mb-8 rotate-[-1deg]">
+          <div className="w-full mb-8 rotate-[-1deg] max-w-[94%]">
             <div className="bg-[#FAF6EE] p-6 border-2 border-emerald-950 text-left shadow-md relative">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-800 mb-3 font-serif flex items-center gap-2">
+              {/* Ring binder hole cutouts on left margin */}
+              <div className="absolute top-4 -left-2 w-3.5 h-3.5 bg-[#FAF6EE] border-2 border-emerald-950 rounded-full" />
+              <div className="absolute top-20 -left-2 w-3.5 h-3.5 bg-[#FAF6EE] border-2 border-emerald-950 rounded-full" />
+              <div className="absolute bottom-6 -left-2 w-3.5 h-3.5 bg-[#FAF6EE] border-2 border-emerald-955 rounded-full" />
+
+              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-800 mb-3 font-serif flex items-center gap-2 pl-3">
                 <span className="w-2 h-2 rounded-full bg-emerald-800" /> // MY NARRATIVE JOURNAL //
               </h4>
-              <p className="text-sm text-neutral-700 leading-relaxed font-serif italic text-left">
+              <p className="text-xs text-neutral-700 leading-relaxed font-serif italic text-left pl-3">
                 {data.about_me}
               </p>
             </div>
@@ -659,7 +719,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
         {/* Digital Contacts platforms */}
         {data?.platforms && data?.platforms?.length > 0 && (
-          <div className="w-full mb-8 text-left">
+          <div className="w-full mb-8 text-left max-w-[94%]">
             <h4 className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-4 text-center font-mono">// CORE SHUNT DIRECTORY //</h4>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {data.platforms.map((p: any, i: number) => {
@@ -703,18 +763,22 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
         {/* Lined Notebook metrics */}
         {(data.campus_rank_pct || data.study_buddies || stats) && (
-          <div className="grid grid-cols-2 gap-4 w-full mb-8">
+          <div className="grid grid-cols-2 gap-4 w-full mb-8 max-w-[94%]">
             <div 
-              className={`bg-[#FAF6EE] p-5 border-2 border-emerald-950 shadow-sm text-center relative ${isFreeProfile ? 'cursor-pointer hover:opacity-85' : ''}`}
+              className={`bg-[#FAF6EE] p-5 border-2 border-emerald-955 shadow-sm text-center relative ${isFreeProfile ? 'cursor-pointer hover:opacity-85' : ''}`}
               onClick={() => isFreeProfile && setShowFomoModal(true)}
             >
               <span className="text-[9px] font-black uppercase tracking-widest text-emerald-800/60 block mb-1">Log Scans</span>
-              <span className={`text-lg font-extrabold text-neutral-800 font-serif ${isFreeProfile ? 'blur-[6px]' : ''}`}>{isFreeProfile ? '8,204' : liveViews}</span>
+              <span className={`text-lg font-extrabold text-neutral-800 font-serif flex items-center justify-center gap-1 ${isFreeProfile ? 'blur-[6px]' : ''}`}>
+                {isFreeProfile ? '8,204' : liveViews} <Activity size={14} className="text-emerald-700 animate-pulse" />
+              </span>
             </div>
             {data.campus_rank_pct && (
               <div className="bg-[#FAF6EE] p-5 border-2 border-emerald-950 shadow-sm text-center">
                 <span className="text-[9px] font-black uppercase tracking-widest text-emerald-800/60 block mb-1">Academic Rank</span>
-                <span className="text-lg font-extrabold text-neutral-800 font-serif">Top {data.campus_rank_pct}%</span>
+                <span className="text-lg font-extrabold text-neutral-800 font-serif flex items-center justify-center gap-1">
+                  Top {data.campus_rank_pct}% <Trophy size={14} className="text-amber-600" />
+                </span>
               </div>
             )}
           </div>
@@ -722,8 +786,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
         {/* Engagements Sticky note */}
         {data.availability && (
-          <div className="w-full max-w-md mb-8 rotate-[1deg]">
-            <div className="bg-[#EAE2B7] border-2 border-emerald-950 text-emerald-950 rounded-none p-5 flex items-center gap-4 shadow-md font-serif">
+          <div className="w-full mb-8 rotate-[1deg] max-w-[94%]">
+            <div className="bg-[#EAE2B7] border-2 border-emerald-950 text-emerald-955 rounded-none p-5 flex items-center gap-4 shadow-md font-serif">
               <Zap size={22} className="text-emerald-700 shrink-0" />
               <div className="text-left">
                 <p className="text-[9px] font-black uppercase tracking-widest text-emerald-850/60 mb-0.5">AVAILABILITY PROTOCOLS</p>
@@ -743,7 +807,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
       {/* FOMO Modal */}
       {showFomoModal && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fadeIn">
-          <div className="bg-white border-2 border-emerald-950 rounded-none p-8 max-w-sm w-full shadow-2xl relative animate-zoomIn text-center">
+          <div className="bg-white border-2 border-emerald-955 rounded-none p-8 max-w-sm w-full shadow-2xl relative animate-zoomIn text-center">
             <button onClick={() => setShowFomoModal(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-600 rounded-full hover:bg-neutral-50 transition-all">
               <X size={20} />
             </button>
