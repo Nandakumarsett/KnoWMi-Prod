@@ -758,32 +758,32 @@ export default function IdentityStudio() {
                       </div>
                     )}
 
-                    <div>
+                     <div>
                       <label className="section-label">Profile Theme</label>
-                      <div className="grid grid-cols-3 gap-3">
+                      <div className="grid grid-cols-4 gap-2">
                         {(() => {
-                           let options = ['default', 'blueprint', 'hacker'];
-                           if (activePersona === 'student') options = ['default', 'campus', 'night owl'];
-                           if (activePersona === 'creator' || activePersona === 'influencer') options = ['default', 'minimal', 'neon'];
+                           let options = ['default', 'classic', 'blueprint', 'hacker'];
+                           if (activePersona === 'student') options = ['default', 'classic', 'campus', 'night owl'];
+                           if (activePersona === 'creator' || activePersona === 'influencer') options = ['default', 'classic', 'minimal', 'neon'];
                            
                            return options.map(opt => (
                              <div 
                                key={opt}
                                onClick={() => updateField('profile_theme', opt)}
-                               className={`p-4 rounded-xl border-2 cursor-pointer transition-all text-center ${
+                               className={`p-3 rounded-xl border-2 cursor-pointer transition-all text-center flex flex-col justify-center items-center ${
                                  (data.profile_theme?.toLowerCase() || 'default') === opt 
                                  ? 'border-orange-500 bg-orange-50' 
                                  : 'border-neutral-200 hover:border-orange-300'
                                }`}
                              >
-                               <p className={`text-xs font-black uppercase tracking-widest ${
+                               <p className={`text-[10px] font-black uppercase tracking-wider ${
                                  (data.profile_theme?.toLowerCase() || 'default') === opt 
                                  ? 'text-orange-600' 
                                  : 'text-neutral-500'
                                }`}>
                                  {opt === 'default' 
                                    ? (activePersona === 'student' ? 'Notebook' : activePersona === 'creator' || activePersona === 'influencer' ? 'Glow' : 'Terminal')
-                                   : opt}
+                                   : opt === 'classic' ? 'Classic' : opt}
                                </p>
                              </div>
                            ));

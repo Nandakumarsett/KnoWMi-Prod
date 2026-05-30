@@ -43,6 +43,253 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   }
 
   // ----------------------------------------------------
+  // LAYOUT 0: ORIGINAL CLASSIC STYLE (Classic Theme)
+  // ----------------------------------------------------
+  if (activeTheme === 'classic') {
+    const BackgroundPattern = () => (
+      <div className="absolute inset-0 pointer-events-none opacity-[0.02] z-0" 
+           style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+    );
+
+    const BackgroundAnimation = () => (
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute left-[10%] top-[15%] text-emerald-500/20 animate-float-slow">
+          <Rocket size={40} />
+        </div>
+        <div className="absolute right-[15%] top-[30%] text-blue-500/10 animate-float-medium">
+          <BookOpen size={60} />
+        </div>
+        <div className="absolute left-[20%] bottom-[30%] text-amber-500/20 animate-float-fast">
+          <Star size={30} />
+        </div>
+        <div className="absolute right-[25%] bottom-[15%] text-emerald-500/10 animate-float-slow">
+          <GraduationCap size={80} />
+        </div>
+        <div className="absolute left-[40%] top-[60%] text-indigo-500/10 animate-float-medium">
+          <Sparkles size={50} />
+        </div>
+      </div>
+    );
+
+    return (
+      <div className="w-full pb-12 relative overflow-hidden bg-[#FAFAFA] rounded-[40px] border border-[#E5D5C4] shadow-2xl font-sans min-h-screen">
+        <BackgroundPattern />
+        <BackgroundAnimation />
+
+        <div className="relative h-48 sm:h-64 w-full bg-neutral-200 overflow-hidden rounded-t-[40px] shadow-sm">
+          {data.featured_work_url ? (
+            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover" alt="Profile Banner" />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-emerald-400 via-teal-300 to-blue-400 flex items-center justify-center">
+              <Sparkles size={48} className="text-white/30" />
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#FAFAFA] via-transparent to-transparent opacity-90" />
+        </div>
+
+        <main className="relative z-10 max-w-2xl mx-auto px-5 sm:px-8 -mt-20 sm:-mt-24 pb-24 flex flex-col items-center">
+          <div className="flex flex-col items-center w-full mb-4">
+            <div className="relative mb-5 group flex items-center justify-center">
+              {data.mood && (
+                <div className="absolute -right-8 -top-2 sm:-right-12 sm:-top-2 z-30 animate-bounce" style={{ animationDuration: '3s' }}>
+                  <div className="relative bg-white border-2 border-emerald-100 rounded-2xl px-3 py-2 shadow-xl shadow-emerald-500/10 flex items-center gap-1.5">
+                    <span className="text-xs sm:text-sm font-black text-emerald-600 uppercase tracking-widest whitespace-nowrap">{data.mood}</span>
+                    <div className="absolute -left-1.5 bottom-3 w-3 h-3 bg-white border-l-2 border-b-2 border-emerald-100 rotate-45 rounded-sm" />
+                  </div>
+                </div>
+              )}
+
+              <div 
+                className="w-40 h-40 sm:w-48 sm:h-48 p-1.5 rounded-full shadow-[0_20px_50px_rgba(16,185,129,0.2)] relative z-10 mx-auto flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg, #059669, #34D399)' }}
+              >
+                <div className="w-full h-full bg-white p-1 rounded-full overflow-hidden shadow-inner flex items-center justify-center relative">
+                  <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" />
+                </div>
+              </div>
+
+              <div 
+                className={`absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 z-40 ${isFreeProfile ? 'cursor-pointer hover:opacity-85 transition-opacity' : ''}`}
+                onClick={() => isFreeProfile && setShowFomoModal(true)}
+              >
+                <div className="bg-neutral-900 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full shadow-lg shadow-emerald-900/10 border-2 border-white flex items-center gap-1.5 whitespace-nowrap">
+                  <Activity size={14} className="text-emerald-400 sm:w-4 sm:h-4 animate-pulse" />
+                  <span className={`text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] ${isFreeProfile ? 'blur-[3px] select-none opacity-60 inline-block px-1' : ''}`}>{isFreeProfile ? '8,204' : liveViews} Pulse</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center w-full">
+              <h1 className="text-2xl sm:text-4xl leading-tight font-black text-neutral-900 tracking-tight mb-1.5">
+                {profile.display_name}
+              </h1>
+              <p className="text-emerald-500 font-bold text-sm sm:text-base tracking-wide flex items-center justify-center gap-1.5">
+                <GraduationCap size={18} /> {data.university ? `Student @ ${data.university}` : 'Student'}
+              </p>
+            </div>
+          </div>
+
+          {profile.bio && (
+            <div className="w-full max-w-md mx-auto text-center mb-8 -mt-2">
+              <p className="text-sm sm:text-[15px] text-neutral-500 leading-relaxed font-medium">
+                "{profile.bio}"
+              </p>
+            </div>
+          )}
+
+          <div className="w-full max-w-sm mb-8 z-20">
+            <ProfileCTAs profile={profile} accentColor="#10B981" />
+          </div>
+
+          {data.availability && (
+            <div className="w-full max-w-md mx-auto mb-10">
+              <div className="bg-emerald-500 text-white rounded-[1.5rem] p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 shadow-[0_8px_30px_rgba(16,185,129,0.2)] text-left">
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                  <Briefcase size={20} className="text-white" />
+                </div>
+                <div className="text-center sm:text-left">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-emerald-100 mb-0.5">Currently Open To</p>
+                  <p className="text-sm sm:text-base font-black tracking-wide">{data.availability}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {(data.campus_rank_pct || data.study_buddies) && (
+            <div className="grid grid-cols-2 gap-3 sm:gap-5 w-full mb-10">
+              {data.campus_rank_pct && (
+                <div className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-sm text-center flex flex-col justify-center transition-all">
+                  <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1.5 sm:mb-2">Campus Rank</p>
+                  <div className="text-xl sm:text-2xl font-black text-neutral-900 flex items-center justify-center gap-1.5 sm:gap-2">
+                    Top {data.campus_rank_pct}% <Trophy size={18} className="text-amber-400" />
+                  </div>
+                </div>
+              )}
+              {data.study_buddies && (
+                <div className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-sm text-center flex flex-col justify-center transition-all">
+                  <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1.5 sm:mb-2">Study Buddies</p>
+                  <div className="text-xl sm:text-2xl font-black text-neutral-900 flex items-center justify-center gap-1.5 sm:gap-2">
+                    {data.study_buddies} <Users size={18} className="text-emerald-400" />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {data.about_me && (
+            <div className="w-full mb-10">
+              <div className="bg-white p-6 sm:p-8 rounded-3xl sm:rounded-[2.5rem] border border-neutral-100 shadow-sm relative overflow-hidden text-left">
+                <div className="absolute top-0 right-0 p-6 sm:p-8 opacity-5">
+                  <BookOpen size={80} className="sm:w-[120px] sm:h-[120px]" />
+                </div>
+                <div className="relative z-10">
+                  <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-5 flex items-center gap-2 sm:gap-3">
+                    <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-400" /> The Story
+                  </h4>
+                  <p className="text-sm sm:text-[15px] text-neutral-700 leading-relaxed sm:leading-loose font-medium text-left">
+                    {data.about_me}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {data?.platforms && data?.platforms?.length > 0 && (
+            <div className="w-full mb-10 text-left">
+              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Digital Footprint</h4>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
+                {data.platforms.map((p: any, i: number) => {
+                  const pData = getPlatformData(p.platform);
+                  return (
+                    <a 
+                      key={i}
+                      href={ensureAbsoluteUrl(p.url)} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-5 rounded-2xl sm:rounded-[2rem] bg-white border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] ${pData.hoverBorder} transition-all duration-300 group relative social-link-item cursor-pointer`}
+                      onClick={(e) => {
+                        handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                        if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                      }}
+                    >
+                      <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center ${pData.bg} ${pData.text} group-hover:scale-110 transition-transform duration-300 relative overflow-hidden`}>
+                        {pData.logo ? (
+                          <img 
+                            src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
+                            className="w-5 h-5 filter invert object-contain"
+                            style={{ filter: 'brightness(0)' }}
+                            alt={p.platform}
+                          />
+                        ) : (
+                          pData.icon
+                        )}
+                        {isGated && (
+                          <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-black/20 flex items-center justify-center">
+                            <Lock size={18} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-neutral-500 group-hover:text-emerald-500 transition-colors">{p.platform}</span>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {data.core_skills && data.core_skills.length > 0 && (
+            <div className="w-full mb-10 text-left">
+              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Core Superpowers</h4>
+              <div className="flex flex-wrap justify-center gap-2">
+                {data.core_skills.map((skill: string, i: number) => (
+                  <span key={i} className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] sm:text-xs font-black text-indigo-600 tracking-wider flex items-center gap-2 shadow-sm">
+                    <Zap size={14} className="text-indigo-400" /> {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {(data.contact_email || data.quick_talk_url) && (
+            <div className="grid grid-cols-2 gap-3 sm:gap-5 w-full max-w-sm sm:max-w-md mx-auto mt-6 sm:mt-8">
+              {data.contact_email ? (
+                <a href={`mailto:${data.contact_email}`} className="bg-neutral-900 text-white py-3.5 sm:py-4 rounded-xl sm:rounded-[1.5rem] font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] hover:bg-neutral-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-md">
+                  <Mail size={16} /> Email
+                </a>
+              ) : <div />}
+              
+              {data.quick_talk_url ? (
+                <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noopener noreferrer" className="bg-white text-neutral-900 py-3.5 sm:py-4 rounded-xl sm:rounded-[1.5rem] font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] border-2 border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                  <Calendar size={16} /> Quick Talk
+                </a>
+              ) : <div />}
+            </div>
+          )}
+
+        </main>
+
+        <style>{`
+          @keyframes float-slow {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+          }
+          @keyframes float-medium {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(-5deg); }
+          }
+          @keyframes float-fast {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(10deg); }
+          }
+          .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+          .animate-float-medium { animation: float-medium 6s ease-in-out infinite; }
+          .animate-float-fast { animation: float-fast 4s ease-in-out infinite; }
+        `}</style>
+      </div>
+    )
+  }
+
+  // ----------------------------------------------------
   // LAYOUT 1: CAMPUS VARSITY STYLE (Campus Theme)
   // ----------------------------------------------------
   if (activeTheme === 'campus') {
