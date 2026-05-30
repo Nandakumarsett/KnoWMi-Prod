@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Printer, Edit3, Image as ImageIcon, QrCode, Sparkles, Loader2, 
   Users, ShieldCheck, Link2, Settings, Plus, Trash2, Edit, Save, 
-  ArrowRight, Globe, Check, AlertCircle, Phone, Heart, Award, ArrowUpRight
+  ArrowRight, Globe, Check, AlertCircle, Phone, Heart, Award, ArrowUpRight, X
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { supabase } from '../../lib/supabase';
