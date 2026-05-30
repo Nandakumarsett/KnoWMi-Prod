@@ -101,10 +101,10 @@ function ReturnRequestForm({ user, latestOrder, supabaseClient }) {
           <label className="block text-[10px] font-black uppercase tracking-wide text-neutral-400 mb-1.5">Issue Type</label>
           <select value={form.issue_type} onChange={e => setForm(f => ({ ...f, issue_type: e.target.value }))}
             className="w-full px-4 py-2.5 rounded-xl text-sm outline-none border border-neutral-200 bg-neutral-50">
-            <option value="defect">Manufacturing Defect</option>
-            <option value="wrong_item">Wrong Item Delivered</option>
-            <option value="qr_issue">QR Not Scanning</option>
-            <option value="size_exchange">Size Exchange</option>
+            <option value="defect">Damaged Product / Defect (Free)</option>
+            <option value="qr_issue">QR Fade Issue (Free)</option>
+            <option value="color_issue">T-Shirt Color Issue (Free)</option>
+            <option value="size_exchange">Size Exchange (Paid Replacement)</option>
             <option value="other">Other</option>
           </select>
         </div>
@@ -2788,7 +2788,7 @@ function Dashboard() {
                   <div className="mb-6">
                     <p className="text-[11px] font-black uppercase text-orange-500 tracking-[0.2em] mb-1">Support</p>
                     <h3 className="text-2xl font-display font-black tracking-tight">Report an Issue</h3>
-                    <p className="text-sm text-neutral-400 mt-1">For defects, wrong items, or size exchanges. Requests must be raised within 7 days of delivery.</p>
+                    <p className="text-sm text-neutral-400 mt-1">Free replacements are provided for damaged products, QR code fade issues, or T-shirt color issues. Other requests like size exchanges require a paid replacement. All claims must be raised within 7 days of delivery.</p>
                   </div>
                   <ReturnRequestForm user={user} latestOrder={latestOrder} supabaseClient={supabase} />
                 </div>
