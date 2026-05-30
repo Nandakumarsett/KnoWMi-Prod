@@ -92,7 +92,8 @@ export default function PersonaStore({ onClose, onAuth, user }) {
           amount_override: amountPaise, // Pass actual amount for store items
           user_id: user.id,
           customer_details: {
-            design: selectedDesign.name,
+            design: selectedDesign.id,
+            design_name: selectedDesign.name,
             category: selectedDesign.category,
             size,
             qr_placement: qrPlacement,

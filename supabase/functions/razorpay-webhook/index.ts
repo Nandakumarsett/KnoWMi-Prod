@@ -119,12 +119,19 @@ serve(async (req) => {
         let itemName = 'KnoWMi Identity Tee'
         let modelImageUrl = null
         
-        if (customerDetails?.design) {
-          const { data: designData } = await supabaseClient
-            .from('persona_designs')
-            .select('name, model_image_url, front_image_url')
-            .eq('id', customerDetails.design)
-            .maybeSingle()
+        const designIdentifier = customerDetails?.design_id || customerDetails?.design
+        if (designIdentifier) {
+          // Robust checking: is it a valid UUID?
+          const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(designIdentifier)
+          let query = supabaseClient.from('persona_designs').select('name, model_image_url, front_image_url')
+          
+          if (isUuid) {
+            query = query.eq('id', designIdentifier)
+          } else {
+            query = query.eq('name', designIdentifier)
+          }
+          
+          const { data: designData } = await query.maybeSingle()
             
           if (designData) {
             itemName = designData.name
