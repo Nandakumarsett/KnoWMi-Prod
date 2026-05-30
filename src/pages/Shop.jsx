@@ -238,8 +238,7 @@ export default function Shop() {
                       <p className="text-[10px] font-black text-neutral-400 uppercase tracking-luxury">Phygital Edition</p>
                     </div>
                     <div className="text-right">
-                       <p className="text-lg font-black text-orange-500">₹{d.price || '999'}</p>
-                       <p className="text-[8px] font-bold text-neutral-300 uppercase tracking-widest mt-1">Free Global Shipping</p>
+                       <p className="text-[10px] font-bold text-green-600 uppercase tracking-widest">Free Shipping</p>
                     </div>
                   </div>
                 </div>
