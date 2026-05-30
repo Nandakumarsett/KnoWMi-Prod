@@ -117,7 +117,17 @@ export default function PublicProfile() {
   }
 }, [profile, safeDisplayName]);
 
+const isOwnerOfProfile = user && profile && user.id === profile.user_id;
+const isScanner = !isOwnerOfProfile;
 
+useEffect(() => {
+  if (profile && !isOwnerOfProfile) {
+    const brandSettings = profile.persona_data?.team_branding;
+    if (brandSettings?.redirect_mode === 'direct_corporate' && brandSettings?.redirect_url) {
+      window.location.replace(brandSettings.redirect_url);
+    }
+  }
+}, [profile, user, isOwnerOfProfile]);
 
   if (loading) {
     return (
@@ -173,17 +183,6 @@ export default function PublicProfile() {
   const activeConfig = personaConfigs[pAlias] || personaConfigs.developer
   const fromSrc = searchParams.get('src')
   const isClaimFlow = searchParams.get('claim') === 'true' || !profile.user_id;
-  const isOwnerOfProfile = user && user.id === profile.user_id
-  const isScanner = !isOwnerOfProfile
-
-  useEffect(() => {
-    if (profile && !isOwnerOfProfile) {
-      const brandSettings = profile.persona_data?.team_branding;
-      if (brandSettings?.redirect_mode === 'direct_corporate' && brandSettings?.redirect_url) {
-        window.location.replace(brandSettings.redirect_url);
-      }
-    }
-  }, [profile, user, isOwnerOfProfile]);
   const isGhostMode = isScanner && (searchParams.get('ghost') === 'true' || profile?.ghost_mode === true)
   const fromTab = searchParams.get('from') || 'analytics'
   const accentColor = activeConfig?.theme?.accent || '#C1440E'
