@@ -1669,9 +1669,28 @@ function Dashboard() {
   
   // Onboarding Wizard State
   const [showOnboardingModal, setShowOnboardingModal] = useState(false)
-  const [onboardingDismissed, setOnboardingDismissed] = useState(() => localStorage.getItem('knowmi_onboarding_dismissed') === 'true')
-  const [hasPreviewed, setHasPreviewed] = useState(() => localStorage.getItem('knowmi_onboarding_previewed') === 'true')
-  const [hasShared, setHasShared] = useState(() => localStorage.getItem('knowmi_onboarding_shared') === 'true')
+  const [onboardingDismissed, setOnboardingDismissed] = useState(() => {
+    try {
+      return localStorage.getItem('knowmi_onboarding_dismissed') === 'true'
+    } catch (e) {
+      return false
+    }
+  })
+  const [hasPreviewed, setHasPreviewed] = useState(() => {
+    try {
+      return localStorage.getItem('knowmi_onboarding_previewed') === 'true'
+    } catch (e) {
+      return false
+    }
+  })
+  const [hasShared, setHasShared] = useState(() => {
+    try {
+      return localStorage.getItem('knowmi_onboarding_shared') === 'true'
+    } catch (e) {
+      return false
+    }
+  })
+
 
   const { isSupported: pushSupported, isSubscribed: pushSubscribed, loading: pushLoading, subscribe: pushSubscribe, unsubscribe: pushUnsubscribe } = usePushNotifications(user?.id);
   const [activeTab, setActiveTab] = useState(() => {
@@ -1706,7 +1725,9 @@ function Dashboard() {
   }, [profile, authLoading, searchParams])
   
   useEffect(() => {
-    localStorage.setItem('knowmi_active_tab', activeTab)
+    try {
+      localStorage.setItem('knowmi_active_tab', activeTab)
+    } catch (e) {}
   }, [activeTab])
 
   const [analyticsView, setAnalyticsView] = useState('vibe')
@@ -1725,7 +1746,10 @@ function Dashboard() {
 
   // Process Factory Claim Flow if user just logged in from a physical scan
   useEffect(() => {
-    const pendingClaimId = localStorage.getItem('knowmi_pending_claim')
+    let pendingClaimId = null
+    try {
+      pendingClaimId = localStorage.getItem('knowmi_pending_claim')
+    } catch (e) {}
     if (pendingClaimId && user && profile) {
       const claimTee = async () => {
         try {
@@ -1733,7 +1757,10 @@ function Dashboard() {
           const { error } = await supabase.rpc('claim_factory_tee', { p_factory_id: pendingClaimId });
           if (error) throw error;
             
-          localStorage.removeItem('knowmi_pending_claim')
+          try {
+            localStorage.removeItem('knowmi_pending_claim')
+          } catch (e) {}
+
           toast.success("🎉 Tee claimed successfully! This physical product is now permanently paired to your digital identity.", { duration: 5000 })
           
           // Google Sheets Webhook Sync

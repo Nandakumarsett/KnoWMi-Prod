@@ -27,6 +27,50 @@ serve(async (req) => {
       throw new Error('Missing userId in payload')
     }
 
+    // ─── Validate payload to prevent malicious notification spamming ───
+    const isScanAlert = 
+      (title && (title.includes('Scan Alert') || title.includes('scan alert'))) &&
+      (body && (body.includes('scanned') && (body.includes('KnoWMi') || body.includes('profile')))) &&
+      url === '/dashboard';
+
+    // If it's not a standard scan alert, check if the caller is an authenticated owner/staff
+    if (!isScanAlert) {
+      const authHeader = req.headers.get('Authorization')
+      if (!authHeader) {
+        return new Response(JSON.stringify({ error: 'Unauthorized: Custom notification text requires admin authorization' }), {
+          status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+      }
+
+      const client = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+        { global: { headers: { Authorization: authHeader } } }
+      )
+      
+      const { data: { user }, error: userErr } = await client.auth.getUser()
+      if (userErr || !user) {
+        return new Response(JSON.stringify({ error: 'Unauthorized: Invalid token' }), {
+          status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+      }
+
+      // Check if the user is a staff/owner
+      const { data: profile } = await client
+        .from('profiles')
+        .select('role')
+        .eq('user_id', user.id)
+        .single()
+      
+      const isStaff = profile && ['owner', 'ambassador', 'collaborator'].includes(profile.role)
+      if (!isStaff) {
+        return new Response(JSON.stringify({ error: 'Unauthorized: Only staff/owners can send arbitrary push notifications' }), {
+          status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+      }
+    }
+
+
     // 1. Fetch user's push subscriptions
     const { data: subscriptions, error } = await supabaseClient
       .from('user_push_subscriptions')

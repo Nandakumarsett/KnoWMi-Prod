@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.44.0"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -494,6 +495,57 @@ serve(async (req) => {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
+
+    // ─── Cryptographic JWT and Role/Recipient Authorization ───
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Missing authorization header' }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: authHeader } } }
+    )
+
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser()
+    if (userError || !user) {
+      // Check if this is a service-to-service call using the service role key
+      const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+      const isServiceRole = serviceRoleKey && authHeader.includes(serviceRoleKey)
+      
+      if (!isServiceRole) {
+        return new Response(JSON.stringify({ error: 'Unauthorized: Invalid token' }), {
+          status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+      }
+    } else {
+      // Authenticated User Flow
+      if (['welcome', 'deletion_request', 'return_request'].includes(type)) {
+        if (to.toLowerCase().trim() !== user.email?.toLowerCase().trim()) {
+          return new Response(JSON.stringify({ error: 'Unauthorized: Can only send transaction emails to your own registered email address' }), {
+            status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          })
+        }
+      } else {
+        // Types like order_confirmation, dispatch, policy_change, scan_alert, deletion_completed can only be sent by staff or owners.
+        const { data: callerProfile } = await supabaseClient
+          .from('profiles')
+          .select('role')
+          .eq('user_id', user.id)
+          .single()
+        
+        const isStaff = callerProfile && ['owner', 'ambassador', 'collaborator'].includes(callerProfile.role)
+        if (!isStaff) {
+          return new Response(JSON.stringify({ error: 'Unauthorized: Insufficient permissions for this email type' }), {
+            status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          })
+        }
+      }
+    }
+
 
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
     if (!RESEND_API_KEY) {

@@ -21,25 +21,42 @@ serve(async (req) => {
       })
     }
 
+    // ─── Cryptographic JWT and Owner Authorization ───
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Authorization required' }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+    const client = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: authHeader } } }
+    )
+    const { data: { user }, error: userError } = await client.auth.getUser()
+    if (userError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized: Invalid token' }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+    const { data: callerProfile } = await client
+      .from('profiles')
+      .select('role')
+      .eq('user_id', user.id)
+      .single()
+
+    if (!callerProfile || callerProfile.role !== 'owner') {
+      return new Response(JSON.stringify({ error: 'Unauthorized: Only owners can send broadcast emails' }), {
+        status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
-
-    // Verify caller is owner
-    if (caller_user_id) {
-      const { data: callerProfile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('user_id', caller_user_id)
-        .single()
-      
-      if (!callerProfile || callerProfile.role !== 'owner') {
-        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-          status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        })
-      }
-    }
 
     // Fetch all users with emails from auth
     const { data: authUsers } = await supabase.auth.admin.listUsers()
@@ -95,7 +112,7 @@ serve(async (req) => {
       subject: `${policy_name} Updated`,
       sent_count: sent,
       failed_count: failed,
-      sent_by: caller_user_id || null,
+      sent_by: user.id,
       metadata: { policy_name, effective_date, summary },
     }).select()
 

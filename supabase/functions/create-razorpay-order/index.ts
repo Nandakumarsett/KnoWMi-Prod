@@ -14,6 +14,34 @@ serve(async (req) => {
   try {
     const { plan_id, amount_override, user_id, customer_details } = await req.json()
 
+    // ─── Cryptographic JWT and User ID Verification ───
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Authorization required' }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+    const client = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: authHeader } } }
+    )
+    const { data: { user }, error: userError } = await client.auth.getUser()
+    if (userError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized: Invalid token' }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+    // Verify that the requested user_id matches the authenticated user
+    if (user_id && user_id !== user.id) {
+      return new Response(JSON.stringify({ error: 'Forbidden: Cannot create order for another user' }), {
+        status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+
     // 1. Determine price on the backend securely.
     // For fixed subscription plans, prices are hardcoded here (tamper-proof).
     // For store items (PersonaStore), `amount_override` is used — the price
