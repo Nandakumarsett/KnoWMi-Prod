@@ -227,6 +227,27 @@ export default function TeamCheckout({ onClose, user, onAuth, selectedDesign }) 
               >
                 <Plus size={16} /> Add Another Member
               </button>
+
+              {/* Pricing Breakdown Card */}
+              <div className="mt-6 bg-neutral-50 rounded-2xl p-5 border border-neutral-100 space-y-3.5 text-xs text-neutral-600 font-medium">
+                <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-2">Pricing Breakdown ({members.length} Members)</p>
+                <div className="flex justify-between items-center">
+                  <span>Base T-Shirt Price</span>
+                  <span className="line-through text-neutral-400 font-bold">₹{(1299 * members.length).toLocaleString('en-IN')}</span>
+                </div>
+                <div className="flex justify-between items-center text-orange-600 font-bold">
+                  <span>Bulk Team Special Promo</span>
+                  <span>-₹{(600 * members.length).toLocaleString('en-IN')}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span>Priority Shipping & Custom NFC Tagging</span>
+                  <span className="text-green-600 font-bold">₹0 (FREE)</span>
+                </div>
+                <div className="border-t border-neutral-200/60 pt-3.5 flex justify-between items-center text-sm">
+                  <span className="font-black text-black">Total Amount</span>
+                  <span className="font-black text-lg text-black">₹{totalAmount.toLocaleString('en-IN')}</span>
+                </div>
+              </div>
             </>
           )}
         </div>

@@ -319,6 +319,27 @@ export default function PersonaStore({ onClose, onAuth, user }) {
                       </div>
                     </div>
 
+                    {/* Pricing Breakdown Card */}
+                    <div className="mt-6 bg-white/5 rounded-2xl p-5 border border-white/10 space-y-3.5 text-xs text-gray-300 font-medium">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Pricing Breakdown</p>
+                      <div className="flex justify-between items-center">
+                        <span>Base T-Shirt Price ({qty}x)</span>
+                        <span className="line-through text-gray-400 font-bold">₹{((selectedDesign.price + 500) * qty).toLocaleString('en-IN')}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-[#FF9933] font-bold">
+                        <span>Limited Edition Launch Discount</span>
+                        <span>-₹{(500 * qty).toLocaleString('en-IN')}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Priority Shipping & NFC Tagging</span>
+                        <span className="text-[#1dce96] font-bold">₹0 (FREE)</span>
+                      </div>
+                      <div className="border-t border-white/10 pt-3.5 flex justify-between items-center text-sm">
+                        <span className="font-bold text-white">Total Amount</span>
+                        <span className="font-black text-xl text-white">₹{(selectedDesign.price * qty).toLocaleString('en-IN')}</span>
+                      </div>
+                    </div>
+
                     {/* Qty & Add to Cart */}
                     <div className="flex flex-col sm:flex-row items-center gap-6 pt-6 mt-6 border-t border-white/10">
                       <div className="flex items-center rounded-xl bg-white/5 border border-white/10 h-14 w-full sm:w-auto">

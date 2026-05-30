@@ -388,6 +388,27 @@ export default function Shop() {
                     </div>
                   </div>
 
+                  {/* Pricing Breakdown Card */}
+                  <div className="mb-6 bg-neutral-50 rounded-2xl p-5 border border-neutral-100 space-y-3.5 text-xs text-neutral-600 font-medium">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-2">Pricing Breakdown</p>
+                    <div className="flex justify-between items-center">
+                      <span>Base T-Shirt Price</span>
+                      <span className="line-through text-neutral-400 font-bold">₹{selectedPlan === 'starter' ? '1,499' : selectedPlan === 'creator' ? '1,999' : '1,299'}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-orange-600 font-bold">
+                      <span>Founding Member Special Promo</span>
+                      <span>-₹{selectedPlan === 'starter' ? '700' : selectedPlan === 'creator' ? '1,000' : '600'}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Priority Shipping & NFC Setup</span>
+                      <span className="text-green-600 font-bold">₹0 (FREE)</span>
+                    </div>
+                    <div className="border-t border-neutral-200/60 pt-3.5 flex justify-between items-center text-sm">
+                      <span className="font-black text-black">Total Amount</span>
+                      <span className="font-black text-lg text-black">₹{selectedPlan === 'starter' ? '799' : selectedPlan === 'creator' ? '999' : '699'}</span>
+                    </div>
+                  </div>
+
                   {/* Checkout */}
                   <div className="pt-2">
                     <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100/50 border border-orange-200 rounded-2xl p-4 flex flex-col items-center justify-center">
