@@ -148,6 +148,10 @@ export default function Shop() {
   }
 
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false)
+  const [activeAccordion, setActiveAccordion] = useState(null)
+  const toggleAccordion = (name) => {
+    setActiveAccordion(activeAccordion === name ? null : name)
+  }
 
   const SizeGuideModal = () => (
     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
@@ -201,13 +205,18 @@ export default function Shop() {
         <div className="max-w-[1200px] mx-auto">
           {/* Header - Only show if no design selected */}
           {!selectedDesign && (
-            <header className="mb-16">
-              <h1 className="text-6xl font-display font-black text-black mb-4">
-                Explore <span className="text-orange-500 italic">Designs</span>
-              </h1>
-              <p className="text-xl text-neutral-500 max-w-xl">
-                Choose your digital soul. Every design is crafted to pulse with your identity.
-              </p>
+            <header className="mb-12 border-b border-neutral-100 pb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+              <div>
+                <h1 className="text-4xl md:text-5xl font-display font-black text-black uppercase tracking-wide">
+                  Explore <span className="text-orange-500 italic">Designs</span>
+                </h1>
+                <p className="text-sm text-neutral-400 mt-2 tracking-wider uppercase font-bold text-[10px]">
+                  Premium Heavyweight Phygital Streetwear Series
+                </p>
+              </div>
+              <div className="text-[10px] font-black uppercase tracking-[0.2em] bg-black text-white px-4 py-2">
+                {designs.length} Limited Editions
+              </div>
             </header>
           )}
 
@@ -216,29 +225,60 @@ export default function Shop() {
               <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
             </div>
           ) : !selectedDesign ? (
-            /* Design Grid */
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 animate-fade-in">
+            /* Design Grid - Restyled to match Offcult look */
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12 animate-fade-in">
               {designs.map((d) => (
-                <div key={d.id} className="group cursor-pointer" onClick={() => handleSelect(d)}>
-                  <div className="aspect-square bg-neutral-100 rounded-[40px] overflow-hidden relative mb-6 border border-neutral-100 group-hover:border-orange-500/20 transition-all premium-shimmer shadow-sm group-hover:shadow-2xl group-hover:shadow-orange-500/10">
+                <div 
+                  key={d.id} 
+                  className="group cursor-pointer flex flex-col"
+                  onClick={() => handleSelect(d)}
+                >
+                  <div className="aspect-[3/4] w-full bg-neutral-50 overflow-hidden relative mb-4 border border-neutral-100/50 group-hover:border-neutral-300 transition-colors">
                     <img 
                       src={getAssetUrl(d.model_image_url || d.front_image_url) || '/assets/tees/front.png'} 
                       alt={d.name} 
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     />
-                    <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                      <div className="bg-white text-black px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-luxury flex items-center gap-3 transform translate-y-4 group-hover:translate-y-0 transition-all shadow-2xl">
-                        <ShoppingBag size={14} /> Configure
-                      </div>
+                    
+                    {/* Wishlist Button Overlay */}
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toast.success(`Saved to wishlist: ${d.name}`);
+                      }}
+                      className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 hover:bg-black text-white flex items-center justify-center transition-colors shadow-sm"
+                    >
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        strokeWidth={2.5} 
+                        stroke="currentColor" 
+                        className="w-4 h-4"
+                      >
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" 
+                        />
+                      </svg>
+                    </button>
+
+                    {/* Oversized absolute bottom-center tag */}
+                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] select-none">
+                      Oversized
                     </div>
                   </div>
-                  <div className="flex justify-between items-start px-6">
-                    <div>
-                      <h3 className="text-xl font-display font-black text-black mb-1">{d.name}</h3>
-                      <p className="text-[10px] font-black text-neutral-400 uppercase tracking-luxury">Phygital Edition</p>
-                    </div>
-                    <div className="text-right">
-                       <p className="text-[10px] font-bold text-green-600 uppercase tracking-widest">Free Shipping</p>
+                  
+                  <div className="px-1">
+                    <h3 className="text-xs font-black text-neutral-900 uppercase tracking-wider truncate mb-1">
+                      {d.name}
+                    </h3>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-black text-neutral-900">₹599</span>
+                      <span className="text-[10px] text-neutral-400 line-through">
+                        {d.price ? `₹${d.price}` : '₹1999'}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -283,7 +323,7 @@ export default function Shop() {
               </div>
             </div>
           ) : (
-            /* Single Design Customization View */
+            /* Single Design Customization View - Revamped to Offcult checkout style */
             <div className="animate-fade-in max-w-6xl mx-auto">
               <button 
                 onClick={() => {
@@ -293,165 +333,298 @@ export default function Shop() {
                   window.history.pushState({}, '', url);
                   window.scrollTo(0, 0)
                 }}
-                className="mb-8 flex items-center gap-2 text-xs font-bold text-neutral-500 hover:text-black transition-colors"
+                className="mb-10 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-neutral-400 hover:text-black transition-colors"
               >
-                <ChevronRight size={16} className="rotate-180" /> Back to Collection
+                <ChevronRight size={14} className="rotate-180 text-black" /> Back to Designs
               </button>
 
-              <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
-                {/* Left: Preview - Larger and Sleeker */}
-                <div className="w-full lg:w-1/2">
-                  <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden bg-gradient-to-b from-neutral-50 to-neutral-100/50 shadow-2xl shadow-neutral-200/50">
-                    {/* Add a subtle highlight border */}
-                    <div className="absolute inset-0 border border-white/50 rounded-[32px] pointer-events-none z-10" />
-                    <img 
-                      src={getAssetUrl(selectedDesign.model_image_url || selectedDesign.front_image_url)} 
-                      className="w-full h-full object-cover mix-blend-multiply"
-                      alt={selectedDesign.name}
-                    />
-                  </div>
+              <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
+                {/* Left Column: Stack of high-quality product images */}
+                <div className="w-full lg:w-3/5 flex flex-col gap-6">
+                  {[
+                    selectedDesign.model_image_url,
+                    selectedDesign.front_image_url,
+                    selectedDesign.back_image_url
+                  ]
+                    .filter(Boolean)
+                    .map((imgUrl, index) => (
+                      <div 
+                        key={index} 
+                        className="w-full aspect-[3/4] bg-neutral-50 overflow-hidden relative border border-neutral-100"
+                      >
+                        <img 
+                          src={getAssetUrl(imgUrl)} 
+                          className="w-full h-full object-cover" 
+                          alt={`${selectedDesign.name} view ${index + 1}`}
+                        />
+                        {index === 0 && selectedDesign.model_image_url && (
+                          <span className="absolute bottom-4 left-4 bg-black text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">
+                            Model Look
+                          </span>
+                        )}
+                        {((index === 1 && selectedDesign.model_image_url) || (index === 0 && !selectedDesign.model_image_url)) && (
+                          <span className="absolute bottom-4 left-4 bg-black text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">
+                            Front View
+                          </span>
+                        )}
+                        {((index === 2 && selectedDesign.model_image_url) || (index === 1 && !selectedDesign.model_image_url)) && (
+                          <span className="absolute bottom-4 left-4 bg-black text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">
+                            Back View
+                          </span>
+                        )}
+                      </div>
+                    ))
+                  }
                 </div>
 
-                {/* Right: Customization - Luxurious Typography & Controls */}
-                <div className="w-full lg:w-1/2 py-4 lg:py-10">
-                  <div className="mb-10">
-                    <div className="inline-block px-3 py-1 bg-orange-100 text-orange-600 font-bold text-[10px] uppercase tracking-widest rounded-full mb-4">
-                      Premium Phygital Core
+                {/* Right Column: Sticky checkout and configuration specs */}
+                <div className="w-full lg:w-2/5 lg:sticky lg:top-28 py-2">
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-[9px] font-black uppercase tracking-[0.2em] bg-neutral-100 text-neutral-800 px-2.5 py-1 rounded-sm">
+                        Oversized Fit
+                      </span>
+                      <span className="text-[9px] font-black uppercase tracking-[0.2em] bg-orange-50 text-orange-600 px-2.5 py-1 rounded-sm">
+                        Phygital Edition
+                      </span>
                     </div>
-                    <h2 className="text-4xl lg:text-5xl font-display font-black text-black mb-2 tracking-tight">{selectedDesign.name}</h2>
-                    <p className="text-sm text-neutral-500 leading-relaxed max-w-md">
-                      A next-generation digital smart tee. This physical garment serves as a secure gateway to your dynamic digital identity.
+                    <h1 className="text-3xl font-black text-neutral-900 uppercase tracking-wide mb-3 leading-tight font-display">
+                      {selectedDesign.name}
+                    </h1>
+                    <p className="text-xs text-neutral-400 tracking-widest font-bold uppercase text-[9px] mb-4">
+                      STREETWEAR SERIES CO-CREATION
                     </p>
+                    
+                    {/* Price display based on Selected Plan */}
+                    <div className="flex items-baseline gap-3 mb-6 border-b border-neutral-100 pb-5">
+                      <span className="text-3xl font-black text-neutral-900">
+                        ₹{PLANS.find(p => p.id === selectedPlan)?.price || 999}
+                      </span>
+                      <span className="text-base text-neutral-400 line-through">
+                        {selectedPlan === 'starter' ? '₹1499' : selectedPlan === 'creator' ? '₹1999' : '₹1299'}
+                      </span>
+                      <span className="text-[10px] font-black text-green-600 uppercase tracking-widest bg-green-50 px-2.5 py-1">
+                        Save {selectedPlan === 'starter' ? '47%' : selectedPlan === 'creator' ? '50%' : '46%'}
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Size Selection */}
-                  <div className="mb-10">
-                    <div className="flex items-center justify-between mb-4">
-                      <p className="text-xs font-bold text-black uppercase tracking-wider">Select Size</p>
+                  {/* Plan/Fabric Selector (Horizontal minimalistic pills) */}
+                  <div className="mb-6">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 block mb-3">
+                      Select Fabric Grade & Plan
+                    </label>
+                    <div className="grid grid-cols-3 gap-2.5">
+                      {PLANS.map(p => (
+                        <button 
+                          key={p.id}
+                          onClick={() => setSelectedPlan(p.id)}
+                          className={`flex flex-col items-center justify-center p-3.5 border transition-all text-center ${
+                            selectedPlan === p.id 
+                              ? 'border-black bg-black text-white' 
+                              : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-400'
+                          }`}
+                        >
+                          <span className="text-[11px] font-black uppercase tracking-wider">{p.name}</span>
+                          <span className="text-[8px] uppercase font-bold tracking-widest mt-1 opacity-70">{p.gsm}</span>
+                          <span className="text-xs font-black mt-2">₹{p.price}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Size Selector */}
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
+                        Select Size: <span className="text-black font-black">{selectedSize}</span>
+                      </label>
                       <button 
-                        onClick={() => setSizeGuideOpen(true)}
-                        className="text-xs font-bold text-neutral-400 flex items-center gap-1.5 hover:text-orange-500 transition-colors"
+                        onClick={() => setSizeGuideOpen(!sizeGuideOpen)}
+                        className="text-[9px] font-black text-neutral-800 uppercase tracking-widest flex items-center gap-1 hover:text-black border-b border-black"
                       >
-                        <Ruler size={14} /> Size Guide
+                        Size Chart
                       </button>
                     </div>
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex gap-2">
                       {SIZES.map(s => (
                         <button 
                           key={s}
                           onClick={() => setSelectedSize(s)}
-                          className={`w-14 h-14 rounded-2xl font-black transition-all text-sm border-2 ${
+                          className={`w-11 h-11 text-xs font-black uppercase transition-all border ${
                             selectedSize === s 
-                              ? 'border-orange-500 bg-orange-500 text-white shadow-lg shadow-orange-500/20' 
-                              : 'border-neutral-100 bg-white text-neutral-500 hover:border-neutral-300'
+                              ? 'border-black bg-black text-white' 
+                              : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-400'
                           }`}
                         >
                           {s}
                         </button>
                       ))}
                     </div>
+
+                    {/* Inline Size measurements expandable table */}
+                    {sizeGuideOpen && (
+                      <div className="mt-4 overflow-hidden border border-neutral-200 bg-white animate-fade-in">
+                        <table className="w-full text-left text-xs border-collapse">
+                          <thead>
+                            <tr className="bg-neutral-50 border-b border-neutral-200 font-bold uppercase tracking-wider text-neutral-500">
+                              <th className="px-4 py-2 text-[9px]">Size</th>
+                              <th className="px-4 py-2 text-[9px]">Chest (in)</th>
+                              <th className="px-4 py-2 text-[9px]">Length (in)</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-neutral-100 text-neutral-700">
+                            {[
+                              { s: 'S', c: '38"', l: '27"' },
+                              { s: 'M', c: '40"', l: '28"' },
+                              { s: 'L', c: '42"', l: '29"' },
+                              { s: 'XL', c: '44"', l: '30"' },
+                              { s: 'XXL', c: '46"', l: '31"' },
+                            ].map(row => (
+                              <tr key={row.s} className="hover:bg-neutral-50/30">
+                                <td className="px-4 py-2 font-black text-black">{row.s}</td>
+                                <td className="px-4 py-2">{row.c}</td>
+                                <td className="px-4 py-2">{row.l}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Plan Selection */}
-                  <div className="mb-10">
-                    <p className="text-xs font-bold text-black uppercase tracking-wider mb-4">Identity Protocol</p>
-                    <div className="grid grid-cols-1 gap-4">
-                      {PLANS.map(p => (
-                        <button 
-                          key={p.id}
-                          onClick={() => setSelectedPlan(p.id)}
-                          className={`w-full p-5 rounded-2xl border-2 transition-all text-left flex items-center justify-between group ${
-                            selectedPlan === p.id 
-                              ? 'border-black bg-[#111111] text-white shadow-2xl shadow-black/10' 
-                              : 'border-neutral-200 bg-white hover:border-neutral-300'
-                          }`}
-                        >
-                          <div className="flex items-center gap-4">
-                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                              selectedPlan === p.id 
-                                ? 'border-orange-500 bg-orange-500' 
-                                : 'border-neutral-300 group-hover:border-neutral-400'
-                            }`}>
-                              {selectedPlan === p.id && <Check size={12} className="text-white" />}
-                            </div>
-                            <div>
-                              <p className={`font-black text-lg leading-tight ${selectedPlan === p.id ? 'text-white' : 'text-black'}`}>{p.name}</p>
-                              <p className={`text-[10px] uppercase tracking-widest font-bold mt-1 ${selectedPlan === p.id ? 'text-neutral-400' : 'text-neutral-500'}`}>{p.gsm}</p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className={`text-2xl font-black ${selectedPlan === p.id ? 'text-white' : 'text-black'}`}>₹{p.price}</p>
-                          </div>
-                        </button>
-                      ))}
+                  {/* Specifications Summary */}
+                  <div className="border-t border-b border-neutral-100 py-4 mb-6 grid grid-cols-2 gap-y-2 gap-x-4 text-xs">
+                    <div>
+                      <span className="text-neutral-400 font-bold uppercase tracking-wider block text-[8px]">Fabric grade</span>
+                      <span className="text-neutral-800 font-black uppercase text-[10px]">100% Premium Cotton</span>
+                    </div>
+                    <div>
+                      <span className="text-neutral-400 font-bold uppercase tracking-wider block text-[8px]">Weight/thickness</span>
+                      <span className="text-neutral-800 font-black uppercase text-[10px]">{PLANS.find(p => p.id === selectedPlan)?.gsm || '220 GSM'}</span>
+                    </div>
+                    <div>
+                      <span className="text-neutral-400 font-bold uppercase tracking-wider block text-[8px]">Garment fit</span>
+                      <span className="text-neutral-800 font-black uppercase text-[10px]">Oversized / Boxy Fit</span>
+                    </div>
+                    <div>
+                      <span className="text-neutral-400 font-bold uppercase tracking-wider block text-[8px]">Print style</span>
+                      <span className="text-neutral-800 font-black uppercase text-[10px]">Premium HD PUFF PRINT</span>
                     </div>
                   </div>
 
-                  {/* Pricing Breakdown Card */}
-                  <div className="mb-6 bg-neutral-50 rounded-2xl p-5 border border-neutral-100 space-y-3.5 text-xs text-neutral-600 font-medium">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-2">Pricing Breakdown</p>
+                  {/* E-Commerce Receipt & Finance details */}
+                  <div className="mb-6 bg-neutral-50 p-4 border border-neutral-100 space-y-2.5 text-xs text-neutral-600 font-medium">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Receipt Details</p>
                     <div className="flex justify-between items-center">
-                      <span>Base T-Shirt Price</span>
-                      <span className="line-through text-neutral-400 font-bold">₹{selectedPlan === 'starter' ? '1,499' : selectedPlan === 'creator' ? '1,999' : '1,299'}</span>
+                      <span>Premium Heavyweight Tee ({selectedPlan.toUpperCase()})</span>
+                      <span className="line-through text-neutral-400 font-bold">₹{selectedPlan === 'starter' ? '1499' : selectedPlan === 'creator' ? '1999' : '1299'}</span>
                     </div>
-                    <div className="flex justify-between items-center text-orange-600 font-bold">
+                    <div className="flex justify-between items-center text-red-600 font-bold">
                       <span>Founding Member Special Promo</span>
-                      <span>-₹{selectedPlan === 'starter' ? '700' : selectedPlan === 'creator' ? '1,000' : '600'}</span>
+                      <span>-₹{selectedPlan === 'starter' ? '700' : selectedPlan === 'creator' ? '1000' : '600'}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span>Priority Shipping & Smart Setup</span>
-                      <span className="text-green-600 font-bold">₹0 (FREE)</span>
+                      <span>Priority Shipping & Customization</span>
+                      <span className="text-green-600 font-bold">FREE (₹0)</span>
                     </div>
-                    <div className="border-t border-neutral-200/60 pt-3.5 flex justify-between items-center text-sm">
-                      <span className="font-black text-black">Total Amount</span>
-                      <span className="font-black text-lg text-black">₹{selectedPlan === 'starter' ? '799' : selectedPlan === 'creator' ? '999' : '699'}</span>
+                    <div className="border-t border-neutral-200 pt-2.5 flex justify-between items-center text-sm font-black text-black">
+                      <span>Total Amount (all inclusive)</span>
+                      <span className="text-lg">₹{PLANS.find(p => p.id === selectedPlan)?.price || 999}</span>
                     </div>
                   </div>
 
-                  {/* Checkout */}
+                  {/* Sticky Checkout Action button */}
                   <div className="pt-2">
-                    <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100/50 border border-orange-200 rounded-2xl p-4 flex flex-col items-center justify-center">
-                      <span className="text-orange-600 font-black text-sm flex items-center gap-2">
-                        <span className="relative flex h-3 w-3">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
+                    <div className="mb-4 bg-black text-white p-3.5 text-center flex flex-col items-center justify-center relative overflow-hidden">
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                         </span>
-                        Only {remainingSpots} Founding Spots Left!
+                        Strictly Limited Founding Spots
+                      </span>
+                      <span className="text-[9px] uppercase tracking-widest mt-1 text-neutral-400 font-bold">
+                        Only {remainingSpots} remaining spots active
                       </span>
                     </div>
+
                     <button 
                       onClick={triggerCheckout}
                       disabled={checkoutLoading}
-                      className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-5 rounded-2xl font-black text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_40px_-10px_rgba(249,115,22,0.5)] flex items-center justify-center gap-3 disabled:opacity-50 disabled:hover:scale-100"
+                      className="w-full bg-black text-white py-4.5 font-black uppercase tracking-[0.2em] text-sm hover:bg-neutral-900 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                     >
                       {checkoutLoading ? (
-                        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       ) : (
-                        <Lock size={20} />
+                        <Lock size={15} />
                       )}
                       {checkoutLoading
-                        ? 'Initiating Secure Checkout...'
+                        ? 'Initiating secure transaction...'
                         : selectedPlan === 'team'
                         ? 'Configure Team Order →'
-                        : 'Secure Checkout'
+                        : 'Secure Checkout via Razorpay'
                       }
                     </button>
                     
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-8">
+                    <div className="flex flex-col gap-2 mt-4 text-[9px] text-neutral-500 font-bold uppercase tracking-wider">
                       <div className="flex items-center gap-2">
-                        <Shield size={18} className="text-green-600" />
-                        <span className="text-[11px] font-bold uppercase tracking-widest text-neutral-600">100% Secure via Razorpay</span>
+                        <Truck size={14} className="text-black" />
+                        <span>Dispatched in 24-48 Hours • Free Delivery Across India</span>
                       </div>
-                      <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-neutral-200" />
                       <div className="flex items-center gap-2">
-                        <Truck size={18} className="text-blue-600" />
-                        <span className="text-[11px] font-bold uppercase tracking-widest text-neutral-600">Free Priority Shipping</span>
+                        <Shield size={14} className="text-black" />
+                        <span>256-Bit SSL Encrypted secure transactions</span>
                       </div>
-                    </div>
-                    <div className="mt-6 text-center border-t border-neutral-100 pt-6">
-                      <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">7-Day Free Replacement Policy • 256-bit SSL Encrypted</p>
                     </div>
                   </div>
+
+                  {/* Modern Streetwear Collapsible Accordions */}
+                  <div className="mt-8 border-t border-neutral-100 divide-y divide-neutral-100">
+                    {[
+                      {
+                        id: 'fabric',
+                        title: 'Fabric Premium Details',
+                        content: 'Crafted with 100% long-staple premium combed cotton. Featuring a boxy oversized drape, 200-240 GSM ultra-heavyweight knit, double-needle stitched neckband, and pre-shrunk construction for perfect longevity. Screened with high-definition puff and premium reactive inks.'
+                      },
+                      {
+                        id: 'shipping',
+                        title: 'Delivery Timelines',
+                        content: 'Standard shipping is completely free for all prepaid orders. Shipments are dispatched from our warehouse within 24-48 hours. Transit time ranges from 3-5 business days depending on your pin code.'
+                      },
+                      {
+                        id: 'returns',
+                        title: 'Return & Exchange Policy',
+                        content: 'We offer a 7-Day Free Replacement Policy specifically for products received with manufacturing defects, printing issues (e.g. design fade), or transit damages. Since each product is linked to a secure digital identity, standard size exchanges or change-of-mind replacements are subject to a minor shipping fee. Please check our size chart before ordering.'
+                      },
+                      {
+                        id: 'payments',
+                        title: 'Secure Payment Options',
+                        content: 'Securely pay with any UPI application (Google Pay, PhonePe, Paytm), Credit or Debit Cards (Visa, Mastercard, RuPay), Net Banking across major banks, or secure Wallets via our trusted partner Razorpay.'
+                      }
+                    ].map(item => (
+                      <div key={item.id} className="py-4">
+                        <button 
+                          onClick={() => toggleAccordion(item.id)}
+                          className="w-full flex items-center justify-between text-left text-xs font-black uppercase tracking-wider text-black py-1"
+                        >
+                          <span>{item.title}</span>
+                          <ChevronRight 
+                            size={14} 
+                            className={`text-black transition-transform duration-300 ${activeAccordion === item.id ? 'rotate-90' : ''}`} 
+                          />
+                        </button>
+                        <div className={`transition-all duration-300 overflow-hidden ${
+                          activeAccordion === item.id ? 'max-h-40 mt-3' : 'max-h-0'
+                        }`}>
+                          <p className="text-xs text-neutral-500 leading-relaxed font-normal normal-case">
+                            {item.content}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
                 </div>
               </div>
             </div>
