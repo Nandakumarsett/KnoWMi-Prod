@@ -201,7 +201,50 @@ export default function TestCenterAdmin() {
     }
   }
 
+  // Generate a test order in the 'orders' table to review the TrackOrder page
+  const generateTestOrder = async () => {
+    setStatus('test_order', 'loading')
+    try {
+      // 1. Fetch user's profile ID
+      const { data: userProfile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .single()
+      
+      if (!userProfile) {
+        throw new Error('Your profile is missing. Please setup your profile first.')
+      }
+
+      const testOrderNumber = `KWM-${Math.floor(10000000 + Math.random() * 90000000)}`
+
+      // 2. Insert mock order
+      const { error } = await supabase
+        .from('orders')
+        .insert({
+          profile_id: userProfile.id,
+          order_number: testOrderNumber,
+          item_name: 'Creator Identity Tee',
+          item_type: 'tshirt',
+          size: 'L',
+          amount: 999,
+          status: 'shipped',
+          shipping_address: '42, Anna Salai, Chennai, Tamil Nadu - 600002',
+          delivery_city: 'Chennai',
+          estimated_delivery: '3-4 Business Days',
+          tracking_info: 'Bluedart : BDT987654321IN',
+          model_image_url: 'https://jwsoutcwgwwfovrdrmjk.supabase.co/storage/v1/object/public/persona-designs/mock-tee-preview.png'
+        })
+
+      if (error) throw error
+      setStatus('test_order', 'ok', `Mock Order ${testOrderNumber} created! Check at: /track?order=${testOrderNumber}`)
+    } catch (err) {
+      setStatus('test_order', 'error', err.message)
+    }
+  }
+
   const razorpayWebhookUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/razorpay-webhook`
+
 
   return (
     <div className="space-y-8">
@@ -278,6 +321,24 @@ export default function TestCenterAdmin() {
             onRun={testDeletion}
             status={statuses.deletion || 'idle'}
             detail={details.deletion}
+          />
+        </div>
+      </div>
+
+      {/* ── Order Tracking Review ────────────────── */}
+      <div>
+        <p className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: 'var(--muted)' }}>
+          🧪 Order Tracking & Layout Review
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <TestCard
+            icon={ShoppingCart} color="#F97316"
+            title="Create Mock Order"
+            desc="Generates a mock paid & shipped order in your database so you can preview the Shopify-style double-column Track Order page."
+            btnLabel="Generate Mock Order"
+            onRun={generateTestOrder}
+            status={statuses.test_order || 'idle'}
+            detail={details.test_order}
           />
         </div>
       </div>
