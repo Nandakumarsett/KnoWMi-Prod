@@ -365,6 +365,10 @@ export default function TrackOrder() {
                         src={getAssetUrl(order.model_image_url) || '/assets/tees/front.png'} 
                         className="w-full h-full object-cover" 
                         alt="Tee preview" 
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/assets/tees/front.png';
+                        }}
                       />
                       <div className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-neutral-900 text-white rounded-full flex items-center justify-center text-[10px] font-black border-2 border-white select-none">
                         1

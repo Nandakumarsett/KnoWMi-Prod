@@ -2718,23 +2718,67 @@ function Dashboard() {
                       </div>
                     </div>
 
-                    <div className="card p-10 bg-neutral-900 text-white relative overflow-hidden flex flex-col items-center justify-center">
-                       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/20 to-transparent pointer-events-none" />
-                       <div className="relative w-full aspect-square animate-float-slow">
-                          {latestOrder.model_image_url ? (
-                            <img src={getAssetUrl(latestOrder.model_image_url)} className="w-full h-full object-contain" alt={latestOrder.item_name} />
-                          ) : (
-                            <svg viewBox="0 0 200 250" className="w-full h-full drop-shadow-[0_40px_40px_rgba(0,0,0,0.5)]">
-                              <path d="M40,50 Q100,30 160,50 L190,90 L165,115 L155,108 L155,230 Q100,245 45,230 L45,108 L35,115 L10,90 Z" fill="#262626" />
-                              <path d="M45,108 Q100,120 155,108" fill="none" stroke="white" strokeOpacity="0.1" strokeWidth="2" />
-                              <rect x="50" y="80" width="100" height="1" fill="var(--saffron)" className="animate-scan-glow" />
-                            </svg>
-                          )}
-                       </div>
-                       <div className="text-center mt-6">
-                         <h3 className="text-xl font-display font-black text-white mb-2">{latestOrder.item_name}</h3>
-                         <p className="text-[10px] font-bold text-orange-500 uppercase tracking-[0.2em]">{latestOrder.sku || 'SKU-SIGNATURE-TEE'}</p>
-                       </div>
+                    <div className="card p-6 lg:p-8 bg-white border border-neutral-100 shadow-xl rounded-[32px] flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-xs font-black uppercase tracking-widest text-neutral-400 mb-6">Order Summary</h3>
+                        
+                        {/* Item Details */}
+                        <div className="flex items-center gap-4 py-4 border-b border-neutral-100">
+                          <div className="relative w-20 h-24 bg-neutral-50 rounded-2xl border border-neutral-100 overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
+                            <img 
+                              src={getAssetUrl(latestOrder.model_image_url) || '/assets/tees/front.png'} 
+                              className="w-full h-full object-cover" 
+                              alt={latestOrder.item_name || 'Tee preview'} 
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = '/assets/tees/front.png';
+                              }}
+                            />
+                            <div className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-neutral-900 text-white rounded-full flex items-center justify-center text-[10px] font-black border-2 border-white select-none">
+                              {latestOrder.quantity || 1}
+                            </div>
+                          </div>
+                          
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-black text-sm text-neutral-950 leading-snug truncate">
+                              {latestOrder.item_name || 'Creator Identity Tee'}
+                            </h4>
+                            <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mt-1">
+                              Size {latestOrder.size || 'L'} • Phygital Core
+                            </p>
+                            <p className="text-[10px] font-bold text-orange-500 uppercase tracking-[0.2em] mt-1">
+                              {latestOrder.sku || 'SKU-SIGNATURE-TEE'}
+                            </p>
+                          </div>
+
+                          <div className="text-right">
+                            <span className="font-black text-sm text-neutral-950">₹{latestOrder.amount || '999'}</span>
+                          </div>
+                        </div>
+
+                        {/* Financial Breakdown */}
+                        <div className="py-6 border-b border-neutral-100 space-y-3.5 text-xs">
+                          <div className="flex justify-between items-center text-neutral-500 font-medium">
+                            <span>Subtotal</span>
+                            <span className="font-bold text-neutral-950">₹{latestOrder.amount || '999'}</span>
+                          </div>
+                          <div className="flex justify-between items-center text-neutral-500 font-medium">
+                            <span>Taxes & Shipping</span>
+                            <span className="font-bold text-emerald-600">₹0 (All Inclusive)</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Total Row */}
+                      <div className="pt-6 flex justify-between items-center">
+                        <div>
+                          <span className="text-xs font-black uppercase tracking-widest text-neutral-400">Total Paid</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="font-black text-2xl text-neutral-950">₹{latestOrder.amount || '999'}</span>
+                          <span className="block text-[8px] font-bold text-neutral-400 uppercase tracking-widest mt-0.5">INR (Indian Rupee)</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
