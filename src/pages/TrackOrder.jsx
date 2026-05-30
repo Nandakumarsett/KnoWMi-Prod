@@ -259,7 +259,7 @@ export default function TrackOrder() {
                         <p>We have successfully initiated your order. Our finance gateway has validated your receipt, and your tee is scheduled to move to printing.</p>
                       )}
                       {order.status === 'paid' && (
-                        <p>Your phygital KnoWMi tee is currently in custom printing. We are programming your secure NFC chip and linking it to your digital identity profile.</p>
+                        <p>Your phygital KnoWMi tee is currently in custom printing. We are programming your secure smart chip and linking it to your digital identity profile.</p>
                       )}
                       {order.status === 'shipped' && (
                         <p>Your KnoWMi order has been packed and handed over to our premier shipping partner. Check the transit number below for live dispatch tracking.</p>
@@ -418,9 +418,9 @@ export default function TrackOrder() {
                   <div className="flex items-center gap-3">
                     <ShieldCheck size={20} className="text-emerald-600 shrink-0" />
                     <div>
-                      <h4 className="text-[10px] font-black uppercase tracking-widest text-neutral-900">NFC Secure Protocol</h4>
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-neutral-900">QR Secure Protocol</h4>
                       <p className="text-[10px] text-neutral-500 font-medium leading-relaxed">
-                        Every KnoWMi physical item is custom embedded with a secure cryptographic web3 identity tag.
+                        Every KnoWMi physical item is custom printed with a secure cryptographic web3 identity QR code.
                       </p>
                     </div>
                   </div>

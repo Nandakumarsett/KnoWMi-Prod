@@ -1540,7 +1540,7 @@ const IdentityPass = ({ profile }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-6">
                   {[
                     "Lifetime Advanced Analytics",
-                    "Dynamic NFC Sleeve Activation",
+                    "Dynamic Profile Activation",
                     "240 GSM Ultra-Premium Cotton",
                     "Verified Profile Badge",
                     "Priority 24/7 WhatsApp Support",
@@ -1657,7 +1657,7 @@ function Dashboard() {
       score += 10;
     }
     
-    // 5. Active and Paid (NFC Tee Activated) -> +25%
+    // 5. Active and Paid (Smart Tee Activated) -> +25%
     if (isPaid) score += 25;
     
     return score;
@@ -2066,7 +2066,7 @@ function Dashboard() {
                 <h3 className="text-sm font-black text-neutral-900 uppercase tracking-widest leading-none mb-2">Profile Setup Completion</h3>
                 <p className="text-[11px] font-bold text-neutral-400">
                   {profileCompletion < 100 
-                    ? `Complete your path to get the physical NFC smart Tee & unlock 100% of features!` 
+                    ? `Complete your path to get the physical smart T-shirt & unlock 100% of features!` 
                     : `Congratulations! Your KnoWMi Identity is fully activated! 🎉`}
                 </p>
               </div>

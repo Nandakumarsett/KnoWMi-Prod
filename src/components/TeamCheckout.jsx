@@ -240,7 +240,7 @@ export default function TeamCheckout({ onClose, user, onAuth, selectedDesign }) 
                   <span>-₹{(600 * members.length).toLocaleString('en-IN')}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span>Priority Shipping & Custom NFC Tagging</span>
+                  <span>Priority Shipping & Custom QR Setup</span>
                   <span className="text-green-600 font-bold">₹0 (FREE)</span>
                 </div>
                 <div className="border-t border-neutral-200/60 pt-3.5 flex justify-between items-center text-sm">

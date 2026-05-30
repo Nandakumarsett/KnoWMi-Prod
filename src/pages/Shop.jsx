@@ -400,7 +400,7 @@ export default function Shop() {
                       <span>-₹{selectedPlan === 'starter' ? '700' : selectedPlan === 'creator' ? '1,000' : '600'}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span>Priority Shipping & NFC Setup</span>
+                      <span>Priority Shipping & Smart Setup</span>
                       <span className="text-green-600 font-bold">₹0 (FREE)</span>
                     </div>
                     <div className="border-t border-neutral-200/60 pt-3.5 flex justify-between items-center text-sm">

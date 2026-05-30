@@ -27,7 +27,7 @@ export default function QRManager({ initialTokens, profileId, profileSlug, isPai
             Buy a Tee to Unlock QR Studio
           </h3>
           <p className="text-sm font-semibold max-w-sm text-neutral-500 mb-8 leading-relaxed">
-            Get your physical NFC Smart Tee to activate your official QR Studio, generate custom scan tracking tokens, and export high-resolution QR codes for print.
+            Get your physical Smart Tee to activate your official QR Studio, generate custom scan tracking tokens, and export high-resolution QR codes for print.
           </p>
           <button
             onClick={() => window.location.href = '/#pricing'}

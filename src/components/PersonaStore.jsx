@@ -331,7 +331,7 @@ export default function PersonaStore({ onClose, onAuth, user }) {
                         <span>-₹{(500 * qty).toLocaleString('en-IN')}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span>Priority Shipping & NFC Tagging</span>
+                        <span>Priority Shipping & Smart Setup</span>
                         <span className="text-[#1dce96] font-bold">₹0 (FREE)</span>
                       </div>
                       <div className="border-t border-white/10 pt-3.5 flex justify-between items-center text-sm">
