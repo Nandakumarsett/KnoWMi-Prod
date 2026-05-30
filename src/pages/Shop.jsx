@@ -6,13 +6,12 @@ import { Footer } from '../components/Footer'
 import { ShoppingBag, ChevronRight, Check, X, Ruler, Lock, Shield, Truck, Zap } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import AuthModal from '../components/AuthModal'
-import TeamCheckout from '../components/TeamCheckout'
 import LiveSalesPopup from '../components/LiveSalesPopup'
 
-const PLANS = [
-  { id: 'starter', name: 'Starter', price: 799, gsm: '200 GSM' },
-  { id: 'creator', name: 'Creator', price: 999, gsm: '220 GSM' },
-  { id: 'team', name: 'Team', price: 699, gsm: '240 GSM' }
+const PRODUCTS = [
+  { id: 'regular', name: 'Regular Tee', price: 799, gsm: '200 GSM', disabled: false },
+  { id: 'oversized', name: 'Oversized Tee', price: 999, gsm: '220 GSM', disabled: false },
+  { id: 'hoodie', name: 'Hoodie (Soon)', price: 1499, gsm: '300 GSM', disabled: true }
 ]
 
 const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
@@ -23,11 +22,10 @@ export default function Shop() {
   const [loading, setLoading] = useState(true)
   const [selectedDesign, setSelectedDesign] = useState(null)
   const [selectedSize, setSelectedSize] = useState('M')
-  const [selectedPlan, setSelectedPlan] = useState('creator')
+  const [selectedProductType, setSelectedProductType] = useState('oversized')
   const [modalOpen, setModalOpen] = useState(false)
   const [authOpen, setAuthOpen] = useState(false)
   const [checkoutLoading, setCheckoutLoading] = useState(false)
-  const [teamCheckoutOpen, setTeamCheckoutOpen] = useState(false)
   const [orderSuccess, setOrderSuccess] = useState(null)
   const [remainingSpots, setRemainingSpots] = useState(100)
 
@@ -77,14 +75,8 @@ export default function Shop() {
       return
     }
 
-    // Team plan gets a dedicated configurator modal
-    if (selectedPlan === 'team') {
-      setTeamCheckoutOpen(true)
-      return
-    }
-
     setCheckoutLoading(true)
-    const plan = PLANS.find(p => p.id === selectedPlan)
+    const product = PRODUCTS.find(p => p.id === selectedProductType)
     
     // Load Razorpay SDK
     const res = await new Promise((resolve) => {
@@ -105,7 +97,7 @@ export default function Shop() {
       // 1. Create secure order on our backend
       const { data: orderData, error: apiError } = await supabase.functions.invoke('create-razorpay-order', {
         body: { 
-          plan_id: selectedPlan,
+          product_type: selectedProductType,
           user_id: user.id,
           customer_details: { design: selectedDesign.id, size: selectedSize }
         }
@@ -119,7 +111,7 @@ export default function Shop() {
         amount: orderData.amount,
         currency: "INR",
         name: "KnoWMi",
-        description: `Purchase ${plan.name} Plan`,
+        description: `Purchase ${product.name}`,
         image: "https://knowmi.co/favicon.ico", // This will show the KnoWMi logo in the checkout modal
         order_id: orderData.order_id,
         handler: async function (response) {
@@ -395,32 +387,36 @@ export default function Shop() {
                       STREETWEAR SERIES CO-CREATION
                     </p>
                     
-                    {/* Price display based on Selected Plan */}
+                    {/* Price display based on Selected Product */}
                     <div className="flex items-baseline gap-3 mb-6 border-b border-neutral-100 pb-5">
                       <span className="text-3xl font-black text-neutral-900">
-                        ₹{PLANS.find(p => p.id === selectedPlan)?.price || 999}
+                        ₹{PRODUCTS.find(p => p.id === selectedProductType)?.price || 999}
                       </span>
                       <span className="text-base text-neutral-400 line-through">
-                        {selectedPlan === 'starter' ? '₹1499' : selectedPlan === 'creator' ? '₹1999' : '₹1299'}
+                        {selectedProductType === 'regular' ? '₹1499' : selectedProductType === 'oversized' ? '₹1999' : '₹2999'}
                       </span>
                       <span className="text-[10px] font-black text-green-600 uppercase tracking-widest bg-green-50 px-2.5 py-1">
-                        Save {selectedPlan === 'starter' ? '47%' : selectedPlan === 'creator' ? '50%' : '46%'}
+                        Save {selectedProductType === 'regular' ? '47%' : selectedProductType === 'oversized' ? '50%' : '50%'}
                       </span>
                     </div>
                   </div>
 
-                  {/* Plan/Fabric Selector (Horizontal minimalistic pills) */}
+                  {/* Product/Fabric Selector (Horizontal minimalistic pills) */}
                   <div className="mb-6">
                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 block mb-3">
-                      Select Fabric Grade & Plan
+                      Select Product Type
                     </label>
                     <div className="grid grid-cols-3 gap-2.5">
-                      {PLANS.map(p => (
+                      {PRODUCTS.map(p => (
                         <button 
                           key={p.id}
-                          onClick={() => setSelectedPlan(p.id)}
+                          onClick={() => {
+                            if (!p.disabled) setSelectedProductType(p.id)
+                          }}
+                          disabled={p.disabled}
                           className={`flex flex-col items-center justify-center p-3.5 border transition-all text-center ${
-                            selectedPlan === p.id 
+                            p.disabled ? 'opacity-50 cursor-not-allowed bg-neutral-50 border-neutral-100' :
+                            selectedProductType === p.id 
                               ? 'border-black bg-black text-white' 
                               : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-400'
                           }`}
@@ -501,11 +497,11 @@ export default function Shop() {
                     </div>
                     <div>
                       <span className="text-neutral-400 font-bold uppercase tracking-wider block text-[8px]">Weight/thickness</span>
-                      <span className="text-neutral-800 font-black uppercase text-[10px]">{PLANS.find(p => p.id === selectedPlan)?.gsm || '220 GSM'}</span>
+                      <span className="text-neutral-800 font-black uppercase text-[10px]">{PRODUCTS.find(p => p.id === selectedProductType)?.gsm || '220 GSM'}</span>
                     </div>
                     <div>
                       <span className="text-neutral-400 font-bold uppercase tracking-wider block text-[8px]">Garment fit</span>
-                      <span className="text-neutral-800 font-black uppercase text-[10px]">Oversized / Boxy Fit</span>
+                      <span className="text-neutral-800 font-black uppercase text-[10px]">{selectedProductType === 'regular' ? 'Regular Fit' : selectedProductType === 'hoodie' ? 'Relaxed Fit' : 'Oversized / Boxy Fit'}</span>
                     </div>
                     <div>
                       <span className="text-neutral-400 font-bold uppercase tracking-wider block text-[8px]">Print style</span>
@@ -517,12 +513,12 @@ export default function Shop() {
                   <div className="mb-6 bg-neutral-50 p-4 border border-neutral-100 space-y-2.5 text-xs text-neutral-600 font-medium">
                     <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Receipt Details</p>
                     <div className="flex justify-between items-center">
-                      <span>Premium Heavyweight Tee ({selectedPlan.toUpperCase()})</span>
-                      <span className="line-through text-neutral-400 font-bold">₹{selectedPlan === 'starter' ? '1499' : selectedPlan === 'creator' ? '1999' : '1299'}</span>
+                      <span>{PRODUCTS.find(p => p.id === selectedProductType)?.name}</span>
+                      <span className="line-through text-neutral-400 font-bold">₹{selectedProductType === 'regular' ? '1499' : selectedProductType === 'oversized' ? '1999' : '2999'}</span>
                     </div>
                     <div className="flex justify-between items-center text-red-600 font-bold">
                       <span>Founding Member Special Promo</span>
-                      <span>-₹{selectedPlan === 'starter' ? '700' : selectedPlan === 'creator' ? '1000' : '600'}</span>
+                      <span>-₹{selectedProductType === 'regular' ? '700' : selectedProductType === 'oversized' ? '1000' : '1500'}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span>Priority Shipping & Customization</span>
@@ -530,7 +526,7 @@ export default function Shop() {
                     </div>
                     <div className="border-t border-neutral-200 pt-2.5 flex justify-between items-center text-sm font-black text-black">
                       <span>Total Amount (all inclusive)</span>
-                      <span className="text-lg">₹{PLANS.find(p => p.id === selectedPlan)?.price || 999}</span>
+                      <span className="text-lg">₹{PRODUCTS.find(p => p.id === selectedProductType)?.price || 999}</span>
                     </div>
                   </div>
 
@@ -561,8 +557,6 @@ export default function Shop() {
                       )}
                       {checkoutLoading
                         ? 'Initiating secure transaction...'
-                        : selectedPlan === 'team'
-                        ? 'Configure Team Order →'
                         : 'Secure Checkout via Razorpay'
                       }
                     </button>
@@ -641,14 +635,7 @@ export default function Shop() {
           triggerCheckout();
         }}
       />
-      {teamCheckoutOpen && (
-        <TeamCheckout
-          onClose={() => setTeamCheckoutOpen(false)}
-          user={user}
-          onAuth={() => { setTeamCheckoutOpen(false); setAuthOpen(true) }}
-          selectedDesign={selectedDesign}
-        />
-      )}
+      {/* Team Checkout removed */}
       <LiveSalesPopup />
     </div>
   )

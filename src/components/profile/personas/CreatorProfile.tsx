@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import { trackLinkClick } from '../../../lib/analytics/track'
 import { useGatedLink } from '../../../hooks/useGatedLink'
+
 const PLATFORM_ICONS: Record<string, any> = {
   instagram: Instagram,
   youtube: Youtube,
@@ -27,9 +28,81 @@ const PLATFORM_ICONS: Record<string, any> = {
   twitch: Twitter
 }
 
+const getTheme = (themeName?: string) => {
+  switch (themeName?.toLowerCase()) {
+    case 'neon':
+      return {
+        bg: 'bg-black',
+        border: 'border-fuchsia-900/50',
+        textMain: 'text-white',
+        textSec: 'text-neutral-300',
+        textMuted: 'text-neutral-400',
+        accentText: 'text-fuchsia-500',
+        accentBg: 'bg-fuchsia-600',
+        accentHex: '#d946ef',
+        bannerGradient: 'from-fuchsia-600 to-purple-800',
+        avatarGradient: 'linear-gradient(135deg, #a21caf, #d946ef)',
+        bannerOverlayBg: 'bg-black',
+        cardBg: 'bg-neutral-900/50',
+        cardBorder: 'border-neutral-800/50',
+        tagBg: 'bg-fuchsia-950',
+        tagBorder: 'border-fuchsia-900',
+        tagText: 'text-fuchsia-400',
+        achievementBg: 'bg-amber-950/50',
+        achievementBorder: 'border-amber-900',
+        achievementText: 'text-amber-400',
+      };
+    case 'minimal':
+      return {
+        bg: 'bg-[#fafafa]',
+        border: 'border-neutral-200',
+        textMain: 'text-neutral-900',
+        textSec: 'text-neutral-600',
+        textMuted: 'text-neutral-500',
+        accentText: 'text-neutral-900',
+        accentBg: 'bg-neutral-900',
+        accentHex: '#171717',
+        bannerGradient: 'from-neutral-200 to-neutral-300',
+        avatarGradient: 'linear-gradient(135deg, #404040, #171717)',
+        bannerOverlayBg: 'bg-[#fafafa]',
+        cardBg: 'bg-white',
+        cardBorder: 'border-neutral-200',
+        tagBg: 'bg-neutral-100',
+        tagBorder: 'border-neutral-200',
+        tagText: 'text-neutral-700',
+        achievementBg: 'bg-neutral-100',
+        achievementBorder: 'border-neutral-200',
+        achievementText: 'text-neutral-800',
+      };
+    case 'glow':
+    default:
+      return {
+        bg: 'bg-white',
+        border: 'border-[#E5D5C4]',
+        textMain: 'text-neutral-900',
+        textSec: 'text-neutral-800',
+        textMuted: 'text-neutral-500',
+        accentText: 'text-orange-600',
+        accentBg: 'bg-orange-600',
+        accentHex: '#F97316',
+        bannerGradient: 'from-orange-500 to-rose-600',
+        avatarGradient: 'linear-gradient(135deg, #C1440E, #F97316)',
+        bannerOverlayBg: 'bg-[#1A1A1A]',
+        cardBg: 'bg-neutral-50/30',
+        cardBorder: 'border-neutral-100/50',
+        tagBg: 'bg-orange-50',
+        tagBorder: 'border-orange-100',
+        tagText: 'text-orange-600',
+        achievementBg: 'bg-amber-50/50',
+        achievementBorder: 'border-amber-100',
+        achievementText: 'text-amber-700',
+      };
+  }
+};
+
 export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats?: any }) {
-  const data = profile.persona_data as CreatorData
-  const accent = '#F97316'
+  const data = (profile.persona_data || {}) as CreatorData
+  const t = getTheme(profile.profile_theme);
   const { isGated, handleGatedClick, GateModal } = useGatedLink();
   const [selectedWork, setSelectedWork] = React.useState<any>(null);
   const [showFomoModal, setShowFomoModal] = React.useState(false);
@@ -40,28 +113,17 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
 
   const getPlaceColor = (city: string) => {
     const c = city.toLowerCase();
-    // Karnataka (Bengaluru) - Red
     if (c.includes('bengaluru') || c.includes('bangalore') || c.includes('karnataka') || c.includes('mysuru') || c.includes('hubballi') || c.includes('mangalore')) return '#D71920';
-    // Tamil Nadu (Chennai) - Yellow
     if (c.includes('chennai') || c.includes('madras') || c.includes('tamil nadu') || c.includes('coimbatore') || c.includes('madurai')) return '#F9CD05';
-    // Maharashtra (Mumbai) - Royal Blue
     if (c.includes('mumbai') || c.includes('bombay') || c.includes('maharashtra') || c.includes('pune') || c.includes('nagpur')) return '#004BA0';
-    // West Bengal (Kolkata) - Purple
     if (c.includes('kolkata') || c.includes('calcutta') || c.includes('west bengal')) return '#3A225D';
-    // Telangana / Andhra (Hyderabad) - Orange
     if (c.includes('hyderabad') || c.includes('telangana') || c.includes('andhra') || c.includes('vijayawada') || c.includes('visakhapatnam')) return '#F26522';
-    // Rajasthan - Pink
     if (c.includes('rajasthan') || c.includes('jaipur') || c.includes('jodhpur') || c.includes('udaipur')) return '#EA1A85';
-    // Delhi - Blue
     if (c.includes('delhi')) return '#17479E';
-    // Punjab - Red
     if (c.includes('punjab') || c.includes('ludhiana') || c.includes('amritsar') || c.includes('chandigarh')) return '#DD1F2D';
-    // Gujarat - Navy Blue
     if (c.includes('gujarat') || c.includes('ahmedabad') || c.includes('surat') || c.includes('vadodara')) return '#1C1C3C';
-    // Uttar Pradesh (Lucknow) - Sky Blue
     if (c.includes('lucknow') || c.includes('kanpur') || c.includes('agra') || c.includes('uttar pradesh')) return '#00AEEF';
-    
-    return '#1A1A1A'; // Default Ink
+    return t.accentHex;
   };
 
   const cityColor = getPlaceColor(topCity);
@@ -69,12 +131,10 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
   const getThumbnail = (work: any) => {
     if (work.external_url) {
       const url = work.external_url;
-      // Robust YouTube ID extraction
       const ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
       if (ytMatch) {
         return `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`;
       }
-      // Vimeo
       if (url.includes('vimeo.com')) {
         const id = url.split('/').pop();
         return `https://vumbnail.com/${id}.jpg`;
@@ -82,10 +142,8 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
       return null;
     }
     
-    // If it's a video and we don't have an explicit thumbnail, don't return the video URL as a thumbnail
     const mediaUrl = work.thumbnail_url || work.img || (work.type !== 'video' ? work.url : null);
     if (!mediaUrl) return null;
-    
     return getAssetUrl(mediaUrl);
   };
 
@@ -96,7 +154,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {works.map((w, i) => {
           const isExternal = !!w.external_url;
-          const targetUrl = w.external_url || getAssetUrl(w.url || w.img);
           const thumb = getThumbnail(w);
           
           const CardContent = (
@@ -134,7 +191,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             <div 
               key={i} 
               onClick={() => setSelectedWork(w)}
-              className="group relative rounded-[32px] overflow-hidden bg-neutral-100 border border-neutral-100 shadow-sm hover:shadow-xl transition-all aspect-video cursor-pointer"
+              className={`group relative rounded-[32px] overflow-hidden bg-neutral-100 border ${t.cardBorder} shadow-sm hover:shadow-xl transition-all aspect-video cursor-pointer`}
             >
               {CardContent}
             </div>
@@ -142,14 +199,12 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
         })}
       </div>
     );
-  }, [data.works, getThumbnail, setSelectedWork]);
+  }, [data.works, getThumbnail, setSelectedWork, t]);
 
   const getEmbedUrl = (url: string) => {
     if (!url) return '';
-    // YouTube
     const ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
     if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`;
-    // Vimeo
     if (url.includes('vimeo.com')) {
       const id = url.split('/').pop();
       return `https://player.vimeo.com/video/${id}?autoplay=1`;
@@ -158,7 +213,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
   };
 
   return (
-    <div className="w-full pb-12 relative overflow-hidden bg-white rounded-[40px] border border-[#E5D5C4] shadow-2xl">
+    <div className={`w-full pb-12 relative overflow-hidden ${t.bg} rounded-[40px] border ${t.border} shadow-2xl`}>
       {/* Floating Butterflies & Glitters Background Layer */}
       <div className="absolute inset-0 pointer-events-none z-0">
         {[...Array(15)].map((_, i) => (
@@ -179,7 +234,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
 
       {/* Premium Hero Banner Section - TOTAL COVER STYLE */}
       <section className="relative z-10">
-        <div className="w-full h-48 sm:h-64 relative bg-[#1A1A1A] overflow-hidden rounded-t-[40px]">
+        <div className={`w-full h-48 sm:h-64 relative ${t.bannerOverlayBg} overflow-hidden rounded-t-[40px]`}>
           {/* The Banner Image: Total Cover */}
           {data.featured_work_url ? (
             <img 
@@ -188,14 +243,14 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
               alt="Profile Banner"
             />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-rose-600" />
+            <div className={`absolute inset-0 bg-gradient-to-br ${t.bannerGradient}`} />
           )}
           
           {/* Top/Side Vignette for Depth */}
           <div className="absolute inset-0 bg-black/10" />
           
           {/* THE 25% FEATHER: Minimal smooth bottom fade out */}
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/0 to-transparent via-[25%]" />
+          <div className={`absolute inset-0 bg-gradient-to-t ${profile.profile_theme?.toLowerCase() === 'neon' ? 'from-black via-black/0' : 'from-white via-white/0'} to-transparent via-[25%]`} />
           
           <div className="absolute top-6 right-8 text-white/40 z-20">
             <Sparkles size={28} className="animate-pulse" />
@@ -207,15 +262,15 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
           <div className="absolute -top-24 sm:-top-32 left-1/2 -translate-x-1/2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
             <div 
               className="w-40 h-40 sm:w-48 sm:h-48 p-1.5 rounded-full"
-              style={{ background: 'linear-gradient(135deg, #C1440E, #F97316)' }}
+              style={{ background: t.avatarGradient }}
             >
-              <div className="w-full h-full bg-white p-1 rounded-full overflow-hidden shadow-inner">
+              <div className={`w-full h-full ${t.bg === 'bg-black' ? 'bg-neutral-900' : 'bg-white'} p-1 rounded-full overflow-hidden shadow-inner`}>
                 <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" />
               </div>
             </div>
             {profile.is_verified && (
-              <div className="absolute bottom-2 right-2 w-10 h-10 bg-white rounded-full shadow-xl flex items-center justify-center border border-neutral-100">
-                <VerifiedBadge isVerified={profile.is_verified} accentColor="#C1440E" />
+              <div className={`absolute bottom-2 right-2 w-10 h-10 ${t.bg === 'bg-black' ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-neutral-100'} rounded-full shadow-xl flex items-center justify-center border`}>
+                <VerifiedBadge isVerified={profile.is_verified} accentColor={t.accentHex} />
               </div>
             )}
           </div>
@@ -224,12 +279,12 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
         <div className="px-8 pt-6 relative z-20">
             <div className="flex flex-col items-center mb-10">
               <div className="text-center">
-                <h1 className="text-4xl font-black tracking-tight text-neutral-900 mb-2 uppercase italic leading-tight">{profile.display_name}</h1>
-                <p className="text-xs font-black text-orange-600 uppercase tracking-[0.4em] leading-none mt-2 mb-4">
+                <h1 className={`text-4xl font-black tracking-tight ${t.textMain} mb-2 uppercase italic leading-tight`}>{profile.display_name}</h1>
+                <p className={`text-xs font-black ${t.accentText} uppercase tracking-[0.4em] leading-none mt-2 mb-4`}>
                   {data.type || 'CREATIVE PROFESSIONAL'}
                 </p>
                 {profile.bio && (
-                  <p className="text-sm font-black text-neutral-800 leading-tight italic max-w-lg mx-auto">
+                  <p className={`text-sm font-black ${t.textSec} leading-tight italic max-w-lg mx-auto`}>
                     {profile.bio}
                   </p>
                 )}
@@ -243,12 +298,12 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             >
               <div className="flex justify-evenly items-start w-full">
                 <div className="flex flex-col items-center text-center">
-                  <span className={`text-4xl font-black text-neutral-900 leading-none mb-3 ${isFreeProfile ? 'blur-[6px] select-none opacity-50 inline-block px-2' : ''}`}>{isFreeProfile ? '8,204' : liveViews}</span>
-                  <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest">Profile Views</p>
+                  <span className={`text-4xl font-black ${t.textMain} leading-none mb-3 ${isFreeProfile ? 'blur-[6px] select-none opacity-50 inline-block px-2' : ''}`}>{isFreeProfile ? '8,204' : liveViews}</span>
+                  <p className={`text-[10px] font-black uppercase ${t.textMuted} tracking-widest`}>Profile Views</p>
                 </div>
                 <div className="flex flex-col items-center text-center transform translate-x-4">
                   <span className={`text-4xl font-black leading-none mb-3 ${isFreeProfile ? 'blur-[6px] select-none opacity-50 inline-block px-2' : ''}`} style={{ color: cityColor }}>{isFreeProfile ? 'New York' : topCity}</span>
-                  <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest">Most Scanned Place</p>
+                  <p className={`text-[10px] font-black uppercase ${t.textMuted} tracking-widest`}>Most Scanned Place</p>
                 </div>
               </div>
             </div>
@@ -256,8 +311,8 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             {/* Professional Narrative - Moved Up for priority */}
             {data.about && (
               <div className="mb-8">
-                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-1">Professional Narrative</p>
-                <p className="text-base text-neutral-600 leading-relaxed bg-neutral-50/30 py-4 px-6 rounded-[24px] border border-neutral-100/50 max-w-2xl italic">
+                <p className={`text-[13px] font-black uppercase tracking-[0.2em] ${t.textMain} mb-1`}>Professional Narrative</p>
+                <p className={`text-base ${t.textSec} leading-relaxed ${t.cardBg} py-4 px-6 rounded-[24px] border ${t.cardBorder} max-w-2xl italic`}>
                   "{data.about}"
                 </p>
               </div>
@@ -266,13 +321,12 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             {/* Network Presence - Moved Down */}
             {data.platforms && data.platforms.length > 0 && (
               <div className="mb-12">
-                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6">Where you can find me</p>
+                <p className={`text-[13px] font-black uppercase tracking-[0.2em] ${t.textMain} mb-6`}>Where you can find me</p>
                 <div className="flex flex-wrap sm:flex-nowrap items-center justify-start gap-3 sm:gap-8 overflow-x-auto no-scrollbar pb-2">
                   {data.platforms.map(p => {
                     const platform = p.platform?.toLowerCase();
                     const Icon = PLATFORM_ICONS[platform] || Share2;
                     
-                    // Original Brand Colors
                     const brandStyles: Record<string, string> = {
                       instagram: 'bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white',
                       youtube: 'bg-[#FF0000] text-white',
@@ -344,8 +398,8 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                           )}
                         </div>
                         <div className="text-center hidden sm:block">
-                          <p className="text-[10px] font-black uppercase text-neutral-900 tracking-tighter">{p.platform}</p>
-                          <p className="text-[9px] font-bold text-neutral-400 truncate max-w-[80px]">
+                          <p className={`text-[10px] font-black uppercase ${t.textMain} tracking-tighter`}>{p.platform}</p>
+                          <p className={`text-[9px] font-bold ${t.textMuted} truncate max-w-[80px]`}>
                             {p.url?.split('/').filter(Boolean).pop()?.replace('@', '') || 'Profile'}
                           </p>
                         </div>
@@ -368,10 +422,10 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             {/* Specialty Formats / Specialized in */}
             {data.content_formats && data.content_formats.length > 0 && (
               <div className="mb-12">
-                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-4">Core Specialization</p>
+                <p className={`text-[13px] font-black uppercase tracking-[0.2em] ${t.textMain} mb-4`}>Core Specialization</p>
                 <div className="flex flex-wrap gap-2">
                   {data.content_formats.map(format => (
-                    <span key={format} className="px-4 py-2 rounded-xl bg-orange-50 text-xs font-black uppercase tracking-widest text-orange-600 border border-orange-100">
+                    <span key={format} className={`px-4 py-2 rounded-xl ${t.tagBg} text-xs font-black uppercase tracking-widest ${t.tagText} border ${t.tagBorder}`}>
                       {format}
                     </span>
                   ))}
@@ -382,10 +436,10 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             {/* Achievements & Milestones */}
             {data.achievements && data.achievements.length > 0 && (
               <div className="mb-12">
-                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-4">Career Milestones</p>
+                <p className={`text-[13px] font-black uppercase tracking-[0.2em] ${t.textMain} mb-4`}>Career Milestones</p>
                 <div className="flex flex-wrap gap-3">
                   {data.achievements.map((ach, idx) => (
-                    <div key={idx} className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-amber-50/50 border border-amber-100 text-xs font-bold text-amber-700 shadow-sm">
+                    <div key={idx} className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl ${t.achievementBg} border ${t.achievementBorder} text-xs font-bold ${t.achievementText} shadow-sm`}>
                       <Trophy size={14} className="text-amber-500" />
                       {ach}
                     </div>
@@ -398,26 +452,26 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             {(data.total_reach || data.engagement_rate || data.avg_views) && (
               <>
                 <div className="mb-4">
-                  <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-2">Influence Analytics</p>
+                  <p className={`text-[13px] font-black uppercase tracking-[0.2em] ${t.textMain} mb-2`}>Influence Analytics</p>
                 </div>
                 
                 <div className="grid grid-cols-3 gap-4 mb-12">
                   {data.total_reach && (
-                    <div className="bg-white/40 backdrop-blur-md p-5 rounded-3xl border border-white/50 text-center shadow-sm">
-                      <div className="text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-1">Total Reach</div>
-                      <div className="text-2xl font-black text-neutral-900">{data.total_reach}</div>
+                    <div className={`${t.cardBg} backdrop-blur-md p-5 rounded-3xl border ${t.cardBorder} text-center shadow-sm`}>
+                      <div className={`text-[10px] font-black ${t.textMuted} uppercase tracking-widest mb-1`}>Total Reach</div>
+                      <div className={`text-2xl font-black ${t.textMain}`}>{data.total_reach}</div>
                     </div>
                   )}
                   {data.engagement_rate && (
-                    <div className="bg-white/40 backdrop-blur-md p-5 rounded-3xl border border-white/50 text-center shadow-sm">
-                      <div className="text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-1">Engagement</div>
-                      <div className="text-2xl font-black text-neutral-900">{data.engagement_rate}</div>
+                    <div className={`${t.cardBg} backdrop-blur-md p-5 rounded-3xl border ${t.cardBorder} text-center shadow-sm`}>
+                      <div className={`text-[10px] font-black ${t.textMuted} uppercase tracking-widest mb-1`}>Engagement</div>
+                      <div className={`text-2xl font-black ${t.textMain}`}>{data.engagement_rate}</div>
                     </div>
                   )}
                   {data.avg_views && (
-                    <div className="bg-white/40 backdrop-blur-md p-5 rounded-3xl border border-white/50 text-center shadow-sm">
-                      <div className="text-[10px] font-black text-neutral-500 uppercase tracking-widest mb-1">Avg. Views</div>
-                      <div className="text-2xl font-black text-neutral-900">{data.avg_views}</div>
+                    <div className={`${t.cardBg} backdrop-blur-md p-5 rounded-3xl border ${t.cardBorder} text-center shadow-sm`}>
+                      <div className={`text-[10px] font-black ${t.textMuted} uppercase tracking-widest mb-1`}>Avg. Views</div>
+                      <div className={`text-2xl font-black ${t.textMain}`}>{data.avg_views}</div>
                     </div>
                   )}
                 </div>
@@ -429,7 +483,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
       {/* Recent Works / Portfolio Section */}
       <section className="px-8 relative z-10 mb-12">
           <div className="mb-8">
-             <h4 className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-1">Curated Showcase</h4>
+             <h4 className={`text-[13px] font-black uppercase tracking-[0.2em] ${t.textMain} mb-1`}>Curated Showcase</h4>
              <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Recent Creative Works</p>
           </div>
          {renderedWorks}
@@ -437,13 +491,13 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
 
       {/* Minimalistic Collab & Contact Row */}
       <section className="px-8 mb-12 relative z-10">
-        <div className="flex flex-col items-center text-center gap-8 bg-neutral-50/50 p-8 rounded-[32px] border border-neutral-100/50">
+        <div className={`flex flex-col items-center text-center gap-8 ${t.cardBg} p-8 rounded-[32px] border ${t.cardBorder}`}>
           <div className="flex flex-col items-center">
             <div className="flex items-center justify-center gap-2 mb-2 whitespace-nowrap">
-              <Sparkles size={16} className="text-orange-500" />
-              <span className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900">Open for Collaboration</span>
+              <Sparkles size={16} className={t.accentText} />
+              <span className={`text-[13px] font-black uppercase tracking-[0.2em] ${t.textMain}`}>Open for Collaboration</span>
             </div>
-            <p className="text-xs text-neutral-500 font-medium italic">
+            <p className={`text-xs ${t.textMuted} font-medium italic`}>
               {data.collab_types || 'Available for strategic creative partnerships.'}
             </p>
           </div>
@@ -452,7 +506,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             {data.contact_email && (
               <a 
                 href={`mailto:${data.contact_email}`}
-                className="flex items-center justify-center gap-2 px-8 py-3.5 bg-white border border-neutral-200 rounded-2xl hover:border-orange-500 hover:text-orange-500 transition-all text-xs font-black uppercase tracking-widest text-neutral-900 shadow-sm whitespace-nowrap flex-1 min-w-[160px]"
+                className={`flex items-center justify-center gap-2 px-8 py-3.5 bg-white border ${t.border} rounded-2xl hover:border-orange-500 hover:${t.accentText} transition-all text-xs font-black uppercase tracking-widest ${t.textMain} shadow-sm whitespace-nowrap flex-1 min-w-[160px]`}
               >
                 <Mail size={16} />
                 Email Me
@@ -463,7 +517,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                 href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-8 py-3.5 bg-neutral-900 rounded-2xl hover:bg-orange-600 transition-all text-xs font-black uppercase tracking-widest text-white shadow-lg shadow-neutral-900/10 whitespace-nowrap flex-1 min-w-[160px]"
+                className={`flex items-center justify-center gap-2 px-8 py-3.5 ${t.accentBg} rounded-2xl hover:opacity-90 transition-all text-xs font-black uppercase tracking-widest text-white shadow-lg shadow-neutral-900/10 whitespace-nowrap flex-1 min-w-[160px]`}
               >
                 <MessageCircle size={16} />
                 WhatsApp
@@ -485,7 +539,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
               onClick={() => setSelectedWork(null)}
               className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white border border-white/20 hover:bg-white/20 transition-all"
             >
-              <Globe size={24} className="rotate-45" /> 
+              <X size={24} /> 
             </button>
           </div>
           
@@ -515,7 +569,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
               />
             )}
             <div className="absolute bottom-0 left-0 right-0 p-10 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none">
-               <h4 className="text-2xl font-black text-white uppercase tracking-tighter mb-2" style={{ fontFamily: 'Fraunces, serif' }}>
+               <h4 className="text-2xl font-black text-white uppercase tracking-tighter mb-2">
                  {selectedWork.title}
                </h4>
                <p className="text-xs font-bold text-white/60 uppercase tracking-[0.3em]">
@@ -529,37 +583,37 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
       {/* Interactive FOMO Upsell Modal */}
       {showFomoModal && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fadeIn">
-          <div className="bg-white rounded-[32px] p-8 max-w-sm w-full border border-neutral-100 shadow-2xl relative animate-zoomIn text-center">
+          <div className={`rounded-[32px] p-8 max-w-sm w-full border ${t.cardBorder} ${t.bg === 'bg-black' ? 'bg-neutral-900' : 'bg-white'} shadow-2xl relative animate-zoomIn text-center`}>
             <button 
               onClick={() => setShowFomoModal(false)}
-              className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-600 rounded-full hover:bg-neutral-50 transition-all"
+              className={`absolute top-4 right-4 p-2 text-neutral-400 hover:${t.textSec} rounded-full hover:bg-neutral-50/10 transition-all`}
             >
               <X size={20} />
             </button>
             
             <div className="relative inline-flex items-center justify-center mb-6">
-              <div className="absolute inset-0 bg-orange-500/10 rounded-full blur-xl animate-pulse" />
-              <div className="w-16 h-16 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center shadow-inner">
+              <div className={`absolute inset-0 ${t.accentBg}/10 rounded-full blur-xl animate-pulse`} />
+              <div className={`w-16 h-16 ${t.tagBg} ${t.accentText} rounded-2xl flex items-center justify-center shadow-inner`}>
                 <Activity size={32} className="animate-pulse" />
               </div>
             </div>
             
-            <h3 className="text-xl font-black text-neutral-900 tracking-tight mb-2">Unlock Profile Analytics</h3>
-            <p className="text-xs font-bold text-neutral-500 mb-6 leading-relaxed">
+            <h3 className={`text-xl font-black ${t.textMain} tracking-tight mb-2`}>Unlock Profile Analytics</h3>
+            <p className={`text-xs font-bold ${t.textMuted} mb-6 leading-relaxed`}>
               Your profile is actively receiving connections! Upgrading to a premium plan unlocks these features instantly:
             </p>
             
             <ul className="text-left space-y-3 mb-8 pl-4">
-              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+              <li className={`text-xs font-bold ${t.textSec} flex items-center gap-2`}>
                 <span className="text-emerald-500 font-black">✓</span> 📈 Real-Time View Count Tracking
               </li>
-              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+              <li className={`text-xs font-bold ${t.textSec} flex items-center gap-2`}>
                 <span className="text-emerald-500 font-black">✓</span> 📍 Global & Local City-by-City Scans
               </li>
-              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+              <li className={`text-xs font-bold ${t.textSec} flex items-center gap-2`}>
                 <span className="text-emerald-500 font-black">✓</span> 📱 Detailed Browser & Device Insights
               </li>
-              <li className="text-xs font-bold text-neutral-700 flex items-center gap-2">
+              <li className={`text-xs font-bold ${t.textSec} flex items-center gap-2`}>
                 <span className="text-emerald-500 font-black">✓</span> 👥 Unique vs. Repeat Visitor Scoring
               </li>
             </ul>
@@ -567,13 +621,13 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             <div className="space-y-3">
               <button 
                 onClick={() => window.location.href = '/#pricing'}
-                className="w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-[0.98]"
+                className={`w-full py-3.5 ${t.accentBg} text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-[0.98]`}
               >
                 🔒 Buy A Tee to Unlock
               </button>
               <button 
                 onClick={() => setShowFomoModal(false)}
-                className="w-full py-3 text-neutral-400 hover:text-neutral-600 font-bold text-xs uppercase tracking-wider transition-colors"
+                className={`w-full py-3 text-neutral-400 hover:${t.textSec} font-bold text-xs uppercase tracking-wider transition-colors`}
               >
                 Maybe Later
               </button>

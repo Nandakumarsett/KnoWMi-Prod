@@ -198,4 +198,6 @@ export interface ProfileData {
   joined_at: string;
   views?: number;
   top_location?: string;
+  ghost_mode?: boolean;
+  profile_theme?: string;
 }

@@ -96,12 +96,12 @@ serve(async (req) => {
       })
 
       // Parse items from order
-      const rawItems: Array<{ plan_id?: string; quantity?: number }> = orderRow?.items || []
+      const rawItems: Array<{ product_type?: string; plan_id?: string; quantity?: number }> = orderRow?.items || []
       const customerDetails = orderRow?.customer_details || {}
 
       const items = rawItems.length > 0
         ? rawItems.map(item => ({
-            name: customerDetails?.design || item.plan_id || 'KnoWMi Identity Tee',
+            name: customerDetails?.design || item.product_type || item.plan_id || 'KnoWMi Identity Tee',
             size: customerDetails?.size,
             qty: customerDetails?.quantity || item.quantity || 1,
             color: customerDetails?.color,
@@ -137,7 +137,7 @@ serve(async (req) => {
             itemName = designData.name
             modelImageUrl = designData.model_image_url || designData.front_image_url
           }
-        } else if (orderRow?.items && orderRow.items[0]?.plan_id === 'team') {
+        } else if (orderRow?.items && (orderRow.items[0]?.plan_id === 'team' || orderRow.items[0]?.product_type === 'team')) {
           itemName = `Team Order — ${customerDetails?.team_name || 'My Team'} (${customerDetails?.quantity || 1} Tees)`
         }
 

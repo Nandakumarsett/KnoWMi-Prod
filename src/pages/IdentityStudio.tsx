@@ -187,7 +187,8 @@ const INITIAL_STATE = {
   collab_info: '',
   niche: '',
   total_reach: '',
-  avg_engagement: ''
+  avg_engagement: '',
+  profile_theme: 'default'
 }
 
 export default function IdentityStudio() {
@@ -452,7 +453,8 @@ export default function IdentityStudio() {
         persona_data: { ...(profile?.persona_data || {}), identities: newIdentities },
         first_name: data.first_name,
         last_name: data.last_name,
-        bio: data.bio
+        bio: data.bio,
+        profile_theme: data.profile_theme || 'default'
       }).eq('user_id', user.id)
 
       if (error) {
@@ -464,6 +466,7 @@ export default function IdentityStudio() {
         ...profile,
         persona: activePersona,
         persona_type: activePersona,
+        profile_theme: data.profile_theme || 'default',
         persona_data: { ...(profile?.persona_data || {}), identities: newIdentities }
       })
       sessionStorage.removeItem(`draft_persona_${activePersona}`)
@@ -754,6 +757,39 @@ export default function IdentityStudio() {
                         />
                       </div>
                     )}
+
+                    <div>
+                      <label className="section-label">Profile Theme</label>
+                      <div className="grid grid-cols-3 gap-3">
+                        {(() => {
+                           let options = ['default', 'blueprint', 'hacker'];
+                           if (activePersona === 'student') options = ['default', 'campus', 'night owl'];
+                           if (activePersona === 'creator' || activePersona === 'influencer') options = ['default', 'minimal', 'neon'];
+                           
+                           return options.map(opt => (
+                             <div 
+                               key={opt}
+                               onClick={() => updateField('profile_theme', opt)}
+                               className={`p-4 rounded-xl border-2 cursor-pointer transition-all text-center ${
+                                 (data.profile_theme?.toLowerCase() || 'default') === opt 
+                                 ? 'border-orange-500 bg-orange-50' 
+                                 : 'border-neutral-200 hover:border-orange-300'
+                               }`}
+                             >
+                               <p className={`text-xs font-black uppercase tracking-widest ${
+                                 (data.profile_theme?.toLowerCase() || 'default') === opt 
+                                 ? 'text-orange-600' 
+                                 : 'text-neutral-500'
+                               }`}>
+                                 {opt === 'default' 
+                                   ? (activePersona === 'student' ? 'Notebook' : activePersona === 'creator' || activePersona === 'influencer' ? 'Glow' : 'Terminal')
+                                   : opt}
+                               </p>
+                             </div>
+                           ));
+                        })()}
+                      </div>
+                    </div>
 
                     <div>
                       <label className="section-label">Public Bio</label>

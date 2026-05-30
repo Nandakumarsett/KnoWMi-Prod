@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { plan_id, amount_override, user_id, customer_details } = await req.json()
+    const { product_type, amount_override, user_id, customer_details } = await req.json()
 
     // ─── Cryptographic JWT and User ID Verification ───
     const authHeader = req.headers.get('Authorization')
@@ -43,24 +43,20 @@ serve(async (req) => {
 
 
     // 1. Determine price on the backend securely.
-    // For fixed subscription plans, prices are hardcoded here (tamper-proof).
-    // For store items (PersonaStore), `amount_override` is used — the price
-    // comes from the DB-driven design card, not user input.
+    // For fixed products, prices are hardcoded here (tamper-proof).
     let pricePaise = 0
 
     if (amount_override && typeof amount_override === 'number' && amount_override > 0) {
-      // Store item: use the amount passed (already in paise, from selectedDesign.price * qty * 100)
+      // Store item: use the amount passed (already in paise)
       pricePaise = amount_override
-    } else if (plan_id === 'starter') {
+    } else if (product_type === 'regular') {
       pricePaise = 79900
-    } else if (plan_id === 'creator') {
+    } else if (product_type === 'oversized') {
       pricePaise = 99900
-    } else if (plan_id === 'team') {
-      pricePaise = 69900
-    } else if (plan_id === 'corporate') {
-      pricePaise = 59900
+    } else if (product_type === 'hoodie') {
+      pricePaise = 149900
     } else {
-      throw new Error("Invalid plan or missing amount")
+      throw new Error("Invalid product type or missing amount")
     }
 
 
@@ -104,7 +100,7 @@ serve(async (req) => {
         user_id: user_id || null,
         razorpay_order_id: rzpData.id,
         amount_paise: pricePaise,
-        items: [{ plan_id, quantity: 1 }],
+        items: [{ product_type, quantity: 1 }],
         customer_details
       })
 

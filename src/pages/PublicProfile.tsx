@@ -281,7 +281,7 @@ useEffect(() => {
   const customType = profile.persona_data?.type;
   const personaLabel = (customType && customType.toLowerCase() !== pAlias) 
     ? customType 
-    : (activeConfig?.name || personaRaw.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()))
+    : (activeConfig?.name || (profile.persona || '').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()))
 
 
   const isDarkTheme = activeConfig?.theme?.color === 'dark' || activeConfig?.theme?.color === 'neon' || activeConfig?.theme?.color === 'purple' || activeConfig?.theme?.color === 'green' || activeConfig?.theme?.color === 'blue'

@@ -23,6 +23,7 @@ export interface PersonaConfig {
     badgeStyle: string;
   };
   fields: FieldConfig[];
+  themes?: { id: string; name: string }[];
 }
 
 const developerConfig: PersonaConfig = {
@@ -39,6 +40,11 @@ const developerConfig: PersonaConfig = {
     buttonBg: 'linear-gradient(135deg, #238636, #2ea043)',
     badgeStyle: 'bg-green-50 text-green-700'
   },
+  themes: [
+    { id: 'default', name: 'Terminal' },
+    { id: 'blueprint', name: 'Blueprint' },
+    { id: 'hacker', name: 'Hacker' }
+  ],
   fields: [
     { key: 'skills', label: 'Core Skills', type: 'tags', suggestions: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Docker'] },
     { key: 'github', label: 'GitHub Profile', type: 'url', placeholder: 'https://github.com/...' },
@@ -71,6 +77,11 @@ const creatorConfig: PersonaConfig = {
     buttonBg: 'linear-gradient(135deg, #a855f7, #c084fc)',
     badgeStyle: 'bg-purple-500/20 text-purple-300'
   },
+  themes: [
+    { id: 'default', name: 'Glow' },
+    { id: 'minimal', name: 'Minimal' },
+    { id: 'neon', name: 'Neon' }
+  ],
   fields: [
     { key: 'niche', label: 'Creative Niche', type: 'text', placeholder: 'e.g. Tech Reviewer' },
     { key: 'followers', label: 'Total Reach', type: 'text', placeholder: 'e.g. 150K+' },
@@ -110,6 +121,11 @@ const studentConfig: PersonaConfig = {
     buttonBg: 'linear-gradient(135deg, #3b82f6, #60a5fa)',
     badgeStyle: 'bg-blue-500/20 text-blue-300'
   },
+  themes: [
+    { id: 'default', name: 'Notebook' },
+    { id: 'campus', name: 'Campus' },
+    { id: 'night owl', name: 'Night Owl' }
+  ],
   fields: [
     { key: 'college', label: 'College / University', type: 'text', placeholder: 'e.g. Stanford University' },
     { key: 'course', label: 'Major / Course', type: 'text', placeholder: 'e.g. Computer Science' },

@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   -- Persona Fields
   bio TEXT DEFAULT '',
   tagline TEXT DEFAULT '',
+  profile_theme TEXT DEFAULT 'default',
   instagram_url TEXT DEFAULT '',
   linkedin_url TEXT DEFAULT '',
   whatsapp_number TEXT DEFAULT '',

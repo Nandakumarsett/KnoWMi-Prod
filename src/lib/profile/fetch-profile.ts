@@ -44,7 +44,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     'role', 'is_verified', 'created_at', 'wm_code', 'member_id',
     'instagram', 'instagram_url', 'linkedin', 'linkedin_url', 'github',
     'github_url', 'twitter', 'twitter_url', 'youtube', 'youtube_url',
-    'website', 'website_url', 'whatsapp', 'whatsapp_number', 'views', 'top_location', 'ghost_mode'
+    'website', 'website_url', 'whatsapp', 'whatsapp_number', 'views', 'top_location', 'ghost_mode', 'profile_theme'
   ]
 
   // Create a clean public object
@@ -135,6 +135,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     views: publicProfile.views || 0,
     top_location: publicProfile.top_location || 'Global',
     ghost_mode: publicProfile.ghost_mode || false,
+    profile_theme: publicProfile.profile_theme || 'default',
     social_links,
     persona_data: (() => {
       let finalData: any = {}
