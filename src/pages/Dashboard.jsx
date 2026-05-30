@@ -2841,18 +2841,13 @@ function Dashboard() {
             { id: 'analytics', icon: Signal, label: 'Pulse' },
             { id: 'profile', icon: User, label: 'Identity' },
             { id: 'network', icon: Users, label: 'Network' },
-            { id: 'business', icon: Lock, label: 'Business' },
+            { id: 'business', icon: Crown, label: 'Business' },
             { id: 'pass', icon: ShieldCheck, label: 'Pass' },
             { id: 'order-status', icon: Clock, label: 'Status' }
           ].map(tab => (
             <button 
               key={tab.id} 
               onClick={() => {
-                if (tab.id === 'business') {
-                  setShowComingSoon(true);
-                  setTimeout(() => setShowComingSoon(false), 3000);
-                  return;
-                }
                 setActiveTab(tab.id);
                 const newParams = new URLSearchParams(window.location.search);
                 newParams.set('tab', tab.id);

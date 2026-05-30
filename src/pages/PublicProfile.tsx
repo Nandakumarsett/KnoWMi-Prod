@@ -108,14 +108,23 @@ export default function PublicProfile() {
           if (property.startsWith('og:')) {
             metaTag.setAttribute('property', property);
           } else {
-            metaTag.setAttribute('name', property);
-          }
-          document.head.appendChild(metaTag);
+          metaTag.setAttribute('name', property);
         }
-        metaTag.setAttribute('content', value);
-      });
+        document.head.appendChild(metaTag);
+      }
+      metaTag.setAttribute('content', value);
+    });
+  }
+}, [profile, safeDisplayName]);
+
+useEffect(() => {
+  if (profile && !isOwnerOfProfile) {
+    const brandSettings = profile.persona_data?.team_branding;
+    if (brandSettings?.redirect_mode === 'direct_corporate' && brandSettings?.redirect_url) {
+      window.location.replace(brandSettings.redirect_url);
     }
-  }, [profile, safeDisplayName]);
+  }
+}, [profile, user, isOwnerOfProfile]);
 
   if (loading) {
     return (
@@ -316,6 +325,22 @@ export default function PublicProfile() {
             </button>
           )}
         </header>
+
+        {/* Brand Banner Header for Redirect Mode option brand_header */}
+        {profile.persona_data?.team_branding?.redirect_mode === 'brand_header' && (
+          <div 
+            className="mt-16 py-4 px-6 text-center text-white flex flex-col items-center justify-center relative overflow-hidden transition-all shadow-md"
+            style={{ backgroundColor: profile.persona_data.team_branding.accent_color || '#F97316' }}
+          >
+            <div className="absolute -top-16 -right-16 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none" />
+            <span className="px-2.5 py-0.5 bg-white/20 backdrop-blur-md rounded text-[8px] font-black uppercase tracking-widest text-white mb-1.5 border border-white/10 flex items-center gap-1">
+              <Award size={10} /> {profile.persona_data.team_branding.team_name || 'Team Member'}
+            </span>
+            <p className="text-xs uppercase font-black tracking-widest truncate max-w-full px-4 text-white">
+              {profile.persona_data.team_branding.tagline || 'Unified Branding'}
+            </p>
+          </div>
+        )}
 
         {/* Small Button to view QR on Mobile */}
         <div className="pt-20 px-6 flex justify-center mb-6 gap-3">
@@ -523,6 +548,21 @@ export default function PublicProfile() {
       </header>
 
       <main className="max-w-6xl mx-auto pt-28 pb-12 px-4 sm:px-8">
+        {/* Brand Banner Header for Redirect Mode option brand_header */}
+        {profile.persona_data?.team_branding?.redirect_mode === 'brand_header' && (
+          <div 
+            className="mb-8 py-5 px-8 rounded-3xl text-center text-white flex flex-col items-center justify-center relative overflow-hidden transition-all shadow-xl shadow-neutral-100/50"
+            style={{ backgroundColor: profile.persona_data.team_branding.accent_color || '#F97316' }}
+          >
+            <div className="absolute -top-16 -right-16 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none" />
+            <span className="px-2.5 py-0.5 bg-white/20 backdrop-blur-md rounded text-[9px] font-black uppercase tracking-widest text-white mb-2 border border-white/10 flex items-center gap-1.5">
+              <Award size={12} /> {profile.persona_data.team_branding.team_name || 'Team Member'}
+            </span>
+            <p className="text-sm uppercase font-black tracking-widest truncate max-w-full px-4 text-white">
+              {profile.persona_data.team_branding.tagline || 'Unified Branding'}
+            </p>
+          </div>
+        )}
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center lg:items-start justify-center">
           
           {/* Left Column - Fixed Identity Card */}
