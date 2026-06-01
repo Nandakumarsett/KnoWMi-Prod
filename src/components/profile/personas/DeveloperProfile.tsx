@@ -683,191 +683,183 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         <GateModal />
       </div>
     )
-  }
-
-  // ----------------------------------------------------
+   // ----------------------------------------------------
   // LAYOUT 3: RETRO TERMINAL EMULATOR (Terminal Theme)
   // ----------------------------------------------------
   return (
-    <div className="min-h-screen bg-[#F0F2F5] text-[#1C1E21] font-mono relative overflow-x-hidden selection:bg-[#3B82F6] selection:text-white p-4 sm:p-8 flex flex-col justify-start items-center">
-      <main className="w-full max-w-[650px] mx-auto pb-24 pt-4 sm:pt-12 px-4 flex flex-col items-center relative z-20">
+    <div className="min-h-screen bg-[#0D1117] text-[#E6EDF3] font-mono relative overflow-x-hidden selection:bg-[#58A6FF] selection:text-[#0D1117] flex flex-col justify-start">
+      {/* Terminal Title Bar */}
+      <div className="w-full bg-[#161B22] px-4 py-2 flex items-center justify-between select-none border-b border-[#30363D] sticky top-0 z-50">
+        <div className="flex gap-2">
+          <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
+          <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
+          <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
+        </div>
+        <div className="text-xs font-medium text-[#8B949E] flex-grow text-center">
+          bash - {profile.display_name?.toLowerCase().replace(/\s+/g, '_') || 'developer'}
+        </div>
+        <div className="w-12"></div>
+      </div>
 
-        {/* Retro MacOS-style Terminal Window */}
-        <div className="w-full bg-[#1C1E21] rounded-xl shadow-2xl overflow-hidden flex flex-col mb-12 border border-[#3A3D42]">
-          
-          {/* Terminal Title Bar */}
-          <div className="bg-[#2D3136] px-4 py-3 flex items-center justify-between select-none">
-            <div className="flex gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
-              <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
-              <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
+      <main className="w-full max-w-3xl mx-auto pb-24 pt-8 px-4 sm:px-8 flex flex-col items-start relative z-20 text-sm sm:text-base">
+        
+        <div className="w-full flex flex-col sm:flex-row gap-6 items-center sm:items-start mb-10">
+          <div className="relative shrink-0">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 border-2 border-[#30363D] p-1">
+              <img
+                src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=0D1117&color=E6EDF3`}
+                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                alt={profile.display_name}
+              />
             </div>
-            <div className="text-xs font-medium text-[#8A9199] font-sans flex-grow text-center">
-              bash - {profile.display_name?.toLowerCase().replace(/\\s+/g, '_') || 'developer'}
-            </div>
-            <div className="w-12"></div>
           </div>
 
-          <div className="p-6 sm:p-8 flex flex-col items-start w-full text-[#E6EDF3] text-sm">
-            
-            <div className="w-full flex flex-col sm:flex-row gap-6 items-center sm:items-start mb-8">
-              <div className="relative shrink-0">
-                <div className="w-24 h-24 rounded-lg overflow-hidden border-2 border-[#3A3D42]">
-                  <img
-                    src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=1C1E21&color=E6EDF3`}
-                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
-                    alt={profile.display_name}
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col text-center sm:text-left">
-                <div className="flex items-center gap-2 mb-1 justify-center sm:justify-start">
-                  <span className="text-[#27C93F] font-bold">~</span>
-                  <span className="text-[#8A9199]">$</span>
-                  <span className="text-white font-bold text-lg">{profile.display_name}</span>
-                </div>
-                <div className="text-[#8A9199] mb-3">
-                  Role: <span className="text-[#58A6FF]">{data.about?.role || 'Software Engineer'}</span>
-                </div>
-                {profile.bio && (
-                  <p className="text-[#8A9199] text-sm leading-relaxed">
-                    {profile.bio}
-                  </p>
-                )}
-              </div>
+          <div className="flex flex-col text-center sm:text-left mt-2 sm:mt-0">
+            <div className="flex items-center gap-2 mb-2 justify-center sm:justify-start flex-wrap">
+              <span className="text-[#3FB950] font-bold">~</span>
+              <span className="text-[#8B949E]">$</span>
+              <span className="text-white font-bold text-xl">{profile.display_name}</span>
             </div>
-
-            {(data.about?.status || data.about?.company || data.about?.mission) && (
-              <div className="w-full mb-6">
-                <div className="flex gap-2 mb-2">
-                  <span className="text-[#27C93F] font-bold">~</span>
-                  <span className="text-[#8A9199]">$</span>
-                  <span className="text-white">cat status.txt</span>
-                </div>
-                <div className="pl-4 py-2 border-l-2 border-[#3A3D42] space-y-2 text-[#8A9199]">
-                  {data.about.status && <p>State: <span className="text-[#E6EDF3]">{data.about.status}</span></p>}
-                  {data.about.company && <p>Host: <span className="text-[#E6EDF3]">{data.about.company}</span></p>}
-                  {data.about.mission && <p>Goal: <span className="text-[#E6EDF3]">{data.about.mission}</span></p>}
-                </div>
-              </div>
-            )}
-
-            {((aboutMeLanguages && aboutMeLanguages.length > 0) || (techStack && techStack.length > 0)) && (
-              <div className="w-full mb-6">
-                <div className="flex gap-2 mb-3">
-                  <span className="text-[#27C93F] font-bold">~</span>
-                  <span className="text-[#8A9199]">$</span>
-                  <span className="text-white">ls -la ./skills</span>
-                </div>
-                <div className="pl-4">
-                  {aboutMeLanguages && aboutMeLanguages.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      <span className="text-[#FF7B72] min-w-[80px]">drwxr-xr-x</span>
-                      <span className="text-[#8A9199]">languages</span>
-                      <div className="flex flex-wrap gap-2 ml-4">
-                        {aboutMeLanguages.map((l, i) => (
-                          <span key={i} className="text-[#E6EDF3]">{l}</span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {techStack && techStack.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      <span className="text-[#FF7B72] min-w-[80px]">drwxr-xr-x</span>
-                      <span className="text-[#8A9199]">tools</span>
-                      <div className="flex flex-wrap gap-2 ml-4">
-                        {techStack.map(tech => (
-                          <span key={tech} className="text-[#E6EDF3]">{tech}</span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {data.projects && data.projects.length > 0 && (
-              <div className="w-full mb-6">
-                <div className="flex gap-2 mb-3">
-                  <span className="text-[#27C93F] font-bold">~</span>
-                  <span className="text-[#8A9199]">$</span>
-                  <span className="text-white">./projects.sh</span>
-                </div>
-                <div className="pl-4 space-y-4">
-                  {data.projects.map((project: any, i: number) => (
-                    <div key={i} className="border border-[#3A3D42] rounded-md p-4 bg-[#212428] hover:border-[#8A9199] transition-colors">
-                      <h4 className="text-[#58A6FF] font-medium mb-1 flex items-center gap-2">
-                        {project.name}
-                      </h4>
-                      {project.description && (
-                        <p className="text-[#8A9199] text-xs mb-3">
-                          {project.description}
-                        </p>
-                      )}
-                      {project.live_url && (
-                        <a
-                          href={ensureAbsoluteUrl(project.live_url)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[#E6EDF3] hover:text-[#58A6FF] text-xs underline decoration-[#3A3D42] hover:decoration-[#58A6FF] transition-colors inline-flex items-center gap-1"
-                        >
-                          Execute &gt;_
-                        </a>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {data.platforms && data.platforms.length > 0 && (
-              <div className="w-full mb-6">
-                <div className="flex gap-2 mb-3">
-                  <span className="text-[#27C93F] font-bold">~</span>
-                  <span className="text-[#8A9199]">$</span>
-                  <span className="text-white">netstat -a | grep CONNECTED</span>
-                </div>
-                <div className="pl-4 flex flex-col gap-2">
-                  {data.platforms.map((p, i) => {
-                    if (!p.url) return null
-                    return (
-                      <a
-                        key={i}
-                        href={ensureAbsoluteUrl(p.url)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => {
-                          handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
-                          if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
-                        }}
-                        className="text-[#E6EDF3] hover:text-[#58A6FF] flex items-center gap-4 group"
-                      >
-                        <span className="text-[#27C93F]">tcp</span>
-                        <span className="text-[#8A9199] w-24">{p.platform?.toLowerCase()}:80</span>
-                        <span className="text-[#8A9199] w-24">ESTABLISHED</span>
-                        {isGated && <Lock size={12} className="text-[#FF7B72]" />}
-                      </a>
-                    )
-                  })}
-                </div>
-              </div>
-            )}
-
-            <div className="w-full mt-4 mb-2 flex gap-2 items-center">
-              <span className="text-[#27C93F] font-bold">~</span>
-              <span className="text-[#8A9199]">$</span>
-              <span className="w-2 h-4 bg-[#E6EDF3] animate-pulse" />
+            <div className="text-[#8B949E] mb-3">
+              Role: <span className="text-[#58A6FF]">{data.about?.role || 'Software Engineer'}</span>
             </div>
-
-            <div className="w-full mt-6 z-20">
-              <ProfileCTAs profile={profile} accentColor="#58A6FF" />
-            </div>
-
+            {profile.bio && (
+              <p className="text-[#8B949E] text-sm leading-relaxed max-w-lg">
+                {profile.bio}
+              </p>
+            )}
           </div>
         </div>
+
+        {(data.about?.status || data.about?.company || data.about?.mission) && (
+          <div className="w-full mb-8">
+            <div className="flex gap-2 mb-3">
+              <span className="text-[#3FB950] font-bold">~</span>
+              <span className="text-[#8B949E]">$</span>
+              <span className="text-white">cat status.txt</span>
+            </div>
+            <div className="pl-4 py-2 border-l-2 border-[#30363D] space-y-2 text-[#8B949E]">
+              {data.about.status && <p>State: <span className="text-[#E6EDF3]">{data.about.status}</span></p>}
+              {data.about.company && <p>Host: <span className="text-[#E6EDF3]">{data.about.company}</span></p>}
+              {data.about.mission && <p>Goal: <span className="text-[#E6EDF3]">{data.about.mission}</span></p>}
+            </div>
+          </div>
+        )}
+
+        {((aboutMeLanguages && aboutMeLanguages.length > 0) || (techStack && techStack.length > 0)) && (
+          <div className="w-full mb-8">
+            <div className="flex gap-2 mb-4">
+              <span className="text-[#3FB950] font-bold">~</span>
+              <span className="text-[#8B949E]">$</span>
+              <span className="text-white">ls -la ./skills</span>
+            </div>
+            <div className="pl-4 space-y-3">
+              {aboutMeLanguages && aboutMeLanguages.length > 0 && (
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                  <span className="text-[#FF7B72] shrink-0 font-bold">drwxr-xr-x</span>
+                  <span className="text-[#8B949E] shrink-0 w-24">languages</span>
+                  <div className="flex flex-wrap gap-2">
+                    {aboutMeLanguages.map((l, i) => (
+                      <span key={i} className="text-[#58A6FF] bg-[#58A6FF]/10 px-2 py-0.5 rounded">{l}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {techStack && techStack.length > 0 && (
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                  <span className="text-[#FF7B72] shrink-0 font-bold">drwxr-xr-x</span>
+                  <span className="text-[#8B949E] shrink-0 w-24">tools</span>
+                  <div className="flex flex-wrap gap-2">
+                    {techStack.map(tech => (
+                      <span key={tech} className="text-[#E6EDF3] bg-[#8B949E]/10 px-2 py-0.5 rounded">{tech}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {data.projects && data.projects.length > 0 && (
+          <div className="w-full mb-8">
+            <div className="flex gap-2 mb-4">
+              <span className="text-[#3FB950] font-bold">~</span>
+              <span className="text-[#8B949E]">$</span>
+              <span className="text-white">./projects.sh</span>
+            </div>
+            <div className="pl-4 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+              {data.projects.map((project: any, i: number) => (
+                <div key={i} className="border border-[#30363D] p-4 bg-[#161B22] hover:border-[#8B949E] transition-colors relative group">
+                  <h4 className="text-[#58A6FF] font-medium mb-2 flex items-center gap-2">
+                    {project.name}
+                  </h4>
+                  {project.description && (
+                    <p className="text-[#8B949E] text-xs mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
+                  )}
+                  {project.live_url && (
+                    <a
+                      href={ensureAbsoluteUrl(project.live_url)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#3FB950] hover:text-white text-xs transition-colors inline-flex items-center gap-1 mt-auto"
+                    >
+                      Execute &gt;_
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {data.platforms && data.platforms.length > 0 && (
+          <div className="w-full mb-8">
+            <div className="flex gap-2 mb-4">
+              <span className="text-[#3FB950] font-bold">~</span>
+              <span className="text-[#8B949E]">$</span>
+              <span className="text-white">netstat -a | grep CONNECTED</span>
+            </div>
+            <div className="pl-4 flex flex-col gap-2">
+              {data.platforms.map((p, i) => {
+                if (!p.url) return null
+                return (
+                  <a
+                    key={i}
+                    href={ensureAbsoluteUrl(p.url)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                      if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                    }}
+                    className="text-[#E6EDF3] hover:text-[#58A6FF] flex items-center gap-3 group bg-[#161B22] border border-[#30363D] px-3 py-2 hover:bg-[#30363D]/50 transition-colors"
+                  >
+                    <span className="text-[#3FB950] font-bold text-xs">tcp</span>
+                    <span className="text-[#8B949E] text-xs w-20 truncate">{p.platform?.toLowerCase()}:80</span>
+                    <span className="text-[#8B949E] text-xs w-24">ESTABLISHED</span>
+                    {isGated && <Lock size={12} className="text-[#FF7B72] ml-auto" />}
+                  </a>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        <div className="w-full mt-4 mb-12 flex gap-2 items-center">
+          <span className="text-[#3FB950] font-bold">~</span>
+          <span className="text-[#8B949E]">$</span>
+          <span className="w-2.5 h-5 bg-[#E6EDF3] animate-pulse" />
+        </div>
+
+        <div className="w-full mt-auto pt-8 border-t border-[#30363D] z-20">
+          <ProfileCTAs profile={profile} accentColor="#58A6FF" />
+        </div>
+
       </main>
       <GateModal />
     </div>
+  )
   )
 }

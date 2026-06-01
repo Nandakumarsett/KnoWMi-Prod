@@ -7,7 +7,7 @@ import { getAssetUrl } from '../../../lib/supabase'
 import { 
   LayoutGrid, Instagram, Youtube, Twitter, Github, 
   Share2, Sparkles, TrendingUp, Camera, Play, Film, MapPin, 
-  Trophy, Mail, MessageCircle, Facebook, Linkedin, Globe, Activity, X, Lock
+  Trophy, Mail, MessageCircle, Facebook, Linkedin, Globe, Activity, X, Lock, QrCode
 } from 'lucide-react'
 import { trackLinkClick } from '../../../lib/analytics/track'
 import { useGatedLink } from '../../../hooks/useGatedLink'
