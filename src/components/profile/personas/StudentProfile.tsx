@@ -26,6 +26,7 @@ const PLATFORM_ICONS: Record<string, any> = {
 }
 
 export function StudentProfile({ profile, stats }: { profile: ProfileData, stats?: any }) {
+  const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as StudentData;
   const activeTheme = (profile.profile_theme || 'default').toLowerCase();
   const { isGated, handleGatedClick, GateModal } = useGatedLink();
@@ -118,7 +119,13 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 style={{ background: 'linear-gradient(135deg, #059669, #34D399)' }}
               >
                 <div className="w-full h-full bg-white p-1 rounded-full overflow-hidden shadow-inner flex items-center justify-center relative">
-                  <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" />
+                  {!avatarError && profile.avatar_url ? (
+                    <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full object-cover rounded-full flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl rounded-full" style={{ fontFamily: 'sans-serif' }}>
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -344,11 +351,17 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             <div className="relative -mt-20 mb-6 flex justify-center z-10">
               <div className="w-40 h-40 rounded-full border-8 border-white bg-white overflow-hidden shadow-2xl relative">
                 <div className="w-full h-full rounded-full border-4 border-[#1E3A8A] overflow-hidden">
-                  <img 
+                  {!avatarError && profile.avatar_url ? (
+                    <img 
                     src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=1e3a8a&color=ffffff`} 
                     alt={profile.display_name} 
                     className="w-full h-full object-cover" 
-                  />
+                  onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full object-cover flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -529,11 +542,17 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           <div className="relative mb-12">
             <div className="absolute inset-0 bg-indigo-500 rounded-full blur-xl opacity-50 animate-pulse" />
             <div className="w-48 h-48 rounded-full border border-indigo-500/30 bg-[#0A0514] p-2 relative z-10">
-              <img 
+              {!avatarError && profile.avatar_url ? (
+                    <img 
                 src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=0A0514&color=6366f1`} 
                 alt={profile.display_name} 
                 className="w-full h-full object-cover rounded-full filter contrast-125 brightness-90" 
-              />
+              onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full object-cover rounded-full filter contrast-125 brightness-90 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl rounded-full" style={{ fontFamily: 'sans-serif' }}>
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
             </div>
           </div>
 

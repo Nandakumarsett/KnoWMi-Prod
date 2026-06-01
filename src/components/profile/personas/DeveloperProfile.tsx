@@ -19,6 +19,7 @@ function getPlatformIcon(platform: string) {
 }
 
 export function DeveloperProfile({ profile }: { profile: ProfileData }) {
+  const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as DeveloperData;
   const activeTheme = (profile.profile_theme || 'default').toLowerCase();
   const { isGated, handleGatedClick, GateModal } = useGatedLink();
@@ -91,11 +92,17 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           <div className="relative -mt-24 sm:-mt-[120px] flex flex-col items-center z-30">
             <div className="relative p-[4px] rounded-full bg-white shadow-xl shadow-neutral-300/60">
               <div className="w-36 h-36 sm:w-48 sm:h-48 rounded-full overflow-hidden bg-neutral-100 border-4 border-white">
-                <img
+                {!avatarError && profile.avatar_url ? (
+                    <img
                   src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=f0f0f0&color=22c55e`}
                   className="w-full h-full object-cover"
                   alt={profile.display_name}
-                />
+                onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full object-cover flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
               </div>
             </div>
           </div>
@@ -275,11 +282,17 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <div className="relative shrink-0">
                 <div className="w-36 h-36 blueprint-border p-1.5 bg-[#001B2E] relative group-hover:shadow-[0_0_20px_rgba(100,255,218,0.2)] transition-shadow duration-500">
                   <div className="w-full h-full border border-dashed border-[#64FFDA]/50 overflow-hidden bg-[#0A192F]">
+                    {!avatarError && profile.avatar_url ? (
                     <img
                       src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=0A192F&color=64FFDA`}
                       className="w-full h-full object-cover filter contrast-125 saturate-50 brightness-90 mix-blend-screen opacity-90"
                       alt={profile.display_name}
-                    />
+                    onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full object-cover filter contrast-125 saturate-50 brightness-90 mix-blend-screen opacity-90 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
                   </div>
                 </div>
               </div>
@@ -514,11 +527,17 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <div className="relative group">
                 <div className="w-32 h-32 hacker-border p-1 bg-black relative">
                   <div className="w-full h-full overflow-hidden relative">
+                    {!avatarError && profile.avatar_url ? (
                     <img
                       src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=000&color=00FF41`}
                       className="w-full h-full object-cover filter contrast-150 saturate-0"
                       alt={profile.display_name}
-                    />
+                    onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full object-cover filter contrast-150 saturate-0 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
                     <div className="absolute inset-0 bg-[#00FF41]/20 mix-blend-color pointer-events-none" />
                   </div>
                 </div>
@@ -708,11 +727,17 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         <div className="w-full flex flex-col sm:flex-row gap-6 items-center sm:items-start mb-10">
           <div className="relative shrink-0">
             <div className="w-24 h-24 sm:w-32 sm:h-32 border-2 border-[#30363D] p-1">
-              <img
+              {!avatarError && profile.avatar_url ? (
+                    <img
                 src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=0D1117&color=E6EDF3`}
                 className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
                 alt={profile.display_name}
-              />
+              onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
             </div>
           </div>
 

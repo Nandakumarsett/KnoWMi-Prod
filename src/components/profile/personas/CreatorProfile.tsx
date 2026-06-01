@@ -29,6 +29,7 @@ const PLATFORM_ICONS: Record<string, any> = {
 }
 
 export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats?: any }) {
+  const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as CreatorData
   const activeTheme = (profile.profile_theme || 'default').toLowerCase()
   const { isGated, handleGatedClick, GateModal } = useGatedLink()
@@ -161,7 +162,13 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                 style={{ background: 'linear-gradient(135deg, #C1440E, #F97316)' }}
               >
                 <div className="w-full h-full bg-white p-1 rounded-full overflow-hidden shadow-inner">
-                  <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" />
+                  {!avatarError && profile.avatar_url ? (
+                    <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full object-cover rounded-full flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl rounded-full" style={{ fontFamily: 'sans-serif' }}>
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
                 </div>
               </div>
               {profile.is_verified && (
@@ -361,7 +368,13 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
 
           <div className="w-full mb-8 flex justify-center">
              <div className="w-32 h-32 sm:w-40 sm:h-40 border-4 border-black overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-               <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover grayscale" />
+               {!avatarError && profile.avatar_url ? (
+                    <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover grayscale" onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full object-cover grayscale flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
              </div>
           </div>
 
@@ -496,7 +509,13 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
           <div className="relative mb-8">
             <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full p-1 bg-gradient-to-br from-[#FF2D78] to-purple-600 shadow-[0_0_30px_rgba(255,45,120,0.6)] animate-pulse" style={{ animationDuration: '3s' }}>
               <div className="w-full h-full rounded-full bg-[#0D0B1A] overflow-hidden p-1">
-                <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full filter contrast-125 saturate-50" />
+                {!avatarError && profile.avatar_url ? (
+                    <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full filter contrast-125 saturate-50" onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full object-cover rounded-full filter contrast-125 saturate-50 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl rounded-full" style={{ fontFamily: 'sans-serif' }}>
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
               </div>
             </div>
           </div>
@@ -654,7 +673,13 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             {/* Avatar */}
             <div className="relative shrink-0">
               <div className="w-48 h-48 rounded-[32px] overflow-hidden bg-white/80 p-2 shadow-xl rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
-                <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-[24px]" />
+                {!avatarError && profile.avatar_url ? (
+                    <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-[24px]" onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full object-cover rounded-[24px] flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl rounded-lg" style={{ fontFamily: 'sans-serif' }}>
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
               </div>
               <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-amber-200 rounded-full blur-2xl -z-10" />
             </div>
