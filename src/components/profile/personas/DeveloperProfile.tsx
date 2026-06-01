@@ -533,8 +533,6 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           </div>
         )}
 
-        <div className="w-full max-w-3xl mx-auto flex flex-col sm:flex-row gap-6 items-start relative z-30 mb-10 pt-4">
-
         <main className="w-full max-w-[620px] mx-auto pb-24 pt-8 px-4 flex flex-col items-center relative z-20">
           
           <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left relative overflow-hidden">
