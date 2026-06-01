@@ -338,6 +338,13 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
         <div className="absolute inset-0 varsity-bg pointer-events-none z-0" />
         
+        {/* Banner */}
+        {data.featured_work_url && (
+          <div className="w-full max-w-5xl mx-auto mb-8 h-48 sm:h-64 border-4 border-[#1E3A8A] varsity-shadow overflow-hidden relative z-10 bg-white">
+            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover mix-blend-multiply opacity-90" alt="Banner" />
+          </div>
+        )}
+        
         {/* Varsity Header Band */}
         <div className="absolute top-0 left-0 right-0 h-32 bg-[#1E3A8A] border-b-8 border-amber-400 z-0" />
 
@@ -534,7 +541,15 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           `
         }} />
 
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none" />
+        {/* Banner */}
+        {data.featured_work_url && (
+          <div className="absolute top-0 left-0 w-full h-64 sm:h-80 opacity-30 mix-blend-screen pointer-events-none z-0" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}>
+            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter contrast-125 saturate-150" alt="Banner" />
+            <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/30 via-[#0A0514]/80 to-[#0A0514]" />
+          </div>
+        )}
+
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none z-0" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
 
         <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center pt-12">
@@ -716,6 +731,20 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
       <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center pt-8">
         
+        {/* Tape/Polaroid Banner */}
+        {data.featured_work_url && (
+          <div className="relative mb-8 w-full max-w-[80%] mx-auto group">
+            <div className="w-full h-40 sm:h-56 bg-white p-3 pb-8 shadow-[0_10px_30px_rgba(0,0,0,0.1)] rotate-[1deg] transition-transform duration-500 hover:rotate-0 hover:scale-105">
+              <div className="absolute -top-4 right-1/4 w-16 h-6 bg-white/50 backdrop-blur-sm border border-neutral-200 shadow-sm rotate-[-4deg] opacity-80 z-10" />
+              <img 
+                src={getAssetUrl(data.featured_work_url)} 
+                alt="Banner" 
+                className="w-full h-full object-cover filter sepia-[0.2]"
+              />
+            </div>
+          </div>
+        )}
+
         {/* Tape/Polaroid Avatar */}
         <div className="relative mb-12 mt-6 group">
           <div className="w-48 h-56 bg-white p-3 pb-12 shadow-[0_10px_30px_rgba(0,0,0,0.1)] rotate-[-2deg] transition-transform duration-500 hover:rotate-0 hover:scale-105">

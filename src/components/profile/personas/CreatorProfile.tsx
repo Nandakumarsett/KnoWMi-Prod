@@ -356,6 +356,13 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
 
         <div className="px-6 sm:px-12 pt-20 max-w-4xl mx-auto flex flex-col items-center">
           
+          {/* Banner */}
+          {data.featured_work_url && (
+            <div className="w-full h-48 sm:h-64 mb-10 border-4 border-black overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              <img src={getAssetUrl(data.featured_work_url)} alt="Banner" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+            </div>
+          )}
+
           {/* Typographic Header */}
           <div className="text-center w-full mb-8">
             <h1 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase leading-none mb-4">
@@ -486,8 +493,14 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
     return (
       <div className="w-full pb-24 relative bg-[#0D0B1A] text-white font-sans overflow-x-hidden min-h-screen">
         
-        {/* Neon Background Accents */}
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#FF2D78]/20 rounded-full blur-[120px] pointer-events-none" />
+        {/* Neon Background Accents & Banner */}
+        {data.featured_work_url && (
+          <div className="absolute top-0 left-0 w-full h-72 sm:h-96 opacity-40 mix-blend-screen pointer-events-none z-0" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}>
+            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter contrast-125 saturate-150 grayscale" alt="Banner" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#FF2D78]/40 via-purple-600/20 to-transparent mix-blend-overlay" />
+          </div>
+        )}
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#FF2D78]/20 rounded-full blur-[120px] pointer-events-none z-0" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
 
         {/* Top Right Actions */}
