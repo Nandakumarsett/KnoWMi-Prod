@@ -861,5 +861,4 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
       <GateModal />
     </div>
   )
-  )
 }
