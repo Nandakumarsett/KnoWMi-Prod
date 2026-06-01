@@ -221,106 +221,85 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
   // ----------------------------------------------------
   if (activeTheme === 'blueprint') {
     return (
-      <div className="min-h-screen bg-[#071324] text-[#71B5F5] font-mono relative overflow-x-hidden selection:bg-[#71B5F5] selection:text-[#071324] p-4 sm:p-8 flex flex-col justify-start items-center">
+      <div className="min-h-screen bg-[#001B2E] text-[#64FFDA] font-mono relative overflow-x-hidden selection:bg-[#64FFDA] selection:text-[#001B2E] p-4 sm:p-8 flex flex-col justify-start items-center">
         {/* CSS rules for blueprints */}
         <style dangerouslySetInnerHTML={{
           __html: `
-            @keyframes scan-horizontal {
-              0% { transform: translateY(-100%); }
-              100% { transform: translateY(100%); }
-            }
-            @keyframes laser-glow {
-              0%, 100% { opacity: 0.3; }
-              50% { opacity: 0.7; }
-            }
             .grid-blueprint {
               background-image: 
-                linear-gradient(rgba(113, 181, 245, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(113, 181, 245, 0.1) 1px, transparent 1px),
-                linear-gradient(rgba(113, 181, 245, 0.05) 5px, transparent 5px),
-                linear-gradient(90deg, rgba(113, 181, 245, 0.05) 5px, transparent 5px);
-              background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+                linear-gradient(rgba(100, 255, 218, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(100, 255, 218, 0.15) 1px, transparent 1px),
+                linear-gradient(rgba(100, 255, 218, 0.05) 20px, transparent 20px),
+                linear-gradient(90deg, rgba(100, 255, 218, 0.05) 20px, transparent 20px);
+              background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+              background-position: center center;
             }
-            .vector-dashed {
-              background-image: repeating-linear-gradient(90deg, #71B5F5 0px, #71B5F5 4px, transparent 4px, transparent 8px);
+            .blueprint-border {
+              border: 1px solid rgba(100, 255, 218, 0.3);
+              box-shadow: inset 0 0 20px rgba(100, 255, 218, 0.05);
             }
           `
         }} />
 
         {/* Technical drafting grid background */}
-        <div className="fixed inset-0 pointer-events-none grid-blueprint z-0 opacity-70" />
+        <div className="fixed inset-0 pointer-events-none grid-blueprint z-0 opacity-80" />
         
-        {/* Glowing blueprint laser line */}
-        <div className="fixed inset-x-0 h-[2px] bg-sky-500/20 shadow-[0_0_15px_#71B5F5] pointer-events-none animate-[scan-horizontal_12s_linear_infinite] z-10" />
-
         {/* Blueprint outer frame with drafting details */}
-        <div className="absolute top-4 left-4 right-4 bottom-4 border-2 border-double border-[#71B5F5]/30 pointer-events-none z-10 p-4 hidden md:flex flex-col justify-between text-[10px] text-[#71B5F5]/50 select-none">
+        <div className="absolute top-4 left-4 right-4 bottom-4 border border-[#64FFDA]/30 pointer-events-none z-10 p-4 hidden md:flex flex-col justify-between text-[10px] text-[#64FFDA]/50 select-none">
           <div className="flex justify-between">
-            <span>DRAFT_ID: PEHCHAAN_DEV_PRTCL</span>
-            <span>SYSTEM_MODEL: R-105-V2</span>
-            <span>COORD_SPACE: [X_MAX: 1920, Y_MAX: 1080]</span>
+            <span>SYS_ID: PEHCHAAN_DEV_PRTCL</span>
+            <span>MODEL: X-99-V2</span>
+            <span>GRID_REF: [X_1920, Y_1080]</span>
           </div>
           <div className="flex justify-between">
-            <span>CAD_SCALE: 1:1 [FULL_RESOLUTION]</span>
-            <span>SPEC: CREATIVE_SCHEMA_TEES</span>
-            <span>STATUS: RENDER_STABLE</span>
+            <span>SCALE: 1:1 [NATIVE]</span>
+            <span>SPEC: BLUEPRINT_SCHEMA</span>
+            <span>STATUS: ONLINE</span>
           </div>
         </div>
 
         <main className="w-full max-w-[620px] mx-auto pb-24 pt-8 px-4 flex flex-col items-center relative z-20">
           
           {/* Schematic Blueprint Title Card block */}
-          <div className="w-full border-2 border-[#71B5F5] bg-[#071324]/90 backdrop-blur-md p-6 mb-8 text-left shadow-[5px_5px_0px_0px_rgba(113,181,245,0.3)] relative overflow-hidden">
+          <div className="w-full blueprint-border bg-[#001B2E]/90 backdrop-blur-md p-8 mb-8 text-left relative overflow-hidden group hover:border-[#64FFDA]/60 transition-colors duration-500">
             {/* Corner Crosshairs */}
-            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#71B5F5]" />
-            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-[#71B5F5]" />
-            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-[#71B5F5]" />
-            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#71B5F5]" />
+            <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#64FFDA]" />
+            <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#64FFDA]" />
+            <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#64FFDA]" />
+            <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#64FFDA]" />
 
-            {/* Subdued design vector markings */}
-            <div className="absolute top-2 right-4 text-[8px] text-[#71B5F5]/60 font-mono tracking-widest">// ARCH_DRAFT_VIEW_01</div>
+            <div className="absolute top-3 right-4 text-[9px] text-[#64FFDA]/60 font-mono tracking-widest">// VIEW_01</div>
             
-            <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-[#71B5F5]/30">
-              {/* Technical square photo frame with blueprint vectors */}
+            <div className="flex flex-col sm:flex-row items-center gap-8 pb-6 border-b border-[#64FFDA]/20">
+              {/* Technical square photo frame */}
               <div className="relative shrink-0">
-                <div className="w-32 h-32 border-2 border-[#71B5F5] p-1 bg-[#071324] relative shadow-[0_0_15px_rgba(113,181,245,0.1)]">
-                  {/* Dimension lines */}
-                  <div className="absolute -top-6 left-0 right-0 flex items-center justify-between text-[8px] text-[#71B5F5]/70">
-                    <span>|</span>
-                    <span className="border-b border-dashed border-[#71B5F5]/50 flex-grow mx-1 text-center font-bold">120 mm</span>
-                    <span>|</span>
-                  </div>
-                  <div className="absolute -left-6 top-0 bottom-0 flex flex-col items-center justify-between text-[8px] text-[#71B5F5]/70 [writing-mode:vertical-lr]">
-                    <span>|</span>
-                    <span className="border-b border-dashed border-[#71B5F5]/50 flex-grow my-1 text-center font-bold">120 mm</span>
-                    <span>|</span>
-                  </div>
-                  <div className="w-full h-full border border-dashed border-[#71B5F5]/60 overflow-hidden bg-[#0A223D]">
+                <div className="w-36 h-36 blueprint-border p-1.5 bg-[#001B2E] relative group-hover:shadow-[0_0_20px_rgba(100,255,218,0.2)] transition-shadow duration-500">
+                  <div className="w-full h-full border border-dashed border-[#64FFDA]/50 overflow-hidden bg-[#0A192F]">
                     <img
-                      src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=071324&color=71b5f5`}
-                      className="w-full h-full object-cover filter contrast-125 saturate-50 brightness-90 mix-blend-screen"
+                      src={getAssetUrl(profile.avatar_url) || \`https://ui-avatars.com/api/?name=\${encodeURIComponent(profile.display_name)}&background=0A192F&color=64FFDA\`}
+                      className="w-full h-full object-cover filter contrast-125 saturate-50 brightness-90 mix-blend-screen opacity-90"
                       alt={profile.display_name}
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="text-center sm:text-left flex-grow mt-2 sm:mt-0">
-                <div className="text-[10px] text-[#71B5F5]/70 font-bold uppercase tracking-[0.2em] mb-1.5">// SYSTEM_IDENTIFIER //</div>
-                <h1 className="text-2xl sm:text-3xl font-black text-white tracking-widest uppercase mb-2 leading-none drop-shadow-[0_0_8px_rgba(113,181,245,0.4)]">
+              <div className="text-center sm:text-left flex-grow mt-4 sm:mt-0">
+                <div className="text-[10px] text-[#64FFDA]/70 font-bold uppercase tracking-[0.2em] mb-2">// ENTITY_IDENTIFIER</div>
+                <h1 className="text-3xl sm:text-4xl font-light text-white tracking-widest uppercase mb-3">
                   {profile.display_name}
                 </h1>
-                <p className="text-xs font-bold text-[#71B5F5] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
-                  <Terminal size={14} className="animate-pulse" /> CLASS: {data.about?.role || 'ARCHITECT CORE'}
+                <p className="text-sm font-medium text-[#64FFDA] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
+                  <Monitor size={16} className="opacity-70" /> {data.about?.role || 'SYSTEM ARCHITECT'}
                 </p>
               </div>
             </div>
 
             {profile.bio && (
-              <div className="mt-4 pt-2">
-                <span className="text-[9px] text-[#71B5F5]/50 block uppercase font-bold mb-1">// INTENT_SUMMARY_LOG</span>
-                <p className="text-xs leading-relaxed text-sky-200/90 pl-3 border-l-2 border-[#71B5F5] italic font-semibold">
-                  "{profile.bio}"
+              <div className="mt-6">
+                <span className="text-[10px] text-[#64FFDA]/50 block uppercase font-bold mb-2">// INIT_PARAMS</span>
+                <p className="text-sm leading-relaxed text-[#8892B0] pl-4 border-l border-[#64FFDA]/40">
+                  {profile.bio}
                 </p>
               </div>
             )}
@@ -328,28 +307,28 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
           {/* Infrastructure Specs */}
           {(data.about?.status || data.about?.company || data.about?.mission) && (
-            <div className="w-full border-2 border-[#71B5F5] bg-[#071324]/80 backdrop-blur-md p-6 mb-8 text-left relative shadow-[5px_5px_0px_0px_rgba(113,181,245,0.2)]">
-              <div className="absolute top-0 right-0 bg-[#71B5F5] text-[#071324] px-2 py-0.5 text-[8px] font-bold">NODE_01_SPECS</div>
-              <h3 className="text-sm font-black uppercase text-white tracking-[0.2em] mb-4 border-b border-[#71B5F5]/30 pb-2">
-                [01] NODE CONFIGURATION
+            <div className="w-full blueprint-border bg-[#001B2E]/90 backdrop-blur-md p-8 mb-8 text-left relative group hover:border-[#64FFDA]/60 transition-colors duration-500">
+              <h3 className="text-xs font-medium uppercase text-white tracking-[0.2em] mb-6 flex items-center gap-3">
+                <span className="text-[#64FFDA]">01.</span> NODE CONFIGURATION
+                <div className="flex-grow h-px bg-gradient-to-r from-[#64FFDA]/20 to-transparent ml-2" />
               </h3>
-              <div className="space-y-3.5 text-xs">
+              <div className="space-y-4 text-sm text-[#8892B0]">
                 {data.about.status && (
-                  <div className="flex justify-between items-center py-1 border-b border-[#71B5F5]/10">
-                    <span className="text-[#71B5F5]/60 font-black">NODE_STATE:</span>
-                    <span className="text-white font-bold">{data.about.status}</span>
+                  <div className="flex justify-between items-center py-2 border-b border-[#64FFDA]/10">
+                    <span className="text-[#64FFDA]/60">STATUS:</span>
+                    <span className="text-white">{data.about.status}</span>
                   </div>
                 )}
                 {data.about.company && (
-                  <div className="flex justify-between items-center py-1 border-b border-[#71B5F5]/10">
-                    <span className="text-[#71B5F5]/60 font-black">DEPLOYMENT_SITE:</span>
-                    <span className="text-white font-bold">{data.about.company}</span>
+                  <div className="flex justify-between items-center py-2 border-b border-[#64FFDA]/10">
+                    <span className="text-[#64FFDA]/60">DEPLOYMENT:</span>
+                    <span className="text-white">{data.about.company}</span>
                   </div>
                 )}
                 {data.about.mission && (
                   <div className="pt-2">
-                    <span className="text-[#71B5F5]/60 font-black block mb-1.5">STRUCTURAL_GOAL:</span>
-                    <p className="text-sky-200 leading-relaxed font-sans text-xs bg-[#0b213b]/50 p-3 border border-[#71B5F5]/20 font-semibold rounded-md">
+                    <span className="text-[#64FFDA]/60 block mb-2">OBJECTIVE:</span>
+                    <p className="bg-[#0A192F] p-4 border border-[#64FFDA]/20 text-[#8892B0]">
                       {data.about.mission}
                     </p>
                   </div>
@@ -358,20 +337,20 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
-          {/* Compiled Modules (Tech Stack) */}
+          {/* Compiled Modules */}
           {((aboutMeLanguages && aboutMeLanguages.length > 0) || (techStack && techStack.length > 0)) && (
-            <div className="w-full border-2 border-[#71B5F5] bg-[#071324]/80 backdrop-blur-md p-6 mb-8 text-left relative shadow-[5px_5px_0px_0px_rgba(113,181,245,0.2)]">
-              <div className="absolute top-0 right-0 bg-[#71B5F5] text-[#071324] px-2 py-0.5 text-[8px] font-bold">NODE_02_COMPILERS</div>
-              <h3 className="text-sm font-black uppercase text-white tracking-[0.2em] mb-6 border-b border-[#71B5F5]/30 pb-2">
-                [02] TECHNICAL PROTOCOLS
+            <div className="w-full blueprint-border bg-[#001B2E]/90 backdrop-blur-md p-8 mb-8 text-left relative group hover:border-[#64FFDA]/60 transition-colors duration-500">
+              <h3 className="text-xs font-medium uppercase text-white tracking-[0.2em] mb-6 flex items-center gap-3">
+                <span className="text-[#64FFDA]">02.</span> TECHNICAL PROTOCOLS
+                <div className="flex-grow h-px bg-gradient-to-r from-[#64FFDA]/20 to-transparent ml-2" />
               </h3>
               
               {aboutMeLanguages && aboutMeLanguages.length > 0 && (
-                <div className="mb-6">
-                  <span className="text-[10px] font-black text-[#71B5F5]/60 uppercase block mb-3">// SYNTAX_LANGUAGES</span>
+                <div className="mb-8">
+                  <span className="text-[10px] text-[#64FFDA]/60 uppercase block mb-3">// SYNTAX</span>
                   <div className="flex flex-wrap gap-2">
                     {aboutMeLanguages.map((l, idx) => (
-                      <span key={idx} className="border border-[#71B5F5]/50 bg-[#0A223D] px-3.5 py-1.5 text-[10px] font-black uppercase text-white hover:bg-[#71B5F5] hover:text-[#071324] transition-colors duration-200">
+                      <span key={idx} className="border border-[#64FFDA]/30 bg-[#0A192F] px-4 py-2 text-[11px] uppercase text-[#64FFDA] hover:bg-[#64FFDA]/10 transition-colors duration-200">
                         {l}
                       </span>
                     ))}
@@ -381,12 +360,11 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
               {techStack && techStack.length > 0 && (
                 <div>
-                  <span className="text-[10px] font-black text-[#71B5F5]/60 uppercase block mb-3">// ENGINE_COMPONENTS</span>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <span className="text-[10px] text-[#64FFDA]/60 uppercase block mb-3">// COMPONENTS</span>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {techStack.map(tech => (
-                      <div key={tech} className="border border-[#71B5F5]/30 bg-[#071324] p-3 text-center hover:border-[#71B5F5] hover:bg-[#0b213b]/60 transition-all duration-200 relative group">
-                        <span className="text-[10px] font-black uppercase truncate block w-full text-[#71B5F5] group-hover:text-white">{tech}</span>
-                        <div className="absolute top-0 right-0 w-1.5 h-1.5 bg-[#71B5F5]/40 group-hover:bg-[#71B5F5]" />
+                      <div key={tech} className="border border-[#64FFDA]/20 bg-[#0A192F] p-3 text-center hover:border-[#64FFDA]/50 hover:bg-[#64FFDA]/5 transition-all duration-300">
+                        <span className="text-[11px] uppercase text-[#8892B0] hover:text-[#64FFDA] transition-colors">{tech}</span>
                       </div>
                     ))}
                   </div>
@@ -395,19 +373,19 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
-          {/* Masterpieces Grid */}
+          {/* Projects */}
           {data.projects && data.projects.length > 0 && (
             <div className="w-full mb-8 text-left">
-              <span className="block text-[10px] font-black text-[#71B5F5]/60 uppercase tracking-[0.25em] mb-4 px-2">// [03] ARCHITECTURAL RELEASES //</span>
-              <div className="space-y-6">
+              <span className="block text-[10px] text-[#64FFDA]/60 uppercase tracking-[0.2em] mb-4">// 03. SCHEMATIC RELEASES</span>
+              <div className="space-y-4">
                 {data.projects.map((project: any, i: number) => (
-                  <div key={i} className="border-2 border-[#71B5F5] bg-[#071324]/90 p-6 relative shadow-[5px_5px_0px_0px_rgba(113,181,245,0.2)]">
-                    <div className="absolute top-2 right-4 text-[8px] text-[#71B5F5]/40 font-mono">RELEASE_0{i+1}</div>
-                    <h4 className="text-base font-black text-white mb-2.5 uppercase flex items-center gap-2">
-                      <Cpu size={16} className="text-[#71B5F5]" /> {project.name}
+                  <div key={i} className="blueprint-border bg-[#001B2E]/90 p-6 relative group hover:border-[#64FFDA]/60 transition-colors duration-500">
+                    <div className="absolute top-4 right-4 text-[10px] text-[#64FFDA]/40 font-mono">v1.0.{i}</div>
+                    <h4 className="text-lg font-light text-white mb-2 uppercase flex items-center gap-3">
+                      <Box size={18} className="text-[#64FFDA]" /> {project.name}
                     </h4>
                     {project.description && (
-                      <p className="text-xs text-sky-200/80 leading-relaxed mb-4 font-sans font-semibold">
+                      <p className="text-sm text-[#8892B0] leading-relaxed mb-4">
                         {project.description}
                       </p>
                     )}
@@ -416,9 +394,9 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                         href={ensureAbsoluteUrl(project.live_url)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase text-[#71B5F5] hover:text-white transition-colors border-b border-[#71B5F5] pb-0.5"
+                        className="inline-flex items-center gap-2 text-[11px] uppercase text-[#64FFDA] hover:text-white transition-colors"
                       >
-                        Launch Schema <ExternalLink size={10} />
+                        Launch Schema <ExternalLink size={12} />
                       </a>
                     )}
                   </div>
@@ -427,11 +405,11 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
-          {/* Social Platforms Node links */}
+          {/* Social Platforms */}
           {data.platforms && data.platforms.length > 0 && (
             <div className="w-full text-left mb-8">
-              <span className="block text-[10px] font-black text-[#71B5F5]/60 uppercase tracking-[0.25em] mb-4 px-2">// [04] INTEGRATED CHANNELS //</span>
-              <div className="flex flex-wrap gap-4">
+              <span className="block text-[10px] text-[#64FFDA]/60 uppercase tracking-[0.2em] mb-4">// 04. INTEGRATED CHANNELS</span>
+              <div className="flex flex-wrap gap-3">
                 {data.platforms.map((p, i) => {
                   if (!p.url) return null
                   const { logo } = getPlatformIcon(p.platform || '')
@@ -445,22 +423,22 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
-                      className="border-2 border-[#71B5F5] bg-[#071324] hover:bg-[#71B5F5] hover:text-[#071324] px-4 py-2.5 text-xs flex items-center gap-2.5 transition-colors relative cursor-pointer shadow-[3px_3px_0px_0px_rgba(113,181,245,0.25)] font-black text-white hover:shadow-none"
+                      className="blueprint-border bg-[#0A192F] hover:bg-[#64FFDA]/10 px-5 py-3 text-xs flex items-center gap-3 transition-all duration-300 relative group"
                     >
                       {logo && logo !== 'globe' ? (
                         <img 
-                          src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
-                          className="w-4 h-4 object-contain filter brightness-0 invert"
-                          style={{ filter: 'brightness(0) invert(1)' }}
+                          src={\`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/\${logo}.svg\`}
+                          className="w-4 h-4 object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+                          style={{ filter: 'invert(87%) sepia(26%) saturate(692%) hue-rotate(107deg) brightness(101%) contrast(105%)' }}
                           alt={p.platform}
                         />
                       ) : (
-                        <Globe size={14} />
+                        <Globe size={16} className="text-[#64FFDA] opacity-70 group-hover:opacity-100" />
                       )}
-                      <span className="text-[10px] font-black uppercase">{p.platform}</span>
+                      <span className="text-[11px] uppercase text-[#8892B0] group-hover:text-[#64FFDA] transition-colors">{p.platform}</span>
                       {isGated && (
-                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                          <Lock size={12} className="text-white" />
+                        <div className="absolute inset-0 bg-[#001B2E]/80 flex items-center justify-center">
+                          <Lock size={14} className="text-[#64FFDA]" />
                         </div>
                       )}
                     </a>
@@ -472,24 +450,8 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
           {/* Connection Actions */}
           <div className="w-full mb-8 z-20">
-            <ProfileCTAs profile={profile} accentColor="#71B5F5" />
+            <ProfileCTAs profile={profile} accentColor="#64FFDA" />
           </div>
-
-          {/* Schematic buttons */}
-          {(data.contact_email || data.quick_talk_url) && (
-            <div className="grid grid-cols-2 gap-4 w-full text-left">
-              {data.contact_email && (
-                <a href={`mailto:${data.contact_email}`} className="border-2 border-[#71B5F5] bg-[#71B5F5] text-[#071324] hover:bg-transparent hover:text-[#71B5F5] py-4 text-center font-black text-xs uppercase tracking-widest transition-all shadow-[4px_4px_0px_0px_rgba(113,181,245,0.25)] text-center flex items-center justify-center">
-                  Contact Architect
-                </a>
-              )}
-              {data.quick_talk_url && (
-                <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noopener noreferrer" className="border-2 border-[#71B5F5] bg-[#071324] text-[#71B5F5] hover:bg-[#71B5F5] hover:text-[#071324] py-4 text-center font-black text-xs uppercase tracking-widest transition-all shadow-[4px_4px_0px_0px_rgba(113,181,245,0.25)] text-center flex items-center justify-center">
-                  Request Sync
-                </a>
-              )}
-            </div>
-          )}
 
         </main>
         <GateModal />
@@ -502,107 +464,104 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
   // ----------------------------------------------------
   if (activeTheme === 'hacker') {
     return (
-      <div className="min-h-screen bg-black text-[#39FF14] font-mono relative overflow-x-hidden selection:bg-[#39FF14] selection:text-black p-4 sm:p-8 flex flex-col justify-start items-center">
-        {/* CSS styles for hackers */}
+      <div className="min-h-screen bg-[#0D0D0D] text-[#00FF41] font-mono relative overflow-x-hidden selection:bg-[#00FF41] selection:text-black p-4 sm:p-8 flex flex-col justify-start items-center">
         <style dangerouslySetInnerHTML={{
-          __html: `
+          __html: \`
             @keyframes crt-flicker {
               0% { opacity: 0.97; }
               50% { opacity: 1; }
               100% { opacity: 0.98; }
             }
-            @keyframes cursor-blink {
-              0%, 100% { opacity: 1; }
-              50% { opacity: 0; }
+            @keyframes scanline {
+              0% { transform: translateY(-100vh); }
+              100% { transform: translateY(100vh); }
             }
-            @keyframes text-glow-pulse {
-              0%, 100% { text-shadow: 0 0 6px rgba(57, 255, 20, 0.4); }
-              50% { text-shadow: 0 0 14px rgba(57, 255, 20, 0.8); }
+            .crt-overlay {
+              background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+              background-size: 100% 4px;
+              animation: crt-flicker 0.15s infinite;
             }
-            .glow-hacker-text {
-              animation: text-glow-pulse 4s ease-in-out infinite;
+            .hacker-glow {
+              text-shadow: 0 0 5px #00FF41, 0 0 10px #00FF41;
             }
-            .crt-scanlines {
-              background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-              background-size: 100% 3px, 6px 100%;
+            .hacker-border {
+              border: 1px solid #00FF41;
+              box-shadow: 0 0 10px rgba(0, 255, 65, 0.2), inset 0 0 10px rgba(0, 255, 65, 0.1);
             }
-          `
+            .hacker-border:hover {
+              box-shadow: 0 0 15px rgba(0, 255, 65, 0.4), inset 0 0 15px rgba(0, 255, 65, 0.2);
+            }
+            .matrix-bg {
+              background-color: #0D0D0D;
+              background-image: radial-gradient(circle at 50% 50%, rgba(0, 255, 65, 0.05) 0%, transparent 60%);
+            }
+          \`
         }} />
         
-        {/* CRT Scanline Overlay */}
-        <div className="fixed inset-0 pointer-events-none z-10 crt-scanlines opacity-50 pointer-events-none" />
-
-        {/* Ambient background glows */}
-        <div className="absolute top-[10%] left-[5%] w-[350px] h-[350px] bg-emerald-950/20 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[20%] right-[5%] w-[350px] h-[350px] bg-green-950/15 rounded-full blur-[120px] pointer-events-none animate-pulse" />
+        {/* CRT Scanline Overlay & Scanning Bar */}
+        <div className="fixed inset-0 pointer-events-none z-50 crt-overlay opacity-40 mix-blend-overlay" />
+        <div className="fixed inset-0 pointer-events-none z-40 bg-gradient-to-b from-transparent via-[#00FF41]/10 to-transparent h-32 animate-[scanline_8s_linear_infinite] opacity-50" />
 
         <main className="w-full max-w-[620px] mx-auto pb-24 pt-8 px-4 flex flex-col items-center relative z-20">
           
-          {/* Glowing CRT Frame Avatar */}
-          <div className="relative mb-10 group">
-            <div className="w-40 h-40 border-2 border-[#39FF14] p-2 bg-black shadow-[0_0_20px_rgba(57,255,20,0.3)] hover:shadow-[0_0_35px_rgba(57,255,20,0.6)] transition-all duration-300 relative">
-              <div className="w-full h-full overflow-hidden relative border border-[#39FF14]/50">
-                <img
-                  src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=000&color=39ff14`}
-                  className="w-full h-full object-cover filter brightness-110 contrast-125 saturate-0"
-                  alt={profile.display_name}
-                />
-                <div className="absolute inset-0 bg-[#39FF14]/15 pointer-events-none" />
-              </div>
-              <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-[#39FF14]" />
-              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#39FF14]" />
-              <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-[#39FF14]" />
-              <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-[#39FF14]" />
+          <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left relative overflow-hidden">
+            <div className="text-[10px] text-[#00FF41]/70 mb-4 font-bold uppercase tracking-widest flex items-center justify-between">
+              <span>root@system:~# whoami</span>
+              <span className="animate-pulse">_</span>
             </div>
-            <div className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 bg-black border border-[#39FF14] px-4 py-0.5 text-[8px] font-bold text-[#39FF14] tracking-widest shadow-[0_0_8px_rgba(57,255,20,0.3)] uppercase">
-              NODE_SECTOR_09
-            </div>
-          </div>
-
-          {/* Tactical HUD Header */}
-          <div className="w-full border border-[#39FF14] bg-black/95 p-6 mb-8 text-left shadow-[0_0_15px_rgba(57,255,20,0.15)] relative">
-            <div className="absolute top-2 right-4 text-[7px] text-[#39FF14]/70 animate-pulse">// HUD STATUS: ACTIVE</div>
-            <div className="text-[9px] text-[#39FF14]/50 mb-2.5 font-bold uppercase tracking-wider">root@knowmi:~# info_check</div>
             
-            <h1 className="text-3xl font-black text-white tracking-widest uppercase mb-1.5 drop-shadow-[0_0_8px_rgba(57,255,20,0.7)] glow-hacker-text">
-              {(profile.display_name || 'NULL_NODE')}
-            </h1>
-            <p className="text-xs font-bold text-[#39FF14] uppercase tracking-widest flex items-center gap-2 mt-2">
-              <Shield size={12} className="animate-pulse" /> CLASS: {data.about?.role || 'HACKER ENG'}
-            </p>
-            {profile.bio && (
-              <div className="mt-4 pt-3 border-t border-[#39FF14]/20 flex gap-2">
-                <span className="text-[#39FF14] text-xs font-bold shrink-0">&gt;</span>
-                <p className="text-xs leading-relaxed text-[#39FF14]/90 font-semibold font-mono italic">
-                  "{profile.bio}"
-                </p>
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+              <div className="relative group">
+                <div className="w-32 h-32 hacker-border p-1 bg-black relative">
+                  <div className="w-full h-full overflow-hidden relative">
+                    <img
+                      src={getAssetUrl(profile.avatar_url) || \`https://ui-avatars.com/api/?name=\${encodeURIComponent(profile.display_name)}&background=000&color=00FF41\`}
+                      className="w-full h-full object-cover filter contrast-150 saturate-0"
+                      alt={profile.display_name}
+                    />
+                    <div className="absolute inset-0 bg-[#00FF41]/20 mix-blend-color pointer-events-none" />
+                  </div>
+                </div>
               </div>
-            )}
+
+              <div className="text-center sm:text-left flex-grow">
+                <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-widest uppercase mb-2 hacker-glow">
+                  {profile.display_name || 'UNKNOWN_USER'}
+                </h1>
+                <p className="text-sm text-[#00FF41] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
+                  <Terminal size={14} /> {data.about?.role || 'ROOT_ACCESS'}
+                </p>
+                {profile.bio && (
+                  <p className="text-xs leading-relaxed text-[#00FF41]/80 mt-4 border-l-2 border-[#00FF41]/50 pl-3">
+                    <span className="text-[#00FF41] opacity-50 mr-2">&gt;</span>{profile.bio}
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
 
-          {/* System status environment */}
           {(data.about?.status || data.about?.company || data.about?.mission) && (
-            <div className="w-full border border-[#39FF14] bg-black/90 p-6 mb-8 text-left relative shadow-[0_0_15px_rgba(57,255,20,0.1)]">
-              <h3 className="text-xs font-black uppercase text-[#39FF14] tracking-[0.2em] mb-4 border-b border-[#39FF14]/20 pb-2 flex items-center gap-2">
-                <Shield size={12} /> SYSTEM STATE PARAMETERS
+            <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left relative">
+              <h3 className="text-sm font-bold uppercase text-[#00FF41] tracking-widest mb-4 flex items-center gap-2 border-b border-[#00FF41]/30 pb-2">
+                <Layers size={14} /> SYS_VARS
               </h3>
-              <div className="space-y-4 text-xs">
+              <div className="space-y-3 text-xs">
                 {data.about.status && (
                   <p className="flex items-center gap-3">
-                    <span className="text-[#39FF14]/50 font-bold shrink-0">STATE_STATUS :</span> 
-                    <span className="text-white bg-[#0e3b0b]/40 px-2 py-0.5 border border-[#39FF14]/30">{data.about.status}</span>
+                    <span className="text-[#00FF41]/60 w-24">STATUS:</span> 
+                    <span className="text-white bg-[#00FF41]/10 px-2 py-0.5 border border-[#00FF41]/30">{data.about.status}</span>
                   </p>
                 )}
                 {data.about.company && (
                   <p className="flex items-center gap-3">
-                    <span className="text-[#39FF14]/50 font-bold shrink-0">SYS_HOST     :</span> 
-                    <span className="text-white font-bold">{data.about.company}</span>
+                    <span className="text-[#00FF41]/60 w-24">HOST:</span> 
+                    <span className="text-white">{data.about.company}</span>
                   </p>
                 )}
                 {data.about.mission && (
-                  <div className="pt-2.5 border-t border-dashed border-[#39FF14]/20">
-                    <span className="text-[#39FF14]/50 font-bold block mb-1.5">CORE_MISSION :</span>
-                    <p className="text-[#39FF14]/90 leading-relaxed font-sans text-xs bg-[#0e3b0b]/20 p-3 border border-[#39FF14]/30 font-semibold rounded-md relative overflow-hidden">
+                  <div className="pt-2">
+                    <span className="text-[#00FF41]/60 block mb-2">DIRECTIVE:</span>
+                    <p className="text-[#00FF41]/90 p-3 border border-[#00FF41]/30 bg-[#00FF41]/5">
                       {data.about.mission}
                     </p>
                   </div>
@@ -611,19 +570,18 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
-          {/* Compiler Stack (Tech) */}
           {((aboutMeLanguages && aboutMeLanguages.length > 0) || (techStack && techStack.length > 0)) && (
-            <div className="w-full border border-[#39FF14] bg-black/90 p-6 mb-8 text-left shadow-[0_0_15px_rgba(57,255,20,0.1)]">
-              <h3 className="text-xs font-black uppercase text-[#39FF14] tracking-[0.2em] mb-6 border-b border-[#39FF14]/20 pb-2">
-                # COMPILED MODULES
+            <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left">
+              <h3 className="text-sm font-bold uppercase text-[#00FF41] tracking-widest mb-6 flex items-center gap-2 border-b border-[#00FF41]/30 pb-2">
+                <Code2 size={14} /> EXECUTABLES
               </h3>
               
               {aboutMeLanguages && aboutMeLanguages.length > 0 && (
                 <div className="mb-6">
-                  <span className="text-[10px] font-black text-[#39FF14]/50 uppercase tracking-widest block mb-3">&gt;_ LANGUAGES</span>
-                  <div className="flex flex-wrap gap-2.5">
+                  <span className="text-[10px] text-[#00FF41]/60 uppercase tracking-widest block mb-3"># LANGUAGES</span>
+                  <div className="flex flex-wrap gap-2">
                     {aboutMeLanguages.map((l, idx) => (
-                      <span key={idx} className="border border-[#39FF14] bg-black px-3.5 py-1.5 text-[10px] font-black uppercase text-white shadow-[0_0_8px_rgba(57,255,20,0.2)]">
+                      <span key={idx} className="border border-[#00FF41]/50 bg-black px-3 py-1 text-xs uppercase text-white hover:bg-[#00FF41] hover:text-black transition-colors cursor-default">
                         {l}
                       </span>
                     ))}
@@ -633,11 +591,11 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
               {techStack && techStack.length > 0 && (
                 <div>
-                  <span className="text-[10px] font-black text-[#39FF14]/50 uppercase tracking-widest block mb-3">&gt;_ COMPILER_ELEMENTS</span>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <span className="text-[10px] text-[#00FF41]/60 uppercase tracking-widest block mb-3"># MODULES</span>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     {techStack.map(tech => (
-                      <div key={tech} className="border border-[#39FF14]/40 bg-[#0e3b0b]/10 p-3 text-center hover:border-[#39FF14] hover:bg-[#39FF14]/10 transition-all duration-200">
-                        <span className="text-[10px] font-black uppercase truncate block w-full text-white">{tech}</span>
+                      <div key={tech} className="border border-[#00FF41]/30 bg-[#00FF41]/5 p-2 text-center hover:bg-[#00FF41]/20 transition-colors">
+                        <span className="text-xs uppercase text-white">{tech}</span>
                       </div>
                     ))}
                   </div>
@@ -646,19 +604,17 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
-          {/* Masterpieces Grid */}
           {data.projects && data.projects.length > 0 && (
             <div className="w-full mb-8 text-left">
-              <span className="block text-[10px] font-black text-[#39FF14]/50 uppercase tracking-[0.25em] mb-4 px-2">// DEPLOYED_CORES //</span>
-              <div className="space-y-6">
+              <span className="block text-[10px] text-[#00FF41]/60 uppercase tracking-widest mb-3"># ACTIVE_PROCESSES</span>
+              <div className="space-y-4">
                 {data.projects.map((project: any, i: number) => (
-                  <div key={i} className="border border-[#39FF14] bg-black/95 p-6 shadow-[0_0_12px_rgba(57,255,20,0.1)] hover:shadow-[0_0_20px_rgba(57,255,20,0.3)] transition-all duration-300 relative">
-                    <div className="absolute top-2 right-4 text-[7px] text-[#39FF14]/40">PID_0{i+1}</div>
-                    <h4 className="text-base font-black text-white mb-2.5 uppercase flex items-center gap-2">
-                      <Terminal size={16} className="text-[#39FF14] animate-pulse" /> {project.name}
+                  <div key={i} className="hacker-border bg-black/80 p-5 hover:bg-[#00FF41]/5 transition-colors relative">
+                    <h4 className="text-sm font-bold text-white mb-2 uppercase flex items-center gap-2">
+                      <RefreshCw size={12} className="text-[#00FF41]" /> {project.name}
                     </h4>
                     {project.description && (
-                      <p className="text-xs text-[#39FF14]/85 leading-relaxed mb-4 font-sans font-semibold">
+                      <p className="text-xs text-[#00FF41]/80 mb-3 pl-3 border-l border-[#00FF41]/30">
                         {project.description}
                       </p>
                     )}
@@ -667,9 +623,9 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                         href={ensureAbsoluteUrl(project.live_url)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase text-[#39FF14] hover:text-white border-b border-[#39FF14] pb-0.5 transition-colors duration-200"
+                        className="text-[10px] uppercase text-[#00FF41] hover:text-white border-b border-[#00FF41] pb-0.5 inline-flex items-center gap-1"
                       >
-                        RUN MODULE <ExternalLink size={10} />
+                        EXECUTE <ExternalLink size={10} />
                       </a>
                     )}
                   </div>
@@ -678,11 +634,10 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
-          {/* Social Platforms Node links */}
           {data.platforms && data.platforms.length > 0 && (
             <div className="w-full text-left mb-8">
-              <span className="block text-[10px] font-black text-[#39FF14]/50 uppercase tracking-[0.25em] mb-4 px-2">// DECK_SHUNTS //</span>
-              <div className="flex flex-wrap gap-4">
+              <span className="block text-[10px] text-[#00FF41]/60 uppercase tracking-widest mb-3"># NETWORK_NODES</span>
+              <div className="flex flex-wrap gap-3">
                 {data.platforms.map((p, i) => {
                   if (!p.url) return null
                   const { logo } = getPlatformIcon(p.platform || '')
@@ -696,22 +651,21 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
-                      className="border border-[#39FF14] bg-black hover:bg-[#39FF14] hover:text-black px-4 py-2.5 text-xs flex items-center gap-2.5 transition-all duration-200 relative cursor-pointer font-black text-white hover:shadow-[0_0_12px_rgba(57,255,20,0.5)]"
+                      className="hacker-border bg-black hover:bg-[#00FF41] hover:text-black px-4 py-2 text-xs flex items-center gap-2 transition-all relative"
                     >
                       {logo && logo !== 'globe' ? (
                         <img 
-                          src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
-                          className="w-4 h-4 object-contain filter brightness-0 invert hover:brightness-100"
-                          style={{ filter: 'brightness(0) invert(1)' }}
+                          src={\`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/\${logo}.svg\`}
+                          className="w-3.5 h-3.5 object-contain filter brightness-0 invert"
                           alt={p.platform}
                         />
                       ) : (
-                        <Globe size={14} />
+                        <Globe size={12} />
                       )}
-                      <span className="text-[10px] font-black uppercase">{p.platform}</span>
+                      <span className="uppercase font-bold">{p.platform}</span>
                       {isGated && (
-                        <div className="absolute inset-0 bg-black/75 flex items-center justify-center">
-                          <Lock size={12} className="text-white" />
+                        <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
+                          <Lock size={12} className="text-[#00FF41]" />
                         </div>
                       )}
                     </a>
@@ -721,21 +675,9 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
-          {/* Buttons */}
-          {(data.contact_email || data.quick_talk_url) && (
-            <div className="grid grid-cols-2 gap-4 w-full text-left">
-              {data.contact_email && (
-                <a href={`mailto:${data.contact_email}`} className="border border-[#39FF14] bg-[#39FF14] text-black hover:bg-transparent hover:text-[#39FF14] py-4 text-center font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(57,255,20,0.3)] text-center flex items-center justify-center">
-                  PING SYSTEM
-                </a>
-              )}
-              {data.quick_talk_url && (
-                <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noopener noreferrer" className="border border-[#39FF14] bg-black text-[#39FF14] hover:bg-[#39FF14] hover:text-black py-4 text-center font-black text-xs uppercase tracking-widest transition-all hover:shadow-[0_0_15px_rgba(57,255,20,0.2)] text-center flex items-center justify-center">
-                  SYNC LINK
-                </a>
-              )}
-            </div>
-          )}
+          <div className="w-full mb-8 z-20">
+            <ProfileCTAs profile={profile} accentColor="#00FF41" />
+          </div>
 
         </main>
         <GateModal />
@@ -744,145 +686,122 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
   }
 
   // ----------------------------------------------------
-  // LAYOUT 3: RETRO TERMINAL EMULATOR (Default / Terminal Theme)
+  // LAYOUT 3: RETRO TERMINAL EMULATOR (Terminal Theme)
   // ----------------------------------------------------
   return (
-    <div className="min-h-screen bg-[#EBE9E4] text-[#2C2925] font-mono relative overflow-x-hidden selection:bg-[#EAE4D3] selection:text-neutral-900 p-4 sm:p-8 flex flex-col justify-start items-center">
-      {/* High-Contrast Grid Background */}
-      <div
-        className="fixed inset-0 pointer-events-none opacity-[0.06] z-0"
-        style={{
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.4) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-          backgroundPosition: 'center center'
-        }}
-      />
+    <div className="min-h-screen bg-[#F0F2F5] text-[#1C1E21] font-mono relative overflow-x-hidden selection:bg-[#3B82F6] selection:text-white p-4 sm:p-8 flex flex-col justify-start items-center">
+      <main className="w-full max-w-[650px] mx-auto pb-24 pt-4 sm:pt-12 px-4 flex flex-col items-center relative z-20">
 
-      <main className="w-full max-w-[620px] mx-auto pb-24 pt-8 px-4 flex flex-col items-center relative z-20">
-
-        {/* Retro UNIX Desktop Workstation Chassis */}
-        <div className="w-full border-4 border-[#2C2925] bg-[#FFFFFF] rounded-2xl shadow-[12px_12px_0px_0px_#2C2925] overflow-hidden flex flex-col mb-12 relative">
+        {/* Retro MacOS-style Terminal Window */}
+        <div className="w-full bg-[#1C1E21] rounded-xl shadow-2xl overflow-hidden flex flex-col mb-12 border border-[#3A3D42]">
           
-          {/* Physical Sticker sheets applied at slight angles */}
-          <div className="absolute top-28 -left-4 select-none opacity-95 rotate-[-12deg] z-40 bg-[#FFD166] border-2 border-[#2C2925] text-black px-3.5 py-1.5 text-[9px] font-black uppercase tracking-wider font-mono shadow-[3px_3px_0px_0px_rgba(0,0,0,0.15)]">
-            ⚡️ React Inside
-          </div>
-          
-          <div className="absolute top-52 -right-5 select-none opacity-95 rotate-[15deg] z-40 bg-[#EF476F] border-2 border-[#2C2925] text-white px-3.5 py-1.5 text-[9px] font-black uppercase tracking-wider font-mono shadow-[3px_3px_0px_0px_rgba(0,0,0,0.15)]">
-            STABLE CORE
-          </div>
-
-          {/* Workstation Header Window Bar */}
-          <div className="bg-[#DDD8CC] border-b-4 border-[#2C2925] px-5 py-3.5 flex items-center justify-between">
+          {/* Terminal Title Bar */}
+          <div className="bg-[#2D3136] px-4 py-3 flex items-center justify-between select-none">
             <div className="flex gap-2">
-              <div className="w-3.5 h-3.5 rounded-full bg-[#EF476F] border-2 border-[#2C2925] shadow-inner" />
-              <div className="w-3.5 h-3.5 rounded-full bg-[#FFD166] border-2 border-[#2C2925] shadow-inner" />
-              <div className="w-3.5 h-3.5 rounded-full bg-[#06D6A0] border-2 border-[#2C2925] shadow-inner" />
+              <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
+              <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
+              <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
             </div>
-            <div className="text-[10px] font-black text-[#2C2925] uppercase tracking-widest font-mono select-none">
-              index.sh - profile - 80x24
+            <div className="text-xs font-medium text-[#8A9199] font-sans flex-grow text-center">
+              bash - {profile.display_name?.toLowerCase().replace(/\\s+/g, '_') || 'developer'}
             </div>
-            <div className="w-10"></div>
+            <div className="w-12"></div>
           </div>
 
-          <div className="p-6 sm:p-8 flex flex-col items-center">
+          <div className="p-6 sm:p-8 flex flex-col items-start w-full text-[#E6EDF3] text-sm">
             
-            {/* Round Avatar with retro border inside window chassis */}
-            <div className="relative mb-6">
-              <div className="w-36 h-36 rounded-full border-4 border-[#2C2925] p-1.5 bg-white shadow-[4px_4px_0px_0px_rgba(44,41,37,0.1)]">
-                <div className="w-full h-full rounded-full overflow-hidden border border-[#2C2925]/30">
+            <div className="w-full flex flex-col sm:flex-row gap-6 items-center sm:items-start mb-8">
+              <div className="relative shrink-0">
+                <div className="w-24 h-24 rounded-lg overflow-hidden border-2 border-[#3A3D42]">
                   <img
-                    src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=ffffff&color=2c2925`}
-                    className="w-full h-full object-cover"
+                    src={getAssetUrl(profile.avatar_url) || \`https://ui-avatars.com/api/?name=\${encodeURIComponent(profile.display_name)}&background=1C1E21&color=E6EDF3\`}
+                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
                     alt={profile.display_name}
                   />
                 </div>
               </div>
-            </div>
 
-            {/* Workstation Identity */}
-            <div className="text-center w-full">
-              <h1 className="text-2xl sm:text-3xl font-black text-[#2C2925] tracking-widest uppercase mb-2">
-                {(profile.display_name || 'NEW USER').toUpperCase()}
-              </h1>
-              <p className="text-xs font-black text-emerald-700 tracking-widest mt-1.5 uppercase bg-emerald-50 border-2 border-emerald-600/30 px-4 py-2 rounded-lg inline-block">
-                // {data.about?.role || 'CORE ENGINEER'}
-              </p>
-              {profile.bio && (
-                <div className="text-xs leading-relaxed text-[#5C564E] mt-6 border-t-2 border-dashed border-[#DDD8CC] pt-5 text-left italic font-bold">
-                  "{profile.bio}"
+              <div className="flex flex-col text-center sm:text-left">
+                <div className="flex items-center gap-2 mb-1 justify-center sm:justify-start">
+                  <span className="text-[#27C93F] font-bold">~</span>
+                  <span className="text-[#8A9199]">$</span>
+                  <span className="text-white font-bold text-lg">{profile.display_name}</span>
                 </div>
-              )}
+                <div className="text-[#8A9199] mb-3">
+                  Role: <span className="text-[#58A6FF]">{data.about?.role || 'Software Engineer'}</span>
+                </div>
+                {profile.bio && (
+                  <p className="text-[#8A9199] text-sm leading-relaxed">
+                    {profile.bio}
+                  </p>
+                )}
+              </div>
             </div>
 
-            {/* System variables prompt logs */}
             {(data.about?.status || data.about?.company || data.about?.mission) && (
-              <div className="w-full text-left mt-8 border-2 border-[#2C2925] bg-[#FAF8F4] p-5 relative shadow-[4px_4px_0px_0px_rgba(44,41,37,0.15)]">
-                <span className="absolute -top-3.5 left-4 bg-white border-2 border-[#2C2925] px-3.5 py-0.5 text-[9px] font-black text-[#2C2925] uppercase tracking-wider">
-                  $ printenv env_vars
-                </span>
-                <div className="space-y-3.5 font-mono text-xs pt-1.5">
-                  {data.about.status && (
-                    <p><span className="text-[#5C564E] font-bold">STATUS =</span> <span className="text-neutral-900 font-bold">{data.about.status}</span></p>
+              <div className="w-full mb-6">
+                <div className="flex gap-2 mb-2">
+                  <span className="text-[#27C93F] font-bold">~</span>
+                  <span className="text-[#8A9199]">$</span>
+                  <span className="text-white">cat status.txt</span>
+                </div>
+                <div className="pl-4 py-2 border-l-2 border-[#3A3D42] space-y-2 text-[#8A9199]">
+                  {data.about.status && <p>State: <span className="text-[#E6EDF3]">{data.about.status}</span></p>}
+                  {data.about.company && <p>Host: <span className="text-[#E6EDF3]">{data.about.company}</span></p>}
+                  {data.about.mission && <p>Goal: <span className="text-[#E6EDF3]">{data.about.mission}</span></p>}
+                </div>
+              </div>
+            )}
+
+            {((aboutMeLanguages && aboutMeLanguages.length > 0) || (techStack && techStack.length > 0)) && (
+              <div className="w-full mb-6">
+                <div className="flex gap-2 mb-3">
+                  <span className="text-[#27C93F] font-bold">~</span>
+                  <span className="text-[#8A9199]">$</span>
+                  <span className="text-white">ls -la ./skills</span>
+                </div>
+                <div className="pl-4">
+                  {aboutMeLanguages && aboutMeLanguages.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      <span className="text-[#FF7B72] min-w-[80px]">drwxr-xr-x</span>
+                      <span className="text-[#8A9199]">languages</span>
+                      <div className="flex flex-wrap gap-2 ml-4">
+                        {aboutMeLanguages.map((l, i) => (
+                          <span key={i} className="text-[#E6EDF3]">{l}</span>
+                        ))}
+                      </div>
+                    </div>
                   )}
-                  {data.about.company && (
-                    <p><span className="text-[#5C564E] font-bold">SYS_HOST =</span> <span className="text-neutral-900 font-bold">{data.about.company}</span></p>
-                  )}
-                  {data.about.mission && (
-                    <div className="pt-2.5 border-t border-dashed border-[#DDD8CC]">
-                      <span className="text-[#5C564E] font-bold block mb-1.5">MISSION =</span>
-                      <p className="text-neutral-700 leading-relaxed font-sans text-xs bg-white p-3 border border-[#2C2925]/20 font-semibold rounded-md">{data.about.mission}</p>
+                  {techStack && techStack.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      <span className="text-[#FF7B72] min-w-[80px]">drwxr-xr-x</span>
+                      <span className="text-[#8A9199]">tools</span>
+                      <div className="flex flex-wrap gap-2 ml-4">
+                        {techStack.map(tech => (
+                          <span key={tech} className="text-[#E6EDF3]">{tech}</span>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
               </div>
             )}
 
-            {/* Compiler stack list */}
-            {((aboutMeLanguages && aboutMeLanguages.length > 0) || (techStack && techStack.length > 0)) && (
-              <div className="w-full text-left mt-8 border-2 border-[#2C2925] bg-[#FAF8F4] p-5 relative shadow-[4px_4px_0px_0px_rgba(44,41,37,0.15)]">
-                <span className="absolute -top-3.5 left-4 bg-white border-2 border-[#2C2925] px-3.5 py-0.5 text-[9px] font-black text-[#2C2925] uppercase tracking-wider">
-                  $ list --stack
-                </span>
-                
-                {aboutMeLanguages && aboutMeLanguages.length > 0 && (
-                  <div className="mb-4 pt-2">
-                    <span className="text-[9px] font-bold text-[#8C8377] uppercase tracking-widest block mb-2">Languages:</span>
-                    <div className="flex flex-wrap gap-2.5">
-                      {aboutMeLanguages.map((l, i) => (
-                        <span key={i} className="text-[10px] bg-white border-2 border-[#2C2925] px-3.5 py-1.5 font-black uppercase text-neutral-800 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)]">{l}</span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {techStack && techStack.length > 0 && (
-                  <div className="pt-1.5">
-                    <span className="text-[9px] font-bold text-[#8C8377] uppercase tracking-widest block mb-2">Components:</span>
-                    <div className="flex flex-wrap gap-2.5">
-                      {techStack.map(tech => (
-                        <span key={tech} className="text-[10px] bg-white border-2 border-[#2C2925] px-3.5 py-1.5 font-black uppercase text-[#2C2925] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.15)]">{tech}</span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Released projects */}
             {data.projects && data.projects.length > 0 && (
-              <div className="w-full text-left mt-8 border-2 border-[#2C2925] bg-[#FAF8F4] p-5 relative shadow-[4px_4px_0px_0px_rgba(44,41,37,0.15)]">
-                <span className="absolute -top-3.5 left-4 bg-white border-2 border-[#2C2925] px-3.5 py-0.5 text-[9px] font-black text-[#2C2925] uppercase tracking-wider">
-                  $ ls ./releases
-                </span>
-                <div className="space-y-5 pt-2">
+              <div className="w-full mb-6">
+                <div className="flex gap-2 mb-3">
+                  <span className="text-[#27C93F] font-bold">~</span>
+                  <span className="text-[#8A9199]">$</span>
+                  <span className="text-white">./projects.sh</span>
+                </div>
+                <div className="pl-4 space-y-4">
                   {data.projects.map((project: any, i: number) => (
-                    <div key={i} className="border-b border-[#2C2925]/20 last:border-0 pb-4 last:pb-0">
-                      <h4 className="text-sm font-black text-neutral-900 uppercase flex items-center gap-2">
-                        <Terminal size={14} className="text-emerald-700 animate-pulse" /> {project.name}
+                    <div key={i} className="border border-[#3A3D42] rounded-md p-4 bg-[#212428] hover:border-[#8A9199] transition-colors">
+                      <h4 className="text-[#58A6FF] font-medium mb-1 flex items-center gap-2">
+                        {project.name}
                       </h4>
                       {project.description && (
-                        <p className="text-xs text-[#5C564E] leading-relaxed font-sans mt-1.5 font-semibold">
+                        <p className="text-[#8A9199] text-xs mb-3">
                           {project.description}
                         </p>
                       )}
@@ -891,9 +810,9 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                           href={ensureAbsoluteUrl(project.live_url)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase text-emerald-700 hover:text-emerald-800 transition-colors border-b-2 border-emerald-700 pb-0.5 mt-2.5"
+                          className="text-[#E6EDF3] hover:text-[#58A6FF] text-xs underline decoration-[#3A3D42] hover:decoration-[#58A6FF] transition-colors inline-flex items-center gap-1"
                         >
-                          RUN MODULE <ExternalLink size={10} />
+                          Execute &gt;_
                         </a>
                       )}
                     </div>
@@ -902,16 +821,16 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               </div>
             )}
 
-            {/* Social channels */}
             {data.platforms && data.platforms.length > 0 && (
-              <div className="w-full text-left mt-8 border-2 border-[#2C2925] bg-[#FAF8F4] p-5 relative shadow-[4px_4px_0px_0px_rgba(44,41,37,0.15)]">
-                <span className="absolute -top-3.5 left-4 bg-white border-2 border-[#2C2925] px-3.5 py-0.5 text-[9px] font-black text-[#2C2925] uppercase tracking-wider">
-                  $ sh connections.sh
-                </span>
-                <div className="flex flex-wrap gap-4 pt-2.5">
+              <div className="w-full mb-6">
+                <div className="flex gap-2 mb-3">
+                  <span className="text-[#27C93F] font-bold">~</span>
+                  <span className="text-[#8A9199]">$</span>
+                  <span className="text-white">netstat -a | grep CONNECTED</span>
+                </div>
+                <div className="pl-4 flex flex-col gap-2">
                   {data.platforms.map((p, i) => {
                     if (!p.url) return null
-                    const { logo } = getPlatformIcon(p.platform || '')
                     return (
                       <a
                         key={i}
@@ -922,24 +841,12 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                           handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                           if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                         }}
-                        className="border-2 border-[#2C2925] bg-white hover:bg-neutral-50 px-3.5 py-2 text-xs flex items-center gap-2.5 transition-all relative shadow-[3px_3px_0px_0px_rgba(44,41,37,0.15)] cursor-pointer text-[#2C2925] font-black hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(44,41,37,0.15)]"
+                        className="text-[#E6EDF3] hover:text-[#58A6FF] flex items-center gap-4 group"
                       >
-                        {logo && logo !== 'globe' ? (
-                          <img 
-                            src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
-                            className="w-3.5 h-3.5 object-contain"
-                            style={{ filter: 'brightness(0)' }}
-                            alt={p.platform}
-                          />
-                        ) : (
-                          <Globe size={12} />
-                        )}
-                        <span className="text-[10px] font-black uppercase text-[#2C2925]">{p.platform}</span>
-                        {isGated && (
-                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                            <Lock size={12} className="text-white" />
-                          </div>
-                        )}
+                        <span className="text-[#27C93F]">tcp</span>
+                        <span className="text-[#8A9199] w-24">{p.platform?.toLowerCase()}:80</span>
+                        <span className="text-[#8A9199] w-24">ESTABLISHED</span>
+                        {isGated && <Lock size={12} className="text-[#FF7B72]" />}
                       </a>
                     )
                   })}
@@ -947,31 +854,18 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               </div>
             )}
 
-            {/* Connection Actions */}
-            <div className="w-full mt-8 border-t-2 border-dashed border-[#DDD8CC] pt-6 z-20">
-              <ProfileCTAs profile={profile} accentColor="#10B981" />
+            <div className="w-full mt-4 mb-2 flex gap-2 items-center">
+              <span className="text-[#27C93F] font-bold">~</span>
+              <span className="text-[#8A9199]">$</span>
+              <span className="w-2 h-4 bg-[#E6EDF3] animate-pulse" />
             </div>
 
-            {/* Workstation buttons */}
-            {(data.contact_email || data.quick_talk_url) && (
-              <div className="grid grid-cols-2 gap-4 w-full text-left mt-6">
-                {data.contact_email && (
-                  <a href={`mailto:${data.contact_email}`} className="border-4 border-[#2C2925] bg-[#2C2925] text-white hover:bg-white hover:text-black py-4 text-center font-black text-xs uppercase tracking-widest transition-all shadow-[4px_4px_0px_0px_#FFD166] text-center flex items-center justify-center animate-bounce" style={{ animationDuration: '3s' }}>
-                    SYNC EMAIL
-                  </a>
-                )}
-                {data.quick_talk_url && (
-                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noopener noreferrer" className="border-4 border-[#2C2925] bg-white text-[#2C2925] hover:bg-[#2C2925] hover:text-white py-4 text-center font-black text-xs uppercase tracking-widest transition-all shadow-[4px_4px_0px_0px_rgba(44,41,37,0.15)] text-center flex items-center justify-center">
-                    TALK SCHEDULE
-                  </a>
-                )}
-              </div>
-            )}
+            <div className="w-full mt-6 z-20">
+              <ProfileCTAs profile={profile} accentColor="#58A6FF" />
+            </div>
 
           </div>
-
         </div>
-
       </main>
       <GateModal />
     </div>

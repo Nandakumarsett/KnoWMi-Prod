@@ -336,113 +336,93 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
   // ----------------------------------------------------
   if (activeTheme === 'minimal') {
     return (
-      <div className="w-full pb-24 relative bg-[#F3F4F6] text-black font-mono selection:bg-yellow-300 selection:text-black min-h-screen">
-        <style dangerouslySetInnerHTML={{ __html: `
-          .brutalist-block {
-            background: white;
-            border: 4px solid black;
-            box-shadow: 8px 8px 0px 0px rgba(0,0,0,1);
-            transition: all 0.15s cubic-bezier(0.19, 1, 0.22, 1);
-          }
-          .brutalist-block:hover {
-            transform: translate(-3px, -3px);
-            box-shadow: 11px 11px 0px 0px rgba(0,0,0,1);
-          }
-          .brutalist-accent {
-            background: #FDE047;
-            border: 4px solid black;
-            box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
-          }
-          .brutalist-btn {
-            background: white;
-            border: 3px solid black;
-            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
-            transition: all 0.1s ease;
-          }
-          .brutalist-btn:hover {
-            background: #FDE047;
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
-          }
-        `}} />
-
-        <section className="relative border-b-4 border-black h-56 bg-neutral-200 overflow-hidden flex items-center justify-center">
-          {data.featured_work_url ? (
-            <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover grayscale contrast-150 brightness-95" alt="Banner" />
-          ) : (
-            <div className="absolute inset-0 bg-[#FDE047] flex items-center justify-center font-black text-4xl uppercase tracking-widest">
-              CREATIVE LAB
-            </div>
-          )}
-          <div className="absolute top-6 left-6 bg-black text-white px-4 py-2 font-black text-sm uppercase tracking-widest border-2 border-black">
-            MINIMAL // BRUTALIST
+      <div className="w-full pb-24 relative bg-white text-black font-sans min-h-screen">
+        {/* Top Header / Menu */}
+        <div className="absolute top-6 right-6 z-40 flex items-center gap-4">
+          <div className="text-right hidden sm:block">
+            <span className="text-[10px] font-bold uppercase tracking-widest block">Scan to Connect</span>
           </div>
-        </section>
-
-        <div className="relative h-12 px-6 sm:px-12 z-30 flex justify-start">
-          <div className="absolute -top-20 w-36 h-36 border-4 border-black bg-white overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-none">
-            <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover grayscale contrast-125" />
+          <div className="w-10 h-10 border-2 border-black flex items-center justify-center bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer">
+            <QrCode size={18} className="text-black" />
           </div>
         </div>
 
-        <div className="px-6 sm:px-12 pt-14 max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-            <div className="lg:col-span-8 space-y-6 text-left">
-              <div className="brutalist-block p-6 sm:p-8">
-                <span className="inline-block bg-[#FDE047] text-black px-3 py-1 font-black text-xs uppercase tracking-widest border-2 border-black mb-4">
-                  {data.type || 'CREATIVE DIRECTOR'}
-                </span>
-                <h1 className="text-3xl sm:text-5xl font-black tracking-tighter uppercase mb-4 leading-none">{profile.display_name}</h1>
-                {profile.bio && (
-                  <p className="text-sm font-bold leading-relaxed border-t-2 border-dashed border-black pt-4">
-                    {profile.bio}
-                  </p>
-                )}
-              </div>
+        <div className="px-6 sm:px-12 pt-20 max-w-4xl mx-auto flex flex-col items-center">
+          
+          {/* Typographic Header */}
+          <div className="text-center w-full mb-8">
+            <h1 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase leading-none mb-4">
+              {profile.display_name}
+            </h1>
+            <p className="text-sm sm:text-base font-bold tracking-widest uppercase border-y-2 border-black py-2 inline-block">
+              {data.type || 'DIGITAL CREATOR'}
+            </p>
+          </div>
 
-              {data.about && (
-                <div className="brutalist-block p-6 bg-white">
-                  <h3 className="font-black uppercase tracking-widest text-xs border-b-2 border-black pb-2 mb-4">// CORE NARRATIVE</h3>
-                  <p className="text-sm font-bold leading-relaxed">
-                    "{data.about}"
-                  </p>
-                </div>
-              )}
+          <div className="w-full mb-8 flex justify-center">
+             <div className="w-32 h-32 sm:w-40 sm:h-40 border-4 border-black overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+               <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover grayscale" />
+             </div>
+          </div>
+
+          {/* Tagline / Bio */}
+          {profile.bio && (
+            <div className="mb-10 w-full text-center max-w-lg mx-auto">
+              <p className="text-sm font-bold tracking-widest uppercase italic">
+                "{profile.bio}"
+              </p>
             </div>
+          )}
 
-            <div className="lg:col-span-4 flex flex-col gap-6">
-              <div className="brutalist-accent p-6 text-left">
-                <span className="text-[10px] font-black uppercase tracking-widest text-neutral-800 block mb-1">TOTAL_SCANS</span>
-                <span className={`text-4xl font-black block ${isFreeProfile ? 'blur-[6px]' : ''}`}>{isFreeProfile ? '8,204' : liveViews}</span>
-              </div>
-              
-              <div className="brutalist-block p-6 text-left bg-white">
-                <span className="text-[10px] font-black uppercase tracking-widest text-neutral-500 block mb-1">TOP_ORIGIN</span>
-                <span className={`text-lg font-black block uppercase truncate ${isFreeProfile ? 'blur-[6px]' : ''}`}>{isFreeProfile ? 'New York' : topCity}</span>
-              </div>
-
-              <div className="brutalist-block p-6 bg-white text-left flex flex-col gap-3">
-                <span className="text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-2">// PING CHANNEL</span>
-                {data.contact_email && (
-                  <a href={`mailto:${data.contact_email}`} className="brutalist-btn py-3 px-4 font-black text-xs uppercase tracking-widest text-center block">
-                    EMAIL OWNER
-                  </a>
-                )}
-                {data.contact_whatsapp && (
-                  <a href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" className="brutalist-btn py-3 px-4 font-black text-xs uppercase tracking-widest text-center block">
-                    WHATSAPP
-                  </a>
-                )}
-              </div>
+          {/* Stats Bar */}
+          <div className="w-full border-4 border-black p-4 sm:p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-wrap justify-center sm:justify-between items-center gap-4 mb-10 bg-white">
+            <div className={`text-center ${isFreeProfile ? 'cursor-pointer hover:opacity-80' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
+              <span className="text-[10px] font-black uppercase tracking-widest block mb-1">VIEWS</span>
+              <span className={`text-2xl font-black ${isFreeProfile ? 'blur-[4px]' : ''}`}>{isFreeProfile ? '4.2K' : liveViews}</span>
+            </div>
+            <div className="hidden sm:block w-0.5 h-8 bg-black"></div>
+            <div className="text-center">
+              <span className="text-[10px] font-black uppercase tracking-widest block mb-1">LOCATION</span>
+              <span className="text-xl font-black uppercase">{topCity}</span>
+            </div>
+            <div className="hidden sm:block w-0.5 h-8 bg-black"></div>
+            <div className="text-center">
+              <span className="text-[10px] font-black uppercase tracking-widest block mb-1">VIBE SCORE</span>
+              <span className="text-3xl font-black flex items-end gap-1">92<span className="text-xs mb-1">/100</span></span>
             </div>
           </div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 w-full text-left mb-12">
+            {/* Work List */}
+            {data.content_formats && data.content_formats.length > 0 && (
+              <div>
+                <h3 className="font-black text-2xl uppercase tracking-tighter mb-4 border-b-4 border-black pb-2">WORK</h3>
+                <ul className="space-y-3">
+                  {data.content_formats.map(format => (
+                    <li key={format} className="font-bold text-sm uppercase tracking-widest flex items-center gap-3">
+                      <div className="w-2 h-2 bg-black"></div> {format}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            {/* About / Narrative */}
+            {data.about && (
+              <div>
+                <h3 className="font-black text-2xl uppercase tracking-tighter mb-4 border-b-4 border-black pb-2">NARRATIVE</h3>
+                <p className="text-xs font-bold leading-relaxed">
+                  {data.about}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Socials */}
           {data.platforms && data.platforms.length > 0 && (
-            <div className="mb-12 text-left">
-              <h3 className="font-black text-lg uppercase tracking-widest mb-6 flex items-center gap-2">
-                <span className="w-4 h-4 bg-black"></span> CONNECTIVE NODES
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="w-full text-center mb-10">
+              <h3 className="font-black text-2xl uppercase tracking-tighter mb-6 border-b-4 border-black pb-2 text-left">SOCIALS</h3>
+              <div className="flex flex-wrap gap-4 justify-start">
                 {data.platforms.map(p => {
                   const platform = p.platform?.toLowerCase()
                   const Icon = PLATFORM_ICONS[platform] || Share2
@@ -456,17 +436,14 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
-                      className="brutalist-block p-4 flex flex-col items-center justify-center gap-3 group cursor-pointer"
+                      className="w-14 h-14 border-4 border-black flex items-center justify-center bg-white hover:bg-black hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] relative cursor-pointer"
                     >
-                      <div className="w-12 h-12 bg-black text-white flex items-center justify-center p-2.5 relative">
-                        <Icon size={24} />
-                        {isGated && (
-                          <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
-                            <Lock size={14} className="text-white" />
-                          </div>
-                        )}
-                      </div>
-                      <span className="text-[10px] font-black uppercase tracking-wider">{p.platform}</span>
+                      <Icon size={24} />
+                      {isGated && (
+                        <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
+                          <Lock size={14} className="text-white" />
+                        </div>
+                      )}
                     </a>
                   )
                 })}
@@ -474,60 +451,15 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          {data.works && data.works.length > 0 && (
-            <div className="mb-12 text-left">
-              <h3 className="font-black text-lg uppercase tracking-widest mb-6 flex items-center gap-2">
-                <span className="w-4 h-4 bg-[#FDE047] border-2 border-black"></span> SELECTED WORKS
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                {data.works.map((w, i) => {
-                  const thumb = getThumbnail(w)
-                  return (
-                    <div 
-                      key={i}
-                      onClick={() => setSelectedWork(w)}
-                      className="brutalist-block overflow-hidden group cursor-pointer aspect-video relative"
-                    >
-                      <img src={thumb || 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=2070'} className="w-full h-full object-cover grayscale transition-all group-hover:grayscale-0 group-hover:scale-105 duration-300" alt={w.title} />
-                      <div className="absolute bottom-0 left-0 right-0 bg-white border-t-4 border-black p-4 flex justify-between items-center">
-                        <span className="text-xs font-black uppercase tracking-widest">{w.title}</span>
-                        <Play size={14} className="text-black" />
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          )}
+          {/* Contact / Action */}
+          <div className="w-full mt-4">
+             {data.contact_email && (
+               <a href={`mailto:${data.contact_email}`} className="block w-full py-5 bg-black text-white text-center font-black text-xl uppercase tracking-widest hover:bg-white hover:text-black hover:border-4 hover:border-black transition-all">
+                 LET'S CONNECT &rarr;
+               </a>
+             )}
+          </div>
 
-          {data.content_formats && data.content_formats.length > 0 && (
-            <div className="mb-12 text-left">
-              <span className="text-[10px] font-black uppercase tracking-widest text-neutral-500 block mb-4">// SPECIALIZED FORMATS</span>
-              <div className="flex flex-wrap gap-3">
-                {data.content_formats.map(format => (
-                  <span key={format} className="border-2 border-black bg-white px-4 py-2 text-xs font-black uppercase tracking-wider shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all">
-                    {format}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <section className="brutalist-accent p-8 text-left mb-12">
-            <h3 className="font-black text-xl uppercase tracking-widest mb-2 flex items-center gap-2">
-              <Sparkles size={22} /> COLLABORATION INQUIRY
-            </h3>
-            <p className="text-xs font-black leading-relaxed mb-6 border-b border-black pb-4">
-              {data.collab_types || 'Available for creative consultation and high-impact visual direction.'}
-            </p>
-            <div className="flex flex-wrap gap-4">
-              {data.contact_email && (
-                <a href={`mailto:${data.contact_email}`} className="px-6 py-3 bg-black text-white font-black text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors shadow-[4px_4px_0px_0px_rgba(250,204,21,1)] border-2 border-black">
-                  SEND DISPATCH
-                </a>
-              )}
-            </div>
-          </section>
         </div>
         <GateModal />
       </div>
@@ -539,76 +471,107 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
   // ----------------------------------------------------
   if (activeTheme === 'neon') {
     return (
-      <div className="w-full pb-24 relative bg-[#090214] text-white font-sans overflow-hidden min-h-screen selection:bg-fuchsia-500 selection:text-white">
-        <div 
-          className="absolute inset-0 pointer-events-none opacity-25 z-0" 
-          style={{
-            backgroundImage: 'linear-gradient(rgba(236, 72, 153, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(236, 72, 153, 0.3) 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-            backgroundPosition: 'top center'
-          }}
-        />
+      <div className="w-full pb-24 relative bg-[#0D0B1A] text-white font-sans overflow-x-hidden min-h-screen">
+        
+        {/* Neon Background Accents */}
+        <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#FF2D78]/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
 
-        <div className="absolute top-[80px] left-[-150px] w-[400px] h-[400px] bg-fuchsia-600/20 rounded-full blur-[120px] pointer-events-none animate-pulse" />
-        <div className="absolute bottom-[100px] right-[-150px] w-[400px] h-[400px] bg-cyan-600/20 rounded-full blur-[120px] pointer-events-none" />
-
-        <section className="relative z-10 h-60 sm:h-72 overflow-hidden border-b-2 border-fuchsia-500 shadow-[0_0_20px_rgba(240,46,170,0.4)]">
-          {data.featured_work_url ? (
-            <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover brightness-75 contrast-125" alt="Banner" />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-900 via-purple-950 to-[#0c0421]" />
-          )}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.3)_50%)] bg-[length:100%_4px] pointer-events-none" />
-          <div className="absolute bottom-6 right-6 bg-black/80 border border-fuchsia-500/60 px-4 py-2 rounded-md text-[10px] font-black text-fuchsia-400 tracking-widest backdrop-blur-md">
-            SYSTEM // MODE: NEON_SYNTH
-          </div>
-        </section>
-
-        <div className="relative h-12 px-8 z-30 flex justify-center">
-          <div className="absolute -top-20 w-36 h-36 rounded-full p-[2.5px] bg-gradient-to-tr from-fuchsia-500 via-purple-600 to-cyan-400 shadow-[0_0_25px_rgba(240,46,170,0.6)]">
-            <div className="w-full h-full bg-[#0D0721] rounded-full overflow-hidden p-1.5">
-              <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" />
-            </div>
-          </div>
+        {/* Top Right Actions */}
+        <div className="absolute top-6 right-6 z-40 flex flex-col items-end gap-2">
+           <div className="flex items-center gap-3 bg-black/40 border border-[#FF2D78]/50 px-3 py-1.5 rounded-md backdrop-blur-md shadow-[0_0_10px_rgba(255,45,120,0.3)]">
+             <span className="text-[9px] font-bold uppercase tracking-widest text-[#FF2D78]">Scan to Connect</span>
+             <QrCode size={16} className="text-[#FF2D78]" />
+           </div>
+           <div className="w-8 h-8 flex flex-col justify-center gap-1.5 items-end cursor-pointer group mt-2">
+             <div className="w-6 h-0.5 bg-[#FF2D78] shadow-[0_0_5px_rgba(255,45,120,0.8)] group-hover:w-8 transition-all"></div>
+             <div className="w-8 h-0.5 bg-[#FF2D78] shadow-[0_0_5px_rgba(255,45,120,0.8)]"></div>
+             <div className="w-4 h-0.5 bg-[#FF2D78] shadow-[0_0_5px_rgba(255,45,120,0.8)] group-hover:w-8 transition-all"></div>
+           </div>
         </div>
 
-        <div className="px-6 sm:px-12 pt-16 max-w-4xl mx-auto relative z-20">
-          <div className="text-center mb-12 bg-neutral-950/80 border border-fuchsia-500/40 p-8 rounded-3xl backdrop-blur-md shadow-[0_0_20px_rgba(240,46,170,0.1)] relative">
-            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-fuchsia-400 via-purple-300 to-cyan-400 bg-clip-text text-transparent uppercase italic mb-3 mt-2">
+        <div className="px-6 sm:px-12 pt-24 max-w-4xl mx-auto flex flex-col items-center relative z-20">
+          
+          {/* Avatar with Neon Ring */}
+          <div className="relative mb-8">
+            <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full p-1 bg-gradient-to-br from-[#FF2D78] to-purple-600 shadow-[0_0_30px_rgba(255,45,120,0.6)] animate-pulse" style={{ animationDuration: '3s' }}>
+              <div className="w-full h-full rounded-full bg-[#0D0B1A] overflow-hidden p-1">
+                <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full filter contrast-125 saturate-50" />
+              </div>
+            </div>
+          </div>
+
+          {/* Headers */}
+          <div className="text-center w-full mb-6">
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight uppercase text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] mb-2">
               {profile.display_name}
             </h1>
-            <p className="text-[10px] font-black text-fuchsia-400 uppercase tracking-[0.4em] mb-6">// {data.type || 'VISUAL SYSTEMS CORE'}</p>
-            {profile.bio && (
-              <p className="text-sm border-t border-purple-950/80 pt-6 max-w-xl mx-auto text-purple-200 leading-relaxed font-medium">
+            <h2 className="text-sm sm:text-base font-black tracking-[0.3em] uppercase text-[#FF2D78] drop-shadow-[0_0_8px_rgba(255,45,120,0.8)]">
+              {data.type || 'DIGITAL CREATOR'}
+            </h2>
+          </div>
+
+          {/* Bio */}
+          {profile.bio && (
+            <div className="w-full max-w-lg mx-auto text-center mb-10">
+              <p className="text-sm text-gray-300 leading-relaxed font-light">
                 {profile.bio}
               </p>
+            </div>
+          )}
+
+          {/* Stats Bar */}
+          <div className="w-full max-w-3xl border border-white/10 bg-black/40 backdrop-blur-md rounded-2xl p-6 mb-10 flex flex-wrap justify-between items-center gap-6 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <div className={`text-center flex-1 min-w-[80px] ${isFreeProfile ? 'cursor-pointer hover:opacity-80' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">VIEWS</span>
+              <span className={`text-2xl font-black text-white border-b-2 border-[#FF2D78] pb-1 inline-block ${isFreeProfile ? 'blur-[4px]' : ''}`}>{isFreeProfile ? '4.2K' : liveViews}</span>
+            </div>
+            <div className="text-center flex-1 min-w-[80px]">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">LOCATION</span>
+              <span className="text-xl font-black text-white border-b-2 border-[#FF2D78] pb-1 inline-block truncate max-w-full uppercase">{topCity}</span>
+            </div>
+            <div className="text-center flex-1 min-w-[120px]">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[#FF2D78] block mb-2 drop-shadow-[0_0_5px_rgba(255,45,120,0.8)]">VIBE SCORE</span>
+              <div className="flex flex-col items-center">
+                <span className="text-3xl font-black text-[#FF2D78] drop-shadow-[0_0_8px_rgba(255,45,120,0.8)] flex items-baseline gap-1">92<span className="text-sm text-gray-400">/100</span></span>
+                <div className="w-full h-1 bg-white/10 mt-2 rounded-full overflow-hidden">
+                  <div className="w-[92%] h-full bg-[#FF2D78] shadow-[0_0_10px_rgba(255,45,120,1)]"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full max-w-3xl mb-12">
+            {/* What I Do */}
+            {data.content_formats && data.content_formats.length > 0 && (
+              <div className="bg-black/30 border border-[#FF2D78]/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(255,45,120,0.05)]">
+                <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-[#FF2D78] mb-5">WHAT I DO</h3>
+                <ul className="space-y-4">
+                  {data.content_formats.map(format => (
+                    <li key={format} className="text-sm text-gray-200 flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#FF2D78] shadow-[0_0_8px_rgba(255,45,120,1)]"></div>
+                      <span className="font-medium tracking-wide">{format}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            {/* Narrative */}
+            {data.about && (
+              <div className="bg-black/30 border border-cyan-500/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(6,182,212,0.05)]">
+                <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-cyan-400 mb-5">NARRATIVE</h3>
+                <p className="text-xs text-gray-300 leading-relaxed font-light">
+                  {data.about}
+                </p>
+              </div>
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-6 max-w-xl mx-auto mb-12">
-            <div className="bg-[#0f041d] border border-fuchsia-500/40 p-6 rounded-2xl text-center shadow-[0_0_15px_rgba(240,46,170,0.15)] hover:border-fuchsia-400 transition-colors">
-              <span className={`text-4xl font-extrabold block text-fuchsia-400 tracking-wider ${isFreeProfile ? 'blur-[6px]' : ''}`}>{isFreeProfile ? '8,204' : liveViews}</span>
-              <span className="text-[9px] font-bold uppercase tracking-widest text-neutral-400 mt-2 block">// INBOUND_SIGNALS</span>
-            </div>
-            <div className="bg-[#0f041d] border border-cyan-500/40 p-6 rounded-2xl text-center shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:border-cyan-400 transition-colors">
-              <span className={`text-2xl font-extrabold block text-cyan-400 truncate ${isFreeProfile ? 'blur-[6px]' : ''}`}>{isFreeProfile ? 'New York' : topCity}</span>
-              <span className="text-[9px] font-bold uppercase tracking-widest text-neutral-400 mt-2 block">// HOST_SECTOR</span>
-            </div>
-          </div>
-
-          {data.about && (
-            <div className="mb-12 bg-neutral-950/70 border border-purple-900/40 p-6 rounded-3xl text-left">
-              <span className="text-[9px] font-black tracking-widest text-fuchsia-400 block mb-3">// CREATIVE MANUAL DIALOGUE</span>
-              <p className="text-base text-purple-100 leading-relaxed italic">
-                "{data.about}"
-              </p>
-            </div>
-          )}
-
+          {/* Social Links */}
           {data.platforms && data.platforms.length > 0 && (
-            <div className="mb-12 text-left">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-fuchsia-400 mb-6">// ACTIVE NODE SHUNTS</h4>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="w-full text-center mb-10">
+              <div className="flex flex-wrap gap-5 justify-center">
                 {data.platforms.map(p => {
                   const platform = p.platform?.toLowerCase()
                   const Icon = PLATFORM_ICONS[platform] || Share2
@@ -622,17 +585,14 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
-                      className="bg-neutral-950/90 border border-purple-900/50 hover:border-fuchsia-500 p-5 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all hover:scale-105 shadow-lg group cursor-pointer"
+                      className="w-12 h-12 rounded-full border border-[#FF2D78]/50 flex items-center justify-center bg-black/50 text-[#FF2D78] hover:bg-[#FF2D78] hover:text-white hover:shadow-[0_0_20px_rgba(255,45,120,0.8)] transition-all cursor-pointer relative"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-fuchsia-950/40 border border-fuchsia-500/20 text-fuchsia-400 flex items-center justify-center relative">
-                        <Icon size={20} />
-                        {isGated && (
-                          <div className="absolute inset-0 bg-black/80 flex items-center justify-center rounded-xl">
-                            <Lock size={12} className="text-white" />
-                          </div>
-                        )}
-                      </div>
-                      <span className="text-[10px] font-black uppercase tracking-widest text-purple-200">{p.platform}</span>
+                      <Icon size={20} />
+                      {isGated && (
+                        <div className="absolute inset-0 bg-black/80 rounded-full flex items-center justify-center">
+                          <Lock size={12} className="text-white" />
+                        </div>
+                      )}
                     </a>
                   )
                 })}
@@ -640,57 +600,53 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          {data.works && data.works.length > 0 && (
-            <div className="mb-12 text-left">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-fuchsia-400 mb-6">// VISUAL CORE SHOWCASE</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {data.works.map((w, i) => {
-                  const thumb = getThumbnail(w)
-                  return (
-                    <div 
-                      key={i}
-                      onClick={() => setSelectedWork(w)}
-                      className="bg-neutral-950/95 border border-purple-900/40 hover:border-fuchsia-400 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 hover:scale-[1.02] cursor-pointer aspect-video relative group"
-                    >
-                      <img src={thumb || 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=2070'} className="w-full h-full object-cover brightness-75 group-hover:brightness-95 transition-all duration-500" alt={w.title} />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent p-5 flex flex-col justify-end text-left">
-                        <span className="text-xs font-black uppercase tracking-wider text-white shadow-sm">{w.title}</span>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
+          {data.contact_email && (
+            <div className="w-full flex justify-center pb-8">
+              <a href={`mailto:${data.contact_email}`} className="px-10 py-4 bg-transparent border-2 border-cyan-400 text-cyan-400 font-bold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all">
+                INITIATE CONTACT
+              </a>
             </div>
           )}
+      <div className="w-full pb-24 relative bg-[#0D0B1A] text-white font-sans overflow-x-hidden min-h-screen pt-10">
+        <div className="fixed inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_50%_50%,#FF2D78_0%,transparent_70%)]" />
 
-          {data.content_formats && data.content_formats.length > 0 && (
-            <div className="mb-12 text-left">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-fuchsia-400 mb-4">// CORE PROTOCOLS</h4>
-              <div className="flex flex-wrap gap-2">
-                {data.content_formats.map(format => (
-                  <span key={format} className="px-4 py-2 rounded-xl bg-purple-950/30 border border-purple-800/40 text-xs font-black uppercase tracking-wider text-fuchsia-300">
-                    {format}
-                  </span>
-                ))}
-              </div>
+        <div className="px-6 max-w-lg mx-auto relative z-20">
+          <div className="relative mb-8 text-center">
+            <div className="w-32 h-32 mx-auto rounded-full p-1 bg-gradient-to-tr from-[#FF2D78] to-cyan-400 mb-6 shadow-[0_0_20px_rgba(255,45,120,0.5)]">
+               <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full bg-[#0D0B1A]" />
             </div>
-          )}
+            <h1 className="text-4xl font-black uppercase italic tracking-tighter mb-2">{profile.display_name}</h1>
+            <p className="text-[#FF2D78] font-bold text-sm tracking-widest">{data.type || 'DIGITAL OPERATIVE'}</p>
+          </div>
 
-          <section className="bg-neutral-950/80 border border-fuchsia-500 p-8 rounded-3xl text-left shadow-[0_0_30px_rgba(240,46,170,0.15)] mb-10">
-            <h3 className="font-extrabold text-xl uppercase tracking-widest mb-2 text-fuchsia-400 flex items-center gap-2">
-              <Sparkles size={20} className="animate-pulse" /> CORE COLLABORATIVE INTERACTION
-            </h3>
-            <p className="text-xs text-purple-200 leading-relaxed mb-6 border-b border-purple-900/30 pb-4">
-              {data.collab_types || 'Ready for creative partnership, high-fidelity strategy, and visual consults.'}
-            </p>
-            <div className="flex flex-wrap gap-4">
-              {data.contact_email && (
-                <a href={`mailto:${data.contact_email}`} className="px-6 py-3.5 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-[0_0_15px_rgba(240,46,170,0.4)] active:scale-95">
-                  DISPATCH EMAIL
+          <div className="bg-black/50 border border-white/10 rounded-3xl p-6 mb-8 backdrop-blur-xl">
+             <p className="text-gray-300 text-sm italic font-light leading-relaxed">"{profile.bio}"</p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="bg-white/5 border border-white/5 rounded-2xl p-4 text-center">
+              <span className="text-[10px] text-gray-500 uppercase tracking-widest block mb-1">Views</span>
+              <span className="text-xl font-bold">{isFreeProfile ? '4.2K' : liveViews}</span>
+            </div>
+            <div className="bg-white/5 border border-white/5 rounded-2xl p-4 text-center">
+              <span className="text-[10px] text-gray-500 uppercase tracking-widest block mb-1">Origin</span>
+              <span className="text-xl font-bold uppercase">{topCity}</span>
+            </div>
+          </div>
+
+          {data.platforms && (
+            <div className="flex flex-wrap gap-3 justify-center mb-10">
+              {data.platforms.map(p => (
+                <a key={p.platform} href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-white/5 border border-[#FF2D78]/30 flex items-center justify-center hover:bg-[#FF2D78] transition-all">
+                  <Share2 size={18} />
                 </a>
-              )}
+              ))}
             </div>
-          </section>
+          )}
+
+          <a href={`mailto:${data.contact_email}`} className="block w-full py-4 border border-[#FF2D78] text-[#FF2D78] text-center font-bold uppercase tracking-widest hover:bg-[#FF2D78] hover:text-white transition-all rounded-xl">
+            INITIALIZE CONTACT
+          </a>
         </div>
         <GateModal />
       </div>
@@ -701,206 +657,6 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
   // LAYOUT 3: GLOW EDITORIAL MAGAZINE (Default / Glow Theme)
   // ----------------------------------------------------
   return (
-    <div className="w-full pb-24 relative overflow-hidden bg-[#FDFBF7] rounded-[48px] border border-[#E9DFCE] shadow-2xl min-h-screen">
-      <div className="absolute top-[10%] left-[5%] w-[400px] h-[400px] bg-gradient-to-tr from-rose-200/30 via-amber-100/20 to-transparent rounded-full blur-[100px] pointer-events-none animate-pulse" style={{ animationDuration: '8s' }} />
-      <div className="absolute bottom-[15%] right-[5%] w-[400px] h-[400px] bg-gradient-to-tr from-amber-100/30 via-orange-100/20 to-transparent rounded-full blur-[100px] pointer-events-none" />
-
-      <div className="absolute inset-0 pointer-events-none z-0">
-        {[...Array(12)].map((_, i) => (
-          <div 
-            key={i}
-            className="absolute animate-float-sparkle"
-            style={{ 
-              top: `${Math.random() * 100}%`, 
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              fontSize: `${Math.random() * 12 + 6}px`
-            }}
-          >
-            {i % 3 === 0 ? '✨' : '🦋'}
-          </div>
-        ))}
-      </div>
-
-      <section className="relative z-10">
-        <div className="w-full h-56 sm:h-72 relative bg-neutral-900 overflow-hidden rounded-t-[48px]">
-          {data.featured_work_url ? (
-            <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-1000" alt="Profile Banner" />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-rose-500 to-amber-500" />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#FDFBF7] via-[#FDFBF7]/10 to-transparent" />
-        </div>
-
-        <div className="relative h-12 px-8 z-30">
-          <div className="absolute -top-24 sm:-top-32 left-1/2 -translate-x-1/2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.15)]">
-            <div 
-              className="w-44 h-44 sm:w-52 sm:h-52 p-2 rounded-full"
-              style={{ background: 'linear-gradient(135deg, #C1440E, #F97316)' }}
-            >
-              <div className="w-full h-full bg-[#FDFBF7] p-1.5 rounded-full overflow-hidden">
-                <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" />
-              </div>
-            </div>
-            {profile.is_verified && (
-              <div className="absolute bottom-2 right-2 w-11 h-11 bg-[#FDFBF7] rounded-full shadow-lg flex items-center justify-center border border-[#E9DFCE]">
-                <VerifiedBadge isVerified={profile.is_verified} accentColor="#C1440E" />
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Asymmetrical Premium Editorial Grid */}
-        <div className="px-6 sm:px-12 pt-16 max-w-6xl mx-auto relative z-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mb-16">
-            
-            {/* Sticky Card Info Panel */}
-            <div className="lg:col-span-5 bg-white/50 border border-[#E9DFCE] p-8 rounded-[36px] shadow-sm backdrop-blur-md text-center lg:text-left lg:sticky lg:top-8">
-              <span className="inline-block bg-orange-600/10 text-orange-700 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.25em] mb-4">
-                {data.type || 'CREATIVE PROFESSIONAL'}
-              </span>
-              <h1 className="text-4xl sm:text-5xl font-serif font-black tracking-tight text-neutral-900 uppercase italic leading-tight mb-4">
-                {profile.display_name}
-              </h1>
-              {profile.bio && (
-                <p className="text-sm text-neutral-600 leading-relaxed font-sans italic border-l-4 border-orange-500 pl-4 mt-6">
-                  {profile.bio}
-                </p>
-              )}
-              
-              <div className="mt-8 flex flex-col gap-3">
-                {data.contact_email && (
-                  <a href={`mailto:${data.contact_email}`} className="flex items-center justify-center gap-2 px-8 py-3.5 bg-white border border-[#E9DFCE] rounded-2xl hover:border-orange-500 hover:text-orange-600 transition-all text-xs font-black uppercase tracking-widest text-neutral-900 shadow-sm">
-                    <Mail size={16} /> Send Dispatch
-                  </a>
-                )}
-                {data.contact_whatsapp && (
-                  <a href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-8 py-3.5 bg-neutral-900 rounded-2xl hover:bg-orange-600 transition-all text-xs font-black uppercase tracking-widest text-white shadow-lg">
-                    <MessageCircle size={16} /> WhatsApp Sync
-                  </a>
-                )}
-              </div>
-            </div>
-
-            {/* Scrolling Dynamic Details Panel */}
-            <div className="lg:col-span-7 space-y-10 text-left">
-              
-              {/* Premium Analytics grid */}
-              <div 
-                className={`grid grid-cols-2 gap-4 ${isFreeProfile ? 'cursor-pointer hover:opacity-85 transition-all' : ''}`}
-                onClick={() => isFreeProfile && setShowFomoModal(true)}
-              >
-                <div className="bg-white/80 border border-[#E9DFCE] p-6 rounded-3xl shadow-sm text-center backdrop-blur-sm">
-                  <span className={`text-4xl font-extrabold text-neutral-900 leading-none mb-2 block ${isFreeProfile ? 'blur-[6px]' : ''}`}>{isFreeProfile ? '8,204' : liveViews}</span>
-                  <p className="text-[10px] font-black uppercase text-neutral-400 tracking-wider">Profile Views</p>
-                </div>
-                <div className="bg-white/80 border border-[#E9DFCE] p-6 rounded-3xl shadow-sm text-center backdrop-blur-sm">
-                  <span className={`text-3xl font-serif italic font-black text-orange-600 leading-none mb-2 block ${isFreeProfile ? 'blur-[6px] truncate' : ''}`}>{isFreeProfile ? 'New York' : topCity}</span>
-                  <p className="text-[10px] font-black uppercase text-neutral-400 tracking-wider">Top Origin</p>
-                </div>
-              </div>
-
-              {/* Narrative Statement */}
-              {data.about && (
-                <div className="bg-white/60 border border-[#E9DFCE] p-8 rounded-[32px]">
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 block mb-3">// CREATOR DIALOGUE</span>
-                  <p className="text-base text-neutral-700 leading-relaxed font-medium italic">
-                    "{data.about}"
-                  </p>
-                </div>
-              )}
-
-              {/* Curated showcase with masonry offset */}
-              {data.works && data.works.length > 0 && (
-                <div className="space-y-6">
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 block">// VISUAL MASTERPIECES</span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {data.works.map((w, i) => {
-                      const thumb = getThumbnail(w)
-                      return (
-                        <div 
-                          key={i} 
-                          onClick={() => setSelectedWork(w)}
-                          className="group relative rounded-[32px] overflow-hidden bg-neutral-100 border border-[#E9DFCE] shadow-sm hover:shadow-xl transition-all aspect-video cursor-pointer"
-                        >
-                          <img src={thumb || 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=2070'} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={w.title} />
-                          <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/80 to-transparent flex justify-between items-center">
-                            <span className="text-xs font-black text-white uppercase tracking-wider">{w.title}</span>
-                            <Play size={14} className="text-white" />
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Specialties */}
-              {data.content_formats && data.content_formats.length > 0 && (
-                <div>
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 block mb-4">// PRODUCTION FORMATS</span>
-                  <div className="flex flex-wrap gap-2">
-                    {data.content_formats.map(format => (
-                      <span key={format} className="px-4 py-2 rounded-xl bg-orange-50/70 border border-[#E9DFCE] text-xs font-black uppercase tracking-widest text-orange-700">
-                        {format}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Social platform directory */}
-              {data.platforms && data.platforms.length > 0 && (
-                <div>
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 block mb-6">// INTEGRATED HUBS</span>
-                  <div className="flex flex-wrap gap-3">
-                    {data.platforms.map(p => {
-                      const platform = p.platform?.toLowerCase()
-                      const Icon = PLATFORM_ICONS[platform] || Share2
-                      const style = brandStyles[platform] || 'bg-neutral-900 text-white'
-                      const logo = logoNames[platform]
-
-                      return (
-                        <a 
-                          key={p.platform} 
-                          href={ensureAbsoluteUrl(p.url)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => {
-                            handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
-                            if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
-                          }}
-                          className="group flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
-                        >
-                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-md ${style} transition-shadow p-3 relative overflow-hidden`}>
-                            {logo ? (
-                              <img 
-                                src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
-                                className="w-full h-full object-contain filter invert"
-                                alt={p.platform}
-                                style={{ filter: 'brightness(0) invert(1)' }}
-                              />
-                            ) : (
-                              <Icon size={18} />
-                            )}
-                            {isGated && (
-                              <div className="absolute inset-0 rounded-xl bg-black/20 flex items-center justify-center">
-                                <Lock size={14} className="text-white" />
-                              </div>
-                            )}
-                          </div>
-                        </a>
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Collaboration strategy */}
-              <section className="bg-[#FAF6F0] border border-[#E9DFCE] p-8 rounded-[32px] text-left">
-                <div className="flex items-center gap-2 mb-2">
-                  <Sparkles size={16} className="text-orange-500" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-900">Collaboration Engine</span>
                 </div>
                 <p className="text-xs text-neutral-500 font-medium italic leading-relaxed">
                   {data.collab_types || 'Open for high-end artistic direction, photography campaigns, and strategic creative partnerships.'}

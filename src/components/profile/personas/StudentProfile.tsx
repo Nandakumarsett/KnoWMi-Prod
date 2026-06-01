@@ -294,94 +294,90 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   // ----------------------------------------------------
   if (activeTheme === 'campus') {
     return (
-      <div className="w-full min-h-screen bg-[#E2D4C9] text-blue-950 pb-24 p-4 sm:p-8 relative selection:bg-amber-100">
-        
-        {/* CSS styles for Campus notice board */}
+      <div className="w-full min-h-screen bg-[#FDFBF7] text-[#1E3A8A] pb-24 p-4 sm:p-8 relative selection:bg-amber-200">
         <style dangerouslySetInnerHTML={{
           __html: `
-            .cork-texture {
-              background-image: 
-                radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 0),
-                radial-gradient(rgba(0, 0, 0, 0.08) 2px, transparent 0);
-              background-size: 8px 8px, 16px 16px;
-              background-position: 0 0, 4px 4px;
+            .varsity-bg {
+              background-image: radial-gradient(#1E3A8A 1px, transparent 1px);
+              background-size: 20px 20px;
+              opacity: 0.03;
             }
-            .varsity-title {
-              text-shadow: 2px 2px 0px #1E3A8A, -1px -1px 0px #1E3A8A, 1px -1px 0px #1E3A8A, -1px 1px 0px #1E3A8A;
+            .varsity-shadow {
+              box-shadow: 8px 8px 0px 0px #1E3A8A;
+            }
+            .varsity-shadow-sm {
+              box-shadow: 4px 4px 0px 0px #1E3A8A;
+            }
+            .hover-varsity-shadow:hover {
+              box-shadow: 12px 12px 0px 0px #1E3A8A;
+              transform: translate(-4px, -4px);
             }
           `
         }} />
 
-        {/* Cork noticeboard background */}
-        <div className="fixed inset-0 cork-texture bg-[#CBB59F] border-[16px] border-[#8C6D58] shadow-inner pointer-events-none z-0" />
+        <div className="fixed inset-0 varsity-bg pointer-events-none z-0" />
+        
+        {/* Varsity Header Band */}
+        <div className="absolute top-0 left-0 right-0 h-32 bg-[#1E3A8A] border-b-8 border-amber-400 z-0" />
 
-        <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center">
+        <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center pt-12">
           
-          {/* Main Pinned Roster Card */}
-          <div className="w-full bg-white border-4 border-blue-900 rounded-none p-8 text-center shadow-[8px_8px_0px_0px_#1E3A8A] mb-8 relative rotate-[-1deg] mt-6">
-            {/* Red plastic push pin at the top */}
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center">
-              <div className="w-4 h-4 rounded-full bg-red-600 border border-red-800 shadow-md" />
-              <div className="w-1.5 h-4 bg-zinc-400 border border-zinc-500 -mt-1 shadow-sm" />
+          <div className="w-full bg-white border-4 border-[#1E3A8A] p-8 text-center varsity-shadow hover-varsity-shadow transition-all duration-300 mb-12 relative mt-12">
+            <div className="absolute -top-6 -left-6 w-12 h-12 bg-amber-400 border-4 border-[#1E3A8A] rounded-full flex items-center justify-center font-black text-[#1E3A8A] text-xl transform -rotate-12 z-20">
+              A+
             </div>
-
-            <div className="absolute top-3 right-6 text-[8px] font-black tracking-widest text-blue-900/60 uppercase">// ROSTER SHEET</div>
             
-            {/* Varsity Letter block Frame Avatar */}
-            <div className="relative mb-6 mt-4 flex justify-center">
-              <div className="w-36 h-36 rounded-2xl border-4 border-blue-900 bg-white overflow-hidden shadow-lg p-1.5 flex items-center justify-center relative rotate-[2deg]">
-                <img 
-                  src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=1e3a8a&color=ffffff`} 
-                  alt={profile.display_name} 
-                  className="w-full h-full object-cover rounded-xl" 
-                />
-                <div className="absolute -top-2 -right-2 bg-amber-400 text-blue-900 w-8 h-8 rounded-full border-2 border-blue-900 flex items-center justify-center font-black text-xs shadow-md">A+</div>
+            <div className="relative -mt-20 mb-6 flex justify-center z-10">
+              <div className="w-40 h-40 rounded-full border-8 border-white bg-white overflow-hidden shadow-2xl relative">
+                <div className="w-full h-full rounded-full border-4 border-[#1E3A8A] overflow-hidden">
+                  <img 
+                    src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=1e3a8a&color=ffffff`} 
+                    alt={profile.display_name} 
+                    className="w-full h-full object-cover" 
+                  />
+                </div>
               </div>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white varsity-title uppercase mb-2 leading-none">
+            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-[#1E3A8A] uppercase mb-3">
               {profile.display_name}
             </h1>
             
-            <p className="text-blue-900 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-1.5 border-t-2 border-dashed border-blue-900/20 pt-4 mt-4">
-              <GraduationCap size={16} /> {data.university ? `VARSITY CLASS @ ${data.university}` : 'UNIVERSITY LEAGUE'}
-            </p>
+            <div className="inline-block bg-amber-400 text-[#1E3A8A] px-6 py-2 border-2 border-[#1E3A8A] font-black text-sm uppercase tracking-widest mb-6 shadow-[4px_4px_0px_0px_rgba(30,58,138,0.2)] transform rotate-1">
+              <GraduationCap size={18} className="inline mr-2 -mt-1" />
+              {data.university ? data.university : 'VARSITY LEAGUE'}
+            </div>
+
             {profile.bio && (
-              <p className="text-xs font-semibold text-neutral-600 leading-relaxed mt-4 italic max-w-lg mx-auto">
+              <p className="text-sm font-bold text-neutral-600 leading-relaxed italic max-w-md mx-auto bg-neutral-50 p-4 border-l-4 border-amber-400">
                 "{profile.bio}"
               </p>
             )}
           </div>
 
-          {/* Academic Stats (Pinned Page Note) */}
           {(data.campus_rank_pct || data.study_buddies || stats) && (
-            <div className="w-full bg-[#FCF6BD] border-2 border-[#1E3A8A] p-6 rounded-none shadow-[5px_5px_0px_0px_#1E3A8A] mb-8 relative rotate-[1.5deg]">
-              {/* Blue push pin */}
-              <div className="absolute -top-3 left-10 z-30 flex flex-col items-center">
-                <div className="w-3.5 h-3.5 rounded-full bg-blue-600 border border-blue-800 shadow-md" />
-                <div className="w-1 h-3.5 bg-zinc-400 border border-zinc-500 -mt-1 shadow-sm" />
-              </div>
-              
-              <h3 className="text-xs font-black uppercase text-blue-900 tracking-[0.2em] mb-4 border-b border-blue-900/10 pb-2">
-                ACADEMIC CREDENTIALS
+            <div className="w-full mb-12">
+              <h3 className="text-xs font-black uppercase text-[#1E3A8A] tracking-[0.2em] mb-4 flex items-center gap-4">
+                <span className="flex-grow h-1 bg-[#1E3A8A]"></span>
+                ACADEMIC STANDING
+                <span className="flex-grow h-1 bg-[#1E3A8A]"></span>
               </h3>
-
-              <div className="grid grid-cols-2 gap-4 text-center">
+              <div className="grid grid-cols-2 gap-6">
                 <div 
-                  className={`bg-white p-4 border border-blue-900/20 shadow-inner ${isFreeProfile ? 'cursor-pointer hover:opacity-85' : ''}`}
+                  className={`bg-white border-4 border-[#1E3A8A] p-6 text-center varsity-shadow-sm transition-all ${isFreeProfile ? 'cursor-pointer hover:bg-neutral-50' : ''}`}
                   onClick={() => isFreeProfile && setShowFomoModal(true)}
                 >
-                  <span className="text-[9px] font-black uppercase tracking-widest text-neutral-400 block mb-1">Campus Scans</span>
-                  <span className={`text-2xl font-black text-blue-950 flex justify-center items-center gap-1 ${isFreeProfile ? 'blur-[6px]' : ''}`}>
-                    {isFreeProfile ? '8,204' : liveViews} <Activity size={16} className="text-blue-500" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 block mb-2">Campus Scans</span>
+                  <span className={`text-3xl font-black text-[#1E3A8A] flex justify-center items-center gap-2 ${isFreeProfile ? 'blur-[6px]' : ''}`}>
+                    {isFreeProfile ? '8,204' : liveViews} <Activity size={24} className="text-amber-500" />
                   </span>
                 </div>
                 
                 {data.campus_rank_pct && (
-                  <div className="bg-white p-4 border border-blue-900/20 shadow-inner">
-                    <span className="text-[9px] font-black uppercase tracking-widest text-neutral-400 block mb-1">Honor Roll</span>
-                    <span className="text-2xl font-black text-blue-950 flex justify-center items-center gap-1">
-                      Top {data.campus_rank_pct}% <Trophy size={16} className="text-amber-500" />
+                  <div className="bg-[#1E3A8A] text-white border-4 border-[#1E3A8A] p-6 text-center varsity-shadow-sm">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 block mb-2">Honor Roll</span>
+                    <span className="text-3xl font-black flex justify-center items-center gap-2">
+                      Top {data.campus_rank_pct}% <Trophy size={24} className="text-amber-400" />
                     </span>
                   </div>
                 )}
@@ -389,34 +385,27 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          {/* Ruled Bulletin noticeboard Bio */}
           {data.about_me && (
-            <div className="w-full bg-[#FAF9F5] p-6 border-2 border-blue-900 rounded-none shadow-[5px_5px_0px_0px_#1E3A8A] mb-8 relative rotate-[-1.5deg]">
-              {/* Green push pin */}
-              <div className="absolute -top-3 right-10 z-30 flex flex-col items-center">
-                <div className="w-3.5 h-3.5 rounded-full bg-emerald-600 border border-emerald-800 shadow-md" />
-                <div className="w-1 h-3.5 bg-zinc-400 border border-zinc-500 -mt-1 shadow-sm" />
+            <div className="w-full bg-white p-8 border-4 border-[#1E3A8A] varsity-shadow hover-varsity-shadow transition-all duration-300 mb-12 relative group">
+              <div className="absolute top-4 right-4 text-amber-400 opacity-20 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
+                <BookOpen size={64} />
               </div>
-
-              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-900 mb-4 flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-900" /> ACADEMIC SUMMARY & VIBE
+              <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#1E3A8A] mb-4 flex items-center gap-3">
+                <div className="w-8 h-1 bg-amber-400" /> STUDENT BIO
               </h4>
-              <p className="text-xs text-neutral-700 leading-relaxed font-semibold text-left">
+              <p className="text-sm text-neutral-700 leading-loose font-medium text-left relative z-10">
                 {data.about_me}
               </p>
             </div>
           )}
 
-          {/* Social connections */}
           {data?.platforms && data?.platforms?.length > 0 && (
-            <div className="w-full bg-[#FAF9F5] p-6 border-2 border-blue-900 rounded-none shadow-[5px_5px_0px_0px_#1E3A8A] mb-8 relative rotate-[1deg]">
-              {/* Yellow push pin */}
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center">
-                <div className="w-3.5 h-3.5 rounded-full bg-amber-500 border border-amber-600 shadow-md" />
-                <div className="w-1 h-3.5 bg-zinc-400 border border-zinc-500 -mt-1 shadow-sm" />
-              </div>
-
-              <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-900 mb-6 text-center border-b border-blue-900/10 pb-2">// CAMPUS DIRECTORY //</h4>
+            <div className="w-full mb-12">
+              <h3 className="text-xs font-black uppercase text-[#1E3A8A] tracking-[0.2em] mb-6 flex items-center gap-4">
+                <span className="flex-grow h-1 bg-[#1E3A8A]"></span>
+                STUDENT DIRECTORY
+                <span className="flex-grow h-1 bg-[#1E3A8A]"></span>
+              </h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {data.platforms.map((p: any, i: number) => {
                   const pData = getPlatformData(p.platform)
@@ -430,13 +419,13 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
-                      className="bg-white border-2 border-blue-900 p-4 rounded-none flex flex-col items-center justify-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer social-link-item"
+                      className="bg-white border-4 border-[#1E3A8A] p-6 flex flex-col items-center justify-center gap-3 hover:-translate-y-2 hover:varsity-shadow transition-all cursor-pointer social-link-item group"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-900 flex items-center justify-center relative">
+                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-amber-400 transition-colors border-2 border-[#1E3A8A] flex items-center justify-center relative">
                         {pData.logo ? (
                           <img 
                             src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
-                            className="w-5 h-5 filter invert object-contain"
+                            className="w-6 h-6 filter invert object-contain transition-transform group-hover:scale-110"
                             style={{ filter: 'brightness(0)' }}
                             alt={p.platform}
                           />
@@ -444,12 +433,12 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                           pData.icon
                         )}
                         {isGated && (
-                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center rounded-xl">
-                            <Lock size={12} className="text-white" />
+                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                            <Lock size={14} className="text-white" />
                           </div>
                         )}
                       </div>
-                      <span className="text-[9px] font-black uppercase text-blue-950">{p.platform}</span>
+                      <span className="text-[10px] font-black uppercase text-[#1E3A8A]">{p.platform}</span>
                     </a>
                   )
                 })}
@@ -457,31 +446,37 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          {/* Availability badge */}
           {data.availability && (
-            <div className="w-full bg-[#EAE2B7] border-2 border-blue-900 p-5 rounded-none shadow-[5px_5px_0px_0px_#1E3A8A] mb-8 relative rotate-[-1deg]">
-              {/* Red push pin */}
-              <div className="absolute -top-3 left-8 z-30 flex flex-col items-center">
-                <div className="w-3.5 h-3.5 rounded-full bg-red-600 border border-red-800 shadow-md" />
-                <div className="w-1 h-3.5 bg-zinc-400 border border-zinc-500 -mt-1 shadow-sm" />
-              </div>
-
-              <div className="flex items-center gap-4 text-left">
-                <Briefcase size={22} className="text-blue-900 animate-pulse shrink-0" />
-                <div>
-                  <p className="text-[9px] font-black uppercase tracking-widest text-blue-900/60">// ACTIVE ENGAGEMENTS //</p>
-                  <p className="text-xs font-black tracking-wide leading-relaxed mt-1 text-blue-950">{data.availability}</p>
-                </div>
+            <div className="w-full bg-amber-400 border-4 border-[#1E3A8A] p-6 text-[#1E3A8A] flex items-center gap-6 varsity-shadow hover-varsity-shadow transition-all duration-300 mb-12">
+              <Briefcase size={32} className="animate-bounce" />
+              <div className="text-left">
+                <p className="text-[10px] font-black uppercase tracking-widest text-[#1E3A8A]/60 mb-1">CURRENTLY SEEKING</p>
+                <p className="text-sm font-black tracking-wide">{data.availability}</p>
               </div>
             </div>
           )}
 
-          {/* Connection Actions */}
-          <div className="w-full max-w-sm mb-6 z-20">
-            <ProfileCTAs profile={profile} accentColor="#1e3a8a" />
+          <div className="w-full max-w-sm mb-12 z-20">
+            <ProfileCTAs profile={profile} accentColor="#1E3A8A" />
           </div>
 
         </main>
+
+        {showFomoModal && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#1E3A8A]/80 backdrop-blur-sm">
+            <div className="bg-white border-4 border-[#1E3A8A] p-8 max-w-sm w-full varsity-shadow relative text-center">
+              <button onClick={() => setShowFomoModal(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-[#1E3A8A] transition-colors">
+                <X size={24} />
+              </button>
+              <Activity size={48} className="text-amber-400 mx-auto mb-6 animate-pulse" />
+              <h3 className="text-2xl font-black text-[#1E3A8A] uppercase mb-3">Unlock Premium</h3>
+              <p className="text-sm font-medium text-neutral-600 mb-8">Access advanced academic metrics and live campus scans.</p>
+              <button onClick={() => window.location.href = '/#pricing'} className="w-full py-4 bg-amber-400 hover:bg-amber-300 border-4 border-[#1E3A8A] text-[#1E3A8A] font-black text-xs uppercase tracking-widest transition-all varsity-shadow-sm hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1E3A8A]">
+                CLAIM STATUS
+              </button>
+            </div>
+          </div>
+        )}
         <GateModal />
       </div>
     )
@@ -492,90 +487,101 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   // ----------------------------------------------------
   if (activeTheme === 'night owl') {
     return (
-      <div className="w-full min-h-screen bg-[#040209] text-indigo-100 pb-24 p-4 sm:p-8 relative selection:bg-amber-500 selection:text-black">
-        
-        {/* Soft Cozy Glowing Study Desk Lamps */}
-        <div className="absolute top-[60px] right-[-100px] w-[350px] h-[350px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-[100px] left-[-100px] w-[350px] h-[350px] bg-indigo-600/15 rounded-full blur-[100px] pointer-events-none animate-pulse" />
+      <div className="w-full min-h-screen bg-[#0A0514] text-[#E0E7FF] pb-24 p-4 sm:p-8 relative selection:bg-indigo-500/30 selection:text-white">
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            .glass-panel {
+              background: rgba(17, 24, 39, 0.6);
+              backdrop-filter: blur(16px);
+              -webkit-backdrop-filter: blur(16px);
+              border: 1px solid rgba(99, 102, 241, 0.1);
+              box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            }
+            .glass-panel:hover {
+              border: 1px solid rgba(99, 102, 241, 0.3);
+              box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.1);
+            }
+            .text-glow {
+              text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+            }
+          `
+        }} />
 
-        <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center">
+        <div className="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
+
+        <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center pt-12">
           
-          {/* Glowing Starry Avatar frame */}
-          <div className="relative mb-8 mt-6">
-            <div className="w-40 h-40 rounded-full border-4 border-indigo-500 bg-slate-950 overflow-hidden shadow-[0_0_25px_rgba(99,102,241,0.5)] p-1.5 flex items-center justify-center">
+          <div className="relative mb-12">
+            <div className="absolute inset-0 bg-indigo-500 rounded-full blur-xl opacity-50 animate-pulse" />
+            <div className="w-48 h-48 rounded-full border border-indigo-500/30 bg-[#0A0514] p-2 relative z-10">
               <img 
-                src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=020617&color=6366f1`} 
+                src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=0A0514&color=6366f1`} 
                 alt={profile.display_name} 
-                className="w-full h-full object-cover rounded-full" 
+                className="w-full h-full object-cover rounded-full filter contrast-125 brightness-90" 
               />
             </div>
           </div>
 
-          {/* Cozy Workspace Panel */}
-          <div className="w-full bg-slate-950/80 border border-indigo-950 p-8 rounded-[2.5rem] text-center shadow-[0_0_30px_rgba(0,0,0,0.8)] mb-8 backdrop-blur-md relative overflow-hidden">
-            {/* Lamp light reflection overlay */}
-            <div className="absolute -top-[120px] left-1/2 -translate-x-1/2 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute top-3 right-6 text-[8px] font-black tracking-widest text-indigo-400/60 uppercase">// NIGHT STUDY DECK</div>
+          <div className="glass-panel w-full p-8 rounded-3xl text-center mb-12 relative overflow-hidden transition-all duration-500">
+            <div className="absolute top-0 right-0 p-8 opacity-10 text-indigo-400">
+              <Rocket size={120} />
+            </div>
             
-            <h1 className="text-3xl font-extrabold tracking-widest text-white uppercase mb-2 drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]">
+            <h1 className="text-4xl sm:text-5xl font-light tracking-widest text-white uppercase mb-4 text-glow">
               {profile.display_name}
             </h1>
             
-            <p className="text-indigo-400 font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-1.5 mt-3 pt-3 border-t border-indigo-950/80">
-              <BookOpen size={16} className="text-indigo-500" /> {data.university ? `CAMPUS DEP // ${data.university}` : 'NIGHT OWL ACADEMICS'}
+            <p className="text-indigo-400 font-medium text-sm tracking-[0.2em] uppercase flex items-center justify-center gap-3">
+              <BookOpen size={18} /> {data.university || 'NIGHT ACADEMICS'}
             </p>
+            
             {profile.bio && (
-              <p className="text-xs text-indigo-200/70 leading-relaxed mt-4 italic max-w-md mx-auto">
-                "{profile.bio}"
+              <p className="text-sm text-indigo-200/60 leading-loose mt-8 font-light max-w-lg mx-auto">
+                {profile.bio}
               </p>
             )}
           </div>
 
-          {/* Metrics Screen cards */}
           {(data.campus_rank_pct || data.study_buddies || stats) && (
-            <div className="grid grid-cols-2 gap-4 w-full mb-8">
+            <div className="grid grid-cols-2 gap-6 w-full mb-12">
               <div 
-                className={`bg-slate-950/70 border border-indigo-950/80 p-5 rounded-3xl text-center shadow-lg transition-all hover:border-indigo-500/50 ${isFreeProfile ? 'cursor-pointer hover:opacity-85' : ''}`}
+                className={`glass-panel p-6 rounded-3xl text-center transition-all duration-300 ${isFreeProfile ? 'cursor-pointer hover:bg-white/5' : ''}`}
                 onClick={() => isFreeProfile && setShowFomoModal(true)}
               >
-                <span className="text-[9px] font-black uppercase tracking-widest text-indigo-400/50 block mb-1">Session Scans</span>
-                <span className={`text-2xl font-black text-indigo-200 flex justify-center items-center gap-1.5 ${isFreeProfile ? 'blur-[6px]' : ''}`}>
-                  {isFreeProfile ? '8,204' : liveViews} <Activity size={16} className="text-indigo-500" />
+                <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-indigo-400/50 block mb-3">Live Scans</span>
+                <span className={`text-3xl font-light text-white flex justify-center items-center gap-3 ${isFreeProfile ? 'blur-[8px]' : ''}`}>
+                  {isFreeProfile ? '8,204' : liveViews} <Activity size={20} className="text-indigo-400" />
                 </span>
               </div>
               
               {data.campus_rank_pct && (
-                <div className="bg-slate-950/70 border border-indigo-950/80 p-5 rounded-3xl text-center shadow-lg transition-all hover:border-indigo-500/50">
-                  <span className="text-[9px] font-black uppercase tracking-widest text-indigo-400/50 block mb-1">Academic Rank</span>
-                  <span className="text-2xl font-black text-indigo-200 flex justify-center items-center gap-1.5">
-                    Top {data.campus_rank_pct}% <Trophy size={16} className="text-amber-500" />
+                <div className="glass-panel p-6 rounded-3xl text-center">
+                  <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-indigo-400/50 block mb-3">Honor Rank</span>
+                  <span className="text-3xl font-light text-white flex justify-center items-center gap-3">
+                    Top {data.campus_rank_pct}% <Trophy size={20} className="text-amber-400" />
                   </span>
                 </div>
               )}
             </div>
           )}
 
-          {/* Story Narrative */}
           {data.about_me && (
-            <div className="w-full mb-8">
-              <div className="bg-slate-950/60 border border-indigo-950 p-6 rounded-[2rem] text-left shadow-lg backdrop-blur-sm relative">
-                <div className="absolute top-0 right-0 p-6 opacity-5">
-                  <BookOpen size={80} />
-                </div>
-                <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-400 mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" /> BIO PROFILE SUMMARY
-                </h4>
-                <p className="text-xs text-indigo-100/90 leading-relaxed font-semibold">
-                  {data.about_me}
-                </p>
-              </div>
+            <div className="w-full mb-12 glass-panel p-8 rounded-3xl text-left">
+              <h4 className="text-[10px] font-medium uppercase tracking-[0.3em] text-indigo-400 mb-6 flex items-center gap-4">
+                <div className="h-px bg-indigo-500/30 flex-grow" />
+                BIO SUMMARY
+                <div className="h-px bg-indigo-500/30 flex-grow" />
+              </h4>
+              <p className="text-sm text-indigo-100/80 leading-loose font-light">
+                {data.about_me}
+              </p>
             </div>
           )}
 
-          {/* Social links */}
           {data?.platforms && data?.platforms?.length > 0 && (
-            <div className="w-full mb-8 text-left">
-              <h4 className="text-[9px] font-black uppercase tracking-widest text-indigo-400 mb-4 text-center">// DESK STATIONS //</h4>
+            <div className="w-full mb-12 text-left">
+              <h4 className="text-[10px] font-medium uppercase tracking-[0.3em] text-indigo-400 mb-6 text-center">CONNECTIONS</h4>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {data.platforms.map((p: any, i: number) => {
                   const pData = getPlatformData(p.platform)
@@ -589,13 +595,13 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
-                      className="bg-slate-950 border border-indigo-950 hover:border-indigo-500 p-4 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer social-link-item hover:shadow-[0_0_15px_rgba(99,102,241,0.2)]"
+                      className="glass-panel p-6 rounded-2xl flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:scale-[1.02] social-link-item group"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-slate-900 text-indigo-400 flex items-center justify-center relative">
+                      <div className="w-12 h-12 rounded-xl bg-white/5 group-hover:bg-indigo-500/20 text-indigo-300 flex items-center justify-center relative transition-colors">
                         {pData.logo ? (
                           <img 
                             src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
-                            className="w-4 h-4 filter invert object-contain"
+                            className="w-5 h-5 filter invert object-contain opacity-70 group-hover:opacity-100 transition-opacity"
                             style={{ filter: 'brightness(0) invert(1)' }}
                             alt={p.platform}
                           />
@@ -603,12 +609,12 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                           pData.icon
                         )}
                         {isGated && (
-                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center rounded-xl">
-                            <Lock size={12} className="text-white" />
+                          <div className="absolute inset-0 bg-[#0A0514]/80 flex items-center justify-center rounded-xl border border-indigo-500/30">
+                            <Lock size={14} className="text-indigo-400" />
                           </div>
                         )}
                       </div>
-                      <span className="text-[9px] font-black uppercase text-indigo-300">{p.platform}</span>
+                      <span className="text-[10px] font-medium uppercase tracking-widest text-indigo-300/70 group-hover:text-indigo-300 transition-colors">{p.platform}</span>
                     </a>
                   )
                 })}
@@ -616,25 +622,41 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          {/* Availability openings */}
           {data.availability && (
-            <div className="w-full mb-8">
-              <div className="bg-gradient-to-tr from-indigo-950/60 to-slate-950/80 border border-indigo-500/30 text-white rounded-3xl p-6 flex items-center gap-4 shadow-xl backdrop-blur-sm">
-                <Zap size={22} className="text-amber-400 animate-pulse shrink-0" />
-                <div className="text-left">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-indigo-400">// WORKSPACE STATUS //</p>
-                  <p className="text-xs font-black tracking-wide leading-relaxed mt-1 text-indigo-100">{data.availability}</p>
-                </div>
+            <div className="w-full glass-panel p-6 rounded-3xl flex items-center gap-6 mb-12">
+              <div className="w-12 h-12 rounded-full bg-indigo-500/10 flex items-center justify-center shrink-0 border border-indigo-500/30">
+                <Zap size={20} className="text-indigo-400" />
+              </div>
+              <div className="text-left">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-indigo-400/50 mb-1">LOOKING FOR</p>
+                <p className="text-sm font-light tracking-wider text-indigo-100">{data.availability}</p>
               </div>
             </div>
           )}
 
-          {/* Connection Actions */}
-          <div className="w-full max-w-sm mb-6 z-20">
-            <ProfileCTAs profile={profile} accentColor="#4f46e5" />
+          <div className="w-full max-w-sm mb-12 z-20">
+            <ProfileCTAs profile={profile} accentColor="#6366f1" />
           </div>
 
         </main>
+
+        {showFomoModal && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#0A0514]/90 backdrop-blur-md">
+            <div className="glass-panel p-8 max-w-sm w-full rounded-3xl relative text-center">
+              <button onClick={() => setShowFomoModal(false)} className="absolute top-4 right-4 p-2 text-indigo-400/50 hover:text-white transition-colors">
+                <X size={24} />
+              </button>
+              <div className="w-16 h-16 rounded-full bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center mx-auto mb-6">
+                <Lock size={24} className="text-indigo-400" />
+              </div>
+              <h3 className="text-2xl font-light text-white tracking-widest uppercase mb-3">Locked Stats</h3>
+              <p className="text-sm font-light text-indigo-200/60 mb-8 leading-relaxed">Upgrade to view live scanning metrics and academic performance indicators.</p>
+              <button onClick={() => window.location.href = '/#pricing'} className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-[10px] uppercase tracking-[0.2em] rounded-xl transition-colors">
+                UNLOCK ACCESS
+              </button>
+            </div>
+          </div>
+        )}
         <GateModal />
       </div>
     )
@@ -644,84 +666,105 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   // LAYOUT 3: SKETCHED RULED NOTEBOOK (Default / Notebook Theme)
   // ----------------------------------------------------
   return (
-    <div className="w-full min-h-screen relative overflow-x-hidden bg-[#FAF6EE] text-[#2C2925] transition-colors duration-300 pb-24 p-4 sm:p-8 selection:bg-emerald-100">
+    <div className="w-full min-h-screen relative overflow-x-hidden bg-[#Fdfbf7] text-[#333333] transition-colors duration-300 pb-24 p-4 sm:p-8 selection:bg-blue-100 font-sans">
       
-      {/* Hand drawn horizontal lined paper rules */}
+      {/* Notebook Paper Lines */}
       <div 
-        className="absolute inset-0 pointer-events-none opacity-20 z-0" 
+        className="fixed inset-0 pointer-events-none z-0" 
         style={{
-          backgroundImage: 'linear-gradient(rgba(0, 128, 255, 0.15) 1.5px, transparent 1.5px)',
-          backgroundSize: '100% 28px',
+          backgroundImage: 'linear-gradient(#E5E7EB 1px, transparent 1px)',
+          backgroundSize: '100% 32px',
           backgroundPosition: 'top left'
         }}
       />
-      {/* Ruled notebook vertical margin line */}
-      <div className="absolute top-0 bottom-0 left-[12%] sm:left-[15%] w-[2px] bg-red-400/40 pointer-events-none z-0" />
+      {/* Red Margin Line */}
+      <div className="fixed top-0 bottom-0 left-[15%] w-[1px] bg-red-400/60 pointer-events-none z-0" />
+      <div className="fixed top-0 bottom-0 left-[15.5%] w-[1px] bg-red-400/60 pointer-events-none z-0" />
 
-      <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center">
+      <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center pt-8">
         
-        {/* Notebook Polaroid Avatar Frame with organically taped edges */}
-        <div className="relative mb-8 mt-6">
-          <div className="w-40 h-44 rounded-none border-2 border-emerald-950 bg-white p-2.5 pb-8 flex flex-col items-center justify-center shadow-md rotate-[-3deg] relative">
-            {/* Matte transparent scotch tapes on physical corners */}
-            <div className="absolute -top-3 left-6 w-10 h-4 bg-white/40 border border-neutral-300/20 backdrop-blur-[1px] rotate-[-5deg] pointer-events-none" />
-            <div className="absolute -top-2 right-6 w-10 h-4 bg-white/40 border border-neutral-300/20 backdrop-blur-[1px] rotate-[10deg] pointer-events-none" />
-            
-            <div className="w-full h-full bg-[#EAE8E2] border border-neutral-300 overflow-hidden flex items-center justify-center">
-              <img 
-                src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=e2f1e8&color=065f46`} 
-                alt={profile.display_name} 
-                className="w-full h-full object-cover grayscale brightness-95" 
-              />
+        {/* Tape/Polaroid Avatar */}
+        <div className="relative mb-12 mt-6 group">
+          <div className="w-48 h-56 bg-white p-3 pb-12 shadow-[0_10px_30px_rgba(0,0,0,0.1)] rotate-[-2deg] transition-transform duration-500 hover:rotate-0 hover:scale-105">
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-16 h-6 bg-white/50 backdrop-blur-sm border border-neutral-200 shadow-sm rotate-[4deg] opacity-80" />
+            <img 
+              src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=f3f4f6&color=374151`} 
+              alt={profile.display_name} 
+              className="w-full h-full object-cover filter contrast-110 sepia-[0.2]" 
+            />
+            <div className="absolute bottom-4 left-0 right-0 text-center text-neutral-500 font-medium text-sm" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
+              {profile.display_name}
             </div>
-            <span className="text-[9px] font-black uppercase text-neutral-400 tracking-wider mt-2.5 font-serif select-none">polaroid_snapshot</span>
           </div>
         </div>
 
-        {/* Post-It Yellow Sticky Note Card block */}
-        <div className="w-full bg-[#FCF6BD] border-2 border-emerald-950 p-8 rounded-none text-center shadow-xl mb-8 relative rotate-[1.5deg] max-w-[94%]">
-          {/* Glossy transparent sticky tape on top margin */}
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-24 h-6 bg-white/40 border border-neutral-300/25 backdrop-blur-[1.5px] pointer-events-none" />
-          <div className="absolute top-2 right-4 text-emerald-800 font-sans text-xs select-none">No. 1 // LOG</div>
-          
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-emerald-955 mb-3 font-serif leading-none">
+        {/* Title / Name */}
+        <div className="w-full mb-12 text-center pl-[5%]">
+          <h1 className="text-4xl sm:text-6xl font-black text-neutral-800 tracking-tight mb-2" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>
             {profile.display_name}
           </h1>
-          
-          <p className="text-emerald-800 font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-1.5 border-t border-emerald-955/20 pt-4 mt-4">
-            <BookOpen size={16} /> {data.university ? `STUDENT DECK // ${data.university}` : 'CLASS ROSTER REGISTER'}
+          <p className="text-blue-600 font-bold text-lg" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
+            {data.university ? `@ ${data.university}` : 'Student'}
           </p>
-          {profile.bio && (
-            <p className="text-xs text-neutral-700 leading-relaxed mt-4 italic font-serif max-w-lg mx-auto">
-              "{profile.bio}"
-            </p>
-          )}
         </div>
 
-        {/* Handcrafted story bio notes */}
-        {data.about_me && (
-          <div className="w-full mb-8 rotate-[-1deg] max-w-[94%]">
-            <div className="bg-[#FAF6EE] p-6 border-2 border-emerald-950 text-left shadow-md relative">
-              {/* Ring binder hole cutouts on left margin */}
-              <div className="absolute top-4 -left-2 w-3.5 h-3.5 bg-[#FAF6EE] border-2 border-emerald-950 rounded-full" />
-              <div className="absolute top-20 -left-2 w-3.5 h-3.5 bg-[#FAF6EE] border-2 border-emerald-950 rounded-full" />
-              <div className="absolute bottom-6 -left-2 w-3.5 h-3.5 bg-[#FAF6EE] border-2 border-emerald-955 rounded-full" />
+        {/* Bio (Sticky Note) */}
+        {profile.bio && (
+          <div className="w-full max-w-sm ml-auto mr-4 mb-12 relative rotate-[3deg]">
+            <div className="bg-[#FEF08A] p-6 shadow-md hover:shadow-lg transition-shadow">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-12 h-4 bg-[#FDE047] opacity-60" />
+              <p className="text-neutral-800 text-lg leading-relaxed" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
+                "{profile.bio}"
+              </p>
+            </div>
+          </div>
+        )}
 
-              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-800 mb-3 font-serif flex items-center gap-2 pl-3">
-                <span className="w-2 h-2 rounded-full bg-emerald-800" /> // MY NARRATIVE JOURNAL //
-              </h4>
-              <p className="text-xs text-neutral-700 leading-relaxed font-serif italic text-left pl-3">
+        {/* Metrics */}
+        {(data.campus_rank_pct || data.study_buddies || stats) && (
+          <div className="grid grid-cols-2 gap-8 w-full mb-12 pl-[5%]">
+            <div 
+              className={`border-2 border-neutral-300 border-dashed rounded-2xl p-6 text-center bg-white/50 backdrop-blur-sm ${isFreeProfile ? 'cursor-pointer hover:bg-white' : ''}`}
+              onClick={() => isFreeProfile && setShowFomoModal(true)}
+            >
+              <p className="text-neutral-500 text-sm font-bold uppercase tracking-widest mb-2">Visits</p>
+              <div className={`text-4xl font-black text-neutral-800 ${isFreeProfile ? 'blur-[5px]' : ''}`} style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
+                {isFreeProfile ? '8k+' : liveViews}
+              </div>
+            </div>
+            
+            {data.campus_rank_pct && (
+              <div className="border-2 border-neutral-300 border-dashed rounded-2xl p-6 text-center bg-white/50 backdrop-blur-sm">
+                <p className="text-neutral-500 text-sm font-bold uppercase tracking-widest mb-2">Rank</p>
+                <div className="text-4xl font-black text-blue-600" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
+                  Top {data.campus_rank_pct}%
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* About Me */}
+        {data.about_me && (
+          <div className="w-full mb-12 pl-[5%]">
+            <div className="relative">
+              <h3 className="text-xl font-bold text-neutral-800 mb-4" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>
+                About Me...
+              </h3>
+              <p className="text-lg text-neutral-700 leading-[32px] font-medium" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
                 {data.about_me}
               </p>
             </div>
           </div>
         )}
 
-        {/* Digital Contacts platforms */}
+        {/* Links */}
         {data?.platforms && data?.platforms?.length > 0 && (
-          <div className="w-full mb-8 text-left max-w-[94%]">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-4 text-center font-mono">// CORE SHUNT DIRECTORY //</h4>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="w-full mb-12 pl-[5%]">
+            <h3 className="text-xl font-bold text-neutral-800 mb-6 text-center" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>
+              Find me here ↓
+            </h3>
+            <div className="flex flex-wrap justify-center gap-4">
               {data.platforms.map((p: any, i: number) => {
                 const pData = getPlatformData(p.platform)
                 return (
@@ -734,26 +777,24 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                       handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                       if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                     }}
-                    className="bg-[#FAF6EE] border-2 border-emerald-950 p-4 flex flex-col items-center justify-center gap-2 shadow-sm social-link-item hover:scale-105 transition-transform duration-250 cursor-pointer"
+                    className="w-16 h-16 bg-white border-2 border-neutral-300 rounded-full flex items-center justify-center hover:scale-110 hover:border-blue-500 transition-all shadow-sm relative group"
                   >
-                    <div className="w-10 h-10 rounded-none bg-white text-emerald-800 flex items-center justify-center relative border border-emerald-950">
-                      {pData.logo ? (
-                        <img 
-                          src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
-                          className="w-4.5 h-4.5 filter invert object-contain"
-                          style={{ filter: 'brightness(0)' }}
-                          alt={p.platform}
-                        />
-                      ) : (
-                        pData.icon
-                      )}
-                      {isGated && (
-                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                          <Lock size={12} className="text-white" />
-                        </div>
-                      )}
-                    </div>
-                    <span className="text-[9px] font-black uppercase tracking-wider text-emerald-950 font-mono">{p.platform}</span>
+                    {pData.logo ? (
+                      <img 
+                        src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
+                        className="w-6 h-6 opacity-60 group-hover:opacity-100 transition-opacity"
+                        alt={p.platform}
+                      />
+                    ) : (
+                      <div className="opacity-60 group-hover:opacity-100 text-neutral-800 transition-opacity">
+                        {pData.icon}
+                      </div>
+                    )}
+                    {isGated && (
+                      <div className="absolute inset-0 bg-white/80 rounded-full flex items-center justify-center">
+                        <Lock size={16} className="text-neutral-500" />
+                      </div>
+                    )}
                   </a>
                 )
               })}
@@ -761,68 +802,31 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           </div>
         )}
 
-        {/* Lined Notebook metrics */}
-        {(data.campus_rank_pct || data.study_buddies || stats) && (
-          <div className="grid grid-cols-2 gap-4 w-full mb-8 max-w-[94%]">
-            <div 
-              className={`bg-[#FAF6EE] p-5 border-2 border-emerald-955 shadow-sm text-center relative ${isFreeProfile ? 'cursor-pointer hover:opacity-85' : ''}`}
-              onClick={() => isFreeProfile && setShowFomoModal(true)}
-            >
-              <span className="text-[9px] font-black uppercase tracking-widest text-emerald-800/60 block mb-1">Log Scans</span>
-              <span className={`text-lg font-extrabold text-neutral-800 font-serif flex items-center justify-center gap-1 ${isFreeProfile ? 'blur-[6px]' : ''}`}>
-                {isFreeProfile ? '8,204' : liveViews} <Activity size={14} className="text-emerald-700 animate-pulse" />
-              </span>
-            </div>
-            {data.campus_rank_pct && (
-              <div className="bg-[#FAF6EE] p-5 border-2 border-emerald-950 shadow-sm text-center">
-                <span className="text-[9px] font-black uppercase tracking-widest text-emerald-800/60 block mb-1">Academic Rank</span>
-                <span className="text-lg font-extrabold text-neutral-800 font-serif flex items-center justify-center gap-1">
-                  Top {data.campus_rank_pct}% <Trophy size={14} className="text-amber-600" />
-                </span>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Engagements Sticky note */}
         {data.availability && (
-          <div className="w-full mb-8 rotate-[1deg] max-w-[94%]">
-            <div className="bg-[#EAE2B7] border-2 border-emerald-950 text-emerald-955 rounded-none p-5 flex items-center gap-4 shadow-md font-serif">
-              <Zap size={22} className="text-emerald-700 shrink-0" />
-              <div className="text-left">
-                <p className="text-[9px] font-black uppercase tracking-widest text-emerald-850/60 mb-0.5">AVAILABILITY PROTOCOLS</p>
-                <p className="text-xs font-bold leading-relaxed">{data.availability}</p>
-              </div>
+          <div className="w-full mb-12 pl-[5%]">
+            <div className="inline-block border-4 border-blue-500 rounded-full px-6 py-3 text-blue-600 font-bold text-lg rotate-[-2deg]" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
+              Looking for: {data.availability}
             </div>
           </div>
         )}
 
-        {/* Connection Actions */}
-        <div className="w-full max-w-sm mb-6 z-20">
-          <ProfileCTAs profile={profile} accentColor="#047857" />
+        <div className="w-full max-w-sm mb-12 pl-[5%] z-20">
+          <ProfileCTAs profile={profile} accentColor="#2563EB" />
         </div>
 
       </main>
 
-      {/* FOMO Modal */}
       {showFomoModal && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fadeIn">
-          <div className="bg-white border-2 border-emerald-955 rounded-none p-8 max-w-sm w-full shadow-2xl relative animate-zoomIn text-center">
-            <button onClick={() => setShowFomoModal(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-600 rounded-full hover:bg-neutral-50 transition-all">
-              <X size={20} />
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-neutral-900/40 backdrop-blur-sm">
+          <div className="bg-white p-8 max-w-sm w-full rounded-2xl shadow-xl relative text-center border-2 border-neutral-200">
+            <button onClick={() => setShowFomoModal(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-600">
+              <X size={24} />
             </button>
-            <div className="relative inline-flex items-center justify-center mb-6">
-              <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center shadow-inner">
-                <Activity size={32} className="animate-pulse" />
-              </div>
-            </div>
-            <h3 className="text-xl font-black text-neutral-900 tracking-tight mb-2 font-serif uppercase">Unlock Stats</h3>
-            <p className="text-xs font-bold text-neutral-500 mb-6 leading-relaxed font-serif">Upgrading reveals live telemetry and metrics details.</p>
-            <div className="space-y-3">
-              <button onClick={() => window.location.href = '/#pricing'} className="w-full py-3.5 bg-emerald-800 hover:bg-emerald-900 text-white font-black text-xs uppercase tracking-widest rounded-none transition-all shadow-md font-mono">
-                🔒 CLAIM TEE TO UNLOCK
-              </button>
-            </div>
+            <h3 className="text-2xl font-bold text-neutral-800 mb-2" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>Secret Stats</h3>
+            <p className="text-neutral-600 mb-6 font-medium" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>Looks like you need the premium tee to unlock these numbers.</p>
+            <button onClick={() => window.location.href = '/#pricing'} className="w-full py-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl transition-colors shadow-md">
+              Unlock Now
+            </button>
           </div>
         </div>
       )}
