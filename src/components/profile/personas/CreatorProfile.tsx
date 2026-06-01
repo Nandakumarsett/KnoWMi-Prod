@@ -358,23 +358,17 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
           
           {/* Banner */}
           {data.featured_work_url && (
-            <div className="w-full h-48 sm:h-64 mb-10 border-4 border-black overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <div 
+              className="w-full h-48 sm:h-64 mb-8 overflow-hidden"
+              style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' }}
+            >
               <img src={getAssetUrl(data.featured_work_url)} alt="Banner" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
             </div>
           )}
 
-          {/* Typographic Header */}
-          <div className="text-center w-full mb-8">
-            <h1 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase leading-none mb-4">
-              {profile.display_name}
-            </h1>
-            <p className="text-sm sm:text-base font-bold tracking-widest uppercase border-y-2 border-black py-2 inline-block">
-              {data.type || 'DIGITAL CREATOR'}
-            </p>
-          </div>
-
-          <div className="w-full mb-8 flex justify-center">
-             <div className="w-32 h-32 sm:w-40 sm:h-40 border-4 border-black overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          {/* Profile Pic */}
+          <div className="w-full mb-6 flex justify-center">
+             <div className="w-32 h-32 sm:w-40 sm:h-40 border-4 border-black overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white">
                {!avatarError && profile.avatar_url ? (
                     <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover grayscale" onError={() => setAvatarError(true)} />
                   ) : (
@@ -383,6 +377,16 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                     </div>
                   )}
              </div>
+          </div>
+
+          {/* Typographic Header */}
+          <div className="text-center w-full mb-6">
+            <h1 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase leading-none mb-4">
+              {profile.display_name}
+            </h1>
+            <p className="text-sm sm:text-base font-bold tracking-widest uppercase border-y-2 border-black py-2 inline-block">
+              {data.type || 'DIGITAL CREATOR'}
+            </p>
           </div>
 
           {/* Tagline / Bio */}
