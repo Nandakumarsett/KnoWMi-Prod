@@ -248,13 +248,13 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           `
         }} />
 
-        {/* Blueprint Banner */}
+        {/* Blueprint Banner (Background) */}
         {data.featured_work_url && (
-          <div className="w-full max-w-4xl mb-8 relative z-10 group">
-            <div className="w-full h-48 sm:h-64 blueprint-border p-2 bg-[#001B2E]/50 backdrop-blur-sm">
-              <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover opacity-80 mix-blend-screen filter contrast-125 sepia-[0.5] hue-rotate-180" alt="Banner" />
-              <div className="absolute top-4 right-4 bg-[#001B2E] text-[#64FFDA] text-xs px-2 py-1 border border-[#64FFDA]/30 font-bold tracking-widest">FIG. 1</div>
-            </div>
+          <div 
+            className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-30 mix-blend-screen"
+            style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
+          >
+            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter contrast-125 sepia-[0.5] hue-rotate-180" alt="Banner" />
           </div>
         )}
 
@@ -525,10 +525,13 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         <div className="absolute inset-0 pointer-events-none z-50 crt-overlay opacity-40 mix-blend-overlay" />
         <div className="absolute inset-0 pointer-events-none z-40 bg-gradient-to-b from-transparent via-[#00FF41]/10 to-transparent h-32 animate-[scanline_8s_linear_infinite] opacity-50" />
 
-        {/* Hacker Banner */}
+        {/* Hacker Banner (Background) */}
         {data.featured_work_url && (
-          <div className="w-full max-w-3xl mb-8 relative z-30 hacker-border p-1 bg-black overflow-hidden mt-4">
-            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-32 sm:h-48 object-cover filter brightness-75 contrast-125 sepia-[1] hue-rotate-50 saturate-200 opacity-60 mix-blend-screen" alt="Banner" />
+          <div 
+            className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-30 mix-blend-screen"
+            style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
+          >
+            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter brightness-75 contrast-125 sepia-[1] hue-rotate-50 saturate-200" alt="Banner" />
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjEiIGZpbGw9IiMwMGZmNDEiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] pointer-events-none" />
           </div>
         )}
@@ -740,18 +743,18 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         <div className="w-12"></div>
       </div>
 
+      {/* Terminal Banner (Background) */}
+      {data.featured_work_url && (
+        <div 
+          className="absolute top-[41px] left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-20 mix-blend-screen"
+          style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
+        >
+          <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter contrast-125 saturate-50" alt="Banner" />
+        </div>
+      )}
+
       <main className="w-full max-w-3xl mx-auto pb-24 pt-8 px-4 sm:px-8 flex flex-col items-start relative z-20 text-sm sm:text-base">
         
-        {/* Terminal Banner Image (Markdown preview style) */}
-        {data.featured_work_url && (
-          <div className="w-full mb-8 border border-[#30363D] bg-[#161B22] rounded-md overflow-hidden p-2">
-             <div className="flex items-center gap-2 mb-2 text-[#8B949E] text-xs font-bold font-sans px-2">
-               <span className="text-[#3FB950] font-mono">~</span> preview.png
-             </div>
-             <img src={getAssetUrl(data.featured_work_url)} className="w-full h-40 sm:h-56 object-cover rounded border border-[#30363D] filter contrast-125 saturate-50" alt="Banner" />
-          </div>
-        )}
-
         <div className="w-full flex flex-col sm:flex-row gap-6 items-center sm:items-start mb-10">
           <div className="relative shrink-0">
             <div className="w-24 h-24 sm:w-32 sm:h-32 border-2 border-[#30363D] p-1">

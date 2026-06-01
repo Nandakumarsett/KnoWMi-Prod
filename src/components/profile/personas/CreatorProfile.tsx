@@ -354,18 +354,18 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
           </div>
         </div>
 
-        <div className="px-6 sm:px-12 pt-20 max-w-4xl mx-auto flex flex-col items-center">
-          
-          {/* Banner */}
-          {data.featured_work_url && (
-            <div 
-              className="w-full h-48 sm:h-64 mb-8 overflow-hidden"
-              style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' }}
-            >
-              <img src={getAssetUrl(data.featured_work_url)} alt="Banner" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
-            </div>
-          )}
+        {/* Banner (Background) */}
+        {data.featured_work_url && (
+          <div 
+            className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-40 mix-blend-multiply"
+            style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
+          >
+            <img src={getAssetUrl(data.featured_work_url)} alt="Banner" className="w-full h-full object-cover grayscale" />
+          </div>
+        )}
 
+        <div className="px-6 sm:px-12 pt-32 max-w-4xl mx-auto flex flex-col items-center relative z-10">
+          
           {/* Profile Pic */}
           <div className="w-full mb-6 flex justify-center">
              <div className="w-32 h-32 sm:w-40 sm:h-40 border-4 border-black overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white">
