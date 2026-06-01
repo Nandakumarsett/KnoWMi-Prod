@@ -276,7 +276,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                 <div className="w-36 h-36 blueprint-border p-1.5 bg-[#001B2E] relative group-hover:shadow-[0_0_20px_rgba(100,255,218,0.2)] transition-shadow duration-500">
                   <div className="w-full h-full border border-dashed border-[#64FFDA]/50 overflow-hidden bg-[#0A192F]">
                     <img
-                      src={getAssetUrl(profile.avatar_url) || \`https://ui-avatars.com/api/?name=\${encodeURIComponent(profile.display_name)}&background=0A192F&color=64FFDA\`}
+                      src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=0A192F&color=64FFDA`}
                       className="w-full h-full object-cover filter contrast-125 saturate-50 brightness-90 mix-blend-screen opacity-90"
                       alt={profile.display_name}
                     />
@@ -427,7 +427,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                     >
                       {logo && logo !== 'globe' ? (
                         <img 
-                          src={\`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/\${logo}.svg\`}
+                          src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
                           className="w-4 h-4 object-contain opacity-70 group-hover:opacity-100 transition-opacity"
                           style={{ filter: 'invert(87%) sepia(26%) saturate(692%) hue-rotate(107deg) brightness(101%) contrast(105%)' }}
                           alt={p.platform}
@@ -466,7 +466,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
     return (
       <div className="min-h-screen bg-[#0D0D0D] text-[#00FF41] font-mono relative overflow-x-hidden selection:bg-[#00FF41] selection:text-black p-4 sm:p-8 flex flex-col justify-start items-center">
         <style dangerouslySetInnerHTML={{
-          __html: \`
+          __html: `
             @keyframes crt-flicker {
               0% { opacity: 0.97; }
               50% { opacity: 1; }
@@ -495,7 +495,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               background-color: #0D0D0D;
               background-image: radial-gradient(circle at 50% 50%, rgba(0, 255, 65, 0.05) 0%, transparent 60%);
             }
-          \`
+          `
         }} />
         
         {/* CRT Scanline Overlay & Scanning Bar */}
@@ -515,7 +515,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                 <div className="w-32 h-32 hacker-border p-1 bg-black relative">
                   <div className="w-full h-full overflow-hidden relative">
                     <img
-                      src={getAssetUrl(profile.avatar_url) || \`https://ui-avatars.com/api/?name=\${encodeURIComponent(profile.display_name)}&background=000&color=00FF41\`}
+                      src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=000&color=00FF41`}
                       className="w-full h-full object-cover filter contrast-150 saturate-0"
                       alt={profile.display_name}
                     />
@@ -655,7 +655,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                     >
                       {logo && logo !== 'globe' ? (
                         <img 
-                          src={\`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/\${logo}.svg\`}
+                          src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
                           className="w-3.5 h-3.5 object-contain filter brightness-0 invert"
                           alt={p.platform}
                         />
@@ -714,7 +714,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <div className="relative shrink-0">
                 <div className="w-24 h-24 rounded-lg overflow-hidden border-2 border-[#3A3D42]">
                   <img
-                    src={getAssetUrl(profile.avatar_url) || \`https://ui-avatars.com/api/?name=\${encodeURIComponent(profile.display_name)}&background=1C1E21&color=E6EDF3\`}
+                    src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=1C1E21&color=E6EDF3`}
                     className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
                     alt={profile.display_name}
                   />
