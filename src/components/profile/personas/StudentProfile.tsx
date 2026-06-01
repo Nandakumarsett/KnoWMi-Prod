@@ -11,6 +11,20 @@ import { ProfileCTAs } from '../shared/ProfileCTAs'
 import { trackLinkClick } from '../../../lib/analytics/track'
 import { useGatedLink } from '../../../hooks/useGatedLink'
 
+const PLATFORM_ICONS: Record<string, any> = {
+  instagram: Instagram,
+  twitter: Twitter,
+  'twitter / x': Twitter,
+  linkedin: Linkedin,
+  github: Github,
+  snapchat: Ghost,
+  discord: MessageCircle,
+  behance: LinkIcon,
+  medium: LinkIcon,
+  youtube: LinkIcon,
+  facebook: LinkIcon
+}
+
 export function StudentProfile({ profile, stats }: { profile: ProfileData, stats?: any }) {
   const data = (profile.persona_data || {}) as StudentData;
   const activeTheme = (profile.profile_theme || 'default').toLowerCase();
