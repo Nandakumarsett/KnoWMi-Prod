@@ -683,6 +683,8 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         <GateModal />
       </div>
     )
+  }
+
    // ----------------------------------------------------
   // LAYOUT 3: RETRO TERMINAL EMULATOR (Terminal Theme)
   // ----------------------------------------------------
