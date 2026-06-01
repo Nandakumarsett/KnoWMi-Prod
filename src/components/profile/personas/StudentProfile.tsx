@@ -315,7 +315,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           `
         }} />
 
-        <div className="fixed inset-0 varsity-bg pointer-events-none z-0" />
+        <div className="absolute inset-0 varsity-bg pointer-events-none z-0" />
         
         {/* Varsity Header Band */}
         <div className="absolute top-0 left-0 right-0 h-32 bg-[#1E3A8A] border-b-8 border-amber-400 z-0" />
@@ -507,8 +507,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           `
         }} />
 
-        <div className="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none" />
-        <div className="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
 
         <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center pt-12">
           
@@ -670,7 +670,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
       
       {/* Notebook Paper Lines */}
       <div 
-        className="fixed inset-0 pointer-events-none z-0" 
+        className="absolute inset-0 pointer-events-none z-0" 
         style={{
           backgroundImage: 'linear-gradient(#E5E7EB 1px, transparent 1px)',
           backgroundSize: '100% 32px',
@@ -678,8 +678,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         }}
       />
       {/* Red Margin Line */}
-      <div className="fixed top-0 bottom-0 left-[15%] w-[1px] bg-red-400/60 pointer-events-none z-0" />
-      <div className="fixed top-0 bottom-0 left-[15.5%] w-[1px] bg-red-400/60 pointer-events-none z-0" />
+      <div className="absolute top-0 bottom-0 left-[15%] w-[1px] bg-red-400/60 pointer-events-none z-0" />
+      <div className="absolute top-0 bottom-0 left-[15.5%] w-[1px] bg-red-400/60 pointer-events-none z-0" />
 
       <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center pt-8">
         
@@ -690,7 +690,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             <img 
               src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=f3f4f6&color=374151`} 
               alt={profile.display_name} 
-              className="w-full h-full object-cover filter contrast-110 sepia-[0.2]" 
+              className="w-full h-full object-cover filter contrast-110 sepia-[0.2]"
+              onError={(e) => { e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=f3f4f6&color=374151`; }} 
             />
             <div className="absolute bottom-4 left-0 right-0 text-center text-neutral-500 font-medium text-sm" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
               {profile.display_name}
@@ -766,7 +767,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </h3>
             <div className="flex flex-wrap justify-center gap-4">
               {data.platforms.map((p: any, i: number) => {
-                const pData = getPlatformData(p.platform)
+                const platform = p.platform?.toLowerCase()
+                const Icon = PLATFORM_ICONS[platform] || Share2
                 return (
                   <a 
                     key={i}
@@ -779,17 +781,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                     }}
                     className="w-16 h-16 bg-white border-2 border-neutral-300 rounded-full flex items-center justify-center hover:scale-110 hover:border-blue-500 transition-all shadow-sm relative group"
                   >
-                    {pData.logo ? (
-                      <img 
-                        src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
-                        className="w-6 h-6 opacity-60 group-hover:opacity-100 transition-opacity"
-                        alt={p.platform}
-                      />
-                    ) : (
-                      <div className="opacity-60 group-hover:opacity-100 text-neutral-800 transition-opacity">
-                        {pData.icon}
-                      </div>
-                    )}
+                    <Icon className="w-6 h-6 opacity-60 group-hover:opacity-100 text-neutral-800 transition-opacity" />
                     {isGated && (
                       <div className="absolute inset-0 bg-white/80 rounded-full flex items-center justify-center">
                         <Lock size={16} className="text-neutral-500" />

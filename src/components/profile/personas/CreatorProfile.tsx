@@ -474,8 +474,8 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
       <div className="w-full pb-24 relative bg-[#0D0B1A] text-white font-sans overflow-x-hidden min-h-screen">
         
         {/* Neon Background Accents */}
-        <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#FF2D78]/20 rounded-full blur-[120px] pointer-events-none" />
-        <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#FF2D78]/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
 
         {/* Top Right Actions */}
         <div className="absolute top-6 right-6 z-40 flex flex-col items-end gap-2">
@@ -638,8 +638,8 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
     <div className="w-full pb-24 relative bg-[#FDFBF7] text-neutral-900 font-sans min-h-screen overflow-x-hidden selection:bg-purple-200">
       
       {/* Soft Ambient Glows */}
-      <div className="fixed top-[-10%] left-[-10%] w-[60%] h-[60%] bg-purple-400/20 rounded-full blur-[140px] pointer-events-none" />
-      <div className="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-amber-400/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-purple-400/20 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-amber-400/20 rounded-full blur-[120px] pointer-events-none" />
       
       <div className="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-white to-transparent z-0" />
 

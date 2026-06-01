@@ -63,7 +63,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           `}} />
 
         <div
-          className="fixed inset-0 pointer-events-none opacity-[0.06] z-0"
+          className="absolute inset-0 pointer-events-none opacity-[0.06] z-0"
           style={{
             backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.8) 1.2px, transparent 1.2px), linear-gradient(90deg, rgba(0, 0, 0, 0.8) 1.2px, transparent 1.2px)',
             backgroundSize: '44px 44px',
@@ -242,7 +242,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         }} />
 
         {/* Technical drafting grid background */}
-        <div className="fixed inset-0 pointer-events-none grid-blueprint z-0 opacity-80" />
+        <div className="absolute inset-0 pointer-events-none grid-blueprint z-0 opacity-80" />
         
         {/* Blueprint outer frame with drafting details */}
         <div className="absolute top-4 left-4 right-4 bottom-4 border border-[#64FFDA]/30 pointer-events-none z-10 p-4 hidden md:flex flex-col justify-between text-[10px] text-[#64FFDA]/50 select-none">
@@ -499,8 +499,8 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         }} />
         
         {/* CRT Scanline Overlay & Scanning Bar */}
-        <div className="fixed inset-0 pointer-events-none z-50 crt-overlay opacity-40 mix-blend-overlay" />
-        <div className="fixed inset-0 pointer-events-none z-40 bg-gradient-to-b from-transparent via-[#00FF41]/10 to-transparent h-32 animate-[scanline_8s_linear_infinite] opacity-50" />
+        <div className="absolute inset-0 pointer-events-none z-50 crt-overlay opacity-40 mix-blend-overlay" />
+        <div className="absolute inset-0 pointer-events-none z-40 bg-gradient-to-b from-transparent via-[#00FF41]/10 to-transparent h-32 animate-[scanline_8s_linear_infinite] opacity-50" />
 
         <main className="w-full max-w-[620px] mx-auto pb-24 pt-8 px-4 flex flex-col items-center relative z-20">
           
