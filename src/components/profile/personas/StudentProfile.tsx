@@ -338,18 +338,16 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
         <div className="absolute inset-0 varsity-bg pointer-events-none z-0" />
         
-        {/* Banner (Background) */}
-        {data.featured_work_url && (
-          <div 
-            className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-40 mix-blend-multiply"
-            style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
-          >
-            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover grayscale sepia-[0.3]" alt="Banner" />
-          </div>
-        )}
-        
-        {/* Varsity Header Band */}
-        <div className="absolute top-0 left-0 right-0 h-32 bg-[#1E3A8A] border-b-8 border-amber-400 z-0" />
+        {/* Varsity Header Band / Banner */}
+        <div className="absolute top-0 left-0 right-0 h-48 sm:h-64 border-b-8 border-amber-400 z-0 bg-[#1E3A8A] overflow-hidden">
+          {data.featured_work_url && (
+            <img 
+              src={getAssetUrl(data.featured_work_url)} 
+              className="w-full h-full object-cover mix-blend-overlay opacity-60 filter contrast-125 saturate-50" 
+              alt="Banner" 
+            />
+          )}
+        </div>
 
         <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center pt-12">
           
@@ -735,10 +733,10 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
       {/* Notebook Banner (Background) */}
       {data.featured_work_url && (
         <div 
-          className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-30 mix-blend-multiply"
-          style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
+          className="absolute top-0 left-0 w-full h-48 sm:h-64 z-0 pointer-events-none mix-blend-multiply opacity-80"
+          style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)' }}
         >
-          <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter grayscale sepia-[0.5]" alt="Banner" />
+          <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter grayscale sepia-[0.3] contrast-125" alt="Banner" />
         </div>
       )}
 
