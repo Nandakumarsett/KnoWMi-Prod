@@ -503,7 +503,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                       >
                         {pData.logo ? (
                           <div className="relative w-6 h-6 flex items-center justify-center">
-                            <span className="absolute inset-0 flex items-center justify-center opacity-60"><Link size={20} className="text-neutral-800" /></span>
+                            <span className="absolute inset-0 flex items-center justify-center opacity-60"><LinkIcon size={20} className="text-neutral-800" /></span>
                             <img 
                               src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
                               className="w-6 h-6 relative z-10 bg-white"
