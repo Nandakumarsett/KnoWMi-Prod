@@ -437,17 +437,6 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 <div className="paper-holes" />
                 <div className="margin-line" />
                 
-                {/* QR Code */}
-                <div className="absolute top-6 right-6 text-center hidden sm:block">
-                  <span className="text-sm text-neutral-600 block mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Scan to Connect</span>
-                  <div className="w-20 h-20 bg-white border-2 border-neutral-800 flex items-center justify-center p-1 relative">
-                     <QrCode size={48} className="text-neutral-800" />
-                     <div className="absolute -bottom-5 w-full text-center text-[9px] text-neutral-800 font-sans font-bold">
-                       KNOWMI-{profile.id?.substring(0,5).toUpperCase() || '00721'}
-                     </div>
-                  </div>
-                </div>
-
                 <h1 className="text-4xl sm:text-5xl font-bold text-[#1e3a8a] mb-2 mt-2 leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   {profile.display_name}
                 </h1>
@@ -469,6 +458,18 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
           {/* Row 2: Stats Sticky Notes */}
           <div className="w-full flex flex-wrap justify-center gap-4 sm:gap-6 mt-2">
+             
+             {/* Spotify QR */}
+             {data.playlist_url && (
+               <a href={ensureAbsoluteUrl(data.playlist_url)} target="_blank" rel="noopener noreferrer" className="w-28 sm:w-32 aspect-square bg-[#1DB954] p-2 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center hover:scale-105 transition-transform cursor-pointer">
+                  <div className="pushpin pin-white" />
+                  <span className="text-lg font-bold block mt-1 text-white leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.playlist_name || 'My Playlist'}</span>
+                  <div className="bg-white p-1 rounded mt-1 shadow-sm">
+                    <QrCode size={36} className="text-[#1DB954]" />
+                  </div>
+               </a>
+             )}
+             
              {/* CGPA */}
              <div className="w-28 sm:w-32 aspect-square bg-[#FDE68A] p-4 text-center cork-shadow -rotate-2 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-blue" />
