@@ -653,7 +653,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                    <Mail size={28} className="text-neutral-800" />
                 </div>
                 <div className="text-center sm:text-left">
-                   <h4 className="text-2xl font-bold text-neutral-800 mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Let's Connect</h4>
+                   <h4 className="text-2xl font-bold text-neutral-800 mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Get in Touch</h4>
                    <p className="text-lg text-neutral-700" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>I'm always open to new opportunities, ideas and collaborations.</p>
                    <a href={`mailto:${data.contact_email}`} className="font-sans font-bold text-sm text-[#1e3a8a] hover:underline mt-2 inline-block">{data.contact_email}</a>
                 </div>
