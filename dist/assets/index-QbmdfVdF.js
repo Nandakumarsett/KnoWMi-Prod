@@ -894,8 +894,14 @@ ${_}`}class $t extends Error{constructor({message:t,code:r,cause:a,name:i}){var 
           .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
           .animate-float-medium { animation: float-medium 6s ease-in-out infinite; }
           .animate-float-fast { animation: float-fast 4s ease-in-out infinite; }
-        `})]})}return s==="campus"?n.jsxs("div",{className:"w-full relative text-black min-h-screen bg-[#c89b70] bg-[url('https://www.transparenttextures.com/patterns/cork-board.png')] overflow-hidden font-sans",children:[n.jsx("style",{dangerouslySetInnerHTML:{__html:`
+        `})]})}return s==="campus"?n.jsxs("div",{className:"w-full relative text-black min-h-screen cork-bg overflow-hidden font-sans",children:[n.jsx("style",{dangerouslySetInnerHTML:{__html:`
           @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
+          
+          .cork-bg {
+            background-color: #b38254;
+            background-image: url('https://www.transparenttextures.com/patterns/cork-board.png'), radial-gradient(circle at 50% 30%, #e0ad7a 0%, #8a572a 100%);
+            background-blend-mode: overlay;
+          }
           
           .cork-shadow { box-shadow: 2px 4px 10px rgba(0,0,0,0.3); }
           .cork-shadow-lg { box-shadow: 4px 8px 15px rgba(0,0,0,0.4); }
