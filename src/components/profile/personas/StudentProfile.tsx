@@ -352,15 +352,17 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           }
         `}} />
 
+        {/* Banner (Background) */}
+        {data.featured_work_url && (
+          <div 
+            className="absolute top-0 left-0 w-full h-72 sm:h-96 z-0 pointer-events-none opacity-90"
+            style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)' }}
+          >
+             <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover" alt="Banner" />
+          </div>
+        )}
+
         <main className="relative z-10 max-w-4xl mx-auto px-4 flex flex-col items-center pt-8 pb-24 gap-8">
-          
-          {/* Banner as Pinned Photo */}
-          {data.featured_work_url && (
-            <div className="w-full max-w-md bg-white p-3 sm:p-4 pb-10 sm:pb-14 cork-shadow-lg rotate-[2deg] relative mt-4 sm:mt-8 mx-auto z-10 transition-transform hover:rotate-0 hover:scale-105">
-              <div className="pushpin pin-yellow" />
-              <img src={getAssetUrl(data.featured_work_url)} className="w-full h-48 sm:h-56 object-cover sepia-[0.2]" alt="Banner" />
-            </div>
-          )}
           
           {/* Main ID Card - Lined Paper */}
           <div className="w-full max-w-xl bg-[#fdfbf7] p-6 sm:p-8 pb-10 sm:pb-12 cork-shadow-lg relative -rotate-1 mx-auto mt-6 sm:mt-12">
