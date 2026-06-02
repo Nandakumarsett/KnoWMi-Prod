@@ -315,25 +315,26 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   // ----------------------------------------------------
   if (activeTheme === 'campus') {
     return (
-      <div className="w-full relative text-black min-h-screen cork-bg overflow-hidden font-sans">
-        <style dangerouslySetInnerHTML={{__html: `
-          @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
-          
+      <div className="w-full relative text-black min-h-screen cork-bg overflow-hidden font-sans pb-24">
+        <style dangerouslySetInnerHTML={{
+          __html: `
           .cork-bg {
-            background-color: #b38254;
-            background-image: url('https://www.transparenttextures.com/patterns/cork-board.png'), radial-gradient(circle at 50% 30%, #e0ad7a 0%, #8a572a 100%);
-            background-blend-mode: overlay;
+            background-color: #d1bfae;
+            background-image: url('https://www.transparenttextures.com/patterns/cork-board.png');
           }
-          
-          .cork-shadow { box-shadow: 2px 4px 10px rgba(0,0,0,0.3); }
-          .cork-shadow-lg { box-shadow: 4px 8px 15px rgba(0,0,0,0.4); }
+          .cork-shadow {
+            box-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+          }
+          .cork-shadow-lg {
+            box-shadow: 4px 8px 20px rgba(0,0,0,0.4);
+          }
           .pushpin {
             position: absolute;
             top: 8px;
             left: 50%;
             transform: translateX(-50%);
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
             box-shadow: inset -2px -2px 4px rgba(0,0,0,0.5), 2px 2px 4px rgba(0,0,0,0.4);
             z-index: 10;
@@ -344,11 +345,33 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           .pin-yellow { background: radial-gradient(circle at 30% 30%, #ffff4d, #e6e600); }
           .pin-white { background: radial-gradient(circle at 30% 30%, #ffffff, #cccccc); }
           
+          .paper-holes {
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 24px;
+            background-image: radial-gradient(circle at 12px 50%, #9e7f61 5px, transparent 6px);
+            background-size: 100% 32px;
+            background-position: 0 16px;
+            border-right: 1px solid rgba(0,0,0,0.05);
+            z-index: 5;
+          }
+          
           .lined-paper {
             background-color: #fdfbf7;
-            background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
+            background-image: linear-gradient(#cbd5e1 1px, transparent 1px);
             background-size: 100% 32px;
-            background-position: top left;
+            background-position: 0 16px;
+          }
+          .margin-line {
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 36px;
+            width: 2px;
+            background-color: rgba(239, 68, 68, 0.4);
+            z-index: 4;
+          }
+          .solid-paper {
+            background-color: #fdfbf7;
           }
         `}} />
 
@@ -362,179 +385,277 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           </div>
         )}
 
-        <main className="relative z-10 max-w-4xl mx-auto px-4 flex flex-col items-center pt-8 pb-24 gap-8">
+        <main className="relative z-10 w-full max-w-6xl mx-auto px-4 pt-12 flex flex-col items-center gap-6">
           
-          {/* Main ID Card - Lined Paper */}
-          <div className="w-full max-w-xl bg-[#fdfbf7] p-6 sm:p-8 pb-10 sm:pb-12 cork-shadow-lg relative -rotate-1 mx-auto mt-6 sm:mt-12">
-            <div className="pushpin pin-blue" />
-            
-            {/* Lined paper lines */}
-            <div className="absolute inset-0 pointer-events-none lined-paper opacity-70" />
-            <div className="absolute top-0 bottom-0 left-[10%] sm:left-[15%] w-[2px] bg-red-400/50 pointer-events-none z-0" />
-            <div className="absolute top-0 bottom-0 left-[11%] sm:left-[16%] w-[1px] bg-red-400/50 pointer-events-none z-0" />
-            
-            {/* Content & Photo Container */}
-            <div className="relative z-10 flex flex-col sm:flex-row gap-4 sm:gap-6 items-center sm:items-start pt-6 sm:pt-6">
-              
-              {/* Polaroid Photo inline */}
-              <div className="w-32 h-40 sm:w-36 sm:h-48 shrink-0 bg-white p-2 sm:p-3 pb-8 sm:pb-12 cork-shadow-lg -rotate-[6deg] z-20 transition-transform duration-300 hover:rotate-0 hover:scale-105 relative mt-4 sm:-mt-12 ml-0 sm:-ml-12">
-                <div className="pushpin pin-red" />
+          {/* Row 1: Main ID Card + Polaroids */}
+          <div className="w-full flex flex-wrap md:flex-nowrap justify-center items-start gap-8 relative">
+             
+             {/* Polaroid Photo */}
+             <div className="w-40 h-48 sm:w-48 sm:h-56 shrink-0 bg-white p-3 pb-12 cork-shadow-lg -rotate-[4deg] z-20 transition-transform duration-300 hover:rotate-0 hover:scale-105 mt-2 md:-mr-12">
+                <div className="pushpin pin-blue" />
                 <div className="w-full h-full bg-neutral-200 overflow-hidden">
                   {!avatarError && profile.avatar_url ? (
-                    <img 
-                    src={getAssetUrl(profile.avatar_url)} 
-                    alt={profile.display_name} 
-                    className="w-full h-full object-cover grayscale sepia-[0.2]" 
-                    onError={() => setAvatarError(true)} />
+                    <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover grayscale sepia-[0.2]" onError={() => setAvatarError(true)} />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-neutral-300 text-neutral-600 font-bold text-4xl font-sans">
-                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
-                    </div>
+                    <div className="w-full h-full flex items-center justify-center bg-neutral-300 text-neutral-600 font-bold text-4xl font-sans">{profile.display_name?.charAt(0).toUpperCase() || 'U'}</div>
                   )}
                 </div>
-              </div>
+             </div>
+             
+             {/* Main Lined Paper */}
+             <div className="w-full max-w-2xl bg-[#fdfbf7] lined-paper pt-8 pb-10 pr-6 pl-12 sm:pl-16 cork-shadow-lg relative rotate-1 z-10 min-h-[220px]">
+                <div className="pushpin pin-red absolute top-3 left-[50%]" />
+                <div className="paper-holes" />
+                <div className="margin-line" />
+                
+                {/* QR Code */}
+                <div className="absolute top-6 right-6 text-center hidden sm:block">
+                  <span className="text-sm text-neutral-600 block mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Scan to Connect</span>
+                  <div className="w-20 h-20 bg-white border-2 border-neutral-800 flex items-center justify-center p-1 relative">
+                     <QrCode size={48} className="text-neutral-800" />
+                     <div className="absolute -bottom-5 w-full text-center text-[9px] text-neutral-800 font-sans font-bold">
+                       KNOWMI-{profile.id?.substring(0,5).toUpperCase() || '00721'}
+                     </div>
+                  </div>
+                </div>
 
-              {/* Text Info */}
-              <div className="flex-grow text-center sm:text-left w-full sm:pr-24 mt-4 sm:mt-0 px-4 sm:px-0">
-                <h1 className="text-4xl sm:text-5xl font-bold text-[#1e3a8a] mb-2 leading-none" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                <h1 className="text-4xl sm:text-5xl font-bold text-[#1e3a8a] mb-2 mt-2 leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   {profile.display_name}
                 </h1>
-                <div className="w-3/4 sm:w-full h-[2px] bg-[#1e3a8a]/40 mx-auto sm:mx-0 mb-4" />
                 
-                <div className="text-2xl sm:text-2xl font-bold text-[#cc0000] mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                <div className="text-2xl font-bold text-[#cc0000] mt-4 leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   {data.university ? data.university : 'Stanford University'}
                 </div>
-                <div className="text-xl sm:text-xl text-[#4a5568] mb-4 sm:mb-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  Computer Science
+                <div className="text-xl text-[#4a5568] leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {data.course ? data.course : 'Computer Science'}
                 </div>
                 
                 {profile.bio && (
-                  <p className="text-xl sm:text-xl text-[#2d3748] leading-tight sm:leading-relaxed mx-auto sm:mx-0 max-w-sm mt-4 sm:mt-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  <p className="text-xl text-[#2d3748] mt-4 max-w-md leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                     "{profile.bio}"
                   </p>
                 )}
-              </div>
-            </div>
-            
-            {/* QR Code Placeholder */}
-            <div className="absolute top-4 right-4 text-center">
-              <span className="text-sm text-neutral-600 block mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Scan to Connect</span>
-              <div className="w-20 h-20 bg-white border border-dashed border-neutral-400 flex items-center justify-center relative">
-                 <QrCode size={48} className="text-neutral-800" />
-                 <div className="absolute -bottom-6 w-full text-center text-[10px] text-neutral-500 font-mono">
-                   KNOWMI-{profile.id?.substring(0,5).toUpperCase() || '007'}
-                 </div>
-              </div>
-            </div>
+             </div>
           </div>
 
-          {/* Stats Row (Sticky Notes) */}
-          {(data.campus_rank_pct || data.study_buddies || stats) && (
-            <div className="w-full max-w-3xl grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-4 sm:gap-8 mt-4 mx-auto">
-              <div className={`w-full sm:w-36 aspect-square bg-[#FDE68A] p-4 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
+          {/* Row 2: Stats Sticky Notes */}
+          <div className="w-full flex flex-wrap justify-center gap-4 sm:gap-6 mt-2">
+             {/* CGPA */}
+             <div className="w-32 sm:w-40 aspect-square bg-[#FDE68A] p-4 text-center cork-shadow -rotate-2 relative flex flex-col items-center justify-center">
+                <div className="pushpin pin-blue" />
+                <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>CGPA</span>
+                <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.campus_rank_pct ? data.campus_rank_pct : '3.9/4.0'}</span>
+                <Star size={16} className="absolute bottom-3 left-3 text-[#1e3a8a]" strokeWidth={1.5} />
+             </div>
+             
+             {/* Courses */}
+             <div className="w-32 sm:w-40 aspect-square bg-[#d4e0b5] p-4 text-center cork-shadow rotate-1 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-green" />
-                <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Scans</span>
-                <span className={`text-3xl font-bold text-[#1e3a8a] mt-1 block ${isFreeProfile ? 'blur-[6px]' : ''}`} style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  {isFreeProfile ? '146' : liveViews}
-                </span>
-                <div className="absolute bottom-2 left-2 text-[#1e3a8a]">
-                  <Activity size={16} />
-                </div>
-              </div>
-              
-              <div className="w-full sm:w-36 aspect-square bg-[#A7F3D0] p-4 text-center cork-shadow -rotate-3 relative flex flex-col items-center justify-center">
-                <div className="pushpin pin-red" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Courses</span>
                 <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>8</span>
                 <span className="text-sm text-neutral-600 block mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Completed</span>
-              </div>
-              
-              <div className="w-full sm:w-36 aspect-square bg-[#BFDBFE] p-4 text-center cork-shadow rotate-1 relative flex flex-col items-center justify-center">
+             </div>
+             
+             {/* Study Streak */}
+             <div className="w-32 sm:w-40 aspect-square bg-[#c0d6e4] p-4 text-center cork-shadow -rotate-1 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-blue" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Study Streak</span>
-                <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>21</span>
+                <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.study_buddies ? data.study_buddies : '21'}</span>
                 <span className="text-sm text-neutral-600 block mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Days</span>
-              </div>
+             </div>
+             
+             {/* Scan Count */}
+             <div className="w-32 sm:w-40 aspect-square bg-[#f2c7ce] p-4 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center cursor-pointer" onClick={() => isFreeProfile && setShowFomoModal(true)}>
+                <div className="pushpin pin-white" />
+                <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Scan Count</span>
+                <span className={`text-3xl font-bold text-[#1e3a8a] mt-1 block ${isFreeProfile ? 'blur-[4px]' : ''}`} style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {isFreeProfile ? '146' : liveViews}
+                </span>
+                <Activity size={16} className="absolute bottom-3 right-3 text-[#1e3a8a]" strokeWidth={1.5} />
+             </div>
+          </div>
 
-              {data.campus_rank_pct && (
-                <div className="w-full sm:w-36 aspect-square bg-[#FBCFE8] p-4 text-center cork-shadow -rotate-2 relative flex flex-col items-center justify-center">
-                  <div className="pushpin pin-white" />
-                  <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Honor Roll</span>
-                  <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Top {data.campus_rank_pct}%</span>
-                  <div className="absolute bottom-2 right-2 text-[#cc0000]">
-                    <Trophy size={16} />
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          <div className="flex flex-col md:flex-row gap-8 w-full max-w-4xl items-stretch justify-center mt-6">
-            {/* About Me */}
+          {/* Grid Layout Rows */}
+          <div className="w-full max-w-5xl flex flex-wrap justify-center items-stretch gap-6 mt-4">
+            
+            {/* Row 3: About Me, Clubs, Skills */}
             {data.about_me && (
-              <div className="w-full md:w-3/5 bg-white p-6 pb-8 cork-shadow-lg -rotate-[1deg] relative">
+              <div className="w-full md:w-[28%] bg-[#fdfbf7] p-6 pb-8 pl-10 cork-shadow -rotate-1 relative solid-paper min-h-[220px]">
                 <div className="pushpin pin-blue" />
-                <h4 className="text-2xl font-bold text-[#1e3a8a] mb-2 uppercase tracking-wide" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>About Me</h4>
-                <div className="w-full h-[2px] bg-[#1e3a8a]/20 mb-4" />
-                <p className="text-2xl text-neutral-800 leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                <div className="paper-holes" />
+                <h4 className="text-xl font-bold text-[#1e3a8a] mb-3 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>About Me</h4>
+                <p className="text-xl text-neutral-800 leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   {data.about_me}
                 </p>
-                <div className="mt-4 border-b-[3px] border-[#1e3a8a] border-dashed w-16 opacity-60" />
               </div>
             )}
             
-            {/* Skills / Socials */}
-            {data?.platforms && data?.platforms?.length > 0 && (
-              <div className="w-full md:w-2/5 bg-[#FDE68A] p-6 pb-8 cork-shadow rotate-[2deg] relative">
+            {data.clubs && data.clubs.length > 0 && (
+              <div className="w-full md:w-[28%] bg-[#FDE68A] p-6 pb-8 cork-shadow rotate-1 relative min-h-[220px]">
                 <div className="pushpin pin-green" />
-                <h4 className="text-2xl font-bold text-neutral-800 mb-4 uppercase tracking-wide text-center" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Let's Connect</h4>
-                <div className="flex flex-wrap gap-4 justify-center">
+                <h4 className="text-xl font-bold text-[#cc0000] mb-3 uppercase tracking-wide text-center mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Clubs & Orgs</h4>
+                <ul className="text-xl text-neutral-800 space-y-1 ml-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {data.clubs.map((c, i) => <li key={i}>• {c}</li>)}
+                </ul>
+              </div>
+            )}
+
+            {data.core_skills && data.core_skills.length > 0 && (
+              <div className="w-full md:w-[28%] bg-[#fdfbf7] p-6 pb-8 pl-10 cork-shadow -rotate-2 relative solid-paper min-h-[220px]">
+                <div className="pushpin pin-white" />
+                <div className="paper-holes" />
+                <h4 className="text-xl font-bold text-[#1e3a8a] mb-3 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Skills</h4>
+                <ul className="text-xl text-neutral-800 space-y-1 ml-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {data.core_skills.slice(0,5).map((s, i) => <li key={i}>• {s}</li>)}
+                </ul>
+                <div className="absolute bottom-4 right-4 text-[#1e3a8a] opacity-50"><span className="text-3xl" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>&lt;/&gt;</span></div>
+              </div>
+            )}
+
+            {/* Row 4: Achievements, Focus */}
+            {data.hackathons && data.hackathons.length > 0 && (
+              <div className="w-full md:w-[46%] bg-[#fdfbf7] p-6 pb-8 pl-14 cork-shadow rotate-[1deg] relative lined-paper min-h-[180px]">
+                <div className="pushpin pin-red absolute top-3 left-[50%]" />
+                <div className="paper-holes" />
+                <div className="margin-line" />
+                <h4 className="text-xl font-bold text-[#1e3a8a] mb-2 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Recent Achievements</h4>
+                <ul className="text-xl text-neutral-800 space-y-1 ml-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {data.hackathons.map((h, i) => (
+                    <li key={i} className="leading-[32px]">• {h.achievement || '1st Prize'} - {h.name} {h.year}</li>
+                  ))}
+                </ul>
+                <Trophy size={32} className="absolute bottom-6 right-6 text-[#1e3a8a] opacity-60" strokeWidth={1.5} />
+              </div>
+            )}
+
+            {data.favorite_subject && (
+              <div className="w-full md:w-[46%] bg-[#fdfbf7] p-6 pb-8 pl-14 cork-shadow -rotate-[1deg] relative lined-paper min-h-[180px]">
+                <div className="pushpin pin-blue absolute top-3 left-[50%]" />
+                <div className="paper-holes" />
+                <div className="margin-line" />
+                <h4 className="text-xl font-bold text-[#1e3a8a] mb-2 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Current Focus</h4>
+                <ul className="text-xl text-neutral-800 space-y-1 ml-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  <li className="leading-[32px]">• {data.favorite_subject}</li>
+                  {data.core_skills && data.core_skills.length > 1 && <li className="leading-[32px]">• {data.core_skills[1]}</li>}
+                  <li className="leading-[32px]">• Web Development</li>
+                </ul>
+                <Target size={40} className="absolute bottom-6 right-6 text-[#1e3a8a] opacity-60" strokeWidth={1.5} />
+              </div>
+            )}
+
+            {/* Row 5: Snapshot, Events */}
+            <div className="w-full md:w-[62%] bg-[#fdfbf7] p-6 pt-10 pb-10 pl-14 cork-shadow rotate-1 relative lined-paper">
+              <div className="pushpin pin-red absolute top-3 left-[50%]" />
+              <div className="paper-holes" />
+              <div className="margin-line" />
+              <h4 className="text-xl font-bold text-[#1e3a8a] mb-6 uppercase tracking-wide text-center mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Academic Snapshot</h4>
+              <div className="flex flex-row justify-around items-center text-center">
+                 <div>
+                   <BookOpen size={24} className="mx-auto text-[#1e3a8a] mb-2" strokeWidth={1.5} />
+                   <div className="text-sm font-sans font-bold text-neutral-600 uppercase">Courses Completed</div>
+                   <div className="text-3xl font-bold text-[#1e3a8a] mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>8 / 12</div>
+                   <div className="w-full h-1 bg-[#1e3a8a] mt-2 rounded"></div>
+                 </div>
+                 <div>
+                   <FileText size={24} className="mx-auto text-[#1e3a8a] mb-2" strokeWidth={1.5} />
+                   <div className="text-sm font-sans font-bold text-neutral-600 uppercase">Assignments Done</div>
+                   <div className="text-3xl font-bold text-[#1e3a8a] mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>24 / 30</div>
+                   <div className="w-full h-1 bg-[#1e3a8a] mt-2 rounded"></div>
+                 </div>
+                 <div>
+                   <GraduationCap size={24} className="mx-auto text-[#1e3a8a] mb-2" strokeWidth={1.5} />
+                   <div className="text-sm font-sans font-bold text-neutral-600 uppercase">Next Goal</div>
+                   <div className="text-3xl font-bold text-[#1e3a8a] mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>4.0 CGPA</div>
+                   <div className="w-full h-1 bg-[#1e3a8a] mt-2 rounded"></div>
+                 </div>
+              </div>
+            </div>
+
+            <div className="w-full md:w-[32%] bg-[#c0d6e4] p-6 pb-8 cork-shadow -rotate-2 relative">
+              <div className="pushpin pin-green" />
+              <h4 className="text-xl font-bold text-[#1e3a8a] mb-4 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Upcoming Events</h4>
+              <div className="space-y-4">
+                 <div className="flex gap-3">
+                   <Calendar size={18} className="text-[#1e3a8a] shrink-0 mt-1" strokeWidth={1.5} />
+                   <div>
+                     <div className="text-xl text-neutral-800 leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Midterm Exams</div>
+                     <div className="text-sm text-neutral-600 font-sans">May 15 - May 20</div>
+                   </div>
+                 </div>
+                 <div className="flex gap-3">
+                   <Calendar size={18} className="text-[#1e3a8a] shrink-0 mt-1" strokeWidth={1.5} />
+                   <div>
+                     <div className="text-xl text-neutral-800 leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Hackathon</div>
+                     <div className="text-sm text-neutral-600 font-sans">May 25 - May 27</div>
+                   </div>
+                 </div>
+              </div>
+            </div>
+
+            {/* Row 6: Projects, Connect, Advice */}
+            {data.projects && data.projects.length > 0 && (
+              <div className="w-full md:w-[28%] bg-[#fdfbf7] p-6 pb-8 pl-10 cork-shadow rotate-[1deg] relative solid-paper min-h-[220px]">
+                <div className="pushpin pin-blue" />
+                <div className="paper-holes" />
+                <h4 className="text-xl font-bold text-[#1e3a8a] mb-3 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Projects</h4>
+                <ul className="text-xl text-neutral-800 space-y-1 ml-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {data.projects.slice(0,3).map((p, i) => (
+                    <li key={i}>• {p.name}</li>
+                  ))}
+                </ul>
+                <div className="mt-4 text-[#1e3a8a] font-bold text-lg cursor-pointer hover:underline" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>View all projects →</div>
+              </div>
+            )}
+
+            {data?.platforms && data?.platforms?.length > 0 && (
+              <div className="w-full md:w-[32%] bg-[#FDE68A] p-6 pb-8 cork-shadow -rotate-1 relative min-h-[220px]">
+                <div className="pushpin pin-yellow" />
+                <h4 className="text-xl font-bold text-neutral-800 mb-4 uppercase tracking-wide text-center mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Let's Connect</h4>
+                <div className="flex flex-wrap gap-3 justify-center">
                   {data.platforms.map((p: any, i: number) => {
                     const pData = getPlatformData(p.platform)
                     return (
-                      <a 
-                        key={i}
-                        href={ensureAbsoluteUrl(p.url)} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        onClick={(e) => {
-                          handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
-                          if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
-                        }}
-                        className="w-12 h-12 bg-white/50 rounded flex items-center justify-center hover:bg-white hover:scale-110 transition-all cork-shadow"
-                      >
+                      <a key={i} href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer" onClick={(e) => { handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url)); if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank'); }} className="w-10 h-10 bg-white/50 rounded flex items-center justify-center hover:bg-white hover:scale-110 transition-all cork-shadow">
                         {pData.logo ? (
-                          <div className="relative w-6 h-6 flex items-center justify-center">
-                            <span className="absolute inset-0 flex items-center justify-center opacity-60"><LinkIcon size={20} className="text-neutral-800" /></span>
-                            <img 
-                              src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
-                              className="w-6 h-6 relative z-10 bg-white"
-                              alt={p.platform}
-                              onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                            />
-                          </div>
-                        ) : (
-                          pData.icon
-                        )}
+                          <div className="relative w-5 h-5 flex items-center justify-center"><span className="absolute inset-0 flex items-center justify-center opacity-60"><LinkIcon size={16} className="text-neutral-800" /></span><img src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`} className="w-5 h-5 relative z-10 bg-white" alt={p.platform} onError={(e) => { e.currentTarget.style.display = 'none'; }} /></div>
+                        ) : pData.icon}
                       </a>
                     )
                   })}
                 </div>
-                <div className="mt-6 text-center text-xl text-neutral-700" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                <div className="mt-4 text-center text-lg text-neutral-800 leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   Open to collaborate and build amazing things together!
                 </div>
               </div>
             )}
-          </div>
-          
-          {data.availability && (
-            <div className="w-full max-w-sm bg-white p-4 pb-6 text-center cork-shadow -rotate-1 relative mt-4">
-              <div className="pushpin pin-yellow" />
-              <div className="text-3xl font-bold text-[#cc0000] mt-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>"{data.availability}"</div>
-              <div className="absolute bottom-2 right-2 text-[#cc0000]">
-                <Briefcase size={20} />
+
+            {data.thought_bubble && (
+              <div className="w-full md:w-[28%] bg-[#fdfbf7] p-6 pb-8 pl-10 cork-shadow rotate-2 relative solid-paper min-h-[220px] flex flex-col justify-center text-center">
+                <div className="pushpin pin-white" />
+                <div className="paper-holes" />
+                <h4 className="text-xl font-bold text-[#1e3a8a] mb-2 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Advice I Live By</h4>
+                <div className="text-2xl text-neutral-800 leading-tight italic" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  "{data.thought_bubble}"
+                </div>
+                <Heart size={24} className="mx-auto mt-4 text-[#1e3a8a]" strokeWidth={1.5} />
               </div>
-            </div>
+            )}
+
+          </div>
+
+          {/* Bottom Banner */}
+          {data.contact_email && (
+             <div className="w-full max-w-2xl bg-[#fdfbf7] p-4 sm:p-6 mt-8 cork-shadow-lg relative flex flex-col sm:flex-row items-center justify-center gap-6 solid-paper">
+                <div className="pushpin pin-green" />
+                <div className="w-14 h-14 bg-[#d1bfae] rounded-full flex items-center justify-center shrink-0">
+                   <Mail size={28} className="text-neutral-800" />
+                </div>
+                <div className="text-center sm:text-left">
+                   <h4 className="text-2xl font-bold text-neutral-800 mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Let's Connect</h4>
+                   <p className="text-lg text-neutral-700" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>I'm always open to new opportunities, ideas and collaborations.</p>
+                   <a href={`mailto:${data.contact_email}`} className="font-sans font-bold text-sm text-[#1e3a8a] hover:underline mt-2 inline-block">{data.contact_email}</a>
+                </div>
+             </div>
           )}
 
           <div className="w-full max-w-sm mt-8 z-20 bg-white/80 p-2 rounded backdrop-blur-sm cork-shadow">
