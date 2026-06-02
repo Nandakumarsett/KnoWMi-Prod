@@ -271,6 +271,35 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
+          {data.thought_bubble && (
+            <div className="w-full mb-10 text-center">
+              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2">Advice I Live By</h4>
+              <div className="bg-emerald-50/50 p-6 rounded-[2rem] border border-emerald-100 italic text-emerald-800 text-lg font-medium">
+                "{data.thought_bubble}"
+              </div>
+            </div>
+          )}
+
+          {data.upcoming_events && data.upcoming_events.length > 0 && (
+            <div className="w-full mb-10 text-left">
+              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Upcoming Events</h4>
+              <div className="space-y-3">
+                {data.upcoming_events.map((ev: any, i: number) => (
+                  <div key={i} className="flex items-center justify-between p-4 bg-white rounded-2xl border border-neutral-100 shadow-sm">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                        <Calendar size={18} />
+                      </div>
+                      <span className="font-bold text-neutral-900">{ev.title}</span>
+                    </div>
+                    <span className="text-sm font-medium text-neutral-500">{ev.date}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+
           {(data.contact_email || data.quick_talk_url) && (
             <div className="grid grid-cols-2 gap-3 sm:gap-5 w-full max-w-sm sm:max-w-md mx-auto mt-6 sm:mt-8">
               {data.contact_email ? (
@@ -441,7 +470,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           {/* Row 2: Stats Sticky Notes */}
           <div className="w-full flex flex-wrap justify-center gap-4 sm:gap-6 mt-2">
              {/* CGPA */}
-             <div className="w-32 sm:w-40 aspect-square bg-[#FDE68A] p-4 text-center cork-shadow -rotate-2 relative flex flex-col items-center justify-center">
+             <div className="w-28 sm:w-32 aspect-square bg-[#FDE68A] p-4 text-center cork-shadow -rotate-2 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-blue" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>CGPA</span>
                 <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.campus_rank_pct ? data.campus_rank_pct : '3.9/4.0'}</span>
@@ -449,7 +478,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              </div>
              
              {/* Courses */}
-             <div className="w-32 sm:w-40 aspect-square bg-[#d4e0b5] p-4 text-center cork-shadow rotate-1 relative flex flex-col items-center justify-center">
+             <div className="w-28 sm:w-32 aspect-square bg-[#d4e0b5] p-4 text-center cork-shadow rotate-1 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-green" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Courses</span>
                 <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>8</span>
@@ -457,7 +486,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              </div>
              
              {/* Study Streak */}
-             <div className="w-32 sm:w-40 aspect-square bg-[#c0d6e4] p-4 text-center cork-shadow -rotate-1 relative flex flex-col items-center justify-center">
+             <div className="w-28 sm:w-32 aspect-square bg-[#c0d6e4] p-4 text-center cork-shadow -rotate-1 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-blue" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Study Streak</span>
                 <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.study_buddies ? data.study_buddies : '21'}</span>
@@ -465,7 +494,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              </div>
              
              {/* Scan Count */}
-             <div className="w-32 sm:w-40 aspect-square bg-[#f2c7ce] p-4 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center cursor-pointer" onClick={() => isFreeProfile && setShowFomoModal(true)}>
+             <div className="w-28 sm:w-32 aspect-square bg-[#f2c7ce] p-4 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center cursor-pointer" onClick={() => isFreeProfile && setShowFomoModal(true)}>
                 <div className="pushpin pin-white" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Scan Count</span>
                 <span className={`text-3xl font-bold text-[#1e3a8a] mt-1 block ${isFreeProfile ? 'blur-[4px]' : ''}`} style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
@@ -544,57 +573,29 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             )}
 
             {/* Row 5: Snapshot, Events */}
-            <div className="w-full md:w-[62%] bg-[#fdfbf7] p-6 pt-10 pb-10 pl-14 cork-shadow rotate-1 relative lined-paper">
-              <div className="pushpin pin-red absolute top-3 left-[50%]" />
-              <div className="paper-holes" />
-              <div className="margin-line" />
-              <h4 className="text-xl font-bold text-[#1e3a8a] mb-6 uppercase tracking-wide text-center mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Academic Snapshot</h4>
-              <div className="flex flex-row justify-around items-center text-center">
-                 <div>
-                   <BookOpen size={24} className="mx-auto text-[#1e3a8a] mb-2" strokeWidth={1.5} />
-                   <div className="text-sm font-sans font-bold text-neutral-600 uppercase">Courses Completed</div>
-                   <div className="text-3xl font-bold text-[#1e3a8a] mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>8 / 12</div>
-                   <div className="w-full h-1 bg-[#1e3a8a] mt-2 rounded"></div>
-                 </div>
-                 <div>
-                   <FileText size={24} className="mx-auto text-[#1e3a8a] mb-2" strokeWidth={1.5} />
-                   <div className="text-sm font-sans font-bold text-neutral-600 uppercase">Assignments Done</div>
-                   <div className="text-3xl font-bold text-[#1e3a8a] mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>24 / 30</div>
-                   <div className="w-full h-1 bg-[#1e3a8a] mt-2 rounded"></div>
-                 </div>
-                 <div>
-                   <GraduationCap size={24} className="mx-auto text-[#1e3a8a] mb-2" strokeWidth={1.5} />
-                   <div className="text-sm font-sans font-bold text-neutral-600 uppercase">Next Goal</div>
-                   <div className="text-3xl font-bold text-[#1e3a8a] mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>4.0 CGPA</div>
-                   <div className="w-full h-1 bg-[#1e3a8a] mt-2 rounded"></div>
-                 </div>
-              </div>
-            </div>
-
-            <div className="w-full md:w-[32%] bg-[#c0d6e4] p-6 pb-8 cork-shadow -rotate-2 relative">
+            
+            {(data.upcoming_events && data.upcoming_events.length > 0) && (
+<div className="w-full md:w-[46%] bg-[#c0d6e4] p-6 pb-8 cork-shadow -rotate-2 relative">
               <div className="pushpin pin-green" />
               <h4 className="text-xl font-bold text-[#1e3a8a] mb-4 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Upcoming Events</h4>
+
               <div className="space-y-4">
-                 <div className="flex gap-3">
-                   <Calendar size={18} className="text-[#1e3a8a] shrink-0 mt-1" strokeWidth={1.5} />
-                   <div>
-                     <div className="text-xl text-neutral-800 leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Midterm Exams</div>
-                     <div className="text-sm text-neutral-600 font-sans">May 15 - May 20</div>
+                 {data.upcoming_events.map((ev: any, i: number) => (
+                   <div key={i} className="flex gap-3">
+                     <Calendar size={18} className="text-[#1e3a8a] shrink-0 mt-1" strokeWidth={1.5} />
+                     <div>
+                       <div className="text-xl text-neutral-800 leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{ev.title}</div>
+                       <div className="text-sm text-neutral-600 font-sans">{ev.date}</div>
+                     </div>
                    </div>
-                 </div>
-                 <div className="flex gap-3">
-                   <Calendar size={18} className="text-[#1e3a8a] shrink-0 mt-1" strokeWidth={1.5} />
-                   <div>
-                     <div className="text-xl text-neutral-800 leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Hackathon</div>
-                     <div className="text-sm text-neutral-600 font-sans">May 25 - May 27</div>
-                   </div>
-                 </div>
+                 ))}
               </div>
             </div>
+            )}
 
             {/* Row 6: Projects, Connect, Advice */}
             {data.projects && data.projects.length > 0 && (
-              <div className="w-full md:w-[28%] bg-[#fdfbf7] p-6 pb-8 pl-10 cork-shadow rotate-[1deg] relative solid-paper min-h-[220px]">
+              <div className="w-full md:w-[46%] bg-[#fdfbf7] p-6 pb-8 pl-10 cork-shadow rotate-[1deg] relative solid-paper min-h-[220px]">
                 <div className="pushpin pin-blue" />
                 <div className="paper-holes" />
                 <h4 className="text-xl font-bold text-[#1e3a8a] mb-3 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Projects</h4>
@@ -608,7 +609,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             )}
 
             {data?.platforms && data?.platforms?.length > 0 && (
-              <div className="w-full md:w-[32%] bg-[#FDE68A] p-6 pb-8 cork-shadow -rotate-1 relative min-h-[220px]">
+              <div className="w-full md:w-[46%] bg-[#FDE68A] p-6 pb-8 cork-shadow -rotate-1 relative min-h-[220px]">
                 <div className="pushpin pin-yellow" />
                 <h4 className="text-xl font-bold text-neutral-800 mb-4 uppercase tracking-wide text-center mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Let's Connect</h4>
                 <div className="flex flex-wrap gap-3 justify-center">
@@ -630,7 +631,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             )}
 
             {data.thought_bubble && (
-              <div className="w-full md:w-[28%] bg-[#fdfbf7] p-6 pb-8 pl-10 cork-shadow rotate-2 relative solid-paper min-h-[220px] flex flex-col justify-center text-center">
+              <div className="w-full md:max-w-xl mx-auto bg-[#fdfbf7] p-6 pb-8 pl-10 cork-shadow rotate-1 relative solid-paper min-h-[220px] flex flex-col justify-center text-center mt-4">
                 <div className="pushpin pin-white" />
                 <div className="paper-holes" />
                 <h4 className="text-xl font-bold text-[#1e3a8a] mb-2 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Advice I Live By</h4>
