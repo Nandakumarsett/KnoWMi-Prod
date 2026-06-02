@@ -315,199 +315,236 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   // ----------------------------------------------------
   if (activeTheme === 'campus') {
     return (
-      <div className="w-full min-h-screen bg-[#FDFBF7] text-[#1E3A8A] pb-24 p-4 sm:p-8 relative selection:bg-amber-200">
-        <style dangerouslySetInnerHTML={{
-          __html: `
-            .varsity-bg {
-              background-image: radial-gradient(#1E3A8A 1px, transparent 1px);
-              background-size: 20px 20px;
-              opacity: 0.03;
-            }
-            .varsity-shadow {
-              box-shadow: 8px 8px 0px 0px #1E3A8A;
-            }
-            .varsity-shadow-sm {
-              box-shadow: 4px 4px 0px 0px #1E3A8A;
-            }
-            .hover-varsity-shadow:hover {
-              box-shadow: 12px 12px 0px 0px #1E3A8A;
-              transform: translate(-4px, -4px);
-            }
-          `
-        }} />
-
-        <div className="absolute inset-0 varsity-bg pointer-events-none z-0" />
-        
-        {/* Varsity Header Band / Banner */}
-        <div className="absolute top-0 left-0 right-0 h-48 sm:h-64 border-b-8 border-amber-400 z-0 bg-[#1E3A8A] overflow-hidden">
-          {data.featured_work_url && (
-            <img 
-              src={getAssetUrl(data.featured_work_url)} 
-              className="w-full h-full object-cover mix-blend-overlay opacity-60 filter contrast-125 saturate-50" 
-              alt="Banner" 
-            />
-          )}
-        </div>
-
-        <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center pt-12">
+      <div className="w-full relative text-black min-h-screen bg-[#c89b70] bg-[url('https://www.transparenttextures.com/patterns/cork-board.png')] overflow-hidden font-sans">
+        <style dangerouslySetInnerHTML={{__html: `
+          @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
           
-          <div className="w-full bg-white border-4 border-[#1E3A8A] p-8 text-center varsity-shadow hover-varsity-shadow transition-all duration-300 mb-12 relative mt-12">
-            <div className="absolute -top-6 -left-6 w-12 h-12 bg-amber-400 border-4 border-[#1E3A8A] rounded-full flex items-center justify-center font-black text-[#1E3A8A] text-xl transform -rotate-12 z-20">
-              A+
-            </div>
+          .cork-shadow { box-shadow: 2px 4px 10px rgba(0,0,0,0.3); }
+          .cork-shadow-lg { box-shadow: 4px 8px 15px rgba(0,0,0,0.4); }
+          .pushpin {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            box-shadow: inset -2px -2px 4px rgba(0,0,0,0.5), 2px 2px 4px rgba(0,0,0,0.4);
+            z-index: 10;
+          }
+          .pin-red { background: radial-gradient(circle at 30% 30%, #ff4d4d, #cc0000); }
+          .pin-blue { background: radial-gradient(circle at 30% 30%, #4da6ff, #005ce6); }
+          .pin-green { background: radial-gradient(circle at 30% 30%, #4dff4d, #00b300); }
+          .pin-yellow { background: radial-gradient(circle at 30% 30%, #ffff4d, #e6e600); }
+          .pin-white { background: radial-gradient(circle at 30% 30%, #ffffff, #cccccc); }
+          
+          .lined-paper {
+            background-color: #fdfbf7;
+            background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 100% 32px;
+            background-position: top left;
+          }
+        `}} />
+
+        {/* Banner (Background poster) */}
+        {data.featured_work_url && (
+          <div className="w-[90%] max-w-4xl mx-auto mt-8 relative z-0 cork-shadow-lg rotate-[1deg]">
+             <div className="pushpin pin-red" />
+             <div className="absolute top-4 left-4 right-4 bottom-4 border-[8px] border-white/30 z-10 pointer-events-none" />
+             <img src={getAssetUrl(data.featured_work_url)} className="w-full h-48 sm:h-64 object-cover opacity-90 sepia-[0.2]" alt="Banner" />
+          </div>
+        )}
+
+        <main className="relative z-10 max-w-4xl mx-auto px-4 flex flex-col items-center pt-8 pb-24 gap-8">
+          
+          {/* Main ID Card - Lined Paper */}
+          <div className="w-full max-w-xl bg-[#fdfbf7] p-8 pb-12 cork-shadow-lg relative -rotate-1 mx-auto mt-6">
+            <div className="pushpin pin-blue" />
             
-            <div className="relative -mt-20 mb-6 flex justify-center z-10">
-              <div className="w-40 h-40 rounded-full border-8 border-white bg-white overflow-hidden shadow-2xl relative">
-                <div className="w-full h-full rounded-full border-4 border-[#1E3A8A] overflow-hidden">
-                  {!avatarError && profile.avatar_url ? (
-                    <img 
-                    src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=1e3a8a&color=ffffff`} 
-                    alt={profile.display_name} 
-                    className="w-full h-full object-cover" 
-                  onError={() => setAvatarError(true)} />
-                  ) : (
-                    <div className="w-full h-full object-cover flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
-                    </div>
-                  )}
+            {/* Lined paper lines */}
+            <div className="absolute inset-0 pointer-events-none lined-paper opacity-70" />
+            <div className="absolute top-0 bottom-0 left-[15%] w-[2px] bg-red-400/50 pointer-events-none z-0" />
+            <div className="absolute top-0 bottom-0 left-[16%] w-[1px] bg-red-400/50 pointer-events-none z-0" />
+            
+            {/* Content */}
+            <div className="relative z-10 pl-[22%] sm:pl-[20%] text-left pt-6">
+              <h1 className="text-4xl sm:text-5xl font-bold text-[#1e3a8a] mb-2 leading-none" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                {profile.display_name}
+              </h1>
+              <div className="w-[90%] h-[2px] bg-[#1e3a8a]/40 mb-4" />
+              
+              <div className="text-2xl font-bold text-[#cc0000]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                {data.university ? data.university : 'Stanford University'}
+              </div>
+              <div className="text-xl text-[#4a5568] mb-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                Computer Science
+              </div>
+              
+              {profile.bio && (
+                <p className="text-xl text-[#2d3748] leading-relaxed max-w-sm mt-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  "{profile.bio}"
+                </p>
+              )}
+
+              {/* QR Code Placeholder */}
+              <div className="absolute top-4 right-4 text-center">
+                <span className="text-sm text-neutral-600 block mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Scan to Connect</span>
+                <div className="w-20 h-20 bg-white border border-dashed border-neutral-400 flex items-center justify-center relative">
+                   <QrCode size={48} className="text-neutral-800" />
+                   <div className="absolute -bottom-6 w-full text-center text-[10px] text-neutral-500 font-mono">
+                     KNOWMI-{profile.id?.substring(0,5).toUpperCase() || '007'}
+                   </div>
                 </div>
+              </div>
+              
+              {/* Doodle Star */}
+              <div className="absolute bottom-2 right-12 text-[#1e3a8a] opacity-80 transform rotate-12">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
               </div>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-[#1E3A8A] uppercase mb-3">
-              {profile.display_name}
-            </h1>
-            
-            <div className="inline-block bg-amber-400 text-[#1E3A8A] px-6 py-2 border-2 border-[#1E3A8A] font-black text-sm uppercase tracking-widest mb-6 shadow-[4px_4px_0px_0px_rgba(30,58,138,0.2)] transform rotate-1">
-              <GraduationCap size={18} className="inline mr-2 -mt-1" />
-              {data.university ? data.university : 'VARSITY LEAGUE'}
-            </div>
-
-            {profile.bio && (
-              <p className="text-sm font-bold text-neutral-600 leading-relaxed italic max-w-md mx-auto bg-neutral-50 p-4 border-l-4 border-amber-400">
-                "{profile.bio}"
-              </p>
-            )}
-          </div>
-
-          {(data.campus_rank_pct || data.study_buddies || stats) && (
-            <div className="w-full mb-12">
-              <h3 className="text-xs font-black uppercase text-[#1E3A8A] tracking-[0.2em] mb-4 flex items-center gap-4">
-                <span className="flex-grow h-1 bg-[#1E3A8A]"></span>
-                ACADEMIC STANDING
-                <span className="flex-grow h-1 bg-[#1E3A8A]"></span>
-              </h3>
-              <div className="grid grid-cols-2 gap-6">
-                <div 
-                  className={`bg-white border-4 border-[#1E3A8A] p-6 text-center varsity-shadow-sm transition-all ${isFreeProfile ? 'cursor-pointer hover:bg-neutral-50' : ''}`}
-                  onClick={() => isFreeProfile && setShowFomoModal(true)}
-                >
-                  <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 block mb-2">Campus Scans</span>
-                  <span className={`text-3xl font-black text-[#1E3A8A] flex justify-center items-center gap-2 ${isFreeProfile ? 'blur-[6px]' : ''}`}>
-                    {isFreeProfile ? '8,204' : liveViews} <Activity size={24} className="text-amber-500" />
-                  </span>
-                </div>
-                
-                {data.campus_rank_pct && (
-                  <div className="bg-[#1E3A8A] text-white border-4 border-[#1E3A8A] p-6 text-center varsity-shadow-sm">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 block mb-2">Honor Roll</span>
-                    <span className="text-3xl font-black flex justify-center items-center gap-2">
-                      Top {data.campus_rank_pct}% <Trophy size={24} className="text-amber-400" />
-                    </span>
+            {/* Polaroid Photo overlapping */}
+            <div className="absolute -top-12 -left-6 sm:-left-12 w-32 h-40 sm:w-40 sm:h-48 bg-white p-2 sm:p-3 pb-8 sm:pb-12 cork-shadow-lg -rotate-[8deg] z-20 transition-transform duration-300 hover:rotate-0 hover:scale-105">
+              <div className="pushpin pin-red" />
+              <div className="w-full h-full bg-neutral-200 overflow-hidden">
+                {!avatarError && profile.avatar_url ? (
+                  <img 
+                  src={getAssetUrl(profile.avatar_url)} 
+                  alt={profile.display_name} 
+                  className="w-full h-full object-cover grayscale sepia-[0.2]" 
+                  onError={() => setAvatarError(true)} />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-neutral-300 text-neutral-600 font-bold text-4xl font-sans">
+                    {profile.display_name?.charAt(0).toUpperCase() || 'U'}
                   </div>
                 )}
               </div>
             </div>
-          )}
+          </div>
 
-          {data.about_me && (
-            <div className="w-full bg-white p-8 border-4 border-[#1E3A8A] varsity-shadow hover-varsity-shadow transition-all duration-300 mb-12 relative group">
-              <div className="absolute top-4 right-4 text-amber-400 opacity-20 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
-                <BookOpen size={64} />
+          {/* Stats Row (Sticky Notes) */}
+          {(data.campus_rank_pct || data.study_buddies || stats) && (
+            <div className="w-full flex flex-wrap justify-center gap-6 mt-4">
+              <div className={`w-32 h-32 bg-[#FDE68A] p-4 text-center cork-shadow rotate-2 relative ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
+                <div className="pushpin pin-green" />
+                <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Scans</span>
+                <span className={`text-3xl font-bold text-[#1e3a8a] mt-1 block ${isFreeProfile ? 'blur-[6px]' : ''}`} style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {isFreeProfile ? '146' : liveViews}
+                </span>
+                <div className="absolute bottom-2 left-2 text-[#1e3a8a]">
+                  <Activity size={16} />
+                </div>
               </div>
-              <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#1E3A8A] mb-4 flex items-center gap-3">
-                <div className="w-8 h-1 bg-amber-400" /> STUDENT BIO
-              </h4>
-              <p className="text-sm text-neutral-700 leading-loose font-medium text-left relative z-10">
-                {data.about_me}
-              </p>
+              
+              <div className="w-32 h-32 bg-[#A7F3D0] p-4 text-center cork-shadow -rotate-3 relative">
+                <div className="pushpin pin-red" />
+                <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Courses</span>
+                <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>8</span>
+                <span className="text-sm text-neutral-600 block mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Completed</span>
+              </div>
+              
+              <div className="w-32 h-32 bg-[#BFDBFE] p-4 text-center cork-shadow rotate-1 relative">
+                <div className="pushpin pin-blue" />
+                <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Study Streak</span>
+                <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>21</span>
+                <span className="text-sm text-neutral-600 block mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Days</span>
+              </div>
+
+              {data.campus_rank_pct && (
+                <div className="w-32 h-32 bg-[#FBCFE8] p-4 text-center cork-shadow -rotate-2 relative">
+                  <div className="pushpin pin-white" />
+                  <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Honor Roll</span>
+                  <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Top {data.campus_rank_pct}%</span>
+                  <div className="absolute bottom-2 right-2 text-[#cc0000]">
+                    <Trophy size={16} />
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
-          {data?.platforms && data?.platforms?.length > 0 && (
-            <div className="w-full mb-12">
-              <h3 className="text-xs font-black uppercase text-[#1E3A8A] tracking-[0.2em] mb-6 flex items-center gap-4">
-                <span className="flex-grow h-1 bg-[#1E3A8A]"></span>
-                STUDENT DIRECTORY
-                <span className="flex-grow h-1 bg-[#1E3A8A]"></span>
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {data.platforms.map((p: any, i: number) => {
-                  const pData = getPlatformData(p.platform)
-                  return (
-                    <a 
-                      key={i}
-                      href={ensureAbsoluteUrl(p.url)} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      onClick={(e) => {
-                        handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
-                        if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
-                      }}
-                      className="bg-white border-4 border-[#1E3A8A] p-6 flex flex-col items-center justify-center gap-3 hover:-translate-y-2 hover:varsity-shadow transition-all cursor-pointer social-link-item group"
-                    >
-                      <div className="w-12 h-12 bg-neutral-100 group-hover:bg-amber-400 transition-colors border-2 border-[#1E3A8A] flex items-center justify-center relative">
+          <div className="flex flex-col md:flex-row gap-6 w-full items-start justify-center mt-4">
+            {/* About Me */}
+            {data.about_me && (
+              <div className="w-full md:w-1/2 bg-white p-6 pb-8 cork-shadow-lg -rotate-[1deg] relative">
+                <div className="pushpin pin-blue" />
+                <h4 className="text-2xl font-bold text-[#1e3a8a] mb-2 uppercase tracking-wide" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>About Me</h4>
+                <div className="w-full h-[2px] bg-[#1e3a8a]/20 mb-4" />
+                <p className="text-2xl text-neutral-800 leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {data.about_me}
+                </p>
+                <div className="mt-4 border-b-[3px] border-[#1e3a8a] border-dashed w-16 opacity-60" />
+              </div>
+            )}
+            
+            {/* Skills / Socials */}
+            {data?.platforms && data?.platforms?.length > 0 && (
+              <div className="w-full md:w-1/3 bg-[#FDE68A] p-6 pb-8 cork-shadow rotate-[2deg] relative">
+                <div className="pushpin pin-green" />
+                <h4 className="text-2xl font-bold text-neutral-800 mb-4 uppercase tracking-wide text-center" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Let's Connect</h4>
+                <div className="flex flex-wrap gap-4 justify-center">
+                  {data.platforms.map((p: any, i: number) => {
+                    const pData = getPlatformData(p.platform)
+                    return (
+                      <a 
+                        key={i}
+                        href={ensureAbsoluteUrl(p.url)} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        onClick={(e) => {
+                          handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                          if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                        }}
+                        className="w-12 h-12 bg-white/50 rounded flex items-center justify-center hover:bg-white hover:scale-110 transition-all cork-shadow"
+                      >
                         {pData.logo ? (
                           <img 
                             src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
-                            className="w-6 h-6 filter invert object-contain transition-transform group-hover:scale-110"
-                            style={{ filter: 'brightness(0)' }}
+                            className="w-6 h-6"
                             alt={p.platform}
                           />
                         ) : (
                           pData.icon
                         )}
-                        {isGated && (
-                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                            <Lock size={14} className="text-white" />
-                          </div>
-                        )}
-                      </div>
-                      <span className="text-[10px] font-black uppercase text-[#1E3A8A]">{p.platform}</span>
-                    </a>
-                  )
-                })}
+                      </a>
+                    )
+                  })}
+                </div>
+                <div className="mt-6 text-center text-xl text-neutral-700" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  Open to collaborate and build amazing things together!
+                </div>
               </div>
-            </div>
-          )}
-
+            )}
+          </div>
+          
           {data.availability && (
-            <div className="w-full bg-amber-400 border-4 border-[#1E3A8A] p-6 text-[#1E3A8A] flex items-center gap-6 varsity-shadow hover-varsity-shadow transition-all duration-300 mb-12">
-              <Briefcase size={32} className="animate-bounce" />
-              <div className="text-left">
-                <p className="text-[10px] font-black uppercase tracking-widest text-[#1E3A8A]/60 mb-1">CURRENTLY SEEKING</p>
-                <p className="text-sm font-black tracking-wide">{data.availability}</p>
+            <div className="w-full max-w-sm bg-white p-4 pb-6 text-center cork-shadow -rotate-1 relative mt-4">
+              <div className="pushpin pin-yellow" />
+              <div className="text-3xl font-bold text-[#cc0000] mt-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>"{data.availability}"</div>
+              <div className="absolute bottom-2 right-2 text-[#cc0000]">
+                <Briefcase size={20} />
               </div>
             </div>
           )}
 
-          <div className="w-full max-w-sm mb-12 z-20">
-            <ProfileCTAs profile={profile} accentColor="#1E3A8A" />
+          <div className="w-full max-w-sm mt-8 z-20 bg-white/80 p-2 rounded backdrop-blur-sm cork-shadow">
+            <ProfileCTAs profile={profile} accentColor="#cc0000" />
           </div>
 
         </main>
 
         {showFomoModal && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#1E3A8A]/80 backdrop-blur-sm">
-            <div className="bg-white border-4 border-[#1E3A8A] p-8 max-w-sm w-full varsity-shadow relative text-center">
-              <button onClick={() => setShowFomoModal(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-[#1E3A8A] transition-colors">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <div className="bg-[#fdfbf7] p-8 max-w-sm w-full cork-shadow-lg relative text-center rotate-1">
+              <button onClick={() => setShowFomoModal(false)} className="absolute top-2 right-2 p-2 text-neutral-400 hover:text-red-500">
                 <X size={24} />
               </button>
-              <Activity size={48} className="text-amber-400 mx-auto mb-6 animate-pulse" />
-              <h3 className="text-2xl font-black text-[#1E3A8A] uppercase mb-3">Unlock Premium</h3>
-              <p className="text-sm font-medium text-neutral-600 mb-8">Access advanced academic metrics and live campus scans.</p>
-              <button onClick={() => window.location.href = '/#pricing'} className="w-full py-4 bg-amber-400 hover:bg-amber-300 border-4 border-[#1E3A8A] text-[#1E3A8A] font-black text-xs uppercase tracking-widest transition-all varsity-shadow-sm hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1E3A8A]">
-                CLAIM STATUS
+              <div className="pushpin pin-red" />
+              <Activity size={48} className="text-[#1e3a8a] mx-auto mb-4 mt-4" />
+              <h3 className="text-3xl font-bold text-[#1e3a8a] mb-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Unlock Premium</h3>
+              <p className="text-xl text-neutral-600 mb-6" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>See your exact campus standing & scans!</p>
+              <button onClick={() => window.location.href = '/#pricing'} className="w-full py-3 bg-[#cc0000] text-white font-bold text-xl rounded shadow-md hover:bg-red-700 transition-colors" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                Upgrade Now
               </button>
             </div>
           </div>
