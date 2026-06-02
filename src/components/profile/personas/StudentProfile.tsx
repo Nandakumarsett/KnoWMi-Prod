@@ -352,14 +352,15 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           }
         `}} />
 
-        {/* Banner (Background) */}
-        {data.featured_work_url && (
-          <div className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-50 mix-blend-multiply" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' }}>
-             <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover sepia-[0.2]" alt="Banner" />
-          </div>
-        )}
-
         <main className="relative z-10 max-w-4xl mx-auto px-4 flex flex-col items-center pt-8 pb-24 gap-8">
+          
+          {/* Banner as Pinned Photo */}
+          {data.featured_work_url && (
+            <div className="w-full max-w-md bg-white p-3 sm:p-4 pb-10 sm:pb-14 cork-shadow-lg rotate-[2deg] relative mt-4 sm:mt-8 mx-auto z-10 transition-transform hover:rotate-0 hover:scale-105">
+              <div className="pushpin pin-yellow" />
+              <img src={getAssetUrl(data.featured_work_url)} className="w-full h-48 sm:h-56 object-cover sepia-[0.2]" alt="Banner" />
+            </div>
+          )}
           
           {/* Main ID Card - Lined Paper */}
           <div className="w-full max-w-xl bg-[#fdfbf7] p-6 sm:p-8 pb-10 sm:pb-12 cork-shadow-lg relative -rotate-1 mx-auto mt-6 sm:mt-12">
@@ -371,10 +372,10 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             <div className="absolute top-0 bottom-0 left-[11%] sm:left-[16%] w-[1px] bg-red-400/50 pointer-events-none z-0" />
             
             {/* Content & Photo Container */}
-            <div className="relative z-10 flex flex-row gap-4 sm:gap-6 items-start pt-2 sm:pt-6">
+            <div className="relative z-10 flex flex-col sm:flex-row gap-4 sm:gap-6 items-center sm:items-start pt-6 sm:pt-6">
               
               {/* Polaroid Photo inline */}
-              <div className="w-24 h-32 sm:w-36 sm:h-48 shrink-0 bg-white p-2 sm:p-3 pb-8 sm:pb-12 cork-shadow-lg -rotate-[6deg] z-20 transition-transform duration-300 hover:rotate-0 hover:scale-105 relative -mt-4 sm:-mt-12 ml-2 sm:-ml-12">
+              <div className="w-32 h-40 sm:w-36 sm:h-48 shrink-0 bg-white p-2 sm:p-3 pb-8 sm:pb-12 cork-shadow-lg -rotate-[6deg] z-20 transition-transform duration-300 hover:rotate-0 hover:scale-105 relative mt-4 sm:-mt-12 ml-0 sm:-ml-12">
                 <div className="pushpin pin-red" />
                 <div className="w-full h-full bg-neutral-200 overflow-hidden">
                   {!avatarError && profile.avatar_url ? (
@@ -392,35 +393,26 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               </div>
 
               {/* Text Info */}
-              <div className="flex-grow text-left w-full pr-16 sm:pr-24">
-                <h1 className="text-3xl sm:text-5xl font-bold text-[#1e3a8a] mb-2 leading-none" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+              <div className="flex-grow text-center sm:text-left w-full sm:pr-24 mt-4 sm:mt-0 px-4 sm:px-0">
+                <h1 className="text-4xl sm:text-5xl font-bold text-[#1e3a8a] mb-2 leading-none" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   {profile.display_name}
                 </h1>
-                <div className="w-full h-[2px] bg-[#1e3a8a]/40 mb-4" />
+                <div className="w-3/4 sm:w-full h-[2px] bg-[#1e3a8a]/40 mx-auto sm:mx-0 mb-4" />
                 
-                <div className="text-xl sm:text-2xl font-bold text-[#cc0000]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                <div className="text-2xl sm:text-2xl font-bold text-[#cc0000] mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   {data.university ? data.university : 'Stanford University'}
                 </div>
-                <div className="text-lg sm:text-xl text-[#4a5568] mb-2 sm:mb-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                <div className="text-xl sm:text-xl text-[#4a5568] mb-4 sm:mb-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   Computer Science
                 </div>
                 
                 {profile.bio && (
-                  <p className="text-lg sm:text-xl text-[#2d3748] leading-tight sm:leading-relaxed max-w-sm mt-2 sm:mt-4 hidden sm:block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  <p className="text-xl sm:text-xl text-[#2d3748] leading-tight sm:leading-relaxed mx-auto sm:mx-0 max-w-sm mt-4 sm:mt-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                     "{profile.bio}"
                   </p>
                 )}
               </div>
             </div>
-
-            {/* Mobile Bio wrapped under row */}
-            {profile.bio && (
-              <div className="relative z-10 pl-[12%] pr-4 block sm:hidden mt-4">
-                <p className="text-lg text-[#2d3748] leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  "{profile.bio}"
-                </p>
-              </div>
-            )}
             
             {/* QR Code Placeholder */}
             <div className="absolute top-4 right-4 text-center">
@@ -510,12 +502,15 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                         className="w-12 h-12 bg-white/50 rounded flex items-center justify-center hover:bg-white hover:scale-110 transition-all cork-shadow"
                       >
                         {pData.logo ? (
-                          <img 
-                            src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
-                            className="w-6 h-6"
-                            alt={p.platform}
-                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                          />
+                          <div className="relative w-6 h-6 flex items-center justify-center">
+                            <span className="absolute inset-0 flex items-center justify-center opacity-60"><Link size={20} className="text-neutral-800" /></span>
+                            <img 
+                              src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
+                              className="w-6 h-6 relative z-10 bg-white"
+                              alt={p.platform}
+                              onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                            />
+                          </div>
                         ) : (
                           pData.icon
                         )}
