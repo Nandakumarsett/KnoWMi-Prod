@@ -91,15 +91,27 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
           </div>
 
           {/* Bio */}
-          <div className="flex flex-col">
-             <label className={labelClasses}>Your Story / Bio</label>
-             <textarea
-              rows={6}
-              value={data.bio || data.about_me || ''}
-              onChange={e => onChange({ ...data, bio: e.target.value, about_me: e.target.value })}
-              placeholder="What drives you? What are you learning right now?"
-              className={`${inputBaseClasses} flex-1 resize-none`}
-            />
+          <div className="flex flex-col gap-4">
+             <div>
+               <label className={labelClasses}>Your Story / Bio</label>
+               <textarea
+                rows={4}
+                value={data.bio || data.about_me || ''}
+                onChange={e => onChange({ ...data, bio: e.target.value, about_me: e.target.value })}
+                placeholder="What drives you? What are you learning right now?"
+                className={`${inputBaseClasses} resize-none`}
+              />
+             </div>
+             <div>
+               <label className={labelClasses}>Advice I Live By</label>
+               <input
+                 type="text"
+                 value={data.thought_bubble || ''}
+                 onChange={e => updateField('thought_bubble', e.target.value)}
+                 placeholder="e.g. Stay hungry, stay foolish"
+                 className={inputBaseClasses}
+               />
+             </div>
           </div>
         </div>
       </section>
@@ -254,6 +266,39 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
               <div>
                 <label className={labelClasses}>Hackathons & Events</label>
                 <TagInput value={data.hackathons || []} onChange={tags => updateField('hackathons', tags)} placeholder="Add events..." />
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className={labelClasses} style={{marginBottom: 0}}>Upcoming Events</label>
+                </div>
+                <div className="space-y-3">
+                  {(data.upcoming_events || []).map((ev: any, i: number) => (
+                    <div key={i} className="flex gap-2 relative group">
+                      <input 
+                        type="text" 
+                        value={ev.title || ''} 
+                        onChange={e => { const copy = [...(data.upcoming_events || [])]; copy[i] = { ...ev, title: e.target.value }; updateField('upcoming_events', copy); }} 
+                        placeholder="Event Name" 
+                        className={`${inputBaseClasses} py-2`}
+                      />
+                      <input 
+                        type="text" 
+                        value={ev.date || ''} 
+                        onChange={e => { const copy = [...(data.upcoming_events || [])]; copy[i] = { ...ev, date: e.target.value }; updateField('upcoming_events', copy); }} 
+                        placeholder="Date (e.g. May 15)" 
+                        className={`${inputBaseClasses} py-2 w-1/2`}
+                      />
+                      <button type="button" onClick={() => { const copy = [...(data.upcoming_events || [])]; copy.splice(i,1); updateField('upcoming_events', copy); }} className="absolute -right-2 -top-2 w-5 h-5 bg-red-100 text-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Trash2 size={12} />
+                      </button>
+                    </div>
+                  ))}
+                  {(data.upcoming_events || []).length < 4 && (
+                    <button type="button" onClick={() => updateField('upcoming_events', [...(data.upcoming_events || []), { title: '', date: '' }])} className="w-full py-2 border-2 border-dashed border-neutral-200 rounded-xl text-xs font-bold text-neutral-500 hover:bg-neutral-50 flex items-center justify-center gap-2">
+                      <Plus size={14} /> Add Event
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>

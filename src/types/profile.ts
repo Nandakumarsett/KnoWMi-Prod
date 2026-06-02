@@ -43,6 +43,7 @@ export interface StudentData {
   campus_rank_pct: number;
   study_buddies: number;
   thought_bubble: string;
+  upcoming_events?: Array<{ title: string; date: string; }>;
   batch_year?: string;
   favorite_subject?: string;
   resume_url?: string;
