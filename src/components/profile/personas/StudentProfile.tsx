@@ -765,167 +765,199 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   // LAYOUT 3: SKETCHED RULED NOTEBOOK (Default / Notebook Theme)
   // ----------------------------------------------------
   return (
-    <div className="w-full min-h-screen relative overflow-x-hidden bg-[#Fdfbf7] text-[#333333] transition-colors duration-300 pb-24 p-4 sm:p-8 selection:bg-blue-100 font-sans">
+    <div className="w-full min-h-screen relative overflow-x-hidden bg-[#2d3748] bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')] bg-blend-multiply text-[#333333] transition-colors duration-300 pb-12 sm:pb-24 p-2 sm:p-8 selection:bg-blue-200 font-sans flex justify-center items-start">
       
-      {/* Notebook Paper Lines */}
-      <div 
-        className="absolute inset-0 pointer-events-none z-0" 
-        style={{
-          backgroundImage: 'linear-gradient(#E5E7EB 1px, transparent 1px)',
-          backgroundSize: '100% 32px',
-          backgroundPosition: 'top left'
-        }}
-      />
-      {/* Red Margin Line */}
-      <div className="absolute top-0 bottom-0 left-[15%] w-[1px] bg-red-400/60 pointer-events-none z-0" />
-      <div className="absolute top-0 bottom-0 left-[15.5%] w-[1px] bg-red-400/60 pointer-events-none z-0" />
-
-      {/* Notebook Banner (Background) */}
-      {data.featured_work_url && (
-        <div 
-          className="absolute top-0 left-0 w-full h-48 sm:h-64 z-0 pointer-events-none mix-blend-multiply opacity-80"
-          style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)' }}
-        >
-          <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter grayscale sepia-[0.3] contrast-125" alt="Banner" />
-        </div>
-      )}
-
-      <main className="relative z-10 max-w-2xl mx-auto px-4 flex flex-col items-center pt-8">
+      {/* Physical Notebook Container */}
+      <div className="relative w-full max-w-3xl bg-[#fdfbf7] shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-r-xl min-h-[90vh] mt-2 sm:mt-8 flex flex-row">
         
-        {/* Tape/Polaroid Avatar */}
-        <div className="relative mb-12 mt-6 group">
-          <div className="w-48 h-56 bg-white p-3 pb-12 shadow-[0_10px_30px_rgba(0,0,0,0.1)] rotate-[-2deg] transition-transform duration-500 hover:rotate-0 hover:scale-105">
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-16 h-6 bg-white/50 backdrop-blur-sm border border-neutral-200 shadow-sm rotate-[4deg] opacity-80" />
-            <img 
-              src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=f3f4f6&color=374151`} 
-              alt={profile.display_name} 
-              className="w-full h-full object-cover filter contrast-110 sepia-[0.2]"
-              onError={(e) => { e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=f3f4f6&color=374151`; }} 
-            />
-            <div className="absolute bottom-4 left-0 right-0 text-center text-neutral-500 font-medium text-sm" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
-              {profile.display_name}
+        {/* Notebook Spiral Edge */}
+        <div className="absolute left-0 top-0 bottom-0 w-10 sm:w-16 border-r border-neutral-300 flex flex-col justify-evenly items-center py-8 z-30 pointer-events-none">
+          <div className="absolute top-0 bottom-0 left-0 w-full bg-gradient-to-r from-black/5 to-transparent z-0" />
+          {Array.from({ length: 24 }).map((_, i) => (
+            <div key={i} className="relative w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-[#1a202c] shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)] flex items-center justify-center z-10">
+               {/* Spiral Ring */}
+               <div className="absolute w-10 sm:w-14 h-2 sm:h-3 border-2 border-neutral-500/80 rounded-full left-[-16px] sm:left-[-20px] bg-gradient-to-r from-neutral-300 via-white to-neutral-400 shadow-md" />
             </div>
-          </div>
+          ))}
         </div>
 
-        {/* Title / Name */}
-        <div className="w-full mb-12 text-center pl-[5%]">
-          <h1 className="text-4xl sm:text-6xl font-black text-neutral-800 tracking-tight mb-2" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>
-            {profile.display_name}
-          </h1>
-          <p className="text-blue-600 font-bold text-lg" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
-            {data.university ? `@ ${data.university}` : 'Student'}
-          </p>
-        </div>
+        {/* Paper Content Area */}
+        <div className="relative flex-grow overflow-hidden rounded-r-xl">
+          {/* Notebook Paper Lines */}
+          <div 
+            className="absolute inset-0 pointer-events-none z-0 opacity-40" 
+            style={{
+              backgroundImage: 'linear-gradient(#3b82f6 1px, transparent 1px)',
+              backgroundSize: '100% 32px',
+              backgroundPosition: 'top left'
+            }}
+          />
+          {/* Red Margin Line */}
+          <div className="absolute top-0 bottom-0 left-[3.5rem] sm:left-[5rem] w-[2px] bg-red-400/60 pointer-events-none z-0 shadow-sm" />
+          <div className="absolute top-0 bottom-0 left-[3.7rem] sm:left-[5.2rem] w-[1px] bg-red-400/30 pointer-events-none z-0" />
 
-        {/* Bio (Sticky Note) */}
-        {profile.bio && (
-          <div className="w-full max-w-sm ml-auto mr-4 mb-12 relative rotate-[3deg]">
-            <div className="bg-[#FEF08A] p-6 shadow-md hover:shadow-lg transition-shadow">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-12 h-4 bg-[#FDE047] opacity-60" />
-              <p className="text-neutral-800 text-lg leading-relaxed" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
-                "{profile.bio}"
+          {/* Actual Content Wrapper (padding accounts for rings + margin) */}
+          <main className="relative z-10 w-full pl-[4.5rem] sm:pl-[6.5rem] pr-6 sm:pr-12 pt-16 pb-24 flex flex-col gap-10">
+            
+            {/* Banner (Taped Photo) */}
+            {data.featured_work_url && (
+              <div className="w-full max-w-sm mx-auto relative rotate-[2deg]">
+                {/* Washi Tape */}
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-white/40 backdrop-blur-sm border border-neutral-300 shadow-sm rotate-[-3deg] z-20" />
+                <img src={getAssetUrl(data.featured_work_url)} className="w-full h-48 sm:h-56 object-cover shadow-lg border-[6px] sm:border-[8px] border-white filter contrast-110 sepia-[0.1]" alt="Banner" />
+              </div>
+            )}
+
+            {/* Header / Name */}
+            <div className="w-full mt-4">
+              <h1 className="text-4xl sm:text-6xl font-black text-blue-900 tracking-tight leading-none mb-2" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>
+                {profile.display_name}
+              </h1>
+              <p className="text-red-600 font-bold text-xl sm:text-2xl" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                {data.university ? `@ ${data.university}` : 'Student'}
               </p>
             </div>
-          </div>
-        )}
 
-        {/* Metrics */}
-        {(data.campus_rank_pct || data.study_buddies || stats) && (
-          <div className="grid grid-cols-2 gap-8 w-full mb-12 pl-[5%]">
-            <div 
-              className={`border-2 border-neutral-300 border-dashed rounded-2xl p-6 text-center bg-white/50 backdrop-blur-sm ${isFreeProfile ? 'cursor-pointer hover:bg-white' : ''}`}
-              onClick={() => isFreeProfile && setShowFomoModal(true)}
-            >
-              <p className="text-neutral-500 text-sm font-bold uppercase tracking-widest mb-2">Visits</p>
-              <div className={`text-4xl font-black text-neutral-800 ${isFreeProfile ? 'blur-[5px]' : ''}`} style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
-                {isFreeProfile ? '8k+' : liveViews}
+            {/* Profile Content row */}
+            <div className="flex flex-col sm:flex-row gap-8 items-start w-full">
+              {/* Avatar Taped */}
+              <div className="relative shrink-0 rotate-[-3deg] sm:mt-2">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-[#FEF08A]/60 backdrop-blur-md border border-neutral-200 shadow-sm rotate-[4deg] z-20" />
+                <div className="w-28 h-36 sm:w-36 sm:h-48 bg-white p-2 sm:p-3 pb-8 sm:pb-12 shadow-[2px_4px_12px_rgba(0,0,0,0.15)] transition-transform duration-300 hover:rotate-0 hover:scale-105">
+                  <img 
+                    src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=f3f4f6&color=374151`} 
+                    alt={profile.display_name} 
+                    className="w-full h-full object-cover filter contrast-110 grayscale"
+                    onError={(e) => { e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=f3f4f6&color=374151`; }} 
+                  />
+                  <div className="absolute bottom-2 left-0 right-0 text-center text-neutral-600 font-medium text-lg sm:text-xl" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                    It's me!
+                  </div>
+                </div>
               </div>
+
+              {/* Bio */}
+              {profile.bio && (
+                <div className="flex-grow">
+                  <p className="text-neutral-800 text-xl sm:text-3xl leading-relaxed" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                    "{profile.bio}"
+                  </p>
+                </div>
+              )}
             </div>
-            
-            {data.campus_rank_pct && (
-              <div className="border-2 border-neutral-300 border-dashed rounded-2xl p-6 text-center bg-white/50 backdrop-blur-sm">
-                <p className="text-neutral-500 text-sm font-bold uppercase tracking-widest mb-2">Rank</p>
-                <div className="text-4xl font-black text-blue-600" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
-                  Top {data.campus_rank_pct}%
+
+            {/* Hand-Drawn Metrics Boxes */}
+            {(data.campus_rank_pct || data.study_buddies || stats) && (
+              <div className="grid grid-cols-2 gap-4 sm:gap-6 w-full max-w-sm mt-4">
+                <div 
+                  className={`border-[3px] border-blue-600/70 p-4 text-center bg-blue-50/40 transform transition-transform hover:scale-105 ${isFreeProfile ? 'cursor-pointer' : ''}`}
+                  style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
+                  onClick={() => isFreeProfile && setShowFomoModal(true)}
+                >
+                  <p className="text-blue-900 text-xl font-bold mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Visits</p>
+                  <div className={`text-4xl sm:text-5xl font-black text-blue-800 ${isFreeProfile ? 'blur-[5px]' : ''}`} style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>
+                    {isFreeProfile ? '8k+' : liveViews}
+                  </div>
+                </div>
+                
+                {data.campus_rank_pct && (
+                  <div 
+                    className="border-[3px] border-red-500/70 p-4 text-center bg-red-50/40 transform transition-transform hover:scale-105"
+                    style={{ borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px' }}
+                  >
+                    <p className="text-red-900 text-xl font-bold mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Rank</p>
+                    <div className="text-3xl sm:text-4xl font-black text-red-600" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>
+                      Top {data.campus_rank_pct}%
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* About Me */}
+            {data.about_me && (
+              <div className="w-full mt-2">
+                <h3 className="text-3xl sm:text-4xl font-bold text-neutral-800 mb-2 underline decoration-wavy decoration-blue-400" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  About Me
+                </h3>
+                <p className="text-2xl sm:text-3xl text-neutral-700 leading-snug font-medium" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {data.about_me}
+                </p>
+              </div>
+            )}
+
+            {/* Let's Connect */}
+            {data?.platforms && data?.platforms?.length > 0 && (
+              <div className="w-full mt-4 mb-8">
+                <h3 className="text-3xl sm:text-4xl font-bold text-neutral-800 mb-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  Find me here:
+                </h3>
+                <div className="flex flex-wrap gap-4">
+                  {data.platforms.map((p: any, i: number) => {
+                    const platform = p.platform?.toLowerCase()
+                    const pData = getPlatformData(platform)
+                    return (
+                      <a 
+                        key={i}
+                        href={ensureAbsoluteUrl(p.url)} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        onClick={(e) => {
+                          handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                          if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 border-[3px] border-neutral-700 text-neutral-800 hover:bg-neutral-100 transition-colors bg-white relative group shadow-sm hover:-translate-y-1"
+                        style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
+                      >
+                        {pData.logo ? (
+                          <img 
+                            src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
+                            className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity"
+                            alt={p.platform}
+                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                          />
+                        ) : (
+                          <div className="opacity-80 scale-90 group-hover:opacity-100 transition-opacity">{pData.icon}</div>
+                        )}
+                        <span className="font-bold text-lg sm:text-xl" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{p.platform}</span>
+                        
+                        {isGated && (
+                          <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-lg">
+                            <Lock size={16} className="text-neutral-500" />
+                          </div>
+                        )}
+                      </a>
+                    )
+                  })}
                 </div>
               </div>
             )}
-          </div>
-        )}
 
-        {/* About Me */}
-        {data.about_me && (
-          <div className="w-full mb-12 pl-[5%]">
-            <div className="relative">
-              <h3 className="text-xl font-bold text-neutral-800 mb-4" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>
-                About Me...
-              </h3>
-              <p className="text-lg text-neutral-700 leading-[32px] font-medium" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
-                {data.about_me}
-              </p>
+            {data.availability && (
+              <div className="w-full mb-8">
+                <div className="inline-block border-[3px] border-blue-600 bg-blue-50/50 px-6 py-2 text-blue-800 font-bold text-2xl rotate-[-2deg] shadow-sm" style={{ borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px', fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  Looking for: {data.availability}
+                </div>
+              </div>
+            )}
+
+            <div className="w-full max-w-sm mb-4 z-20">
+              <ProfileCTAs profile={profile} accentColor="#1e3a8a" />
             </div>
-          </div>
-        )}
-
-        {/* Links */}
-        {data?.platforms && data?.platforms?.length > 0 && (
-          <div className="w-full mb-12 pl-[5%]">
-            <h3 className="text-xl font-bold text-neutral-800 mb-6 text-center" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>
-              Find me here ↓
-            </h3>
-            <div className="flex flex-wrap justify-center gap-4">
-              {data.platforms.map((p: any, i: number) => {
-                const platform = p.platform?.toLowerCase()
-                const Icon = PLATFORM_ICONS[platform] || Share2
-                return (
-                  <a 
-                    key={i}
-                    href={ensureAbsoluteUrl(p.url)} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    onClick={(e) => {
-                      handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
-                      if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
-                    }}
-                    className="w-16 h-16 bg-white border-2 border-neutral-300 rounded-full flex items-center justify-center hover:scale-110 hover:border-blue-500 transition-all shadow-sm relative group"
-                  >
-                    <Icon className="w-6 h-6 opacity-60 group-hover:opacity-100 text-neutral-800 transition-opacity" />
-                    {isGated && (
-                      <div className="absolute inset-0 bg-white/80 rounded-full flex items-center justify-center">
-                        <Lock size={16} className="text-neutral-500" />
-                      </div>
-                    )}
-                  </a>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {data.availability && (
-          <div className="w-full mb-12 pl-[5%]">
-            <div className="inline-block border-4 border-blue-500 rounded-full px-6 py-3 text-blue-600 font-bold text-lg rotate-[-2deg]" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>
-              Looking for: {data.availability}
-            </div>
-          </div>
-        )}
-
-        <div className="w-full max-w-sm mb-12 pl-[5%] z-20">
-          <ProfileCTAs profile={profile} accentColor="#2563EB" />
+            
+          </main>
         </div>
-
-      </main>
+      </div>
 
       {showFomoModal && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-neutral-900/40 backdrop-blur-sm">
-          <div className="bg-white p-8 max-w-sm w-full rounded-2xl shadow-xl relative text-center border-2 border-neutral-200">
-            <button onClick={() => setShowFomoModal(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-600">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-neutral-900/60 backdrop-blur-sm">
+          <div className="bg-white p-8 max-w-sm w-full shadow-2xl relative text-center border-[3px] border-neutral-800" style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}>
+            <button onClick={() => setShowFomoModal(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-800 transition-colors">
               <X size={24} />
             </button>
-            <h3 className="text-2xl font-bold text-neutral-800 mb-2" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>Secret Stats</h3>
-            <p className="text-neutral-600 mb-6 font-medium" style={{ fontFamily: "'Indie Flower', cursive, sans-serif" }}>Looks like you need the premium tee to unlock these numbers.</p>
-            <button onClick={() => window.location.href = '/#pricing'} className="w-full py-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl transition-colors shadow-md">
+            <h3 className="text-3xl font-bold text-neutral-800 mb-2" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>Secret Stats</h3>
+            <p className="text-neutral-700 mb-6 font-medium text-xl leading-snug" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Looks like you need the premium tee to unlock these numbers.</p>
+            <button onClick={() => window.location.href = '/#pricing'} className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xl transition-colors border-[3px] border-blue-800 shadow-md" style={{ borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px', fontFamily: "'Caveat', cursive, sans-serif" }}>
               Unlock Now
             </button>
           </div>
