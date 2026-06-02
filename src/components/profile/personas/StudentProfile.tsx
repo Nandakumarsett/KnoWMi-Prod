@@ -362,66 +362,74 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         <main className="relative z-10 max-w-4xl mx-auto px-4 flex flex-col items-center pt-8 pb-24 gap-8">
           
           {/* Main ID Card - Lined Paper */}
-          <div className="w-full max-w-xl bg-[#fdfbf7] p-8 pb-12 cork-shadow-lg relative -rotate-1 mx-auto mt-16 sm:mt-12">
+          <div className="w-full max-w-xl bg-[#fdfbf7] p-6 sm:p-8 pb-10 sm:pb-12 cork-shadow-lg relative -rotate-1 mx-auto mt-6 sm:mt-12">
             <div className="pushpin pin-blue" />
             
             {/* Lined paper lines */}
             <div className="absolute inset-0 pointer-events-none lined-paper opacity-70" />
-            <div className="absolute top-0 bottom-0 left-[15%] w-[2px] bg-red-400/50 pointer-events-none z-0" />
-            <div className="absolute top-0 bottom-0 left-[16%] w-[1px] bg-red-400/50 pointer-events-none z-0" />
+            <div className="absolute top-0 bottom-0 left-[10%] sm:left-[15%] w-[2px] bg-red-400/50 pointer-events-none z-0" />
+            <div className="absolute top-0 bottom-0 left-[11%] sm:left-[16%] w-[1px] bg-red-400/50 pointer-events-none z-0" />
             
-            {/* Content */}
-            <div className="relative z-10 pl-[30%] sm:pl-[24%] text-left pt-6">
-              <h1 className="text-4xl sm:text-5xl font-bold text-[#1e3a8a] mb-2 leading-none" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                {profile.display_name}
-              </h1>
-              <div className="w-[90%] h-[2px] bg-[#1e3a8a]/40 mb-4" />
+            {/* Content & Photo Container */}
+            <div className="relative z-10 flex flex-row gap-4 sm:gap-6 items-start pt-2 sm:pt-6">
               
-              <div className="text-2xl font-bold text-[#cc0000]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                {data.university ? data.university : 'Stanford University'}
-              </div>
-              <div className="text-xl text-[#4a5568] mb-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                Computer Science
-              </div>
-              
-              {profile.bio && (
-                <p className="text-xl text-[#2d3748] leading-relaxed max-w-sm mt-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  "{profile.bio}"
-                </p>
-              )}
-
-              {/* QR Code Placeholder */}
-              <div className="absolute top-4 right-4 text-center">
-                <span className="text-sm text-neutral-600 block mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Scan to Connect</span>
-                <div className="w-20 h-20 bg-white border border-dashed border-neutral-400 flex items-center justify-center relative">
-                   <QrCode size={48} className="text-neutral-800" />
-                   <div className="absolute -bottom-6 w-full text-center text-[10px] text-neutral-500 font-mono">
-                     KNOWMI-{profile.id?.substring(0,5).toUpperCase() || '007'}
-                   </div>
+              {/* Polaroid Photo inline */}
+              <div className="w-24 h-32 sm:w-36 sm:h-48 shrink-0 bg-white p-2 sm:p-3 pb-8 sm:pb-12 cork-shadow-lg -rotate-[6deg] z-20 transition-transform duration-300 hover:rotate-0 hover:scale-105 relative -mt-4 sm:-mt-12 ml-2 sm:-ml-12">
+                <div className="pushpin pin-red" />
+                <div className="w-full h-full bg-neutral-200 overflow-hidden">
+                  {!avatarError && profile.avatar_url ? (
+                    <img 
+                    src={getAssetUrl(profile.avatar_url)} 
+                    alt={profile.display_name} 
+                    className="w-full h-full object-cover grayscale sepia-[0.2]" 
+                    onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-neutral-300 text-neutral-600 font-bold text-4xl font-sans">
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
                 </div>
               </div>
-              
-              {/* Doodle Star */}
-              <div className="absolute bottom-2 right-12 text-[#1e3a8a] opacity-80 transform rotate-12">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+
+              {/* Text Info */}
+              <div className="flex-grow text-left w-full pr-16 sm:pr-24">
+                <h1 className="text-3xl sm:text-5xl font-bold text-[#1e3a8a] mb-2 leading-none" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {profile.display_name}
+                </h1>
+                <div className="w-full h-[2px] bg-[#1e3a8a]/40 mb-4" />
+                
+                <div className="text-xl sm:text-2xl font-bold text-[#cc0000]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {data.university ? data.university : 'Stanford University'}
+                </div>
+                <div className="text-lg sm:text-xl text-[#4a5568] mb-2 sm:mb-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  Computer Science
+                </div>
+                
+                {profile.bio && (
+                  <p className="text-lg sm:text-xl text-[#2d3748] leading-tight sm:leading-relaxed max-w-sm mt-2 sm:mt-4 hidden sm:block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                    "{profile.bio}"
+                  </p>
+                )}
               </div>
             </div>
 
-            {/* Polaroid Photo overlapping */}
-            <div className="absolute -top-12 sm:-top-10 left-2 sm:-left-8 w-28 h-36 sm:w-36 sm:h-48 bg-white p-2 sm:p-3 pb-8 sm:pb-12 cork-shadow-lg -rotate-[6deg] z-20 transition-transform duration-300 hover:rotate-0 hover:scale-105">
-              <div className="pushpin pin-red" />
-              <div className="w-full h-full bg-neutral-200 overflow-hidden">
-                {!avatarError && profile.avatar_url ? (
-                  <img 
-                  src={getAssetUrl(profile.avatar_url)} 
-                  alt={profile.display_name} 
-                  className="w-full h-full object-cover grayscale sepia-[0.2]" 
-                  onError={() => setAvatarError(true)} />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-neutral-300 text-neutral-600 font-bold text-4xl font-sans">
-                    {profile.display_name?.charAt(0).toUpperCase() || 'U'}
-                  </div>
-                )}
+            {/* Mobile Bio wrapped under row */}
+            {profile.bio && (
+              <div className="relative z-10 pl-[12%] pr-4 block sm:hidden mt-4">
+                <p className="text-lg text-[#2d3748] leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  "{profile.bio}"
+                </p>
+              </div>
+            )}
+            
+            {/* QR Code Placeholder */}
+            <div className="absolute top-4 right-4 text-center">
+              <span className="text-sm text-neutral-600 block mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Scan to Connect</span>
+              <div className="w-20 h-20 bg-white border border-dashed border-neutral-400 flex items-center justify-center relative">
+                 <QrCode size={48} className="text-neutral-800" />
+                 <div className="absolute -bottom-6 w-full text-center text-[10px] text-neutral-500 font-mono">
+                   KNOWMI-{profile.id?.substring(0,5).toUpperCase() || '007'}
+                 </div>
               </div>
             </div>
           </div>
@@ -506,6 +514,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                             src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
                             className="w-6 h-6"
                             alt={p.platform}
+                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
                           />
                         ) : (
                           pData.icon
