@@ -346,19 +346,17 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           }
         `}} />
 
-        {/* Banner (Background poster) */}
+        {/* Banner (Background) */}
         {data.featured_work_url && (
-          <div className="w-[90%] max-w-4xl mx-auto mt-8 relative z-0 cork-shadow-lg rotate-[1deg]">
-             <div className="pushpin pin-red" />
-             <div className="absolute top-4 left-4 right-4 bottom-4 border-[8px] border-white/30 z-10 pointer-events-none" />
-             <img src={getAssetUrl(data.featured_work_url)} className="w-full h-48 sm:h-64 object-cover opacity-90 sepia-[0.2]" alt="Banner" />
+          <div className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-50 mix-blend-multiply" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' }}>
+             <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover sepia-[0.2]" alt="Banner" />
           </div>
         )}
 
         <main className="relative z-10 max-w-4xl mx-auto px-4 flex flex-col items-center pt-8 pb-24 gap-8">
           
           {/* Main ID Card - Lined Paper */}
-          <div className="w-full max-w-xl bg-[#fdfbf7] p-8 pb-12 cork-shadow-lg relative -rotate-1 mx-auto mt-6">
+          <div className="w-full max-w-xl bg-[#fdfbf7] p-8 pb-12 cork-shadow-lg relative -rotate-1 mx-auto mt-16 sm:mt-12">
             <div className="pushpin pin-blue" />
             
             {/* Lined paper lines */}
@@ -367,7 +365,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             <div className="absolute top-0 bottom-0 left-[16%] w-[1px] bg-red-400/50 pointer-events-none z-0" />
             
             {/* Content */}
-            <div className="relative z-10 pl-[22%] sm:pl-[20%] text-left pt-6">
+            <div className="relative z-10 pl-[30%] sm:pl-[24%] text-left pt-6">
               <h1 className="text-4xl sm:text-5xl font-bold text-[#1e3a8a] mb-2 leading-none" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                 {profile.display_name}
               </h1>
@@ -404,7 +402,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
 
             {/* Polaroid Photo overlapping */}
-            <div className="absolute -top-12 -left-6 sm:-left-12 w-32 h-40 sm:w-40 sm:h-48 bg-white p-2 sm:p-3 pb-8 sm:pb-12 cork-shadow-lg -rotate-[8deg] z-20 transition-transform duration-300 hover:rotate-0 hover:scale-105">
+            <div className="absolute -top-12 sm:-top-10 left-2 sm:-left-8 w-28 h-36 sm:w-36 sm:h-48 bg-white p-2 sm:p-3 pb-8 sm:pb-12 cork-shadow-lg -rotate-[6deg] z-20 transition-transform duration-300 hover:rotate-0 hover:scale-105">
               <div className="pushpin pin-red" />
               <div className="w-full h-full bg-neutral-200 overflow-hidden">
                 {!avatarError && profile.avatar_url ? (
@@ -424,8 +422,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
           {/* Stats Row (Sticky Notes) */}
           {(data.campus_rank_pct || data.study_buddies || stats) && (
-            <div className="w-full flex flex-wrap justify-center gap-6 mt-4">
-              <div className={`w-32 h-32 bg-[#FDE68A] p-4 text-center cork-shadow rotate-2 relative ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
+            <div className="w-full max-w-3xl grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-4 sm:gap-8 mt-4 mx-auto">
+              <div className={`w-full sm:w-36 aspect-square bg-[#FDE68A] p-4 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
                 <div className="pushpin pin-green" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Scans</span>
                 <span className={`text-3xl font-bold text-[#1e3a8a] mt-1 block ${isFreeProfile ? 'blur-[6px]' : ''}`} style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
@@ -436,14 +434,14 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 </div>
               </div>
               
-              <div className="w-32 h-32 bg-[#A7F3D0] p-4 text-center cork-shadow -rotate-3 relative">
+              <div className="w-full sm:w-36 aspect-square bg-[#A7F3D0] p-4 text-center cork-shadow -rotate-3 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-red" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Courses</span>
                 <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>8</span>
                 <span className="text-sm text-neutral-600 block mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Completed</span>
               </div>
               
-              <div className="w-32 h-32 bg-[#BFDBFE] p-4 text-center cork-shadow rotate-1 relative">
+              <div className="w-full sm:w-36 aspect-square bg-[#BFDBFE] p-4 text-center cork-shadow rotate-1 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-blue" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Study Streak</span>
                 <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>21</span>
@@ -451,7 +449,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               </div>
 
               {data.campus_rank_pct && (
-                <div className="w-32 h-32 bg-[#FBCFE8] p-4 text-center cork-shadow -rotate-2 relative">
+                <div className="w-full sm:w-36 aspect-square bg-[#FBCFE8] p-4 text-center cork-shadow -rotate-2 relative flex flex-col items-center justify-center">
                   <div className="pushpin pin-white" />
                   <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Honor Roll</span>
                   <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Top {data.campus_rank_pct}%</span>
@@ -463,10 +461,10 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          <div className="flex flex-col md:flex-row gap-6 w-full items-start justify-center mt-4">
+          <div className="flex flex-col md:flex-row gap-8 w-full max-w-4xl items-stretch justify-center mt-6">
             {/* About Me */}
             {data.about_me && (
-              <div className="w-full md:w-1/2 bg-white p-6 pb-8 cork-shadow-lg -rotate-[1deg] relative">
+              <div className="w-full md:w-3/5 bg-white p-6 pb-8 cork-shadow-lg -rotate-[1deg] relative">
                 <div className="pushpin pin-blue" />
                 <h4 className="text-2xl font-bold text-[#1e3a8a] mb-2 uppercase tracking-wide" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>About Me</h4>
                 <div className="w-full h-[2px] bg-[#1e3a8a]/20 mb-4" />
@@ -479,7 +477,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             
             {/* Skills / Socials */}
             {data?.platforms && data?.platforms?.length > 0 && (
-              <div className="w-full md:w-1/3 bg-[#FDE68A] p-6 pb-8 cork-shadow rotate-[2deg] relative">
+              <div className="w-full md:w-2/5 bg-[#FDE68A] p-6 pb-8 cork-shadow rotate-[2deg] relative">
                 <div className="pushpin pin-green" />
                 <h4 className="text-2xl font-bold text-neutral-800 mb-4 uppercase tracking-wide text-center" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Let's Connect</h4>
                 <div className="flex flex-wrap gap-4 justify-center">
