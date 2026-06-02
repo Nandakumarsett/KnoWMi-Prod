@@ -461,7 +461,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              
              {/* Spotify QR */}
              {data.playlist_url && (
-               <a href={ensureAbsoluteUrl(data.playlist_url)} target="_blank" rel="noopener noreferrer" className="w-28 sm:w-32 aspect-square bg-[#1DB954] p-2 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center hover:scale-105 transition-transform cursor-pointer">
+               <a href={ensureAbsoluteUrl(data.playlist_url)} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#1DB954] p-2 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center hover:scale-105 transition-transform cursor-pointer">
                   <div className="pushpin pin-white" />
                   <span className="text-lg font-bold block mt-1 text-white leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.playlist_name || 'My Playlist'}</span>
                   <div className="bg-white p-1 rounded mt-1 shadow-sm">
@@ -471,7 +471,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              )}
              
              {/* CGPA */}
-             <div className="w-28 sm:w-32 aspect-square bg-[#FDE68A] p-4 text-center cork-shadow -rotate-2 relative flex flex-col items-center justify-center">
+             <div className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#FDE68A] p-4 text-center cork-shadow -rotate-2 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-blue" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>CGPA</span>
                 <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.campus_rank_pct ? data.campus_rank_pct : '3.9/4.0'}</span>
@@ -479,7 +479,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              </div>
              
              {/* Courses */}
-             <div className="w-28 sm:w-32 aspect-square bg-[#d4e0b5] p-4 text-center cork-shadow rotate-1 relative flex flex-col items-center justify-center">
+             <div className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#d4e0b5] p-4 text-center cork-shadow rotate-1 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-green" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Courses</span>
                 <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>8</span>
@@ -487,7 +487,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              </div>
              
              {/* Study Streak */}
-             <div className="w-28 sm:w-32 aspect-square bg-[#c0d6e4] p-4 text-center cork-shadow -rotate-1 relative flex flex-col items-center justify-center">
+             <div className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#c0d6e4] p-4 text-center cork-shadow -rotate-1 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-blue" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Study Streak</span>
                 <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.study_buddies ? data.study_buddies : '21'}</span>
@@ -495,7 +495,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              </div>
              
              {/* Scan Count */}
-             <div className="w-28 sm:w-32 aspect-square bg-[#f2c7ce] p-4 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center cursor-pointer" onClick={() => isFreeProfile && setShowFomoModal(true)}>
+             <div className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#f2c7ce] p-4 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center cursor-pointer" onClick={() => isFreeProfile && setShowFomoModal(true)}>
                 <div className="pushpin pin-white" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Scan Count</span>
                 <span className={`text-3xl font-bold text-[#1e3a8a] mt-1 block ${isFreeProfile ? 'blur-[4px]' : ''}`} style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
@@ -510,7 +510,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             
             {/* Row 3: About Me, Clubs, Skills */}
             {data.about_me && (
-              <div className="w-full md:w-[28%] bg-[#fdfbf7] p-6 pb-8 pl-10 cork-shadow -rotate-1 relative solid-paper min-h-[220px]">
+              <div className="w-full flex-1 min-w-[280px] max-w-[400px] bg-[#fdfbf7] p-6 pb-8 pl-10 cork-shadow -rotate-1 relative solid-paper min-h-[220px]">
                 <div className="pushpin pin-blue" />
                 <div className="paper-holes" />
                 <h4 className="text-xl font-bold text-[#1e3a8a] mb-3 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>About Me</h4>
@@ -521,7 +521,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             )}
             
             {data.clubs && data.clubs.length > 0 && (
-              <div className="w-full md:w-[28%] bg-[#FDE68A] p-6 pb-8 cork-shadow rotate-1 relative min-h-[220px]">
+              <div className="w-full flex-1 min-w-[280px] max-w-[400px] bg-[#FDE68A] p-6 pb-8 cork-shadow rotate-1 relative min-h-[220px]">
                 <div className="pushpin pin-green" />
                 <h4 className="text-xl font-bold text-[#cc0000] mb-3 uppercase tracking-wide text-center mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Clubs & Orgs</h4>
                 <ul className="text-xl text-neutral-800 space-y-1 ml-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
@@ -531,7 +531,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             )}
 
             {data.core_skills && data.core_skills.length > 0 && (
-              <div className="w-full md:w-[28%] bg-[#fdfbf7] p-6 pb-8 pl-10 cork-shadow -rotate-2 relative solid-paper min-h-[220px]">
+              <div className="w-full flex-1 min-w-[280px] max-w-[400px] bg-[#fdfbf7] p-6 pb-8 pl-10 cork-shadow -rotate-2 relative solid-paper min-h-[220px]">
                 <div className="pushpin pin-white" />
                 <div className="paper-holes" />
                 <h4 className="text-xl font-bold text-[#1e3a8a] mb-3 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Skills</h4>
