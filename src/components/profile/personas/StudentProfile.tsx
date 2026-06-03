@@ -143,11 +143,11 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
 
             <div className="text-center w-full">
-              <h1 className="text-2xl sm:text-4xl leading-tight font-black text-neutral-900 tracking-tight mb-1.5">
-                {profile.display_name}
+              <h1 className="text-2xl sm:text-4xl leading-tight font-black text-neutral-900 tracking-tight mb-1.5 flex items-center justify-center gap-3">
+                {profile.display_name} {data.mood && <span className="text-2xl sm:text-3xl">{data.mood}</span>}
               </h1>
               <p className="text-emerald-500 font-bold text-sm sm:text-base tracking-wide flex items-center justify-center gap-1.5">
-                <GraduationCap size={18} /> {data.university ? `Student @ ${data.university}` : 'Student'}
+                <GraduationCap size={18} /> {data.course ? data.course : 'Student'} {data.university ? `@ ${data.university}` : ''}
               </p>
             </div>
           </div>
@@ -199,6 +199,43 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
+          {(data.year || data.batch_year || data.courses_completed || data.favorite_subject) && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 w-full mb-10">
+              {data.year && (
+                <div className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-sm text-center flex flex-col justify-center transition-all">
+                  <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1.5 sm:mb-2">Year</p>
+                  <div className="text-xl sm:text-2xl font-black text-neutral-900 flex items-center justify-center gap-1.5 sm:gap-2">
+                    {data.year}
+                  </div>
+                </div>
+              )}
+              {data.batch_year && (
+                <div className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-sm text-center flex flex-col justify-center transition-all">
+                  <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1.5 sm:mb-2">Batch</p>
+                  <div className="text-xl sm:text-2xl font-black text-neutral-900 flex items-center justify-center gap-1.5 sm:gap-2">
+                    {data.batch_year}
+                  </div>
+                </div>
+              )}
+              {data.courses_completed && (
+                <div className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-sm text-center flex flex-col justify-center transition-all">
+                  <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1.5 sm:mb-2">Courses</p>
+                  <div className="text-xl sm:text-2xl font-black text-neutral-900 flex items-center justify-center gap-1.5 sm:gap-2">
+                    {data.courses_completed} <BookOpen size={18} className="text-blue-400" />
+                  </div>
+                </div>
+              )}
+              {data.favorite_subject && (
+                <div className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-sm text-center flex flex-col justify-center transition-all">
+                  <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1.5 sm:mb-2">Fav Subject</p>
+                  <div className="text-lg sm:text-xl font-black text-neutral-900 flex items-center justify-center gap-1.5 sm:gap-2 leading-tight">
+                    {data.favorite_subject}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {data.about_me && (
             <div className="w-full mb-10">
               <div className="bg-white p-6 sm:p-8 rounded-3xl sm:rounded-[2.5rem] border border-neutral-100 shadow-sm relative overflow-hidden text-left">
@@ -213,6 +250,45 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                     {data.about_me}
                   </p>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {data.projects && data.projects.length > 0 && (
+            <div className="w-full mb-10 text-left">
+              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Projects</h4>
+              <div className="space-y-4">
+                {data.projects.map((proj: any, i: number) => (
+                  <div key={i} className="bg-white p-6 sm:p-8 rounded-3xl border border-neutral-100 shadow-sm flex flex-col gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl">{proj.emoji || '🚀'}</span>
+                      <h3 className="text-xl font-black text-neutral-900">{proj.name}</h3>
+                    </div>
+                    {proj.description && <p className="text-neutral-600 text-sm">{proj.description}</p>}
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {proj.tech?.map((t: string, j: number) => (
+                        <span key={j} className="px-3 py-1 bg-neutral-100 rounded-full text-xs font-bold text-neutral-600">{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {data.hackathons && data.hackathons.length > 0 && (
+            <div className="w-full mb-10 text-left">
+              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Hackathons & Events</h4>
+              <div className="space-y-3">
+                {data.hackathons.map((h: any, i: number) => (
+                  <div key={i} className="bg-white p-5 rounded-2xl border border-neutral-100 shadow-sm flex items-center justify-between">
+                    <div>
+                      <h5 className="font-black text-neutral-900">{h.name}</h5>
+                      {h.achievement && <p className="text-emerald-600 text-sm font-bold mt-1">{h.achievement}</p>}
+                    </div>
+                    <span className="text-neutral-400 font-black text-sm">{h.year}</span>
+                  </div>
+                ))}
               </div>
             </div>
           )}
@@ -267,6 +343,24 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 {data.core_skills.map((skill: string, i: number) => (
                   <span key={i} className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] sm:text-xs font-black text-indigo-600 tracking-wider flex items-center gap-2 shadow-sm">
                     <Zap size={14} className="text-indigo-400" /> {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {(data.clubs?.length > 0 || data.hobbies?.length > 0) && (
+            <div className="w-full mb-10 text-left">
+              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Interests & Activities</h4>
+              <div className="flex flex-wrap justify-center gap-2">
+                {data.clubs?.map((club: string, i: number) => (
+                  <span key={`club-${i}`} className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-blue-50 border border-blue-100 text-[11px] sm:text-xs font-black text-blue-600 tracking-wider flex items-center gap-2 shadow-sm">
+                    <Users size={14} className="text-blue-400" /> {club}
+                  </span>
+                ))}
+                {data.hobbies?.map((hobby: string, i: number) => (
+                  <span key={`hobby-${i}`} className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-pink-50 border border-pink-100 text-[11px] sm:text-xs font-black text-pink-600 tracking-wider flex items-center gap-2 shadow-sm">
+                    <Sparkles size={14} className="text-pink-400" /> {hobby}
                   </span>
                 ))}
               </div>
@@ -448,6 +542,10 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 </div>
                 <div className="text-xl text-[#4a5568] leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   {data.course ? data.course : 'Computer Science'}
+                  {(data.year || data.batch_year) ? ' | ' : ''}
+                  {data.year ? `Year ${data.year}` : ''}
+                  {(data.year && data.batch_year) ? ' - ' : ''}
+                  {data.batch_year ? `Batch of ${data.batch_year}` : ''}
                 </div>
                 
                 {profile.bio && (
@@ -532,6 +630,16 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               </div>
             )}
 
+            {data.hobbies && data.hobbies.length > 0 && (
+              <div className="w-full flex-1 min-w-[280px] max-w-[400px] bg-[#F6C1D6] p-6 pb-8 cork-shadow -rotate-2 relative min-h-[220px]">
+                <div className="pushpin pin-white" />
+                <h4 className="text-xl font-bold text-[#1e3a8a] mb-3 uppercase tracking-wide text-center mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Hobbies</h4>
+                <ul className="text-xl text-neutral-800 space-y-1 ml-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {data.hobbies.map((h: string, i: number) => <li key={i}>• {h}</li>)}
+                </ul>
+              </div>
+            )}
+
             {data.core_skills && data.core_skills.length > 0 && (
               <div className="w-full flex-1 min-w-[280px] max-w-[400px] bg-[#FDF9F1] p-6 pb-8 pl-10 cork-shadow -rotate-2 relative solid-paper min-h-[220px]">
                 <div className="pushpin pin-white" />
@@ -557,6 +665,21 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                   ))}
                 </ul>
                 <Trophy size={32} className="absolute bottom-6 right-6 text-[#1e3a8a] opacity-60" strokeWidth={1.5} />
+              </div>
+            )}
+
+            {data.projects && data.projects.length > 0 && (
+              <div className="w-full md:w-[46%] bg-[#FDF9F1] p-6 pb-8 pl-14 cork-shadow -rotate-[1deg] relative lined-paper min-h-[180px]">
+                <div className="pushpin pin-blue absolute top-3 left-[50%]" />
+                <div className="paper-holes" />
+                <div className="margin-line" />
+                <h4 className="text-xl font-bold text-[#1e3a8a] mb-2 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Projects</h4>
+                <ul className="text-xl text-neutral-800 space-y-1 ml-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {data.projects.map((p: any, i: number) => (
+                    <li key={i} className="leading-[32px]">• {p.emoji} {p.name}</li>
+                  ))}
+                </ul>
+                <Rocket size={32} className="absolute bottom-6 right-6 text-[#1e3a8a] opacity-60" strokeWidth={1.5} />
               </div>
             )}
 
@@ -793,7 +916,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           </div>
 
           {(data.campus_rank_pct || data.study_buddies || stats) && (
-            <div className="grid grid-cols-2 gap-6 w-full mb-12">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full mb-12">
               <div 
                 className={`glass-panel p-6 rounded-3xl text-center transition-all duration-300 ${isFreeProfile ? 'cursor-pointer hover:bg-white/5' : ''}`}
                 onClick={() => isFreeProfile && setShowFomoModal(true)}
@@ -812,6 +935,33 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                   </span>
                 </div>
               )}
+
+              {data.courses_completed && (
+                <div className="glass-panel p-6 rounded-3xl text-center">
+                  <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-indigo-400/50 block mb-3">Courses</span>
+                  <span className="text-3xl font-light text-white flex justify-center items-center gap-3">
+                    {data.courses_completed} <BookOpen size={20} className="text-indigo-400" />
+                  </span>
+                </div>
+              )}
+
+              {data.study_buddies && (
+                <div className="glass-panel p-6 rounded-3xl text-center">
+                  <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-indigo-400/50 block mb-3">Study Buddies</span>
+                  <span className="text-3xl font-light text-white flex justify-center items-center gap-3">
+                    {data.study_buddies} <Users size={20} className="text-indigo-400" />
+                  </span>
+                </div>
+              )}
+
+              {data.batch_year && (
+                <div className="glass-panel p-6 rounded-3xl text-center">
+                  <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-indigo-400/50 block mb-3">Batch</span>
+                  <span className="text-2xl font-light text-white flex justify-center items-center gap-3 mt-1">
+                    {data.batch_year}
+                  </span>
+                </div>
+              )}
             </div>
           )}
 
@@ -825,6 +975,87 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               <p className="text-sm text-indigo-100/80 leading-loose font-light">
                 {data.about_me}
               </p>
+            </div>
+          )}
+
+          {(data.year || data.favorite_subject) && (
+            <div className="w-full mb-12 glass-panel p-8 rounded-3xl text-left">
+              <h4 className="text-[10px] font-medium uppercase tracking-[0.3em] text-indigo-400 mb-6 flex items-center gap-4">
+                <div className="h-px bg-indigo-500/30 flex-grow" />
+                ACADEMIC PROFILE
+                <div className="h-px bg-indigo-500/30 flex-grow" />
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {data.year && (
+                  <div>
+                    <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-indigo-400/50 block mb-2">Current Year</span>
+                    <span className="text-lg text-white font-light">{data.year}</span>
+                  </div>
+                )}
+                {data.favorite_subject && (
+                  <div>
+                    <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-indigo-400/50 block mb-2">Favorite Subject</span>
+                    <span className="text-lg text-white font-light">{data.favorite_subject}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {(data.projects?.length > 0 || data.hackathons?.length > 0) && (
+            <div className="w-full mb-12 glass-panel p-8 rounded-3xl text-left">
+              <h4 className="text-[10px] font-medium uppercase tracking-[0.3em] text-indigo-400 mb-6 flex items-center gap-4">
+                <div className="h-px bg-indigo-500/30 flex-grow" />
+                BUILDS & HACKATHONS
+                <div className="h-px bg-indigo-500/30 flex-grow" />
+              </h4>
+              <div className="space-y-6">
+                {data.projects?.map((proj: any, i: number) => (
+                  <div key={`proj-${i}`} className="p-5 rounded-2xl bg-[#0A0514]/40 border border-indigo-500/20">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-2xl">{proj.emoji || '🚀'}</span>
+                      <h3 className="text-xl font-light text-white">{proj.name}</h3>
+                    </div>
+                    {proj.description && <p className="text-indigo-200/60 text-sm mb-3 font-light">{proj.description}</p>}
+                    <div className="flex flex-wrap gap-2">
+                      {proj.tech?.map((t: string, j: number) => (
+                        <span key={j} className="px-3 py-1 bg-indigo-900/30 border border-indigo-500/30 rounded-full text-[10px] uppercase tracking-wider text-indigo-300">{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+                {data.hackathons?.map((h: any, i: number) => (
+                  <div key={`hack-${i}`} className="p-5 rounded-2xl bg-[#0A0514]/40 border border-indigo-500/20 flex items-center justify-between">
+                    <div>
+                      <h5 className="font-light text-white text-lg">{h.name}</h5>
+                      {h.achievement && <p className="text-indigo-400 text-sm font-medium mt-1">{h.achievement}</p>}
+                    </div>
+                    <span className="text-indigo-500/50 font-mono text-sm">{h.year}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {(data.clubs?.length > 0 || data.hobbies?.length > 0) && (
+            <div className="w-full mb-12 glass-panel p-8 rounded-3xl text-left">
+              <h4 className="text-[10px] font-medium uppercase tracking-[0.3em] text-indigo-400 mb-6 flex items-center gap-4">
+                <div className="h-px bg-indigo-500/30 flex-grow" />
+                EXTRACURRICULARS
+                <div className="h-px bg-indigo-500/30 flex-grow" />
+              </h4>
+              <div className="flex flex-wrap gap-3">
+                {data.clubs?.map((club: string, i: number) => (
+                  <span key={`club-${i}`} className="px-4 py-2 rounded-xl bg-indigo-900/20 border border-indigo-500/20 text-[11px] font-light text-indigo-200 flex items-center gap-2">
+                    <Users size={14} className="text-indigo-400" /> {club}
+                  </span>
+                ))}
+                {data.hobbies?.map((hobby: string, i: number) => (
+                  <span key={`hobby-${i}`} className="px-4 py-2 rounded-xl bg-indigo-900/20 border border-indigo-500/20 text-[11px] font-light text-indigo-200 flex items-center gap-2">
+                    <Sparkles size={14} className="text-indigo-400" /> {hobby}
+                  </span>
+                ))}
+              </div>
             </div>
           )}
 
@@ -879,6 +1110,31 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               <div className="text-left">
                 <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-indigo-400/50 mb-1">LOOKING FOR</p>
                 <p className="text-sm font-light tracking-wider text-indigo-100">{data.availability}</p>
+              </div>
+            </div>
+          )}
+
+          {data.upcoming_events && data.upcoming_events.length > 0 && (
+            <div className="w-full mb-12 glass-panel p-8 rounded-3xl text-left">
+              <h4 className="text-[10px] font-medium uppercase tracking-[0.3em] text-indigo-400 mb-6 flex items-center gap-4">
+                <div className="h-px bg-indigo-500/30 flex-grow" />
+                UPCOMING EVENTS
+                <div className="h-px bg-indigo-500/30 flex-grow" />
+              </h4>
+              <div className="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-indigo-500/30 before:to-transparent">
+                {data.upcoming_events.map((ev: any, i: number) => (
+                  <div key={i} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full border border-indigo-500/30 bg-[#0A0514] text-indigo-400 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+                      <Calendar size={16} />
+                    </div>
+                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] glass-panel p-4 rounded-xl">
+                      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-1">
+                        <h5 className="font-light text-white text-lg">{ev.title}</h5>
+                        <span className="text-[10px] font-medium uppercase tracking-widest text-indigo-400/70">{ev.date}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
