@@ -34,6 +34,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   const liveViews = stats?.totalViews || 0;
   const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
   const [showFomoModal, setShowFomoModal] = React.useState(false);
+  const [showSpotifyQR, setShowSpotifyQR] = React.useState(false);
   
   if (!data || Object.keys(data).length === 0) {
     return <div className="p-10 text-center text-neutral-400 font-medium text-sm">Loading student identity...</div>
@@ -462,13 +463,13 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              
              {/* Spotify QR */}
              {data.playlist_url && (
-               <a href={ensureAbsoluteUrl(data.playlist_url)} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#C3E7AD] p-2 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center hover:scale-105 transition-transform cursor-pointer">
+               <div onClick={() => setShowSpotifyQR(true)} className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#C3E7AD] p-2 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center hover:scale-105 transition-transform cursor-pointer">
                   <div className="pushpin pin-white" />
                   <span className="text-lg font-bold block mt-1 text-white leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.playlist_name || 'My Playlist'}</span>
                   <div className="bg-white p-1 rounded mt-1 shadow-sm w-12 h-12 flex items-center justify-center">
                     <QRCodeSVG value={ensureAbsoluteUrl(data.playlist_url)} size={40} style={{ width: '100%', height: '100%' }} fgColor="#1DB954" bgColor="transparent" />
                   </div>
-               </a>
+               </div>
              )}
              
              {/* CGPA */}
@@ -1081,6 +1082,33 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             <button onClick={() => window.location.href = '/#pricing'} className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xl transition-colors border-[3px] border-blue-800 shadow-md" style={{ borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px', fontFamily: "'Caveat', cursive, sans-serif" }}>
               Unlock Now
             </button>
+          </div>
+        </div>
+      )}
+
+      {showSpotifyQR && data.playlist_url && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-neutral-900/60 backdrop-blur-sm" onClick={() => setShowSpotifyQR(false)}>
+          <div className="bg-white p-8 max-w-sm w-full shadow-2xl relative text-center rounded-2xl flex flex-col items-center" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setShowSpotifyQR(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-800 transition-colors">
+              <X size={24} />
+            </button>
+            <h3 className="text-2xl font-bold text-neutral-800 mb-6 flex items-center gap-2">
+              <Music className="text-[#1DB954]" />
+              {data.playlist_name || 'My Playlist'}
+            </h3>
+            
+            <div className="bg-white p-4 rounded-xl shadow-inner mb-6 border border-neutral-100 w-full flex justify-center">
+              <QRCodeSVG value={ensureAbsoluteUrl(data.playlist_url)} size={220} fgColor="#1DB954" bgColor="transparent" />
+            </div>
+            
+            <a 
+              href={ensureAbsoluteUrl(data.playlist_url)} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="w-full py-3 bg-[#1DB954] hover:bg-[#1ed760] text-white font-bold text-lg rounded-xl transition-colors flex items-center justify-center gap-2"
+            >
+              Open in Spotify <ExternalLink size={18} />
+            </a>
           </div>
         </div>
       )}
