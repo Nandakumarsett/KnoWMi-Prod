@@ -312,16 +312,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                       }}
                     >
                       <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center ${pData.bg} ${pData.text} group-hover:scale-110 transition-transform duration-300 relative overflow-hidden`}>
-                        {pData.logo ? (
-                          <img 
-                            src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
-                            className="w-5 h-5 filter invert object-contain"
-                            style={{ filter: 'brightness(0)' }}
-                            alt={p.platform}
-                          />
-                        ) : (
-                          pData.icon
-                        )}
+                        {pData.icon}
                         {isGated && (
                           <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-black/20 flex items-center justify-center">
                             <Lock size={18} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
@@ -743,9 +734,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                     const pData = getPlatformData(p.platform)
                     return (
                       <a key={i} href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer" onClick={(e) => { handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url)); if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank'); }} className="w-10 h-10 bg-white/50 rounded flex items-center justify-center hover:bg-white hover:scale-110 transition-all cork-shadow">
-                        {pData.logo ? (
-                          <div className="relative w-5 h-5 flex items-center justify-center"><span className="absolute inset-0 flex items-center justify-center opacity-60"><LinkIcon size={16} className="text-neutral-800" /></span><img src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`} className="w-5 h-5 relative z-10 bg-white" alt={p.platform} onError={(e) => { e.currentTarget.style.display = 'none'; }} /></div>
-                        ) : pData.icon}
+                        {pData.icon}
                       </a>
                     )
                   })}
@@ -1078,16 +1067,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                       className="glass-panel p-6 rounded-2xl flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:scale-[1.02] social-link-item group"
                     >
                       <div className="w-12 h-12 rounded-xl bg-white/5 group-hover:bg-indigo-500/20 text-indigo-300 flex items-center justify-center relative transition-colors">
-                        {pData.logo ? (
-                          <img 
-                            src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
-                            className="w-5 h-5 filter invert object-contain opacity-70 group-hover:opacity-100 transition-opacity"
-                            style={{ filter: 'brightness(0) invert(1)' }}
-                            alt={p.platform}
-                          />
-                        ) : (
-                          pData.icon
-                        )}
+                        {pData.icon}
                         {isGated && (
                           <div className="absolute inset-0 bg-[#0A0514]/80 flex items-center justify-center rounded-xl border border-indigo-500/30">
                             <Lock size={14} className="text-indigo-400" />
@@ -1343,16 +1323,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                         className="flex items-center gap-2 px-4 py-2 border-[3px] border-neutral-700 text-neutral-800 hover:bg-neutral-100 transition-colors bg-white relative group shadow-sm hover:-translate-y-1"
                         style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
                       >
-                        {pData.logo ? (
-                          <img 
-                            src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${pData.logo}.svg`}
-                            className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity"
-                            alt={p.platform}
-                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                          />
-                        ) : (
-                          <div className="opacity-80 scale-90 group-hover:opacity-100 transition-opacity">{pData.icon}</div>
-                        )}
+                        <div className="opacity-80 scale-90 group-hover:opacity-100 transition-opacity">{pData.icon}</div>
                         <span className="font-bold text-lg sm:text-xl" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{p.platform}</span>
                         
                         {isGated && (
