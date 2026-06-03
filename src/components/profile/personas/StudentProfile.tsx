@@ -684,6 +684,34 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           </div>
         )}
+
+        {showSpotifyQR && data.playlist_url && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-neutral-900/60 backdrop-blur-sm" onClick={() => setShowSpotifyQR(false)}>
+            <div className="bg-white p-8 max-w-sm w-full shadow-2xl relative text-center rounded-2xl flex flex-col items-center" onClick={e => e.stopPropagation()}>
+              <button onClick={() => setShowSpotifyQR(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-800 transition-colors">
+                <X size={24} />
+              </button>
+              <h3 className="text-2xl font-bold text-neutral-800 mb-6 flex items-center gap-2">
+                <Music className="text-[#1DB954]" />
+                {data.playlist_name || 'My Playlist'}
+              </h3>
+              
+              <div className="bg-white p-4 rounded-xl shadow-inner mb-6 border border-neutral-100 w-full flex justify-center">
+                <QRCodeSVG value={ensureAbsoluteUrl(data.playlist_url)} size={220} fgColor="#1DB954" bgColor="transparent" />
+              </div>
+              
+              <a 
+                href={ensureAbsoluteUrl(data.playlist_url)} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-full py-3 bg-[#1DB954] hover:bg-[#1ed760] text-white font-bold text-lg rounded-xl transition-colors flex items-center justify-center gap-2"
+              >
+                Open in Spotify <ExternalLink size={18} />
+              </a>
+            </div>
+          </div>
+        )}
+
         <GateModal />
       </div>
     )
@@ -878,6 +906,34 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           </div>
         )}
+
+        {showSpotifyQR && data.playlist_url && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-neutral-900/60 backdrop-blur-sm" onClick={() => setShowSpotifyQR(false)}>
+            <div className="bg-white p-8 max-w-sm w-full shadow-2xl relative text-center rounded-2xl flex flex-col items-center" onClick={e => e.stopPropagation()}>
+              <button onClick={() => setShowSpotifyQR(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-800 transition-colors">
+                <X size={24} />
+              </button>
+              <h3 className="text-2xl font-bold text-neutral-800 mb-6 flex items-center gap-2">
+                <Music className="text-[#1DB954]" />
+                {data.playlist_name || 'My Playlist'}
+              </h3>
+              
+              <div className="bg-white p-4 rounded-xl shadow-inner mb-6 border border-neutral-100 w-full flex justify-center">
+                <QRCodeSVG value={ensureAbsoluteUrl(data.playlist_url)} size={220} fgColor="#1DB954" bgColor="transparent" />
+              </div>
+              
+              <a 
+                href={ensureAbsoluteUrl(data.playlist_url)} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-full py-3 bg-[#1DB954] hover:bg-[#1ed760] text-white font-bold text-lg rounded-xl transition-colors flex items-center justify-center gap-2"
+              >
+                Open in Spotify <ExternalLink size={18} />
+              </a>
+            </div>
+          </div>
+        )}
+
         <GateModal />
       </div>
     )
@@ -1117,3 +1173,4 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
     </div>
   )
 }
+
