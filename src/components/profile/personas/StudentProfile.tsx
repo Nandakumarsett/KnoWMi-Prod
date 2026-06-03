@@ -1179,485 +1179,377 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   // LAYOUT 3: PREMIUM JOURNAL NOTEBOOK (Default / Notebook Theme)
   // ----------------------------------------------------
   return (
-    <div className="w-full min-h-screen relative overflow-x-hidden bg-[#8B7355] text-[#333333] transition-colors duration-300 pb-12 sm:pb-24 p-3 sm:p-8 selection:bg-amber-200/60 font-sans flex justify-center items-start">
+    <div className="w-full min-h-screen relative overflow-x-hidden text-[#333333] pb-8 selection:bg-amber-200/60 font-sans nb-page">
       
       <style dangerouslySetInnerHTML={{
         __html: `
           @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Permanent+Marker&display=swap');
           .nb-page {
             background: linear-gradient(135deg, #FFFDF7 0%, #FDF8EE 40%, #FAF4E4 100%);
-            box-shadow: 
-              inset 0 0 80px rgba(0,0,0,0.03),
-              0 0 0 1px rgba(0,0,0,0.05),
-              4px 4px 20px rgba(0,0,0,0.15),
-              12px 12px 40px rgba(0,0,0,0.1);
           }
           .nb-lines {
-            background-image: 
-              linear-gradient(transparent 31px, #B8D4E3 31px, #B8D4E3 32px, transparent 32px);
-            background-size: 100% 32px;
+            background-image: linear-gradient(transparent 27px, #c8dce8 27px, #c8dce8 28px, transparent 28px);
+            background-size: 100% 28px;
           }
           .nb-section-title {
             font-family: 'Permanent Marker', cursive, sans-serif;
             color: #1a365d;
+            font-size: 1.15rem;
+            line-height: 28px;
           }
-          .nb-handwriting {
-            font-family: 'Caveat', cursive, sans-serif;
-          }
+          .nb-handwriting { font-family: 'Caveat', cursive, sans-serif; }
           .nb-ink { color: #1e3a5f; }
           .nb-red-ink { color: #c53030; }
           .nb-pencil { color: #6B7280; }
           .washi-tape {
-            background: repeating-linear-gradient(
-              45deg,
-              transparent,
-              transparent 4px,
-              rgba(255,255,255,0.3) 4px,
-              rgba(255,255,255,0.3) 8px
-            );
+            background: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,0.3) 4px, rgba(255,255,255,0.3) 8px);
           }
           .nb-card {
-            background: rgba(255,253,247,0.7);
-            border: 2px solid rgba(30,58,95,0.12);
-            border-radius: 4px;
+            background: rgba(255,253,247,0.6);
+            border: 1.5px solid rgba(30,58,95,0.1);
+            border-radius: 3px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
           }
           .nb-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.06);
           }
           .nb-divider {
-            border: none;
-            height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #B8D4E3 20%, #B8D4E3 80%, transparent 100%);
-            margin: 2rem 0;
+            border: none; height: 1px;
+            background: linear-gradient(90deg, transparent 0%, #B8D4E3 15%, #B8D4E3 85%, transparent 100%);
+            margin: 0.75rem 0;
           }
           .nb-highlight {
             background: linear-gradient(180deg, transparent 60%, #FEF08A 60%);
-            padding: 0 4px;
+            padding: 0 3px;
           }
           .nb-doodle-box {
-            border: 3px solid #1e3a5f;
-            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-            padding: 1rem 1.25rem;
-            background: rgba(255,253,247,0.6);
-          }
-          .nb-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 14px;
             border: 2px solid #1e3a5f;
             border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-            font-family: 'Caveat', cursive;
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: #1e3a5f;
+            padding: 0.4rem 0.8rem;
             background: rgba(255,253,247,0.5);
+          }
+          .nb-tag {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 2px 10px;
+            border: 1.5px solid #1e3a5f;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            font-family: 'Caveat', cursive; font-size: 1.05rem; font-weight: 600;
+            color: #1e3a5f; background: rgba(255,253,247,0.4);
             transition: all 0.2s ease;
           }
-          .nb-tag:hover {
-            background: #EBF5FF;
-            transform: rotate(-1deg) scale(1.05);
-          }
-          .nb-tag-pink {
-            border-color: #9B2C2C;
-            color: #9B2C2C;
-          }
+          .nb-tag:hover { background: #EBF5FF; transform: rotate(-1deg) scale(1.04); }
+          .nb-tag-pink { border-color: #9B2C2C; color: #9B2C2C; }
           .nb-tag-pink:hover { background: #FFF5F5; }
-          .nb-stat-circle {
-            width: 90px; height: 90px;
-            border-radius: 50%;
-            border: 3px solid #1e3a5f;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            background: rgba(255,253,247,0.5);
+          .nb-stat {
+            width: 68px; height: 68px; border-radius: 50%;
+            border: 2.5px solid #1e3a5f;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(255,253,247,0.4);
             font-family: 'Permanent Marker', cursive;
             transition: transform 0.2s ease;
           }
-          .nb-stat-circle:hover { transform: scale(1.08) rotate(2deg); }
+          .nb-stat:hover { transform: scale(1.06) rotate(2deg); }
+          .nb-animate { animation: notebook-entry 0.4s ease forwards; }
           @keyframes notebook-entry {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
           }
-          .nb-animate { animation: notebook-entry 0.5s ease forwards; }
         `
       }} />
       
-      {/* Notebook Container */}
-      <div className="relative w-full max-w-3xl nb-page rounded-sm sm:rounded-md min-h-[90vh] mt-2 sm:mt-6 flex flex-row">
-        
-        {/* Left Margin - Spiral Binding */}
-        <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-14 flex flex-col justify-evenly items-center py-6 z-30 pointer-events-none bg-gradient-to-r from-[#e8e0d0]/30 to-transparent border-r-2 border-[#c53030]/40">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div key={i} className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#8B7355] shadow-[inset_0_2px_3px_rgba(0,0,0,0.4)] flex items-center justify-center z-10 border border-[#6B5B3E]">
-              <div className="absolute w-8 sm:w-10 h-2 border-2 border-[#A0A0A0] rounded-full left-[-10px] sm:left-[-8px] bg-gradient-to-r from-[#C0C0C0] via-[#E8E8E8] to-[#B0B0B0] shadow-sm" />
-            </div>
-          ))}
-        </div>
-        
-        {/* Second red margin line */}
-        <div className="absolute top-0 bottom-0 left-[3.3rem] sm:left-[3.8rem] w-[1px] bg-[#c53030]/20 pointer-events-none z-0" />
+      {/* Full-width ruled paper with red margin */}
+      <div className="relative w-full max-w-3xl mx-auto nb-lines min-h-screen">
+        {/* Red margin line */}
+        <div className="absolute top-0 bottom-0 left-[2.5rem] sm:left-[3.5rem] w-[2px] bg-[#c53030]/30 pointer-events-none z-0" />
+        <div className="absolute top-0 bottom-0 left-[2.7rem] sm:left-[3.7rem] w-[1px] bg-[#c53030]/15 pointer-events-none z-0" />
 
-        {/* Paper Content */}
-        <div className="relative flex-grow overflow-hidden rounded-r-sm sm:rounded-r-md nb-lines">
+        <main className="relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pt-8 pb-12 flex flex-col gap-0 nb-animate">
           
-          <main className="relative z-10 w-full pl-[4rem] sm:pl-[5rem] pr-5 sm:pr-10 pt-12 pb-16 flex flex-col gap-0 nb-animate">
-            
-            {/* ═══ PAGE HEADER ═══ */}
-            <div className="flex flex-col sm:flex-row items-start gap-6 mb-2">
-              
-              {/* Taped Polaroid Avatar */}
-              <div className="relative shrink-0 rotate-[-2deg] group">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-20 h-7 bg-[#FEF08A]/70 washi-tape border border-yellow-300/30 shadow-sm rotate-[3deg] z-20 rounded-sm" />
-                <div className="w-28 h-36 sm:w-32 sm:h-40 bg-white p-2 pb-10 shadow-[2px_3px_10px_rgba(0,0,0,0.12)] transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">
-                  {!avatarError && profile.avatar_url ? (
-                    <img 
-                      src={getAssetUrl(profile.avatar_url)} 
-                      alt={profile.display_name} 
-                      className="w-full h-full object-cover"
-                      onError={() => setAvatarError(true)} 
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-blue-50 text-blue-900 font-bold text-3xl" style={{ fontFamily: "'Permanent Marker', cursive" }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
-                    </div>
-                  )}
-                  <div className="absolute bottom-2 left-0 right-0 text-center nb-pencil font-medium text-sm nb-handwriting">
-                    📸 That's me!
+          {/* ═══ HEADER: Avatar + Name + Bio + Stats — all compact ═══ */}
+          <div className="flex items-start gap-4 mb-1">
+            {/* Tiny taped polaroid */}
+            <div className="relative shrink-0 rotate-[-2deg] group">
+              <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-14 h-5 bg-[#FEF08A]/60 washi-tape border border-yellow-300/20 shadow-sm rotate-[3deg] z-20 rounded-sm" />
+              <div className="w-20 h-24 sm:w-24 sm:h-30 bg-white p-1.5 pb-6 shadow-[1px_2px_6px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">
+                {!avatarError && profile.avatar_url ? (
+                  <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover" onError={() => setAvatarError(true)} />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-blue-50 text-blue-900 font-bold text-xl" style={{ fontFamily: "'Permanent Marker', cursive" }}>
+                    {profile.display_name?.charAt(0).toUpperCase() || 'U'}
                   </div>
-                </div>
-              </div>
-              
-              {/* Name + Title */}
-              <div className="flex-grow pt-2">
-                <h1 className="text-4xl sm:text-5xl font-black nb-ink tracking-tight leading-none mb-1 nb-section-title">
-                  {profile.display_name}
-                </h1>
-                <p className="nb-red-ink font-bold text-lg sm:text-xl nb-handwriting flex items-center gap-2 mt-1">
-                  <GraduationCap size={20} /> {data.course || 'Student'} {data.university ? `@ ${data.university}` : ''}
-                </p>
-                {(data.year || data.batch_year) && (
-                  <p className="nb-pencil text-lg nb-handwriting mt-1">
-                    {data.year ? `Year ${data.year}` : ''}{data.year && data.batch_year ? ' · ' : ''}{data.batch_year ? `Batch of ${data.batch_year}` : ''}
-                  </p>
                 )}
-                {data.mood && (
-                  <span className="inline-block mt-2 text-2xl">{data.mood}</span>
-                )}
+                <div className="absolute bottom-1 left-0 right-0 text-center nb-pencil text-[10px] nb-handwriting">📸 me!</div>
               </div>
             </div>
-
-            {/* Bio quote */}
-            {profile.bio && (
-              <div className="mb-2">
-                <p className="nb-ink text-xl sm:text-2xl leading-relaxed nb-handwriting italic">
-                  "{profile.bio}"
+            
+            {/* Name + Title + Year + Mood */}
+            <div className="flex-grow min-w-0">
+              <h1 className="text-2xl sm:text-3xl font-black nb-ink tracking-tight leading-tight nb-section-title" style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)' }}>
+                {profile.display_name} {data.mood && <span className="text-xl">{data.mood}</span>}
+              </h1>
+              <p className="nb-red-ink font-bold text-base nb-handwriting flex items-center gap-1.5 mt-0.5 leading-[28px]">
+                <GraduationCap size={16} /> {data.course || 'Student'} {data.university ? `@ ${data.university}` : ''}
+              </p>
+              {(data.year || data.batch_year) && (
+                <p className="nb-pencil text-base nb-handwriting leading-[28px]">
+                  {data.year ? `Year ${data.year}` : ''}{data.year && data.batch_year ? ' · ' : ''}{data.batch_year ? `Batch of ${data.batch_year}` : ''}
                 </p>
-              </div>
-            )}
+              )}
+              {profile.bio && (
+                <p className="nb-ink text-lg leading-[28px] nb-handwriting italic mt-0.5">"{profile.bio}"</p>
+              )}
+            </div>
+          </div>
 
-            <div className="w-full max-w-xs mb-4 mt-2 z-20">
+          {/* CTA + Availability — side by side */}
+          <div className="flex flex-wrap items-center gap-3 mb-1">
+            <div className="max-w-[220px] z-20 shrink-0">
               <ProfileCTAs profile={profile} accentColor="#1e3a5f" />
             </div>
-
-            <hr className="nb-divider" />
-
-            {/* ═══ STATS ROW ═══ */}
-            {(data.campus_rank_pct || data.study_buddies || data.courses_completed || stats) && (
-              <div className="flex flex-wrap gap-4 sm:gap-6 items-center justify-start mb-2">
-                <div 
-                  className={`nb-stat-circle ${isFreeProfile ? 'cursor-pointer' : ''}`}
-                  onClick={() => isFreeProfile && setShowFomoModal(true)}
-                >
-                  <span className={`text-2xl nb-ink ${isFreeProfile ? 'blur-[4px]' : ''}`}>{isFreeProfile ? '9k' : liveViews}</span>
-                  <span className="text-[10px] nb-pencil font-sans uppercase tracking-wider">views</span>
-                </div>
-                
-                {data.campus_rank_pct && (
-                  <div className="nb-stat-circle" style={{ borderColor: '#c53030' }}>
-                    <span className="text-xl nb-red-ink">Top {data.campus_rank_pct}%</span>
-                    <span className="text-[10px] nb-pencil font-sans uppercase tracking-wider">rank</span>
-                  </div>
-                )}
-                
-                {data.courses_completed && (
-                  <div className="nb-stat-circle">
-                    <span className="text-2xl nb-ink">{data.courses_completed}</span>
-                    <span className="text-[10px] nb-pencil font-sans uppercase tracking-wider">courses</span>
-                  </div>
-                )}
-                
-                {data.study_buddies && (
-                  <div className="nb-stat-circle" style={{ borderColor: '#2B6CB0' }}>
-                    <span className="text-2xl nb-ink">{data.study_buddies}</span>
-                    <span className="text-[10px] nb-pencil font-sans uppercase tracking-wider">buddies</span>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* ═══ AVAILABILITY BANNER ═══ */}
             {data.availability && (
-              <div className="mb-2">
-                <div className="nb-doodle-box inline-flex items-center gap-3 rotate-[-1deg]" style={{ borderColor: '#2B6CB0' }}>
-                  <Briefcase size={18} className="nb-ink" />
-                  <span className="nb-handwriting text-xl font-bold nb-ink">
-                    Open to: <span className="nb-highlight">{data.availability}</span>
-                  </span>
+              <div className="nb-doodle-box inline-flex items-center gap-2 rotate-[-1deg]" style={{ borderColor: '#2B6CB0' }}>
+                <Briefcase size={14} className="nb-ink" />
+                <span className="nb-handwriting text-base font-bold nb-ink">
+                  Open to: <span className="nb-highlight">{data.availability}</span>
+                </span>
+              </div>
+            )}
+          </div>
+
+          <hr className="nb-divider" />
+
+          {/* ═══ STATS ROW — compact circles ═══ */}
+          {(data.campus_rank_pct || data.study_buddies || data.courses_completed || stats) && (
+            <>
+              <div className="flex flex-wrap gap-3 items-center mb-1">
+                <div className={`nb-stat ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
+                  <span className={`text-lg nb-ink ${isFreeProfile ? 'blur-[3px]' : ''}`}>{isFreeProfile ? '9k' : liveViews}</span>
+                  <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">views</span>
                 </div>
+                {data.campus_rank_pct && (
+                  <div className="nb-stat" style={{ borderColor: '#c53030' }}>
+                    <span className="text-sm nb-red-ink">Top {data.campus_rank_pct}%</span>
+                    <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">rank</span>
+                  </div>
+                )}
+                {data.courses_completed && (
+                  <div className="nb-stat">
+                    <span className="text-lg nb-ink">{data.courses_completed}</span>
+                    <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">courses</span>
+                  </div>
+                )}
+                {data.study_buddies && (
+                  <div className="nb-stat" style={{ borderColor: '#2B6CB0' }}>
+                    <span className="text-lg nb-ink">{data.study_buddies}</span>
+                    <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">buddies</span>
+                  </div>
+                )}
+                {data.favorite_subject && (
+                  <div className="nb-doodle-box inline-flex items-center gap-2" style={{ borderColor: '#c53030' }}>
+                    <Star size={14} className="nb-red-ink" />
+                    <span className="nb-handwriting text-base font-bold nb-red-ink">Fav: <span className="nb-highlight">{data.favorite_subject}</span></span>
+                  </div>
+                )}
               </div>
-            )}
+              <hr className="nb-divider" />
+            </>
+          )}
 
-            <hr className="nb-divider" />
-
-            {/* ═══ ABOUT ME ═══ */}
-            {data.about_me && (
-              <div className="w-full mb-2">
-                <h3 className="text-2xl sm:text-3xl nb-section-title mb-3 flex items-center gap-2">
-                  <BookOpen size={22} className="nb-ink opacity-50" /> About Me
+          {/* ═══ ABOUT ME ═══ */}
+          {data.about_me && (
+            <>
+              <div className="w-full mb-1">
+                <h3 className="nb-section-title mb-1 flex items-center gap-1.5">
+                  <BookOpen size={16} className="nb-ink opacity-50" /> About Me
                 </h3>
-                <p className="nb-ink text-xl sm:text-2xl leading-[32px] nb-handwriting">
-                  {data.about_me}
-                </p>
+                <p className="nb-ink text-lg leading-[28px] nb-handwriting">{data.about_me}</p>
               </div>
-            )}
+              <hr className="nb-divider" />
+            </>
+          )}
 
-            {/* ═══ FAVORITE SUBJECT ═══ */}
-            {data.favorite_subject && (
-              <div className="mb-2 mt-4">
-                <div className="nb-doodle-box inline-flex items-center gap-3" style={{ borderColor: '#c53030' }}>
-                  <Star size={18} className="nb-red-ink" />
-                  <span className="nb-handwriting text-xl font-bold nb-red-ink">
-                    Favorite Subject: <span className="nb-highlight">{data.favorite_subject}</span>
-                  </span>
-                </div>
-              </div>
-            )}
-
-            <hr className="nb-divider" />
-
-            {/* ═══ SKILLS ═══ */}
-            {data.core_skills && data.core_skills.length > 0 && (
-              <div className="w-full mb-2">
-                <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
-                  <Zap size={22} className="nb-ink opacity-50" /> Skills & Powers
+          {/* ═══ SKILLS ═══ */}
+          {data.core_skills && data.core_skills.length > 0 && (
+            <>
+              <div className="w-full mb-1">
+                <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
+                  <Zap size={16} className="nb-ink opacity-50" /> Skills & Powers
                 </h3>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2">
                   {data.core_skills.map((skill: string, i: number) => (
-                    <span key={i} className="nb-tag">
-                      ⚡ {skill}
-                    </span>
+                    <span key={i} className="nb-tag">⚡ {skill}</span>
+                  ))}
+                </div>
+              </div>
+              <hr className="nb-divider" />
+            </>
+          )}
+
+          {/* ═══ PROJECTS + HACKATHONS — 2 col grid ═══ */}
+          {(data.projects?.length > 0 || data.hackathons?.length > 0) && (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-1">
+                {/* Projects */}
+                {data.projects && data.projects.length > 0 && (
+                  <div>
+                    <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
+                      <Rocket size={16} className="nb-ink opacity-50" /> Projects
+                    </h3>
+                    <div className="space-y-2">
+                      {data.projects.map((proj: any, i: number) => (
+                        <div key={i} className="nb-card p-3 relative">
+                          <div className="flex items-start gap-2">
+                            <span className="text-lg">{proj.emoji || '🚀'}</span>
+                            <div className="flex-grow min-w-0">
+                              <h4 className="text-lg font-bold nb-ink nb-handwriting leading-[28px]">{proj.name}</h4>
+                              {proj.description && <p className="nb-pencil text-base nb-handwriting leading-[28px]">{proj.description}</p>}
+                              {proj.tech && proj.tech.length > 0 && (
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                  {proj.tech.map((t: string, j: number) => (
+                                    <span key={j} className="px-2 py-0.5 bg-blue-50/50 border border-blue-200 rounded-sm text-[10px] font-bold nb-ink uppercase tracking-wider font-sans">{t}</span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {/* Hackathons */}
+                {data.hackathons && data.hackathons.length > 0 && (
+                  <div>
+                    <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
+                      <Trophy size={16} className="nb-ink opacity-50" /> Hackathons
+                    </h3>
+                    <div className="space-y-1">
+                      {data.hackathons.map((h: any, i: number) => (
+                        <div key={i} className="flex items-start gap-2 py-1">
+                          <span className="text-base mt-0.5">🏆</span>
+                          <div className="flex-grow min-w-0">
+                            <span className="nb-handwriting text-lg font-bold nb-ink leading-[28px]">{h.name}</span>
+                            {h.year && <span className="nb-pencil text-xs font-sans ml-1">({h.year})</span>}
+                            {h.achievement && <p className="nb-handwriting text-base nb-red-ink font-semibold leading-[28px]">↳ {h.achievement}</p>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <hr className="nb-divider" />
+            </>
+          )}
+
+          {/* ═══ CLUBS + HOBBIES — side by side ═══ */}
+          {(data.clubs?.length > 0 || data.hobbies?.length > 0) && (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-1">
+                {data.clubs?.length > 0 && (
+                  <div>
+                    <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
+                      <Users size={16} className="nb-ink opacity-50" /> Clubs & Orgs
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {data.clubs.map((club: string, i: number) => (
+                        <span key={i} className="nb-tag">🎓 {club}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {data.hobbies?.length > 0 && (
+                  <div>
+                    <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
+                      <Heart size={16} className="nb-ink opacity-50" /> Hobbies
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {data.hobbies.map((hobby: string, i: number) => (
+                        <span key={i} className="nb-tag nb-tag-pink">💛 {hobby}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <hr className="nb-divider" />
+            </>
+          )}
+
+          {/* ═══ SOCIALS + EVENTS — side by side ═══ */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-1">
+            {/* Social Links */}
+            {data?.platforms && data?.platforms?.length > 0 && (
+              <div>
+                <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
+                  <Globe size={16} className="nb-ink opacity-50" /> Find Me Here
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {data.platforms.map((p: any, i: number) => {
+                    const pData = getPlatformData(p.platform?.toLowerCase())
+                    return (
+                      <a key={i} href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer"
+                        onClick={(e) => { handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url)); if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank'); }}
+                        className="nb-tag group relative">
+                        <div className="opacity-80 group-hover:opacity-100 transition-opacity">{pData.icon}</div>
+                        {p.platform}
+                        {isGated && (<div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-lg"><Lock size={12} className="nb-pencil" /></div>)}
+                      </a>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+            {/* Events */}
+            {data.upcoming_events && data.upcoming_events.length > 0 && (
+              <div>
+                <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
+                  <Calendar size={16} className="nb-ink opacity-50" /> Coming Up
+                </h3>
+                <div className="space-y-1">
+                  {data.upcoming_events.map((ev: any, i: number) => (
+                    <div key={i} className="flex items-center gap-2 py-0.5">
+                      <Calendar size={13} className="nb-ink shrink-0 opacity-50" />
+                      <span className="nb-handwriting text-base font-bold nb-ink leading-[28px]">{ev.title}</span>
+                      <span className="nb-pencil text-xs font-sans ml-auto whitespace-nowrap">{ev.date}</span>
+                    </div>
                   ))}
                 </div>
               </div>
             )}
+          </div>
 
-            {/* ═══ PROJECTS ═══ */}
-            {data.projects && data.projects.length > 0 && (
-              <>
-                <hr className="nb-divider" />
-                <div className="w-full mb-2">
-                  <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
-                    <Rocket size={22} className="nb-ink opacity-50" /> Projects
-                  </h3>
-                  <div className="space-y-5">
-                    {data.projects.map((proj: any, i: number) => (
-                      <div key={i} className="nb-card p-5 relative">
-                        <div className="flex items-start gap-3 mb-2">
-                          <span className="text-2xl">{proj.emoji || '🚀'}</span>
-                          <div className="flex-grow">
-                            <h4 className="text-xl sm:text-2xl font-bold nb-ink nb-handwriting">{proj.name}</h4>
-                            {proj.description && (
-                              <p className="nb-pencil text-lg nb-handwriting mt-1">{proj.description}</p>
-                            )}
-                          </div>
-                        </div>
-                        {proj.tech && proj.tech.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mt-3 ml-9">
-                            {proj.tech.map((t: string, j: number) => (
-                              <span key={j} className="px-3 py-1 bg-blue-50/60 border border-blue-200 rounded-sm text-xs font-bold nb-ink uppercase tracking-wider font-sans">
-                                {t}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                        {/* Doodle numbering */}
-                        <div className="absolute top-3 right-4 text-3xl nb-pencil opacity-30 nb-section-title">#{i + 1}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
+          {(data?.platforms?.length > 0 || data.upcoming_events?.length > 0) && <hr className="nb-divider" />}
 
-            {/* ═══ HACKATHONS ═══ */}
-            {data.hackathons && data.hackathons.length > 0 && (
-              <>
-                <hr className="nb-divider" />
-                <div className="w-full mb-2">
-                  <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
-                    <Trophy size={22} className="nb-ink opacity-50" /> Hackathons & Achievements
-                  </h3>
-                  <div className="space-y-3">
-                    {data.hackathons.map((h: any, i: number) => (
-                      <div key={i} className="flex items-start gap-3 py-2">
-                        <span className="text-xl mt-0.5">🏆</span>
-                        <div className="flex-grow">
-                          <span className="nb-handwriting text-xl font-bold nb-ink">{h.name}</span>
-                          {h.year && <span className="nb-pencil text-sm font-sans ml-2">({h.year})</span>}
-                          {h.achievement && (
-                            <p className="nb-handwriting text-lg nb-red-ink font-semibold mt-0.5">↳ {h.achievement}</p>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-
-            {/* ═══ CLUBS & HOBBIES ═══ */}
-            {(data.clubs?.length > 0 || data.hobbies?.length > 0) && (
-              <>
-                <hr className="nb-divider" />
-                <div className="w-full mb-2">
-                  {data.clubs?.length > 0 && (
-                    <div className="mb-5">
-                      <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
-                        <Users size={22} className="nb-ink opacity-50" /> Clubs & Orgs
-                      </h3>
-                      <div className="flex flex-wrap gap-3">
-                        {data.clubs.map((club: string, i: number) => (
-                          <span key={i} className="nb-tag">🎓 {club}</span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {data.hobbies?.length > 0 && (
-                    <div>
-                      <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
-                        <Heart size={22} className="nb-ink opacity-50" /> Hobbies
-                      </h3>
-                      <div className="flex flex-wrap gap-3">
-                        {data.hobbies.map((hobby: string, i: number) => (
-                          <span key={i} className="nb-tag nb-tag-pink">💛 {hobby}</span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
-
-            {/* ═══ SOCIAL LINKS ═══ */}
-            {data?.platforms && data?.platforms?.length > 0 && (
-              <>
-                <hr className="nb-divider" />
-                <div className="w-full mb-2">
-                  <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
-                    <Globe size={22} className="nb-ink opacity-50" /> Find Me Here
-                  </h3>
-                  <div className="flex flex-wrap gap-3">
-                    {data.platforms.map((p: any, i: number) => {
-                      const pData = getPlatformData(p.platform?.toLowerCase())
-                      return (
-                        <a 
-                          key={i}
-                          href={ensureAbsoluteUrl(p.url)} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          onClick={(e) => {
-                            handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
-                            if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
-                          }}
-                          className="nb-tag group relative"
-                        >
-                          <div className="opacity-80 group-hover:opacity-100 transition-opacity">{pData.icon}</div>
-                          {p.platform}
-                          {isGated && (
-                            <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-lg">
-                              <Lock size={14} className="nb-pencil" />
-                            </div>
-                          )}
-                        </a>
-                      )
-                    })}
-                  </div>
-                </div>
-              </>
-            )}
-
-            {/* ═══ UPCOMING EVENTS ═══ */}
-            {data.upcoming_events && data.upcoming_events.length > 0 && (
-              <>
-                <hr className="nb-divider" />
-                <div className="w-full mb-2">
-                  <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
-                    <Calendar size={22} className="nb-ink opacity-50" /> What's Coming Up
-                  </h3>
-                  <div className="space-y-3">
-                    {data.upcoming_events.map((ev: any, i: number) => (
-                      <div key={i} className="flex items-center gap-4 py-2">
-                        <div className="w-10 h-10 rounded-full border-2 border-[#1e3a5f] flex items-center justify-center shrink-0 bg-blue-50/40">
-                          <Calendar size={16} className="nb-ink" />
-                        </div>
-                        <div className="flex-grow">
-                          <span className="nb-handwriting text-xl font-bold nb-ink">{ev.title}</span>
-                          <span className="nb-pencil text-sm font-sans ml-2">— {ev.date}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-
-            {/* ═══ THOUGHT BUBBLE ═══ */}
+          {/* ═══ THOUGHT BUBBLE + CONTACT — side by side ═══ */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-1">
             {data.thought_bubble && (
-              <>
-                <hr className="nb-divider" />
-                <div className="w-full mb-2">
-                  <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
-                    <Sparkles size={22} className="nb-ink opacity-50" /> Advice I Live By
-                  </h3>
-                  <div className="nb-card p-6 text-center relative">
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-[#B8D4E3]/50 washi-tape rounded-sm z-20" />
-                    <p className="nb-handwriting text-2xl sm:text-3xl nb-ink italic leading-relaxed">
-                      "{data.thought_bubble}"
-                    </p>
-                    <Heart size={20} className="mx-auto mt-4 nb-red-ink opacity-60" />
-                  </div>
-                </div>
-              </>
+              <div className="nb-card p-4 text-center relative">
+                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-4 bg-[#B8D4E3]/40 washi-tape rounded-sm z-20" />
+                <h3 className="nb-section-title mb-1 text-center">✨ Advice I Live By</h3>
+                <p className="nb-handwriting text-xl nb-ink italic leading-[28px]">"{data.thought_bubble}"</p>
+                <Heart size={14} className="mx-auto mt-2 nb-red-ink opacity-50" />
+              </div>
             )}
-
-            {/* ═══ CONTACT ═══ */}
             {data.contact_email && (
-              <>
-                <hr className="nb-divider" />
-                <div className="w-full mb-4">
-                  <div className="nb-card p-6 flex flex-col sm:flex-row items-center gap-5">
-                    <div className="w-14 h-14 rounded-full border-2 border-[#1e3a5f] flex items-center justify-center shrink-0 bg-blue-50/40">
-                      <Mail size={24} className="nb-ink" />
-                    </div>
-                    <div className="text-center sm:text-left flex-grow">
-                      <h4 className="text-2xl font-bold nb-ink nb-handwriting mb-1">Let's Talk!</h4>
-                      <p className="nb-pencil nb-handwriting text-lg">I'm always open to new opportunities and ideas.</p>
-                      <a href={`mailto:${data.contact_email}`} className="text-sm font-bold nb-ink hover:underline font-sans mt-2 inline-block">{data.contact_email}</a>
-                    </div>
-                  </div>
+              <div className="nb-card p-4 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full border-2 border-[#1e3a5f] flex items-center justify-center shrink-0 bg-blue-50/30">
+                  <Mail size={18} className="nb-ink" />
                 </div>
-              </>
+                <div className="flex-grow min-w-0">
+                  <h4 className="text-lg font-bold nb-ink nb-handwriting leading-[28px]">Let's Talk!</h4>
+                  <a href={`mailto:${data.contact_email}`} className="text-xs font-bold nb-ink hover:underline font-sans">{data.contact_email}</a>
+                </div>
+              </div>
             )}
+          </div>
 
-            {/* Page number doodle */}
-            <div className="w-full text-center mt-8 nb-pencil opacity-40">
-              <span className="nb-handwriting text-lg">— page 1 of 1 —</span>
-            </div>
-            
-          </main>
-        </div>
+          {/* Page number */}
+          <div className="w-full text-center mt-4 nb-pencil opacity-30">
+            <span className="nb-handwriting text-sm">— page 1 of 1 —</span>
+          </div>
+          
+        </main>
       </div>
 
       {showFomoModal && (
