@@ -3,9 +3,10 @@ import { ProfileData, StudentData } from '../../../types/profile'
 import { 
   GraduationCap, BookOpen, Rocket, FileText, 
   Globe, Music, Sparkles, Heart, Star, Users,
-  Share2, UserPlus, QrCode, ExternalLink, Github, Linkedin, Twitter, Instagram,
+  Share2, UserPlus, QrCode as QrCodeIcon, ExternalLink, Github, Linkedin, Twitter, Instagram,
   MessageCircle, Link as LinkIcon, Trophy, Target, Briefcase, Zap, Mail, Calendar, Ghost, Activity, X, Lock
 } from 'lucide-react'
+import { QRCodeSVG } from 'qrcode.react'
 import { getAssetUrl } from '../../../lib/supabase'
 import { ProfileCTAs } from '../shared/ProfileCTAs'
 import { trackLinkClick } from '../../../lib/analytics/track'
@@ -464,8 +465,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                <a href={ensureAbsoluteUrl(data.playlist_url)} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#C3E7AD] p-2 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center hover:scale-105 transition-transform cursor-pointer">
                   <div className="pushpin pin-white" />
                   <span className="text-lg font-bold block mt-1 text-white leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.playlist_name || 'My Playlist'}</span>
-                  <div className="bg-white p-1 rounded mt-1 shadow-sm">
-                    <QrCode size={36} className="text-[#14532D]" />
+                  <div className="bg-white p-1 rounded mt-1 shadow-sm w-12 h-12 flex items-center justify-center">
+                    <QRCodeSVG value={ensureAbsoluteUrl(data.playlist_url)} size={40} style={{ width: '100%', height: '100%' }} fgColor="#1DB954" bgColor="transparent" />
                   </div>
                </a>
              )}
