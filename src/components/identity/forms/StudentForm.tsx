@@ -5,7 +5,7 @@ import {
   Plus, Trash2, FileText, Globe, Eye, 
   GraduationCap, Music, Rocket, Users, 
   ShieldCheck, Sparkles, BookOpen, Layout,
-  Upload, Camera, Github, MessageCircle
+  Upload, Camera, Github, MessageCircle, X
 } from 'lucide-react'
 import { EmojiPicker } from '../EmojiPicker'
 import { getAssetUrl } from '../../../lib/supabase'
