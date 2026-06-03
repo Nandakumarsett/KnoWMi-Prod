@@ -200,7 +200,7 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
           </div>
 
           <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className={labelClasses}>Campus Rank (%)</label>
                 <div className="relative">
@@ -211,6 +211,10 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
               <div>
                 <label className={labelClasses}>Study Buddies</label>
                 <input type="number" onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()} value={data.study_buddies || ''} onChange={e => updateField('study_buddies', Number(e.target.value))} placeholder="e.g. 15" className={inputBaseClasses} />
+              </div>
+              <div>
+                <label className={labelClasses}>Courses Completed</label>
+                <input type="number" onKeyDown={(e) => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()} min={0} value={data.courses_completed || ''} onChange={e => updateField('courses_completed', Number(e.target.value))} placeholder="e.g. 8" className={inputBaseClasses} />
               </div>
             </div>
 
@@ -264,8 +268,42 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
                 <TagInput value={data.clubs || []} onChange={tags => updateField('clubs', tags)} placeholder="Add clubs..." />
               </div>
               <div>
-                <label className={labelClasses}>Hackathons & Events</label>
-                <TagInput value={data.hackathons || []} onChange={tags => updateField('hackathons', tags)} placeholder="Add events..." />
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className={labelClasses} style={{marginBottom: 0}}>Hackathons & Events</label>
+                </div>
+                <div className="space-y-3">
+                  {(data.hackathons || []).map((ev: any, i: number) => (
+                    <div key={i} className="flex gap-2 relative group flex-col sm:flex-row">
+                      <input 
+                        type="text" 
+                        value={ev.name || ''} 
+                        onChange={e => { const copy = [...(data.hackathons || [])]; copy[i] = { ...ev, name: e.target.value }; updateField('hackathons', copy); }} 
+                        placeholder="Event Name" 
+                        className={`${inputBaseClasses} py-2 flex-1`}
+                      />
+                      <input 
+                        type="text" 
+                        value={ev.year || ''} 
+                        onChange={e => { const copy = [...(data.hackathons || [])]; copy[i] = { ...ev, year: e.target.value }; updateField('hackathons', copy); }} 
+                        placeholder="Year (e.g. 2024)" 
+                        className={`${inputBaseClasses} py-2 sm:w-1/4`}
+                      />
+                      <input 
+                        type="text" 
+                        value={ev.achievement || ''} 
+                        onChange={e => { const copy = [...(data.hackathons || [])]; copy[i] = { ...ev, achievement: e.target.value }; updateField('hackathons', copy); }} 
+                        placeholder="Achievement (e.g. 1st Prize)" 
+                        className={`${inputBaseClasses} py-2 sm:w-1/3`}
+                      />
+                      <button type="button" onClick={() => { const copy = [...(data.hackathons || [])]; copy.splice(i,1); updateField('hackathons', copy); }} className="absolute -right-2 -top-2 w-5 h-5 bg-red-100 text-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ))}
+                  <button type="button" onClick={() => updateField('hackathons', [...(data.hackathons || []), { name: '', year: '', achievement: '' }])} className="w-full py-2 border-2 border-dashed border-neutral-200 rounded-xl text-xs font-bold text-neutral-500 hover:bg-neutral-50 flex items-center justify-center gap-2">
+                    <Plus size={14} /> Add Achievement
+                  </button>
+                </div>
               </div>
               <div>
                 <div className="flex items-center justify-between mb-1.5">

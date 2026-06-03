@@ -41,6 +41,7 @@ export interface StudentData {
   year: string;
   mood: string;
   campus_rank_pct: number;
+  courses_completed?: number;
   study_buddies: number;
   thought_bubble: string;
   upcoming_events?: Array<{ title: string; date: string; }>;
@@ -202,3 +203,4 @@ export interface ProfileData {
   ghost_mode?: boolean;
   profile_theme?: string;
 }
+

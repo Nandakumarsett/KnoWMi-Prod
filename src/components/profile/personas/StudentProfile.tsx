@@ -472,11 +472,11 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                </div>
              )}
              
-             {/* CGPA */}
+             {/* Rank */}
              <div className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#FCEB9C] p-4 text-center cork-shadow -rotate-2 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-blue" />
-                <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>CGPA</span>
-                <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.campus_rank_pct ? data.campus_rank_pct : '3.9/4.0'}</span>
+                <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Rank</span>
+                <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.campus_rank_pct ? `Top ${data.campus_rank_pct}%` : 'N/A'}</span>
                 <Star size={16} className="absolute bottom-3 left-3 text-[#1e3a8a]" strokeWidth={1.5} />
              </div>
              
@@ -484,16 +484,16 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              <div className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#C3E7AD] p-4 text-center cork-shadow rotate-1 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-green" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Courses</span>
-                <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>8</span>
+                <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.courses_completed || 0}</span>
                 <span className="text-sm text-neutral-600 block mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Completed</span>
              </div>
              
-             {/* Study Streak */}
+             {/* Study Buddies */}
              <div className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#BCE2EE] p-4 text-center cork-shadow -rotate-1 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-blue" />
-                <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Study Streak</span>
-                <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.study_buddies ? data.study_buddies : '21'}</span>
-                <span className="text-sm text-neutral-600 block mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Days</span>
+                <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Study Buddies</span>
+                <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.study_buddies || 0}</span>
+                <span className="text-sm text-neutral-600 block mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Buddies</span>
              </div>
              
              {/* Scan Count */}
@@ -553,7 +553,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 <h4 className="text-xl font-bold text-[#1e3a8a] mb-2 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Recent Achievements</h4>
                 <ul className="text-xl text-neutral-800 space-y-1 ml-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   {data.hackathons.map((h, i) => (
-                    <li key={i} className="leading-[32px]">• {h.achievement || '1st Prize'} - {h.name} {h.year}</li>
+                    <li key={i} className="leading-[32px]">• {h.achievement ? `${h.achievement} - ` : ''}{h.name} {h.year}</li>
                   ))}
                 </ul>
                 <Trophy size={32} className="absolute bottom-6 right-6 text-[#1e3a8a] opacity-60" strokeWidth={1.5} />
