@@ -1264,40 +1264,58 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         <div className="absolute top-0 bottom-0 left-[2.5rem] sm:left-[3.5rem] w-[2px] bg-[#c53030]/30 pointer-events-none z-0" />
         <div className="absolute top-0 bottom-0 left-[2.7rem] sm:left-[3.7rem] w-[1px] bg-[#c53030]/15 pointer-events-none z-0" />
 
-        <main className="relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pt-8 pb-12 flex flex-col gap-0 nb-animate">
+        <main className="relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pt-6 pb-12 flex flex-col gap-0 nb-animate">
           
+          {/* ═══ COVER BANNER ═══ */}
+          {profile.cover_url && (
+            <div className="relative w-full h-32 sm:h-48 mb-6 group">
+              {/* Tape corners */}
+              <div className="absolute -top-3 left-4 w-12 h-6 bg-[#FEF08A]/70 washi-tape rotate-[-15deg] z-20 rounded-sm shadow-sm" />
+              <div className="absolute -top-3 right-4 w-12 h-6 bg-[#FEF08A]/70 washi-tape rotate-[15deg] z-20 rounded-sm shadow-sm" />
+              
+              <div className="w-full h-full bg-white p-2 pb-4 shadow-[2px_3px_10px_rgba(0,0,0,0.12)] rotate-[1deg] transition-transform duration-300 group-hover:rotate-0">
+                <img 
+                  src={getAssetUrl(profile.cover_url)} 
+                  alt="Cover" 
+                  className="w-full h-full object-cover border border-neutral-200/50"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                />
+              </div>
+            </div>
+          )}
+
           {/* ═══ HEADER: Avatar + Name + Bio + Stats — all compact ═══ */}
-          <div className="flex items-start gap-4 mb-1">
-            {/* Tiny taped polaroid */}
+          <div className="flex flex-col sm:flex-row items-start gap-5 mb-2">
+            {/* Taped polaroid */}
             <div className="relative shrink-0 rotate-[-2deg] group">
-              <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-14 h-5 bg-[#FEF08A]/60 washi-tape border border-yellow-300/20 shadow-sm rotate-[3deg] z-20 rounded-sm" />
-              <div className="w-20 h-24 sm:w-24 sm:h-30 bg-white p-1.5 pb-6 shadow-[1px_2px_6px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-[#FEF08A]/60 washi-tape border border-yellow-300/20 shadow-sm rotate-[3deg] z-20 rounded-sm" />
+              <div className="w-28 h-36 sm:w-32 sm:h-44 bg-white p-2 pb-8 shadow-[1px_2px_8px_rgba(0,0,0,0.12)] transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">
                 {!avatarError && profile.avatar_url ? (
                   <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover" onError={() => setAvatarError(true)} />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-blue-50 text-blue-900 font-bold text-xl" style={{ fontFamily: "'Permanent Marker', cursive" }}>
+                  <div className="w-full h-full flex items-center justify-center bg-blue-50 text-blue-900 font-bold text-3xl" style={{ fontFamily: "'Permanent Marker', cursive" }}>
                     {profile.display_name?.charAt(0).toUpperCase() || 'U'}
                   </div>
                 )}
-                <div className="absolute bottom-1 left-0 right-0 text-center nb-pencil text-[10px] nb-handwriting">📸 me!</div>
+                <div className="absolute bottom-1.5 left-0 right-0 text-center nb-pencil text-[13px] nb-handwriting font-medium">📸 me!</div>
               </div>
             </div>
             
             {/* Name + Title + Year + Mood */}
-            <div className="flex-grow min-w-0">
-              <h1 className="text-2xl sm:text-3xl font-black nb-ink tracking-tight leading-tight nb-section-title" style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)' }}>
+            <div className="flex-grow min-w-0 pt-1 sm:pt-3">
+              <h1 className="text-3xl sm:text-4xl font-black nb-ink tracking-tight leading-tight nb-section-title" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)' }}>
                 {profile.display_name} {data.mood && <span className="text-xl">{data.mood}</span>}
               </h1>
-              <p className="nb-red-ink font-bold text-base nb-handwriting flex items-center gap-1.5 mt-0.5 leading-[28px]">
-                <GraduationCap size={16} /> {data.course || 'Student'} {data.university ? `@ ${data.university}` : ''}
+              <p className="nb-red-ink font-bold text-lg nb-handwriting flex items-center gap-1.5 mt-1 leading-[28px]">
+                <GraduationCap size={18} /> {data.course || 'Student'} {data.university ? `@ ${data.university}` : ''}
               </p>
               {(data.year || data.batch_year) && (
-                <p className="nb-pencil text-base nb-handwriting leading-[28px]">
+                <p className="nb-pencil text-lg nb-handwriting leading-[28px]">
                   {data.year ? `Year ${data.year}` : ''}{data.year && data.batch_year ? ' · ' : ''}{data.batch_year ? `Batch of ${data.batch_year}` : ''}
                 </p>
               )}
               {profile.bio && (
-                <p className="nb-ink text-lg leading-[28px] nb-handwriting italic mt-0.5">"{profile.bio}"</p>
+                <p className="nb-ink text-xl leading-[30px] nb-handwriting italic mt-1.5">"{profile.bio}"</p>
               )}
             </div>
           </div>
