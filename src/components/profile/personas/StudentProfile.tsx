@@ -1176,178 +1176,484 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   }
 
   // ----------------------------------------------------
-  // LAYOUT 3: SKETCHED RULED NOTEBOOK (Default / Notebook Theme)
+  // LAYOUT 3: PREMIUM JOURNAL NOTEBOOK (Default / Notebook Theme)
   // ----------------------------------------------------
   return (
-    <div className="w-full min-h-screen relative overflow-x-hidden bg-[#2d3748] bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')] bg-blend-multiply text-[#333333] transition-colors duration-300 pb-12 sm:pb-24 p-2 sm:p-8 selection:bg-blue-200 font-sans flex justify-center items-start">
+    <div className="w-full min-h-screen relative overflow-x-hidden bg-[#8B7355] text-[#333333] transition-colors duration-300 pb-12 sm:pb-24 p-3 sm:p-8 selection:bg-amber-200/60 font-sans flex justify-center items-start">
       
-      {/* Physical Notebook Container */}
-      <div className="relative w-full max-w-3xl bg-[#FDF9F1] shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-r-xl min-h-[90vh] mt-2 sm:mt-8 flex flex-row">
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Permanent+Marker&display=swap');
+          .nb-page {
+            background: linear-gradient(135deg, #FFFDF7 0%, #FDF8EE 40%, #FAF4E4 100%);
+            box-shadow: 
+              inset 0 0 80px rgba(0,0,0,0.03),
+              0 0 0 1px rgba(0,0,0,0.05),
+              4px 4px 20px rgba(0,0,0,0.15),
+              12px 12px 40px rgba(0,0,0,0.1);
+          }
+          .nb-lines {
+            background-image: 
+              linear-gradient(transparent 31px, #B8D4E3 31px, #B8D4E3 32px, transparent 32px);
+            background-size: 100% 32px;
+          }
+          .nb-section-title {
+            font-family: 'Permanent Marker', cursive, sans-serif;
+            color: #1a365d;
+          }
+          .nb-handwriting {
+            font-family: 'Caveat', cursive, sans-serif;
+          }
+          .nb-ink { color: #1e3a5f; }
+          .nb-red-ink { color: #c53030; }
+          .nb-pencil { color: #6B7280; }
+          .washi-tape {
+            background: repeating-linear-gradient(
+              45deg,
+              transparent,
+              transparent 4px,
+              rgba(255,255,255,0.3) 4px,
+              rgba(255,255,255,0.3) 8px
+            );
+          }
+          .nb-card {
+            background: rgba(255,253,247,0.7);
+            border: 2px solid rgba(30,58,95,0.12);
+            border-radius: 4px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+          }
+          .nb-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+          }
+          .nb-divider {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #B8D4E3 20%, #B8D4E3 80%, transparent 100%);
+            margin: 2rem 0;
+          }
+          .nb-highlight {
+            background: linear-gradient(180deg, transparent 60%, #FEF08A 60%);
+            padding: 0 4px;
+          }
+          .nb-doodle-box {
+            border: 3px solid #1e3a5f;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            padding: 1rem 1.25rem;
+            background: rgba(255,253,247,0.6);
+          }
+          .nb-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 14px;
+            border: 2px solid #1e3a5f;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            font-family: 'Caveat', cursive;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #1e3a5f;
+            background: rgba(255,253,247,0.5);
+            transition: all 0.2s ease;
+          }
+          .nb-tag:hover {
+            background: #EBF5FF;
+            transform: rotate(-1deg) scale(1.05);
+          }
+          .nb-tag-pink {
+            border-color: #9B2C2C;
+            color: #9B2C2C;
+          }
+          .nb-tag-pink:hover { background: #FFF5F5; }
+          .nb-stat-circle {
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            border: 3px solid #1e3a5f;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            background: rgba(255,253,247,0.5);
+            font-family: 'Permanent Marker', cursive;
+            transition: transform 0.2s ease;
+          }
+          .nb-stat-circle:hover { transform: scale(1.08) rotate(2deg); }
+          @keyframes notebook-entry {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .nb-animate { animation: notebook-entry 0.5s ease forwards; }
+        `
+      }} />
+      
+      {/* Notebook Container */}
+      <div className="relative w-full max-w-3xl nb-page rounded-sm sm:rounded-md min-h-[90vh] mt-2 sm:mt-6 flex flex-row">
         
-        {/* Notebook Spiral Edge */}
-        <div className="absolute left-0 top-0 bottom-0 w-10 sm:w-16 border-r border-neutral-300 flex flex-col justify-evenly items-center py-8 z-30 pointer-events-none">
-          <div className="absolute top-0 bottom-0 left-0 w-full bg-gradient-to-r from-black/5 to-transparent z-0" />
-          {Array.from({ length: 24 }).map((_, i) => (
-            <div key={i} className="relative w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-[#1a202c] shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)] flex items-center justify-center z-10">
-               {/* Spiral Ring */}
-               <div className="absolute w-10 sm:w-14 h-2 sm:h-3 border-2 border-neutral-500/80 rounded-full left-[-16px] sm:left-[-20px] bg-gradient-to-r from-neutral-300 via-white to-neutral-400 shadow-md" />
+        {/* Left Margin - Spiral Binding */}
+        <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-14 flex flex-col justify-evenly items-center py-6 z-30 pointer-events-none bg-gradient-to-r from-[#e8e0d0]/30 to-transparent border-r-2 border-[#c53030]/40">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div key={i} className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#8B7355] shadow-[inset_0_2px_3px_rgba(0,0,0,0.4)] flex items-center justify-center z-10 border border-[#6B5B3E]">
+              <div className="absolute w-8 sm:w-10 h-2 border-2 border-[#A0A0A0] rounded-full left-[-10px] sm:left-[-8px] bg-gradient-to-r from-[#C0C0C0] via-[#E8E8E8] to-[#B0B0B0] shadow-sm" />
             </div>
           ))}
         </div>
+        
+        {/* Second red margin line */}
+        <div className="absolute top-0 bottom-0 left-[3.3rem] sm:left-[3.8rem] w-[1px] bg-[#c53030]/20 pointer-events-none z-0" />
 
-        {/* Paper Content Area */}
-        <div className="relative flex-grow overflow-hidden rounded-r-xl">
-          {/* Notebook Paper Lines */}
-          <div 
-            className="absolute inset-0 pointer-events-none z-0 opacity-40" 
-            style={{
-              backgroundImage: 'linear-gradient(#3b82f6 1px, transparent 1px)',
-              backgroundSize: '100% 32px',
-              backgroundPosition: 'top left'
-            }}
-          />
-          {/* Red Margin Line */}
-          <div className="absolute top-0 bottom-0 left-[3.5rem] sm:left-[5rem] w-[2px] bg-red-400/60 pointer-events-none z-0 shadow-sm" />
-          <div className="absolute top-0 bottom-0 left-[3.7rem] sm:left-[5.2rem] w-[1px] bg-red-400/30 pointer-events-none z-0" />
-
-          {/* Actual Content Wrapper (padding accounts for rings + margin) */}
-          <main className="relative z-10 w-full pl-[4.5rem] sm:pl-[6.5rem] pr-6 sm:pr-12 pt-16 pb-24 flex flex-col gap-10">
+        {/* Paper Content */}
+        <div className="relative flex-grow overflow-hidden rounded-r-sm sm:rounded-r-md nb-lines">
+          
+          <main className="relative z-10 w-full pl-[4rem] sm:pl-[5rem] pr-5 sm:pr-10 pt-12 pb-16 flex flex-col gap-0 nb-animate">
             
-            {/* Banner (Taped Photo) */}
-            {data.featured_work_url && (
-              <div className="w-full max-w-sm mx-auto relative rotate-[2deg]">
-                {/* Washi Tape */}
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-white/40 backdrop-blur-sm border border-neutral-300 shadow-sm rotate-[-3deg] z-20" />
-                <img src={getAssetUrl(data.featured_work_url)} className="w-full h-48 sm:h-56 object-cover shadow-lg border-[6px] sm:border-[8px] border-white filter contrast-110 sepia-[0.1]" alt="Banner" />
+            {/* ═══ PAGE HEADER ═══ */}
+            <div className="flex flex-col sm:flex-row items-start gap-6 mb-2">
+              
+              {/* Taped Polaroid Avatar */}
+              <div className="relative shrink-0 rotate-[-2deg] group">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-20 h-7 bg-[#FEF08A]/70 washi-tape border border-yellow-300/30 shadow-sm rotate-[3deg] z-20 rounded-sm" />
+                <div className="w-28 h-36 sm:w-32 sm:h-40 bg-white p-2 pb-10 shadow-[2px_3px_10px_rgba(0,0,0,0.12)] transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">
+                  {!avatarError && profile.avatar_url ? (
+                    <img 
+                      src={getAssetUrl(profile.avatar_url)} 
+                      alt={profile.display_name} 
+                      className="w-full h-full object-cover"
+                      onError={() => setAvatarError(true)} 
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-blue-50 text-blue-900 font-bold text-3xl" style={{ fontFamily: "'Permanent Marker', cursive" }}>
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
+                  <div className="absolute bottom-2 left-0 right-0 text-center nb-pencil font-medium text-sm nb-handwriting">
+                    📸 That's me!
+                  </div>
+                </div>
+              </div>
+              
+              {/* Name + Title */}
+              <div className="flex-grow pt-2">
+                <h1 className="text-4xl sm:text-5xl font-black nb-ink tracking-tight leading-none mb-1 nb-section-title">
+                  {profile.display_name}
+                </h1>
+                <p className="nb-red-ink font-bold text-lg sm:text-xl nb-handwriting flex items-center gap-2 mt-1">
+                  <GraduationCap size={20} /> {data.course || 'Student'} {data.university ? `@ ${data.university}` : ''}
+                </p>
+                {(data.year || data.batch_year) && (
+                  <p className="nb-pencil text-lg nb-handwriting mt-1">
+                    {data.year ? `Year ${data.year}` : ''}{data.year && data.batch_year ? ' · ' : ''}{data.batch_year ? `Batch of ${data.batch_year}` : ''}
+                  </p>
+                )}
+                {data.mood && (
+                  <span className="inline-block mt-2 text-2xl">{data.mood}</span>
+                )}
+              </div>
+            </div>
+
+            {/* Bio quote */}
+            {profile.bio && (
+              <div className="mb-2">
+                <p className="nb-ink text-xl sm:text-2xl leading-relaxed nb-handwriting italic">
+                  "{profile.bio}"
+                </p>
               </div>
             )}
 
-            {/* Header / Name */}
-            <div className="w-full mt-4">
-              <h1 className="text-4xl sm:text-6xl font-black text-blue-900 tracking-tight leading-none mb-2" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>
-                {profile.display_name}
-              </h1>
-              <p className="text-red-600 font-bold text-xl sm:text-2xl" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                {data.university ? `@ ${data.university}` : 'Student'}
-              </p>
+            <div className="w-full max-w-xs mb-4 mt-2 z-20">
+              <ProfileCTAs profile={profile} accentColor="#1e3a5f" />
             </div>
 
-            {/* Profile Content row */}
-            <div className="flex flex-col sm:flex-row gap-8 items-start w-full">
-              {/* Avatar Taped */}
-              <div className="relative shrink-0 rotate-[-3deg] sm:mt-2">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-[#FEF08A]/60 backdrop-blur-md border border-neutral-200 shadow-sm rotate-[4deg] z-20" />
-                <div className="w-28 h-36 sm:w-36 sm:h-48 bg-white p-2 sm:p-3 pb-8 sm:pb-12 shadow-[2px_4px_12px_rgba(0,0,0,0.15)] transition-transform duration-300 hover:rotate-0 hover:scale-105">
-                  <img 
-                    src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=f3f4f6&color=374151`} 
-                    alt={profile.display_name} 
-                    className="w-full h-full object-cover filter contrast-110 grayscale"
-                    onError={(e) => { e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=f3f4f6&color=374151`; }} 
-                  />
-                  <div className="absolute bottom-2 left-0 right-0 text-center text-neutral-600 font-medium text-lg sm:text-xl" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                    It's me!
-                  </div>
-                </div>
-              </div>
+            <hr className="nb-divider" />
 
-              {/* Bio */}
-              {profile.bio && (
-                <div className="flex-grow">
-                  <p className="text-neutral-800 text-xl sm:text-3xl leading-relaxed" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                    "{profile.bio}"
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Hand-Drawn Metrics Boxes */}
-            {(data.campus_rank_pct || data.study_buddies || stats) && (
-              <div className="grid grid-cols-2 gap-4 sm:gap-6 w-full max-w-sm mt-4">
+            {/* ═══ STATS ROW ═══ */}
+            {(data.campus_rank_pct || data.study_buddies || data.courses_completed || stats) && (
+              <div className="flex flex-wrap gap-4 sm:gap-6 items-center justify-start mb-2">
                 <div 
-                  className={`border-[3px] border-blue-600/70 p-4 text-center bg-blue-50/40 transform transition-transform hover:scale-105 ${isFreeProfile ? 'cursor-pointer' : ''}`}
-                  style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
+                  className={`nb-stat-circle ${isFreeProfile ? 'cursor-pointer' : ''}`}
                   onClick={() => isFreeProfile && setShowFomoModal(true)}
                 >
-                  <p className="text-blue-900 text-xl font-bold mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Visits</p>
-                  <div className={`text-4xl sm:text-5xl font-black text-blue-800 ${isFreeProfile ? 'blur-[5px]' : ''}`} style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>
-                    {isFreeProfile ? '8k+' : liveViews}
-                  </div>
+                  <span className={`text-2xl nb-ink ${isFreeProfile ? 'blur-[4px]' : ''}`}>{isFreeProfile ? '9k' : liveViews}</span>
+                  <span className="text-[10px] nb-pencil font-sans uppercase tracking-wider">views</span>
                 </div>
                 
                 {data.campus_rank_pct && (
-                  <div 
-                    className="border-[3px] border-red-500/70 p-4 text-center bg-red-50/40 transform transition-transform hover:scale-105"
-                    style={{ borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px' }}
-                  >
-                    <p className="text-red-900 text-xl font-bold mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Rank</p>
-                    <div className="text-3xl sm:text-4xl font-black text-red-600" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>
-                      Top {data.campus_rank_pct}%
-                    </div>
+                  <div className="nb-stat-circle" style={{ borderColor: '#c53030' }}>
+                    <span className="text-xl nb-red-ink">Top {data.campus_rank_pct}%</span>
+                    <span className="text-[10px] nb-pencil font-sans uppercase tracking-wider">rank</span>
+                  </div>
+                )}
+                
+                {data.courses_completed && (
+                  <div className="nb-stat-circle">
+                    <span className="text-2xl nb-ink">{data.courses_completed}</span>
+                    <span className="text-[10px] nb-pencil font-sans uppercase tracking-wider">courses</span>
+                  </div>
+                )}
+                
+                {data.study_buddies && (
+                  <div className="nb-stat-circle" style={{ borderColor: '#2B6CB0' }}>
+                    <span className="text-2xl nb-ink">{data.study_buddies}</span>
+                    <span className="text-[10px] nb-pencil font-sans uppercase tracking-wider">buddies</span>
                   </div>
                 )}
               </div>
             )}
 
-            {/* About Me */}
+            {/* ═══ AVAILABILITY BANNER ═══ */}
+            {data.availability && (
+              <div className="mb-2">
+                <div className="nb-doodle-box inline-flex items-center gap-3 rotate-[-1deg]" style={{ borderColor: '#2B6CB0' }}>
+                  <Briefcase size={18} className="nb-ink" />
+                  <span className="nb-handwriting text-xl font-bold nb-ink">
+                    Open to: <span className="nb-highlight">{data.availability}</span>
+                  </span>
+                </div>
+              </div>
+            )}
+
+            <hr className="nb-divider" />
+
+            {/* ═══ ABOUT ME ═══ */}
             {data.about_me && (
-              <div className="w-full mt-2">
-                <h3 className="text-3xl sm:text-4xl font-bold text-neutral-800 mb-2 underline decoration-wavy decoration-blue-400" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  About Me
+              <div className="w-full mb-2">
+                <h3 className="text-2xl sm:text-3xl nb-section-title mb-3 flex items-center gap-2">
+                  <BookOpen size={22} className="nb-ink opacity-50" /> About Me
                 </h3>
-                <p className="text-2xl sm:text-3xl text-neutral-700 leading-snug font-medium" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                <p className="nb-ink text-xl sm:text-2xl leading-[32px] nb-handwriting">
                   {data.about_me}
                 </p>
               </div>
             )}
 
-            {/* Let's Connect */}
-            {data?.platforms && data?.platforms?.length > 0 && (
-              <div className="w-full mt-4 mb-8">
-                <h3 className="text-3xl sm:text-4xl font-bold text-neutral-800 mb-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  Find me here:
+            {/* ═══ FAVORITE SUBJECT ═══ */}
+            {data.favorite_subject && (
+              <div className="mb-2 mt-4">
+                <div className="nb-doodle-box inline-flex items-center gap-3" style={{ borderColor: '#c53030' }}>
+                  <Star size={18} className="nb-red-ink" />
+                  <span className="nb-handwriting text-xl font-bold nb-red-ink">
+                    Favorite Subject: <span className="nb-highlight">{data.favorite_subject}</span>
+                  </span>
+                </div>
+              </div>
+            )}
+
+            <hr className="nb-divider" />
+
+            {/* ═══ SKILLS ═══ */}
+            {data.core_skills && data.core_skills.length > 0 && (
+              <div className="w-full mb-2">
+                <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
+                  <Zap size={22} className="nb-ink opacity-50" /> Skills & Powers
                 </h3>
-                <div className="flex flex-wrap gap-4">
-                  {data.platforms.map((p: any, i: number) => {
-                    const platform = p.platform?.toLowerCase()
-                    const pData = getPlatformData(platform)
-                    return (
-                      <a 
-                        key={i}
-                        href={ensureAbsoluteUrl(p.url)} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        onClick={(e) => {
-                          handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
-                          if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
-                        }}
-                        className="flex items-center gap-2 px-4 py-2 border-[3px] border-neutral-700 text-neutral-800 hover:bg-neutral-100 transition-colors bg-white relative group shadow-sm hover:-translate-y-1"
-                        style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}
-                      >
-                        <div className="opacity-80 scale-90 group-hover:opacity-100 transition-opacity">{pData.icon}</div>
-                        <span className="font-bold text-lg sm:text-xl" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{p.platform}</span>
-                        
-                        {isGated && (
-                          <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-lg">
-                            <Lock size={16} className="text-neutral-500" />
+                <div className="flex flex-wrap gap-3">
+                  {data.core_skills.map((skill: string, i: number) => (
+                    <span key={i} className="nb-tag">
+                      ⚡ {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ═══ PROJECTS ═══ */}
+            {data.projects && data.projects.length > 0 && (
+              <>
+                <hr className="nb-divider" />
+                <div className="w-full mb-2">
+                  <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
+                    <Rocket size={22} className="nb-ink opacity-50" /> Projects
+                  </h3>
+                  <div className="space-y-5">
+                    {data.projects.map((proj: any, i: number) => (
+                      <div key={i} className="nb-card p-5 relative">
+                        <div className="flex items-start gap-3 mb-2">
+                          <span className="text-2xl">{proj.emoji || '🚀'}</span>
+                          <div className="flex-grow">
+                            <h4 className="text-xl sm:text-2xl font-bold nb-ink nb-handwriting">{proj.name}</h4>
+                            {proj.description && (
+                              <p className="nb-pencil text-lg nb-handwriting mt-1">{proj.description}</p>
+                            )}
+                          </div>
+                        </div>
+                        {proj.tech && proj.tech.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mt-3 ml-9">
+                            {proj.tech.map((t: string, j: number) => (
+                              <span key={j} className="px-3 py-1 bg-blue-50/60 border border-blue-200 rounded-sm text-xs font-bold nb-ink uppercase tracking-wider font-sans">
+                                {t}
+                              </span>
+                            ))}
                           </div>
                         )}
-                      </a>
-                    )
-                  })}
+                        {/* Doodle numbering */}
+                        <div className="absolute top-3 right-4 text-3xl nb-pencil opacity-30 nb-section-title">#{i + 1}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </>
             )}
 
-            {data.availability && (
-              <div className="w-full mb-8">
-                <div className="inline-block border-[3px] border-blue-600 bg-blue-50/50 px-6 py-2 text-blue-800 font-bold text-2xl rotate-[-2deg] shadow-sm" style={{ borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px', fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  Looking for: {data.availability}
+            {/* ═══ HACKATHONS ═══ */}
+            {data.hackathons && data.hackathons.length > 0 && (
+              <>
+                <hr className="nb-divider" />
+                <div className="w-full mb-2">
+                  <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
+                    <Trophy size={22} className="nb-ink opacity-50" /> Hackathons & Achievements
+                  </h3>
+                  <div className="space-y-3">
+                    {data.hackathons.map((h: any, i: number) => (
+                      <div key={i} className="flex items-start gap-3 py-2">
+                        <span className="text-xl mt-0.5">🏆</span>
+                        <div className="flex-grow">
+                          <span className="nb-handwriting text-xl font-bold nb-ink">{h.name}</span>
+                          {h.year && <span className="nb-pencil text-sm font-sans ml-2">({h.year})</span>}
+                          {h.achievement && (
+                            <p className="nb-handwriting text-lg nb-red-ink font-semibold mt-0.5">↳ {h.achievement}</p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </>
             )}
 
-            <div className="w-full max-w-sm mb-4 z-20">
-              <ProfileCTAs profile={profile} accentColor="#1e3a8a" />
+            {/* ═══ CLUBS & HOBBIES ═══ */}
+            {(data.clubs?.length > 0 || data.hobbies?.length > 0) && (
+              <>
+                <hr className="nb-divider" />
+                <div className="w-full mb-2">
+                  {data.clubs?.length > 0 && (
+                    <div className="mb-5">
+                      <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
+                        <Users size={22} className="nb-ink opacity-50" /> Clubs & Orgs
+                      </h3>
+                      <div className="flex flex-wrap gap-3">
+                        {data.clubs.map((club: string, i: number) => (
+                          <span key={i} className="nb-tag">🎓 {club}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {data.hobbies?.length > 0 && (
+                    <div>
+                      <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
+                        <Heart size={22} className="nb-ink opacity-50" /> Hobbies
+                      </h3>
+                      <div className="flex flex-wrap gap-3">
+                        {data.hobbies.map((hobby: string, i: number) => (
+                          <span key={i} className="nb-tag nb-tag-pink">💛 {hobby}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+
+            {/* ═══ SOCIAL LINKS ═══ */}
+            {data?.platforms && data?.platforms?.length > 0 && (
+              <>
+                <hr className="nb-divider" />
+                <div className="w-full mb-2">
+                  <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
+                    <Globe size={22} className="nb-ink opacity-50" /> Find Me Here
+                  </h3>
+                  <div className="flex flex-wrap gap-3">
+                    {data.platforms.map((p: any, i: number) => {
+                      const pData = getPlatformData(p.platform?.toLowerCase())
+                      return (
+                        <a 
+                          key={i}
+                          href={ensureAbsoluteUrl(p.url)} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          onClick={(e) => {
+                            handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                            if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                          }}
+                          className="nb-tag group relative"
+                        >
+                          <div className="opacity-80 group-hover:opacity-100 transition-opacity">{pData.icon}</div>
+                          {p.platform}
+                          {isGated && (
+                            <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-lg">
+                              <Lock size={14} className="nb-pencil" />
+                            </div>
+                          )}
+                        </a>
+                      )
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* ═══ UPCOMING EVENTS ═══ */}
+            {data.upcoming_events && data.upcoming_events.length > 0 && (
+              <>
+                <hr className="nb-divider" />
+                <div className="w-full mb-2">
+                  <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
+                    <Calendar size={22} className="nb-ink opacity-50" /> What's Coming Up
+                  </h3>
+                  <div className="space-y-3">
+                    {data.upcoming_events.map((ev: any, i: number) => (
+                      <div key={i} className="flex items-center gap-4 py-2">
+                        <div className="w-10 h-10 rounded-full border-2 border-[#1e3a5f] flex items-center justify-center shrink-0 bg-blue-50/40">
+                          <Calendar size={16} className="nb-ink" />
+                        </div>
+                        <div className="flex-grow">
+                          <span className="nb-handwriting text-xl font-bold nb-ink">{ev.title}</span>
+                          <span className="nb-pencil text-sm font-sans ml-2">— {ev.date}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* ═══ THOUGHT BUBBLE ═══ */}
+            {data.thought_bubble && (
+              <>
+                <hr className="nb-divider" />
+                <div className="w-full mb-2">
+                  <h3 className="text-2xl sm:text-3xl nb-section-title mb-4 flex items-center gap-2">
+                    <Sparkles size={22} className="nb-ink opacity-50" /> Advice I Live By
+                  </h3>
+                  <div className="nb-card p-6 text-center relative">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-[#B8D4E3]/50 washi-tape rounded-sm z-20" />
+                    <p className="nb-handwriting text-2xl sm:text-3xl nb-ink italic leading-relaxed">
+                      "{data.thought_bubble}"
+                    </p>
+                    <Heart size={20} className="mx-auto mt-4 nb-red-ink opacity-60" />
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* ═══ CONTACT ═══ */}
+            {data.contact_email && (
+              <>
+                <hr className="nb-divider" />
+                <div className="w-full mb-4">
+                  <div className="nb-card p-6 flex flex-col sm:flex-row items-center gap-5">
+                    <div className="w-14 h-14 rounded-full border-2 border-[#1e3a5f] flex items-center justify-center shrink-0 bg-blue-50/40">
+                      <Mail size={24} className="nb-ink" />
+                    </div>
+                    <div className="text-center sm:text-left flex-grow">
+                      <h4 className="text-2xl font-bold nb-ink nb-handwriting mb-1">Let's Talk!</h4>
+                      <p className="nb-pencil nb-handwriting text-lg">I'm always open to new opportunities and ideas.</p>
+                      <a href={`mailto:${data.contact_email}`} className="text-sm font-bold nb-ink hover:underline font-sans mt-2 inline-block">{data.contact_email}</a>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Page number doodle */}
+            <div className="w-full text-center mt-8 nb-pencil opacity-40">
+              <span className="nb-handwriting text-lg">— page 1 of 1 —</span>
             </div>
             
           </main>
@@ -1356,14 +1662,14 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
       {showFomoModal && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-neutral-900/60 backdrop-blur-sm">
-          <div className="bg-white p-8 max-w-sm w-full shadow-2xl relative text-center border-[3px] border-neutral-800" style={{ borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px' }}>
+          <div className="bg-[#FFFDF7] p-8 max-w-sm w-full shadow-2xl relative text-center nb-card border-[3px] border-[#1e3a5f]" style={{ borderRadius: '4px' }}>
             <button onClick={() => setShowFomoModal(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-800 transition-colors">
               <X size={24} />
             </button>
-            <h3 className="text-3xl font-bold text-neutral-800 mb-2" style={{ fontFamily: "'Permanent Marker', cursive, sans-serif" }}>Secret Stats</h3>
-            <p className="text-neutral-700 mb-6 font-medium text-xl leading-snug" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Looks like you need the premium tee to unlock these numbers.</p>
-            <button onClick={() => window.location.href = '/#pricing'} className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xl transition-colors border-[3px] border-blue-800 shadow-md" style={{ borderRadius: '15px 225px 15px 255px / 255px 15px 225px 15px', fontFamily: "'Caveat', cursive, sans-serif" }}>
-              Unlock Now
+            <h3 className="text-3xl font-bold nb-ink mb-2 nb-section-title">📓 Secret Stats</h3>
+            <p className="nb-pencil mb-6 font-medium text-xl leading-snug nb-handwriting">These notes are premium. Upgrade to unlock all the stats!</p>
+            <button onClick={() => window.location.href = '/#pricing'} className="w-full py-3 bg-[#1e3a5f] hover:bg-[#2d4a7c] text-white font-bold text-xl transition-colors rounded-sm shadow-md nb-handwriting">
+              Unlock Now ✨
             </button>
           </div>
         </div>
@@ -1400,4 +1706,3 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
     </div>
   )
 }
-
