@@ -1263,7 +1263,7 @@ export function CreatorProfile({
               <div
                 className={`text-xl sm:text-2xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
               >
-                {isFreeProfile ? "4.2K" : liveViews}
+                {liveViews}
               </div>
               <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                 Impressions
@@ -1273,7 +1273,7 @@ export function CreatorProfile({
             {/* Location */}
             <div className="stat-item flex-1 min-w-[100px]">
               <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
-                {topCity}
+                {data.location || "Global"}
               </div>
               <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                 Base
@@ -1609,14 +1609,20 @@ export function CreatorProfile({
                     className="group collab-card overflow-hidden cursor-pointer"
                   >
                     <div className="w-full aspect-video relative overflow-hidden bg-gray-50">
-                      <img
-                        src={
-                          thumb ||
-                          "https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=800"
-                        }
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        alt={w.title}
-                      />
+                      {thumb ? (
+                        <img
+                          src={thumb}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          alt={w.title}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
+                          <Camera
+                            size={40}
+                            className="text-purple-300 opacity-60"
+                          />
+                        </div>
+                      )}
                       {w.type === "video" && (
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                           <div className="w-16 h-16 rounded-full bg-white/90 backdrop-blur-md shadow-lg flex items-center justify-center text-pink-500 group-hover:scale-110 transition-transform">
@@ -1664,8 +1670,7 @@ export function CreatorProfile({
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-purple-300" />
               <span className="text-sm font-bold text-gray-800">
-                {data.collab_types ||
-                  "Always open to discussing new projects and creative ideas."}
+                {data.collab_types || "Open to Opportunities"}
               </span>
             </div>
 
