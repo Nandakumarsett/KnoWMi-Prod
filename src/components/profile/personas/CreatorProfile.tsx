@@ -1272,39 +1272,39 @@ export function CreatorProfile({
           className="mb-12 stagger-fade"
           style={{ animationDelay: "0.1s" }}
         >
-          <div className="grid grid-cols-2 sm:flex sm:flex-wrap justify-center sm:justify-between gap-8 sm:gap-4 text-center w-full max-w-2xl mx-auto">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap justify-center sm:justify-between gap-8 sm:gap-2 md:gap-4 text-center w-full max-w-2xl mx-auto px-2">
             {/* Impressions */}
             <div
               className={`stat-item flex-1 min-w-[100px] ${isFreeProfile ? "cursor-pointer" : ""}`}
               onClick={() => isFreeProfile && setShowFomoModal(true)}
             >
               <div
-                className={`text-xl sm:text-2xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
+                className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
               >
                 {liveViews}
               </div>
-              <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+              <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                 Impressions
               </div>
             </div>
 
             {/* Location */}
-            <div className="stat-item flex-1 min-w-[100px]">
-              <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
+            <div className="stat-item flex-1 min-w-[80px]">
+              <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
                 {data.location || "Global"}
               </div>
-              <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+              <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                 Base
               </div>
             </div>
 
             {/* Audience Age */}
             {data.audience_age_group && (
-              <div className="stat-item flex-1 min-w-[100px]">
-                <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
+              <div className="stat-item flex-1 min-w-[80px]">
+                <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
                   {data.audience_age_group}
                 </div>
-                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                   Audience Age
                 </div>
               </div>
@@ -1312,11 +1312,11 @@ export function CreatorProfile({
 
             {/* Gender Split */}
             {data.audience_gender_split && (
-              <div className="stat-item flex-1 min-w-[100px]">
-                <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
+              <div className="stat-item flex-1 min-w-[80px]">
+                <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
                   {data.audience_gender_split}
                 </div>
-                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                   Gender Split
                 </div>
               </div>
@@ -1324,11 +1324,11 @@ export function CreatorProfile({
 
             {/* Visual Style — shown only if gender split is absent */}
             {data.visual_style && !data.audience_gender_split && (
-              <div className="stat-item flex-1 min-w-[100px]">
-                <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
+              <div className="stat-item flex-1 min-w-[80px]">
+                <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
                   {data.visual_style}
                 </div>
-                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                   Aesthetic
                 </div>
               </div>
@@ -1336,11 +1336,11 @@ export function CreatorProfile({
 
             {/* Posting Frequency — shown only if audience_age_group is absent */}
             {data.posting_frequency && !data.audience_age_group && (
-              <div className="stat-item flex-1 min-w-[100px]">
-                <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
+              <div className="stat-item flex-1 min-w-[80px]">
+                <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
                   {data.posting_frequency}
                 </div>
-                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                   Frequency
                 </div>
               </div>
