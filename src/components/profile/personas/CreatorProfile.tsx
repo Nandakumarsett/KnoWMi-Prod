@@ -1214,7 +1214,7 @@ export function CreatorProfile({
 
           {/* Social Links Row */}
           {data.platforms && data.platforms.length > 0 && (
-            <div className="mt-8 flex flex-wrap justify-center sm:justify-start gap-3 px-2">
+            <div className="mt-8 flex flex-wrap justify-center sm:justify-start gap-4 px-2">
               {data.platforms.map((p) => {
                 const platform = p.platform?.toLowerCase();
                 const Icon = PLATFORM_ICONS[platform] || Share2;
@@ -1239,25 +1239,21 @@ export function CreatorProfile({
                       if (!isGated)
                         window.open(ensureAbsoluteUrl(p.url), "_blank");
                     }}
-                    className="social-bubble group"
+                    className="w-12 h-12 rounded-full flex items-center justify-center relative overflow-hidden group shadow-sm bg-white border border-gray-100 hover:shadow-md transition-all duration-300 hover:-translate-y-1"
                     title={`${p.platform}${p.followers ? ` \u00b7 ${p.followers}` : ""}`}
                   >
                     <Icon
-                      size={18}
-                      className="relative z-10 text-gray-500 group-hover:text-transparent transition-colors"
+                      size={20}
+                      className="relative z-10 text-gray-700 group-hover:text-white transition-colors duration-300"
                     />
                     <div
-                      className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${styleClass}`}
+                      className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${styleClass}`}
                       style={{ zIndex: 0 }}
-                    />
-                    <Icon
-                      size={18}
-                      className="absolute z-10 text-white opacity-0 group-hover:opacity-100 transition-opacity"
                     />
 
                     {isGated && (
-                      <div className="absolute inset-0 bg-white/80 rounded-full flex items-center justify-center backdrop-blur-sm z-20">
-                        <Lock size={11} className="text-gray-500" />
+                      <div className="absolute inset-0 bg-white/80 flex items-center justify-center backdrop-blur-sm z-20">
+                        <Lock size={12} className="text-gray-500" />
                       </div>
                     )}
                   </a>
