@@ -1626,21 +1626,29 @@ export function CreatorProfile({
                     onClick={() => setSelectedWork(w)}
                     className="group collab-card overflow-hidden cursor-pointer"
                   >
-                    <div className="w-full aspect-video relative overflow-hidden bg-gray-50">
+                    <div className="w-full aspect-video relative overflow-hidden bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center">
+                      <Camera size={40} className="text-purple-300 opacity-60 absolute" />
                       {thumb ? (
                         <img
                           src={thumb}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-10"
                           alt={w.title}
+                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
                         />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
-                          <Camera
-                            size={40}
-                            className="text-purple-300 opacity-60"
-                          />
-                        </div>
-                      )}
+                      ) : (() => {
+                        const isUploadedVideo = w.url && typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i);
+                        if (isUploadedVideo) {
+                          return (
+                            <video 
+                              src={getAssetUrl(w.url)} 
+                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-10"
+                              muted
+                              playsInline
+                            />
+                          );
+                        }
+                        return null;
+                      })()}
                       {w.type === "video" && (
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                           <div className="w-16 h-16 rounded-full bg-white/90 backdrop-blur-md shadow-lg flex items-center justify-center text-pink-500 group-hover:scale-110 transition-transform">
@@ -1787,18 +1795,20 @@ export function CreatorProfile({
                 const thumb = getThumbnail(selectedWork);
                 if (thumb) {
                   return (
-                    <div className="w-full aspect-video bg-black">
+                    <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center relative">
+                      <Camera size={40} className="text-purple-300 opacity-60 absolute" />
                       <img
                         src={thumb}
-                        className="w-full h-full object-cover"
+                        className="absolute inset-0 w-full h-full object-cover z-10"
                         alt={selectedWork.title}
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       />
                     </div>
                   );
                 }
                 return (
-                  <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center">
-                    <Camera size={40} className="text-purple-300 opacity-60" />
+                  <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center relative">
+                    <Camera size={40} className="text-purple-300 opacity-60 absolute" />
                   </div>
                 );
               })()}
