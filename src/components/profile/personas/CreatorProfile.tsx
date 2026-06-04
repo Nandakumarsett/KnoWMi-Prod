@@ -74,7 +74,7 @@ export function CreatorProfile({
     (!profile.status && (!profile.tier || profile.tier === "Starter"));
 
   const getThumbnail = (work: any) => {
-    const extUrl = work.external_url || work.url;
+    const extUrl = work.url || work.external_url;
     if (
       extUrl &&
       typeof extUrl === "string" &&
