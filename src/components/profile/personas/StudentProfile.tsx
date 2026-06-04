@@ -973,8 +973,43 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               border-color: rgba(6, 182, 212, 0.35);
               box-shadow: 0 4px 20px rgba(6, 182, 212, 0.1);
             }
+
+            /* Floating Owls */
+            .floating-owls-container {
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              pointer-events: none;
+              z-index: 1;
+              overflow: hidden;
+            }
+            .floating-owl {
+              position: absolute;
+              font-size: 1.5rem;
+              opacity: 0;
+              animation: floatOwl linear infinite;
+              filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.4)) hue-rotate(180deg);
+            }
+            @keyframes floatOwl {
+              0% { transform: translate(0, 100vh) scale(0.5) rotate(-10deg); opacity: 0; }
+              15% { opacity: 0.15; }
+              85% { opacity: 0.15; }
+              100% { transform: translate(var(--end-x, 100px), -10vh) scale(1.2) rotate(10deg); opacity: 0; }
+            }
           `
         }} />
+
+        {/* ═══ FLOATING OWLS BACKGROUND ═══ */}
+        <div className="floating-owls-container">
+          <div className="floating-owl" style={{ left: '10%', animationDuration: '25s', animationDelay: '0s', '--end-x': '50px' } as any}>🦉</div>
+          <div className="floating-owl" style={{ left: '35%', animationDuration: '35s', animationDelay: '5s', '--end-x': '-80px' } as any}>🦉</div>
+          <div className="floating-owl" style={{ left: '60%', animationDuration: '28s', animationDelay: '12s', '--end-x': '120px', fontSize: '2.5rem' } as any}>🦉</div>
+          <div className="floating-owl" style={{ left: '85%', animationDuration: '40s', animationDelay: '2s', '--end-x': '-60px' } as any}>🦉</div>
+          <div className="floating-owl" style={{ left: '20%', animationDuration: '32s', animationDelay: '18s', '--end-x': '90px', fontSize: '1.2rem' } as any}>🦉</div>
+          <div className="floating-owl" style={{ left: '75%', animationDuration: '29s', animationDelay: '8s', '--end-x': '-40px' } as any}>🦉</div>
+        </div>
 
         {/* ═══ COVER BANNER ═══ */}
         {profile.cover_url && (
