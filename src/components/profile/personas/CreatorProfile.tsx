@@ -1219,7 +1219,7 @@ export function CreatorProfile({
                 const platform = p.platform?.toLowerCase();
                 const Icon = PLATFORM_ICONS[platform] || Share2;
                 const styleClass = brandStyles[platform]
-                  ? brandStyles[platform].split(" ")[0]
+                  ? brandStyles[platform].replace(" text-white", "")
                   : "bg-gray-800";
 
                 return (
@@ -1243,7 +1243,7 @@ export function CreatorProfile({
                     title={`${p.platform}${p.followers ? ` \u00b7 ${p.followers}` : ""}`}
                   >
                     <Icon
-                      size={26}
+                      size={30}
                       className="relative z-10 text-gray-700 group-hover:text-white transition-colors duration-300"
                     />
                     <div
