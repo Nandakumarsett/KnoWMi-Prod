@@ -47,20 +47,10 @@ export const getAssetUrl = (pathOrUrl) => {
   // If it's a data URL or already handled
   if (pathOrUrl.startsWith('data:')) return pathOrUrl
 
-  if (IS_DEV) {
-    // In dev, always return a full supabase URL
-    if (pathOrUrl.startsWith(PROXY_PATH)) {
-      return pathOrUrl.replace(PROXY_PATH, STORAGE_ENDPOINT)
-    }
-    if (pathOrUrl.startsWith('http')) return pathOrUrl
-    return `${STORAGE_ENDPOINT}${pathOrUrl}`
-  } else {
-    // In production, always return a masked URL
-    if (pathOrUrl.startsWith(STORAGE_ENDPOINT)) {
-      return pathOrUrl.replace(STORAGE_ENDPOINT, PROXY_PATH)
-    }
-    if (pathOrUrl.startsWith(PROXY_PATH)) return pathOrUrl
-    if (pathOrUrl.startsWith('http')) return pathOrUrl // external images
-    return `${PROXY_PATH}${pathOrUrl}`
+  // Always return the direct Supabase URL to support video streaming byte-range requests
+  if (pathOrUrl.startsWith(PROXY_PATH)) {
+    return pathOrUrl.replace(PROXY_PATH, STORAGE_ENDPOINT)
   }
+  if (pathOrUrl.startsWith('http')) return pathOrUrl 
+  return `${STORAGE_ENDPOINT}${pathOrUrl}`
 }
