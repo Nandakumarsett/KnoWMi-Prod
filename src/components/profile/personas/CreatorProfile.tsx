@@ -1188,7 +1188,7 @@ export function CreatorProfile({
                   </span>
                   {data.response_time && (
                     <span className="text-xs text-gray-400 font-medium hidden sm:inline">
-                      {"\u00b7"} {data.response_time}
+                      {"\u00b7"} Responds {data.response_time.toLowerCase()}
                     </span>
                   )}
                 </div>
