@@ -1239,11 +1239,11 @@ export function CreatorProfile({
                       if (!isGated)
                         window.open(ensureAbsoluteUrl(p.url), "_blank");
                     }}
-                    className="w-14 h-14 rounded-full flex items-center justify-center relative overflow-hidden group shadow-md bg-white border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5"
+                    className="w-16 h-16 rounded-full flex items-center justify-center relative overflow-hidden group shadow-md bg-white border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5"
                     title={`${p.platform}${p.followers ? ` \u00b7 ${p.followers}` : ""}`}
                   >
                     <Icon
-                      size={30}
+                      size={36}
                       className="relative z-10 text-gray-700 group-hover:text-white transition-colors duration-300"
                     />
                     <div
@@ -1633,7 +1633,7 @@ export function CreatorProfile({
                       />
                       {w.type === "video" && (
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                          <div className="w-14 h-14 rounded-full bg-white/90 backdrop-blur-md shadow-lg flex items-center justify-center text-pink-500 group-hover:scale-110 transition-transform">
+                          <div className="w-16 h-16 rounded-full bg-white/90 backdrop-blur-md shadow-lg flex items-center justify-center text-pink-500 group-hover:scale-110 transition-transform">
                             <Play
                               size={22}
                               className="ml-0.5"
