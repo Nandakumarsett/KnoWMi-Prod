@@ -1375,7 +1375,7 @@ export function CreatorProfile({
               {/* Core Focus Card */}
               {data.content_formats && data.content_formats.length > 0 && (
                 <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col min-h-[120px] lg:col-span-2">
-                  <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400 mb-3">
+                  <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mb-3">
                     Core Focus
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -1395,7 +1395,7 @@ export function CreatorProfile({
               {data.audience_interests &&
                 data.audience_interests.length > 0 && (
                   <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col min-h-[120px] lg:col-span-2">
-                    <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400 mb-3">
+                    <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mb-3">
                       Audience Interests
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -1416,7 +1416,7 @@ export function CreatorProfile({
               {/* Visual Aesthetic Card */}
               {data.visual_style && (
                 <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px] lg:col-span-2">
-                  <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400 mb-1">
+                  <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mb-1">
                     Visual Aesthetic
                   </div>
                   <div className="text-xl font-extrabold text-gray-900">
@@ -1433,7 +1433,7 @@ export function CreatorProfile({
               {/* Top Audience Location Card */}
               {data.audience_top_location && (
                 <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px] lg:col-span-2">
-                  <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400 mb-1">
+                  <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mb-1">
                     Top Location
                   </div>
                   <div className="text-xl font-extrabold text-gray-900">
@@ -1466,7 +1466,7 @@ export function CreatorProfile({
                 {data.collab_types_tags &&
                   data.collab_types_tags.length > 0 && (
                     <div className="space-y-4 min-w-[200px]">
-                      <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400">
+                      <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700">
                         Open To
                       </div>
                       <div className="space-y-3">
@@ -1489,7 +1489,7 @@ export function CreatorProfile({
                   <div className="flex flex-wrap gap-8 sm:gap-10">
                     {(data.rate_range_min || data.rate_range_max) && (
                       <div className="space-y-1">
-                        <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400">
+                        <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700">
                           Rates
                         </div>
                         <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
@@ -1510,7 +1510,7 @@ export function CreatorProfile({
                     )}
                     {data.turnaround_time && (
                       <div className="space-y-1">
-                        <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400">
+                        <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700">
                           Turnaround
                         </div>
                         <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
@@ -1524,7 +1524,7 @@ export function CreatorProfile({
                   {data.deliverable_formats &&
                     data.deliverable_formats.length > 0 && (
                       <div className="space-y-3 mt-2">
-                        <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400">
+                        <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700">
                           Deliverables
                         </div>
                         <div className="flex flex-wrap gap-2.5">
