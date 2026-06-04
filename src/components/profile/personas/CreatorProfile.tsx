@@ -1660,7 +1660,7 @@ export function CreatorProfile({
 
             <div className="inline-flex items-center justify-center gap-2 mb-10 px-6 py-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl border border-purple-100/50">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-purple-600">
-                Current Status
+                Collaboration
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-purple-300" />
               <span className="text-sm font-bold text-gray-800">
