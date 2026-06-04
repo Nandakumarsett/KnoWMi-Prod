@@ -94,8 +94,43 @@ export interface CreatorData {
     followers?: string;
     metric_label?: string;
   }>;
+  
+  // Base fields
+  contact_email?: string;
+  contact_whatsapp?: string;
+  
+  // Section 1: Availability Status
+  availability_status?: 'Open' | 'Fully booked' | 'Selective';
+  response_time?: string;
+  preferred_contact_method?: string;
+
+  // Section 2: Collaboration Preferences
+  collab_types_tags?: string[];
+  rate_range_min?: number;
+  rate_range_max?: number;
+  turnaround_time?: string;
+  deliverable_formats?: string[];
+
+  // Section 3: Audience Snapshot
+  audience_age_group?: string;
+  audience_top_location?: string;
+  audience_gender_split?: string;
+  audience_interests?: string[];
+
+  // Section 4: Content Aesthetic
+  visual_style?: 'Cinematic' | 'Minimalist' | 'Vibrant' | 'Moody';
+  posting_frequency?: string;
+
+  // Section 5: Past Collaborations
+  past_collaborations?: Array<{
+    brand_name: string;
+    campaign_description: string;
+    logo_url?: string;
+    link?: string;
+  }>;
+
+  // Legacy/other fields to retain backward compatibility
   collab_types?: string;
-  contact_preference?: string;
   total_reach?: string;
   avg_views?: string;
   engagement_rate?: string;

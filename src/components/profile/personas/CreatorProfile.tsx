@@ -7,7 +7,7 @@ import { getAssetUrl } from '../../../lib/supabase'
 import { 
   LayoutGrid, Instagram, Youtube, Twitter, Github, 
   Share2, Sparkles, TrendingUp, Camera, Play, Film, MapPin, 
-  Trophy, Mail, MessageCircle, Facebook, Linkedin, Globe, Activity, X, Lock, QrCode
+  Trophy, Mail, MessageCircle, Clock, Users, Target, Briefcase, Facebook, Linkedin, Globe, Activity, X, Lock, QrCode
 } from 'lucide-react'
 import { trackLinkClick } from '../../../lib/analytics/track'
 import { useGatedLink } from '../../../hooks/useGatedLink'
@@ -835,7 +835,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             {/* Name & Title */}
             <div className="flex-grow text-center sm:text-left w-full">
               <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500 mb-2">
-                {data.type || 'CREATIVE VISIONARY'}
+                {data.tagline || data.type || 'CREATIVE VISIONARY'}
               </p>
               <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-gradient-glow mb-2" style={{ paddingBottom: '0.1em' }}>
                 {profile.display_name}
@@ -886,6 +886,20 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
               )}
             </div>
 
+              {/* Availability Signal */}
+              {data.availability_status && (
+                <div className="mt-8 inline-flex items-center gap-3 px-4 py-2 bg-white/60 backdrop-blur-md rounded-full shadow-sm border border-white/40">
+                  <div className="relative flex h-3 w-3">
+                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${data.availability_status === 'Open' ? 'bg-emerald-400' : data.availability_status === 'Selective' ? 'bg-amber-400' : 'bg-rose-400'}`}></span>
+                    <span className={`relative inline-flex rounded-full h-3 w-3 ${data.availability_status === 'Open' ? 'bg-emerald-500' : data.availability_status === 'Selective' ? 'bg-amber-500' : 'bg-rose-500'}`}></span>
+                  </div>
+                  <div className="text-sm font-bold text-gray-800">
+                    {data.availability_status}
+                    {data.response_time && <span className="text-gray-400 ml-2 font-medium hidden sm:inline-block">• {data.response_time}</span>}
+                  </div>
+                </div>
+              )}
+
           </div>
         </div>
 
@@ -927,40 +941,170 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
           )}
         </div>
 
-        {/* ═══ MASONRY / ASYMMETRICAL LAYOUT ═══ */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-16">
+        {/* ═══ CREATOR BUSINESS INTELLIGENCE ═══ */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
           
-          {/* About / Narrative (Spans 7 cols) */}
-          {data.about && (
-            <div className="md:col-span-7 aurora-card p-8 sm:p-10 stagger-fade flex flex-col justify-center" style={{ animationDelay: '0.3s' }}>
-              <h3 className="text-sm font-bold text-purple-600 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <Sparkles size={16} /> Inside the Mind
-              </h3>
-              <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-medium">
-                {data.about}
-              </p>
-            </div>
-          )}
-
-          {/* Specialization (Spans 5 cols) */}
-          {data.content_formats && data.content_formats.length > 0 && (
-            <div className="md:col-span-5 aurora-card p-8 sm:p-10 stagger-fade bg-gradient-to-br from-white/80 to-purple-50/80" style={{ animationDelay: '0.4s' }}>
-              <h3 className="text-sm font-bold text-pink-500 uppercase tracking-widest mb-6 flex items-center gap-2">
-                <Camera size={16} /> Core Focus
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {data.content_formats.map((format, i) => (
-                  <span 
-                    key={format} 
-                    className="px-4 py-2 bg-white rounded-full text-xs font-bold text-gray-700 shadow-sm border border-gray-100"
-                  >
-                    {format}
-                  </span>
-                ))}
+          {/* Audience Snapshot & Narrative */}
+          <div className="lg:col-span-7 flex flex-col gap-8">
+            {/* Audience */}
+            {(data.audience_age_group || data.audience_top_location || (data.audience_interests && data.audience_interests.length > 0)) && (
+              <div className="aurora-card p-6 sm:p-8 stagger-fade" style={{ animationDelay: '0.3s' }}>
+                <h3 className="text-xs font-bold text-pink-500 uppercase tracking-widest mb-6 flex items-center gap-2">
+                  <Users size={16} /> Audience Snapshot
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+                  {data.audience_age_group && (
+                    <div className="bg-white/50 p-4 rounded-2xl">
+                      <div className="text-xs text-gray-500 font-bold uppercase mb-1">Primary Age</div>
+                      <div className="text-lg font-black text-gray-900">{data.audience_age_group}</div>
+                    </div>
+                  )}
+                  {data.audience_gender_split && (
+                    <div className="bg-white/50 p-4 rounded-2xl">
+                      <div className="text-xs text-gray-500 font-bold uppercase mb-1">Gender Split</div>
+                      <div className="text-lg font-black text-gray-900">{data.audience_gender_split}</div>
+                    </div>
+                  )}
+                  {data.audience_top_location && (
+                    <div className="bg-white/50 p-4 rounded-2xl sm:col-span-1 col-span-2">
+                      <div className="text-xs text-gray-500 font-bold uppercase mb-1">Top Location</div>
+                      <div className="text-lg font-black text-gray-900">{data.audience_top_location}</div>
+                    </div>
+                  )}
+                </div>
+                {data.audience_interests && data.audience_interests.length > 0 && (
+                  <div>
+                    <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2">Key Interests</div>
+                    <div className="flex flex-wrap gap-2">
+                      {data.audience_interests.map((interest: string, i: number) => (
+                        <span key={i} className="px-3 py-1.5 bg-pink-50 text-pink-600 rounded-lg text-xs font-bold border border-pink-100">
+                          {interest}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+            )}
+
+            {/* Narrative / About */}
+            {data.about && (
+              <div className="aurora-card p-6 sm:p-8 stagger-fade flex-grow" style={{ animationDelay: '0.4s' }}>
+                <h3 className="text-xs font-bold text-purple-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <Sparkles size={16} /> Inside the Mind
+                </h3>
+                <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-medium">
+                  {data.about}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Collab Prefs & Aesthetics */}
+          <div className="lg:col-span-5 flex flex-col gap-8">
+            
+            {(data.collab_types_tags || data.rate_range_min || data.deliverable_formats) && (
+              <div className="aurora-card p-6 sm:p-8 stagger-fade bg-gradient-to-br from-white/90 to-blue-50/50" style={{ animationDelay: '0.4s' }}>
+                <h3 className="text-xs font-bold text-blue-500 uppercase tracking-widest mb-6 flex items-center gap-2">
+                  <Briefcase size={16} /> Collab Preferences
+                </h3>
+                
+                {data.collab_types_tags && data.collab_types_tags.length > 0 && (
+                  <div className="mb-6">
+                    <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2">Open To</div>
+                    <div className="flex flex-wrap gap-2">
+                      {data.collab_types_tags.map((type: string, i: number) => (
+                        <span key={i} className="px-3 py-1.5 bg-white text-gray-800 rounded-lg text-xs font-bold shadow-sm border border-gray-100">
+                          {type}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {(data.rate_range_min || data.turnaround_time) && (
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    {(data.rate_range_min || data.rate_range_max) && (
+                      <div className="bg-white/60 p-4 rounded-2xl">
+                        <div className="text-xs text-gray-500 font-bold uppercase mb-1">Rates From</div>
+                        <div className="text-lg font-black text-gray-900">
+                          {data.rate_range_min ? `₹${data.rate_range_min.toLocaleString()}` : 'Custom'}
+                          {data.rate_range_max ? ` - ${data.rate_range_max.toLocaleString()}` : '+'}
+                        </div>
+                      </div>
+                    )}
+                    {data.turnaround_time && (
+                      <div className="bg-white/60 p-4 rounded-2xl">
+                        <div className="text-xs text-gray-500 font-bold uppercase mb-1">Turnaround</div>
+                        <div className="text-sm font-bold text-gray-900 pt-1">{data.turnaround_time}</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {data.deliverable_formats && data.deliverable_formats.length > 0 && (
+                  <div>
+                    <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2">Deliverables</div>
+                    <div className="flex flex-wrap gap-2">
+                      {data.deliverable_formats.map((format: string, i: number) => (
+                        <span key={i} className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold border border-blue-100">
+                          {format}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Aesthetic Badge */}
+            {data.visual_style && (
+              <div className="aurora-card p-6 flex items-center justify-between stagger-fade" style={{ animationDelay: '0.5s' }}>
+                <div>
+                  <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Visual Aesthetic</div>
+                  <div className="text-lg font-black text-gray-900">{data.visual_style}</div>
+                </div>
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-fuchsia-100 to-cyan-100 flex items-center justify-center text-fuchsia-500">
+                  <Camera size={20} />
+                </div>
+              </div>
+            )}
+            
+          </div>
         </div>
+
+        {/* ═══ PAST COLLABORATIONS ═══ */}
+        {data.past_collaborations && data.past_collaborations.length > 0 && (
+          <div className="w-full mb-16 stagger-fade" style={{ animationDelay: '0.45s' }}>
+            <div className="flex items-center justify-between mb-8 px-2">
+              <h3 className="text-2xl font-extrabold text-gray-900 tracking-tight flex items-center gap-3">
+                <Target className="text-indigo-500" /> Notable Brand Deals
+              </h3>
+              <div className="h-[2px] flex-grow ml-6 bg-gradient-to-r from-gray-200 to-transparent hidden sm:block"></div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {data.past_collaborations.map((collab: any, i: number) => (
+                <div key={i} className="aurora-card p-6 flex flex-col items-center text-center group hover:-translate-y-1 transition-transform cursor-pointer">
+                  <div className="w-20 h-20 bg-white rounded-full p-1 shadow-md border border-gray-100 mb-4 flex items-center justify-center overflow-hidden">
+                    {collab.logo_url ? (
+                      <img src={getAssetUrl(collab.logo_url)} className="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform" alt={collab.brand_name} />
+                    ) : (
+                      <div className="text-xl font-black text-indigo-200">{collab.brand_name.charAt(0)}</div>
+                    )}
+                  </div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">{collab.brand_name}</h4>
+                  <p className="text-sm text-gray-500 font-medium leading-relaxed">{collab.campaign_description}</p>
+                  {collab.link && (
+                    <a href={collab.link} target="_blank" rel="noopener noreferrer" className="mt-4 text-xs font-bold text-indigo-500 hover:text-indigo-600 uppercase tracking-widest flex items-center gap-1">
+                      View Campaign
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* ═══ SHOWCASE GALLERY ═══ */}
         {data.works && data.works.length > 0 && (
