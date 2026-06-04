@@ -787,22 +787,22 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
       <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-8 pt-8 glow-theme">
         
         {/* ═══ CREATIVE HEADER ═══ */}
-        <div className="relative w-full mb-12">
+        <div className="relative w-full mb-16">
           {/* Banner with a creative cut */}
           {data.featured_work_url ? (
             <div className="w-full h-56 sm:h-72 rounded-[40px] overflow-hidden shadow-xl stagger-fade relative" style={{ animationDelay: '0s' }}>
               <img src={getAssetUrl(data.featured_work_url)} alt="Banner" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#FAFAFC] via-[#FAFAFC]/60 to-transparent" />
             </div>
           ) : (
             <div className="w-full h-40 sm:h-56 rounded-[40px] bg-gradient-to-r from-fuchsia-100 to-cyan-100 shadow-md stagger-fade" style={{ animationDelay: '0s' }} />
           )}
 
           {/* Content Container */}
-          <div className="relative px-4 sm:px-12 flex flex-col sm:flex-row items-center sm:items-center gap-6 sm:gap-8 w-full stagger-fade" style={{ animationDelay: '0.1s' }}>
+          <div className="relative -mt-16 sm:-mt-24 px-4 sm:px-12 flex flex-col sm:flex-row items-center sm:items-center gap-6 sm:gap-8 w-full stagger-fade z-10" style={{ animationDelay: '0.1s' }}>
             
-            {/* Avatar - Negative margin to overlap the banner */}
-            <div className="relative shrink-0 -mt-16 sm:-mt-32 group z-10">
+            {/* Avatar */}
+            <div className="relative shrink-0 group">
               <div className="w-36 h-36 sm:w-44 sm:h-44 bg-white p-2 rounded-[35px] shadow-2xl rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
                 <div className="w-full h-full rounded-[28px] overflow-hidden">
                   {!avatarError && profile.avatar_url ? (
@@ -818,8 +818,8 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
               <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-[#00C3FF] to-[#9933FF] border-4 border-white shadow-lg animate-pulse" />
             </div>
 
-            {/* Name & Title - No Box, placed in the whitespace */}
-            <div className="flex-grow text-center sm:text-left w-full sm:pt-4">
+            {/* Name & Title */}
+            <div className="flex-grow text-center sm:text-left w-full">
               <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500 mb-2">
                 {data.type || 'CREATIVE VISIONARY'}
               </p>
@@ -840,7 +840,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
         </div>
 
         {/* ═══ HIGH RETENTION STATS (Pills) ═══ */}
-        <div className="flex flex-wrap justify-center sm:justify-start gap-4 mb-12 stagger-fade" style={{ animationDelay: '0.2s' }}>
+        <div className="flex flex-wrap justify-center sm:justify-start gap-6 mb-16 stagger-fade" style={{ animationDelay: '0.2s' }}>
           <div 
             className={`pill-container px-6 py-3 flex items-center gap-4 ${isFreeProfile ? 'cursor-pointer' : ''}`}
             onClick={() => isFreeProfile && setShowFomoModal(true)}
@@ -878,7 +878,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
         </div>
 
         {/* ═══ MASONRY / ASYMMETRICAL LAYOUT ═══ */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-16">
           
           {/* About / Narrative (Spans 7 cols) */}
           {data.about && (
@@ -920,7 +920,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
               <div className="h-[2px] flex-grow ml-6 bg-gradient-to-r from-gray-200 to-transparent"></div>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
               {data.works.map((w, i) => {
                 const thumb = getThumbnail(w)
                 return (
@@ -957,7 +957,7 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
         )}
 
         {/* ═══ BOTTOM CTA & SOCIALS ═══ */}
-        <div className="aurora-card p-8 sm:p-12 text-center mb-12 stagger-fade relative overflow-hidden" style={{ animationDelay: '0.6s' }}>
+        <div className="aurora-card p-8 sm:p-12 text-center mb-16 stagger-fade relative overflow-hidden" style={{ animationDelay: '0.6s' }}>
           {/* Decorative glow inside card */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-32 bg-gradient-to-b from-purple-200/50 to-transparent blur-3xl rounded-full" />
           
