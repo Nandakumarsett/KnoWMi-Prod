@@ -668,165 +668,361 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
   }
 
   // ----------------------------------------------------
-  // LAYOUT 3: GLOW EDITORIAL MAGAZINE (Default / Glow Theme)
+  // LAYOUT 3: GLOW EDITORIAL (Default / Glow Theme)
   // ----------------------------------------------------
   return (
-    <div className="w-full pb-24 relative bg-[#FDFBF7] text-neutral-900 font-sans min-h-screen overflow-x-hidden selection:bg-purple-200">
+    <div className="w-full pb-16 relative bg-[#08060e] text-white font-sans min-h-screen overflow-x-hidden selection:bg-fuchsia-500/30 selection:text-fuchsia-100">
       
-      {/* Soft Ambient Glows */}
-      <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-purple-400/20 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-amber-400/20 rounded-full blur-[120px] pointer-events-none" />
-      
-      <div className="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-white to-transparent z-0" />
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+          
+          .glow-theme { font-family: 'Outfit', sans-serif; }
+          
+          .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            animation: orbFloat 20s ease-in-out infinite;
+          }
+          @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -20px) scale(1.1); }
+            50% { transform: translate(-20px, 15px) scale(0.95); }
+            75% { transform: translate(15px, 25px) scale(1.05); }
+          }
+          
+          .name-glow {
+            text-shadow: 0 0 30px rgba(168, 85, 247, 0.6),
+                         0 0 60px rgba(168, 85, 247, 0.3),
+                         0 0 100px rgba(236, 72, 153, 0.2);
+            animation: nameBreath 4s ease-in-out infinite;
+          }
+          @keyframes nameBreath {
+            0%, 100% { text-shadow: 0 0 30px rgba(168,85,247,0.6), 0 0 60px rgba(168,85,247,0.3), 0 0 100px rgba(236,72,153,0.2); }
+            50% { text-shadow: 0 0 40px rgba(168,85,247,0.8), 0 0 80px rgba(168,85,247,0.4), 0 0 120px rgba(236,72,153,0.3); }
+          }
+          
+          .glow-glass {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            border-radius: 20px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+          }
+          .glow-glass:hover {
+            border-color: rgba(168, 85, 247, 0.3);
+            box-shadow: 0 4px 30px rgba(168, 85, 247, 0.08);
+          }
+          
+          .glow-section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(168, 85, 247, 0.7);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .glow-section-label::after {
+            content: '';
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(168, 85, 247, 0.2), transparent);
+          }
+          
+          .glow-fade { animation: glowFadeUp 0.6s ease-out forwards; opacity: 0; transform: translateY(18px); }
+          @keyframes glowFadeUp { to { opacity: 1; transform: translateY(0); } }
+          
+          .avatar-glow-ring {
+            background: linear-gradient(135deg, #a855f7, #ec4899, #a855f7);
+            background-size: 200% 200%;
+            animation: ringShift 4s ease infinite;
+            padding: 3px;
+            border-radius: 24px;
+          }
+          @keyframes ringShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+          }
 
-      <main className="relative z-10 max-w-5xl mx-auto px-6 sm:px-12 pt-20 flex flex-col items-center">
-        
-        {/* Floating Glass Profile Card */}
-        <div className="w-full bg-white/40 backdrop-blur-3xl border border-white/60 p-8 sm:p-12 rounded-[40px] shadow-[0_20px_60px_rgba(0,0,0,0.05)] mb-16 relative overflow-hidden">
+          .glow-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px;
+            background: rgba(168, 85, 247, 0.08);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 9999px;
+            color: #d8b4fe;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+          }
+          .glow-tag:hover {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.12);
+          }
           
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/60 to-transparent pointer-events-none" />
-          
-          <div className="relative z-10 flex flex-col sm:flex-row items-center gap-10">
-            {/* Avatar */}
-            <div className="relative shrink-0">
-              <div className="w-48 h-48 rounded-[32px] overflow-hidden bg-white/80 p-2 shadow-xl rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
+          .glow-social-icon {
+            width: 48px; height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(168,85,247,0.12);
+            color: rgba(168,85,247,0.6);
+            transition: all 0.3s ease;
+            position: relative;
+          }
+          .glow-social-icon:hover {
+            background: rgba(168,85,247,0.12);
+            border-color: rgba(168,85,247,0.4);
+            color: #d8b4fe;
+            box-shadow: 0 0 20px rgba(168,85,247,0.15);
+            transform: translateY(-2px);
+          }
+        `
+      }} />
+
+      {/* Ambient floating orbs */}
+      <div className="glow-orb" style={{ top: '5%', left: '15%', width: '350px', height: '350px', background: 'rgba(168, 85, 247, 0.08)' }} />
+      <div className="glow-orb" style={{ top: '60%', right: '10%', width: '280px', height: '280px', background: 'rgba(236, 72, 153, 0.06)', animationDelay: '5s' }} />
+      <div className="glow-orb" style={{ bottom: '10%', left: '30%', width: '200px', height: '200px', background: 'rgba(139, 92, 246, 0.06)', animationDelay: '10s' }} />
+
+      <main className="relative z-10 max-w-3xl mx-auto px-5 sm:px-8 pt-10 glow-theme">
+
+        {/* ═══ BANNER ═══ */}
+        {data.featured_work_url && (
+          <div className="relative w-full h-48 sm:h-64 rounded-[24px] overflow-hidden mb-6 glow-fade" style={{ animationDelay: '0s' }}>
+            <img src={getAssetUrl(data.featured_work_url)} alt="Banner" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#08060e] via-[#08060e]/40 to-transparent" />
+          </div>
+        )}
+
+        {/* ═══ PROFILE HEADER ═══ */}
+        <div className={`flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6 glow-fade ${data.featured_work_url ? '-mt-16 relative z-20' : ''}`} style={{ animationDelay: '0.1s' }}>
+          <div className="shrink-0">
+            <div className="avatar-glow-ring shadow-[0_0_40px_rgba(168,85,247,0.25)]">
+              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-[22px] overflow-hidden bg-[#0f0d18]">
                 {!avatarError && profile.avatar_url ? (
-                    <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-[24px]" onError={() => setAvatarError(true)} />
-                  ) : (
-                    <div className="w-full h-full object-cover rounded-[24px] flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl rounded-lg" style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
-                    </div>
-                  )}
+                  <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover" onError={() => setAvatarError(true)} />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-purple-900/30 text-purple-300 font-bold text-3xl">
+                    {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+                )}
               </div>
-              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-amber-200 rounded-full blur-2xl -z-10" />
             </div>
-
-            <div className="text-center sm:text-left flex-grow">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-purple-600 mb-3">{data.type || 'CREATIVE DIRECTOR'}</p>
-              <h1 className="text-5xl sm:text-7xl font-light tracking-tighter text-neutral-900 mb-4 font-serif">
-                {profile.display_name}
-              </h1>
-              {profile.bio && (
-                <p className="text-lg text-neutral-600 font-medium leading-relaxed max-w-xl">
-                  {profile.bio}
-                </p>
-              )}
-            </div>
+          </div>
+          <div className="flex-grow text-center sm:text-left">
+            <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-fuchsia-400/80 mb-1.5">
+              {data.type || 'CONTENT CREATOR'}
+            </p>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight name-glow mb-2" style={{ lineHeight: 1.15 }}>
+              {profile.display_name}
+            </h1>
+            {profile.is_verified && (
+              <div className="inline-flex mb-2"><VerifiedBadge isVerified={profile.is_verified} accentColor="#a855f7" /></div>
+            )}
+            {profile.bio && (
+              <p className="text-[14px] text-purple-100/60 font-light leading-relaxed max-w-lg mt-1">
+                {profile.bio}
+              </p>
+            )}
           </div>
         </div>
 
-        {/* Stats & Info Grid */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        {/* ═══ STATS ROW ═══ */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6 glow-fade" style={{ animationDelay: '0.15s' }}>
           <div 
-            className={`bg-white/50 backdrop-blur-xl border border-white rounded-[32px] p-8 text-center hover:shadow-xl transition-all duration-300 ${isFreeProfile ? 'cursor-pointer hover:bg-white/80' : ''}`}
+            className={`glow-glass p-5 text-center ${isFreeProfile ? 'cursor-pointer' : ''}`}
             onClick={() => isFreeProfile && setShowFomoModal(true)}
           >
-            <Activity className="mx-auto mb-4 text-purple-500" size={28} />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block mb-1">Total Impressions</span>
-            <span className={`text-4xl font-light font-serif text-neutral-800 ${isFreeProfile ? 'blur-[6px]' : ''}`}>{isFreeProfile ? '4.2K' : liveViews}</span>
+            <Activity size={18} className="text-purple-400 mx-auto mb-1.5" />
+            <div className={`text-xl font-bold text-white ${isFreeProfile ? 'blur-[4px]' : ''}`}>{isFreeProfile ? '8.2K' : liveViews}</div>
+            <div className="text-[9px] uppercase tracking-[0.15em] text-purple-200/40 mt-1">Profile Views</div>
           </div>
-          
-          <div className="bg-white/50 backdrop-blur-xl border border-white rounded-[32px] p-8 text-center hover:shadow-xl transition-all duration-300">
-            <MapPin className="mx-auto mb-4 text-amber-500" size={28} />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block mb-1">Base</span>
-            <span className="text-3xl font-light font-serif text-neutral-800 truncate block">{topCity}</span>
+          <div className="glow-glass p-5 text-center">
+            <MapPin size={18} className="text-fuchsia-400 mx-auto mb-1.5" />
+            <div className="text-lg font-bold text-white truncate">{topCity}</div>
+            <div className="text-[9px] uppercase tracking-[0.15em] text-purple-200/40 mt-1">Top Location</div>
           </div>
-
-          <div className="bg-white/50 backdrop-blur-xl border border-white rounded-[32px] p-8 text-center hover:shadow-xl transition-all duration-300 flex flex-col justify-center">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block mb-4">Focus Areas</span>
-            <div className="flex flex-wrap justify-center gap-2">
-              {data.content_formats?.slice(0,3).map(f => (
-                <span key={f} className="px-3 py-1.5 bg-neutral-900 text-white text-[10px] font-bold uppercase tracking-wider rounded-full">{f}</span>
-              ))}
+          {data.content_formats && data.content_formats.length > 0 && (
+            <div className="glow-glass p-5 text-center col-span-2 sm:col-span-1">
+              <Camera size={18} className="text-violet-400 mx-auto mb-1.5" />
+              <div className="text-lg font-bold text-white">{data.content_formats.length}</div>
+              <div className="text-[9px] uppercase tracking-[0.15em] text-purple-200/40 mt-1">Content Types</div>
             </div>
-          </div>
+          )}
         </div>
 
-        {/* Story Section */}
-        {data.about && (
-          <div className="w-full max-w-4xl mx-auto mb-16 px-4">
-            <div className="text-center mb-10">
-               <span className="text-xs font-bold uppercase tracking-[0.3em] text-neutral-400">THE NARRATIVE</span>
+        {/* ═══ ABOUT & CONTENT FORMATS ═══ */}
+        {(data.about || (data.content_formats && data.content_formats.length > 0)) && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 glow-fade" style={{ animationDelay: '0.25s' }}>
+            {data.about && (
+              <div className="glow-glass p-6">
+                <div className="glow-section-label"><Sparkles size={13} /> About Me</div>
+                <p className="text-[13px] text-purple-100/70 leading-relaxed font-light">{data.about}</p>
+              </div>
+            )}
+            {data.content_formats && data.content_formats.length > 0 && (
+              <div className="glow-glass p-6">
+                <div className="glow-section-label"><Film size={13} /> Content Formats</div>
+                <div className="flex flex-wrap gap-2">
+                  {data.content_formats.map(format => (
+                    <span key={format} className="glow-tag">
+                      <Camera size={11} className="text-purple-400/50" /> {format}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ═══ SHOWCASE / WORKS ═══ */}
+        {data.works && data.works.length > 0 && (
+          <div className="mb-6 glow-fade" style={{ animationDelay: '0.35s' }}>
+            <div className="glow-section-label mb-4"><Play size={13} /> Showcase</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {data.works.map((w, i) => {
+                const thumb = getThumbnail(w)
+                return (
+                  <div 
+                    key={i}
+                    onClick={() => setSelectedWork(w)}
+                    className="group relative rounded-[16px] overflow-hidden glow-glass cursor-pointer aspect-video"
+                  >
+                    <img 
+                      src={thumb || 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=800'} 
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                      alt={w.title} 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#08060e]/90 via-transparent to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <div className="flex items-center gap-2">
+                        {w.type === 'video' && <Play size={14} className="text-fuchsia-400" />}
+                        <span className="text-[12px] font-semibold text-white">{w.title}</span>
+                      </div>
+                      {w.description && <p className="text-[10px] text-purple-200/50 mt-0.5 line-clamp-1">{w.description}</p>}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
-            <p className="text-xl sm:text-3xl font-serif text-neutral-800 leading-relaxed text-center italic font-light">
-              "{data.about}"
-            </p>
           </div>
         )}
 
-        {/* Selected Work Portfolio (If any, placeholder styled) */}
-        {(data.portfolio || data.featured_video) && (
-          <div className="w-full mb-16">
-             <div className="flex items-center justify-between mb-8 px-4">
-                <span className="text-xs font-bold uppercase tracking-[0.3em] text-neutral-400">SELECTED WORKS</span>
-             </div>
-             {/* Note: Minimalist implementation. Real portfolio would map array here. */}
-             <div className="bg-neutral-900 rounded-[40px] p-8 text-center text-white/50 italic text-sm border border-neutral-800 shadow-2xl overflow-hidden relative">
-               <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/10 to-transparent pointer-events-none" />
-               <Sparkles className="mx-auto mb-4 text-white/20" size={32} />
-               Portfolio showcase integrated via persona data payload...
-             </div>
-          </div>
-        )}
-
-        {/* Digital Footprint */}
+        {/* ═══ SOCIAL PLATFORMS ═══ */}
         {data.platforms && data.platforms.length > 0 && (
-          <div className="w-full bg-white/60 backdrop-blur-2xl border border-white rounded-[40px] p-10 sm:p-16 mb-16 shadow-[0_20px_40px_rgba(0,0,0,0.03)] text-center">
-             <span className="text-xs font-bold uppercase tracking-[0.3em] text-neutral-400 block mb-10">DIGITAL PRESENCE</span>
-             <div className="flex flex-wrap justify-center gap-6">
-                {data.platforms.map(p => {
-                  const platform = p.platform?.toLowerCase()
-                  const Icon = PLATFORM_ICONS[platform] || Share2
-                  return (
-                    <a
-                      key={p.platform}
-                      href={ensureAbsoluteUrl(p.url)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => {
-                        handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
-                        if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
-                      }}
-                      className="w-16 h-16 rounded-[20px] bg-white border border-neutral-100 shadow-[0_10px_20px_rgba(0,0,0,0.05)] flex items-center justify-center text-neutral-600 hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,0,0,0.1)] hover:text-purple-600 transition-all cursor-pointer relative group"
-                    >
-                      <Icon size={24} className="transition-transform group-hover:scale-110" />
-                      {isGated && (
-                        <div className="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-[20px] flex items-center justify-center">
-                          <Lock size={16} className="text-neutral-400" />
-                        </div>
-                      )}
-                    </a>
-                  )
-                })}
-             </div>
+          <div className="glow-glass p-6 mb-6 glow-fade" style={{ animationDelay: '0.45s' }}>
+            <div className="glow-section-label"><Share2 size={13} /> Where to Find Me</div>
+            <div className="flex flex-wrap gap-3">
+              {data.platforms.map(p => {
+                const platform = p.platform?.toLowerCase()
+                const Icon = PLATFORM_ICONS[platform] || Share2
+                return (
+                  <a
+                    key={p.platform}
+                    href={ensureAbsoluteUrl(p.url)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                      if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                    }}
+                    className="glow-social-icon cursor-pointer"
+                    title={p.platform}
+                  >
+                    <Icon size={20} />
+                    {isGated && (
+                      <div className="absolute inset-0 bg-[#08060e]/80 rounded-[14px] flex items-center justify-center backdrop-blur-[2px]">
+                        <Lock size={12} className="text-purple-400" />
+                      </div>
+                    )}
+                  </a>
+                )
+              })}
+            </div>
           </div>
         )}
 
-        {/* Contact CTA */}
-        {data.contact_email && (
-          <div className="w-full flex justify-center pb-16">
-            <a href={`mailto:${data.contact_email}`} className="px-12 py-5 bg-neutral-900 text-white font-bold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-purple-600 hover:shadow-[0_10px_30px_rgba(147,51,234,0.3)] transition-all">
-              INITIATE COLLABORATION
-            </a>
+        {/* ═══ COLLABORATION & CONTACT ═══ */}
+        {(data.collab_types || data.contact_email || data.contact_whatsapp) && (
+          <div className="glow-glass p-6 mb-6 glow-fade" style={{ animationDelay: '0.55s' }}>
+            <div className="glow-section-label"><Sparkles size={13} /> Collaboration</div>
+            {data.collab_types && (
+              <p className="text-[13px] text-purple-100/60 font-light mb-4 italic">"{data.collab_types}"</p>
+            )}
+            <div className="flex flex-wrap gap-3">
+              {data.contact_email && (
+                <a 
+                  href={`mailto:${data.contact_email}`}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600/80 to-fuchsia-600/80 text-white text-[11px] font-bold uppercase tracking-[0.15em] rounded-full hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all"
+                >
+                  <Mail size={14} /> Email Me
+                </a>
+              )}
+              {data.contact_whatsapp && (
+                <a 
+                  href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, '')}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#25D366]/80 text-white text-[11px] font-bold uppercase tracking-[0.15em] rounded-full hover:shadow-[0_0_25px_rgba(37,211,102,0.3)] transition-all"
+                >
+                  <MessageCircle size={14} /> WhatsApp
+                </a>
+              )}
+            </div>
           </div>
         )}
 
       </main>
 
-      {/* FOMO Modal */}
-      {showFomoModal && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-white/80 backdrop-blur-md animate-fadeIn">
-          <div className="bg-white border border-neutral-200 rounded-[40px] p-10 max-w-sm w-full shadow-2xl relative animate-zoomIn text-center">
-            <button onClick={() => setShowFomoModal(false)} className="absolute top-6 right-6 p-2 text-neutral-400 hover:text-neutral-600 transition-colors">
-              <X size={24} />
+      {/* ═══ SELECTED WORK MODAL ═══ */}
+      {selectedWork && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#08060e]/90 backdrop-blur-md" onClick={() => setSelectedWork(null)}>
+          <div className="glow-glass p-6 max-w-2xl w-full relative border-purple-500/20 shadow-[0_0_60px_rgba(168,85,247,0.15)]" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setSelectedWork(null)} className="absolute top-4 right-4 p-2 text-purple-400/50 hover:text-white transition-colors z-10">
+              <X size={20} />
             </button>
-            <div className="w-20 h-20 bg-purple-50 text-purple-600 rounded-[24px] flex items-center justify-center shadow-inner mx-auto mb-8">
-              <Activity size={36} className="animate-pulse" />
+            {selectedWork.external_url ? (
+              <div className="w-full aspect-video rounded-[12px] overflow-hidden bg-black mb-4">
+                <iframe src={getEmbedUrl(selectedWork.external_url)} className="w-full h-full" allow="autoplay; encrypted-media" allowFullScreen />
+              </div>
+            ) : getThumbnail(selectedWork) ? (
+              <div className="w-full aspect-video rounded-[12px] overflow-hidden bg-black mb-4">
+                <img src={getThumbnail(selectedWork)} className="w-full h-full object-cover" alt={selectedWork.title} />
+              </div>
+            ) : null}
+            <h3 className="text-lg font-bold text-white mb-1">{selectedWork.title}</h3>
+            {selectedWork.description && <p className="text-[13px] text-purple-100/50 font-light">{selectedWork.description}</p>}
+          </div>
+        </div>
+      )}
+
+      {/* ═══ FOMO MODAL ═══ */}
+      {showFomoModal && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#08060e]/90 backdrop-blur-md">
+          <div className="glow-glass p-8 max-w-sm w-full relative text-center border-purple-500/30 shadow-[0_0_60px_rgba(168,85,247,0.2)]">
+            <button onClick={() => setShowFomoModal(false)} className="absolute top-4 right-4 p-2 text-purple-400/50 hover:text-white transition-colors">
+              <X size={20} />
+            </button>
+            <div className="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/25 flex items-center justify-center mx-auto mb-5">
+              <Lock size={24} className="text-purple-400" />
             </div>
-            <h3 className="text-2xl font-serif text-neutral-900 mb-3">Unlock Insights</h3>
-            <p className="text-sm text-neutral-500 mb-10 leading-relaxed font-light">Claim your premium tee to unlock deep analytics, live impression telemetry, and audience demographics.</p>
-            <button onClick={() => window.location.href = '/#pricing'} className="w-full py-4 bg-neutral-900 hover:bg-neutral-800 text-white font-bold text-[11px] uppercase tracking-widest rounded-[20px] transition-all shadow-xl">
-              🔒 Claim Tee to Unlock
+            <h3 className="text-xl font-bold text-white tracking-tight mb-2">Unlock Insights</h3>
+            <p className="text-[13px] text-purple-100/50 font-light mb-6 leading-relaxed">Upgrade to view live scan metrics and audience analytics.</p>
+            <button onClick={() => window.location.href = '/#pricing'} className="w-full py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-bold text-[11px] uppercase tracking-[0.15em] rounded-xl transition-all hover:shadow-[0_0_25px_rgba(168,85,247,0.4)]">
+              Claim Tee to Unlock
             </button>
           </div>
         </div>
