@@ -1272,7 +1272,7 @@ export function CreatorProfile({
           className="mb-12 stagger-fade"
           style={{ animationDelay: "0.1s" }}
         >
-          <div className="flex flex-wrap justify-center sm:justify-between gap-8 sm:gap-4 text-center w-full max-w-2xl mx-auto">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap justify-center sm:justify-between gap-8 sm:gap-4 text-center w-full max-w-2xl mx-auto">
             {/* Impressions */}
             <div
               className={`stat-item flex-1 min-w-[100px] ${isFreeProfile ? "cursor-pointer" : ""}`}
