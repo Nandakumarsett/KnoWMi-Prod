@@ -788,14 +788,28 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
         
         {/* ═══ CREATIVE HEADER ═══ */}
         <div className="relative w-full mb-16">
-          {/* Banner with a creative cut */}
+          {/* Banner with a feathered fade out at the bottom */}
           {data.featured_work_url ? (
-            <div className="w-full h-56 sm:h-72 rounded-[40px] overflow-hidden shadow-xl stagger-fade relative" style={{ animationDelay: '0s' }}>
+            <div 
+              className="w-full h-64 sm:h-80 rounded-t-[40px] overflow-hidden stagger-fade relative" 
+              style={{ 
+                animationDelay: '0s',
+                maskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)'
+              }}
+            >
               <img src={getAssetUrl(data.featured_work_url)} alt="Banner" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#FAFAFC] via-[#FAFAFC]/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#FAFAFC]/80 to-transparent" />
             </div>
           ) : (
-            <div className="w-full h-40 sm:h-56 rounded-[40px] bg-gradient-to-r from-fuchsia-100 to-cyan-100 shadow-md stagger-fade" style={{ animationDelay: '0s' }} />
+            <div 
+              className="w-full h-48 sm:h-64 rounded-t-[40px] bg-gradient-to-r from-fuchsia-100 to-cyan-100 stagger-fade" 
+              style={{ 
+                animationDelay: '0s',
+                maskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)'
+              }} 
+            />
           )}
 
           {/* Content Container */}
