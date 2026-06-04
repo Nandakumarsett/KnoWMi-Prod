@@ -1116,15 +1116,7 @@ export function CreatorProfile({
         >
           {/* Banner */}
           {data.featured_work_url ? (
-            <div
-              className="w-full h-56 sm:h-72 rounded-[32px] overflow-hidden relative"
-              style={{
-                maskImage:
-                  "linear-gradient(to bottom, black 30%, transparent 100%)",
-                WebkitMaskImage:
-                  "linear-gradient(to bottom, black 30%, transparent 100%)",
-              }}
-            >
+            <div className="w-full h-48 sm:h-64 rounded-t-[32px] rounded-b-[12px] sm:rounded-b-[24px] overflow-hidden relative shadow-sm">
               <img
                 src={getAssetUrl(data.featured_work_url)}
                 alt="Banner"
@@ -1132,23 +1124,15 @@ export function CreatorProfile({
               />
             </div>
           ) : (
-            <div
-              className="w-full h-44 sm:h-56 rounded-[32px] bg-gradient-to-br from-fuchsia-50 via-violet-50 to-cyan-50"
-              style={{
-                maskImage:
-                  "linear-gradient(to bottom, black 30%, transparent 100%)",
-                WebkitMaskImage:
-                  "linear-gradient(to bottom, black 30%, transparent 100%)",
-              }}
-            />
+            <div className="w-full h-40 sm:h-56 rounded-[32px] bg-gradient-to-br from-fuchsia-50 via-violet-50 to-cyan-50" />
           )}
 
           {/* Avatar + Identity */}
-          <div className="relative -mt-20 sm:-mt-24 flex flex-col items-center sm:items-start sm:flex-row gap-6 sm:gap-8 px-2">
+          <div className="relative flex flex-col items-center sm:items-start sm:flex-row gap-4 sm:gap-6 px-4 sm:px-8">
             {/* Avatar */}
-            <div className="relative shrink-0 group">
-              <div className="w-36 h-36 sm:w-40 sm:h-40 bg-white p-1.5 rounded-[32px] shadow-[0_8px_40px_rgba(0,0,0,0.1)] rotate-[-2deg] group-hover:rotate-0 transition-transform duration-500">
-                <div className="w-full h-full rounded-[26px] overflow-hidden">
+            <div className="relative shrink-0 group -mt-16 sm:-mt-24 z-10">
+              <div className="w-32 h-32 sm:w-44 sm:h-44 bg-white p-2 rounded-[32px] sm:rounded-[40px] shadow-[0_8px_40px_rgba(0,0,0,0.12)] rotate-[-2deg] group-hover:rotate-0 transition-transform duration-500">
+                <div className="w-full h-full rounded-[26px] sm:rounded-[34px] overflow-hidden">
                   {!avatarError && profile.avatar_url ? (
                     <img
                       src={getAssetUrl(profile.avatar_url)}
@@ -1163,13 +1147,13 @@ export function CreatorProfile({
                   )}
                 </div>
               </div>
-              <div className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full bg-gradient-to-br from-[#00C3FF] to-[#9933FF] border-[3px] border-[#FAFAFC] shadow-md" />
+              <div className="absolute bottom-0 right-0 sm:bottom-2 sm:right-2 w-7 h-7 rounded-full bg-gradient-to-br from-[#00C3FF] to-[#9933FF] border-[3px] border-[#FAFAFC] shadow-md" />
             </div>
 
             {/* Name, Tagline, Availability */}
-            <div className="flex-grow text-center sm:text-left pt-2 sm:pt-6 w-full">
+            <div className="flex-grow text-center sm:text-left pt-4 sm:pt-6 w-full">
               <h1
-                className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gradient-glow leading-tight mb-1"
+                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-gradient-glow leading-tight mb-1.5"
                 style={{ paddingBottom: "0.05em" }}
               >
                 {profile.display_name}
