@@ -1167,7 +1167,7 @@ export function CreatorProfile({
                 </div>
               )}
               {data.tagline && (
-                <p className="text-sm sm:text-base font-semibold text-gray-500 tracking-wide mb-4">
+                <p className="text-sm sm:text-base font-bold text-gray-700 tracking-wide mb-4">
                   {data.tagline}
                 </p>
               )}
@@ -1187,7 +1187,7 @@ export function CreatorProfile({
                     {data.availability_status}
                   </span>
                   {data.response_time && (
-                    <span className="text-xs text-gray-400 font-medium hidden sm:inline">
+                    <span className="text-xs text-gray-600 font-bold hidden sm:inline">
                       {"\u00b7"} Responds {data.response_time.toLowerCase()}
                     </span>
                   )}
@@ -1237,7 +1237,7 @@ export function CreatorProfile({
 
                     {isGated && (
                       <div className="absolute inset-0 bg-white/80 flex items-center justify-center backdrop-blur-sm z-20">
-                        <Lock size={12} className="text-gray-500" />
+                        <Lock size={12} className="text-gray-700" />
                       </div>
                     )}
                   </a>
@@ -1265,7 +1265,7 @@ export function CreatorProfile({
               >
                 {isFreeProfile ? "4.2K" : liveViews}
               </div>
-              <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-500 mt-1">
+              <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                 Impressions
               </div>
             </div>
@@ -1275,7 +1275,7 @@ export function CreatorProfile({
               <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
                 {topCity}
               </div>
-              <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-500 mt-1">
+              <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                 Base
               </div>
             </div>
@@ -1286,7 +1286,7 @@ export function CreatorProfile({
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.audience_age_group}
                 </div>
-                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-500 mt-1">
+                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                   Audience Age
                 </div>
               </div>
@@ -1298,7 +1298,7 @@ export function CreatorProfile({
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.audience_gender_split}
                 </div>
-                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-500 mt-1">
+                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                   Gender Split
                 </div>
               </div>
@@ -1310,7 +1310,7 @@ export function CreatorProfile({
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.visual_style}
                 </div>
-                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-500 mt-1">
+                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                   Aesthetic
                 </div>
               </div>
@@ -1322,7 +1322,7 @@ export function CreatorProfile({
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.posting_frequency}
                 </div>
-                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-500 mt-1">
+                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                   Frequency
                 </div>
               </div>
@@ -1407,7 +1407,7 @@ export function CreatorProfile({
                     {data.visual_style}
                   </div>
                   {data.posting_frequency && (
-                    <div className="mt-1 text-[11px] text-gray-500 font-semibold uppercase tracking-wider">
+                    <div className="mt-1 text-[11px] text-gray-700 font-bold uppercase tracking-wider">
                       Posts {data.posting_frequency}
                     </div>
                   )}
@@ -1482,12 +1482,14 @@ export function CreatorProfile({
                             ? data.rate_range_min.toLocaleString()
                             : "\u2014"}
                           {data.rate_range_max ? (
-                            <span className="text-gray-400 font-bold">
+                            <span className="text-gray-600 font-extrabold">
                               {" "}
                               {"\u2013"} {data.rate_range_max.toLocaleString()}
                             </span>
                           ) : (
-                            <span className="text-gray-400">+</span>
+                            <span className="text-gray-600 font-extrabold">
+                              +
+                            </span>
                           )}
                         </div>
                       </div>
@@ -1539,7 +1541,7 @@ export function CreatorProfile({
             className="mb-12 stagger-fade"
             style={{ animationDelay: "0.35s" }}
           >
-            <h3 className="text-sm font-extrabold uppercase tracking-[0.15em] text-gray-400 mb-10 flex items-center gap-2">
+            <h3 className="text-sm font-extrabold uppercase tracking-[0.15em] text-gray-600 mb-10 flex items-center gap-2">
               <Target size={18} className="text-indigo-500" /> Notable
               Collaborations
             </h3>
@@ -1566,7 +1568,7 @@ export function CreatorProfile({
                   <h4 className="text-base font-bold text-gray-900 mb-2">
                     {collab.brand_name}
                   </h4>
-                  <p className="text-xs text-gray-500 font-medium leading-relaxed">
+                  <p className="text-[13px] text-gray-700 font-semibold leading-relaxed">
                     {collab.campaign_description}
                   </p>
                   {collab.link && (
@@ -1593,7 +1595,7 @@ export function CreatorProfile({
             className="mb-12 stagger-fade"
             style={{ animationDelay: "0.4s" }}
           >
-            <h3 className="text-sm font-extrabold uppercase tracking-[0.15em] text-gray-400 mb-10 flex items-center gap-2">
+            <h3 className="text-sm font-extrabold uppercase tracking-[0.15em] text-gray-600 mb-10 flex items-center gap-2">
               <Camera size={18} className="text-pink-500" /> Recent Work
             </h3>
 
@@ -1632,7 +1634,7 @@ export function CreatorProfile({
                         {w.title}
                       </h4>
                       {w.description && (
-                        <p className="text-xs text-gray-400 mt-1 line-clamp-1">
+                        <p className="text-xs text-gray-600 font-semibold mt-1 line-clamp-1">
                           {w.description}
                         </p>
                       )}
@@ -1657,7 +1659,7 @@ export function CreatorProfile({
             </h2>
 
             <div className="inline-flex items-center justify-center gap-2 mb-10 px-6 py-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl border border-purple-100/50">
-              <span className="text-[11px] font-extrabold uppercase tracking-widest text-purple-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-purple-600">
                 Current Status
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-purple-300" />
@@ -1691,7 +1693,7 @@ export function CreatorProfile({
             {data.preferred_contact_method && (
               <div className="mt-8 flex justify-center">
                 <div className="inline-flex items-center gap-3 px-4 py-2 bg-gray-50 rounded-full border border-gray-100">
-                  <span className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-gray-500">
+                  <span className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-gray-700">
                     Preferred Reach Out
                   </span>
                   <span className="w-1 h-1 rounded-full bg-gray-300" />
@@ -1745,7 +1747,7 @@ export function CreatorProfile({
                   {selectedWork.title}
                 </h3>
                 {selectedWork.description && (
-                  <p className="text-sm text-gray-500 leading-relaxed">
+                  <p className="text-sm text-gray-700 font-semibold leading-relaxed">
                     {selectedWork.description}
                   </p>
                 )}
@@ -1771,7 +1773,7 @@ export function CreatorProfile({
             <h3 className="text-xl font-extrabold text-gray-900 tracking-tight mb-2">
               Unlock Insights
             </h3>
-            <p className="text-xs text-gray-500 font-medium mb-8 leading-relaxed">
+            <p className="text-sm text-gray-700 font-semibold mb-8 leading-relaxed">
               Upgrade to full tier to view real-time profile scans and audience
               telemetry.
             </p>
