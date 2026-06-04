@@ -1276,39 +1276,39 @@ export function CreatorProfile({
         >
           <div className="section-divider mb-12" />
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-y-10 gap-x-6 text-center">
+          <div className="flex flex-wrap justify-center sm:justify-between gap-8 sm:gap-4 text-center w-full max-w-2xl mx-auto">
             {/* Impressions */}
             <div
-              className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
+              className={`stat-item flex-1 min-w-[100px] ${isFreeProfile ? "cursor-pointer" : ""}`}
               onClick={() => isFreeProfile && setShowFomoModal(true)}
             >
               <div
-                className={`text-3xl sm:text-4xl font-extrabold text-gray-900 mb-1.5 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
+                className={`text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1.5 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
               >
                 {isFreeProfile ? "4.2K" : liveViews}
               </div>
-              <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">
+              <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400">
                 Impressions
               </div>
             </div>
 
             {/* Location */}
-            <div className="stat-item">
-              <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate">
+            <div className="stat-item flex-1 min-w-[100px]">
+              <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
                 {topCity}
               </div>
-              <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">
+              <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400">
                 Base
               </div>
             </div>
 
             {/* Audience Age */}
             {data.audience_age_group && (
-              <div className="stat-item">
+              <div className="stat-item flex-1 min-w-[100px]">
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.audience_age_group}
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">
+                <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400">
                   Audience Age
                 </div>
               </div>
@@ -1316,11 +1316,11 @@ export function CreatorProfile({
 
             {/* Gender Split */}
             {data.audience_gender_split && (
-              <div className="stat-item">
+              <div className="stat-item flex-1 min-w-[100px]">
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.audience_gender_split}
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">
+                <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400">
                   Gender Split
                 </div>
               </div>
@@ -1328,11 +1328,11 @@ export function CreatorProfile({
 
             {/* Visual Style — shown only if gender split is absent */}
             {data.visual_style && !data.audience_gender_split && (
-              <div className="stat-item">
+              <div className="stat-item flex-1 min-w-[100px]">
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.visual_style}
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">
+                <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400">
                   Aesthetic
                 </div>
               </div>
@@ -1340,11 +1340,11 @@ export function CreatorProfile({
 
             {/* Posting Frequency — shown only if audience_age_group is absent */}
             {data.posting_frequency && !data.audience_age_group && (
-              <div className="stat-item">
+              <div className="stat-item flex-1 min-w-[100px]">
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.posting_frequency}
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">
+                <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400">
                   Frequency
                 </div>
               </div>
@@ -1374,8 +1374,8 @@ export function CreatorProfile({
                     <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-purple-500 mb-5 flex items-center gap-2">
                       <Sparkles size={14} /> Inside the Mind
                     </h3>
-                    <p className="glow-serif text-xl sm:text-2xl font-bold text-gray-800 leading-relaxed italic">
-                      "{data.about || profile.bio}"
+                    <p className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight tracking-tight">
+                      {data.about || profile.bio}
                     </p>
                   </div>
                 )}
@@ -1401,9 +1401,9 @@ export function CreatorProfile({
               </div>
 
               {/* Right — Aesthetic & Interests (2 cols) */}
-              <div className="lg:col-span-2 space-y-8">
+              <div className="lg:col-span-2 space-y-6">
                 {data.visual_style && (
-                  <div className="bg-white/60 backdrop-blur-md rounded-3xl p-6 border border-white/80 shadow-sm">
+                  <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-7 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px]">
                     <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-2">
                       Visual Aesthetic
                     </div>
@@ -1411,7 +1411,7 @@ export function CreatorProfile({
                       {data.visual_style}
                     </div>
                     {data.posting_frequency && (
-                      <div className="mt-3 text-xs text-gray-500 font-medium">
+                      <div className="mt-2 text-xs text-gray-500 font-semibold">
                         Posts {data.posting_frequency}
                       </div>
                     )}
@@ -1420,7 +1420,7 @@ export function CreatorProfile({
 
                 {data.audience_interests &&
                   data.audience_interests.length > 0 && (
-                    <div>
+                    <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-7 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px]">
                       <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-3">
                         Audience Interests
                       </div>
@@ -1440,11 +1440,11 @@ export function CreatorProfile({
                   )}
 
                 {data.audience_top_location && (
-                  <div>
+                  <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-7 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px]">
                     <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-1">
                       Top Audience Location
                     </div>
-                    <div className="text-base font-bold text-gray-800">
+                    <div className="text-xl font-extrabold text-gray-900">
                       {data.audience_top_location}
                     </div>
                   </div>
@@ -1471,82 +1471,89 @@ export function CreatorProfile({
               <Briefcase size={14} /> Work With Me
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Open To */}
-              {data.collab_types_tags && data.collab_types_tags.length > 0 && (
-                <div className="space-y-3">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
-                    Open To
-                  </div>
-                  <div className="space-y-2">
-                    {data.collab_types_tags.map((type: string, i: number) => (
-                      <div key={i} className="flex items-center gap-2.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-                        <span className="text-sm font-semibold text-gray-800">
-                          {type}
-                        </span>
+            <div className="bg-white/70 backdrop-blur-xl rounded-[32px] p-8 sm:p-12 border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.03)]">
+              <div className="flex flex-wrap lg:flex-nowrap gap-10 lg:gap-16">
+                {/* Open To */}
+                {data.collab_types_tags &&
+                  data.collab_types_tags.length > 0 && (
+                    <div className="space-y-4 min-w-[200px]">
+                      <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
+                        Open To
                       </div>
-                    ))}
+                      <div className="space-y-3">
+                        {data.collab_types_tags.map(
+                          (type: string, i: number) => (
+                            <div key={i} className="flex items-center gap-3">
+                              <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+                              <span className="text-[15px] font-bold text-gray-800">
+                                {type}
+                              </span>
+                            </div>
+                          ),
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                <div className="flex flex-col gap-10 flex-grow">
+                  {/* Rates & Turnaround in a row */}
+                  <div className="flex flex-wrap gap-10 sm:gap-16">
+                    {(data.rate_range_min || data.rate_range_max) && (
+                      <div className="space-y-1">
+                        <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
+                          Rates
+                        </div>
+                        <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+                          {"\u20B9"}
+                          {data.rate_range_min
+                            ? data.rate_range_min.toLocaleString()
+                            : "\u2014"}
+                          {data.rate_range_max ? (
+                            <span className="text-gray-400 font-bold">
+                              {" "}
+                              {"\u2013"} {data.rate_range_max.toLocaleString()}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400">+</span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    {data.turnaround_time && (
+                      <div className="space-y-1">
+                        <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
+                          Turnaround
+                        </div>
+                        <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+                          {data.turnaround_time}
+                        </div>
+                      </div>
+                    )}
                   </div>
+
+                  {/* Deliverables */}
+                  {data.deliverable_formats &&
+                    data.deliverable_formats.length > 0 && (
+                      <div className="space-y-3 mt-2">
+                        <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
+                          Deliverables
+                        </div>
+                        <div className="flex flex-wrap gap-2.5">
+                          {data.deliverable_formats.map(
+                            (format: string, i: number) => (
+                              <span
+                                key={i}
+                                className="px-4 py-2 bg-blue-50/80 text-blue-600 rounded-xl text-sm font-bold border border-blue-100 shadow-sm"
+                              >
+                                {format}
+                              </span>
+                            ),
+                          )}
+                        </div>
+                      </div>
+                    )}
                 </div>
-              )}
-
-              {/* Rates & Turnaround */}
-              <div className="space-y-6">
-                {(data.rate_range_min || data.rate_range_max) && (
-                  <div>
-                    <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-1">
-                      Rates
-                    </div>
-                    <div className="text-2xl font-extrabold text-gray-900">
-                      {"\u20B9"}
-                      {data.rate_range_min
-                        ? data.rate_range_min.toLocaleString()
-                        : "\u2014"}
-                      {data.rate_range_max ? (
-                        <span className="text-gray-400 font-semibold">
-                          {" "}
-                          {"\u2013"} {data.rate_range_max.toLocaleString()}
-                        </span>
-                      ) : (
-                        <span className="text-gray-400">+</span>
-                      )}
-                    </div>
-                  </div>
-                )}
-                {data.turnaround_time && (
-                  <div>
-                    <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-1">
-                      Turnaround
-                    </div>
-                    <div className="text-base font-bold text-gray-800">
-                      {data.turnaround_time}
-                    </div>
-                  </div>
-                )}
               </div>
-
-              {/* Deliverables */}
-              {data.deliverable_formats &&
-                data.deliverable_formats.length > 0 && (
-                  <div>
-                    <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-3">
-                      Deliverables
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {data.deliverable_formats.map(
-                        (format: string, i: number) => (
-                          <span
-                            key={i}
-                            className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-xl text-xs font-bold border border-blue-100/60"
-                          >
-                            {format}
-                          </span>
-                        ),
-                      )}
-                    </div>
-                  </div>
-                )}
             </div>
 
             <div className="section-divider mt-12" />
