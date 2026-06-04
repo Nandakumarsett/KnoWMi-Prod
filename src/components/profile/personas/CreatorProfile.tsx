@@ -1281,7 +1281,7 @@ export function CreatorProfile({
               >
                 {isFreeProfile ? "4.2K" : liveViews}
               </div>
-              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
+              <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-500 mt-1">
                 Impressions
               </div>
             </div>
@@ -1291,7 +1291,7 @@ export function CreatorProfile({
               <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
                 {topCity}
               </div>
-              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
+              <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-500 mt-1">
                 Base
               </div>
             </div>
@@ -1302,7 +1302,7 @@ export function CreatorProfile({
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.audience_age_group}
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
+                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-500 mt-1">
                   Audience Age
                 </div>
               </div>
@@ -1314,7 +1314,7 @@ export function CreatorProfile({
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.audience_gender_split}
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
+                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-500 mt-1">
                   Gender Split
                 </div>
               </div>
@@ -1326,7 +1326,7 @@ export function CreatorProfile({
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.visual_style}
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
+                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-500 mt-1">
                   Aesthetic
                 </div>
               </div>
@@ -1338,7 +1338,7 @@ export function CreatorProfile({
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.posting_frequency}
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
+                <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-500 mt-1">
                   Frequency
                 </div>
               </div>
@@ -1361,8 +1361,8 @@ export function CreatorProfile({
             {/* Top row: The Bio Narrative */}
             {(profile.bio || data.about) && (
               <div className="mb-10 text-center max-w-3xl mx-auto">
-                <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-purple-500 mb-4 flex items-center justify-center gap-2">
-                  <Sparkles size={14} /> Inside the Mind
+                <h3 className="text-sm font-extrabold uppercase tracking-[0.15em] text-purple-500 mb-4 flex items-center justify-center gap-2">
+                  <Sparkles size={18} /> Inside the Mind
                 </h3>
                 <p className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight tracking-tight">
                   {data.about || profile.bio}
@@ -1375,7 +1375,7 @@ export function CreatorProfile({
               {/* Core Focus Card */}
               {data.content_formats && data.content_formats.length > 0 && (
                 <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col min-h-[120px] lg:col-span-2">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-3">
+                  <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400 mb-3">
                     Core Focus
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -1395,7 +1395,7 @@ export function CreatorProfile({
               {data.audience_interests &&
                 data.audience_interests.length > 0 && (
                   <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col min-h-[120px] lg:col-span-2">
-                    <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-3">
+                    <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400 mb-3">
                       Audience Interests
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -1416,7 +1416,7 @@ export function CreatorProfile({
               {/* Visual Aesthetic Card */}
               {data.visual_style && (
                 <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px] lg:col-span-2">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-1">
+                  <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400 mb-1">
                     Visual Aesthetic
                   </div>
                   <div className="text-xl font-extrabold text-gray-900">
@@ -1433,7 +1433,7 @@ export function CreatorProfile({
               {/* Top Audience Location Card */}
               {data.audience_top_location && (
                 <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px] lg:col-span-2">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-1">
+                  <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400 mb-1">
                     Top Location
                   </div>
                   <div className="text-xl font-extrabold text-gray-900">
@@ -1456,8 +1456,8 @@ export function CreatorProfile({
             className="mb-12 stagger-fade"
             style={{ animationDelay: "0.3s" }}
           >
-            <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-blue-500 mb-10 flex items-center gap-2">
-              <Briefcase size={14} /> Work With Me
+            <h3 className="text-sm font-extrabold uppercase tracking-[0.15em] text-blue-500 mb-10 flex items-center gap-2">
+              <Briefcase size={18} /> Work With Me
             </h3>
 
             <div className="bg-white/70 backdrop-blur-xl rounded-[32px] p-6 sm:p-10 border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.03)]">
@@ -1466,7 +1466,7 @@ export function CreatorProfile({
                 {data.collab_types_tags &&
                   data.collab_types_tags.length > 0 && (
                     <div className="space-y-4 min-w-[200px]">
-                      <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
+                      <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400">
                         Open To
                       </div>
                       <div className="space-y-3">
@@ -1489,7 +1489,7 @@ export function CreatorProfile({
                   <div className="flex flex-wrap gap-8 sm:gap-10">
                     {(data.rate_range_min || data.rate_range_max) && (
                       <div className="space-y-1">
-                        <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
+                        <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400">
                           Rates
                         </div>
                         <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
@@ -1510,7 +1510,7 @@ export function CreatorProfile({
                     )}
                     {data.turnaround_time && (
                       <div className="space-y-1">
-                        <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
+                        <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400">
                           Turnaround
                         </div>
                         <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
@@ -1524,7 +1524,7 @@ export function CreatorProfile({
                   {data.deliverable_formats &&
                     data.deliverable_formats.length > 0 && (
                       <div className="space-y-3 mt-2">
-                        <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
+                        <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-400">
                           Deliverables
                         </div>
                         <div className="flex flex-wrap gap-2.5">
@@ -1555,8 +1555,8 @@ export function CreatorProfile({
             className="mb-12 stagger-fade"
             style={{ animationDelay: "0.35s" }}
           >
-            <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-10 flex items-center gap-2">
-              <Target size={14} className="text-indigo-500" /> Notable
+            <h3 className="text-sm font-extrabold uppercase tracking-[0.15em] text-gray-400 mb-10 flex items-center gap-2">
+              <Target size={18} className="text-indigo-500" /> Notable
               Collaborations
             </h3>
 
@@ -1609,8 +1609,8 @@ export function CreatorProfile({
             className="mb-12 stagger-fade"
             style={{ animationDelay: "0.4s" }}
           >
-            <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-10 flex items-center gap-2">
-              <Camera size={14} className="text-pink-500" /> Recent Work
+            <h3 className="text-sm font-extrabold uppercase tracking-[0.15em] text-gray-400 mb-10 flex items-center gap-2">
+              <Camera size={18} className="text-pink-500" /> Recent Work
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
