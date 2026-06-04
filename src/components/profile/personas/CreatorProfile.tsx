@@ -1667,40 +1667,57 @@ export function CreatorProfile({
           className="mb-12 stagger-fade text-center"
           style={{ animationDelay: "0.5s" }}
         >
-          <h2 className="glow-serif text-3xl sm:text-4xl font-bold text-gray-900 mb-3 italic">
-            Let's Create Together
-          </h2>
-          <p className="text-sm text-gray-400 font-medium mb-10 max-w-md mx-auto leading-relaxed">
-            {data.collab_types ||
-              "Always open to discussing new projects, creative ideas, or opportunities to bring your vision to life."}
-          </p>
+          <div className="bg-white/70 backdrop-blur-xl rounded-[32px] p-8 sm:p-12 border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.03)] max-w-3xl mx-auto">
+            <h2 className="glow-serif text-3xl sm:text-4xl font-bold text-gray-900 mb-6 italic">
+              Let's Create Together
+            </h2>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            {data.contact_email && (
-              <a
-                href={`mailto:${data.contact_email}`}
-                className="w-full sm:w-auto px-10 py-4 bg-gray-900 text-white text-sm font-bold rounded-full hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-purple-500/25 hover:-translate-y-1"
-              >
-                Start a Conversation
-              </a>
-            )}
-            {data.contact_whatsapp && (
-              <a
-                href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, "")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto px-10 py-4 bg-white text-gray-900 text-sm font-bold rounded-full border border-gray-200 hover:border-[#25D366] hover:text-[#25D366] transition-all hover:-translate-y-1"
-              >
-                WhatsApp Message
-              </a>
+            <div className="inline-flex items-center justify-center gap-2 mb-10 px-6 py-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl border border-purple-100/50">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-purple-400">
+                Current Status
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-300" />
+              <span className="text-sm font-bold text-gray-800">
+                {data.collab_types ||
+                  "Always open to discussing new projects and creative ideas."}
+              </span>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              {data.contact_email && (
+                <a
+                  href={`mailto:${data.contact_email}`}
+                  className="w-full sm:w-auto px-10 py-4 bg-gray-900 text-white text-sm font-bold rounded-full hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-purple-500/25 hover:-translate-y-1"
+                >
+                  Start a Conversation
+                </a>
+              )}
+              {data.contact_whatsapp && (
+                <a
+                  href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto px-10 py-4 bg-white text-gray-900 text-sm font-bold rounded-full border border-gray-200 hover:border-[#25D366] hover:text-[#25D366] transition-all hover:-translate-y-1"
+                >
+                  WhatsApp Message
+                </a>
+              )}
+            </div>
+
+            {data.preferred_contact_method && (
+              <div className="mt-8 flex justify-center">
+                <div className="inline-flex items-center gap-3 px-4 py-2 bg-gray-50 rounded-full border border-gray-100">
+                  <span className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-gray-500">
+                    Preferred Reach Out
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-gray-300" />
+                  <span className="text-xs font-bold text-gray-800">
+                    {data.preferred_contact_method}
+                  </span>
+                </div>
+              </div>
             )}
           </div>
-
-          {data.preferred_contact_method && (
-            <p className="mt-6 text-xs text-gray-400">
-              Preferred: {data.preferred_contact_method}
-            </p>
-          )}
         </section>
       </main>
 
