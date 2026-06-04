@@ -1301,7 +1301,7 @@ export function CreatorProfile({
             {/* Audience Age */}
             {data.audience_age_group && (
               <div className="stat-item flex-1 min-w-[100px]">
-                <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
+                <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
                   {data.audience_age_group}
                 </div>
                 <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
@@ -1313,7 +1313,7 @@ export function CreatorProfile({
             {/* Gender Split */}
             {data.audience_gender_split && (
               <div className="stat-item flex-1 min-w-[100px]">
-                <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
+                <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
                   {data.audience_gender_split}
                 </div>
                 <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
@@ -1325,7 +1325,7 @@ export function CreatorProfile({
             {/* Visual Style — shown only if gender split is absent */}
             {data.visual_style && !data.audience_gender_split && (
               <div className="stat-item flex-1 min-w-[100px]">
-                <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
+                <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
                   {data.visual_style}
                 </div>
                 <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
@@ -1337,7 +1337,7 @@ export function CreatorProfile({
             {/* Posting Frequency — shown only if audience_age_group is absent */}
             {data.posting_frequency && !data.audience_age_group && (
               <div className="stat-item flex-1 min-w-[100px]">
-                <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
+                <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
                   {data.posting_frequency}
                 </div>
                 <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
