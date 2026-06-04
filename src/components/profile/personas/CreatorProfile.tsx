@@ -1128,11 +1128,11 @@ export function CreatorProfile({
           )}
 
           {/* Avatar + Identity */}
-          <div className="relative flex flex-col items-center sm:items-start sm:flex-row gap-4 sm:gap-6 px-4 sm:px-8">
+          <div className="relative px-4 sm:px-8 flex flex-col items-center sm:items-start">
             {/* Avatar */}
-            <div className="relative shrink-0 group -mt-16 sm:-mt-24 z-10">
-              <div className="w-32 h-32 sm:w-44 sm:h-44 bg-white p-2 rounded-[32px] sm:rounded-[40px] shadow-[0_8px_40px_rgba(0,0,0,0.12)] rotate-[-2deg] group-hover:rotate-0 transition-transform duration-500">
-                <div className="w-full h-full rounded-[26px] sm:rounded-[34px] overflow-hidden">
+            <div className="relative shrink-0 group -mt-16 sm:-mt-24 z-10 mb-4 sm:mb-5">
+              <div className="w-32 h-32 sm:w-40 sm:h-40 bg-white p-2 rounded-[32px] sm:rounded-[36px] shadow-[0_8px_40px_rgba(0,0,0,0.12)] rotate-[-2deg] group-hover:rotate-0 transition-transform duration-500">
+                <div className="w-full h-full rounded-[26px] sm:rounded-[30px] overflow-hidden">
                   {!avatarError && profile.avatar_url ? (
                     <img
                       src={getAssetUrl(profile.avatar_url)}
@@ -1151,9 +1151,9 @@ export function CreatorProfile({
             </div>
 
             {/* Name, Tagline, Availability */}
-            <div className="flex-grow text-center sm:text-left pt-4 sm:pt-6 w-full">
+            <div className="text-center sm:text-left w-full">
               <h1
-                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-gradient-glow leading-tight mb-1.5"
+                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-gradient-glow leading-tight mb-2"
                 style={{ paddingBottom: "0.05em" }}
               >
                 {profile.display_name}
@@ -1167,14 +1167,14 @@ export function CreatorProfile({
                 </div>
               )}
               {data.tagline && (
-                <p className="text-sm sm:text-base font-semibold text-gray-500 tracking-wide mb-3">
+                <p className="text-sm sm:text-base font-semibold text-gray-500 tracking-wide mb-4">
                   {data.tagline}
                 </p>
               )}
 
               {/* Availability Signal */}
               {data.availability_status && (
-                <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white/70 backdrop-blur-sm rounded-full shadow-sm border border-white/60 mb-4">
+                <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white/70 backdrop-blur-sm rounded-full shadow-sm border border-white/60 mb-2">
                   <div className="relative flex h-2.5 w-2.5">
                     <span
                       className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${data.availability_status === "Open" ? "bg-emerald-400" : data.availability_status === "Selective" ? "bg-amber-400" : "bg-rose-400"}`}
@@ -1198,7 +1198,7 @@ export function CreatorProfile({
 
           {/* Social Links Row */}
           {data.platforms && data.platforms.length > 0 && (
-            <div className="mt-8 flex flex-wrap justify-center sm:justify-start gap-4 px-2">
+            <div className="mt-6 flex flex-wrap justify-center sm:justify-start gap-4 px-4 sm:px-8">
               {data.platforms.map((p) => {
                 const platform = p.platform?.toLowerCase();
                 const Icon = PLATFORM_ICONS[platform] || Share2;
