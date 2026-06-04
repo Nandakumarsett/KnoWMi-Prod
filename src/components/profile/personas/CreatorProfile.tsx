@@ -848,6 +848,42 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
                   {profile.bio}
                 </p>
               )}
+              
+              {/* Social Bubbles */}
+              {data.platforms && data.platforms.length > 0 && (
+                <div className="mt-6 flex flex-wrap justify-center sm:justify-start gap-3">
+                  {data.platforms.map(p => {
+                    const platform = p.platform?.toLowerCase()
+                    const Icon = PLATFORM_ICONS[platform] || Share2
+                    const styleClass = brandStyles[platform] ? brandStyles[platform].split(' ')[0] : 'bg-gray-800'
+                    
+                    return (
+                      <a
+                        key={p.platform}
+                        href={ensureAbsoluteUrl(p.url)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => {
+                          handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                          if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                        }}
+                        className="social-bubble group !w-10 !h-10 shadow-sm"
+                        title={p.platform}
+                      >
+                        <Icon size={18} className="relative z-10 text-gray-500 group-hover:text-transparent transition-colors" />
+                        <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${styleClass}`} style={{ zIndex: 0 }} />
+                        <Icon size={18} className="absolute z-10 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                        
+                        {isGated && (
+                          <div className="absolute inset-0 bg-white/80 rounded-full flex items-center justify-center backdrop-blur-sm z-20">
+                            <Lock size={12} className="text-gray-500" />
+                          </div>
+                        )}
+                      </a>
+                    )
+                  })}
+                </div>
+              )}
             </div>
 
           </div>
@@ -1001,47 +1037,8 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
               )}
             </div>
 
-            {/* Social Bubbles */}
-            {data.platforms && data.platforms.length > 0 && (
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">Connect on Socials</p>
-                <div className="flex flex-wrap justify-center gap-4">
-                  {data.platforms.map(p => {
-                    const platform = p.platform?.toLowerCase()
-                    const Icon = PLATFORM_ICONS[platform] || Share2
-                    const styleClass = brandStyles[platform] ? brandStyles[platform].split(' ')[0] : 'bg-gray-800'
-                    
-                    return (
-                      <a
-                        key={p.platform}
-                        href={ensureAbsoluteUrl(p.url)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => {
-                          handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
-                          if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
-                        }}
-                        className="social-bubble group"
-                        title={p.platform}
-                      >
-                        <Icon size={22} className="relative z-10" />
-                        {/* Hover color fill */}
-                        <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${styleClass}`} style={{ zIndex: 0 }} />
-                        <Icon size={22} className="absolute z-10 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                        
-                        {isGated && (
-                          <div className="absolute inset-0 bg-white/80 rounded-full flex items-center justify-center backdrop-blur-sm z-20">
-                            <Lock size={14} className="text-gray-500" />
-                          </div>
-                        )}
-                      </a>
-                    )
-                  })}
-                </div>
-              </div>
-            )}
+            </div>
           </div>
-        </div>
 
       </main>
 
