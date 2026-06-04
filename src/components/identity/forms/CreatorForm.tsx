@@ -379,7 +379,6 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
 
         <div className="space-y-6">
           {(data.works || []).map((work: any, i: number) => {
-            const hasExternalUrl = !!work.external_url;
             return (
               <div key={i} className="p-5 sm:p-6 bg-neutral-50 border border-neutral-200 rounded-3xl relative group flex flex-col lg:flex-row gap-6">
                 <button type="button" onClick={() => {
@@ -389,41 +388,32 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
                 </button>
 
                 <div className="w-full lg:w-56 h-40 rounded-2xl bg-white border border-neutral-200 overflow-hidden relative flex-shrink-0">
-                  {!hasExternalUrl ? (
-                    <div className="w-full h-full relative group/media cursor-pointer flex flex-col items-center justify-center">
-                      {work.url ? (
-                        <>
-                          {work.type === 'video' ? (
-                            <video src={getAssetUrl(work.url)} className="absolute inset-0 w-full h-full object-cover" muted />
-                          ) : (
-                            <img src={getAssetUrl(work.url)} className="absolute inset-0 w-full h-full object-cover" />
-                          )}
-                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/media:opacity-100 transition-opacity flex flex-col items-center justify-center text-white backdrop-blur-sm">
-                            <Upload size={20} className="mb-1" />
-                            <span className="text-[9px] font-bold uppercase tracking-wider">Replace File</span>
-                          </div>
-                        </>
-                      ) : (
-                        <div className="flex flex-col items-center gap-2 text-neutral-400">
-                          <Upload size={24} className="text-orange-400" />
-                          <div className="text-center">
-                            <span className="text-[10px] font-bold uppercase text-neutral-500">Upload Media</span>
-                          </div>
+                  <div className="w-full h-full relative group/media cursor-pointer flex flex-col items-center justify-center">
+                    {work.url ? (
+                      <>
+                        {work.type === 'video' ? (
+                          <video src={getAssetUrl(work.url)} className="absolute inset-0 w-full h-full object-cover" muted />
+                        ) : (
+                          <img src={getAssetUrl(work.url)} className="absolute inset-0 w-full h-full object-cover" />
+                        )}
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/media:opacity-100 transition-opacity flex flex-col items-center justify-center text-white backdrop-blur-sm">
+                          <Upload size={20} className="mb-1" />
+                          <span className="text-[9px] font-bold uppercase tracking-wider">Replace File</span>
                         </div>
-                      )}
-                      <input type="file" accept="image/*,video/*" className="absolute inset-0 opacity-0 cursor-pointer z-10" onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) handleWorkUpload(file, i);
-                      }} />
-                    </div>
-                  ) : (
-                    <div className="w-full h-full bg-orange-50 flex flex-col items-center justify-center p-4 text-center">
-                      <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center mb-2">
-                        <CheckCircle2 size={20} className="text-orange-500" />
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center gap-2 text-neutral-400">
+                        <Upload size={24} className="text-orange-400" />
+                        <div className="text-center">
+                          <span className="text-[10px] font-bold uppercase text-neutral-500">Upload Media</span>
+                        </div>
                       </div>
-                      <span className="text-[10px] font-black uppercase text-orange-600">External Link Active</span>
-                    </div>
-                  )}
+                    )}
+                    <input type="file" accept="image/*,video/*" className="absolute inset-0 opacity-0 cursor-pointer z-10" onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleWorkUpload(file, i);
+                    }} />
+                  </div>
                 </div>
 
                 <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5 content-center">
@@ -442,7 +432,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
                     <label className={labelClasses}>External Link (Optional)</label>
                     <input type="url" value={work.external_url && !work.external_url.includes('supabase.co') && !work.external_url.startsWith('/content/') ? work.external_url : ''} onChange={e => {
                       const wCopy = [...(data.works || [])];
-                      wCopy[i] = { ...work, external_url: e.target.value, url: e.target.value ? '' : work.url };
+                      wCopy[i] = { ...work, external_url: e.target.value };
                       updateField('works', wCopy);
                     }} placeholder="Paste YouTube/Vimeo Link" className={inputBaseClasses} />
                   </div>

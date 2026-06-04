@@ -1756,7 +1756,7 @@ export function CreatorProfile({
             </button>
             <div className="bg-gray-50 rounded-[22px] overflow-hidden">
               {(() => {
-                const url = selectedWork.external_url || selectedWork.url;
+                const url = selectedWork.url || selectedWork.external_url;
                 const isVideoEmbed =
                   url &&
                   typeof url === "string" &&
@@ -1828,7 +1828,7 @@ export function CreatorProfile({
                   </p>
                 )}
                 {(() => {
-                  const url = selectedWork.external_url || selectedWork.url;
+                  const url = selectedWork.url || selectedWork.external_url;
                   const isVideoEmbed =
                     url &&
                     typeof url === "string" &&
@@ -1863,7 +1863,7 @@ export function CreatorProfile({
                     );
                   }
                   if (isVideoEmbed || isUploadedVideo) {
-                    const finalUrl = isUploadedVideo ? getAssetUrl(url) : ensureAbsoluteUrl(url);
+                    const finalUrl = selectedWork.external_url ? ensureAbsoluteUrl(selectedWork.external_url) : (isUploadedVideo ? getAssetUrl(url) : ensureAbsoluteUrl(url));
                     return (
                       <a
                         href={finalUrl}
