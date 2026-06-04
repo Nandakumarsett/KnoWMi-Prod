@@ -978,8 +978,10 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             .floating-owls-container {
               position: fixed;
               top: 0;
-              left: 0;
+              left: 50%;
+              transform: translateX(-50%);
               width: 100%;
+              max-width: 48rem; /* Matches max-w-3xl container */
               height: 100%;
               pointer-events: none;
               z-index: 1;
