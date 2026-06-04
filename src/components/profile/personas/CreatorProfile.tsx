@@ -1267,11 +1267,9 @@ export function CreatorProfile({
         {/* SECTION 2 — THE IMPACT STRIP                    */}
         {/* ════════════════════════════════════════════════ */}
         <section
-          className="mb-16 stagger-fade"
+          className="mb-12 stagger-fade"
           style={{ animationDelay: "0.1s" }}
         >
-          <div className="section-divider mb-12" />
-
           <div className="flex flex-wrap justify-center sm:justify-between gap-8 sm:gap-4 text-center w-full max-w-2xl mx-auto">
             {/* Impressions */}
             <div
@@ -1346,8 +1344,6 @@ export function CreatorProfile({
               </div>
             )}
           </div>
-
-          <div className="section-divider mt-12" />
         </section>
 
         {/* ════════════════════════════════════════════════ */}
@@ -1359,7 +1355,7 @@ export function CreatorProfile({
           data.audience_interests ||
           data.visual_style) && (
           <section
-            className="mb-16 stagger-fade"
+            className="mb-12 stagger-fade"
             style={{ animationDelay: "0.2s" }}
           >
             {/* Top row: The Bio Narrative */}
@@ -1457,11 +1453,9 @@ export function CreatorProfile({
           data.turnaround_time ||
           data.deliverable_formats) && (
           <section
-            className="mb-16 stagger-fade"
+            className="mb-12 stagger-fade"
             style={{ animationDelay: "0.3s" }}
           >
-            <div className="section-divider mb-12" />
-
             <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-blue-500 mb-10 flex items-center gap-2">
               <Briefcase size={14} /> Work With Me
             </h3>
@@ -1550,8 +1544,6 @@ export function CreatorProfile({
                 </div>
               </div>
             </div>
-
-            <div className="section-divider mt-12" />
           </section>
         )}
 
@@ -1560,7 +1552,7 @@ export function CreatorProfile({
         {/* ════════════════════════════════════════════════ */}
         {data.past_collaborations && data.past_collaborations.length > 0 && (
           <section
-            className="mb-16 stagger-fade"
+            className="mb-12 stagger-fade"
             style={{ animationDelay: "0.35s" }}
           >
             <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-10 flex items-center gap-2">
@@ -1614,7 +1606,7 @@ export function CreatorProfile({
         {/* ════════════════════════════════════════════════ */}
         {data.works && data.works.length > 0 && (
           <section
-            className="mb-16 stagger-fade"
+            className="mb-12 stagger-fade"
             style={{ animationDelay: "0.4s" }}
           >
             <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-10 flex items-center gap-2">
@@ -1675,8 +1667,6 @@ export function CreatorProfile({
           className="mb-12 stagger-fade text-center"
           style={{ animationDelay: "0.5s" }}
         >
-          <div className="section-divider mb-16" />
-
           <h2 className="glow-serif text-3xl sm:text-4xl font-bold text-gray-900 mb-3 italic">
             Let's Create Together
           </h2>
