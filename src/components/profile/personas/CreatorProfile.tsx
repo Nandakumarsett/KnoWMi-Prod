@@ -75,28 +75,48 @@ export function CreatorProfile({
 
   const getThumbnail = (work: any) => {
     const extUrl = work.external_url || work.url;
-    if (extUrl && extUrl.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i)) {
+    if (
+      extUrl &&
+      typeof extUrl === "string" &&
+      extUrl.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i)
+    ) {
       const url = extUrl;
       const ytMatch = url.match(
-        /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i,
+        /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{10,12})/i,
       );
       if (ytMatch)
         return `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`;
+
       if (url.includes("vimeo.com")) {
         const id = url.split("/").pop();
         return `https://vumbnail.com/${id}.jpg`;
       }
     }
-    const mediaUrl =
-      work.thumbnail_url || work.img || (work.type !== "video" ? extUrl : null);
-    if (!mediaUrl) return null;
-    return getAssetUrl(mediaUrl);
+
+    if (work.thumbnail_url) return getAssetUrl(work.thumbnail_url);
+    if (work.img) return getAssetUrl(work.img);
+
+    if (work.url && typeof work.url === "string") {
+      const isVideoFile = work.url.match(/\.(mp4|webm|ogg|mov)$/i);
+      const isImageFile = work.url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i);
+      const isSupabaseUpload = work.url.includes("supabase.co");
+
+      if (
+        isImageFile ||
+        (isSupabaseUpload && !isVideoFile) ||
+        (!work.url.startsWith("http") && !isVideoFile)
+      ) {
+        return getAssetUrl(work.url);
+      }
+    }
+
+    return null;
   };
 
   const getEmbedUrl = (url: string) => {
     if (!url) return "";
     const ytMatch = url.match(
-      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i,
+      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{10,12})/i,
     );
     if (ytMatch)
       return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`;
@@ -1730,7 +1750,14 @@ export function CreatorProfile({
               {(() => {
                 const url = selectedWork.external_url || selectedWork.url;
                 const isVideoEmbed =
-                  url && url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                  url &&
+                  typeof url === "string" &&
+                  url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                const isUploadedVideo =
+                  url &&
+                  typeof url === "string" &&
+                  url.match(/\.(mp4|webm|ogg|mov)$/i);
+
                 if (isVideoEmbed) {
                   return (
                     <div className="w-full aspect-video bg-black">
@@ -1743,6 +1770,20 @@ export function CreatorProfile({
                     </div>
                   );
                 }
+
+                if (isUploadedVideo) {
+                  return (
+                    <div className="w-full aspect-video bg-black">
+                      <video
+                        src={ensureAbsoluteUrl(url)}
+                        className="w-full h-full object-contain"
+                        controls
+                        autoPlay
+                      />
+                    </div>
+                  );
+                }
+
                 const thumb = getThumbnail(selectedWork);
                 if (thumb) {
                   return (
@@ -1773,8 +1814,27 @@ export function CreatorProfile({
                 {(() => {
                   const url = selectedWork.external_url || selectedWork.url;
                   const isVideoEmbed =
-                    url && url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
-                  if (url && !isVideoEmbed) {
+                    url &&
+                    typeof url === "string" &&
+                    url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                  const isUploadedVideo =
+                    url &&
+                    typeof url === "string" &&
+                    url.match(/\.(mp4|webm|ogg|mov)$/i);
+                  const isImageFile =
+                    url &&
+                    typeof url === "string" &&
+                    url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i);
+
+                  const isExternalWebLink =
+                    url &&
+                    typeof url === "string" &&
+                    !isVideoEmbed &&
+                    !isUploadedVideo &&
+                    !isImageFile &&
+                    !url.includes("supabase.co");
+
+                  if (isExternalWebLink) {
                     return (
                       <a
                         href={ensureAbsoluteUrl(url)}
