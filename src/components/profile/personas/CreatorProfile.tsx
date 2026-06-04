@@ -1366,7 +1366,7 @@ export function CreatorProfile({
                     {data.content_formats.map((format: string) => (
                       <span
                         key={format}
-                        className="px-3 py-1.5 bg-gray-50 rounded-xl text-xs font-bold text-gray-700 border border-gray-100"
+                        className="px-4 py-2 bg-gray-50 rounded-2xl text-sm font-bold text-gray-800 border border-gray-100 shadow-sm"
                       >
                         {format}
                       </span>
@@ -1387,7 +1387,7 @@ export function CreatorProfile({
                         (interest: string, i: number) => (
                           <span
                             key={i}
-                            className="px-3 py-1.5 bg-gradient-to-br from-fuchsia-50 to-purple-50 text-purple-600 rounded-xl text-xs font-bold border border-purple-100/60"
+                            className="px-4 py-2 bg-gradient-to-br from-fuchsia-50 to-purple-50 text-purple-700 rounded-2xl text-sm font-bold border border-purple-100/60 shadow-sm"
                           >
                             {interest}
                           </span>
