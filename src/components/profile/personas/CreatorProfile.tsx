@@ -982,7 +982,7 @@ export function CreatorProfile({
   // LAYOUT 3: GLOW EDITORIAL (Default / Glow Theme)
   // ----------------------------------------------------
   return (
-    <div className="w-full pb-20 relative bg-[#FAFAFC] text-gray-900 font-sans min-h-screen overflow-x-hidden selection:bg-fuchsia-200 selection:text-fuchsia-900">
+    <div className="w-full pb-20 relative bg-gradient-to-br from-[#F6F6F9] via-[#F0F0F4] to-[#E9E9EE] text-gray-900 font-sans min-h-screen overflow-x-hidden selection:bg-fuchsia-200 selection:text-fuchsia-900">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -1111,7 +1111,7 @@ export function CreatorProfile({
         {/* SECTION 1 — THE HERO                            */}
         {/* ════════════════════════════════════════════════ */}
         <section
-          className="relative w-full mb-20 stagger-fade"
+          className="relative w-full mb-12 stagger-fade"
           style={{ animationDelay: "0s" }}
         >
           {/* Banner */}
@@ -1271,7 +1271,7 @@ export function CreatorProfile({
         {/* SECTION 2 — THE IMPACT STRIP                    */}
         {/* ════════════════════════════════════════════════ */}
         <section
-          className="mb-24 stagger-fade"
+          className="mb-16 stagger-fade"
           style={{ animationDelay: "0.1s" }}
         >
           <div className="section-divider mb-12" />
@@ -1363,10 +1363,10 @@ export function CreatorProfile({
           data.audience_interests ||
           data.visual_style) && (
           <section
-            className="mb-24 stagger-fade"
+            className="mb-16 stagger-fade"
             style={{ animationDelay: "0.2s" }}
           >
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
               {/* Left — Narrative (3 cols) */}
               <div className="lg:col-span-3 space-y-10">
                 {(profile.bio || data.about) && (
@@ -1462,7 +1462,7 @@ export function CreatorProfile({
           data.turnaround_time ||
           data.deliverable_formats) && (
           <section
-            className="mb-24 stagger-fade"
+            className="mb-16 stagger-fade"
             style={{ animationDelay: "0.3s" }}
           >
             <div className="section-divider mb-12" />
@@ -1471,8 +1471,8 @@ export function CreatorProfile({
               <Briefcase size={14} /> Work With Me
             </h3>
 
-            <div className="bg-white/70 backdrop-blur-xl rounded-[32px] p-8 sm:p-12 border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.03)]">
-              <div className="flex flex-wrap lg:flex-nowrap gap-10 lg:gap-16">
+            <div className="bg-white/70 backdrop-blur-xl rounded-[32px] p-6 sm:p-10 border border-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.03)]">
+              <div className="flex flex-wrap lg:flex-nowrap gap-8 lg:gap-12">
                 {/* Open To */}
                 {data.collab_types_tags &&
                   data.collab_types_tags.length > 0 && (
@@ -1497,7 +1497,7 @@ export function CreatorProfile({
 
                 <div className="flex flex-col gap-10 flex-grow">
                   {/* Rates & Turnaround in a row */}
-                  <div className="flex flex-wrap gap-10 sm:gap-16">
+                  <div className="flex flex-wrap gap-8 sm:gap-10">
                     {(data.rate_range_min || data.rate_range_max) && (
                       <div className="space-y-1">
                         <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400">
@@ -1565,7 +1565,7 @@ export function CreatorProfile({
         {/* ════════════════════════════════════════════════ */}
         {data.past_collaborations && data.past_collaborations.length > 0 && (
           <section
-            className="mb-24 stagger-fade"
+            className="mb-16 stagger-fade"
             style={{ animationDelay: "0.35s" }}
           >
             <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-10 flex items-center gap-2">
@@ -1619,7 +1619,7 @@ export function CreatorProfile({
         {/* ════════════════════════════════════════════════ */}
         {data.works && data.works.length > 0 && (
           <section
-            className="mb-24 stagger-fade"
+            className="mb-16 stagger-fade"
             style={{ animationDelay: "0.4s" }}
           >
             <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-10 flex items-center gap-2">
