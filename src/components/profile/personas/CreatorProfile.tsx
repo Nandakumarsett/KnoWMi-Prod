@@ -1283,11 +1283,11 @@ export function CreatorProfile({
               onClick={() => isFreeProfile && setShowFomoModal(true)}
             >
               <div
-                className={`text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1.5 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
+                className={`text-xl sm:text-2xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
               >
                 {isFreeProfile ? "4.2K" : liveViews}
               </div>
-              <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400">
+              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
                 Impressions
               </div>
             </div>
@@ -1297,7 +1297,7 @@ export function CreatorProfile({
               <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
                 {topCity}
               </div>
-              <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400">
+              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
                 Base
               </div>
             </div>
@@ -1308,7 +1308,7 @@ export function CreatorProfile({
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.audience_age_group}
                 </div>
-                <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400">
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
                   Audience Age
                 </div>
               </div>
@@ -1320,7 +1320,7 @@ export function CreatorProfile({
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.audience_gender_split}
                 </div>
-                <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400">
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
                   Gender Split
                 </div>
               </div>
@@ -1332,7 +1332,7 @@ export function CreatorProfile({
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.visual_style}
                 </div>
-                <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400">
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
                   Aesthetic
                 </div>
               </div>
@@ -1344,7 +1344,7 @@ export function CreatorProfile({
                 <div className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight">
                   {data.posting_frequency}
                 </div>
-                <div className="text-[9px] font-bold uppercase tracking-[0.15em] text-gray-400">
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mt-1">
                   Frequency
                 </div>
               </div>
@@ -1366,90 +1366,89 @@ export function CreatorProfile({
             className="mb-16 stagger-fade"
             style={{ animationDelay: "0.2s" }}
           >
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
-              {/* Left — Narrative (3 cols) */}
-              <div className="lg:col-span-3 space-y-10">
-                {(profile.bio || data.about) && (
-                  <div>
-                    <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-purple-500 mb-5 flex items-center gap-2">
-                      <Sparkles size={14} /> Inside the Mind
-                    </h3>
-                    <p className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight tracking-tight">
-                      {data.about || profile.bio}
-                    </p>
-                  </div>
-                )}
-
-                {/* Content Formats */}
-                {data.content_formats && data.content_formats.length > 0 && (
-                  <div>
-                    <h4 className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-3">
-                      Core Focus
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {data.content_formats.map((format) => (
-                        <span
-                          key={format}
-                          className="px-4 py-2 bg-white rounded-full text-xs font-bold text-gray-700 shadow-sm border border-gray-100/80"
-                        >
-                          {format}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
+            {/* Top row: The Bio Narrative */}
+            {(profile.bio || data.about) && (
+              <div className="mb-10 text-center max-w-3xl mx-auto">
+                <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-purple-500 mb-4 flex items-center justify-center gap-2">
+                  <Sparkles size={14} /> Inside the Mind
+                </h3>
+                <p className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight tracking-tight">
+                  {data.about || profile.bio}
+                </p>
               </div>
+            )}
 
-              {/* Right — Aesthetic & Interests (2 cols) */}
-              <div className="lg:col-span-2 space-y-6">
-                {data.visual_style && (
-                  <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-7 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px]">
-                    <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-2">
-                      Visual Aesthetic
+            {/* Bottom Grid: The Attributes */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {/* Core Focus Card */}
+              {data.content_formats && data.content_formats.length > 0 && (
+                <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col min-h-[120px] lg:col-span-2">
+                  <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-3">
+                    Core Focus
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {data.content_formats.map((format: string) => (
+                      <span
+                        key={format}
+                        className="px-3 py-1.5 bg-gray-50 rounded-xl text-xs font-bold text-gray-700 border border-gray-100"
+                      >
+                        {format}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Audience Interests Card */}
+              {data.audience_interests &&
+                data.audience_interests.length > 0 && (
+                  <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col min-h-[120px] lg:col-span-2">
+                    <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-3">
+                      Audience Interests
                     </div>
-                    <div className="text-2xl font-extrabold text-gray-900">
-                      {data.visual_style}
+                    <div className="flex flex-wrap gap-2">
+                      {data.audience_interests.map(
+                        (interest: string, i: number) => (
+                          <span
+                            key={i}
+                            className="px-3 py-1.5 bg-gradient-to-br from-fuchsia-50 to-purple-50 text-purple-600 rounded-xl text-xs font-bold border border-purple-100/60"
+                          >
+                            {interest}
+                          </span>
+                        ),
+                      )}
                     </div>
-                    {data.posting_frequency && (
-                      <div className="mt-2 text-xs text-gray-500 font-semibold">
-                        Posts {data.posting_frequency}
-                      </div>
-                    )}
                   </div>
                 )}
 
-                {data.audience_interests &&
-                  data.audience_interests.length > 0 && (
-                    <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-7 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px]">
-                      <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-3">
-                        Audience Interests
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {data.audience_interests.map(
-                          (interest: string, i: number) => (
-                            <span
-                              key={i}
-                              className="px-3 py-1.5 bg-gradient-to-br from-fuchsia-50 to-purple-50 text-purple-600 rounded-xl text-xs font-bold border border-purple-100/60"
-                            >
-                              {interest}
-                            </span>
-                          ),
-                        )}
-                      </div>
+              {/* Visual Aesthetic Card */}
+              {data.visual_style && (
+                <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px] lg:col-span-2">
+                  <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-1">
+                    Visual Aesthetic
+                  </div>
+                  <div className="text-xl font-extrabold text-gray-900">
+                    {data.visual_style}
+                  </div>
+                  {data.posting_frequency && (
+                    <div className="mt-1 text-[11px] text-gray-500 font-semibold uppercase tracking-wider">
+                      Posts {data.posting_frequency}
                     </div>
                   )}
+                </div>
+              )}
 
-                {data.audience_top_location && (
-                  <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-7 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px]">
-                    <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-1">
-                      Top Audience Location
-                    </div>
-                    <div className="text-xl font-extrabold text-gray-900">
-                      {data.audience_top_location}
-                    </div>
+              {/* Top Audience Location Card */}
+              {data.audience_top_location && (
+                <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px] lg:col-span-2">
+                  <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-1">
+                    Top Location
                   </div>
-                )}
-              </div>
+                  <div className="text-xl font-extrabold text-gray-900">
+                    {data.audience_top_location}
+                  </div>
+                </div>
+              )}
             </div>
           </section>
         )}
