@@ -119,7 +119,7 @@ export function CreatorProfile({
       /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{10,12})/i,
     );
     if (ytMatch)
-      return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`;
+      return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&end=10`;
     if (url.includes("vimeo.com")) {
       const id = url.split("/").pop();
       return `https://player.vimeo.com/video/${id}?autoplay=1`;
@@ -1783,10 +1783,16 @@ export function CreatorProfile({
                   return (
                     <div className="w-full aspect-video bg-black">
                       <video
-                        src={ensureAbsoluteUrl(url)}
+                        src={getAssetUrl(url)}
                         className="w-full h-full object-contain"
                         controls
                         autoPlay
+                        onTimeUpdate={(e) => {
+                          if (e.currentTarget.currentTime >= 10) {
+                            e.currentTarget.pause();
+                            e.currentTarget.currentTime = 10;
+                          }
+                        }}
                       />
                     </div>
                   );
@@ -1853,6 +1859,19 @@ export function CreatorProfile({
                         className="inline-block mt-4 text-purple-600 font-bold text-sm hover:underline"
                       >
                         Visit Link &rarr;
+                      </a>
+                    );
+                  }
+                  if (isVideoEmbed || isUploadedVideo) {
+                    const finalUrl = isUploadedVideo ? getAssetUrl(url) : ensureAbsoluteUrl(url);
+                    return (
+                      <a
+                        href={finalUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block mt-4 text-purple-600 font-bold text-sm hover:underline"
+                      >
+                        Watch Full Video &rarr;
                       </a>
                     );
                   }
