@@ -74,8 +74,9 @@ export function CreatorProfile({
     (!profile.status && (!profile.tier || profile.tier === "Starter"));
 
   const getThumbnail = (work: any) => {
-    if (work.external_url) {
-      const url = work.external_url;
+    const extUrl = work.external_url || work.url;
+    if (extUrl && extUrl.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i)) {
+      const url = extUrl;
       const ytMatch = url.match(
         /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i,
       );
@@ -85,12 +86,9 @@ export function CreatorProfile({
         const id = url.split("/").pop();
         return `https://vumbnail.com/${id}.jpg`;
       }
-      return null;
     }
     const mediaUrl =
-      work.thumbnail_url ||
-      work.img ||
-      (work.type !== "video" ? work.url : null);
+      work.thumbnail_url || work.img || (work.type !== "video" ? extUrl : null);
     if (!mediaUrl) return null;
     return getAssetUrl(mediaUrl);
   };
@@ -1729,24 +1727,40 @@ export function CreatorProfile({
               <X size={18} strokeWidth={3} />
             </button>
             <div className="bg-gray-50 rounded-[22px] overflow-hidden">
-              {selectedWork.external_url ? (
-                <div className="w-full aspect-video bg-black">
-                  <iframe
-                    src={getEmbedUrl(selectedWork.external_url)}
-                    className="w-full h-full"
-                    allow="autoplay; encrypted-media"
-                    allowFullScreen
-                  />
-                </div>
-              ) : getThumbnail(selectedWork) ? (
-                <div className="w-full aspect-video bg-black">
-                  <img
-                    src={getThumbnail(selectedWork)}
-                    className="w-full h-full object-cover"
-                    alt={selectedWork.title}
-                  />
-                </div>
-              ) : null}
+              {(() => {
+                const url = selectedWork.external_url || selectedWork.url;
+                const isVideoEmbed =
+                  url && url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                if (isVideoEmbed) {
+                  return (
+                    <div className="w-full aspect-video bg-black">
+                      <iframe
+                        src={getEmbedUrl(url)}
+                        className="w-full h-full"
+                        allow="autoplay; encrypted-media"
+                        allowFullScreen
+                      />
+                    </div>
+                  );
+                }
+                const thumb = getThumbnail(selectedWork);
+                if (thumb) {
+                  return (
+                    <div className="w-full aspect-video bg-black">
+                      <img
+                        src={thumb}
+                        className="w-full h-full object-cover"
+                        alt={selectedWork.title}
+                      />
+                    </div>
+                  );
+                }
+                return (
+                  <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center">
+                    <Camera size={40} className="text-purple-300 opacity-60" />
+                  </div>
+                );
+              })()}
               <div className="p-6 sm:p-8">
                 <h3 className="text-xl font-extrabold text-gray-900 mb-2">
                   {selectedWork.title}
@@ -1756,6 +1770,24 @@ export function CreatorProfile({
                     {selectedWork.description}
                   </p>
                 )}
+                {(() => {
+                  const url = selectedWork.external_url || selectedWork.url;
+                  const isVideoEmbed =
+                    url && url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                  if (url && !isVideoEmbed) {
+                    return (
+                      <a
+                        href={ensureAbsoluteUrl(url)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block mt-4 text-purple-600 font-bold text-sm hover:underline"
+                      >
+                        Visit Link &rarr;
+                      </a>
+                    );
+                  }
+                  return null;
+                })()}
               </div>
             </div>
           </div>
