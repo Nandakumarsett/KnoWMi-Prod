@@ -671,249 +671,285 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
   // LAYOUT 3: GLOW EDITORIAL (Default / Glow Theme)
   // ----------------------------------------------------
   return (
-    <div className="w-full pb-16 relative bg-[#08060e] text-white font-sans min-h-screen overflow-x-hidden selection:bg-fuchsia-500/30 selection:text-fuchsia-100">
+    <div className="w-full pb-20 relative bg-[#FAFAFC] text-gray-900 font-sans min-h-screen overflow-x-hidden selection:bg-fuchsia-200 selection:text-fuchsia-900">
       
       <style dangerouslySetInnerHTML={{
         __html: `
-          @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
           
-          .glow-theme { font-family: 'Outfit', sans-serif; }
+          .glow-theme { font-family: 'Plus Jakarta Sans', sans-serif; }
           
-          .glow-orb {
+          /* Light mode ambient glowing orbs */
+          .light-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px);
+            filter: blur(90px);
             pointer-events: none;
-            animation: orbFloat 20s ease-in-out infinite;
+            opacity: 0.6;
+            animation: floatOrb 25s ease-in-out infinite alternate;
           }
-          @keyframes orbFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(30px, -20px) scale(1.1); }
-            50% { transform: translate(-20px, 15px) scale(0.95); }
-            75% { transform: translate(15px, 25px) scale(1.05); }
-          }
-          
-          .name-glow {
-            text-shadow: 0 0 30px rgba(168, 85, 247, 0.6),
-                         0 0 60px rgba(168, 85, 247, 0.3),
-                         0 0 100px rgba(236, 72, 153, 0.2);
-            animation: nameBreath 4s ease-in-out infinite;
-          }
-          @keyframes nameBreath {
-            0%, 100% { text-shadow: 0 0 30px rgba(168,85,247,0.6), 0 0 60px rgba(168,85,247,0.3), 0 0 100px rgba(236,72,153,0.2); }
-            50% { text-shadow: 0 0 40px rgba(168,85,247,0.8), 0 0 80px rgba(168,85,247,0.4), 0 0 120px rgba(236,72,153,0.3); }
+          @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, -40px) scale(1.1); }
+            100% { transform: translate(-30px, 30px) scale(0.9); }
           }
           
-          .glow-glass {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(168, 85, 247, 0.1);
-            border-radius: 20px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-          }
-          .glow-glass:hover {
-            border-color: rgba(168, 85, 247, 0.3);
-            box-shadow: 0 4px 30px rgba(168, 85, 247, 0.08);
-          }
-          
-          .glow-section-label {
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: rgba(168, 85, 247, 0.7);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-          }
-          .glow-section-label::after {
-            content: '';
-            flex-grow: 1;
-            height: 1px;
-            background: linear-gradient(90deg, rgba(168, 85, 247, 0.2), transparent);
-          }
-          
-          .glow-fade { animation: glowFadeUp 0.6s ease-out forwards; opacity: 0; transform: translateY(18px); }
-          @keyframes glowFadeUp { to { opacity: 1; transform: translateY(0); } }
-          
-          .avatar-glow-ring {
-            background: linear-gradient(135deg, #a855f7, #ec4899, #a855f7);
+          /* Vibrant text glow for light backgrounds */
+          .text-gradient-glow {
+            background: linear-gradient(135deg, #FF3366, #9933FF, #00C3FF);
             background-size: 200% 200%;
-            animation: ringShift 4s ease infinite;
-            padding: 3px;
-            border-radius: 24px;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 6s ease infinite;
+            filter: drop-shadow(0px 8px 16px rgba(153, 51, 255, 0.25));
           }
-          @keyframes ringShift {
+          @keyframes gradientShift {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
           }
-
-          .glow-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 6px 14px;
-            background: rgba(168, 85, 247, 0.08);
-            border: 1px solid rgba(168, 85, 247, 0.15);
-            border-radius: 9999px;
-            color: #d8b4fe;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            transition: all 0.2s ease;
-            white-space: nowrap;
+          
+          /* High-retention Aurora Cards (Soft Glass) */
+          .aurora-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 1);
+            border-radius: 32px;
+            box-shadow: 
+              0 10px 40px -10px rgba(153, 51, 255, 0.08),
+              inset 0 0 0 1px rgba(255,255,255,0.5);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
           }
-          .glow-tag:hover {
-            background: rgba(168, 85, 247, 0.15);
-            border-color: rgba(168, 85, 247, 0.4);
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.12);
+          .aurora-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 
+              0 20px 50px -15px rgba(153, 51, 255, 0.15),
+              0 0 30px rgba(255, 51, 102, 0.05),
+              inset 0 0 0 1px rgba(255,255,255,0.8);
+          }
+
+          /* Dynamic Pill Containers */
+          .pill-container {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 1);
+            border-radius: 9999px;
+            box-shadow: 0 8px 24px -6px rgba(0, 195, 255, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+          }
+          .pill-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px -6px rgba(0, 195, 255, 0.25);
           }
           
-          .glow-social-icon {
-            width: 48px; height: 48px;
-            border-radius: 14px;
+          /* Staggered entrance */
+          .stagger-fade { animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); }
+          @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+          
+          /* Fluid image mask */
+          .fluid-mask {
+            mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.6,90,-16.3,89.1,-0.5C88.1,15.3,83.5,30.6,74.7,43.2C65.9,55.8,52.8,65.7,38.2,72.4C23.6,79.1,7.5,82.5,-7.9,80.1C-23.4,77.7,-38.2,69.5,-51.7,59.3C-65.1,49.1,-77.3,37,-83.4,22.1C-89.6,7.2,-89.7,-10.5,-83.6,-25.9C-77.5,-41.2,-65.2,-54.2,-50.9,-61.2C-36.6,-68.2,-20.3,-69.2,-3.1,-63.9C14.1,-58.6,28.2,-47.1,44.7,-76.4Z" transform="translate(100 100)"/></svg>');
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.6,90,-16.3,89.1,-0.5C88.1,15.3,83.5,30.6,74.7,43.2C65.9,55.8,52.8,65.7,38.2,72.4C23.6,79.1,7.5,82.5,-7.9,80.1C-23.4,77.7,-38.2,69.5,-51.7,59.3C-65.1,49.1,-77.3,37,-83.4,22.1C-89.6,7.2,-89.7,-10.5,-83.6,-25.9C-77.5,-41.2,-65.2,-54.2,-50.9,-61.2C-36.6,-68.2,-20.3,-69.2,-3.1,-63.9C14.1,-58.6,28.2,-47.1,44.7,-76.4Z" transform="translate(100 100)"/></svg>');
+            -webkit-mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+          }
+
+          /* Glowing social bubbles */
+          .social-bubble {
+            width: 56px; height: 56px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(168,85,247,0.12);
-            color: rgba(168,85,247,0.6);
-            transition: all 0.3s ease;
+            background: white;
+            color: #4a5568;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
           }
-          .glow-social-icon:hover {
-            background: rgba(168,85,247,0.12);
-            border-color: rgba(168,85,247,0.4);
-            color: #d8b4fe;
-            box-shadow: 0 0 20px rgba(168,85,247,0.15);
-            transform: translateY(-2px);
+          .social-bubble:hover {
+            transform: scale(1.15) translateY(-5px);
+            color: white;
           }
         `
       }} />
 
-      {/* Ambient floating orbs */}
-      <div className="glow-orb" style={{ top: '5%', left: '15%', width: '350px', height: '350px', background: 'rgba(168, 85, 247, 0.08)' }} />
-      <div className="glow-orb" style={{ top: '60%', right: '10%', width: '280px', height: '280px', background: 'rgba(236, 72, 153, 0.06)', animationDelay: '5s' }} />
-      <div className="glow-orb" style={{ bottom: '10%', left: '30%', width: '200px', height: '200px', background: 'rgba(139, 92, 246, 0.06)', animationDelay: '10s' }} />
+      {/* Ambient background glows */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="light-orb" style={{ top: '-10%', left: '-5%', width: '500px', height: '500px', background: '#FF3366', opacity: 0.08 }} />
+        <div className="light-orb" style={{ top: '30%', right: '-10%', width: '600px', height: '600px', background: '#9933FF', opacity: 0.07, animationDelay: '-5s' }} />
+        <div className="light-orb" style={{ bottom: '-10%', left: '20%', width: '400px', height: '400px', background: '#00C3FF', opacity: 0.09, animationDelay: '-10s' }} />
+      </div>
 
-      <main className="relative z-10 max-w-3xl mx-auto px-5 sm:px-8 pt-10 glow-theme">
+      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-8 pt-8 glow-theme">
+        
+        {/* ═══ CREATIVE HEADER ═══ */}
+        <div className="relative w-full mb-12">
+          {/* Banner with a creative cut */}
+          {data.featured_work_url ? (
+            <div className="w-full h-56 sm:h-72 rounded-[40px] overflow-hidden shadow-xl stagger-fade relative" style={{ animationDelay: '0s' }}>
+              <img src={getAssetUrl(data.featured_work_url)} alt="Banner" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
+            </div>
+          ) : (
+            <div className="w-full h-40 sm:h-56 rounded-[40px] bg-gradient-to-r from-fuchsia-100 to-cyan-100 shadow-md stagger-fade" style={{ animationDelay: '0s' }} />
+          )}
 
-        {/* ═══ BANNER ═══ */}
-        {data.featured_work_url && (
-          <div className="relative w-full h-48 sm:h-64 rounded-[24px] overflow-hidden mb-6 glow-fade" style={{ animationDelay: '0s' }}>
-            <img src={getAssetUrl(data.featured_work_url)} alt="Banner" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#08060e] via-[#08060e]/40 to-transparent" />
-          </div>
-        )}
-
-        {/* ═══ PROFILE HEADER ═══ */}
-        <div className={`flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6 glow-fade ${data.featured_work_url ? '-mt-16 relative z-20' : ''}`} style={{ animationDelay: '0.1s' }}>
-          <div className="shrink-0">
-            <div className="avatar-glow-ring shadow-[0_0_40px_rgba(168,85,247,0.25)]">
-              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-[22px] overflow-hidden bg-[#0f0d18]">
-                {!avatarError && profile.avatar_url ? (
-                  <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover" onError={() => setAvatarError(true)} />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-purple-900/30 text-purple-300 font-bold text-3xl">
-                    {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+          {/* Overlapping Content Container */}
+          <div className="relative -mt-20 sm:-mt-28 px-4 sm:px-12 flex flex-col items-center sm:items-start text-center sm:text-left stagger-fade" style={{ animationDelay: '0.1s' }}>
+            
+            <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 sm:gap-8 w-full">
+              {/* Avatar in fluid organic shape */}
+              <div className="relative shrink-0 -mt-8 sm:-mt-0 group">
+                <div className="w-36 h-36 sm:w-44 sm:h-44 bg-white p-2 rounded-[35px] shadow-2xl rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
+                  <div className="w-full h-full rounded-[28px] overflow-hidden">
+                    {!avatarError && profile.avatar_url ? (
+                      <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover" onError={() => setAvatarError(true)} />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-fuchsia-500 to-purple-600 text-white font-bold text-4xl">
+                        {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                      </div>
+                    )}
                   </div>
+                </div>
+                {/* Glowing decorative dot */}
+                <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-[#00C3FF] to-[#9933FF] border-4 border-white shadow-lg animate-pulse" />
+              </div>
+
+              {/* Name & Title */}
+              <div className="flex-grow pt-4 sm:pt-0 sm:pb-4 bg-white/40 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none p-6 sm:p-0 rounded-[32px] sm:rounded-none shadow-sm sm:shadow-none border border-white/50 sm:border-none">
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500 mb-2">
+                  {data.type || 'CREATIVE VISIONARY'}
+                </p>
+                <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-gradient-glow mb-2" style={{ paddingBottom: '0.1em' }}>
+                  {profile.display_name}
+                </h1>
+                {profile.is_verified && (
+                  <div className="inline-flex mb-3"><VerifiedBadge isVerified={profile.is_verified} accentColor="#9933FF" /></div>
+                )}
+                {profile.bio && (
+                  <p className="text-[15px] text-gray-600 font-medium leading-relaxed max-w-xl">
+                    {profile.bio}
+                  </p>
                 )}
               </div>
             </div>
-          </div>
-          <div className="flex-grow text-center sm:text-left">
-            <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-fuchsia-400/80 mb-1.5">
-              {data.type || 'CONTENT CREATOR'}
-            </p>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight name-glow mb-2" style={{ lineHeight: 1.15 }}>
-              {profile.display_name}
-            </h1>
-            {profile.is_verified && (
-              <div className="inline-flex mb-2"><VerifiedBadge isVerified={profile.is_verified} accentColor="#a855f7" /></div>
-            )}
-            {profile.bio && (
-              <p className="text-[14px] text-purple-100/60 font-light leading-relaxed max-w-lg mt-1">
-                {profile.bio}
-              </p>
-            )}
+
           </div>
         </div>
 
-        {/* ═══ STATS ROW ═══ */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6 glow-fade" style={{ animationDelay: '0.15s' }}>
+        {/* ═══ HIGH RETENTION STATS (Pills) ═══ */}
+        <div className="flex flex-wrap justify-center sm:justify-start gap-4 mb-12 stagger-fade" style={{ animationDelay: '0.2s' }}>
           <div 
-            className={`glow-glass p-5 text-center ${isFreeProfile ? 'cursor-pointer' : ''}`}
+            className={`pill-container px-6 py-3 flex items-center gap-4 ${isFreeProfile ? 'cursor-pointer' : ''}`}
             onClick={() => isFreeProfile && setShowFomoModal(true)}
           >
-            <Activity size={18} className="text-purple-400 mx-auto mb-1.5" />
-            <div className={`text-xl font-bold text-white ${isFreeProfile ? 'blur-[4px]' : ''}`}>{isFreeProfile ? '8.2K' : liveViews}</div>
-            <div className="text-[9px] uppercase tracking-[0.15em] text-purple-200/40 mt-1">Profile Views</div>
+            <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-500">
+              <Activity size={18} strokeWidth={2.5} />
+            </div>
+            <div className="text-left">
+              <div className={`text-xl font-bold text-gray-900 ${isFreeProfile ? 'blur-[4px]' : ''}`}>{isFreeProfile ? '4.2K' : liveViews}</div>
+              <div className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Impressions</div>
+            </div>
           </div>
-          <div className="glow-glass p-5 text-center">
-            <MapPin size={18} className="text-fuchsia-400 mx-auto mb-1.5" />
-            <div className="text-lg font-bold text-white truncate">{topCity}</div>
-            <div className="text-[9px] uppercase tracking-[0.15em] text-purple-200/40 mt-1">Top Location</div>
+
+          <div className="pill-container px-6 py-3 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-500">
+              <MapPin size={18} strokeWidth={2.5} />
+            </div>
+            <div className="text-left">
+              <div className="text-lg font-bold text-gray-900 truncate max-w-[120px]">{topCity}</div>
+              <div className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Base Location</div>
+            </div>
           </div>
+          
           {data.content_formats && data.content_formats.length > 0 && (
-            <div className="glow-glass p-5 text-center col-span-2 sm:col-span-1">
-              <Camera size={18} className="text-violet-400 mx-auto mb-1.5" />
-              <div className="text-lg font-bold text-white">{data.content_formats.length}</div>
-              <div className="text-[9px] uppercase tracking-[0.15em] text-purple-200/40 mt-1">Content Types</div>
+            <div className="pill-container px-6 py-3 flex items-center gap-4 hidden sm:flex">
+              <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-500">
+                <Sparkles size={18} strokeWidth={2.5} />
+              </div>
+              <div className="text-left">
+                <div className="text-xl font-bold text-gray-900">{data.content_formats.length}</div>
+                <div className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Formats</div>
+              </div>
             </div>
           )}
         </div>
 
-        {/* ═══ ABOUT & CONTENT FORMATS ═══ */}
-        {(data.about || (data.content_formats && data.content_formats.length > 0)) && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 glow-fade" style={{ animationDelay: '0.25s' }}>
-            {data.about && (
-              <div className="glow-glass p-6">
-                <div className="glow-section-label"><Sparkles size={13} /> About Me</div>
-                <p className="text-[13px] text-purple-100/70 leading-relaxed font-light">{data.about}</p>
-              </div>
-            )}
-            {data.content_formats && data.content_formats.length > 0 && (
-              <div className="glow-glass p-6">
-                <div className="glow-section-label"><Film size={13} /> Content Formats</div>
-                <div className="flex flex-wrap gap-2">
-                  {data.content_formats.map(format => (
-                    <span key={format} className="glow-tag">
-                      <Camera size={11} className="text-purple-400/50" /> {format}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+        {/* ═══ MASONRY / ASYMMETRICAL LAYOUT ═══ */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-12">
+          
+          {/* About / Narrative (Spans 7 cols) */}
+          {data.about && (
+            <div className="md:col-span-7 aurora-card p-8 sm:p-10 stagger-fade flex flex-col justify-center" style={{ animationDelay: '0.3s' }}>
+              <h3 className="text-sm font-bold text-purple-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <Sparkles size={16} /> Inside the Mind
+              </h3>
+              <p className="text-base sm:text-lg text-gray-700 leading-relaxed font-medium">
+                {data.about}
+              </p>
+            </div>
+          )}
 
-        {/* ═══ SHOWCASE / WORKS ═══ */}
+          {/* Specialization (Spans 5 cols) */}
+          {data.content_formats && data.content_formats.length > 0 && (
+            <div className="md:col-span-5 aurora-card p-8 sm:p-10 stagger-fade bg-gradient-to-br from-white/80 to-purple-50/80" style={{ animationDelay: '0.4s' }}>
+              <h3 className="text-sm font-bold text-pink-500 uppercase tracking-widest mb-6 flex items-center gap-2">
+                <Camera size={16} /> Core Focus
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {data.content_formats.map((format, i) => (
+                  <span 
+                    key={format} 
+                    className="px-4 py-2 bg-white rounded-full text-xs font-bold text-gray-700 shadow-sm border border-gray-100"
+                  >
+                    {format}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ═══ SHOWCASE GALLERY ═══ */}
         {data.works && data.works.length > 0 && (
-          <div className="mb-6 glow-fade" style={{ animationDelay: '0.35s' }}>
-            <div className="glow-section-label mb-4"><Play size={13} /> Showcase</div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="w-full mb-16 stagger-fade" style={{ animationDelay: '0.5s' }}>
+            <div className="flex items-center justify-between mb-6 px-2">
+              <h3 className="text-2xl font-extrabold text-gray-900 tracking-tight">Recent Masterpieces</h3>
+              <div className="h-[2px] flex-grow ml-6 bg-gradient-to-r from-gray-200 to-transparent"></div>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
               {data.works.map((w, i) => {
                 const thumb = getThumbnail(w)
                 return (
                   <div 
                     key={i}
                     onClick={() => setSelectedWork(w)}
-                    className="group relative rounded-[16px] overflow-hidden glow-glass cursor-pointer aspect-video"
+                    className="group aurora-card overflow-hidden cursor-pointer flex flex-col h-full"
                   >
-                    <img 
-                      src={thumb || 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=800'} 
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                      alt={w.title} 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#08060e]/90 via-transparent to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <div className="flex items-center gap-2">
-                        {w.type === 'video' && <Play size={14} className="text-fuchsia-400" />}
-                        <span className="text-[12px] font-semibold text-white">{w.title}</span>
+                    <div className="w-full aspect-[4/3] sm:aspect-video relative overflow-hidden bg-gray-100 p-2 pb-0">
+                      <div className="w-full h-full rounded-t-[24px] overflow-hidden">
+                        <img 
+                          src={thumb || 'https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=800'} 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                          alt={w.title} 
+                        />
                       </div>
-                      {w.description && <p className="text-[10px] text-purple-200/50 mt-0.5 line-clamp-1">{w.description}</p>}
+                      {w.type === 'video' && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <div className="w-14 h-14 rounded-full bg-white/90 backdrop-blur-md shadow-lg flex items-center justify-center text-pink-500 transform group-hover:scale-110 transition-transform">
+                            <Play size={24} className="ml-1" fill="currentColor" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-6 flex-grow flex flex-col bg-white/50">
+                      <h4 className="text-lg font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-purple-600 transition-colors">{w.title}</h4>
+                      {w.description && <p className="text-sm text-gray-500 line-clamp-2">{w.description}</p>}
                     </div>
                   </div>
                 )
@@ -922,106 +958,120 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
           </div>
         )}
 
-        {/* ═══ SOCIAL PLATFORMS ═══ */}
-        {data.platforms && data.platforms.length > 0 && (
-          <div className="glow-glass p-6 mb-6 glow-fade" style={{ animationDelay: '0.45s' }}>
-            <div className="glow-section-label"><Share2 size={13} /> Where to Find Me</div>
-            <div className="flex flex-wrap gap-3">
-              {data.platforms.map(p => {
-                const platform = p.platform?.toLowerCase()
-                const Icon = PLATFORM_ICONS[platform] || Share2
-                return (
-                  <a
-                    key={p.platform}
-                    href={ensureAbsoluteUrl(p.url)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => {
-                      handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
-                      if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
-                    }}
-                    className="glow-social-icon cursor-pointer"
-                    title={p.platform}
-                  >
-                    <Icon size={20} />
-                    {isGated && (
-                      <div className="absolute inset-0 bg-[#08060e]/80 rounded-[14px] flex items-center justify-center backdrop-blur-[2px]">
-                        <Lock size={12} className="text-purple-400" />
-                      </div>
-                    )}
-                  </a>
-                )
-              })}
-            </div>
-          </div>
-        )}
+        {/* ═══ BOTTOM CTA & SOCIALS ═══ */}
+        <div className="aurora-card p-8 sm:p-12 text-center mb-12 stagger-fade relative overflow-hidden" style={{ animationDelay: '0.6s' }}>
+          {/* Decorative glow inside card */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-32 bg-gradient-to-b from-purple-200/50 to-transparent blur-3xl rounded-full" />
+          
+          <div className="relative z-10">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-3">Let's Create Magic</h2>
+            <p className="text-sm text-gray-500 mb-8 max-w-lg mx-auto">
+              {data.collab_types || "I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions."}
+            </p>
 
-        {/* ═══ COLLABORATION & CONTACT ═══ */}
-        {(data.collab_types || data.contact_email || data.contact_whatsapp) && (
-          <div className="glow-glass p-6 mb-6 glow-fade" style={{ animationDelay: '0.55s' }}>
-            <div className="glow-section-label"><Sparkles size={13} /> Collaboration</div>
-            {data.collab_types && (
-              <p className="text-[13px] text-purple-100/60 font-light mb-4 italic">"{data.collab_types}"</p>
-            )}
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
               {data.contact_email && (
                 <a 
                   href={`mailto:${data.contact_email}`}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600/80 to-fuchsia-600/80 text-white text-[11px] font-bold uppercase tracking-[0.15em] rounded-full hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all"
+                  className="w-full sm:w-auto px-8 py-4 bg-gray-900 text-white font-bold rounded-full hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-purple-500/30 hover:-translate-y-1"
                 >
-                  <Mail size={14} /> Email Me
+                  Start a Conversation
                 </a>
               )}
               {data.contact_whatsapp && (
                 <a 
                   href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, '')}`}
                   target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#25D366]/80 text-white text-[11px] font-bold uppercase tracking-[0.15em] rounded-full hover:shadow-[0_0_25px_rgba(37,211,102,0.3)] transition-all"
+                  className="w-full sm:w-auto px-8 py-4 bg-white text-gray-900 font-bold rounded-full border-2 border-gray-200 hover:border-[#25D366] hover:text-[#25D366] transition-all hover:-translate-y-1"
                 >
-                  <MessageCircle size={14} /> WhatsApp
+                  WhatsApp Message
                 </a>
               )}
             </div>
+
+            {/* Social Bubbles */}
+            {data.platforms && data.platforms.length > 0 && (
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">Connect on Socials</p>
+                <div className="flex flex-wrap justify-center gap-4">
+                  {data.platforms.map(p => {
+                    const platform = p.platform?.toLowerCase()
+                    const Icon = PLATFORM_ICONS[platform] || Share2
+                    const styleClass = brandStyles[platform] ? brandStyles[platform].split(' ')[0] : 'bg-gray-800'
+                    
+                    return (
+                      <a
+                        key={p.platform}
+                        href={ensureAbsoluteUrl(p.url)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => {
+                          handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                          if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                        }}
+                        className="social-bubble group"
+                        title={p.platform}
+                      >
+                        <Icon size={22} className="relative z-10" />
+                        {/* Hover color fill */}
+                        <div className={`absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${styleClass}`} style={{ zIndex: 0 }} />
+                        <Icon size={22} className="absolute z-10 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                        
+                        {isGated && (
+                          <div className="absolute inset-0 bg-white/80 rounded-full flex items-center justify-center backdrop-blur-sm z-20">
+                            <Lock size={14} className="text-gray-500" />
+                          </div>
+                        )}
+                      </a>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        </div>
 
       </main>
 
       {/* ═══ SELECTED WORK MODAL ═══ */}
       {selectedWork && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#08060e]/90 backdrop-blur-md" onClick={() => setSelectedWork(null)}>
-          <div className="glow-glass p-6 max-w-2xl w-full relative border-purple-500/20 shadow-[0_0_60px_rgba(168,85,247,0.15)]" onClick={e => e.stopPropagation()}>
-            <button onClick={() => setSelectedWork(null)} className="absolute top-4 right-4 p-2 text-purple-400/50 hover:text-white transition-colors z-10">
-              <X size={20} />
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8 bg-white/80 backdrop-blur-xl animate-fadeIn" onClick={() => setSelectedWork(null)}>
+          <div className="bg-white p-2 rounded-[32px] max-w-4xl w-full relative shadow-[0_30px_100px_rgba(0,0,0,0.15)] animate-zoomIn" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setSelectedWork(null)} className="absolute -top-12 right-0 sm:top-6 sm:right-6 p-3 bg-white text-gray-500 hover:text-gray-900 rounded-full shadow-md transition-all hover:scale-110 z-10">
+              <X size={20} strokeWidth={3} />
             </button>
-            {selectedWork.external_url ? (
-              <div className="w-full aspect-video rounded-[12px] overflow-hidden bg-black mb-4">
-                <iframe src={getEmbedUrl(selectedWork.external_url)} className="w-full h-full" allow="autoplay; encrypted-media" allowFullScreen />
+            <div className="bg-gray-50 rounded-[28px] overflow-hidden flex flex-col w-full h-full">
+              {selectedWork.external_url ? (
+                <div className="w-full aspect-video bg-black">
+                  <iframe src={getEmbedUrl(selectedWork.external_url)} className="w-full h-full" allow="autoplay; encrypted-media" allowFullScreen />
+                </div>
+              ) : getThumbnail(selectedWork) ? (
+                <div className="w-full aspect-video bg-black">
+                  <img src={getThumbnail(selectedWork)} className="w-full h-full object-cover" alt={selectedWork.title} />
+                </div>
+              ) : null}
+              <div className="p-8">
+                <h3 className="text-2xl font-extrabold text-gray-900 mb-2">{selectedWork.title}</h3>
+                {selectedWork.description && <p className="text-base text-gray-600 leading-relaxed">{selectedWork.description}</p>}
               </div>
-            ) : getThumbnail(selectedWork) ? (
-              <div className="w-full aspect-video rounded-[12px] overflow-hidden bg-black mb-4">
-                <img src={getThumbnail(selectedWork)} className="w-full h-full object-cover" alt={selectedWork.title} />
-              </div>
-            ) : null}
-            <h3 className="text-lg font-bold text-white mb-1">{selectedWork.title}</h3>
-            {selectedWork.description && <p className="text-[13px] text-purple-100/50 font-light">{selectedWork.description}</p>}
+            </div>
           </div>
         </div>
       )}
 
       {/* ═══ FOMO MODAL ═══ */}
       {showFomoModal && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#08060e]/90 backdrop-blur-md">
-          <div className="glow-glass p-8 max-w-sm w-full relative text-center border-purple-500/30 shadow-[0_0_60px_rgba(168,85,247,0.2)]">
-            <button onClick={() => setShowFomoModal(false)} className="absolute top-4 right-4 p-2 text-purple-400/50 hover:text-white transition-colors">
-              <X size={20} />
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-white/80 backdrop-blur-xl animate-fadeIn">
+          <div className="bg-white border border-gray-100 rounded-[40px] p-10 max-w-sm w-full shadow-[0_30px_100px_rgba(0,0,0,0.12)] relative text-center animate-zoomIn">
+            <button onClick={() => setShowFomoModal(false)} className="absolute top-6 right-6 p-2 text-gray-400 hover:text-gray-900 transition-colors">
+              <X size={24} />
             </button>
-            <div className="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/25 flex items-center justify-center mx-auto mb-5">
-              <Lock size={24} className="text-purple-400" />
+            <div className="w-20 h-20 rounded-[28px] bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center mx-auto mb-6 shadow-inner">
+              <Activity size={32} className="text-purple-600 animate-pulse" />
             </div>
-            <h3 className="text-xl font-bold text-white tracking-tight mb-2">Unlock Insights</h3>
-            <p className="text-[13px] text-purple-100/50 font-light mb-6 leading-relaxed">Upgrade to view live scan metrics and audience analytics.</p>
-            <button onClick={() => window.location.href = '/#pricing'} className="w-full py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-bold text-[11px] uppercase tracking-[0.15em] rounded-xl transition-all hover:shadow-[0_0_25px_rgba(168,85,247,0.4)]">
+            <h3 className="text-2xl font-extrabold text-gray-900 tracking-tight mb-3">Unlock Insights</h3>
+            <p className="text-sm text-gray-500 font-medium mb-8 leading-relaxed">Upgrade to full tier to view real-time profile scans and audience telemetry.</p>
+            <button onClick={() => window.location.href = '/#pricing'} className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-[12px] uppercase tracking-widest rounded-full transition-all shadow-lg hover:shadow-purple-500/30 hover:-translate-y-1">
               Claim Tee to Unlock
             </button>
           </div>
