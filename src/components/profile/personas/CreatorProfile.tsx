@@ -1636,7 +1636,7 @@ export function CreatorProfile({
                           onError={(e) => { e.currentTarget.style.display = 'none'; }}
                         />
                       ) : (() => {
-                        const isUploadedVideo = w.url && typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i);
+                        const isUploadedVideo = w.type === 'video' || (w.url && typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i));
                         if (isUploadedVideo) {
                           return (
                             <video 
@@ -1762,9 +1762,10 @@ export function CreatorProfile({
                   typeof url === "string" &&
                   url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
                 const isUploadedVideo =
-                  url &&
+                  selectedWork.type === 'video' ||
+                  (url &&
                   typeof url === "string" &&
-                  url.match(/\.(mp4|webm|ogg|mov)$/i);
+                  url.match(/\.(mp4|webm|ogg|mov)$/i));
 
                 if (isVideoEmbed) {
                   return (
@@ -1834,13 +1835,15 @@ export function CreatorProfile({
                     typeof url === "string" &&
                     url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
                   const isUploadedVideo =
-                    url &&
+                    selectedWork.type === 'video' ||
+                    (url &&
                     typeof url === "string" &&
-                    url.match(/\.(mp4|webm|ogg|mov)$/i);
+                    url.match(/\.(mp4|webm|ogg|mov)$/i));
                   const isImageFile =
-                    url &&
+                    selectedWork.type === 'image' ||
+                    (url &&
                     typeof url === "string" &&
-                    url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i);
+                    url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i));
 
                   const isExternalWebLink =
                     url &&
