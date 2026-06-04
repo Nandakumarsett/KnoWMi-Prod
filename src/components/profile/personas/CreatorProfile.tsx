@@ -1272,10 +1272,10 @@ export function CreatorProfile({
           className="mb-12 stagger-fade"
           style={{ animationDelay: "0.1s" }}
         >
-          <div className="grid grid-cols-2 sm:flex sm:flex-wrap justify-center sm:justify-between gap-8 sm:gap-2 md:gap-4 text-center w-full max-w-2xl mx-auto px-2">
+          <div className="flex flex-wrap justify-center sm:justify-around gap-6 sm:gap-4 md:gap-6 text-center w-full max-w-2xl mx-auto px-4">
             {/* Impressions */}
             <div
-              className={`stat-item flex-1 min-w-[100px] ${isFreeProfile ? "cursor-pointer" : ""}`}
+              className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
               onClick={() => isFreeProfile && setShowFomoModal(true)}
             >
               <div
@@ -1289,7 +1289,7 @@ export function CreatorProfile({
             </div>
 
             {/* Location */}
-            <div className="stat-item flex-1 min-w-[80px]">
+            <div className="stat-item">
               <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
                 {data.location || "Global"}
               </div>
@@ -1300,7 +1300,7 @@ export function CreatorProfile({
 
             {/* Audience Age */}
             {data.audience_age_group && (
-              <div className="stat-item flex-1 min-w-[80px]">
+              <div className="stat-item">
                 <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
                   {data.audience_age_group}
                 </div>
@@ -1312,7 +1312,7 @@ export function CreatorProfile({
 
             {/* Gender Split */}
             {data.audience_gender_split && (
-              <div className="stat-item flex-1 min-w-[80px]">
+              <div className="stat-item">
                 <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
                   {data.audience_gender_split}
                 </div>
@@ -1324,7 +1324,7 @@ export function CreatorProfile({
 
             {/* Visual Style — shown only if gender split is absent */}
             {data.visual_style && !data.audience_gender_split && (
-              <div className="stat-item flex-1 min-w-[80px]">
+              <div className="stat-item">
                 <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
                   {data.visual_style}
                 </div>
@@ -1336,7 +1336,7 @@ export function CreatorProfile({
 
             {/* Posting Frequency — shown only if audience_age_group is absent */}
             {data.posting_frequency && !data.audience_age_group && (
-              <div className="stat-item flex-1 min-w-[80px]">
+              <div className="stat-item">
                 <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
                   {data.posting_frequency}
                 </div>
