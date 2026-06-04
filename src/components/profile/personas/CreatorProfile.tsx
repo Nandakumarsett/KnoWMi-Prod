@@ -1643,6 +1643,8 @@ export function CreatorProfile({
                               src={getAssetUrl(w.url)} 
                               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-10"
                               muted
+                              autoPlay
+                              loop
                               playsInline
                             />
                           );
