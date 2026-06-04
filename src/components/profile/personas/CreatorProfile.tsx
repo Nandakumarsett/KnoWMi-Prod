@@ -1214,7 +1214,7 @@ export function CreatorProfile({
 
           {/* Social Links Row */}
           {data.platforms && data.platforms.length > 0 && (
-            <div className="mt-6 flex flex-wrap justify-center sm:justify-start gap-3 px-2">
+            <div className="mt-8 flex flex-wrap justify-center sm:justify-start gap-4 px-2">
               {data.platforms.map((p) => {
                 const platform = p.platform?.toLowerCase();
                 const Icon = PLATFORM_ICONS[platform] || Share2;
@@ -1239,11 +1239,11 @@ export function CreatorProfile({
                       if (!isGated)
                         window.open(ensureAbsoluteUrl(p.url), "_blank");
                     }}
-                    className="w-10 h-10 rounded-full flex items-center justify-center relative overflow-hidden group shadow-sm bg-white border border-gray-100 hover:shadow-md transition-all duration-300 hover:-translate-y-1"
+                    className="w-14 h-14 rounded-full flex items-center justify-center relative overflow-hidden group shadow-md bg-white border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5"
                     title={`${p.platform}${p.followers ? ` \u00b7 ${p.followers}` : ""}`}
                   >
                     <Icon
-                      size={20}
+                      size={26}
                       className="relative z-10 text-gray-700 group-hover:text-white transition-colors duration-300"
                     />
                     <div
