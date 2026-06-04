@@ -798,44 +798,42 @@ export function CreatorProfile({ profile, stats }: { profile: ProfileData, stats
             <div className="w-full h-40 sm:h-56 rounded-[40px] bg-gradient-to-r from-fuchsia-100 to-cyan-100 shadow-md stagger-fade" style={{ animationDelay: '0s' }} />
           )}
 
-          {/* Overlapping Content Container */}
-          <div className="relative -mt-20 sm:-mt-28 px-4 sm:px-12 flex flex-col items-center sm:items-start text-center sm:text-left stagger-fade" style={{ animationDelay: '0.1s' }}>
+          {/* Content Container */}
+          <div className="relative px-4 sm:px-12 flex flex-col sm:flex-row items-center sm:items-end gap-6 sm:gap-8 w-full stagger-fade" style={{ animationDelay: '0.1s' }}>
             
-            <div className="flex flex-col sm:flex-row items-center sm:items-end gap-6 sm:gap-8 w-full">
-              {/* Avatar in fluid organic shape */}
-              <div className="relative shrink-0 -mt-8 sm:-mt-0 group">
-                <div className="w-36 h-36 sm:w-44 sm:h-44 bg-white p-2 rounded-[35px] shadow-2xl rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
-                  <div className="w-full h-full rounded-[28px] overflow-hidden">
-                    {!avatarError && profile.avatar_url ? (
-                      <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover" onError={() => setAvatarError(true)} />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-fuchsia-500 to-purple-600 text-white font-bold text-4xl">
-                        {profile.display_name?.charAt(0).toUpperCase() || 'U'}
-                      </div>
-                    )}
-                  </div>
+            {/* Avatar - Negative margin to overlap the banner */}
+            <div className="relative shrink-0 -mt-16 sm:-mt-24 group z-10">
+              <div className="w-36 h-36 sm:w-44 sm:h-44 bg-white p-2 rounded-[35px] shadow-2xl rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
+                <div className="w-full h-full rounded-[28px] overflow-hidden">
+                  {!avatarError && profile.avatar_url ? (
+                    <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover" onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-fuchsia-500 to-purple-600 text-white font-bold text-4xl">
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
                 </div>
-                {/* Glowing decorative dot */}
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-[#00C3FF] to-[#9933FF] border-4 border-white shadow-lg animate-pulse" />
               </div>
+              {/* Glowing decorative dot */}
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-[#00C3FF] to-[#9933FF] border-4 border-white shadow-lg animate-pulse" />
+            </div>
 
-              {/* Name & Title */}
-              <div className="flex-grow pt-4 sm:pt-0 sm:pb-4 bg-white/40 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none p-6 sm:p-0 rounded-[32px] sm:rounded-none shadow-sm sm:shadow-none border border-white/50 sm:border-none">
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500 mb-2">
-                  {data.type || 'CREATIVE VISIONARY'}
+            {/* Name & Title - Sits below the banner */}
+            <div className="flex-grow pt-4 sm:pt-6 sm:pb-2 text-center sm:text-left w-full">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500 mb-2">
+                {data.type || 'CREATIVE VISIONARY'}
+              </p>
+              <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-gradient-glow mb-2" style={{ paddingBottom: '0.1em' }}>
+                {profile.display_name}
+              </h1>
+              {profile.is_verified && (
+                <div className="inline-flex mb-3"><VerifiedBadge isVerified={profile.is_verified} accentColor="#9933FF" /></div>
+              )}
+              {profile.bio && (
+                <p className="text-[15px] text-gray-600 font-medium leading-relaxed max-w-xl mx-auto sm:mx-0">
+                  {profile.bio}
                 </p>
-                <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-gradient-glow mb-2" style={{ paddingBottom: '0.1em' }}>
-                  {profile.display_name}
-                </h1>
-                {profile.is_verified && (
-                  <div className="inline-flex mb-3"><VerifiedBadge isVerified={profile.is_verified} accentColor="#9933FF" /></div>
-                )}
-                {profile.bio && (
-                  <p className="text-[15px] text-gray-600 font-medium leading-relaxed max-w-xl">
-                    {profile.bio}
-                  </p>
-                )}
-              </div>
+              )}
             </div>
 
           </div>
