@@ -96,10 +96,10 @@ export function CreatorProfile({
     if (work.thumbnail_url) return getAssetUrl(work.thumbnail_url);
     if (work.img) return getAssetUrl(work.img);
 
-    if (work.url && typeof work.url === "string") {
+    if (work.url && typeof work.url === "string" && work.type !== "video") {
       const isVideoFile = work.url.match(/\.(mp4|webm|ogg|mov)$/i);
       const isImageFile = work.url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i);
-      const isSupabaseUpload = work.url.includes("supabase.co");
+      const isSupabaseUpload = work.url.includes("supabase.co") || work.url.startsWith("/content");
 
       if (
         isImageFile ||
