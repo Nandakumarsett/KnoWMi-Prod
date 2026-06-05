@@ -183,6 +183,11 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
                <label className={labelClasses}>Contact Email</label>
                <input type="email" value={data.contact_email || ''} onChange={e => updateField('contact_email', e.target.value)} placeholder="hello@yourbrand.com" className={inputBaseClasses} />
             </div>
+            <div className="pt-4">
+               <label className={labelClasses}>WhatsApp Number (Optional)</label>
+               <input type="tel" value={data.contact_whatsapp || ''} onChange={e => updateField('contact_whatsapp', e.target.value)} placeholder="e.g. +1234567890" className={inputBaseClasses} />
+               <p className="text-[10px] text-neutral-400 mt-1">Include country code without spaces or dashes</p>
+            </div>
           </div>
         </section>
 
@@ -199,6 +204,11 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
           </div>
 
           <div className="space-y-4">
+            <div className="relative">
+              <label className={labelClasses}>Collaboration Status</label>
+              <input type="text" value={data.collab_types || ''} onChange={e => updateField('collab_types', e.target.value.slice(0, 30))} placeholder="e.g. Open to Freelancer, Open to Opportunities" className={inputBaseClasses} />
+              <span className={charCountClasses((data.collab_types || '').length, 30)}>{(data.collab_types || '').length}/30</span>
+            </div>
             <div>
               <div className="flex justify-between items-end mb-1.5">
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-500 m-0">Collab Types (Max 4)</label>
