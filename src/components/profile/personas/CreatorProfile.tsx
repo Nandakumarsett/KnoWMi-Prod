@@ -1288,13 +1288,13 @@ export function CreatorProfile({
               </div>
             </div>
 
-            {/* Location */}
+            {/* Most Reached Location */}
             <div className="stat-item">
               <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
-                {data.location || "Global"}
+                {data.audience_top_location || "Global"}
               </div>
               <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                Base
+                Most Reached
               </div>
             </div>
 
@@ -1410,14 +1410,14 @@ export function CreatorProfile({
                 </div>
               )}
 
-              {/* Top Audience Location Card */}
-              {data.audience_top_location && (
+              {/* Creator Base Card */}
+              {data.location && (
                 <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px] lg:col-span-2">
                   <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mb-1">
-                    Top Location
+                    Base
                   </div>
                   <div className="text-xl font-extrabold text-gray-900">
-                    {data.audience_top_location}
+                    {data.location}
                   </div>
                 </div>
               )}

@@ -263,7 +263,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
              <span className={charCountClasses((data.location || '').length, 20)}>{(data.location || '').length}/20</span>
            </div>
            <div className="relative">
-             <label className={labelClasses}>Audience Top Location</label>
+             <label className={labelClasses}>Most Reached Location</label>
              <input type="text" value={data.audience_top_location || ''} onChange={e => updateField('audience_top_location', e.target.value.slice(0, 20))} placeholder="e.g. Bengaluru" className={inputBaseClasses} />
              <span className={charCountClasses((data.audience_top_location || '').length, 20)}>{(data.audience_top_location || '').length}/20</span>
            </div>
