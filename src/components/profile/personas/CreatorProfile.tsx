@@ -475,12 +475,14 @@ export function CreatorProfile({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {data.works.map((w, i) => {
                     const thumb = getThumbnail(w);
-                    const isUploadedVideo = w.type === 'video' || (w.url && typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i));
+                    const isUploadedVideo = !!w.url && (w.type === 'video' || (typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i)));
+                    const isLinkOnly = !thumb && !isUploadedVideo && w.external_url;
+                    
                     return (
                       <div
                         key={i}
                         onClick={() => {
-                          if (!thumb && !isUploadedVideo && w.external_url) {
+                          if (isLinkOnly) {
                             window.open(w.external_url, '_blank');
                           } else {
                             setSelectedWork(w);
@@ -497,10 +499,20 @@ export function CreatorProfile({
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             alt={w.title}
                           />
-                        ) : (
+                        ) : isLinkOnly ? (
                           <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 group-hover:from-indigo-200 group-hover:to-purple-200 transition-colors z-10">
-                            <Globe size={32} className="text-purple-400 mb-2 group-hover:scale-110 transition-transform" />
-                            <span className="text-[10px] font-black text-purple-600 uppercase tracking-widest px-4 text-center">Click to open link</span>
+                            {w.type === 'video' ? (
+                              <Play size={32} className="text-purple-400 mb-2 group-hover:scale-110 transition-transform" />
+                            ) : (
+                              <Globe size={32} className="text-purple-400 mb-2 group-hover:scale-110 transition-transform" />
+                            )}
+                            <span className="text-[10px] font-black text-purple-600 uppercase tracking-widest px-4 text-center">
+                              {w.type === 'video' ? 'Click to open video' : 'Click to open link'}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center bg-neutral-100">
+                             <Camera size={40} className="text-neutral-300 opacity-60" />
                           </div>
                         )}
                         <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent z-20">
@@ -1612,12 +1624,14 @@ export function CreatorProfile({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {data.works.map((w, i) => {
                 const thumb = getThumbnail(w);
-                const isUploadedVideo = w.type === 'video' || (w.url && typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i));
+                const isUploadedVideo = !!w.url && (w.type === 'video' || (typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i)));
+                const isLinkOnly = !thumb && !isUploadedVideo && w.external_url;
+                
                 return (
                   <div
                     key={i}
                     onClick={() => {
-                      if (!thumb && !isUploadedVideo && w.external_url) {
+                      if (isLinkOnly) {
                         window.open(w.external_url, '_blank');
                       } else {
                         setSelectedWork(w);
@@ -1626,10 +1640,16 @@ export function CreatorProfile({
                     className="group collab-card overflow-hidden cursor-pointer"
                   >
                     <div className="w-full aspect-video relative overflow-hidden bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center">
-                      {!thumb && !isUploadedVideo && w.external_url ? (
+                      {isLinkOnly ? (
                         <div className="flex flex-col items-center justify-center z-10 text-purple-600 transition-transform group-hover:scale-105">
-                          <Globe size={40} className="mb-2 opacity-80" />
-                          <span className="text-[10px] font-black uppercase tracking-widest px-4 text-center">Click to open link</span>
+                          {w.type === 'video' ? (
+                            <Play size={40} className="mb-2 opacity-80" />
+                          ) : (
+                            <Globe size={40} className="mb-2 opacity-80" />
+                          )}
+                          <span className="text-[10px] font-black uppercase tracking-widest px-4 text-center">
+                            {w.type === 'video' ? 'Click to open video' : 'Click to open link'}
+                          </span>
                         </div>
                       ) : (
                         <Camera size={40} className="text-purple-300 opacity-60 absolute" />
