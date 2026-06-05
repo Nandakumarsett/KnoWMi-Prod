@@ -1493,7 +1493,7 @@ export function CreatorProfile({
                     {data.turnaround_time && (
                       <div className="space-y-1">
                         <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700">
-                          Turnaround
+                          Turnaround Time
                         </div>
                         <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
                           {data.turnaround_time}
