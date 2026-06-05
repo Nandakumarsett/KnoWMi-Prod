@@ -82,7 +82,7 @@ export function CreatorProfile({
     ) {
       const url = extUrl;
       const ytMatch = url.match(
-        /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{10,12})/i,
+        /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{10,12})/i,
       );
       if (ytMatch)
         return `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`;
@@ -116,7 +116,7 @@ export function CreatorProfile({
   const getEmbedUrl = (url: string) => {
     if (!url) return "";
     const ytMatch = url.match(
-      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{10,12})/i,
+      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{10,12})/i,
     );
     if (ytMatch)
       return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&end=10`;
