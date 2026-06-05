@@ -1496,7 +1496,7 @@ export function CreatorProfile({
                           Turnaround Time
                         </div>
                         <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-                          {data.turnaround_time}
+                          {/^[0-9\s-]+$/.test(data.turnaround_time) ? `${data.turnaround_time} Days` : data.turnaround_time}
                         </div>
                       </div>
                     )}
