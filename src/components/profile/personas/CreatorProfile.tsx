@@ -476,7 +476,7 @@ export function CreatorProfile({
                   {data.works.map((w, i) => {
                     const thumb = getThumbnail(w);
                     const isUploadedVideo = !!w.url && (w.type === 'video' || (typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i)));
-                    const isLinkOnly = !thumb && !isUploadedVideo && w.external_url;
+                    const isLinkOnly = !w.url && !!w.external_url;
                     
                     return (
                       <div
@@ -1625,7 +1625,7 @@ export function CreatorProfile({
               {data.works.map((w, i) => {
                 const thumb = getThumbnail(w);
                 const isUploadedVideo = !!w.url && (w.type === 'video' || (typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i)));
-                const isLinkOnly = !thumb && !isUploadedVideo && w.external_url;
+                const isLinkOnly = !w.url && !!w.external_url;
                 
                 return (
                   <div
