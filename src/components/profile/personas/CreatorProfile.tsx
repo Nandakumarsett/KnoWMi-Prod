@@ -1311,17 +1311,6 @@ export function CreatorProfile({
             )}
 
 
-            {/* Visual Style */}
-            {data.visual_style && (
-              <div className="stat-item">
-                <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
-                  {data.visual_style}
-                </div>
-                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                  Aesthetic
-                </div>
-              </div>
-            )}
 
             {/* Posting Frequency — shown only if audience_age_group is absent */}
             {data.posting_frequency && !data.audience_age_group && (
