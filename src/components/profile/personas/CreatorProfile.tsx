@@ -1310,35 +1310,9 @@ export function CreatorProfile({
               </div>
             )}
 
-            {/* Gender Split */}
-            {data.audience_gender_split && (
-              <div className="stat-item">
-                <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
-                  {(() => {
-                    const text = data.audience_gender_split;
-                    const parts = text.split(/\s*-\s*/);
-                    if (parts.length === 2) {
-                      const p1 = parts[0].replace(/\s+/g, '');
-                      const p2 = parts[1].replace(/\s+/g, '');
-                      return (
-                        <div className="flex items-center justify-center gap-1.5">
-                          <span>{p1}</span>
-                          <span className="text-gray-300 font-medium text-sm sm:text-base">/</span>
-                          <span>{p2}</span>
-                        </div>
-                      );
-                    }
-                    return text;
-                  })()}
-                </div>
-                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                  Gender Split
-                </div>
-              </div>
-            )}
 
-            {/* Visual Style — shown only if gender split is absent */}
-            {data.visual_style && !data.audience_gender_split && (
+            {/* Visual Style */}
+            {data.visual_style && (
               <div className="stat-item">
                 <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
                   {data.visual_style}
