@@ -1501,14 +1501,14 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         <div className="absolute top-0 bottom-0 left-[2.5rem] sm:left-[3.5rem] w-[2px] bg-[#c53030]/40 pointer-events-none z-0" />
         <div className="absolute top-0 bottom-0 left-[2.7rem] sm:left-[3.7rem] w-[1px] bg-[#c53030]/25 pointer-events-none z-0" />
 
-        <main className={`relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pb-12 flex flex-col gap-0 nb-animate ${data.featured_work_url ? 'pt-16 sm:pt-20' : 'pt-6'}`}>
+        <main className={`relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pb-12 flex flex-col gap-0 nb-animate ${data.featured_work_url ? 'pt-32 sm:pt-48' : 'pt-6'}`}>
           
 
 
-          {/* ═══ HEADER: Avatar + Name + Bio + Stats — all compact ═══ */}
-          <div className="flex flex-col sm:flex-row items-start gap-5 mb-2">
+          {/* ═══ HEADER: Avatar + Name + Bio + Stats — Centered ═══ */}
+          <div className="flex flex-col items-center text-center gap-5 mb-2 z-10 relative">
             {/* Taped polaroid */}
-            <div className="relative shrink-0 rotate-[-2deg] group">
+            <div className={`relative shrink-0 rotate-[-2deg] group ${data.featured_work_url ? 'mt-[-80px] sm:mt-[-120px]' : ''}`}>
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-[#FEF08A]/60 washi-tape border border-yellow-300/20 shadow-sm rotate-[3deg] z-20 rounded-sm" />
               <div className="w-28 h-36 sm:w-32 sm:h-44 bg-white p-2 pb-8 shadow-[1px_2px_8px_rgba(0,0,0,0.12)] transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">
                 {!avatarError && profile.avatar_url ? (
@@ -1521,29 +1521,28 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 <div className="absolute bottom-1.5 left-0 right-0 text-center nb-pencil text-[13px] nb-handwriting font-medium">📸 me!</div>
               </div>
             </div>
-            
             {/* Name + Title + Year + Mood */}
-            <div className={`flex-grow min-w-0 ${data.featured_work_url ? 'pt-2 sm:pt-44' : 'pt-1 sm:pt-3'}`}>
+            <div className={`flex flex-col items-center min-w-0 ${data.featured_work_url ? 'mt-1' : 'pt-1 sm:pt-3'}`}>
               <h1 className="text-4xl sm:text-5xl font-black nb-ink tracking-tight leading-tight nb-section-title" style={{ fontSize: 'clamp(2.2rem, 6vw, 3.2rem)' }}>
                 {profile.display_name} {data.mood && <span className="text-2xl">{data.mood}</span>}
               </h1>
-              <p className="text-[#b91c1c] font-bold text-xl nb-handwriting flex items-center gap-1.5 mt-1 leading-[30px]">
+              <p className="text-[#b91c1c] font-bold text-xl nb-handwriting flex items-center justify-center gap-1.5 mt-1 leading-[30px]">
                 <GraduationCap size={20} /> {data.course } {data.university ? `@ ${data.university}` : ''}
               </p>
               {(data.year || data.batch_year) && (
-                <p className="text-gray-700 text-xl nb-handwriting font-semibold leading-[30px]">
+                <p className="text-gray-700 text-xl nb-handwriting font-semibold leading-[30px] flex items-center justify-center">
                   {data.year ? `Year ${data.year}` : ''}{data.year && data.batch_year ? ' · ' : ''}{data.batch_year ? `Batch of ${data.batch_year}` : ''}
                 </p>
               )}
               {profile.bio && (
-                <p className="nb-ink text-2xl leading-[34px] nb-handwriting font-medium mt-2">"{profile.bio}"</p>
+                <p className="nb-ink text-2xl leading-[34px] nb-handwriting font-medium mt-2 max-w-2xl">"{profile.bio}"</p>
               )}
             </div>
           </div>
 
-          {/* CTA + Availability — side by side */}
-          <div className="flex flex-wrap items-center gap-3 mb-1">
-            <div className="max-w-[220px] z-20 shrink-0">
+          {/* CTA + Availability — centered */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-4 w-full mt-2">
+            <div className="z-20 shrink-0">
               <ProfileCTAs profile={profile} accentColor="#1e3a5f" />
             </div>
             {(data.resume_url || data.website) && (
