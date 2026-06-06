@@ -1283,7 +1283,7 @@ export function CreatorProfile({
   // ----------------------------------------------------
   if (activeTheme === "neon") {
     return (
-      <div className="w-full pb-24 relative bg-[#0D0B1A] text-white font-sans overflow-x-hidden min-h-screen">
+      <div className="w-full pb-8 relative bg-[#0D0B1A] text-white font-sans overflow-x-hidden min-h-screen">
         {/* Neon Background Accents & Banner */}
         {data.featured_work_url && (
           <div className="relative w-full h-48 sm:h-72 overflow-hidden shadow-[0_0_30px_rgba(255,45,120,0.2)] z-10">
@@ -1432,6 +1432,45 @@ export function CreatorProfile({
             )}
           </div>
 
+          {/* Social Links */}
+          {Array.isArray(data.platforms) && data.platforms.length > 0 && (
+            <div className="w-full text-center mb-10 mt-6">
+              <div className="flex flex-wrap gap-5 justify-center">
+                {data.platforms.map((p) => {
+                  const platform = p.platform?.toLowerCase();
+                  const Icon = PLATFORM_ICONS[platform] || Share2;
+                  return (
+                    <a
+                      key={p.platform}
+                      href={ensureAbsoluteUrl(p.url)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        handleGatedClick(e, p.url, () =>
+                          trackLinkClick(
+                            profile.id,
+                            p.platform || "unknown",
+                            p.url,
+                          ),
+                        );
+                        if (!isGated)
+                          window.open(ensureAbsoluteUrl(p.url), "_blank");
+                      }}
+                      className="w-12 h-12 rounded-full border border-[#FF2D78]/50 flex items-center justify-center bg-black/50 text-[#FF2D78] hover:bg-[#FF2D78] hover:text-white hover:shadow-[0_0_20px_rgba(255,45,120,0.8)] transition-all cursor-pointer relative"
+                    >
+                      <Icon size={20} />
+                      {isGated && (
+                        <div className="absolute inset-0 bg-black/80 rounded-full flex items-center justify-center">
+                          <Lock size={12} className="text-white" />
+                        </div>
+                      )}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* System Status / Collaboration */}
           {(data.collab_types || data.availability_status || data.rate_range_min || data.turnaround_time || (Array.isArray(data.collab_types_tags) && data.collab_types_tags.length > 0)) && (
             <div className="w-full max-w-3xl mb-12 bg-black/40 border border-purple-500/30 rounded-2xl p-6 sm:p-8 shadow-[0_0_30px_rgba(153,51,255,0.1)]">
@@ -1545,7 +1584,18 @@ export function CreatorProfile({
                       }}
                       className="group relative aspect-square rounded-xl overflow-hidden bg-black/50 border border-white/10 cursor-pointer hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all"
                     >
-                      {thumb ? (
+                      {isLinkOnly && !thumb ? (
+                        <div className="w-full h-full flex flex-col items-center justify-center bg-[#1A1A2E] z-10 text-cyan-500 transition-transform group-hover:scale-105">
+                          {w.type === 'video' ? (
+                            <Play size={40} className="mb-2 opacity-80" />
+                          ) : (
+                            <Globe size={40} className="mb-2 opacity-80" />
+                          )}
+                          <span className="text-[10px] font-black uppercase tracking-widest px-4 text-center mt-2">
+                            {w.type === 'video' ? 'OPEN VIDEO' : 'OPEN LINK'}
+                          </span>
+                        </div>
+                      ) : thumb ? (
                         <img src={getAssetUrl(thumb)} alt={w.title || "Showcase"} className="w-full h-full object-cover filter contrast-125 saturate-50 group-hover:saturate-100 transition-all" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-[#1A1A2E]">
@@ -1553,7 +1603,7 @@ export function CreatorProfile({
                         </div>
                       )}
                       
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none" />
                       
                       <div className="absolute bottom-0 left-0 right-0 p-4">
                         <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest line-clamp-1 group-hover:text-white transition-colors">
@@ -1569,45 +1619,6 @@ export function CreatorProfile({
                         </div>
                       )}
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Social Links */}
-          {Array.isArray(data.platforms) && data.platforms.length > 0 && (
-            <div className="w-full text-center mb-10">
-              <div className="flex flex-wrap gap-5 justify-center">
-                {data.platforms.map((p) => {
-                  const platform = p.platform?.toLowerCase();
-                  const Icon = PLATFORM_ICONS[platform] || Share2;
-                  return (
-                    <a
-                      key={p.platform}
-                      href={ensureAbsoluteUrl(p.url)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => {
-                        handleGatedClick(e, p.url, () =>
-                          trackLinkClick(
-                            profile.id,
-                            p.platform || "unknown",
-                            p.url,
-                          ),
-                        );
-                        if (!isGated)
-                          window.open(ensureAbsoluteUrl(p.url), "_blank");
-                      }}
-                      className="w-12 h-12 rounded-full border border-[#FF2D78]/50 flex items-center justify-center bg-black/50 text-[#FF2D78] hover:bg-[#FF2D78] hover:text-white hover:shadow-[0_0_20px_rgba(255,45,120,0.8)] transition-all cursor-pointer relative"
-                    >
-                      <Icon size={20} />
-                      {isGated && (
-                        <div className="absolute inset-0 bg-black/80 rounded-full flex items-center justify-center">
-                          <Lock size={12} className="text-white" />
-                        </div>
-                      )}
-                    </a>
                   );
                 })}
               </div>
