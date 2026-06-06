@@ -31,6 +31,7 @@ import {
   X,
   Lock,
   QrCode,
+  Image,
 } from "lucide-react";
 import { trackLinkClick } from "../../../lib/analytics/track";
 import { useGatedLink } from "../../../hooks/useGatedLink";
