@@ -1524,8 +1524,11 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             {/* Name + Title + Year + Mood */}
             <div className={`flex flex-col items-center min-w-0 ${data.featured_work_url ? 'mt-1' : 'pt-1 sm:pt-3'}`}>
               <h1 className="text-4xl sm:text-5xl font-black nb-ink tracking-tight leading-tight nb-section-title" style={{ fontSize: 'clamp(2.2rem, 6vw, 3.2rem)' }}>
-                {profile.display_name} {data.mood && <span className="text-2xl">{data.mood}</span>}
+                {profile.display_name}
               </h1>
+              {data.mood && (
+                <div className="text-2xl font-bold nb-ink mt-1 mb-1" style={{ fontFamily: "'Permanent Marker', cursive" }}>{data.mood}</div>
+              )}
               <p className="text-[#b91c1c] font-bold text-xl nb-handwriting flex items-center justify-center gap-1.5 mt-1 leading-[30px]">
                 <GraduationCap size={20} /> {data.course } {data.university ? `@ ${data.university}` : ''}
               </p>
@@ -1541,10 +1544,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           </div>
 
           {/* CTA + Availability — centered */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-4 w-full mt-2">
-            <div className="z-20 shrink-0">
-              <ProfileCTAs profile={profile} accentColor="#1e3a5f" />
-            </div>
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-4 w-full mt-2">
             {(data.resume_url || data.website) && (
               <div className="flex flex-wrap gap-4 items-center">
                 {data.resume_url && (
