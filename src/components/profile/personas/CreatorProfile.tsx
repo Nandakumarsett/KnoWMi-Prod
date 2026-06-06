@@ -986,17 +986,196 @@ export function CreatorProfile({
             )}
 
             {/* About / Narrative */}
-            {data.about && (
+            {(data.about || data.bio) && (
               <div>
                 <h3 className="font-black text-2xl uppercase tracking-tighter mb-4 border-b-4 border-black pb-2">
                   NARRATIVE
                 </h3>
                 <p className="text-xs font-bold leading-relaxed">
-                  {data.about}
+                  {data.about || data.bio}
                 </p>
               </div>
             )}
           </div>
+
+          {/* Demographics */}
+          {(data.audience_age_group || (data.audience_interests && data.audience_interests.length > 0)) && (
+            <div className="w-full mb-12">
+              <h3 className="font-black text-2xl uppercase tracking-tighter mb-6 border-b-4 border-black pb-2 text-left">
+                DEMOGRAPHICS
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                {data.audience_age_group && (
+                  <div className="border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
+                    <span className="text-[10px] font-black uppercase tracking-widest block mb-1">AGE GROUP</span>
+                    <span className="text-xl font-black">{data.audience_age_group}</span>
+                  </div>
+                )}
+                {data.audience_interests && data.audience_interests.length > 0 && (
+                  <div className="sm:col-span-2 border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white flex flex-col justify-center">
+                    <span className="text-[10px] font-black uppercase tracking-widest block mb-3">TOP INTERESTS</span>
+                    <div className="flex flex-wrap gap-2">
+                      {data.audience_interests.map((int: string) => (
+                        <span key={int} className="px-3 py-1 bg-black text-white text-[10px] font-black uppercase tracking-widest">
+                          {int}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Past Collaborations */}
+          {data.past_collaborations && data.past_collaborations.length > 0 && (
+            <div className="w-full mb-12">
+              <h3 className="font-black text-2xl uppercase tracking-tighter mb-6 border-b-4 border-black pb-2 text-left">
+                CLIENTS
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {data.past_collaborations.map((collab: any, i: number) => (
+                  <a key={i} href={collab.link ? ensureAbsoluteUrl(collab.link) : undefined} target={collab.link ? "_blank" : undefined} rel={collab.link ? "noopener noreferrer" : undefined} className={`border-2 border-black p-4 text-center flex flex-col items-center justify-center bg-white ${collab.link ? 'hover:bg-black hover:text-white transition-colors group cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]' : ''}`}>
+                    {collab.logo_url ? (
+                      <div className="w-12 h-12 mb-3 bg-white border border-black p-1">
+                        <img src={getAssetUrl(collab.logo_url)} className="w-full h-full object-contain filter grayscale group-hover:invert" alt={collab.brand_name} />
+                      </div>
+                    ) : (
+                      <Target size={24} className="mb-3 group-hover:text-white" />
+                    )}
+                    <span className="text-xs font-black uppercase">{collab.brand_name}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Recent Showcase */}
+          {data.works && data.works.length > 0 && (
+            <div className="w-full mb-12">
+              <h3 className="font-black text-2xl uppercase tracking-tighter mb-6 border-b-4 border-black pb-2 text-left">
+                SHOWCASE
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {data.works.map((w, i) => {
+                  const thumb = getThumbnail(w);
+                  const isUploadedVideo = !!w.url && (w.type === 'video' || (typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i)));
+                  const isLinkOnly = !w.url && !!w.external_url;
+                  
+                  return (
+                    <div
+                      key={i}
+                      onClick={() => {
+                        if (isLinkOnly) {
+                          window.open(w.external_url, '_blank');
+                        } else {
+                          setSelectedWork(w);
+                        }
+                      }}
+                      className="group relative border-4 border-black aspect-video bg-neutral-200 cursor-pointer overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all"
+                    >
+                      {isLinkOnly ? (
+                        <div className="absolute inset-0 bg-neutral-100 flex flex-col items-center justify-center z-10 group-hover:bg-black group-hover:text-white transition-colors">
+                          {w.type === 'video' ? <Play size={32} className="mb-2" /> : <Globe size={32} className="mb-2" />}
+                          <span className="text-[10px] font-black uppercase tracking-widest text-center px-4">
+                            OPEN {w.type === 'video' ? 'VIDEO' : 'LINK'}
+                          </span>
+                        </div>
+                      ) : (
+                        <Camera size={40} className="text-black opacity-20 absolute inset-0 m-auto" />
+                      )}
+
+                      {thumb ? (
+                        <img
+                          src={thumb}
+                          className="absolute inset-0 w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all z-10"
+                          alt={w.title}
+                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        />
+                      ) : (() => {
+                        if (isUploadedVideo) {
+                          return (
+                            <video 
+                              src={getAssetUrl(w.url)} 
+                              className="absolute inset-0 w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all z-10"
+                              muted
+                              playsInline
+                            />
+                          );
+                        }
+                        return null;
+                      })()}
+
+                      {w.type === "video" && (thumb || isUploadedVideo) && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                          <div className="w-12 h-12 bg-black border-2 border-white flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+                            <Play size={20} className="ml-1" fill="currentColor" />
+                          </div>
+                        </div>
+                      )}
+                      
+                      <div className="absolute bottom-0 left-0 right-0 p-3 bg-black border-t-2 border-black z-30 translate-y-full group-hover:translate-y-0 transition-transform">
+                        <span className="text-[10px] font-black text-white uppercase tracking-widest line-clamp-1">
+                          {w.title || "Project"}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Open For Collaboration Details */}
+          {(data.collab_types || data.availability_status || data.rate_range_min || data.turnaround_time || (data.collab_types_tags && data.collab_types_tags.length > 0)) && (
+            <div className="w-full mb-12 border-4 border-black p-6 sm:p-8 bg-neutral-50 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              <h3 className="font-black text-2xl uppercase tracking-tighter mb-4 text-center">
+                COLLABORATION
+              </h3>
+              
+              {data.collab_types && (
+                <p className="text-sm font-bold text-center mb-6 max-w-lg mx-auto">
+                  {data.collab_types}
+                </p>
+              )}
+              
+              {data.collab_types_tags && data.collab_types_tags.length > 0 && (
+                <div className="flex flex-wrap justify-center gap-2 mb-8">
+                  {data.collab_types_tags.map((tag: string) => (
+                    <span key={tag} className="px-3 py-1 border-2 border-black bg-white text-[10px] font-black uppercase tracking-widest">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              
+              {(data.availability_status || data.rate_range_min || data.turnaround_time) && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t-4 border-black pt-6">
+                  {data.availability_status && (
+                    <div className="text-center">
+                      <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest block mb-1">STATUS</span>
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="w-2 h-2 bg-green-500 border border-black animate-pulse"></span>
+                        <span className="text-sm font-black uppercase">{data.availability_status}</span>
+                      </div>
+                    </div>
+                  )}
+                  {data.turnaround_time && (
+                    <div className="text-center">
+                      <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest block mb-1">TURNAROUND</span>
+                      <span className="text-sm font-black uppercase">{data.turnaround_time}</span>
+                    </div>
+                  )}
+                  {data.rate_range_min && (
+                    <div className="text-center">
+                      <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest block mb-1">STARTING RATE</span>
+                      <span className="text-sm font-black uppercase">₹{data.rate_range_min}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Socials */}
           {data.platforms && data.platforms.length > 0 && (
@@ -1041,17 +1220,28 @@ export function CreatorProfile({
           )}
 
           {/* Contact / Action */}
-          <div className="w-full mt-4">
+          <div className="w-full mt-4 flex flex-col sm:flex-row gap-4 mb-12">
             {data.contact_email && (
               <a
                 href={`mailto:${data.contact_email}`}
-                className="block w-full py-5 bg-black text-white text-center font-black text-xl uppercase tracking-widest hover:bg-white hover:text-black hover:border-4 hover:border-black transition-all"
+                className="flex-1 block w-full py-5 bg-black text-white text-center font-black text-xl uppercase tracking-widest hover:bg-white hover:text-black hover:border-4 hover:border-black transition-all border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]"
               >
                 LET'S CONNECT &rarr;
               </a>
             )}
+            {data.contact_whatsapp && (
+              <a
+                href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 block w-full py-5 bg-[#25D366] text-black text-center font-black text-xl uppercase tracking-widest hover:bg-white hover:text-[#25D366] hover:border-4 hover:border-[#25D366] transition-all border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]"
+              >
+                WHATSAPP
+              </a>
+            )}
           </div>
         </div>
+        {renderWorkModal()}
         <GateModal />
       </div>
     );
