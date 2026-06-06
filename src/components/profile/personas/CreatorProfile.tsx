@@ -470,7 +470,7 @@ export function CreatorProfile({
                   {profile.display_name}
                 </h1>
                 <p className="text-xs font-black text-orange-600 uppercase tracking-[0.4em] leading-none mt-2 mb-4">
-                  {data.tagline || data.type || "CREATIVE PROFESSIONAL"}
+                  {data.tagline || "CREATIVE PROFESSIONAL"}
                 </p>
                 {profile.bio && (
                   <p className="text-sm font-black text-neutral-800 leading-tight italic max-w-lg mx-auto">
@@ -509,13 +509,13 @@ export function CreatorProfile({
               </div>
             </div>
 
-            {(data.bio || data.about) && (
+            {(data.bio || profile.bio) && (
               <div className="mb-8">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-1">
                   Professional Narrative
                 </p>
                 <p className="text-base text-neutral-600 leading-relaxed bg-neutral-50/30 py-4 px-6 rounded-[24px] border border-neutral-100/50 max-w-2xl italic">
-                  "{data.bio || data.about}"
+                  "{data.bio || profile.bio}"
                 </p>
               </div>
             )}
@@ -918,11 +918,7 @@ export function CreatorProfile({
             <h1 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase leading-none mb-4">
               {profile.display_name}
             </h1>
-            {data.type && (
-              <p className="text-sm sm:text-base font-bold tracking-widest uppercase border-y-2 border-black py-2 inline-block">
-                {data.type}
-              </p>
-            )}
+
             {data.tagline && (
               <p className="text-xs sm:text-sm font-bold tracking-widest uppercase mt-4 block max-w-2xl mx-auto">
                 {data.tagline}
@@ -988,13 +984,13 @@ export function CreatorProfile({
             )}
 
             {/* About / Narrative */}
-            {(data.about || data.bio) && (
+            {(profile.bio || data.bio) && (
               <div>
                 <h3 className="font-black text-2xl uppercase tracking-tighter mb-4 border-b-4 border-black pb-2">
                   NARRATIVE
                 </h3>
                 <p className="text-base font-bold leading-relaxed">
-                  {data.about || data.bio}
+                  {data.bio || profile.bio}
                 </p>
               </div>
             )}
@@ -1357,7 +1353,7 @@ export function CreatorProfile({
               {profile.display_name}
             </h1>
             <h2 className="text-sm sm:text-base font-black tracking-[0.3em] uppercase text-[#FF2D78] drop-shadow-[0_0_8px_rgba(255,45,120,0.8)]">
-              {data.type || "DIGITAL CREATOR"}
+              {data.tagline || "DIGITAL CREATOR"}
             </h2>
           </div>
 
@@ -1432,13 +1428,13 @@ export function CreatorProfile({
             )}
 
             {/* Narrative */}
-            {data.about && (
+            {(data.bio || profile.bio) && (
               <div className="bg-black/30 border border-cyan-500/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(6,182,212,0.05)]">
                 <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-cyan-400 mb-5">
                   NARRATIVE
                 </h3>
                 <p className="text-xs text-gray-300 leading-relaxed font-light">
-                  {data.about}
+                  {data.bio || profile.bio}
                 </p>
               </div>
             )}
@@ -1863,7 +1859,7 @@ export function CreatorProfile({
         {/* SECTION 3 — THE STORY & AESTHETIC               */}
         {/* ════════════════════════════════════════════════ */}
         {(profile.bio ||
-          data.about ||
+          data.bio ||
           data.content_formats ||
           data.audience_interests ||
           data.visual_style) && (
@@ -1872,7 +1868,7 @@ export function CreatorProfile({
             style={{ animationDelay: "0.2s" }}
           >
             {/* Top row: The Bio Narrative */}
-            {(profile.bio || data.about) && (
+            {(profile.bio || data.bio) && (
               <div className="mb-10 text-center max-w-3xl mx-auto">
                 <h3 className="text-sm font-extrabold uppercase tracking-[0.15em] text-purple-500 mb-4 flex items-center justify-center gap-2">
                   <Sparkles size={18} /> Inside the Mind

@@ -928,19 +928,8 @@ export default function IdentityStudio() {
 
                     {(activePersona === "influencer" ||
                       activePersona === "creator") && (
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div>
-                          <label className="section-label">Creator Type</label>
-                          <input
-                            type="text"
-                            placeholder="e.g. Visual Artist"
-                            className="input-field"
-                            value={data.type}
-                            onChange={(e) =>
-                              updateField("type", e.target.value)
-                            }
-                          />
-                        </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
                         <div>
                           <label className="section-label">Location Name</label>
                           <input
@@ -970,21 +959,7 @@ export default function IdentityStudio() {
                       </div>
                     )}
 
-                    {(activePersona === "influencer" ||
-                      activePersona === "creator") && (
-                      <div>
-                        <label className="section-label">
-                          About the Creator
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="A short one-liner summary..."
-                          className="input-field"
-                          value={data.about}
-                          onChange={(e) => updateField("about", e.target.value)}
-                        />
-                      </div>
-                    )}
+
 
                     <div>
                       <label className="section-label">Profile Theme</label>
