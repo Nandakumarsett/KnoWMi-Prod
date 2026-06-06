@@ -2104,7 +2104,7 @@ export function CreatorProfile({
                   </p>
                   {collab.link && (
                     <a
-                      href={collab.link}
+                      href={ensureAbsoluteUrl(collab.link)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-5 text-[10px] font-bold text-indigo-500 hover:text-indigo-600 uppercase tracking-[0.15em] transition-colors"
