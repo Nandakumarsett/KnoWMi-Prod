@@ -161,6 +161,156 @@ export function CreatorProfile({
     tiktok: "tiktok",
   };
 
+  const renderWorkModal = () => {
+    if (!selectedWork) return null;
+    return (
+      <div
+        className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8 bg-white/80 backdrop-blur-xl animate-fadeIn"
+        onClick={() => setSelectedWork(null)}
+      >
+        <div
+          className="bg-white p-2 rounded-[28px] max-w-3xl w-full relative shadow-[0_24px_80px_rgba(0,0,0,0.12)] animate-zoomIn"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={() => setSelectedWork(null)}
+            className="absolute -top-12 right-0 sm:top-4 sm:right-4 p-3 bg-white text-gray-400 hover:text-gray-900 rounded-full shadow-md transition-all hover:scale-110 z-10"
+          >
+            <X size={18} strokeWidth={3} />
+          </button>
+          <div className="bg-gray-50 rounded-[22px] overflow-hidden">
+            {(() => {
+              const url = selectedWork.url || selectedWork.external_url;
+              const isVideoEmbed =
+                url &&
+                typeof url === "string" &&
+                url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+              const isUploadedVideo =
+                selectedWork.type === 'video' ||
+                (url &&
+                typeof url === "string" &&
+                url.match(/\.(mp4|webm|ogg|mov)$/i));
+
+              if (isVideoEmbed) {
+                return (
+                  <div className="w-full aspect-video bg-black">
+                    <iframe
+                      src={getEmbedUrl(url)}
+                      className="w-full h-full"
+                      allow="autoplay; encrypted-media"
+                      allowFullScreen
+                    />
+                  </div>
+                );
+              }
+
+              if (isUploadedVideo) {
+                return (
+                  <div className="w-full aspect-video bg-black">
+                    <video
+                      src={getAssetUrl(url)}
+                      className="w-full h-full object-contain"
+                      controls
+                      autoPlay
+                      onTimeUpdate={(e) => {
+                        if (e.currentTarget.currentTime >= 10) {
+                          e.currentTarget.pause();
+                          e.currentTarget.currentTime = 10;
+                        }
+                      }}
+                    />
+                  </div>
+                );
+              }
+
+              const thumb = getThumbnail(selectedWork);
+              if (thumb) {
+                return (
+                  <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center relative">
+                    <Camera size={40} className="text-purple-300 opacity-60 absolute" />
+                    <img
+                      src={thumb}
+                      className="absolute inset-0 w-full h-full object-cover z-10"
+                      alt={selectedWork.title}
+                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                    />
+                  </div>
+                );
+              }
+              return (
+                <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center relative">
+                  <Camera size={40} className="text-purple-300 opacity-60 absolute" />
+                </div>
+              );
+            })()}
+            <div className="p-6 sm:p-8">
+              <h3 className="text-xl font-extrabold text-gray-900 mb-2">
+                {selectedWork.title}
+              </h3>
+              {selectedWork.description && (
+                <p className="text-sm text-gray-700 font-semibold leading-relaxed">
+                  {selectedWork.description}
+                </p>
+              )}
+              {(() => {
+                const url = selectedWork.url || selectedWork.external_url;
+                const isVideoEmbed =
+                  url &&
+                  typeof url === "string" &&
+                  url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                const isUploadedVideo =
+                  selectedWork.type === 'video' ||
+                  (url &&
+                  typeof url === "string" &&
+                  url.match(/\.(mp4|webm|ogg|mov)$/i));
+                const isImageFile =
+                  selectedWork.type === 'image' ||
+                  (url &&
+                  typeof url === "string" &&
+                  url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i));
+
+                const isExternalWebLink =
+                  url &&
+                  typeof url === "string" &&
+                  !isVideoEmbed &&
+                  !isUploadedVideo &&
+                  !isImageFile &&
+                  !url.includes("supabase.co");
+
+                if (isExternalWebLink) {
+                  return (
+                    <a
+                      href={ensureAbsoluteUrl(url)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block mt-4 text-purple-600 font-bold text-sm hover:underline"
+                    >
+                      Visit Link &rarr;
+                    </a>
+                  );
+                }
+                if (isVideoEmbed || isUploadedVideo) {
+                  const finalUrl = selectedWork.external_url ? ensureAbsoluteUrl(selectedWork.external_url) : (isUploadedVideo ? getAssetUrl(url) : ensureAbsoluteUrl(url));
+                  return (
+                    <a
+                      href={finalUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block mt-4 text-purple-600 font-bold text-sm hover:underline"
+                    >
+                      Watch Full Video &rarr;
+                    </a>
+                  );
+                }
+                return null;
+              })()}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   // ----------------------------------------------------
   // LAYOUT 0: ORIGINAL CLASSIC STYLE (Classic Theme)
   // ----------------------------------------------------
@@ -699,6 +849,7 @@ export function CreatorProfile({
             </section>
           </div>
         </section>
+        {renderWorkModal()}
         <GateModal />
       </div>
     );
@@ -1898,152 +2049,7 @@ export function CreatorProfile({
       </main>
 
       {/* ═══ SELECTED WORK MODAL ═══ */}
-      {selectedWork && (
-        <div
-          className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8 bg-white/80 backdrop-blur-xl animate-fadeIn"
-          onClick={() => setSelectedWork(null)}
-        >
-          <div
-            className="bg-white p-2 rounded-[28px] max-w-3xl w-full relative shadow-[0_24px_80px_rgba(0,0,0,0.12)] animate-zoomIn"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setSelectedWork(null)}
-              className="absolute -top-12 right-0 sm:top-4 sm:right-4 p-3 bg-white text-gray-400 hover:text-gray-900 rounded-full shadow-md transition-all hover:scale-110 z-10"
-            >
-              <X size={18} strokeWidth={3} />
-            </button>
-            <div className="bg-gray-50 rounded-[22px] overflow-hidden">
-              {(() => {
-                const url = selectedWork.url || selectedWork.external_url;
-                const isVideoEmbed =
-                  url &&
-                  typeof url === "string" &&
-                  url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
-                const isUploadedVideo =
-                  selectedWork.type === 'video' ||
-                  (url &&
-                  typeof url === "string" &&
-                  url.match(/\.(mp4|webm|ogg|mov)$/i));
-
-                if (isVideoEmbed) {
-                  return (
-                    <div className="w-full aspect-video bg-black">
-                      <iframe
-                        src={getEmbedUrl(url)}
-                        className="w-full h-full"
-                        allow="autoplay; encrypted-media"
-                        allowFullScreen
-                      />
-                    </div>
-                  );
-                }
-
-                if (isUploadedVideo) {
-                  return (
-                    <div className="w-full aspect-video bg-black">
-                      <video
-                        src={getAssetUrl(url)}
-                        className="w-full h-full object-contain"
-                        controls
-                        autoPlay
-                        onTimeUpdate={(e) => {
-                          if (e.currentTarget.currentTime >= 10) {
-                            e.currentTarget.pause();
-                            e.currentTarget.currentTime = 10;
-                          }
-                        }}
-                      />
-                    </div>
-                  );
-                }
-
-                const thumb = getThumbnail(selectedWork);
-                if (thumb) {
-                  return (
-                    <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center relative">
-                      <Camera size={40} className="text-purple-300 opacity-60 absolute" />
-                      <img
-                        src={thumb}
-                        className="absolute inset-0 w-full h-full object-cover z-10"
-                        alt={selectedWork.title}
-                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                      />
-                    </div>
-                  );
-                }
-                return (
-                  <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center relative">
-                    <Camera size={40} className="text-purple-300 opacity-60 absolute" />
-                  </div>
-                );
-              })()}
-              <div className="p-6 sm:p-8">
-                <h3 className="text-xl font-extrabold text-gray-900 mb-2">
-                  {selectedWork.title}
-                </h3>
-                {selectedWork.description && (
-                  <p className="text-sm text-gray-700 font-semibold leading-relaxed">
-                    {selectedWork.description}
-                  </p>
-                )}
-                {(() => {
-                  const url = selectedWork.url || selectedWork.external_url;
-                  const isVideoEmbed =
-                    url &&
-                    typeof url === "string" &&
-                    url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
-                  const isUploadedVideo =
-                    selectedWork.type === 'video' ||
-                    (url &&
-                    typeof url === "string" &&
-                    url.match(/\.(mp4|webm|ogg|mov)$/i));
-                  const isImageFile =
-                    selectedWork.type === 'image' ||
-                    (url &&
-                    typeof url === "string" &&
-                    url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i));
-
-                  const isExternalWebLink =
-                    url &&
-                    typeof url === "string" &&
-                    !isVideoEmbed &&
-                    !isUploadedVideo &&
-                    !isImageFile &&
-                    !url.includes("supabase.co");
-
-                  if (isExternalWebLink) {
-                    return (
-                      <a
-                        href={ensureAbsoluteUrl(url)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block mt-4 text-purple-600 font-bold text-sm hover:underline"
-                      >
-                        Visit Link &rarr;
-                      </a>
-                    );
-                  }
-                  if (isVideoEmbed || isUploadedVideo) {
-                    const finalUrl = selectedWork.external_url ? ensureAbsoluteUrl(selectedWork.external_url) : (isUploadedVideo ? getAssetUrl(url) : ensureAbsoluteUrl(url));
-                    return (
-                      <a
-                        href={finalUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block mt-4 text-purple-600 font-bold text-sm hover:underline"
-                      >
-                        Watch Full Video &rarr;
-                      </a>
-                    );
-                  }
-                  return null;
-                })()}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {renderWorkModal()}
 
       {/* ═══ FOMO MODAL ═══ */}
       {showFomoModal && (
