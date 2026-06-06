@@ -74,6 +74,80 @@ export function CreatorProfile({
     profile.status === "free" ||
     (!profile.status && (!profile.tier || profile.tier === "Starter"));
 
+  const getPlaceColor = (city: string) => {
+    const c = city.toLowerCase();
+    if (
+      c.includes("bengaluru") ||
+      c.includes("bangalore") ||
+      c.includes("karnataka") ||
+      c.includes("mysuru") ||
+      c.includes("hubballi") ||
+      c.includes("mangalore")
+    )
+      return "#D71920";
+    if (
+      c.includes("chennai") ||
+      c.includes("madras") ||
+      c.includes("tamil nadu") ||
+      c.includes("coimbatore") ||
+      c.includes("madurai")
+    )
+      return "#F9CD05";
+    if (
+      c.includes("mumbai") ||
+      c.includes("bombay") ||
+      c.includes("maharashtra") ||
+      c.includes("pune") ||
+      c.includes("nagpur")
+    )
+      return "#004BA0";
+    if (
+      c.includes("kolkata") ||
+      c.includes("calcutta") ||
+      c.includes("west bengal")
+    )
+      return "#3A225D";
+    if (
+      c.includes("hyderabad") ||
+      c.includes("telangana") ||
+      c.includes("andhra") ||
+      c.includes("vijayawada") ||
+      c.includes("visakhapatnam")
+    )
+      return "#F26522";
+    if (
+      c.includes("rajasthan") ||
+      c.includes("jaipur") ||
+      c.includes("jodhpur") ||
+      c.includes("udaipur")
+    )
+      return "#EA1A85";
+    if (c.includes("delhi")) return "#17479E";
+    if (
+      c.includes("punjab") ||
+      c.includes("ludhiana") ||
+      c.includes("amritsar") ||
+      c.includes("chandigarh")
+    )
+      return "#DD1F2D";
+    if (
+      c.includes("gujarat") ||
+      c.includes("ahmedabad") ||
+      c.includes("surat") ||
+      c.includes("vadodara")
+    )
+      return "#1C1C3C";
+    if (
+      c.includes("lucknow") ||
+      c.includes("kanpur") ||
+      c.includes("agra") ||
+      c.includes("uttar pradesh")
+    )
+      return "#00AEEF";
+    return "#1A1A1A";
+  };
+  const cityColor = getPlaceColor(topCity);
+
   const getThumbnail = (work: any) => {
     const extUrl = work.url || work.external_url;
     if (
@@ -311,84 +385,84 @@ export function CreatorProfile({
     );
   };
 
+  const getPlaceColor = (city: string) => {
+    const c = city.toLowerCase();
+    if (
+      c.includes("bengaluru") ||
+      c.includes("bangalore") ||
+      c.includes("karnataka") ||
+      c.includes("mysuru") ||
+      c.includes("hubballi") ||
+      c.includes("mangalore")
+    )
+      return "#D71920";
+    if (
+      c.includes("chennai") ||
+      c.includes("madras") ||
+      c.includes("tamil nadu") ||
+      c.includes("coimbatore") ||
+      c.includes("madurai")
+    )
+      return "#F9CD05";
+    if (
+      c.includes("mumbai") ||
+      c.includes("bombay") ||
+      c.includes("maharashtra") ||
+      c.includes("pune") ||
+      c.includes("nagpur")
+    )
+      return "#004BA0";
+    if (
+      c.includes("kolkata") ||
+      c.includes("calcutta") ||
+      c.includes("west bengal")
+    )
+      return "#3A225D";
+    if (
+      c.includes("hyderabad") ||
+      c.includes("telangana") ||
+      c.includes("andhra") ||
+      c.includes("vijayawada") ||
+      c.includes("visakhapatnam")
+    )
+      return "#F26522";
+    if (
+      c.includes("rajasthan") ||
+      c.includes("jaipur") ||
+      c.includes("jodhpur") ||
+      c.includes("udaipur")
+    )
+      return "#EA1A85";
+    if (c.includes("delhi")) return "#17479E";
+    if (
+      c.includes("punjab") ||
+      c.includes("ludhiana") ||
+      c.includes("amritsar") ||
+      c.includes("chandigarh")
+    )
+      return "#DD1F2D";
+    if (
+      c.includes("gujarat") ||
+      c.includes("ahmedabad") ||
+      c.includes("surat") ||
+      c.includes("vadodara")
+    )
+      return "#1C1C3C";
+    if (
+      c.includes("lucknow") ||
+      c.includes("kanpur") ||
+      c.includes("agra") ||
+      c.includes("uttar pradesh")
+    )
+      return "#00AEEF";
+    return "#1A1A1A";
+  };
+  const cityColor = getPlaceColor(topCity);
+
   // ----------------------------------------------------
   // LAYOUT 0: ORIGINAL CLASSIC STYLE (Classic Theme)
   // ----------------------------------------------------
   if (activeTheme === "classic") {
-    const getPlaceColor = (city: string) => {
-      const c = city.toLowerCase();
-      if (
-        c.includes("bengaluru") ||
-        c.includes("bangalore") ||
-        c.includes("karnataka") ||
-        c.includes("mysuru") ||
-        c.includes("hubballi") ||
-        c.includes("mangalore")
-      )
-        return "#D71920";
-      if (
-        c.includes("chennai") ||
-        c.includes("madras") ||
-        c.includes("tamil nadu") ||
-        c.includes("coimbatore") ||
-        c.includes("madurai")
-      )
-        return "#F9CD05";
-      if (
-        c.includes("mumbai") ||
-        c.includes("bombay") ||
-        c.includes("maharashtra") ||
-        c.includes("pune") ||
-        c.includes("nagpur")
-      )
-        return "#004BA0";
-      if (
-        c.includes("kolkata") ||
-        c.includes("calcutta") ||
-        c.includes("west bengal")
-      )
-        return "#3A225D";
-      if (
-        c.includes("hyderabad") ||
-        c.includes("telangana") ||
-        c.includes("andhra") ||
-        c.includes("vijayawada") ||
-        c.includes("visakhapatnam")
-      )
-        return "#F26522";
-      if (
-        c.includes("rajasthan") ||
-        c.includes("jaipur") ||
-        c.includes("jodhpur") ||
-        c.includes("udaipur")
-      )
-        return "#EA1A85";
-      if (c.includes("delhi")) return "#17479E";
-      if (
-        c.includes("punjab") ||
-        c.includes("ludhiana") ||
-        c.includes("amritsar") ||
-        c.includes("chandigarh")
-      )
-        return "#DD1F2D";
-      if (
-        c.includes("gujarat") ||
-        c.includes("ahmedabad") ||
-        c.includes("surat") ||
-        c.includes("vadodara")
-      )
-        return "#1C1C3C";
-      if (
-        c.includes("lucknow") ||
-        c.includes("kanpur") ||
-        c.includes("agra") ||
-        c.includes("uttar pradesh")
-      )
-        return "#00AEEF";
-      return "#1A1A1A";
-    };
-    const cityColor = getPlaceColor(topCity);
-
     return (
       <div className="w-full pb-12 relative overflow-hidden bg-white rounded-[40px] border border-[#E5D5C4] shadow-2xl">
         <div className="absolute inset-0 pointer-events-none z-0">
@@ -956,7 +1030,9 @@ export function CreatorProfile({
               <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
                 MOST SCANNED LOCATION
               </span>
-              <span className="text-2xl font-black uppercase">{topCity}</span>
+              <span className="text-2xl font-black uppercase" style={{ color: cityColor }}>
+                {topCity}
+              </span>
             </div>
           </div>
 
