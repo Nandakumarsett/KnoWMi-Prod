@@ -1436,7 +1436,7 @@ export function CreatorProfile({
           {(data.collab_types || data.availability_status || data.rate_range_min || data.turnaround_time || (Array.isArray(data.collab_types_tags) && data.collab_types_tags.length > 0)) && (
             <div className="w-full max-w-3xl mb-12 bg-black/40 border border-purple-500/30 rounded-2xl p-6 sm:p-8 shadow-[0_0_30px_rgba(153,51,255,0.1)]">
               <h3 className="font-bold text-base uppercase tracking-[0.2em] text-purple-400 mb-6 text-center">
-                SYSTEM STATUS // COLLABORATION
+                OPEN FOR COLLABORATION
               </h3>
               
               {data.collab_types && (
@@ -1465,7 +1465,7 @@ export function CreatorProfile({
                 )}
                 {data.turnaround_time && (
                   <div className="bg-black/60 border border-white/10 rounded-lg p-4 text-center">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-2">LATENCY</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-2">TURNAROUND TIME</span>
                     <span className="text-sm font-black text-white uppercase whitespace-nowrap">{data.turnaround_time}</span>
                   </div>
                 )}
@@ -1483,7 +1483,7 @@ export function CreatorProfile({
           {Array.isArray(data.equipment) && data.equipment.length > 0 && (
             <div className="w-full max-w-3xl mb-12 bg-black/40 border border-cyan-500/30 rounded-2xl p-6 sm:p-8 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
               <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-cyan-400 mb-6">
-                HARDWARE // SOFTWARE
+                EQUIPMENT & TOOLS
               </h3>
               <div className="flex flex-wrap gap-3">
                 {data.equipment.map((item: string) => (
@@ -1499,7 +1499,7 @@ export function CreatorProfile({
           {Array.isArray(data.past_collaborations) && data.past_collaborations.length > 0 && (
             <div className="w-full max-w-3xl mb-12">
               <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-[#FF2D78] mb-6 drop-shadow-[0_0_5px_rgba(255,45,120,0.8)] border-b border-[#FF2D78]/30 pb-2">
-                DATABASE // ALLIANCES
+                PAST COLLABORATIONS
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {data.past_collaborations.map((collab: any, i: number) => (
@@ -1525,7 +1525,7 @@ export function CreatorProfile({
           {Array.isArray(data.works) && data.works.length > 0 && (
             <div className="w-full max-w-3xl mb-12">
               <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-white mb-6 border-b border-white/20 pb-2">
-                ARCHIVE // MEDIA
+                SHOWCASE
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {data.works.map((w, i) => {
@@ -1557,7 +1557,7 @@ export function CreatorProfile({
                       
                       <div className="absolute bottom-0 left-0 right-0 p-4">
                         <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest line-clamp-1 group-hover:text-white transition-colors">
-                          {w.title || "File Data"}
+                          {w.title || "Media"}
                         </span>
                       </div>
                       
@@ -1621,7 +1621,7 @@ export function CreatorProfile({
                   href={`mailto:${data.contact_email}`}
                   className="px-10 py-4 bg-transparent border-2 border-cyan-400 text-cyan-400 font-bold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all"
                 >
-                  INITIATE EMAIL
+                  EMAIL
                 </a>
               )}
               {data.contact_whatsapp && (
@@ -1631,7 +1631,7 @@ export function CreatorProfile({
                   rel="noopener noreferrer"
                   className="px-10 py-4 bg-transparent border-2 border-[#25D366] text-[#25D366] font-bold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-[#25D366] hover:text-black hover:shadow-[0_0_25px_rgba(37,211,102,0.6)] transition-all"
                 >
-                  COMMLINK
+                  WHATSAPP
                 </a>
               )}
             </div>
