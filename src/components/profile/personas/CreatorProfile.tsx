@@ -256,18 +256,20 @@ export function CreatorProfile({
           <div className="bg-gray-50 rounded-[22px] overflow-hidden">
             {(() => {
               const embedUrl = selectedWork.external_url || selectedWork.url;
+              const hasUploadedVideo = !!selectedWork.url && typeof selectedWork.url === "string" && !!selectedWork.url.match(/\.(mp4|webm|ogg|mov)$/i);
               const isVideoEmbed =
+                !hasUploadedVideo &&
                 embedUrl &&
                 typeof embedUrl === "string" &&
                 embedUrl.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
 
               const url = selectedWork.url || selectedWork.external_url;
+              const isImageFile = !!selectedWork.url && typeof selectedWork.url === "string" && !!selectedWork.url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i);
               const isUploadedVideo =
-                !isVideoEmbed &&
-                (selectedWork.type === 'video' ||
-                (url &&
-                typeof url === "string" &&
-                url.match(/\.(mp4|webm|ogg|mov)$/i)));
+                hasUploadedVideo ||
+                (!isVideoEmbed &&
+                !isImageFile &&
+                selectedWork.type === 'video');
 
               if (isVideoEmbed) {
                 return (
@@ -328,23 +330,24 @@ export function CreatorProfile({
               )}
               {(() => {
                 const embedUrl = selectedWork.external_url || selectedWork.url;
+                const hasUploadedVideo = !!selectedWork.url && typeof selectedWork.url === "string" && !!selectedWork.url.match(/\.(mp4|webm|ogg|mov)$/i);
                 const isVideoEmbed =
+                  !hasUploadedVideo &&
                   embedUrl &&
                   typeof embedUrl === "string" &&
                   embedUrl.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
 
                 const url = selectedWork.url || selectedWork.external_url;
-                const isUploadedVideo =
-                  !isVideoEmbed &&
-                  (selectedWork.type === 'video' ||
-                  (url &&
-                  typeof url === "string" &&
-                  url.match(/\.(mp4|webm|ogg|mov)$/i)));
                 const isImageFile =
                   selectedWork.type === 'image' ||
                   (url &&
                   typeof url === "string" &&
                   url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i));
+                const isUploadedVideo =
+                  hasUploadedVideo ||
+                  (!isVideoEmbed &&
+                  !isImageFile &&
+                  selectedWork.type === 'video');
 
                 const isExternalWebLink =
                   url &&
@@ -682,9 +685,12 @@ export function CreatorProfile({
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {data.works.map((w, i) => {
-                    const thumb = getThumbnail(w);
-                    const isUploadedVideo = !!w.url && (w.type === 'video' || (typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i)));
-                    const isLinkOnly = !w.url && !!w.external_url;
+                  const thumb = getThumbnail(w);
+                  const hasUploadedVideo = !!w.url && typeof w.url === 'string' && !!w.url.match(/\.(mp4|webm|ogg|mov)$/i);
+                  const isImageFile = !!w.url && typeof w.url === 'string' && !!w.url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i);
+                  const isVideoEmbed = !!(w.external_url || w.url) && typeof (w.external_url || w.url) === 'string' && !!(w.external_url || w.url).match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                  const isUploadedVideo = hasUploadedVideo || (!isVideoEmbed && !isImageFile && w.type === 'video');
+                  const isLinkOnly = (!w.url && !!w.external_url) || (w.type === 'video' && !hasUploadedVideo && !isVideoEmbed && !!w.external_url);
                     
                     return (
                       <div
@@ -1113,9 +1119,12 @@ export function CreatorProfile({
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {data.works.map((w, i) => {
-                  const thumb = getThumbnail(w);
-                  const isUploadedVideo = !!w.url && (w.type === 'video' || (typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i)));
-                  const isLinkOnly = !w.url && !!w.external_url;
+                const thumb = getThumbnail(w);
+                const hasUploadedVideo = !!w.url && typeof w.url === 'string' && !!w.url.match(/\.(mp4|webm|ogg|mov)$/i);
+                const isImageFile = !!w.url && typeof w.url === 'string' && !!w.url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i);
+                const isVideoEmbed = !!(w.external_url || w.url) && typeof (w.external_url || w.url) === 'string' && !!(w.external_url || w.url).match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                const isUploadedVideo = hasUploadedVideo || (!isVideoEmbed && !isImageFile && w.type === 'video');
+                const isLinkOnly = (!w.url && !!w.external_url) || (w.type === 'video' && !hasUploadedVideo && !isVideoEmbed && !!w.external_url);
                   
                   return (
                     <div
@@ -1566,9 +1575,12 @@ export function CreatorProfile({
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {data.works.map((w, i) => {
-                  const thumb = getThumbnail(w);
-                  const isUploadedVideo = !!w.url && (w.type === 'video' || (typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i)));
-                  const isLinkOnly = !w.url && !!w.external_url;
+                const thumb = getThumbnail(w);
+                const hasUploadedVideo = !!w.url && typeof w.url === 'string' && !!w.url.match(/\.(mp4|webm|ogg|mov)$/i);
+                const isImageFile = !!w.url && typeof w.url === 'string' && !!w.url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i);
+                const isVideoEmbed = !!(w.external_url || w.url) && typeof (w.external_url || w.url) === 'string' && !!(w.external_url || w.url).match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                const isUploadedVideo = hasUploadedVideo || (!isVideoEmbed && !isImageFile && w.type === 'video');
+                const isLinkOnly = (!w.url && !!w.external_url) || (w.type === 'video' && !hasUploadedVideo && !isVideoEmbed && !!w.external_url);
                   
                   return (
                     <div
@@ -2307,8 +2319,11 @@ export function CreatorProfile({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {data.works.map((w, i) => {
                 const thumb = getThumbnail(w);
-                const isUploadedVideo = !!w.url && (w.type === 'video' || (typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i)));
-                const isLinkOnly = !w.url && !!w.external_url;
+                const hasUploadedVideo = !!w.url && typeof w.url === 'string' && !!w.url.match(/\.(mp4|webm|ogg|mov)$/i);
+                const isImageFile = !!w.url && typeof w.url === 'string' && !!w.url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i);
+                const isVideoEmbed = !!(w.external_url || w.url) && typeof (w.external_url || w.url) === 'string' && !!(w.external_url || w.url).match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                const isUploadedVideo = hasUploadedVideo || (!isVideoEmbed && !isImageFile && w.type === 'video');
+                const isLinkOnly = (!w.url && !!w.external_url) || (w.type === 'video' && !hasUploadedVideo && !isVideoEmbed && !!w.external_url);
                 
                 return (
                   <div
