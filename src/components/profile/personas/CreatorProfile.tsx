@@ -1596,12 +1596,29 @@ export function CreatorProfile({
                           </span>
                         </div>
                       ) : thumb ? (
-                        <img src={getAssetUrl(thumb)} alt={w.title || "Showcase"} className="w-full h-full object-cover filter contrast-125 saturate-50 group-hover:saturate-100 transition-all" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-[#1A1A2E]">
-                          <Image size={24} className="text-gray-600" />
-                        </div>
-                      )}
+                        <img 
+                          src={getAssetUrl(thumb)} 
+                          alt={w.title || "Showcase"} 
+                          className="w-full h-full object-cover filter contrast-125 saturate-50 group-hover:saturate-100 transition-all"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.opacity = '0';
+                          }}
+                        />
+                      ) : (() => {
+                        if (isUploadedVideo) {
+                          return (
+                            <video 
+                              src={getAssetUrl(w.url)} 
+                              className="w-full h-full object-cover filter contrast-125 saturate-50 group-hover:saturate-100 transition-all"
+                            />
+                          );
+                        }
+                        return (
+                          <div className="w-full h-full flex items-center justify-center bg-[#1A1A2E]">
+                            <Image size={24} className="text-gray-600" />
+                          </div>
+                        );
+                      })()}
                       
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none" />
                       
@@ -1626,7 +1643,11 @@ export function CreatorProfile({
           )}
 
           {(data.contact_email || data.contact_whatsapp) && (
-            <div className="w-full flex justify-center pb-8 gap-4 flex-wrap">
+            <div className="w-full max-w-3xl border-t border-white/20 pt-10 pb-8 flex flex-col items-center">
+              <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-cyan-400 mb-8 text-center drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]">
+                LET'S WORK TOGETHER
+              </h3>
+              <div className="w-full flex justify-center gap-4 flex-wrap">
               {data.contact_email && (
                 <a
                   href={`mailto:${data.contact_email}`}
@@ -1645,6 +1666,7 @@ export function CreatorProfile({
                   WHATSAPP
                 </a>
               )}
+              </div>
             </div>
           )}
 
