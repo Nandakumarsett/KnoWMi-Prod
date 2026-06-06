@@ -1282,7 +1282,10 @@ export function CreatorProfile({
       <div className="w-full pb-8 relative bg-[#0D0B1A] text-white font-sans overflow-x-hidden">
         {/* Neon Background Accents & Banner */}
         {data.featured_work_url && (
-          <div className="relative w-full h-48 sm:h-72 overflow-hidden shadow-[0_0_30px_rgba(255,45,120,0.2)] z-10">
+          <div 
+            className="relative w-full h-48 sm:h-72 overflow-hidden shadow-[0_0_30px_rgba(255,45,120,0.2)] z-10"
+            style={{ WebkitMaskImage: "linear-gradient(to bottom, black 0%, transparent 100%)", maskImage: "linear-gradient(to bottom, black 0%, transparent 100%)" }}
+          >
             <img
               src={getAssetUrl(data.featured_work_url)}
               className="w-full h-full object-cover object-center filter contrast-125 saturate-150"
@@ -1379,29 +1382,30 @@ export function CreatorProfile({
                 {topCity}
               </span>
             </div>
-            <div className="text-center flex-1 min-w-[120px]">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-[#FF2D78] block mb-2 drop-shadow-[0_0_5px_rgba(255,45,120,0.8)]">
-                VIBE SCORE
-              </span>
-              <div className="flex flex-col items-center">
-                <span className="text-3xl font-black text-[#FF2D78] drop-shadow-[0_0_8px_rgba(255,45,120,0.8)] flex items-baseline gap-1">
-                  92<span className="text-sm text-gray-400">/100</span>
-                </span>
-                <div className="w-full h-1 bg-white/10 mt-2 rounded-full overflow-hidden">
-                  <div className="w-[92%] h-full bg-[#FF2D78] shadow-[0_0_10px_rgba(255,45,120,1)]"></div>
-                </div>
-              </div>
-            </div>
+
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full max-w-3xl mb-12">
+          <div className="flex flex-col gap-8 w-full max-w-3xl mb-12">
+            {/* Narrative */}
+            {(data.bio || profile.bio) && (
+              <div className="bg-black/30 border border-cyan-500/30 rounded-3xl p-8 sm:p-10 shadow-[inset_0_0_30px_rgba(6,182,212,0.1)] text-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
+                <h3 className="font-black text-lg sm:text-xl uppercase tracking-[0.2em] text-cyan-400 mb-6 drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]">
+                  NARRATIVE
+                </h3>
+                <p className="text-sm sm:text-base text-gray-300 leading-loose font-medium whitespace-pre-wrap">
+                  {data.bio || profile.bio}
+                </p>
+              </div>
+            )}
+
             {/* What I Do */}
             {Array.isArray(data.content_formats) && data.content_formats.length > 0 && (
-              <div className="bg-black/30 border border-[#FF2D78]/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(255,45,120,0.05)]">
-                <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-[#FF2D78] mb-5">
+              <div className="bg-black/30 border border-[#FF2D78]/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(255,45,120,0.05)] w-full max-w-md mx-auto">
+                <h3 className="font-bold text-sm text-center uppercase tracking-[0.2em] text-[#FF2D78] mb-5">
                   WHAT I DO
                 </h3>
-                <ul className="space-y-4">
+                <ul className="space-y-4 max-w-xs mx-auto">
                   {data.content_formats.map((format) => (
                     <li
                       key={format}
@@ -1416,23 +1420,14 @@ export function CreatorProfile({
                 </ul>
               </div>
             )}
-
-            {/* Narrative */}
-            {(data.bio || profile.bio) && (
-              <div className="bg-black/30 border border-cyan-500/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(6,182,212,0.05)]">
-                <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-cyan-400 mb-5">
-                  NARRATIVE
-                </h3>
-                <p className="text-xs text-gray-300 leading-relaxed font-light whitespace-pre-wrap">
-                  {data.bio || profile.bio}
-                </p>
-              </div>
-            )}
           </div>
 
           {/* Social Links */}
           {Array.isArray(data.platforms) && data.platforms.length > 0 && (
             <div className="w-full text-center mb-10 mt-6">
+              <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-white mb-6 border-b border-white/20 pb-2 inline-block">
+                CONNECT WITH ME
+              </h3>
               <div className="flex flex-wrap gap-5 justify-center">
                 {data.platforms.map((p) => {
                   const platform = p.platform?.toLowerCase();
@@ -1489,27 +1484,26 @@ export function CreatorProfile({
                   ))}
                 </div>
               )}
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
                 {data.availability_status && (
-                  <div className="bg-black/60 border border-white/10 rounded-lg p-4 text-center">
+                  <div className="bg-black/60 border border-white/10 rounded-lg p-4 sm:px-6 flex-1 min-w-[140px] text-center shadow-lg">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-2">STATUS</span>
                     <div className="flex items-center justify-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse"></div>
-                      <span className="text-sm font-black text-white uppercase">{data.availability_status}</span>
+                      <span className="text-sm sm:text-base font-black text-white uppercase">{data.availability_status}</span>
                     </div>
                   </div>
                 )}
                 {data.turnaround_time && (
-                  <div className="bg-black/60 border border-white/10 rounded-lg p-4 text-center">
+                  <div className="bg-black/60 border border-white/10 rounded-lg p-4 sm:px-6 flex-1 min-w-[140px] text-center shadow-lg">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-2">TURNAROUND TIME</span>
-                    <span className="text-sm font-black text-white uppercase whitespace-nowrap">{data.turnaround_time}</span>
+                    <span className="text-sm sm:text-base font-black text-white uppercase break-words">{data.turnaround_time}</span>
                   </div>
                 )}
                 {data.rate_range_min && (
-                  <div className="bg-black/60 border border-white/10 rounded-lg p-4 text-center">
+                  <div className="bg-black/60 border border-white/10 rounded-lg p-4 sm:px-6 flex-1 min-w-[140px] text-center shadow-lg">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-2">BASE RATE</span>
-                    <span className="text-sm font-black text-[#FF2D78] uppercase drop-shadow-[0_0_8px_rgba(255,45,120,0.8)]">₹{data.rate_range_min}</span>
+                    <span className="text-sm sm:text-base font-black text-[#FF2D78] uppercase drop-shadow-[0_0_8px_rgba(255,45,120,0.8)]">₹{data.rate_range_min}</span>
                   </div>
                 )}
               </div>
@@ -1640,12 +1634,13 @@ export function CreatorProfile({
             </div>
           )}
 
+          {/* Contact Section */}
           {(data.contact_email || data.contact_whatsapp) && (
-            <div className="w-full max-w-3xl border-t border-white/20 pt-10 pb-8 flex flex-col items-center">
-              <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-cyan-400 mb-8 text-center drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]">
+            <div className="w-full max-w-3xl border-t border-white/20 pt-8 pb-4 flex flex-col items-center">
+              <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-cyan-400 mb-6 text-center drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]">
                 LET'S WORK TOGETHER
               </h3>
-              <div className="w-full flex justify-center gap-4 flex-wrap">
+              <div className="w-full flex justify-center gap-2 flex-wrap">
               {data.contact_email && (
                 <a
                   href={`mailto:${data.contact_email}`}
