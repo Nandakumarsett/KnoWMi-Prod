@@ -930,14 +930,7 @@ export function CreatorProfile({
             )}
           </div>
 
-          {/* Tagline / Bio */}
-          {profile.bio && (
-            <div className="mb-10 w-full text-center max-w-lg mx-auto">
-              <p className="text-sm font-bold tracking-widest uppercase italic">
-                "{profile.bio}"
-              </p>
-            </div>
-          )}
+          {/* Tagline */}
 
           {/* Stats Bar */}
           <div className="w-full border-4 border-black p-4 sm:p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center mb-10 bg-white">

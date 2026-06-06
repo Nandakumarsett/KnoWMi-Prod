@@ -152,13 +152,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           </div>
 
-          {profile.bio && (
-            <div className="w-full max-w-md mx-auto text-center mb-8 -mt-2">
-              <p className="text-sm sm:text-[15px] text-neutral-500 leading-relaxed font-medium">
-                "{profile.bio}"
-              </p>
-            </div>
-          )}
+
 
           <div className="w-full max-w-md mb-8 z-20 flex flex-col items-center gap-4">
             <div className="w-full max-w-sm">
@@ -557,11 +551,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                   {data.batch_year ? `Batch of ${data.batch_year}` : ''}
                 </div>
                 
-                {profile.bio && (
-                  <p className="text-xl text-[#2d3748] mt-4 max-w-md leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                    "{profile.bio}"
-                  </p>
-                )}
+
              </div>
           </div>
 
@@ -1098,11 +1088,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                   </span>
                 )}
               </div>
-              {profile.bio && (
-                <p className="text-indigo-100/70 text-[15px] leading-relaxed mt-3 max-w-xl font-light">
-                  {profile.bio}
-                </p>
-              )}
+
               
               <div className="flex flex-col sm:flex-row flex-wrap items-center sm:items-start justify-center sm:justify-start gap-4 mt-6 z-20 sm:ml-6">
                 {(data.resume_url || data.website) && (
@@ -1549,9 +1535,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                   {data.year ? `Year ${data.year}` : ''}{data.year && data.batch_year ? ' · ' : ''}{data.batch_year ? `Batch of ${data.batch_year}` : ''}
                 </p>
               )}
-              {profile.bio && (
-                <p className="nb-ink text-2xl leading-[34px] nb-handwriting font-medium mt-2 max-w-2xl">"{profile.bio}"</p>
-              )}
+
             </div>
           </div>
 
