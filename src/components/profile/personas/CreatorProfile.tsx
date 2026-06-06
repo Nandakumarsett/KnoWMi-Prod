@@ -935,9 +935,9 @@ export function CreatorProfile({
           )}
 
           {/* Stats Bar */}
-          <div className="w-full border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] grid grid-cols-2 divide-x-4 divide-black mb-10 bg-white">
+          <div className="w-full border-4 border-black p-4 sm:p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center mb-10 bg-white">
             <div
-              className={`text-center py-4 sm:py-6 ${isFreeProfile ? "cursor-pointer hover:opacity-80" : ""}`}
+              className={`flex-1 text-center ${isFreeProfile ? "cursor-pointer hover:opacity-80" : ""}`}
               onClick={() => isFreeProfile && setShowFomoModal(true)}
             >
               <span className="text-[10px] font-black uppercase tracking-widest block mb-1">
@@ -949,9 +949,12 @@ export function CreatorProfile({
                 {isFreeProfile ? "4.2K" : liveViews}
               </span>
             </div>
-            <div className="text-center py-4 sm:py-6">
+            
+            <div className="w-1 h-12 bg-black mx-2 sm:mx-6 rounded-full"></div>
+            
+            <div className="flex-1 text-center">
               <span className="text-[10px] font-black uppercase tracking-widest block mb-1">
-                LOCATION
+                MOST SCANNED LOCATION
               </span>
               <span className="text-xl font-black uppercase">{topCity}</span>
             </div>
