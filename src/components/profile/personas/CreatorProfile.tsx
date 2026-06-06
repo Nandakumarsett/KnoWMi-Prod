@@ -658,7 +658,7 @@ export function CreatorProfile({
             </section>
           </div>
         </section>
-        <GateModal />
+        {renderModals()}
       </div>
     );
   }
@@ -861,7 +861,7 @@ export function CreatorProfile({
             )}
           </div>
         </div>
-        <GateModal />
+        {renderModals()}
       </div>
     );
   }
@@ -1110,7 +1110,7 @@ export function CreatorProfile({
             </div>
           )}
         </div>
-        <GateModal />
+        {renderModals()}
       </div>
     );
   }
@@ -1846,173 +1846,7 @@ export function CreatorProfile({
         </section>
       </main>
 
-      {/* ═══ SELECTED WORK MODAL ═══ */}
-      {selectedWork && (
-        <div
-          className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8 bg-white/80 backdrop-blur-xl animate-fadeIn"
-          onClick={() => setSelectedWork(null)}
-        >
-          <div
-            className="bg-white p-2 rounded-[28px] max-w-3xl w-full relative shadow-[0_24px_80px_rgba(0,0,0,0.12)] animate-zoomIn"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setSelectedWork(null)}
-              className="absolute -top-12 right-0 sm:top-4 sm:right-4 p-3 bg-white text-gray-400 hover:text-gray-900 rounded-full shadow-md transition-all hover:scale-110 z-10"
-            >
-              <X size={18} strokeWidth={3} />
-            </button>
-            <div className="bg-gray-50 rounded-[22px] overflow-hidden">
-              {(() => {
-                const uploadUrl = selectedWork.url;
-                
-                const isImageFile = uploadUrl && typeof uploadUrl === "string" && uploadUrl.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i);
-                const isUploadedVideo = uploadUrl && !isImageFile && (
-                  selectedWork.type === 'video' ||
-                  (typeof uploadUrl === "string" && uploadUrl.match(/\.(mp4|webm|ogg|mov)$/i))
-                );
-
-                if (isUploadedVideo) {
-                  return (
-                    <div className="w-full aspect-video bg-black">
-                      <video
-                        key={uploadUrl}
-                        src={getAssetUrl(uploadUrl)}
-                        className="w-full h-full object-contain"
-                        controls
-                        autoPlay
-                        muted
-                        playsInline
-                        preload="auto"
-                        onTimeUpdate={(e) => {
-                          if (e.currentTarget.currentTime >= 10) {
-                            e.currentTarget.pause();
-                            e.currentTarget.currentTime = 10;
-                          }
-                        }}
-                      />
-                    </div>
-                  );
-                }
-
-                const thumb = getThumbnail(selectedWork);
-                if (thumb) {
-                  return (
-                    <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center relative">
-                      <Camera size={40} className="text-purple-300 opacity-60 absolute" />
-                      <img
-                        src={thumb}
-                        className="absolute inset-0 w-full h-full object-cover z-10"
-                        alt={selectedWork.title}
-                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                      />
-                    </div>
-                  );
-                }
-                return (
-                  <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center relative">
-                    <Camera size={40} className="text-purple-300 opacity-60 absolute" />
-                  </div>
-                );
-              })()}
-              <div className="p-6 sm:p-8">
-                <h3 className="text-xl font-extrabold text-gray-900 mb-2">
-                  {selectedWork.title}
-                </h3>
-                {selectedWork.description && (
-                  <p className="text-sm text-gray-700 font-semibold leading-relaxed">
-                    {selectedWork.description}
-                  </p>
-                )}
-                {(() => {
-                  const url = selectedWork.url || selectedWork.external_url;
-                  const isVideoEmbed =
-                    url &&
-                    typeof url === "string" &&
-                    url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
-                  const isUploadedVideo =
-                    selectedWork.type === 'video' ||
-                    (url &&
-                    typeof url === "string" &&
-                    url.match(/\.(mp4|webm|ogg|mov)$/i));
-                  const isImageFile =
-                    selectedWork.type === 'image' ||
-                    (url &&
-                    typeof url === "string" &&
-                    url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i));
-
-                  const isExternalWebLink =
-                    url &&
-                    typeof url === "string" &&
-                    !isVideoEmbed &&
-                    !isUploadedVideo &&
-                    !isImageFile &&
-                    !url.includes("supabase.co");
-
-                  if (isExternalWebLink) {
-                    return (
-                      <a
-                        href={ensureAbsoluteUrl(url)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block mt-4 text-purple-600 font-bold text-sm hover:underline"
-                      >
-                        Visit Link &rarr;
-                      </a>
-                    );
-                  }
-                  if (isVideoEmbed || isUploadedVideo) {
-                    const finalUrl = selectedWork.external_url ? ensureAbsoluteUrl(selectedWork.external_url) : (isUploadedVideo ? getAssetUrl(url) : ensureAbsoluteUrl(url));
-                    return (
-                      <a
-                        href={finalUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block mt-4 text-purple-600 font-bold text-sm hover:underline"
-                      >
-                        Watch Full Video &rarr;
-                      </a>
-                    );
-                  }
-                  return null;
-                })()}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ═══ FOMO MODAL ═══ */}
-      {showFomoModal && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-white/80 backdrop-blur-xl animate-fadeIn">
-          <div className="bg-white border border-gray-100 rounded-[32px] p-10 max-w-sm w-full shadow-[0_24px_80px_rgba(0,0,0,0.1)] relative text-center animate-zoomIn">
-            <button
-              onClick={() => setShowFomoModal(false)}
-              className="absolute top-5 right-5 p-2 text-gray-400 hover:text-gray-900 transition-colors"
-            >
-              <X size={20} />
-            </button>
-            <div className="w-16 h-16 rounded-[20px] bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center mx-auto mb-6">
-              <Activity size={28} className="text-purple-600 animate-pulse" />
-            </div>
-            <h3 className="text-xl font-extrabold text-gray-900 tracking-tight mb-2">
-              Unlock Insights
-            </h3>
-            <p className="text-sm text-gray-700 font-semibold mb-8 leading-relaxed">
-              Upgrade to full tier to view real-time profile scans and audience
-              telemetry.
-            </p>
-            <button
-              onClick={() => (window.location.href = "/#pricing")}
-              className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-[11px] uppercase tracking-widest rounded-full transition-all shadow-lg hover:shadow-purple-500/25 hover:-translate-y-1"
-            >
-              Claim Tee to Unlock
-            </button>
-          </div>
-        </div>
-      )}
-
-      <GateModal />
+      {renderModals()}
     </div>
   );
 }
