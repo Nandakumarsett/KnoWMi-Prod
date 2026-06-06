@@ -1694,6 +1694,7 @@ export function CreatorProfile({
             </div>
           )}
         </div>
+        {renderWorkModal()}
         <GateModal />
       </div>
     );
