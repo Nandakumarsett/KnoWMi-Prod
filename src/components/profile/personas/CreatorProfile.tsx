@@ -510,8 +510,8 @@ export function CreatorProfile({
             </div>
 
             {(data.bio || profile.bio) && (
-              <div className="mb-8">
-                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-1">
+              <div className="mb-12">
+                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6 text-center sm:text-left">
                   Professional Narrative
                 </p>
                 <p className="text-base text-neutral-600 leading-relaxed bg-neutral-50/30 py-4 px-6 rounded-[24px] border border-neutral-100/50 max-w-2xl italic">
@@ -758,7 +758,7 @@ export function CreatorProfile({
             )}
 
             <section className="px-4 sm:px-0 mb-12 relative z-10">
-              <div className="relative w-full rounded-[32px] overflow-hidden group p-8 sm:p-10 bg-white shadow-[0_2px_40px_-12px_rgba(0,0,0,0.08)] border border-neutral-100 transition-all hover:shadow-[0_8px_40px_-12px_rgba(0,0,0,0.12)]">
+              <div className="relative w-full max-w-2xl mx-auto rounded-[32px] overflow-hidden group p-8 sm:p-10 bg-white shadow-[0_2px_40px_-12px_rgba(0,0,0,0.08)] border border-neutral-100 transition-all hover:shadow-[0_8px_40px_-12px_rgba(0,0,0,0.12)]">
                 {/* Background Pattern / Ambient Glow */}
                 <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-gradient-to-br from-orange-100 via-rose-50 to-transparent rounded-full blur-[80px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-gradient-to-tr from-purple-100 to-transparent rounded-full blur-[60px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
@@ -770,7 +770,7 @@ export function CreatorProfile({
                   </div>
 
                   {/* Heading */}
-                  <h3 className="text-base sm:text-lg font-black uppercase tracking-[0.2em] text-neutral-900 mb-2">
+                  <h3 className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6 text-center">
                     Open for Collaboration
                   </h3>
                   
