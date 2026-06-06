@@ -1492,8 +1492,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
       <div className="relative w-full max-w-3xl mx-auto nb-lines min-h-screen">
         {/* ⭐ COVER BANNER (BACKGROUND) ⭐ */}
         {data.featured_work_url && (
-          <div className="absolute top-0 left-0 right-0 h-64 sm:h-80 z-0 pointer-events-none" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' }}>
-            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover opacity-90" alt="Cover Banner" />
+          <div className="absolute top-0 left-0 right-0 h-48 sm:h-64 z-0 pointer-events-none" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }}>
+            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover opacity-100" alt="Cover Banner" />
           </div>
         )}
 
@@ -1501,7 +1501,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         <div className="absolute top-0 bottom-0 left-[2.5rem] sm:left-[3.5rem] w-[2px] bg-[#c53030]/40 pointer-events-none z-0" />
         <div className="absolute top-0 bottom-0 left-[2.7rem] sm:left-[3.7rem] w-[1px] bg-[#c53030]/25 pointer-events-none z-0" />
 
-        <main className={`relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pb-12 flex flex-col gap-0 nb-animate ${data.featured_work_url ? 'pt-24 sm:pt-32' : 'pt-6'}`}>
+        <main className={`relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pb-12 flex flex-col gap-0 nb-animate ${data.featured_work_url ? 'pt-16 sm:pt-20' : 'pt-6'}`}>
           
 
 
@@ -1523,7 +1523,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
             
             {/* Name + Title + Year + Mood */}
-            <div className="flex-grow min-w-0 pt-1 sm:pt-3">
+            <div className={`flex-grow min-w-0 ${data.featured_work_url ? 'pt-2 sm:pt-44' : 'pt-1 sm:pt-3'}`}>
               <h1 className="text-4xl sm:text-5xl font-black nb-ink tracking-tight leading-tight nb-section-title" style={{ fontSize: 'clamp(2.2rem, 6vw, 3.2rem)' }}>
                 {profile.display_name} {data.mood && <span className="text-2xl">{data.mood}</span>}
               </h1>
