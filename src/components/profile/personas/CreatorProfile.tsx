@@ -767,64 +767,81 @@ export function CreatorProfile({
                           <span className="text-[10px] font-black text-white uppercase tracking-widest">
                             {w.title}
                           </span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            <section className="px-0 mb-6 relative z-10">
-              <div className="flex flex-col items-center text-center gap-6 bg-neutral-50/50 p-8 rounded-[32px] border border-neutral-100/50">
-                <div className="flex flex-col items-center w-full">
-                  <div className="flex items-center justify-center gap-2 mb-2 whitespace-nowrap">
-                    <Sparkles size={16} className="text-orange-500" />
-                    <span className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900">
+            <section className="px-0 mb-8 relative z-10">
+              <div className="relative overflow-hidden group bg-gradient-to-b from-white to-neutral-50/50 p-8 sm:p-12 rounded-[32px] border border-neutral-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500">
+                {/* Subtle gradient hover effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 via-transparent to-neutral-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                
+                <div className="relative flex flex-col items-center text-center z-10">
+                  <div className="inline-flex items-center justify-center gap-2 mb-4 px-5 py-2 rounded-full bg-orange-50 border border-orange-100/50 shadow-sm">
+                    <Sparkles size={14} className="text-orange-500 animate-pulse" />
+                    <span className="text-[11px] font-black uppercase tracking-[0.25em] text-orange-600">
                       Open for Collaboration
                     </span>
                   </div>
-                  <p className="text-xs text-neutral-500 font-medium italic mb-4">
-                    {data.collab_types ||
-                      "Available for strategic creative partnerships."}
+                  
+                  <p className="text-sm sm:text-base text-neutral-600 font-medium italic mb-8 max-w-lg leading-relaxed">
+                    "{data.collab_types || "Available for strategic creative partnerships."}"
                   </p>
                   
                   {data.collab_types_tags && data.collab_types_tags.length > 0 && (
-                    <div className="flex flex-wrap justify-center gap-2 mb-4">
+                    <div className="flex flex-wrap justify-center gap-2.5 mb-10">
                       {data.collab_types_tags.map((tag: string) => (
-                        <span key={tag} className="px-3 py-1 bg-white border border-neutral-200 rounded-full text-[10px] font-bold text-neutral-600 uppercase tracking-wider">{tag}</span>
+                        <span key={tag} className="px-4 py-2 bg-neutral-900 text-white rounded-full text-[10px] font-bold uppercase tracking-widest shadow-md hover:bg-orange-500 hover:shadow-orange-500/25 transition-all cursor-default transform hover:-translate-y-0.5">
+                          {tag}
+                        </span>
                       ))}
                     </div>
                   )}
 
                   {(data.rate_range_min || data.turnaround_time || data.availability_status) && (
-                    <div className="flex flex-wrap justify-center gap-4 text-[11px] font-bold text-neutral-500 uppercase tracking-widest mb-6 bg-white px-6 py-3 rounded-2xl border border-neutral-100 shadow-sm w-full max-w-lg">
-                      {data.availability_status && <span>Status: <span className="text-neutral-900">{data.availability_status}</span></span>}
-                      {data.rate_range_min && <span>Rates: <span className="text-neutral-900">₹{data.rate_range_min} {data.rate_range_max ? `- ₹${data.rate_range_max}` : '+'}</span></span>}
-                      {data.turnaround_time && <span>TAT: <span className="text-neutral-900">{data.turnaround_time}</span></span>}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-3xl mb-10">
+                      {data.availability_status && (
+                        <div className="flex flex-col items-center justify-center p-5 rounded-[20px] bg-white border border-neutral-100 shadow-sm group-hover:border-neutral-200 transition-colors">
+                          <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest mb-1.5">Status</span>
+                          <span className="text-xs font-bold text-neutral-900 uppercase tracking-wide flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse" />
+                            {data.availability_status}
+                          </span>
+                        </div>
+                      )}
+                      {data.rate_range_min && (
+                        <div className="flex flex-col items-center justify-center p-5 rounded-[20px] bg-white border border-neutral-100 shadow-sm group-hover:border-neutral-200 transition-colors">
+                          <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest mb-1.5">Starting Rate</span>
+                          <span className="text-xs font-bold text-neutral-900 uppercase tracking-wide">
+                            ₹{data.rate_range_min} {data.rate_range_max ? `- ₹${data.rate_range_max}` : '+'}
+                          </span>
+                        </div>
+                      )}
+                      {data.turnaround_time && (
+                        <div className="flex flex-col items-center justify-center p-5 rounded-[20px] bg-white border border-neutral-100 shadow-sm group-hover:border-neutral-200 transition-colors">
+                          <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest mb-1.5">Turnaround Time</span>
+                          <span className="text-xs font-bold text-neutral-900 uppercase tracking-wide">{data.turnaround_time}</span>
+                        </div>
+                      )}
                     </div>
                   )}
-                </div>
-
-                <div className="flex flex-wrap items-center gap-4 w-full">
-                  {data.contact_email && (
-                    <a
-                      href={`mailto:${data.contact_email}`}
-                      className="flex items-center justify-center gap-2 px-8 py-3.5 bg-white border border-neutral-200 rounded-2xl hover:border-orange-500 hover:text-orange-500 transition-all text-xs font-black uppercase tracking-widest text-neutral-900 shadow-sm whitespace-nowrap flex-1 min-w-[160px]"
-                    >
-                      <Mail size={16} /> Email Me
-                    </a>
-                  )}
-                  {data.contact_whatsapp && (
-                    <a
-                      href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, "")}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 px-8 py-3.5 bg-neutral-900 rounded-2xl hover:bg-orange-600 transition-all text-xs font-black uppercase tracking-widest text-white shadow-lg shadow-neutral-900/10 whitespace-nowrap flex-1 min-w-[160px]"
-                    >
-                      <MessageCircle size={16} /> WhatsApp
-                    </a>
-                  )}
+                  
+                  <div className="flex flex-wrap justify-center gap-4 w-full pt-6 border-t border-neutral-100/80">
+                    {data.contact_email && (
+                      <a
+                        href={`mailto:${data.contact_email}`}
+                        className="flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-neutral-200 rounded-2xl hover:border-neutral-900 hover:text-neutral-900 transition-all text-xs font-black uppercase tracking-widest text-neutral-600 hover:-translate-y-1 w-full sm:w-auto min-w-[180px]"
+                      >
+                        <Mail size={16} /> Email Me
+                      </a>
+                    )}
+                    {data.contact_whatsapp && (
+                      <a
+                        href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, "")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 px-8 py-4 bg-neutral-900 text-white rounded-2xl hover:bg-orange-500 transition-all text-xs font-black uppercase tracking-widest shadow-lg hover:shadow-orange-500/25 hover:-translate-y-1 w-full sm:w-auto min-w-[180px]"
+                      >
+                        <MessageCircle size={16} /> WhatsApp
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             </section>
