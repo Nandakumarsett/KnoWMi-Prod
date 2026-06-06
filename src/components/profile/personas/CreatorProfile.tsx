@@ -923,6 +923,11 @@ export function CreatorProfile({
                 {data.type}
               </p>
             )}
+            {data.tagline && (
+              <p className="text-xs sm:text-sm font-bold tracking-widest uppercase mt-4 block max-w-2xl mx-auto">
+                {data.tagline}
+              </p>
+            )}
           </div>
 
           {/* Tagline / Bio */}
@@ -964,13 +969,13 @@ export function CreatorProfile({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 w-full text-left mb-12">
             {/* Work List */}
-            {Array.isArray(data.content_formats) && data.content_formats.length > 0 && (
+            {((Array.isArray(data.content_formats) && data.content_formats.length > 0) || (Array.isArray(data.deliverable_formats) && data.deliverable_formats.length > 0)) && (
               <div>
                 <h3 className="font-black text-2xl uppercase tracking-tighter mb-4 border-b-4 border-black pb-2">
                   WORK
                 </h3>
                 <ul className="space-y-3">
-                  {data.content_formats.map((format) => (
+                  {(Array.isArray(data.deliverable_formats) && data.deliverable_formats.length > 0 ? data.deliverable_formats : data.content_formats || []).map((format: string) => (
                     <li
                       key={format}
                       className="font-bold text-sm uppercase tracking-widest flex items-center gap-3"
@@ -1037,11 +1042,11 @@ export function CreatorProfile({
             </div>
           )}
 
-          {/* Demographics */}
-          {(data.audience_age_group || (Array.isArray(data.audience_interests) && data.audience_interests.length > 0)) && (
+          {/* Demographics & Aesthetic */}
+          {(data.audience_age_group || data.visual_style || data.posting_frequency || (Array.isArray(data.audience_interests) && data.audience_interests.length > 0)) && (
             <div className="w-full mb-12">
               <h3 className="font-black text-2xl uppercase tracking-tighter mb-6 border-b-4 border-black pb-2 text-left">
-                DEMOGRAPHICS
+                DEMOGRAPHICS & AESTHETIC
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {data.audience_age_group && (
@@ -1050,8 +1055,20 @@ export function CreatorProfile({
                     <span className="text-xl font-black">{data.audience_age_group}</span>
                   </div>
                 )}
+                {data.visual_style && (
+                  <div className="border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
+                    <span className="text-[10px] font-black uppercase tracking-widest block mb-1">VISUAL STYLE</span>
+                    <span className="text-xl font-black">{data.visual_style}</span>
+                  </div>
+                )}
+                {data.posting_frequency && (
+                  <div className="border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
+                    <span className="text-[10px] font-black uppercase tracking-widest block mb-1">POSTING FREQ</span>
+                    <span className="text-xl font-black">{data.posting_frequency}</span>
+                  </div>
+                )}
                 {Array.isArray(data.audience_interests) && data.audience_interests.length > 0 && (
-                  <div className="sm:col-span-2 border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white flex flex-col justify-center">
+                  <div className="sm:col-span-3 border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white flex flex-col justify-center">
                     <span className="text-[10px] font-black uppercase tracking-widest block mb-3">TOP INTERESTS</span>
                     <div className="flex flex-wrap gap-2">
                       {data.audience_interests.map((int: string) => (
@@ -1195,9 +1212,14 @@ export function CreatorProfile({
                   {data.availability_status && (
                     <div className="text-center flex-1 min-w-[120px]">
                       <span className="text-xs sm:text-sm font-black text-neutral-500 uppercase tracking-widest block mb-1">STATUS</span>
-                      <div className="flex items-center justify-center gap-2">
-                        <span className="w-3 h-3 sm:w-4 sm:h-4 bg-green-500 border-2 border-black animate-pulse"></span>
-                        <span className="text-base sm:text-lg font-black uppercase">{data.availability_status}</span>
+                      <div className="flex flex-col items-center justify-center gap-1">
+                        <div className="flex items-center justify-center gap-2">
+                          <span className="w-3 h-3 sm:w-4 sm:h-4 bg-green-500 border-2 border-black animate-pulse"></span>
+                          <span className="text-base sm:text-lg font-black uppercase">{data.availability_status}</span>
+                        </div>
+                        {data.response_time && (
+                          <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest block mt-1">RESPONDS {data.response_time}</span>
+                        )}
                       </div>
                     </div>
                   )}
@@ -1207,10 +1229,14 @@ export function CreatorProfile({
                       <span className="text-base sm:text-lg font-black uppercase whitespace-nowrap">{data.turnaround_time}</span>
                     </div>
                   )}
-                  {data.rate_range_min && (
+                  {(data.rate_range_min || data.rate_range_max) && (
                     <div className="text-center flex-1 min-w-[120px]">
-                      <span className="text-xs sm:text-sm font-black text-neutral-500 uppercase tracking-widest block mb-1">STARTING RATE</span>
-                      <span className="text-base sm:text-lg font-black uppercase">₹{data.rate_range_min}</span>
+                      <span className="text-xs sm:text-sm font-black text-neutral-500 uppercase tracking-widest block mb-1">RATE</span>
+                      <span className="text-base sm:text-lg font-black uppercase">
+                        {data.rate_range_min ? `₹${data.rate_range_min.toLocaleString()}` : ""}
+                        {data.rate_range_min && data.rate_range_max ? " - " : ""}
+                        {data.rate_range_max ? `₹${data.rate_range_max.toLocaleString()}` : ""}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -1221,7 +1247,14 @@ export function CreatorProfile({
 
 
           {/* Contact / Action */}
-          <div className="w-full mt-4 flex flex-col sm:flex-row gap-4 mb-12">
+          {data.preferred_contact_method && (
+            <div className="w-full text-center mt-8 mb-2">
+              <span className="text-xs font-black uppercase tracking-widest text-neutral-500">
+                PREFERS TO BE CONTACTED VIA {data.preferred_contact_method}
+              </span>
+            </div>
+          )}
+          <div className="w-full mt-2 flex flex-col sm:flex-row gap-4 mb-12">
             {data.contact_email && (
               <a
                 href={`mailto:${data.contact_email}`}
