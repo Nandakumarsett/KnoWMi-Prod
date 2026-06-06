@@ -508,12 +508,12 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         `}} />
 
         {/* Banner (Background) */}
-        {false && (
+        {data.featured_work_url && (
           <div 
             className="absolute top-0 left-0 w-full h-72 sm:h-96 z-0 pointer-events-none opacity-90"
             style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)' }}
           >
-             <img src={getAssetUrl(false)} className="w-full h-full object-cover" alt="Banner" />
+             <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover" alt="Banner" />
           </div>
         )}
 
@@ -526,9 +526,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              <div className="w-40 h-48 sm:w-48 sm:h-56 shrink-0 bg-white p-3 pb-12 cork-shadow-lg -rotate-[4deg] z-20 transition-transform duration-300 hover:rotate-0 hover:scale-105 mt-2 md:-mr-12">
                 <div className="pushpin pin-blue" />
                 <div className="w-full h-full bg-neutral-200 overflow-hidden">
-                  {data.featured_work_url ? (
-                    <img src={getAssetUrl(data.featured_work_url)} alt="Featured Work" className="w-full h-full object-cover grayscale sepia-[0.2]" />
-                  ) : !avatarError && profile.avatar_url ? (
+                  {!avatarError && profile.avatar_url ? (
                     <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover grayscale sepia-[0.2]" onError={() => setAvatarError(true)} />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-neutral-300 text-neutral-600 font-bold text-4xl font-sans">
@@ -630,24 +628,44 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 </p>
               </div>
             )}
-            
-            {data.clubs && data.clubs.length > 0 && (
-              <div className="w-full flex-1 min-w-[280px] max-w-[400px] bg-[#FCEB9C] p-6 pb-8 cork-shadow rotate-1 relative min-h-[220px]">
-                <div className="pushpin pin-green" />
-                <h4 className="text-xl font-bold text-[#B91C1C] mb-3 uppercase tracking-wide text-center mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Clubs & Orgs</h4>
-                <ul className="text-xl text-neutral-800 space-y-1 ml-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  {data.clubs.map((c, i) => <li key={i}>• {c}</li>)}
-                </ul>
+            {/* Resume & Portfolio */}
+            {(data.resume_url || data.website) && (
+              <div className="flex flex-wrap gap-3 mt-2 mb-6 z-20 justify-center">
+                {data.resume_url && (
+                  <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-[#B91C1C] text-white px-6 py-3 rounded shadow-md hover:bg-red-800 transition-colors font-bold text-[15px]">
+                    <FileText size={20} /> Resume
+                  </a>
+                )}
+                {data.website && (
+                  <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-neutral-800 text-white px-6 py-3 rounded shadow-md hover:bg-black transition-colors font-bold text-[15px]">
+                    <Globe size={20} /> Portfolio
+                  </a>
+                )}
               </div>
             )}
 
-            {data.hobbies && data.hobbies.length > 0 && (
-              <div className="w-full flex-1 min-w-[280px] max-w-[400px] bg-[#F6C1D6] p-6 pb-8 cork-shadow -rotate-2 relative min-h-[220px]">
-                <div className="pushpin pin-white" />
-                <h4 className="text-xl font-bold text-[#1e3a8a] mb-3 uppercase tracking-wide text-center mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Hobbies</h4>
-                <ul className="text-xl text-neutral-800 space-y-1 ml-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  {data.hobbies.map((h: string, i: number) => <li key={i}>• {h}</li>)}
-                </ul>
+            {/* Row 2: Clubs, Hobbies, Skills */}
+            {((data.clubs && data.clubs.length > 0) || (data.hobbies && data.hobbies.length > 0)) && (
+              <div className="flex flex-row flex-wrap sm:flex-nowrap justify-center gap-8 w-full max-w-4xl">
+                {data.clubs && data.clubs.length > 0 && (
+                  <div className="w-full flex-1 min-w-[280px] max-w-[400px] bg-[#FCEB9C] p-6 pb-8 cork-shadow rotate-1 relative min-h-[220px]">
+                    <div className="pushpin pin-green" />
+                    <h4 className="text-xl font-bold text-[#B91C1C] mb-3 uppercase tracking-wide text-center mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Clubs & Orgs</h4>
+                    <ul className="text-xl text-neutral-800 space-y-1 ml-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                      {data.clubs.map((c: string, i: number) => <li key={i}>- {c}</li>)}
+                    </ul>
+                  </div>
+                )}
+
+                {data.hobbies && data.hobbies.length > 0 && (
+                  <div className="w-full flex-1 min-w-[280px] max-w-[400px] bg-[#F6C1D6] p-6 pb-8 cork-shadow -rotate-2 relative min-h-[220px]">
+                    <div className="pushpin pin-white" />
+                    <h4 className="text-xl font-bold text-[#1e3a8a] mb-3 uppercase tracking-wide text-center mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Hobbies</h4>
+                    <ul className="text-xl text-neutral-800 space-y-1 ml-4" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                      {data.hobbies.map((h: string, i: number) => <li key={i}>- {h}</li>)}
+                    </ul>
+                  </div>
+                )}
               </div>
             )}
 
@@ -798,20 +816,6 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             <div className="w-full bg-white/80 p-2 rounded backdrop-blur-sm cork-shadow">
               <ProfileCTAs profile={profile} accentColor="#B91C1C" />
             </div>
-            {(data.resume_url || data.website) && (
-              <div className="flex gap-3">
-                {data.resume_url && (
-                  <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-[#B91C1C] text-white px-5 py-2.5 rounded shadow-md hover:bg-red-800 transition-colors font-bold text-[14px]">
-                    <FileText size={18} /> Resume
-                  </a>
-                )}
-                {data.website && (
-                  <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-neutral-800 text-white px-5 py-2.5 rounded shadow-md hover:bg-black transition-colors font-bold text-[14px]">
-                    <Globe size={18} /> Portfolio
-                  </a>
-                )}
-              </div>
-            )}
           </div>
 
         </main>
@@ -1486,29 +1490,20 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
       
       {/* Full-width ruled paper with red margin */}
       <div className="relative w-full max-w-3xl mx-auto nb-lines min-h-screen">
+        {/* ⭐ COVER BANNER (BACKGROUND) ⭐ */}
+        {data.featured_work_url && (
+          <div className="absolute top-0 left-0 right-0 h-56 sm:h-72 z-0 pointer-events-none" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)', mixBlendMode: 'multiply' }}>
+            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover opacity-60" alt="Cover Banner" />
+          </div>
+        )}
+
         {/* Red margin line */}
-        <div className="absolute top-0 bottom-0 left-[2.5rem] sm:left-[3.5rem] w-[2px] bg-[#c53030]/30 pointer-events-none z-0" />
-        <div className="absolute top-0 bottom-0 left-[2.7rem] sm:left-[3.7rem] w-[1px] bg-[#c53030]/15 pointer-events-none z-0" />
+        <div className="absolute top-0 bottom-0 left-[2.5rem] sm:left-[3.5rem] w-[2px] bg-[#c53030]/40 pointer-events-none z-0" />
+        <div className="absolute top-0 bottom-0 left-[2.7rem] sm:left-[3.7rem] w-[1px] bg-[#c53030]/25 pointer-events-none z-0" />
 
         <main className="relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pt-6 pb-12 flex flex-col gap-0 nb-animate">
           
-          {/* ⭐ COVER BANNER ⭐ */}
-          {data.featured_work_url && (
-            <div className="relative w-full h-32 sm:h-48 mb-6 group">
-              {/* Tape corners */}
-              <div className="absolute -top-3 left-4 w-12 h-6 bg-[#FEF08A]/70 washi-tape rotate-[-15deg] z-20 rounded-sm shadow-sm" />
-              <div className="absolute -top-3 right-4 w-12 h-6 bg-[#FEF08A]/70 washi-tape rotate-[15deg] z-20 rounded-sm shadow-sm" />
-              
-              <div className="w-full h-full bg-white p-2 pb-4 shadow-[2px_3px_10px_rgba(0,0,0,0.12)] rotate-[1deg] transition-transform duration-300 group-hover:rotate-0">
-                <img 
-                  src={getAssetUrl(data.featured_work_url)} 
-                  alt="Cover" 
-                  className="w-full h-full object-cover border border-neutral-200/50"
-                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                />
-              </div>
-            </div>
-          )}
+
 
           {/* ═══ HEADER: Avatar + Name + Bio + Stats — all compact ═══ */}
           <div className="flex flex-col sm:flex-row items-start gap-5 mb-2">
@@ -1529,19 +1524,19 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             
             {/* Name + Title + Year + Mood */}
             <div className="flex-grow min-w-0 pt-1 sm:pt-3">
-              <h1 className="text-3xl sm:text-4xl font-black nb-ink tracking-tight leading-tight nb-section-title" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)' }}>
-                {profile.display_name} {data.mood && <span className="text-xl">{data.mood}</span>}
+              <h1 className="text-4xl sm:text-5xl font-black nb-ink tracking-tight leading-tight nb-section-title" style={{ fontSize: 'clamp(2.2rem, 6vw, 3.2rem)' }}>
+                {profile.display_name} {data.mood && <span className="text-2xl">{data.mood}</span>}
               </h1>
-              <p className="nb-red-ink font-bold text-lg nb-handwriting flex items-center gap-1.5 mt-1 leading-[28px]">
-                <GraduationCap size={18} /> {data.course } {data.university ? `@ ${data.university}` : ''}
+              <p className="text-[#b91c1c] font-bold text-xl nb-handwriting flex items-center gap-1.5 mt-1 leading-[30px]">
+                <GraduationCap size={20} /> {data.course } {data.university ? `@ ${data.university}` : ''}
               </p>
               {(data.year || data.batch_year) && (
-                <p className="nb-pencil text-lg nb-handwriting leading-[28px]">
+                <p className="text-gray-700 text-xl nb-handwriting font-semibold leading-[30px]">
                   {data.year ? `Year ${data.year}` : ''}{data.year && data.batch_year ? ' · ' : ''}{data.batch_year ? `Batch of ${data.batch_year}` : ''}
                 </p>
               )}
               {profile.bio && (
-                <p className="nb-ink text-xl leading-[30px] nb-handwriting italic mt-1.5">"{profile.bio}"</p>
+                <p className="nb-ink text-2xl leading-[34px] nb-handwriting font-medium mt-2">"{profile.bio}"</p>
               )}
             </div>
           </div>
@@ -1554,13 +1549,13 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             {(data.resume_url || data.website) && (
               <div className="flex flex-wrap gap-4 items-center">
                 {data.resume_url && (
-                  <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 nb-handwriting text-[#c53030] hover:text-[#9b2c2c] transition-colors text-lg font-bold rotate-[-2deg]">
-                    <FileText size={18} /> My Resume <ExternalLink size={14} className="ml-0.5" />
+                  <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 nb-handwriting text-[#991b1b] hover:text-[#7f1d1d] transition-colors text-xl font-black rotate-[-2deg]">
+                    <FileText size={20} /> My Resume <ExternalLink size={16} className="ml-0.5" />
                   </a>
                 )}
                 {data.website && (
-                  <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 nb-handwriting text-[#1e3a8a] hover:text-[#1e40af] transition-colors text-lg font-bold rotate-[1deg]">
-                    <Globe size={18} /> Personal Site <ExternalLink size={14} className="ml-0.5" />
+                  <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 nb-handwriting text-[#1e3a8a] hover:text-[#172554] transition-colors text-xl font-black rotate-[1deg]">
+                    <Globe size={20} /> Personal Site <ExternalLink size={16} className="ml-0.5" />
                   </a>
                 )}
               </div>
@@ -1587,26 +1582,26 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 </div>
                 {data.campus_rank_pct && (
                   <div className="nb-stat" style={{ borderColor: '#c53030' }}>
-                    <span className="text-sm nb-red-ink">Top {data.campus_rank_pct}%</span>
-                    <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">rank</span>
+                    <span className="text-base font-black nb-red-ink">Top {data.campus_rank_pct}%</span>
+                    <span className="text-[9px] text-gray-600 font-sans uppercase tracking-wider font-bold">rank</span>
                   </div>
                 )}
                 {data.courses_completed && (
                   <div className="nb-stat">
-                    <span className="text-lg nb-ink">{data.courses_completed}</span>
-                    <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">courses</span>
+                    <span className="text-xl font-black nb-ink">{data.courses_completed}</span>
+                    <span className="text-[9px] text-gray-600 font-sans uppercase tracking-wider font-bold">courses</span>
                   </div>
                 )}
                 {data.study_buddies && (
                   <div className="nb-stat" style={{ borderColor: '#2B6CB0' }}>
-                    <span className="text-lg nb-ink">{data.study_buddies}</span>
-                    <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">buddies</span>
+                    <span className="text-xl font-black nb-ink">{data.study_buddies}</span>
+                    <span className="text-[9px] text-gray-600 font-sans uppercase tracking-wider font-bold">buddies</span>
                   </div>
                 )}
                 {data.favorite_subject && (
                   <div className="nb-doodle-box inline-flex items-center gap-2" style={{ borderColor: '#c53030' }}>
-                    <Star size={14} className="nb-red-ink" />
-                    <span className="nb-handwriting text-base font-bold nb-red-ink">Fav: <span className="nb-highlight">{data.favorite_subject}</span></span>
+                    <Star size={16} className="nb-red-ink" />
+                    <span className="nb-handwriting text-lg font-black nb-red-ink">Fav: <span className="nb-highlight">{data.favorite_subject}</span></span>
                   </div>
                 )}
               </div>
@@ -1618,10 +1613,10 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           {profile.bio && (
             <>
               <div className="w-full mb-1">
-                <h3 className="nb-section-title mb-1 flex items-center gap-1.5">
-                  <BookOpen size={16} className="nb-ink opacity-50" /> About Me
+                <h3 className="nb-section-title mb-1 flex items-center gap-1.5 text-xl font-black">
+                  <BookOpen size={20} className="nb-ink opacity-70" /> About Me
                 </h3>
-                <p className="nb-ink text-lg leading-[28px] nb-handwriting">{profile.bio}</p>
+                <p className="nb-ink text-2xl font-medium leading-[34px] nb-handwriting">{profile.bio}</p>
               </div>
               <hr className="nb-divider" />
             </>
