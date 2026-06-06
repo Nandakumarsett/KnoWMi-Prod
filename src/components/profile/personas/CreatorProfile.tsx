@@ -68,7 +68,7 @@ export function CreatorProfile({
   const [showFomoModal, setShowFomoModal] = React.useState(false);
 
   const liveViews = stats?.totalViews || 0;
-  const topCity = stats?.topCities?.[0]?.city || "Global";
+  const topCity = stats?.topCities?.[0]?.city ;
   const isFreeProfile =
     profile.tier === "Starter" ||
     profile.tier === "Free" ||
@@ -476,7 +476,7 @@ export function CreatorProfile({
                   {profile.display_name}
                 </h1>
                 <p className="text-xs font-black text-orange-600 uppercase tracking-[0.4em] leading-none mt-2 mb-4">
-                  {data.tagline || "CREATIVE PROFESSIONAL"}
+                  {data.tagline }
                 </p>
                 {profile.bio && (
                   <p className="text-sm font-black text-neutral-800 leading-tight italic max-w-lg mx-auto">
@@ -495,7 +495,7 @@ export function CreatorProfile({
                   <span
                     className={`text-4xl font-black text-neutral-900 leading-none mb-3 ${isFreeProfile ? "blur-[6px] select-none opacity-50 inline-block px-2" : ""}`}
                   >
-                    {isFreeProfile ? "8,204" : liveViews}
+                    {liveViews}
                   </span>
                   <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest">
                     Profile Views
@@ -506,7 +506,7 @@ export function CreatorProfile({
                     className={`text-4xl font-black leading-none mb-3 ${isFreeProfile ? "blur-[6px] select-none opacity-50 inline-block px-2" : ""}`}
                     style={{ color: cityColor }}
                   >
-                    {isFreeProfile ? "New York" : topCity}
+                    {topCity}
                   </span>
                   <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest">
                     Most Scanned Place
@@ -756,7 +756,7 @@ export function CreatorProfile({
 
                         <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-30">
                           <span className="text-[10px] font-black text-white uppercase tracking-widest line-clamp-1">
-                            {w.title || "Showcase Item"}
+                            {w.title }
                           </span>
                         </div>
                       </div>
@@ -785,7 +785,7 @@ export function CreatorProfile({
                   
                   {/* Subheading */}
                   <p className="text-sm text-neutral-500 font-medium mb-8 max-w-md text-center">
-                    {data.collab_types || "Available for strategic creative partnerships."}
+                    {data.collab_types }
                   </p>
                   
                   {/* Tags */}
@@ -956,7 +956,7 @@ export function CreatorProfile({
               <span
                 className={`text-3xl font-black ${isFreeProfile ? "blur-[4px]" : ""}`}
               >
-                {isFreeProfile ? "4.2K" : liveViews}
+                {liveViews}
               </span>
             </div>
             
@@ -1362,7 +1362,7 @@ export function CreatorProfile({
               {profile.display_name}
             </h1>
             <h2 className="text-sm sm:text-base font-black tracking-[0.3em] uppercase text-[#FF2D78] drop-shadow-[0_0_8px_rgba(255,45,120,0.8)]">
-              {data.tagline || "DIGITAL CREATOR"}
+              {data.tagline }
             </h2>
           </div>
 
@@ -1380,7 +1380,7 @@ export function CreatorProfile({
               <span
                 className={`text-2xl font-black text-white border-b-2 border-[#FF2D78] pb-1 inline-block ${isFreeProfile ? "blur-[4px]" : ""}`}
               >
-                {isFreeProfile ? "4.2K" : liveViews}
+                {liveViews}
               </span>
             </div>
             <div className="text-center flex-1 min-w-[80px]">
@@ -1526,13 +1526,13 @@ export function CreatorProfile({
           )}
 
           {/* Equipment & Tools */}
-          {Array.isArray(data.equipment) && data.equipment.length > 0 && (
+          {Array.isArray((data as any).equipment) && (data as any).equipment.length > 0 && (
             <div className="w-full max-w-3xl mb-12 bg-black/40 border border-cyan-500/30 rounded-2xl p-6 sm:p-8 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
               <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-cyan-400 mb-6">
                 EQUIPMENT & TOOLS
               </h3>
               <div className="flex flex-wrap gap-3">
-                {data.equipment.map((item: string) => (
+                {(data as any).equipment.map((item: string) => (
                   <span key={item} className="px-4 py-2 bg-cyan-900/20 border border-cyan-500/30 text-cyan-300 text-[11px] font-bold uppercase tracking-widest rounded-md hover:bg-cyan-900/40 transition-colors cursor-default">
                     {item}
                   </span>
@@ -1608,7 +1608,7 @@ export function CreatorProfile({
                       ) : thumb ? (
                         <img 
                           src={getAssetUrl(thumb)} 
-                          alt={w.title || "Showcase"} 
+                          alt={w.title } 
                           className="w-full h-full object-cover filter contrast-125 saturate-50 group-hover:saturate-100 transition-all"
                           onError={(e) => {
                             (e.target as HTMLImageElement).style.opacity = '0';
@@ -1634,7 +1634,7 @@ export function CreatorProfile({
                       
                       <div className="absolute bottom-0 left-0 right-0 p-4">
                         <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest line-clamp-1 group-hover:text-white transition-colors">
-                          {w.title || "Media"}
+                          {w.title }
                         </span>
                       </div>
                       
@@ -2012,7 +2012,7 @@ export function CreatorProfile({
             {/* Most Reached Location */}
             <div className="stat-item">
               <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
-                {data.audience_top_location || "Global"}
+                {data.location }
               </div>
               <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                 Most Reached
@@ -2066,7 +2066,7 @@ export function CreatorProfile({
                   <Sparkles size={18} /> Inside the Mind
                 </h3>
                 <p className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight tracking-tight">
-                  {data.about || profile.bio}
+                  {profile.bio}
                 </p>
               </div>
             )}
@@ -2420,7 +2420,7 @@ export function CreatorProfile({
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-purple-300" />
               <span className="text-sm font-bold text-gray-800">
-                {data.collab_types || "Open to Opportunities"}
+                {data.collab_types }
               </span>
             </div>
 

@@ -94,8 +94,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         <BackgroundAnimation />
 
         <div className="relative h-48 sm:h-64 w-full bg-neutral-200 overflow-hidden rounded-t-[40px] shadow-sm">
-          {data.featured_work_url ? (
-            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover" alt="Profile Banner" />
+          {false ? (
+            <img src={getAssetUrl(false)} className="w-full h-full object-cover" alt="Profile Banner" />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-emerald-400 via-teal-300 to-blue-400 flex items-center justify-center">
               <Sparkles size={48} className="text-white/30" />
@@ -125,7 +125,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                     <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" onError={() => setAvatarError(true)} />
                   ) : (
                     <div className="w-full h-full object-cover rounded-full flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl rounded-full" style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                      {profile.display_name?.charAt(0).toUpperCase() || ''}
                     </div>
                   )}
                 </div>
@@ -137,7 +137,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               >
                 <div className="bg-neutral-900 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full shadow-lg shadow-emerald-900/10 border-2 border-white flex items-center gap-1.5 whitespace-nowrap">
                   <Activity size={14} className="text-emerald-400 sm:w-4 sm:h-4 animate-pulse" />
-                  <span className={`text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] ${isFreeProfile ? 'blur-[3px] select-none opacity-60 inline-block px-1' : ''}`}>{isFreeProfile ? '8,204' : liveViews} Pulse</span>
+                  <span className={`text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] ${isFreeProfile ? 'blur-[3px] select-none opacity-60 inline-block px-1' : ''}`}>{liveViews} Pulse</span>
                 </div>
               </div>
             </div>
@@ -147,7 +147,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 {profile.display_name} {data.mood && <span className="text-2xl sm:text-3xl">{data.mood}</span>}
               </h1>
               <p className="text-emerald-500 font-bold text-sm sm:text-base tracking-wide flex items-center justify-center gap-1.5">
-                <GraduationCap size={18} /> {data.course ? data.course : 'Student'} {data.university ? `@ ${data.university}` : ''}
+                <GraduationCap size={18} /> {data.course || ''} {data.university ? `@ ${data.university}` : ''}
               </p>
             </div>
           </div>
@@ -236,7 +236,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          {data.about_me && (
+          {profile.bio && (
             <div className="w-full mb-10">
               <div className="bg-white p-6 sm:p-8 rounded-3xl sm:rounded-[2.5rem] border border-neutral-100 shadow-sm relative overflow-hidden text-left">
                 <div className="absolute top-0 right-0 p-6 sm:p-8 opacity-5">
@@ -247,7 +247,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                     <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-400" /> The Story
                   </h4>
                   <p className="text-sm sm:text-[15px] text-neutral-700 leading-relaxed sm:leading-loose font-medium text-left">
-                    {data.about_me}
+                    {profile.bio}
                   </p>
                 </div>
               </div>
@@ -261,7 +261,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 {data.projects.map((proj: any, i: number) => (
                   <div key={i} className="bg-white p-6 sm:p-8 rounded-3xl border border-neutral-100 shadow-sm flex flex-col gap-3">
                     <div className="flex items-center gap-3">
-                      <span className="text-3xl">{proj.emoji || '🚀'}</span>
+                      <span className="text-3xl">{proj.emoji || ''}</span>
                       <h3 className="text-xl font-black text-neutral-900">{proj.name}</h3>
                     </div>
                     {proj.description && <p className="text-neutral-600 text-sm">{proj.description}</p>}
@@ -492,12 +492,12 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         `}} />
 
         {/* Banner (Background) */}
-        {data.featured_work_url && (
+        {false && (
           <div 
             className="absolute top-0 left-0 w-full h-72 sm:h-96 z-0 pointer-events-none opacity-90"
             style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)' }}
           >
-             <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover" alt="Banner" />
+             <img src={getAssetUrl(false)} className="w-full h-full object-cover" alt="Banner" />
           </div>
         )}
 
@@ -513,7 +513,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                   {!avatarError && profile.avatar_url ? (
                     <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover grayscale sepia-[0.2]" onError={() => setAvatarError(true)} />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-neutral-300 text-neutral-600 font-bold text-4xl font-sans">{profile.display_name?.charAt(0).toUpperCase() || 'U'}</div>
+                    <div className="w-full h-full flex items-center justify-center bg-neutral-300 text-neutral-600 font-bold text-4xl font-sans">{profile.display_name?.charAt(0).toUpperCase() || ''}</div>
                   )}
                 </div>
              </div>
@@ -529,10 +529,10 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 </h1>
                 
                 <div className="text-2xl font-bold text-[#B91C1C] mt-4 leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  {data.university ? data.university : 'Stanford University'}
+                  {data.university || ''}
                 </div>
                 <div className="text-xl text-[#4a5568] leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  {data.course ? data.course : 'Computer Science'}
+                  {data.course || ''}
                   {(data.year || data.batch_year) ? ' | ' : ''}
                   {data.year ? `Year ${data.year}` : ''}
                   {(data.year && data.batch_year) ? ' - ' : ''}
@@ -554,7 +554,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              {data.playlist_url && (
                <div onClick={() => setShowSpotifyQR(true)} className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#C3E7AD] p-2 text-center cork-shadow rotate-2 relative flex flex-col items-center justify-center hover:scale-105 transition-transform cursor-pointer">
                   <div className="pushpin pin-white" />
-                  <span className="text-lg font-bold block mt-1 text-white leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.playlist_name || 'My Playlist'}</span>
+                  <span className="text-lg font-bold block mt-1 text-white leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.playlist_name || ''}</span>
                   <div className="bg-white p-1 rounded mt-1 shadow-sm w-12 h-12 flex items-center justify-center">
                     <QRCodeSVG value={ensureAbsoluteUrl(data.playlist_url)} size={40} style={{ width: '100%', height: '100%' }} fgColor="#1DB954" bgColor="transparent" />
                   </div>
@@ -565,7 +565,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              <div className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#FCEB9C] p-4 text-center cork-shadow -rotate-2 relative flex flex-col items-center justify-center">
                 <div className="pushpin pin-blue" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Rank</span>
-                <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.campus_rank_pct ? `Top ${data.campus_rank_pct}%` : 'N/A'}</span>
+                <span className="text-3xl font-bold text-[#1e3a8a] mt-1 block" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>{data.campus_rank_pct ? `Top ${data.campus_rank_pct}%` : ''}</span>
                 <Star size={16} className="absolute bottom-3 left-3 text-[#1e3a8a]" strokeWidth={1.5} />
              </div>
              
@@ -590,7 +590,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 <div className="pushpin pin-white" />
                 <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Scan Count</span>
                 <span className={`text-3xl font-bold text-[#1e3a8a] mt-1 block ${isFreeProfile ? 'blur-[4px]' : ''}`} style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  {isFreeProfile ? '146' : liveViews}
+                  {liveViews}
                 </span>
                 <Activity size={16} className="absolute bottom-3 right-3 text-[#1e3a8a]" strokeWidth={1.5} />
              </div>
@@ -600,13 +600,13 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           <div className="w-full max-w-5xl flex flex-wrap justify-center items-stretch gap-6 mt-4">
             
             {/* Row 3: About Me, Clubs, Skills */}
-            {data.about_me && (
+            {profile.bio && (
               <div className="w-full flex-1 min-w-[280px] max-w-[400px] bg-[#FDF9F1] p-6 pb-8 pl-10 cork-shadow -rotate-1 relative solid-paper min-h-[220px]">
                 <div className="pushpin pin-blue" />
                 <div className="paper-holes" />
                 <h4 className="text-xl font-bold text-[#1e3a8a] mb-3 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>About Me</h4>
                 <p className="text-xl text-neutral-800 leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  {data.about_me}
+                  {profile.bio}
                 </p>
               </div>
             )}
@@ -805,7 +805,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               </button>
               <h3 className="text-2xl font-bold text-neutral-800 mb-6 flex items-center gap-2">
                 <Music className="text-[#1DB954]" />
-                {data.playlist_name || 'My Playlist'}
+                {data.playlist_name || ''}
               </h3>
               
               <div className="bg-white p-4 rounded-xl shadow-inner mb-6 border border-neutral-100 w-full flex justify-center">
@@ -1014,10 +1014,10 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         </div>
 
         {/* ═══ COVER BANNER ═══ */}
-        {profile.cover_url && (
+        {false && (
           <div className="relative w-full h-44 sm:h-60 overflow-hidden z-0">
             <img 
-              src={getAssetUrl(profile.cover_url)} 
+              src={getAssetUrl(false)} 
               alt="Cover" 
               className="w-full h-full object-cover opacity-50"
               onError={(e) => { e.currentTarget.style.display = 'none'; }}
@@ -1026,7 +1026,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           </div>
         )}
 
-        <main className={`relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-8 ${profile.cover_url ? '-mt-20' : 'pt-10'}`}>
+        <main className={`relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-8 ${false ? '-mt-20' : 'pt-10'}`}>
           
           {/* ═══ HEADER: Avatar + Name + Bio ═══ */}
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6 animate-in" style={{ animationDelay: '0.1s' }}>
@@ -1037,7 +1037,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                   <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" onError={() => setAvatarError(true)} />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-cyan-900/30 text-cyan-300 font-bold text-3xl rounded-full">
-                    {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    {profile.display_name?.charAt(0).toUpperCase() || ''}
                   </div>
                 )}
               </div>
@@ -1050,7 +1050,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               </h1>
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
                 <span className="inline-flex items-center gap-1.5 bg-cyan-900/25 px-3 py-1 rounded-full border border-cyan-500/15 text-[13px] text-cyan-300 font-medium">
-                  <GraduationCap size={14} /> {data.course || 'Student'} {data.university ? `@ ${data.university}` : ''}
+                  <GraduationCap size={14} /> {data.course } {data.university ? `@ ${data.university}` : ''}
                 </span>
                 {(data.year || data.batch_year) && (
                   <span className="inline-flex items-center gap-1.5 bg-cyan-900/25 px-3 py-1 rounded-full border border-cyan-500/15 text-[13px] text-cyan-300/80">
@@ -1085,7 +1085,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6 animate-in" style={{ animationDelay: '0.15s' }}>
               <div className={`stat-card ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
                 <Activity size={18} className="text-cyan-400 mx-auto mb-1.5" />
-                <div className={`text-xl font-bold text-white ${isFreeProfile ? 'blur-[4px]' : ''}`}>{isFreeProfile ? '9.2k' : liveViews}</div>
+                <div className={`text-xl font-bold text-white ${isFreeProfile ? 'blur-[4px]' : ''}`}>{liveViews}</div>
                 <div className="text-[9px] uppercase tracking-[0.15em] text-cyan-200/50 mt-1">Live Views</div>
               </div>
               
@@ -1116,12 +1116,12 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           )}
 
           {/* ═══ ABOUT ME & SKILLS ═══ */}
-          {(data.about_me || (data.core_skills && data.core_skills.length > 0)) && (
+          {(profile.bio || (data.core_skills && data.core_skills.length > 0)) && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 animate-in" style={{ animationDelay: '0.25s' }}>
-              {data.about_me && (
+              {profile.bio && (
                 <div className="glass-card p-6">
                   <div className="section-header"><BookOpen size={14} /> Bio Summary</div>
-                  <p className="text-indigo-100/80 text-[14px] leading-relaxed font-light">{data.about_me}</p>
+                  <p className="text-indigo-100/80 text-[14px] leading-relaxed font-light">{profile.bio}</p>
                   {data.favorite_subject && (
                     <div className="mt-4 flex items-center gap-2 text-[13px] border-t border-cyan-500/10 pt-3">
                       <Star size={14} className="text-amber-400 shrink-0" />
@@ -1158,7 +1158,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                       <div key={i} className="glass-card p-5 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 p-3 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity"><Rocket size={50} /></div>
                         <div className="flex items-start gap-3 relative z-10">
-                          <span className="text-xl shrink-0">{proj.emoji || '🚀'}</span>
+                          <span className="text-xl shrink-0">{proj.emoji || ''}</span>
                           <div className="min-w-0">
                             <h4 className="text-[15px] font-semibold text-white mb-0.5 leading-snug">{proj.name}</h4>
                             {proj.description && <p className="text-[13px] text-indigo-200/60 font-light mb-2 leading-relaxed">{proj.description}</p>}
@@ -1328,7 +1328,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               </button>
               <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                 <Music className="text-[#1DB954]" />
-                {data.playlist_name || 'My Playlist'}
+                {data.playlist_name || ''}
               </h3>
               
               <div className="bg-white p-4 rounded-xl shadow-inner mb-6 w-full flex justify-center">
@@ -1443,7 +1443,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         <main className="relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pt-6 pb-12 flex flex-col gap-0 nb-animate">
           
           {/* ═══ COVER BANNER ═══ */}
-          {profile.cover_url && (
+          {false && (
             <div className="relative w-full h-32 sm:h-48 mb-6 group">
               {/* Tape corners */}
               <div className="absolute -top-3 left-4 w-12 h-6 bg-[#FEF08A]/70 washi-tape rotate-[-15deg] z-20 rounded-sm shadow-sm" />
@@ -1451,7 +1451,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               
               <div className="w-full h-full bg-white p-2 pb-4 shadow-[2px_3px_10px_rgba(0,0,0,0.12)] rotate-[1deg] transition-transform duration-300 group-hover:rotate-0">
                 <img 
-                  src={getAssetUrl(profile.cover_url)} 
+                  src={getAssetUrl(false)} 
                   alt="Cover" 
                   className="w-full h-full object-cover border border-neutral-200/50"
                   onError={(e) => { e.currentTarget.style.display = 'none'; }}
@@ -1470,7 +1470,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                   <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover" onError={() => setAvatarError(true)} />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-blue-50 text-blue-900 font-bold text-3xl" style={{ fontFamily: "'Permanent Marker', cursive" }}>
-                    {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                    {profile.display_name?.charAt(0).toUpperCase() || ''}
                   </div>
                 )}
                 <div className="absolute bottom-1.5 left-0 right-0 text-center nb-pencil text-[13px] nb-handwriting font-medium">📸 me!</div>
@@ -1483,7 +1483,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 {profile.display_name} {data.mood && <span className="text-xl">{data.mood}</span>}
               </h1>
               <p className="nb-red-ink font-bold text-lg nb-handwriting flex items-center gap-1.5 mt-1 leading-[28px]">
-                <GraduationCap size={18} /> {data.course || 'Student'} {data.university ? `@ ${data.university}` : ''}
+                <GraduationCap size={18} /> {data.course } {data.university ? `@ ${data.university}` : ''}
               </p>
               {(data.year || data.batch_year) && (
                 <p className="nb-pencil text-lg nb-handwriting leading-[28px]">
@@ -1518,7 +1518,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             <>
               <div className="flex flex-wrap gap-3 items-center mb-1">
                 <div className={`nb-stat ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
-                  <span className={`text-lg nb-ink ${isFreeProfile ? 'blur-[3px]' : ''}`}>{isFreeProfile ? '9k' : liveViews}</span>
+                  <span className={`text-lg nb-ink ${isFreeProfile ? 'blur-[3px]' : ''}`}>{liveViews}</span>
                   <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">views</span>
                 </div>
                 {data.campus_rank_pct && (
@@ -1551,13 +1551,13 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           )}
 
           {/* ═══ ABOUT ME ═══ */}
-          {data.about_me && (
+          {profile.bio && (
             <>
               <div className="w-full mb-1">
                 <h3 className="nb-section-title mb-1 flex items-center gap-1.5">
                   <BookOpen size={16} className="nb-ink opacity-50" /> About Me
                 </h3>
-                <p className="nb-ink text-lg leading-[28px] nb-handwriting">{data.about_me}</p>
+                <p className="nb-ink text-lg leading-[28px] nb-handwriting">{profile.bio}</p>
               </div>
               <hr className="nb-divider" />
             </>
@@ -1594,7 +1594,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                       {data.projects.map((proj: any, i: number) => (
                         <div key={i} className="nb-card p-3 relative">
                           <div className="flex items-start gap-2">
-                            <span className="text-lg">{proj.emoji || '🚀'}</span>
+                            <span className="text-lg">{proj.emoji || ''}</span>
                             <div className="flex-grow min-w-0">
                               <h4 className="text-lg font-bold nb-ink nb-handwriting leading-[28px]">{proj.name}</h4>
                               {proj.description && <p className="nb-pencil text-base nb-handwriting leading-[28px]">{proj.description}</p>}
@@ -1769,7 +1769,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </button>
             <h3 className="text-2xl font-bold text-neutral-800 mb-6 flex items-center gap-2">
               <Music className="text-[#1DB954]" />
-              {data.playlist_name || 'My Playlist'}
+              {data.playlist_name || ''}
             </h3>
             
             <div className="bg-white p-4 rounded-xl shadow-inner mb-6 border border-neutral-100 w-full flex justify-center">

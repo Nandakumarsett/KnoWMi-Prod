@@ -80,8 +80,8 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         </div>
 
         <div className="w-full h-48 sm:h-64 relative bg-[#f0f2f5] overflow-hidden rounded-t-[32px] sm:rounded-t-[40px] rounded-b-none z-10 border-b border-neutral-200">
-          {data.featured_work_url ? (
-            <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover" alt="Banner" />
+          {false ? (
+            <img src={getAssetUrl(false)} className="absolute inset-0 w-full h-full object-cover" alt="Banner" />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-neutral-200 to-neutral-300" />
           )}
@@ -100,7 +100,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                 onError={() => setAvatarError(true)} />
                   ) : (
                     <div className="w-full h-full object-cover flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                      {profile.display_name?.charAt(0).toUpperCase() || ''}
                     </div>
                   )}
               </div>
@@ -109,10 +109,10 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
           <div className="mt-3 mb-2 text-center">
             <h1 className="text-[28px] font-mono font-black text-neutral-950 tracking-widest leading-tight">
-              {(profile.display_name || 'NEW USER').toUpperCase()}
+              {(profile.display_name ).toUpperCase()}
             </h1>
             <p className="text-neutral-800 font-black text-base sm:text-lg tracking-widest mt-1.5 uppercase">
-              {data.about?.role || data.tagline || 'SYSTEM ENGINEER'}
+              {data.about?.role || data.tagline }
             </p>
           </div>
 
@@ -122,9 +122,9 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </p>
           )}
 
-          {data.platforms && data.platforms.length > 0 && (
+          {profile.social_links && profile.social_links.length > 0 && (
             <div className="w-full flex flex-wrap justify-center gap-6 mt-2 mb-4 z-20">
-              {data.platforms.map((p, i) => {
+              {profile.social_links.map((p, i) => {
                 if (!p.url) return null
                 const { logo } = getPlatformIcon(p.platform || '')
                 return (
@@ -160,13 +160,13 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
-          {data.about?.status && (
+          {false && (
             <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-xl bg-green-100 border-2 border-green-300 text-green-950 font-mono text-[13px] sm:text-[14px] font-black uppercase tracking-widest mt-2 shadow-sm">
               <span className="relative flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-green-600"></span>
               </span>
-              {data.about.status === 'Working at Company' && data.about.company ? `Currently at ${data.about.company}` : data.about.status}
+              {false === 'Working at Company' && false ? `Currently at ${false}` : false}
             </div>
           )}
 
@@ -174,7 +174,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             <ProfileCTAs profile={profile} accentColor="#16a34a" />
           </div>
 
-          {(data.about?.role || data.about?.status || data.about?.company || data.about?.mission) && (
+          {(data.about?.role || false || false || data.about?.mission) && (
             <div className="w-full mt-10 text-left bg-white border-2 border-neutral-300 border-l-[6px] border-l-green-600 rounded-[32px] rounded-l-none p-8 shadow-xl relative group hover:shadow-2xl hover:border-neutral-400 transition-all duration-300">
               <div className="absolute -top-4 -left-3 rotate-[-10deg] z-40 bg-gradient-to-r from-amber-500 to-orange-600 border-2 border-white text-white px-3 py-1.5 rounded-2xl shadow-lg select-none pointer-events-none">
                 <span className="text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 font-mono">⚡️ SUPER_CHARGED</span>
@@ -192,10 +192,10 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                     <span className="text-neutral-900 font-black text-[15px]">{data.about.role}</span>
                   </div>
                 )}
-                {data.about?.status && (
+                {false && (
                   <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
                     <span className="text-neutral-500 font-bold text-[12px] uppercase tracking-wider">STATUS</span>
-                    <span className="text-green-700 font-black text-[15px]">{data.about.status}</span>
+                    <span className="text-green-700 font-black text-[15px]">{false}</span>
                   </div>
                 )}
               </div>
@@ -249,12 +249,12 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         }} />
 
         {/* Blueprint Banner (Background) */}
-        {data.featured_work_url && (
+        {false && (
           <div 
             className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-30 mix-blend-screen"
             style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
           >
-            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter contrast-125 sepia-[0.5] hue-rotate-180" alt="Banner" />
+            <img src={getAssetUrl(false)} className="w-full h-full object-cover filter contrast-125 sepia-[0.5] hue-rotate-180" alt="Banner" />
           </div>
         )}
 
@@ -300,7 +300,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                     onError={() => setAvatarError(true)} />
                   ) : (
                     <div className="w-full h-full object-cover filter contrast-125 saturate-50 brightness-90 mix-blend-screen opacity-90 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                      {profile.display_name?.charAt(0).toUpperCase() || ''}
                     </div>
                   )}
                   </div>
@@ -313,7 +313,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                   {profile.display_name}
                 </h1>
                 <p className="text-sm font-medium text-[#64FFDA] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
-                  <Monitor size={16} className="opacity-70" /> {data.about?.role || 'SYSTEM ARCHITECT'}
+                  <Monitor size={16} className="opacity-70" /> {data.about?.role }
                 </p>
               </div>
             </div>
@@ -329,23 +329,23 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           </div>
 
           {/* Infrastructure Specs */}
-          {(data.about?.status || data.about?.company || data.about?.mission) && (
+          {(false || false || data.about?.mission) && (
             <div className="w-full blueprint-border bg-[#001B2E]/90 backdrop-blur-md p-8 mb-8 text-left relative group hover:border-[#64FFDA]/60 transition-colors duration-500">
               <h3 className="text-xs font-medium uppercase text-white tracking-[0.2em] mb-6 flex items-center gap-3">
                 <span className="text-[#64FFDA]">01.</span> NODE CONFIGURATION
                 <div className="flex-grow h-px bg-gradient-to-r from-[#64FFDA]/20 to-transparent ml-2" />
               </h3>
               <div className="space-y-4 text-sm text-[#8892B0]">
-                {data.about.status && (
+                {false && (
                   <div className="flex justify-between items-center py-2 border-b border-[#64FFDA]/10">
                     <span className="text-[#64FFDA]/60">STATUS:</span>
-                    <span className="text-white">{data.about.status}</span>
+                    <span className="text-white">{false}</span>
                   </div>
                 )}
-                {data.about.company && (
+                {false && (
                   <div className="flex justify-between items-center py-2 border-b border-[#64FFDA]/10">
                     <span className="text-[#64FFDA]/60">DEPLOYMENT:</span>
-                    <span className="text-white">{data.about.company}</span>
+                    <span className="text-white">{false}</span>
                   </div>
                 )}
                 {data.about.mission && (
@@ -429,11 +429,11 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           )}
 
           {/* Social Platforms */}
-          {data.platforms && data.platforms.length > 0 && (
+          {profile.social_links && profile.social_links.length > 0 && (
             <div className="w-full text-left mb-8">
               <span className="block text-[10px] text-[#64FFDA]/60 uppercase tracking-[0.2em] mb-4">// 04. INTEGRATED CHANNELS</span>
               <div className="flex flex-wrap gap-3">
-                {data.platforms.map((p, i) => {
+                {profile.social_links.map((p, i) => {
                   if (!p.url) return null
                   const { logo } = getPlatformIcon(p.platform || '')
                   return (
@@ -526,12 +526,12 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         <div className="absolute inset-0 pointer-events-none z-40 bg-gradient-to-b from-transparent via-[#00FF41]/10 to-transparent h-32 animate-[scanline_8s_linear_infinite] opacity-50" />
 
         {/* Hacker Banner (Background) */}
-        {data.featured_work_url && (
+        {false && (
           <div 
             className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-30 mix-blend-screen"
             style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
           >
-            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter brightness-75 contrast-125 sepia-[1] hue-rotate-50 saturate-200" alt="Banner" />
+            <img src={getAssetUrl(false)} className="w-full h-full object-cover filter brightness-75 contrast-125 sepia-[1] hue-rotate-50 saturate-200" alt="Banner" />
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjEiIGZpbGw9IiMwMGZmNDEiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] pointer-events-none" />
           </div>
         )}
@@ -556,7 +556,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                     onError={() => setAvatarError(true)} />
                   ) : (
                     <div className="w-full h-full object-cover filter contrast-150 saturate-0 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                      {profile.display_name?.charAt(0).toUpperCase() || ''}
                     </div>
                   )}
                     <div className="absolute inset-0 bg-[#00FF41]/20 mix-blend-color pointer-events-none" />
@@ -566,10 +566,10 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
               <div className="text-center sm:text-left flex-grow">
                 <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-widest uppercase mb-2 hacker-glow">
-                  {profile.display_name || 'UNKNOWN_USER'}
+                  {profile.display_name }
                 </h1>
                 <p className="text-sm text-[#00FF41] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
-                  <Terminal size={14} /> {data.about?.role || 'ROOT_ACCESS'}
+                  <Terminal size={14} /> {data.about?.role }
                 </p>
                 {profile.bio && (
                   <p className="text-xs leading-relaxed text-[#00FF41]/80 mt-4 border-l-2 border-[#00FF41]/50 pl-3">
@@ -580,22 +580,22 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           </div>
 
-          {(data.about?.status || data.about?.company || data.about?.mission) && (
+          {(false || false || data.about?.mission) && (
             <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left relative">
               <h3 className="text-sm font-bold uppercase text-[#00FF41] tracking-widest mb-4 flex items-center gap-2 border-b border-[#00FF41]/30 pb-2">
                 <Layers size={14} /> SYS_VARS
               </h3>
               <div className="space-y-3 text-xs">
-                {data.about.status && (
+                {false && (
                   <p className="flex items-center gap-3">
                     <span className="text-[#00FF41]/60 w-24">STATUS:</span> 
-                    <span className="text-white bg-[#00FF41]/10 px-2 py-0.5 border border-[#00FF41]/30">{data.about.status}</span>
+                    <span className="text-white bg-[#00FF41]/10 px-2 py-0.5 border border-[#00FF41]/30">{false}</span>
                   </p>
                 )}
-                {data.about.company && (
+                {false && (
                   <p className="flex items-center gap-3">
                     <span className="text-[#00FF41]/60 w-24">HOST:</span> 
-                    <span className="text-white">{data.about.company}</span>
+                    <span className="text-white">{false}</span>
                   </p>
                 )}
                 {data.about.mission && (
@@ -674,11 +674,11 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
-          {data.platforms && data.platforms.length > 0 && (
+          {profile.social_links && profile.social_links.length > 0 && (
             <div className="w-full text-left mb-8">
               <span className="block text-[10px] text-[#00FF41]/60 uppercase tracking-widest mb-3"># NETWORK_NODES</span>
               <div className="flex flex-wrap gap-3">
-                {data.platforms.map((p, i) => {
+                {profile.social_links.map((p, i) => {
                   if (!p.url) return null
                   const { logo } = getPlatformIcon(p.platform || '')
                   return (
@@ -738,18 +738,18 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
         </div>
         <div className="text-xs font-medium text-[#8B949E] flex-grow text-center">
-          bash - {profile.display_name?.toLowerCase().replace(/\s+/g, '_') || 'developer'}
+          bash - {profile.display_name?.toLowerCase().replace(/\s+/g, '_') }
         </div>
         <div className="w-12"></div>
       </div>
 
       {/* Terminal Banner (Background) */}
-      {data.featured_work_url && (
+      {false && (
         <div 
           className="absolute top-[41px] left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-20 mix-blend-screen"
           style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
         >
-          <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter contrast-125 saturate-50" alt="Banner" />
+          <img src={getAssetUrl(false)} className="w-full h-full object-cover filter contrast-125 saturate-50" alt="Banner" />
         </div>
       )}
 
@@ -766,7 +766,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               onError={() => setAvatarError(true)} />
                   ) : (
                     <div className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                      {profile.display_name?.charAt(0).toUpperCase() || ''}
                     </div>
                   )}
             </div>
@@ -779,7 +779,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <span className="text-white font-bold text-xl">{profile.display_name}</span>
             </div>
             <div className="text-[#8B949E] mb-3">
-              Role: <span className="text-[#58A6FF]">{data.about?.role || 'Software Engineer'}</span>
+              Role: <span className="text-[#58A6FF]">{data.about?.role }</span>
             </div>
             {profile.bio && (
               <p className="text-[#8B949E] text-sm leading-relaxed max-w-lg">
@@ -789,7 +789,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           </div>
         </div>
 
-        {(data.about?.status || data.about?.company || data.about?.mission) && (
+        {(false || false || data.about?.mission) && (
           <div className="w-full mb-8">
             <div className="flex gap-2 mb-3">
               <span className="text-[#3FB950] font-bold">~</span>
@@ -797,8 +797,8 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <span className="text-white">cat status.txt</span>
             </div>
             <div className="pl-4 py-2 border-l-2 border-[#30363D] space-y-2 text-[#8B949E]">
-              {data.about.status && <p>State: <span className="text-[#E6EDF3]">{data.about.status}</span></p>}
-              {data.about.company && <p>Host: <span className="text-[#E6EDF3]">{data.about.company}</span></p>}
+              {false && <p>State: <span className="text-[#E6EDF3]">{false}</span></p>}
+              {false && <p>Host: <span className="text-[#E6EDF3]">{false}</span></p>}
               {data.about.mission && <p>Goal: <span className="text-[#E6EDF3]">{data.about.mission}</span></p>}
             </div>
           </div>
@@ -872,7 +872,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           </div>
         )}
 
-        {data.platforms && data.platforms.length > 0 && (
+        {profile.social_links && profile.social_links.length > 0 && (
           <div className="w-full mb-8">
             <div className="flex gap-2 mb-4">
               <span className="text-[#3FB950] font-bold">~</span>
@@ -880,7 +880,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <span className="text-white">netstat -a | grep CONNECTED</span>
             </div>
             <div className="pl-4 flex flex-col gap-2">
-              {data.platforms.map((p, i) => {
+              {profile.social_links.map((p, i) => {
                 if (!p.url) return null
                 return (
                   <a
