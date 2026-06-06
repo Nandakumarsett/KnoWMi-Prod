@@ -396,7 +396,7 @@ export function CreatorProfile({
   // ----------------------------------------------------
   if (activeTheme === "classic") {
     return (
-      <div className="w-full pb-12 relative overflow-hidden bg-white rounded-[40px] border border-[#E5D5C4] shadow-2xl">
+      <div className="w-full pb-12 relative overflow-hidden bg-[#FCFBF9] rounded-[40px] border border-[#E5D5C4] shadow-2xl">
         <div className="absolute inset-0 pointer-events-none z-0">
           {[...Array(15)].map((_, i) => (
             <div
