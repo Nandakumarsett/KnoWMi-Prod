@@ -370,38 +370,35 @@ export function CreatorProfile({
               </div>
             )}
 
-            {(data.audience_age_group || data.location || data.audience_top_location || (data.audience_interests && data.audience_interests.length > 0)) && (
+            {(data.audience_age_group || data.location || (data.audience_interests && data.audience_interests.length > 0)) && (
               <div className="mb-12">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6">
                   Audience & Demographics
                 </p>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+                <div className="flex flex-wrap gap-4 mb-4">
                    {data.audience_age_group && (
-                     <div className="bg-neutral-50 p-4 rounded-2xl border border-neutral-100">
+                     <div className="flex-1 min-w-[120px] bg-neutral-50 p-4 rounded-2xl border border-neutral-100">
                        <p className="text-[10px] uppercase font-bold text-neutral-400 mb-1">Age Group</p>
                        <p className="text-sm font-black text-neutral-900">{data.audience_age_group}</p>
                      </div>
                    )}
                    {data.location && (
-                     <div className="bg-neutral-50 p-4 rounded-2xl border border-neutral-100">
+                     <div className="flex-1 min-w-[120px] bg-neutral-50 p-4 rounded-2xl border border-neutral-100">
                        <p className="text-[10px] uppercase font-bold text-neutral-400 mb-1">Base</p>
                        <p className="text-sm font-black text-neutral-900">{data.location}</p>
                      </div>
                    )}
-                   {data.audience_top_location && (
-                     <div className="bg-neutral-50 p-4 rounded-2xl border border-neutral-100">
-                       <p className="text-[10px] uppercase font-bold text-neutral-400 mb-1">Top Reach</p>
-                       <p className="text-sm font-black text-neutral-900">{data.audience_top_location}</p>
-                     </div>
-                   )}
                 </div>
                 {data.audience_interests && data.audience_interests.length > 0 && (
-                   <div className="flex flex-wrap gap-2">
-                     {data.audience_interests.map((int: string) => (
-                       <span key={int} className="px-3 py-1.5 rounded-full bg-pink-50 text-[10px] font-black uppercase tracking-widest text-pink-600 border border-pink-100">
-                         {int}
-                       </span>
-                     ))}
+                   <div className="mt-6">
+                     <p className="text-[10px] uppercase font-bold text-neutral-400 mb-2 tracking-widest">Top Interests</p>
+                     <div className="flex flex-wrap gap-2">
+                       {data.audience_interests.map((int: string) => (
+                         <span key={int} className="px-3 py-1.5 rounded-full bg-pink-50 text-[10px] font-black uppercase tracking-widest text-pink-600 border border-pink-100">
+                           {int}
+                         </span>
+                       ))}
+                     </div>
                    </div>
                 )}
               </div>
