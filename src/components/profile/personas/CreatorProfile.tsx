@@ -918,9 +918,11 @@ export function CreatorProfile({
             <h1 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase leading-none mb-4">
               {profile.display_name}
             </h1>
-            <p className="text-sm sm:text-base font-bold tracking-widest uppercase border-y-2 border-black py-2 inline-block">
-              {data.type || "DIGITAL CREATOR"}
-            </p>
+            {data.type && (
+              <p className="text-sm sm:text-base font-bold tracking-widest uppercase border-y-2 border-black py-2 inline-block">
+                {data.type}
+              </p>
+            )}
           </div>
 
           {/* Tagline / Bio */}
@@ -960,7 +962,7 @@ export function CreatorProfile({
                 VIBE SCORE
               </span>
               <span className="text-3xl font-black flex items-end gap-1">
-                92<span className="text-xs mb-1">/100</span>
+                {vibeScore}<span className="text-xs mb-1">/100</span>
               </span>
             </div>
           </div>
@@ -1114,11 +1116,13 @@ export function CreatorProfile({
                         </div>
                       )}
                       
-                      <div className="absolute bottom-0 left-0 right-0 p-3 bg-black border-t-2 border-black z-30 translate-y-full group-hover:translate-y-0 transition-transform">
-                        <span className="text-[10px] font-black text-white uppercase tracking-widest line-clamp-1">
-                          {w.title || "Project"}
-                        </span>
-                      </div>
+                      {w.title && (
+                        <div className="absolute bottom-0 left-0 right-0 p-3 bg-black border-t-2 border-black z-30 translate-y-full group-hover:translate-y-0 transition-transform">
+                          <span className="text-[10px] font-black text-white uppercase tracking-widest line-clamp-1">
+                            {w.title}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
