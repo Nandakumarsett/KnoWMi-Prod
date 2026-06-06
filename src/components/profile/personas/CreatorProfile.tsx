@@ -1191,26 +1191,26 @@ export function CreatorProfile({
               )}
               
               {(data.availability_status || data.rate_range_min || data.turnaround_time) && (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t-4 border-black pt-6">
+                <div className="flex flex-wrap justify-evenly gap-6 sm:gap-4 border-t-4 border-black pt-6">
                   {data.availability_status && (
-                    <div className="text-center">
-                      <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest block mb-1">STATUS</span>
+                    <div className="text-center flex-1 min-w-[120px]">
+                      <span className="text-xs sm:text-sm font-black text-neutral-500 uppercase tracking-widest block mb-1">STATUS</span>
                       <div className="flex items-center justify-center gap-2">
-                        <span className="w-2 h-2 bg-green-500 border border-black animate-pulse"></span>
-                        <span className="text-sm font-black uppercase">{data.availability_status}</span>
+                        <span className="w-3 h-3 sm:w-4 sm:h-4 bg-green-500 border-2 border-black animate-pulse"></span>
+                        <span className="text-base sm:text-lg font-black uppercase">{data.availability_status}</span>
                       </div>
                     </div>
                   )}
                   {data.turnaround_time && (
-                    <div className="text-center">
-                      <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest block mb-1">TURNAROUND</span>
-                      <span className="text-sm font-black uppercase whitespace-nowrap">{data.turnaround_time}</span>
+                    <div className="text-center flex-1 min-w-[120px]">
+                      <span className="text-xs sm:text-sm font-black text-neutral-500 uppercase tracking-widest block mb-1">TURNAROUND</span>
+                      <span className="text-base sm:text-lg font-black uppercase whitespace-nowrap">{data.turnaround_time}</span>
                     </div>
                   )}
                   {data.rate_range_min && (
-                    <div className="text-center">
-                      <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest block mb-1">STARTING RATE</span>
-                      <span className="text-sm font-black uppercase">₹{data.rate_range_min}</span>
+                    <div className="text-center flex-1 min-w-[120px]">
+                      <span className="text-xs sm:text-sm font-black text-neutral-500 uppercase tracking-widest block mb-1">STARTING RATE</span>
+                      <span className="text-base sm:text-lg font-black uppercase">₹{data.rate_range_min}</span>
                     </div>
                   )}
                 </div>
