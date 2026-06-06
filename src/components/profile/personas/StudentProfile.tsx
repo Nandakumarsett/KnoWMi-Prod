@@ -94,8 +94,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         <BackgroundAnimation />
 
         <div className="relative h-48 sm:h-64 w-full bg-neutral-200 overflow-hidden rounded-t-[40px] shadow-sm">
-          {false ? (
-            <img src={getAssetUrl(false)} className="w-full h-full object-cover" alt="Profile Banner" />
+          {data.featured_work_url ? (
+            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover" alt="Profile Banner" />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-emerald-400 via-teal-300 to-blue-400 flex items-center justify-center">
               <Sparkles size={48} className="text-white/30" />
@@ -160,8 +160,24 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             </div>
           )}
 
-          <div className="w-full max-w-sm mb-8 z-20">
-            <ProfileCTAs profile={profile} accentColor="#10B981" />
+          <div className="w-full max-w-md mb-8 z-20 flex flex-col items-center gap-4">
+            <div className="w-full max-w-sm">
+              <ProfileCTAs profile={profile} accentColor="#10B981" />
+            </div>
+            {(data.resume_url || data.website) && (
+              <div className="flex gap-3 mt-2">
+                {data.resume_url && (
+                  <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-2xl font-bold text-[14px] hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-500/20">
+                    <FileText size={18} /> View Resume
+                  </a>
+                )}
+                {data.website && (
+                  <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-neutral-800 text-white px-5 py-2.5 rounded-2xl font-bold text-[14px] hover:bg-neutral-900 transition-colors shadow-lg shadow-neutral-900/20">
+                    <Globe size={18} /> Portfolio
+                  </a>
+                )}
+              </div>
+            )}
           </div>
 
           {data.availability && (
@@ -510,10 +526,14 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              <div className="w-40 h-48 sm:w-48 sm:h-56 shrink-0 bg-white p-3 pb-12 cork-shadow-lg -rotate-[4deg] z-20 transition-transform duration-300 hover:rotate-0 hover:scale-105 mt-2 md:-mr-12">
                 <div className="pushpin pin-blue" />
                 <div className="w-full h-full bg-neutral-200 overflow-hidden">
-                  {!avatarError && profile.avatar_url ? (
+                  {data.featured_work_url ? (
+                    <img src={getAssetUrl(data.featured_work_url)} alt="Featured Work" className="w-full h-full object-cover grayscale sepia-[0.2]" />
+                  ) : !avatarError && profile.avatar_url ? (
                     <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover grayscale sepia-[0.2]" onError={() => setAvatarError(true)} />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-neutral-300 text-neutral-600 font-bold text-4xl font-sans">{profile.display_name?.charAt(0).toUpperCase() || ''}</div>
+                    <div className="w-full h-full flex items-center justify-center bg-neutral-300 text-neutral-600 font-bold text-4xl font-sans">
+                      {profile.display_name?.charAt(0).toUpperCase() || ''}
+                    </div>
                   )}
                 </div>
              </div>
@@ -774,8 +794,24 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
              </div>
           )}
 
-          <div className="w-full max-w-sm mt-8 z-20 bg-white/80 p-2 rounded backdrop-blur-sm cork-shadow">
-            <ProfileCTAs profile={profile} accentColor="#B91C1C" />
+          <div className="w-full max-w-sm mt-8 z-20 flex flex-col items-center gap-4">
+            <div className="w-full bg-white/80 p-2 rounded backdrop-blur-sm cork-shadow">
+              <ProfileCTAs profile={profile} accentColor="#B91C1C" />
+            </div>
+            {(data.resume_url || data.website) && (
+              <div className="flex gap-3">
+                {data.resume_url && (
+                  <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-[#B91C1C] text-white px-5 py-2.5 rounded shadow-md hover:bg-red-800 transition-colors font-bold text-[14px]">
+                    <FileText size={18} /> Resume
+                  </a>
+                )}
+                {data.website && (
+                  <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-neutral-800 text-white px-5 py-2.5 rounded shadow-md hover:bg-black transition-colors font-bold text-[14px]">
+                    <Globe size={18} /> Portfolio
+                  </a>
+                )}
+              </div>
+            )}
           </div>
 
         </main>
@@ -1013,11 +1049,11 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           <div className="floating-owl" style={{ left: '75%', animationDuration: '29s', animationDelay: '8s', '--end-x': '-40px' } as any}>🦉</div>
         </div>
 
-        {/* ═══ COVER BANNER ═══ */}
-        {false && (
+        {/* ⭐ COVER BANNER ⭐ */}
+        {data.featured_work_url && (
           <div className="relative w-full h-44 sm:h-60 overflow-hidden z-0">
             <img 
-              src={getAssetUrl(false)} 
+              src={getAssetUrl(data.featured_work_url)} 
               alt="Cover" 
               className="w-full h-full object-cover opacity-50"
               onError={(e) => { e.currentTarget.style.display = 'none'; }}
@@ -1026,7 +1062,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           </div>
         )}
 
-        <main className={`relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-8 ${false ? '-mt-20' : 'pt-10'}`}>
+        <main className={`relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-8 ${data.featured_work_url ? '-mt-20' : 'pt-10'}`}>
           
           {/* ═══ HEADER: Avatar + Name + Bio ═══ */}
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6 animate-in" style={{ animationDelay: '0.1s' }}>
@@ -1068,6 +1104,20 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 <div className="w-full sm:w-auto max-w-[220px] z-20">
                   <ProfileCTAs profile={profile} accentColor="#06b6d4" />
                 </div>
+                {(data.resume_url || data.website) && (
+                  <div className="flex flex-wrap gap-3 w-full sm:w-auto">
+                    {data.resume_url && (
+                      <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 bg-[#050b14] border border-cyan-500/30 text-cyan-300 px-4 py-2 rounded-lg font-medium text-[13px] hover:bg-cyan-900/40 hover:border-cyan-400 transition-colors shadow-[0_0_10px_rgba(6,182,212,0.1)]">
+                        <FileText size={16} /> Access CV
+                      </a>
+                    )}
+                    {data.website && (
+                      <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 bg-[#050b14] border border-fuchsia-500/30 text-fuchsia-300 px-4 py-2 rounded-lg font-medium text-[13px] hover:bg-fuchsia-900/40 hover:border-fuchsia-400 transition-colors shadow-[0_0_10px_rgba(217,70,239,0.1)]">
+                        <Globe size={16} /> System Link
+                      </a>
+                    )}
+                  </div>
+                )}
                 {data.availability && (
                   <div className="glass-card px-3.5 py-1.5 inline-flex items-center gap-2 no-lift">
                     <Briefcase size={14} className="text-cyan-400" />
@@ -1442,8 +1492,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
         <main className="relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pt-6 pb-12 flex flex-col gap-0 nb-animate">
           
-          {/* ═══ COVER BANNER ═══ */}
-          {false && (
+          {/* ⭐ COVER BANNER ⭐ */}
+          {data.featured_work_url && (
             <div className="relative w-full h-32 sm:h-48 mb-6 group">
               {/* Tape corners */}
               <div className="absolute -top-3 left-4 w-12 h-6 bg-[#FEF08A]/70 washi-tape rotate-[-15deg] z-20 rounded-sm shadow-sm" />
@@ -1451,7 +1501,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               
               <div className="w-full h-full bg-white p-2 pb-4 shadow-[2px_3px_10px_rgba(0,0,0,0.12)] rotate-[1deg] transition-transform duration-300 group-hover:rotate-0">
                 <img 
-                  src={getAssetUrl(false)} 
+                  src={getAssetUrl(data.featured_work_url)} 
                   alt="Cover" 
                   className="w-full h-full object-cover border border-neutral-200/50"
                   onError={(e) => { e.currentTarget.style.display = 'none'; }}
@@ -1501,6 +1551,20 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             <div className="max-w-[220px] z-20 shrink-0">
               <ProfileCTAs profile={profile} accentColor="#1e3a5f" />
             </div>
+            {(data.resume_url || data.website) && (
+              <div className="flex flex-wrap gap-4 items-center">
+                {data.resume_url && (
+                  <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 nb-handwriting text-[#c53030] hover:text-[#9b2c2c] transition-colors text-lg font-bold rotate-[-2deg]">
+                    <FileText size={18} /> My Resume <ExternalLink size={14} className="ml-0.5" />
+                  </a>
+                )}
+                {data.website && (
+                  <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 nb-handwriting text-[#1e3a8a] hover:text-[#1e40af] transition-colors text-lg font-bold rotate-[1deg]">
+                    <Globe size={18} /> Personal Site <ExternalLink size={14} className="ml-0.5" />
+                  </a>
+                )}
+              </div>
+            )}
             {data.availability && (
               <div className="nb-doodle-box inline-flex items-center gap-2 rotate-[-1deg]" style={{ borderColor: '#2B6CB0' }}>
                 <Briefcase size={14} className="nb-ink" />

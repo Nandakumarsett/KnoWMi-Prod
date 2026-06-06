@@ -3,7 +3,8 @@ import { ProfileData, DeveloperData } from '../../../types/profile'
 import { getAssetUrl } from '../../../lib/supabase'
 import { 
   Monitor, Code2, Database, Layout, Box, Globe, ExternalLink, 
-  Terminal, Mail, Calendar, Lock, Shield, Cpu, RefreshCw, Layers
+  Terminal, Mail, Calendar, Lock, Shield, Cpu, RefreshCw, Layers,
+  FileText, Star, MessageCircle, Phone, Video
 } from 'lucide-react'
 import { ProfileCTAs } from '../shared/ProfileCTAs'
 import { trackLinkClick } from '../../../lib/analytics/track'
@@ -80,8 +81,8 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         </div>
 
         <div className="w-full h-48 sm:h-64 relative bg-[#f0f2f5] overflow-hidden rounded-t-[32px] sm:rounded-t-[40px] rounded-b-none z-10 border-b border-neutral-200">
-          {false ? (
-            <img src={getAssetUrl(false)} className="absolute inset-0 w-full h-full object-cover" alt="Banner" />
+          {data.featured_work_url ? (
+            <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover" alt="Banner" />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-neutral-200 to-neutral-300" />
           )}
@@ -100,7 +101,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                 onError={() => setAvatarError(true)} />
                   ) : (
                     <div className="w-full h-full object-cover flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || ''}
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
                     </div>
                   )}
               </div>
@@ -109,10 +110,10 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
           <div className="mt-3 mb-2 text-center">
             <h1 className="text-[28px] font-mono font-black text-neutral-950 tracking-widest leading-tight">
-              {(profile.display_name ).toUpperCase()}
+              {(profile.display_name || 'NEW USER').toUpperCase()}
             </h1>
             <p className="text-neutral-800 font-black text-base sm:text-lg tracking-widest mt-1.5 uppercase">
-              {data.about?.role || data.tagline }
+              {data.about?.role || data.tagline || 'SYSTEM ENGINEER'}
             </p>
           </div>
 
@@ -122,9 +123,9 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </p>
           )}
 
-          {profile.social_links && profile.social_links.length > 0 && (
+          {data.platforms && data.platforms.length > 0 && (
             <div className="w-full flex flex-wrap justify-center gap-6 mt-2 mb-4 z-20">
-              {profile.social_links.map((p, i) => {
+              {data.platforms.map((p, i) => {
                 if (!p.url) return null
                 const { logo } = getPlatformIcon(p.platform || '')
                 return (
@@ -160,13 +161,13 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
-          {false && (
+          {data.about?.status && (
             <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-xl bg-green-100 border-2 border-green-300 text-green-950 font-mono text-[13px] sm:text-[14px] font-black uppercase tracking-widest mt-2 shadow-sm">
               <span className="relative flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-green-600"></span>
               </span>
-              {false === 'Working at Company' && false ? `Currently at ${false}` : false}
+              {data.about.status === 'Working at Company' && data.about.company ? `Currently at ${data.about.company}` : data.about.status}
             </div>
           )}
 
@@ -174,7 +175,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             <ProfileCTAs profile={profile} accentColor="#16a34a" />
           </div>
 
-          {(data.about?.role || false || false || data.about?.mission) && (
+          {(data.about?.role || data.about?.status || data.about?.company || data.about?.mission) && (
             <div className="w-full mt-10 text-left bg-white border-2 border-neutral-300 border-l-[6px] border-l-green-600 rounded-[32px] rounded-l-none p-8 shadow-xl relative group hover:shadow-2xl hover:border-neutral-400 transition-all duration-300">
               <div className="absolute -top-4 -left-3 rotate-[-10deg] z-40 bg-gradient-to-r from-amber-500 to-orange-600 border-2 border-white text-white px-3 py-1.5 rounded-2xl shadow-lg select-none pointer-events-none">
                 <span className="text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 font-mono">⚡️ SUPER_CHARGED</span>
@@ -192,10 +193,10 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                     <span className="text-neutral-900 font-black text-[15px]">{data.about.role}</span>
                   </div>
                 )}
-                {false && (
+                {data.about?.status && (
                   <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
                     <span className="text-neutral-500 font-bold text-[12px] uppercase tracking-wider">STATUS</span>
-                    <span className="text-green-700 font-black text-[15px]">{false}</span>
+                    <span className="text-green-700 font-black text-[15px]">{data.about.status}</span>
                   </div>
                 )}
               </div>
@@ -214,6 +215,82 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {data.projects && data.projects.length > 0 && (
+            <div className="w-full mt-10 text-left">
+              <span className="block text-[13px] font-black text-neutral-500 uppercase tracking-[0.2em] mb-6">Featured Projects</span>
+              <div className="space-y-6">
+                {data.projects.map((project: any, i: number) => (
+                  <div key={i} className="bg-white border-2 border-neutral-300 rounded-[32px] p-6 shadow-lg relative group hover:border-green-500 transition-colors duration-300">
+                    {project.stars !== undefined && project.stars > 0 && (
+                      <div className="absolute top-6 right-6 flex items-center gap-1.5 text-orange-500 bg-orange-50 px-2.5 py-1 rounded-lg border border-orange-200">
+                        <Star size={14} className="fill-orange-500" />
+                        <span className="text-xs font-black">{project.stars}</span>
+                      </div>
+                    )}
+                    <h4 className="text-lg font-black text-neutral-900 mb-2">{project.name}</h4>
+                    {project.description && (
+                      <p className="text-sm text-neutral-600 mb-4 pr-16">{project.description}</p>
+                    )}
+                    {(project.live_url || project.github_url) && (
+                      <a
+                        href={ensureAbsoluteUrl(project.live_url || project.github_url)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-[12px] font-black uppercase tracking-widest text-green-600 hover:text-green-700 bg-green-50 px-4 py-2 rounded-xl border border-green-200 transition-colors"
+                      >
+                        Launch Project <ExternalLink size={14} />
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {(data.contact_email || data.contact_whatsapp || data.quick_talk_url || data.collab_types) && (
+            <div className="w-full mt-10 bg-white border-2 border-neutral-300 rounded-[32px] p-8 shadow-xl relative">
+              <span className="block text-[13px] font-black text-neutral-500 uppercase tracking-[0.2em] mb-6">Collaboration & Contact</span>
+              
+              {data.collab_types && (
+                <p className="text-sm text-neutral-800 font-bold mb-6 bg-neutral-50 p-4 rounded-2xl border border-neutral-200">
+                  <span className="text-neutral-500 uppercase text-[10px] tracking-widest block mb-1">Looking for</span>
+                  {data.collab_types}
+                </p>
+              )}
+
+              <div className="flex flex-wrap gap-3">
+                {data.contact_email && (
+                  <a href={`mailto:${data.contact_email}`} className="flex items-center gap-2 px-4 py-2.5 bg-neutral-900 text-white rounded-xl text-[12px] font-black uppercase tracking-wider hover:bg-neutral-800 transition-colors">
+                    <Mail size={16} /> Email
+                  </a>
+                )}
+                {data.contact_whatsapp && (
+                  <a href={`https://wa.me/${data.contact_whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2.5 bg-[#25D366] text-white rounded-xl text-[12px] font-black uppercase tracking-wider hover:bg-[#128C7E] transition-colors">
+                    <Phone size={16} /> WhatsApp
+                  </a>
+                )}
+                {data.quick_talk_url && (
+                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-[12px] font-black uppercase tracking-wider hover:bg-blue-700 transition-colors">
+                    <Video size={16} /> Book Chat
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
+          {data.resume_url && (
+            <div className="w-full mt-8 flex justify-center z-20">
+              <a 
+                href={data.resume_url}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-3 bg-neutral-900 text-white px-8 py-4 rounded-[20px] font-black text-[14px] uppercase tracking-widest hover:scale-105 transition-transform duration-300 shadow-xl shadow-neutral-900/20"
+              >
+                <FileText size={20} /> View Documentation (CV)
+              </a>
             </div>
           )}
 
@@ -249,12 +326,12 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         }} />
 
         {/* Blueprint Banner (Background) */}
-        {false && (
+        {data.featured_work_url && (
           <div 
             className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-30 mix-blend-screen"
             style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
           >
-            <img src={getAssetUrl(false)} className="w-full h-full object-cover filter contrast-125 sepia-[0.5] hue-rotate-180" alt="Banner" />
+            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter contrast-125 sepia-[0.5] hue-rotate-180" alt="Banner" />
           </div>
         )}
 
@@ -300,7 +377,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                     onError={() => setAvatarError(true)} />
                   ) : (
                     <div className="w-full h-full object-cover filter contrast-125 saturate-50 brightness-90 mix-blend-screen opacity-90 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || ''}
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
                     </div>
                   )}
                   </div>
@@ -313,7 +390,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                   {profile.display_name}
                 </h1>
                 <p className="text-sm font-medium text-[#64FFDA] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
-                  <Monitor size={16} className="opacity-70" /> {data.about?.role }
+                  <Monitor size={16} className="opacity-70" /> {data.about?.role || 'SYSTEM ARCHITECT'}
                 </p>
               </div>
             </div>
@@ -329,23 +406,23 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           </div>
 
           {/* Infrastructure Specs */}
-          {(false || false || data.about?.mission) && (
+          {(data.about?.status || data.about?.company || data.about?.mission) && (
             <div className="w-full blueprint-border bg-[#001B2E]/90 backdrop-blur-md p-8 mb-8 text-left relative group hover:border-[#64FFDA]/60 transition-colors duration-500">
               <h3 className="text-xs font-medium uppercase text-white tracking-[0.2em] mb-6 flex items-center gap-3">
                 <span className="text-[#64FFDA]">01.</span> NODE CONFIGURATION
                 <div className="flex-grow h-px bg-gradient-to-r from-[#64FFDA]/20 to-transparent ml-2" />
               </h3>
               <div className="space-y-4 text-sm text-[#8892B0]">
-                {false && (
+                {data.about.status && (
                   <div className="flex justify-between items-center py-2 border-b border-[#64FFDA]/10">
                     <span className="text-[#64FFDA]/60">STATUS:</span>
-                    <span className="text-white">{false}</span>
+                    <span className="text-white">{data.about.status}</span>
                   </div>
                 )}
-                {false && (
+                {data.about.company && (
                   <div className="flex justify-between items-center py-2 border-b border-[#64FFDA]/10">
                     <span className="text-[#64FFDA]/60">DEPLOYMENT:</span>
-                    <span className="text-white">{false}</span>
+                    <span className="text-white">{data.about.company}</span>
                   </div>
                 )}
                 {data.about.mission && (
@@ -403,7 +480,14 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <div className="space-y-4">
                 {data.projects.map((project: any, i: number) => (
                   <div key={i} className="blueprint-border bg-[#001B2E]/90 p-6 relative group hover:border-[#64FFDA]/60 transition-colors duration-500">
-                    <div className="absolute top-4 right-4 text-[10px] text-[#64FFDA]/40 font-mono">v1.0.{i}</div>
+                    <div className="absolute top-4 right-4 text-[10px] text-[#64FFDA]/40 font-mono flex items-center gap-2">
+                      {project.stars !== undefined && project.stars > 0 && (
+                        <span className="flex items-center gap-1 text-orange-400">
+                          <Star size={10} className="fill-orange-400" /> {project.stars}
+                        </span>
+                      )}
+                      v1.0.{i}
+                    </div>
                     <h4 className="text-lg font-light text-white mb-2 uppercase flex items-center gap-3">
                       <Box size={18} className="text-[#64FFDA]" /> {project.name}
                     </h4>
@@ -429,11 +513,11 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           )}
 
           {/* Social Platforms */}
-          {profile.social_links && profile.social_links.length > 0 && (
+          {data.platforms && data.platforms.length > 0 && (
             <div className="w-full text-left mb-8">
               <span className="block text-[10px] text-[#64FFDA]/60 uppercase tracking-[0.2em] mb-4">// 04. INTEGRATED CHANNELS</span>
               <div className="flex flex-wrap gap-3">
-                {profile.social_links.map((p, i) => {
+                {data.platforms.map((p, i) => {
                   if (!p.url) return null
                   const { logo } = getPlatformIcon(p.platform || '')
                   return (
@@ -468,6 +552,54 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                   )
                 })}
               </div>
+            </div>
+          )}
+          {/* Contact & Collab */}
+          {(data.contact_email || data.contact_whatsapp || data.quick_talk_url || data.collab_types) && (
+            <div className="w-full blueprint-border bg-[#001B2E]/90 backdrop-blur-md p-8 mb-8 text-left relative group hover:border-[#64FFDA]/60 transition-colors duration-500">
+              <h3 className="text-xs font-medium uppercase text-white tracking-[0.2em] mb-6 flex items-center gap-3">
+                <span className="text-[#64FFDA]">05.</span> COMM_PROTOCOLS
+                <div className="flex-grow h-px bg-gradient-to-r from-[#64FFDA]/20 to-transparent ml-2" />
+              </h3>
+
+              {data.collab_types && (
+                <div className="mb-6">
+                  <span className="text-[10px] text-[#64FFDA]/60 uppercase block mb-2">// DIRECTIVES</span>
+                  <p className="text-sm text-[#8892B0] border-l border-[#64FFDA]/40 pl-4">{data.collab_types}</p>
+                </div>
+              )}
+
+              <div className="flex flex-wrap gap-4">
+                {data.contact_email && (
+                  <a href={`mailto:${data.contact_email}`} className="text-xs uppercase text-[#64FFDA] border border-[#64FFDA]/30 px-4 py-2 flex items-center gap-2 hover:bg-[#64FFDA]/10 transition-colors">
+                    <Mail size={14} /> PING_MAIL
+                  </a>
+                )}
+                {data.contact_whatsapp && (
+                  <a href={`https://wa.me/${data.contact_whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="text-xs uppercase text-[#25D366] border border-[#25D366]/30 px-4 py-2 flex items-center gap-2 hover:bg-[#25D366]/10 transition-colors">
+                    <Phone size={14} /> EXT_COMMS
+                  </a>
+                )}
+                {data.quick_talk_url && (
+                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="text-xs uppercase text-[#58A6FF] border border-[#58A6FF]/30 px-4 py-2 flex items-center gap-2 hover:bg-[#58A6FF]/10 transition-colors">
+                    <Video size={14} /> SYNC_LINK
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Resume */}
+          {data.resume_url && (
+            <div className="w-full mb-8 flex justify-center z-20">
+              <a 
+                href={data.resume_url}
+                target="_blank"
+                rel="noreferrer"
+                className="blueprint-border bg-[#64FFDA]/10 hover:bg-[#64FFDA]/20 text-[#64FFDA] px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-3 transition-all duration-300"
+              >
+                <FileText size={16} /> EXTRACT_DOCS (CV)
+              </a>
             </div>
           )}
 
@@ -526,12 +658,12 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         <div className="absolute inset-0 pointer-events-none z-40 bg-gradient-to-b from-transparent via-[#00FF41]/10 to-transparent h-32 animate-[scanline_8s_linear_infinite] opacity-50" />
 
         {/* Hacker Banner (Background) */}
-        {false && (
+        {data.featured_work_url && (
           <div 
             className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-30 mix-blend-screen"
             style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
           >
-            <img src={getAssetUrl(false)} className="w-full h-full object-cover filter brightness-75 contrast-125 sepia-[1] hue-rotate-50 saturate-200" alt="Banner" />
+            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter brightness-75 contrast-125 sepia-[1] hue-rotate-50 saturate-200" alt="Banner" />
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjEiIGZpbGw9IiMwMGZmNDEiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] pointer-events-none" />
           </div>
         )}
@@ -556,7 +688,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                     onError={() => setAvatarError(true)} />
                   ) : (
                     <div className="w-full h-full object-cover filter contrast-150 saturate-0 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || ''}
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
                     </div>
                   )}
                     <div className="absolute inset-0 bg-[#00FF41]/20 mix-blend-color pointer-events-none" />
@@ -566,10 +698,10 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
               <div className="text-center sm:text-left flex-grow">
                 <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-widest uppercase mb-2 hacker-glow">
-                  {profile.display_name }
+                  {profile.display_name || 'UNKNOWN_USER'}
                 </h1>
                 <p className="text-sm text-[#00FF41] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
-                  <Terminal size={14} /> {data.about?.role }
+                  <Terminal size={14} /> {data.about?.role || 'ROOT_ACCESS'}
                 </p>
                 {profile.bio && (
                   <p className="text-xs leading-relaxed text-[#00FF41]/80 mt-4 border-l-2 border-[#00FF41]/50 pl-3">
@@ -580,22 +712,22 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           </div>
 
-          {(false || false || data.about?.mission) && (
+          {(data.about?.status || data.about?.company || data.about?.mission) && (
             <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left relative">
               <h3 className="text-sm font-bold uppercase text-[#00FF41] tracking-widest mb-4 flex items-center gap-2 border-b border-[#00FF41]/30 pb-2">
                 <Layers size={14} /> SYS_VARS
               </h3>
               <div className="space-y-3 text-xs">
-                {false && (
+                {data.about.status && (
                   <p className="flex items-center gap-3">
                     <span className="text-[#00FF41]/60 w-24">STATUS:</span> 
-                    <span className="text-white bg-[#00FF41]/10 px-2 py-0.5 border border-[#00FF41]/30">{false}</span>
+                    <span className="text-white bg-[#00FF41]/10 px-2 py-0.5 border border-[#00FF41]/30">{data.about.status}</span>
                   </p>
                 )}
-                {false && (
+                {data.about.company && (
                   <p className="flex items-center gap-3">
                     <span className="text-[#00FF41]/60 w-24">HOST:</span> 
-                    <span className="text-white">{false}</span>
+                    <span className="text-white">{data.about.company}</span>
                   </p>
                 )}
                 {data.about.mission && (
@@ -650,6 +782,13 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <div className="space-y-4">
                 {data.projects.map((project: any, i: number) => (
                   <div key={i} className="hacker-border bg-black/80 p-5 hover:bg-[#00FF41]/5 transition-colors relative">
+                    <div className="absolute top-4 right-4 text-[10px] text-[#00FF41]/40 font-mono flex items-center gap-2">
+                      {project.stars !== undefined && project.stars > 0 && (
+                        <span className="flex items-center gap-1 text-orange-400">
+                          <Star size={10} className="fill-orange-400" /> {project.stars}
+                        </span>
+                      )}
+                    </div>
                     <h4 className="text-sm font-bold text-white mb-2 uppercase flex items-center gap-2">
                       <RefreshCw size={12} className="text-[#00FF41]" /> {project.name}
                     </h4>
@@ -674,11 +813,11 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
-          {profile.social_links && profile.social_links.length > 0 && (
+          {data.platforms && data.platforms.length > 0 && (
             <div className="w-full text-left mb-8">
               <span className="block text-[10px] text-[#00FF41]/60 uppercase tracking-widest mb-3"># NETWORK_NODES</span>
               <div className="flex flex-wrap gap-3">
-                {profile.social_links.map((p, i) => {
+                {data.platforms.map((p, i) => {
                   if (!p.url) return null
                   const { logo } = getPlatformIcon(p.platform || '')
                   return (
@@ -715,6 +854,56 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
+          {/* Hacker Contact / Collab */}
+          {(data.contact_email || data.contact_whatsapp || data.quick_talk_url || data.collab_types) && (
+            <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left relative">
+              <h3 className="text-sm font-bold uppercase text-[#00FF41] tracking-widest mb-4 flex items-center gap-2 border-b border-[#00FF41]/30 pb-2">
+                <Layers size={14} /> SYS_ADMIN_CONTACTS
+              </h3>
+              
+              {data.collab_types && (
+                <div className="mb-4 pt-2">
+                  <span className="text-[#00FF41]/60 block mb-2 text-xs">DIRECTIVE:</span>
+                  <p className="text-[#00FF41]/90 p-3 border border-[#00FF41]/30 bg-[#00FF41]/5 text-xs">
+                    {data.collab_types}
+                  </p>
+                </div>
+              )}
+
+              <div className="flex flex-wrap gap-3 mt-4">
+                {data.contact_email && (
+                  <a href={`mailto:${data.contact_email}`} className="text-xs uppercase text-[#00FF41] border border-[#00FF41]/50 bg-black px-4 py-2 flex items-center gap-2 hover:bg-[#00FF41] hover:text-black transition-colors">
+                    <Mail size={14} /> /bin/mail
+                  </a>
+                )}
+                {data.contact_whatsapp && (
+                  <a href={`https://wa.me/${data.contact_whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="text-xs uppercase text-[#00FF41] border border-[#00FF41]/50 bg-black px-4 py-2 flex items-center gap-2 hover:bg-[#00FF41] hover:text-black transition-colors">
+                    <Phone size={14} /> /dev/tty
+                  </a>
+                )}
+                {data.quick_talk_url && (
+                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="text-xs uppercase text-[#00FF41] border border-[#00FF41]/50 bg-black px-4 py-2 flex items-center gap-2 hover:bg-[#00FF41] hover:text-black transition-colors">
+                    <Video size={14} /> ./tcp_sync
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Hacker Resume */}
+          {data.resume_url && (
+            <div className="w-full mb-8 flex justify-center z-20">
+              <a 
+                href={data.resume_url}
+                target="_blank"
+                rel="noreferrer"
+                className="hacker-border bg-[#00FF41]/10 hover:bg-[#00FF41]/20 text-[#00FF41] px-8 py-4 text-xs font-bold uppercase tracking-widest flex items-center gap-3 transition-all duration-300"
+              >
+                <FileText size={16} /> &gt; ./download_cv.sh
+              </a>
+            </div>
+          )}
+
           <div className="w-full mb-8 z-20">
             <ProfileCTAs profile={profile} accentColor="#00FF41" />
           </div>
@@ -738,18 +927,18 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
         </div>
         <div className="text-xs font-medium text-[#8B949E] flex-grow text-center">
-          bash - {profile.display_name?.toLowerCase().replace(/\s+/g, '_') }
+          bash - {profile.display_name?.toLowerCase().replace(/\s+/g, '_') || 'developer'}
         </div>
         <div className="w-12"></div>
       </div>
 
       {/* Terminal Banner (Background) */}
-      {false && (
+      {data.featured_work_url && (
         <div 
           className="absolute top-[41px] left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-20 mix-blend-screen"
           style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
         >
-          <img src={getAssetUrl(false)} className="w-full h-full object-cover filter contrast-125 saturate-50" alt="Banner" />
+          <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover filter contrast-125 saturate-50" alt="Banner" />
         </div>
       )}
 
@@ -766,7 +955,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               onError={() => setAvatarError(true)} />
                   ) : (
                     <div className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || ''}
+                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
                     </div>
                   )}
             </div>
@@ -779,7 +968,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <span className="text-white font-bold text-xl">{profile.display_name}</span>
             </div>
             <div className="text-[#8B949E] mb-3">
-              Role: <span className="text-[#58A6FF]">{data.about?.role }</span>
+              Role: <span className="text-[#58A6FF]">{data.about?.role || 'Software Engineer'}</span>
             </div>
             {profile.bio && (
               <p className="text-[#8B949E] text-sm leading-relaxed max-w-lg">
@@ -789,7 +978,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           </div>
         </div>
 
-        {(false || false || data.about?.mission) && (
+        {(data.about?.status || data.about?.company || data.about?.mission) && (
           <div className="w-full mb-8">
             <div className="flex gap-2 mb-3">
               <span className="text-[#3FB950] font-bold">~</span>
@@ -797,8 +986,8 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <span className="text-white">cat status.txt</span>
             </div>
             <div className="pl-4 py-2 border-l-2 border-[#30363D] space-y-2 text-[#8B949E]">
-              {false && <p>State: <span className="text-[#E6EDF3]">{false}</span></p>}
-              {false && <p>Host: <span className="text-[#E6EDF3]">{false}</span></p>}
+              {data.about.status && <p>State: <span className="text-[#E6EDF3]">{data.about.status}</span></p>}
+              {data.about.company && <p>Host: <span className="text-[#E6EDF3]">{data.about.company}</span></p>}
               {data.about.mission && <p>Goal: <span className="text-[#E6EDF3]">{data.about.mission}</span></p>}
             </div>
           </div>
@@ -848,6 +1037,13 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             <div className="pl-4 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
               {data.projects.map((project: any, i: number) => (
                 <div key={i} className="border border-[#30363D] p-4 bg-[#161B22] hover:border-[#8B949E] transition-colors relative group">
+                  <div className="absolute top-4 right-4 text-[10px] text-[#8B949E] font-mono flex items-center gap-2">
+                    {project.stars !== undefined && project.stars > 0 && (
+                      <span className="flex items-center gap-1 text-[#FFBD2E]">
+                        ★ {project.stars}
+                      </span>
+                    )}
+                  </div>
                   <h4 className="text-[#58A6FF] font-medium mb-2 flex items-center gap-2">
                     {project.name}
                   </h4>
@@ -872,7 +1068,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           </div>
         )}
 
-        {profile.social_links && profile.social_links.length > 0 && (
+        {data.platforms && data.platforms.length > 0 && (
           <div className="w-full mb-8">
             <div className="flex gap-2 mb-4">
               <span className="text-[#3FB950] font-bold">~</span>
@@ -880,7 +1076,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <span className="text-white">netstat -a | grep CONNECTED</span>
             </div>
             <div className="pl-4 flex flex-col gap-2">
-              {profile.social_links.map((p, i) => {
+              {data.platforms.map((p, i) => {
                 if (!p.url) return null
                 return (
                   <a
@@ -901,6 +1097,60 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                   </a>
                 )
               })}
+            </div>
+          </div>
+        )}
+
+        {(data.contact_email || data.contact_whatsapp || data.quick_talk_url || data.collab_types) && (
+          <div className="w-full mb-8">
+            <div className="flex gap-2 mb-4">
+              <span className="text-[#3FB950] font-bold">~</span>
+              <span className="text-[#8B949E]">$</span>
+              <span className="text-white">cat contact.txt</span>
+            </div>
+            <div className="pl-4 py-2 border-l-2 border-[#30363D] space-y-3">
+              {data.collab_types && (
+                <p className="text-[#8B949E]">
+                  # LOOKING FOR: <span className="text-[#E6EDF3]">{data.collab_types}</span>
+                </p>
+              )}
+              <div className="flex flex-col sm:flex-row gap-4 mt-2">
+                {data.contact_email && (
+                  <a href={`mailto:${data.contact_email}`} className="text-[#58A6FF] hover:text-white transition-colors flex items-center gap-2 text-xs">
+                    <Mail size={14} /> {data.contact_email}
+                  </a>
+                )}
+                {data.contact_whatsapp && (
+                  <a href={`https://wa.me/${data.contact_whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="text-[#3FB950] hover:text-white transition-colors flex items-center gap-2 text-xs">
+                    <Phone size={14} /> WhatsApp
+                  </a>
+                )}
+                {data.quick_talk_url && (
+                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="text-[#FFBD2E] hover:text-white transition-colors flex items-center gap-2 text-xs">
+                    <Video size={14} /> Schedule Sync
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {data.resume_url && (
+          <div className="w-full mb-8">
+            <div className="flex gap-2 mb-4">
+              <span className="text-[#3FB950] font-bold">~</span>
+              <span className="text-[#8B949E]">$</span>
+              <span className="text-white">cat resume.pdf</span>
+            </div>
+            <div className="pl-4">
+              <a 
+                href={data.resume_url}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[#E6EDF3] hover:text-[#58A6FF] flex items-center gap-3 bg-[#161B22] border border-[#30363D] px-4 py-3 hover:bg-[#30363D]/50 transition-colors w-max"
+              >
+                <FileText size={16} /> Open Document
+              </a>
             </div>
           </div>
         )}

@@ -13,9 +13,11 @@ export interface DeveloperData {
   commits: number;
   collabs: number;
   about: {
-    role: string;
-    mission: string;
-    languages: string[];
+    role?: string;
+    mission?: string;
+    languages?: string[];
+    status?: string;
+    company?: string;
   };
   tech_stack: string[];
   resume_url?: string;
@@ -31,7 +33,15 @@ export interface DeveloperData {
     label: string;
   }>;
   contact_email?: string;
+  contact_whatsapp?: string;
   quick_talk_url?: string;
+  collab_types?: string;
+  platforms?: Array<{
+    platform: string;
+    url: string;
+    followers?: string;
+  }>;
+  featured_work_url?: string;
 }
 
 export interface StudentData {
@@ -51,6 +61,7 @@ export interface StudentData {
   website?: string;
   playlist_url?: string;
   playlist_name?: string;
+  featured_work_url?: string;
   projects: Array<{
     name: string;
     emoji: string;
