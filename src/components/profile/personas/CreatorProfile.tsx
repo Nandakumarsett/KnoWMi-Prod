@@ -255,22 +255,25 @@ export function CreatorProfile({
           </button>
           <div className="bg-gray-50 rounded-[22px] overflow-hidden">
             {(() => {
-              const url = selectedWork.url || selectedWork.external_url;
+              const embedUrl = selectedWork.external_url || selectedWork.url;
               const isVideoEmbed =
-                url &&
-                typeof url === "string" &&
-                url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                embedUrl &&
+                typeof embedUrl === "string" &&
+                embedUrl.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+
+              const url = selectedWork.url || selectedWork.external_url;
               const isUploadedVideo =
-                selectedWork.type === 'video' ||
+                !isVideoEmbed &&
+                (selectedWork.type === 'video' ||
                 (url &&
                 typeof url === "string" &&
-                url.match(/\.(mp4|webm|ogg|mov)$/i));
+                url.match(/\.(mp4|webm|ogg|mov)$/i)));
 
               if (isVideoEmbed) {
                 return (
                   <div className="w-full aspect-video bg-black">
                     <iframe
-                      src={getEmbedUrl(url)}
+                      src={getEmbedUrl(embedUrl)}
                       className="w-full h-full"
                       allow="autoplay; encrypted-media"
                       allowFullScreen
@@ -324,16 +327,19 @@ export function CreatorProfile({
                 </p>
               )}
               {(() => {
-                const url = selectedWork.url || selectedWork.external_url;
+                const embedUrl = selectedWork.external_url || selectedWork.url;
                 const isVideoEmbed =
-                  url &&
-                  typeof url === "string" &&
-                  url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                  embedUrl &&
+                  typeof embedUrl === "string" &&
+                  embedUrl.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+
+                const url = selectedWork.url || selectedWork.external_url;
                 const isUploadedVideo =
-                  selectedWork.type === 'video' ||
+                  !isVideoEmbed &&
+                  (selectedWork.type === 'video' ||
                   (url &&
                   typeof url === "string" &&
-                  url.match(/\.(mp4|webm|ogg|mov)$/i));
+                  url.match(/\.(mp4|webm|ogg|mov)$/i)));
                 const isImageFile =
                   selectedWork.type === 'image' ||
                   (url &&
