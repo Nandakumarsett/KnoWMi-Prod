@@ -1104,7 +1104,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 </p>
               )}
               
-              <div className="flex flex-col sm:flex-row flex-wrap items-center sm:items-start justify-center sm:justify-start gap-4 mt-6 z-20">
+              <div className="flex flex-col sm:flex-row flex-wrap items-center sm:items-start justify-center sm:justify-start gap-4 mt-6 z-20 sm:ml-6">
                 {(data.resume_url || data.website) && (
                   <div className="w-full sm:w-auto p-4 rounded-xl border border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 shadow-[0_0_15px_rgba(6,182,212,0.15)] flex flex-col items-center sm:items-start gap-3">
                     <p className="text-cyan-300 font-bold text-xs uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
