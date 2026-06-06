@@ -49,6 +49,7 @@ const PLATFORM_ICONS: Record<string, any> = {
   github: Github,
   tiktok: Share2,
   twitch: Twitter,
+  snapchat: Share2,
 };
 
 export function CreatorProfile({
@@ -147,20 +148,17 @@ export function CreatorProfile({
     dribbble: "bg-[#ea4c89] text-white",
     medium: "bg-[#000000] text-white",
     github: "bg-[#181717] text-white",
+    snapchat: "bg-[#FFFC00] text-black",
+    tiktok: "bg-[#000000] text-white",
   };
 
   const logoNames: Record<string, string> = {
-    instagram: "instagram",
-    youtube: "youtube",
-    twitter: "x",
-    "twitter / x": "x",
     threads: "threads",
-    facebook: "facebook",
-    linkedin: "linkedin",
     behance: "behance",
     dribbble: "dribbble",
     medium: "medium",
-    github: "github",
+    snapchat: "snapchat",
+    tiktok: "tiktok",
   };
 
   // ----------------------------------------------------
@@ -322,7 +320,7 @@ export function CreatorProfile({
                   {profile.display_name}
                 </h1>
                 <p className="text-xs font-black text-orange-600 uppercase tracking-[0.4em] leading-none mt-2 mb-4">
-                  {data.type || "CREATIVE PROFESSIONAL"}
+                  {data.tagline || data.type || "CREATIVE PROFESSIONAL"}
                 </p>
                 {profile.bio && (
                   <p className="text-sm font-black text-neutral-800 leading-tight italic max-w-lg mx-auto">
@@ -361,14 +359,74 @@ export function CreatorProfile({
               </div>
             </div>
 
-            {data.about && (
+            {(data.bio || data.about) && (
               <div className="mb-8">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-1">
                   Professional Narrative
                 </p>
                 <p className="text-base text-neutral-600 leading-relaxed bg-neutral-50/30 py-4 px-6 rounded-[24px] border border-neutral-100/50 max-w-2xl italic">
-                  "{data.about}"
+                  "{data.bio || data.about}"
                 </p>
+              </div>
+            )}
+
+            {(data.audience_age_group || data.location || data.audience_top_location || (data.audience_interests && data.audience_interests.length > 0)) && (
+              <div className="mb-12">
+                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6">
+                  Audience & Demographics
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+                   {data.audience_age_group && (
+                     <div className="bg-neutral-50 p-4 rounded-2xl border border-neutral-100">
+                       <p className="text-[10px] uppercase font-bold text-neutral-400 mb-1">Age Group</p>
+                       <p className="text-sm font-black text-neutral-900">{data.audience_age_group}</p>
+                     </div>
+                   )}
+                   {data.location && (
+                     <div className="bg-neutral-50 p-4 rounded-2xl border border-neutral-100">
+                       <p className="text-[10px] uppercase font-bold text-neutral-400 mb-1">Base</p>
+                       <p className="text-sm font-black text-neutral-900">{data.location}</p>
+                     </div>
+                   )}
+                   {data.audience_top_location && (
+                     <div className="bg-neutral-50 p-4 rounded-2xl border border-neutral-100">
+                       <p className="text-[10px] uppercase font-bold text-neutral-400 mb-1">Top Reach</p>
+                       <p className="text-sm font-black text-neutral-900">{data.audience_top_location}</p>
+                     </div>
+                   )}
+                </div>
+                {data.audience_interests && data.audience_interests.length > 0 && (
+                   <div className="flex flex-wrap gap-2">
+                     {data.audience_interests.map((int: string) => (
+                       <span key={int} className="px-3 py-1.5 rounded-full bg-pink-50 text-[10px] font-black uppercase tracking-widest text-pink-600 border border-pink-100">
+                         {int}
+                       </span>
+                     ))}
+                   </div>
+                )}
+              </div>
+            )}
+
+            {data.past_collaborations && data.past_collaborations.length > 0 && (
+              <div className="mb-12">
+                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6">
+                  Past Collaborations
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {data.past_collaborations.map((collab: any, i: number) => (
+                    <a key={i} href={collab.link ? ensureAbsoluteUrl(collab.link) : undefined} target={collab.link ? "_blank" : undefined} rel={collab.link ? "noopener noreferrer" : undefined} className={`p-5 bg-neutral-50 rounded-[24px] border border-neutral-100 ${collab.link ? 'hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer' : ''} flex flex-col items-center text-center`}>
+                      <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center p-2 mb-4 border border-neutral-100">
+                         {collab.logo_url ? (
+                           <img src={getAssetUrl(collab.logo_url)} className="w-full h-full object-contain" alt={collab.brand_name} />
+                         ) : (
+                           <Target size={24} className="text-neutral-300" />
+                         )}
+                      </div>
+                      <h4 className="text-sm font-black text-neutral-900 mb-1">{collab.brand_name}</h4>
+                      <p className="text-[11px] font-bold text-neutral-500 leading-tight">{collab.campaign_description}</p>
+                    </a>
+                  ))}
+                </div>
               </div>
             )}
 
@@ -449,13 +507,13 @@ export function CreatorProfile({
               </div>
             )}
 
-            {data.content_formats && data.content_formats.length > 0 && (
+            {(data.deliverable_formats || data.content_formats) && (data.deliverable_formats || data.content_formats).length > 0 && (
               <div className="mb-12">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-4">
-                  Core Specialization
+                  Deliverables & Specialization
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {data.content_formats.map((format) => (
+                  {(data.deliverable_formats || data.content_formats).map((format: string) => (
                     <span
                       key={format}
                       className="px-4 py-2 rounded-xl bg-orange-50 text-xs font-black uppercase tracking-widest text-orange-600 border border-orange-100"
@@ -528,18 +586,34 @@ export function CreatorProfile({
             )}
 
             <section className="px-0 mb-6 relative z-10">
-              <div className="flex flex-col items-center text-center gap-8 bg-neutral-50/50 p-8 rounded-[32px] border border-neutral-100/50">
-                <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center text-center gap-6 bg-neutral-50/50 p-8 rounded-[32px] border border-neutral-100/50">
+                <div className="flex flex-col items-center w-full">
                   <div className="flex items-center justify-center gap-2 mb-2 whitespace-nowrap">
                     <Sparkles size={16} className="text-orange-500" />
                     <span className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900">
                       Open for Collaboration
                     </span>
                   </div>
-                  <p className="text-xs text-neutral-500 font-medium italic">
+                  <p className="text-xs text-neutral-500 font-medium italic mb-4">
                     {data.collab_types ||
                       "Available for strategic creative partnerships."}
                   </p>
+                  
+                  {data.collab_types_tags && data.collab_types_tags.length > 0 && (
+                    <div className="flex flex-wrap justify-center gap-2 mb-4">
+                      {data.collab_types_tags.map((tag: string) => (
+                        <span key={tag} className="px-3 py-1 bg-white border border-neutral-200 rounded-full text-[10px] font-bold text-neutral-600 uppercase tracking-wider">{tag}</span>
+                      ))}
+                    </div>
+                  )}
+
+                  {(data.rate_range_min || data.turnaround_time || data.availability_status) && (
+                    <div className="flex flex-wrap justify-center gap-4 text-[11px] font-bold text-neutral-500 uppercase tracking-widest mb-6 bg-white px-6 py-3 rounded-2xl border border-neutral-100 shadow-sm w-full max-w-lg">
+                      {data.availability_status && <span>Status: <span className="text-neutral-900">{data.availability_status}</span></span>}
+                      {data.rate_range_min && <span>Rates: <span className="text-neutral-900">₹{data.rate_range_min} {data.rate_range_max ? `- ₹${data.rate_range_max}` : '+'}</span></span>}
+                      {data.turnaround_time && <span>TAT: <span className="text-neutral-900">{data.turnaround_time}</span></span>}
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-wrap items-center gap-4 w-full">
