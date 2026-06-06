@@ -113,8 +113,6 @@ export interface CreatorData {
 
   // Section 3: Audience Snapshot
   audience_age_group?: string;
-  audience_top_location?: string;
-  audience_gender_split?: string;
   audience_interests?: string[];
 
   // Section 4: Content Aesthetic

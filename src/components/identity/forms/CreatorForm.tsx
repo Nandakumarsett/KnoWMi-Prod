@@ -261,7 +261,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
            <div className="relative">
              <label className={labelClasses}>Primary Age Group</label>
              <input type="text" value={data.audience_age_group || ''} onChange={e => updateField('audience_age_group', e.target.value.slice(0, 20))} placeholder="e.g. 18-24" className={inputBaseClasses} />
@@ -271,11 +271,6 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
              <label className={labelClasses}>Creator Location (Base)</label>
              <input type="text" value={data.location || ''} onChange={e => updateField('location', e.target.value.slice(0, 20))} placeholder="e.g. Gudur" className={inputBaseClasses} />
              <span className={charCountClasses((data.location || '').length, 20)}>{(data.location || '').length}/20</span>
-           </div>
-           <div className="relative">
-             <label className={labelClasses}>Most Reached Location</label>
-             <input type="text" value={data.audience_top_location || ''} onChange={e => updateField('audience_top_location', e.target.value.slice(0, 20))} placeholder="e.g. Bengaluru" className={inputBaseClasses} />
-             <span className={charCountClasses((data.audience_top_location || '').length, 20)}>{(data.audience_top_location || '').length}/20</span>
            </div>
         </div>
         <div>

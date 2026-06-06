@@ -1385,16 +1385,6 @@ export function CreatorProfile({
               </div>
             </div>
 
-            {/* Most Reached Location */}
-            <div className="stat-item">
-              <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
-                {data.audience_top_location || "Global"}
-              </div>
-              <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                Most Reached
-              </div>
-            </div>
-
             {/* Audience Age */}
             {data.audience_age_group && (
               <div className="stat-item">
@@ -1853,22 +1843,21 @@ export function CreatorProfile({
             </button>
             <div className="bg-gray-50 rounded-[22px] overflow-hidden">
               {(() => {
-                const url = selectedWork.url || selectedWork.external_url;
-                const isVideoEmbed =
-                  url &&
-                  typeof url === "string" &&
-                  url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
-                const isUploadedVideo =
-                  selectedWork.type === 'video' ||
-                  (url &&
-                  typeof url === "string" &&
-                  url.match(/\.(mp4|webm|ogg|mov)$/i));
+                const extUrl = selectedWork.external_url;
+                const uploadUrl = selectedWork.url;
+                
+                const ytRegex = /(?:youtube\.com|youtu\.be|vimeo\.com)/i;
+                const embedUrl = (extUrl && typeof extUrl === 'string' && extUrl.match(ytRegex)) 
+                  ? extUrl 
+                  : (uploadUrl && typeof uploadUrl === 'string' && uploadUrl.match(ytRegex)) 
+                    ? uploadUrl 
+                    : null;
 
-                if (isVideoEmbed) {
+                if (embedUrl) {
                   return (
                     <div className="w-full aspect-video bg-black">
                       <iframe
-                        src={getEmbedUrl(url)}
+                        src={getEmbedUrl(embedUrl)}
                         className="w-full h-full"
                         allow="autoplay; encrypted-media"
                         allowFullScreen
@@ -1877,14 +1866,23 @@ export function CreatorProfile({
                   );
                 }
 
+                const isImageFile = uploadUrl && typeof uploadUrl === "string" && uploadUrl.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i);
+                const isUploadedVideo = uploadUrl && !isImageFile && (
+                  selectedWork.type === 'video' ||
+                  (typeof uploadUrl === "string" && uploadUrl.match(/\.(mp4|webm|ogg|mov)$/i))
+                );
+
                 if (isUploadedVideo) {
                   return (
                     <div className="w-full aspect-video bg-black">
                       <video
-                        src={getAssetUrl(url)}
+                        key={uploadUrl}
+                        src={getAssetUrl(uploadUrl)}
                         className="w-full h-full object-contain"
                         controls
                         autoPlay
+                        playsInline
+                        preload="auto"
                         onTimeUpdate={(e) => {
                           if (e.currentTarget.currentTime >= 10) {
                             e.currentTarget.pause();
