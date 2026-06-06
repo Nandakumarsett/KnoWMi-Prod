@@ -574,7 +574,7 @@ export function CreatorProfile({
                             return (
                               <video 
                                 src={getAssetUrl(w.url)} 
-                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 z-10"
+                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 z-10 pointer-events-none"
                                 muted
                                 playsInline
                               />
@@ -1749,7 +1749,7 @@ export function CreatorProfile({
                           return (
                             <video 
                               src={getAssetUrl(w.url)} 
-                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-10"
+                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-10 pointer-events-none"
                               muted
                               playsInline
                             />
