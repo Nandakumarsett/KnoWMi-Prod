@@ -940,11 +940,11 @@ export function CreatorProfile({
               className={`flex-1 text-center ${isFreeProfile ? "cursor-pointer hover:opacity-80" : ""}`}
               onClick={() => isFreeProfile && setShowFomoModal(true)}
             >
-              <span className="text-[10px] font-black uppercase tracking-widest block mb-1">
-                VIEWS
+              <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
+                PROFILE VIEWS
               </span>
               <span
-                className={`text-2xl font-black ${isFreeProfile ? "blur-[4px]" : ""}`}
+                className={`text-3xl font-black ${isFreeProfile ? "blur-[4px]" : ""}`}
               >
                 {isFreeProfile ? "4.2K" : liveViews}
               </span>
@@ -953,10 +953,10 @@ export function CreatorProfile({
             <div className="w-1 h-12 bg-black mx-2 sm:mx-6 rounded-full"></div>
             
             <div className="flex-1 text-center">
-              <span className="text-[10px] font-black uppercase tracking-widest block mb-1">
+              <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
                 MOST SCANNED LOCATION
               </span>
-              <span className="text-xl font-black uppercase">{topCity}</span>
+              <span className="text-2xl font-black uppercase">{topCity}</span>
             </div>
           </div>
 
