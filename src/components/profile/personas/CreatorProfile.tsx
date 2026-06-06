@@ -1204,7 +1204,7 @@ export function CreatorProfile({
                   {data.turnaround_time && (
                     <div className="text-center">
                       <span className="text-[10px] font-black text-neutral-500 uppercase tracking-widest block mb-1">TURNAROUND</span>
-                      <span className="text-sm font-black uppercase">{data.turnaround_time}</span>
+                      <span className="text-sm font-black uppercase whitespace-nowrap">{data.turnaround_time}</span>
                     </div>
                   )}
                   {data.rate_range_min && (
