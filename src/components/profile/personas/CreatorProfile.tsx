@@ -545,37 +545,53 @@ export function CreatorProfile({
                         }}
                         className="group relative rounded-[32px] overflow-hidden bg-neutral-100 border border-neutral-100 shadow-sm hover:shadow-xl transition-all aspect-video cursor-pointer"
                       >
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          {isLinkOnly ? (
+                            <div className="flex flex-col items-center justify-center z-10 text-neutral-500 transition-transform group-hover:scale-105">
+                              {w.type === 'video' ? (
+                                <Play size={40} className="mb-2 opacity-80" />
+                              ) : (
+                                <Globe size={40} className="mb-2 opacity-80" />
+                              )}
+                              <span className="text-[10px] font-black uppercase tracking-widest px-4 text-center">
+                                {w.type === 'video' ? 'Click to open video' : 'Click to open link'}
+                              </span>
+                            </div>
+                          ) : (
+                            <Camera size={40} className="text-neutral-300 opacity-60 absolute" />
+                          )}
+                        </div>
+
                         {thumb ? (
                           <img
                             src={thumb}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 relative z-10"
+                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 z-10"
                             alt={w.title}
                             onError={(e) => { e.currentTarget.style.display = 'none'; }}
                           />
-                        ) : isUploadedVideo ? (
-                          <video 
-                            src={getAssetUrl(w.url)} 
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 relative z-10"
-                            muted
-                            playsInline
-                          />
-                        ) : isLinkOnly ? (
-                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 group-hover:from-indigo-200 group-hover:to-purple-200 transition-colors z-10">
-                            {w.type === 'video' ? (
-                              <Play size={32} className="text-purple-400 mb-2 group-hover:scale-110 transition-transform" />
-                            ) : (
-                              <Globe size={32} className="text-purple-400 mb-2 group-hover:scale-110 transition-transform" />
-                            )}
-                            <span className="text-[10px] font-black text-purple-600 uppercase tracking-widest px-4 text-center">
-                              {w.type === 'video' ? 'Click to open video' : 'Click to open link'}
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="absolute inset-0 flex items-center justify-center bg-neutral-100">
-                             <Camera size={40} className="text-neutral-300 opacity-60" />
+                        ) : (() => {
+                          if (isUploadedVideo) {
+                            return (
+                              <video 
+                                src={getAssetUrl(w.url)} 
+                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 z-10"
+                                muted
+                                playsInline
+                              />
+                            );
+                          }
+                          return null;
+                        })()}
+
+                        {w.type === "video" && (thumb || isUploadedVideo) && (
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                            <div className="w-16 h-16 rounded-full bg-white/90 backdrop-blur-md shadow-lg flex items-center justify-center text-neutral-800 group-hover:scale-110 transition-transform">
+                              <Play size={22} className="ml-0.5" fill="currentColor" />
+                            </div>
                           </div>
                         )}
-                        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent z-20">
+
+                        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent z-30 pointer-events-none">
                           <span className="text-[10px] font-black text-white uppercase tracking-widest">
                             {w.title}
                           </span>
@@ -1865,6 +1881,7 @@ export function CreatorProfile({
                         className="w-full h-full object-contain"
                         controls
                         autoPlay
+                        muted
                         playsInline
                         preload="auto"
                         onTimeUpdate={(e) => {
