@@ -527,24 +527,24 @@ export function CreatorProfile({
                 </p>
                 <div className="flex flex-wrap gap-4 mb-4">
                    {data.audience_age_group && (
-                     <div className="flex-1 min-w-[120px] bg-neutral-50 p-4 rounded-2xl border border-neutral-100">
-                       <p className="text-[10px] uppercase font-bold text-neutral-400 mb-1">Age Group</p>
-                       <p className="text-sm font-black text-neutral-900">{data.audience_age_group}</p>
+                     <div className="flex-1 min-w-[120px] bg-neutral-50 p-5 rounded-2xl border border-neutral-100">
+                       <p className="text-xs uppercase font-bold text-neutral-400 mb-1 tracking-widest">Age Group</p>
+                       <p className="text-lg font-black text-neutral-900">{data.audience_age_group}</p>
                      </div>
                    )}
                    {data.location && (
-                     <div className="flex-1 min-w-[120px] bg-neutral-50 p-4 rounded-2xl border border-neutral-100">
-                       <p className="text-[10px] uppercase font-bold text-neutral-400 mb-1">Base</p>
-                       <p className="text-sm font-black text-neutral-900">{data.location}</p>
+                     <div className="flex-1 min-w-[120px] bg-neutral-50 p-5 rounded-2xl border border-neutral-100">
+                       <p className="text-xs uppercase font-bold text-neutral-400 mb-1 tracking-widest">Base</p>
+                       <p className="text-lg font-black text-neutral-900">{data.location}</p>
                      </div>
                    )}
                 </div>
                 {data.audience_interests && data.audience_interests.length > 0 && (
                    <div className="mt-6">
-                     <p className="text-[10px] uppercase font-bold text-neutral-400 mb-2 tracking-widest">Top Interests</p>
-                     <div className="flex flex-wrap gap-2">
+                     <p className="text-xs uppercase font-bold text-neutral-400 mb-3 tracking-widest">Top Interests</p>
+                     <div className="flex flex-wrap gap-2.5">
                        {data.audience_interests.map((int: string) => (
-                         <span key={int} className="px-3 py-1.5 rounded-full bg-pink-50 text-[10px] font-black uppercase tracking-widest text-pink-600 border border-pink-100">
+                         <span key={int} className="px-4 py-2 rounded-full bg-pink-50 text-xs font-black uppercase tracking-widest text-pink-600 border border-pink-100">
                            {int}
                          </span>
                        ))}
