@@ -907,6 +907,7 @@ export default function IdentityStudio() {
                           placeholder="Enter first name"
                           className="input-field"
                           value={data.first_name}
+                          maxLength={50}
                           onChange={(e) =>
                             updateField("first_name", e.target.value)
                           }
@@ -919,6 +920,7 @@ export default function IdentityStudio() {
                           placeholder="Enter last name"
                           className="input-field"
                           value={data.last_name}
+                          maxLength={50}
                           onChange={(e) =>
                             updateField("last_name", e.target.value)
                           }
@@ -937,6 +939,7 @@ export default function IdentityStudio() {
                             placeholder="e.g. Mumbai, India"
                             className="input-field"
                             value={data.location}
+                            maxLength={100}
                             onChange={(e) =>
                               updateField("location", e.target.value)
                             }
@@ -951,9 +954,11 @@ export default function IdentityStudio() {
                             placeholder="e.g. 2021"
                             className="input-field"
                             value={data.est_year}
-                            onChange={(e) =>
-                              updateField("est_year", e.target.value)
-                            }
+                            maxLength={4}
+                            onChange={(e) => {
+                              const val = e.target.value.replace(/\D/g, '');
+                              updateField("est_year", val)
+                            }}
                           />
                         </div>
                       </div>
@@ -1026,6 +1031,7 @@ export default function IdentityStudio() {
                         placeholder="Tell the world who you are..."
                         className="input-field min-h-[100px] py-4"
                         value={data.bio}
+                        maxLength={500}
                         onChange={(e) => updateField("bio", e.target.value)}
                       />
                     </div>

@@ -138,7 +138,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
              </div>
              <div>
                <label className={labelClasses}>Inside the Mind (Detailed Bio)</label>
-               <textarea rows={3} value={data.bio || ''} onChange={e => updateField('bio', e.target.value)} placeholder="Tell the world your creative mission..." className={`${inputBaseClasses} resize-none`} />
+               <textarea rows={3} value={data.bio || ''} maxLength={500} onChange={e => updateField('bio', e.target.value)} placeholder="Tell the world your creative mission..." className={`${inputBaseClasses} resize-none`} />
              </div>
           </div>
         </div>
@@ -185,8 +185,13 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
             </div>
             <div className="pt-4">
                <label className={labelClasses}>WhatsApp Number (Optional)</label>
-               <input type="tel" value={data.contact_whatsapp || ''} onChange={e => updateField('contact_whatsapp', e.target.value)} placeholder="e.g. +1234567890" className={inputBaseClasses} />
-               <p className="text-[10px] text-neutral-400 mt-1">Include country code without spaces or dashes</p>
+               <input type="tel" value={data.contact_whatsapp !== undefined && data.contact_whatsapp !== '' ? data.contact_whatsapp : '+91 '} onChange={e => {
+                 let val = e.target.value;
+                 if (!val.startsWith('+')) val = '+' + val.replace(/\D/g, '');
+                 else val = '+' + val.replace(/\D/g, '');
+                 updateField('contact_whatsapp', val);
+               }} placeholder="e.g. +91 9876543210" className={inputBaseClasses} />
+               <p className="text-[10px] text-neutral-400 mt-1">This will display when scanned, please be aware. Make sure to enable private mode if you would not like to display personal info when scanned.</p>
             </div>
           </div>
         </section>

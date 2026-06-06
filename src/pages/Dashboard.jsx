@@ -1231,16 +1231,16 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     <div className="space-y-3">
                       <label className="text-[11px] font-black uppercase tracking-widest text-[#5C5246] ml-1">First Name</label>
-                      <input className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-800 focus:outline-none focus:border-[#C1440E] transition-all" value={firstName} onChange={e => setFirstName(e.target.value)} />
+                      <input className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-800 focus:outline-none focus:border-[#C1440E] transition-all" value={firstName} maxLength={50} onChange={e => setFirstName(e.target.value)} />
                     </div>
                     <div className="space-y-3">
                       <label className="text-[11px] font-black uppercase tracking-widest text-[#5C5246] ml-1">Last Name</label>
-                      <input className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-800 focus:outline-none focus:border-[#C1440E] transition-all" value={lastName} onChange={e => setLastName(e.target.value)} />
+                      <input className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-800 focus:outline-none focus:border-[#C1440E] transition-all" value={lastName} maxLength={50} onChange={e => setLastName(e.target.value)} />
                     </div>
                   </div>
                   <div className="space-y-3">
                     <label className="text-[11px] font-black uppercase tracking-widest text-[#5C5246] ml-1">Public Tagline</label>
-                    <input className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-800 focus:outline-none focus:border-[#C1440E] transition-all" value={data.tagline || ''} onChange={e => setData({...data, tagline: e.target.value})} placeholder="e.g. Building the future..." />
+                    <input className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-800 focus:outline-none focus:border-[#C1440E] transition-all" value={data.tagline || ''} maxLength={100} onChange={e => setData({...data, tagline: e.target.value})} placeholder="e.g. Building the future..." />
                   </div>
                 </div>
               </section>

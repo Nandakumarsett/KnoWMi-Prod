@@ -198,7 +198,13 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
              </div>
              <div className="space-y-2">
                <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">WhatsApp Number</label>
-               <input type="text" value={data.contact_whatsapp || ''} onChange={e => updateField('contact_whatsapp', e.target.value.replace(/[^0-9+\s()]/g, ''))} placeholder="+91 00000 00000" className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none" />
+               <input type="text" value={data.contact_whatsapp !== undefined && data.contact_whatsapp !== '' ? data.contact_whatsapp : '+91 '} onChange={e => {
+                 let val = e.target.value;
+                 if (!val.startsWith('+')) val = '+' + val.replace(/\D/g, '');
+                 else val = '+' + val.replace(/\D/g, '');
+                 updateField('contact_whatsapp', val);
+               }} placeholder="+91 00000 00000" className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none" />
+               <p className="text-[10px] text-neutral-400 mt-1">This will display when scanned, please be aware. Make sure to enable private mode if you would not like to display personal info when scanned.</p>
              </div>
              <div className="space-y-2 md:col-span-2">
                <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Quick Talk URL (Calendly, etc)</label>
