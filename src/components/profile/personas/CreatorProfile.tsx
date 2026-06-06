@@ -935,9 +935,9 @@ export function CreatorProfile({
           )}
 
           {/* Stats Bar */}
-          <div className="w-full border-4 border-black p-4 sm:p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-wrap justify-center sm:justify-between items-center gap-4 mb-10 bg-white">
+          <div className="w-full border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] grid grid-cols-2 divide-x-4 divide-black mb-10 bg-white">
             <div
-              className={`text-center ${isFreeProfile ? "cursor-pointer hover:opacity-80" : ""}`}
+              className={`text-center py-4 sm:py-6 ${isFreeProfile ? "cursor-pointer hover:opacity-80" : ""}`}
               onClick={() => isFreeProfile && setShowFomoModal(true)}
             >
               <span className="text-[10px] font-black uppercase tracking-widest block mb-1">
@@ -949,8 +949,7 @@ export function CreatorProfile({
                 {isFreeProfile ? "4.2K" : liveViews}
               </span>
             </div>
-            <div className="hidden sm:block w-0.5 h-8 bg-black"></div>
-            <div className="text-center">
+            <div className="text-center py-4 sm:py-6">
               <span className="text-[10px] font-black uppercase tracking-widest block mb-1">
                 LOCATION
               </span>
@@ -984,12 +983,54 @@ export function CreatorProfile({
                 <h3 className="font-black text-2xl uppercase tracking-tighter mb-4 border-b-4 border-black pb-2">
                   NARRATIVE
                 </h3>
-                <p className="text-xs font-bold leading-relaxed">
+                <p className="text-base font-bold leading-relaxed">
                   {data.about || data.bio}
                 </p>
               </div>
             )}
           </div>
+
+          {/* Socials */}
+          {Array.isArray(data.platforms) && data.platforms.length > 0 && (
+            <div className="w-full text-center mb-10">
+              <h3 className="font-black text-2xl uppercase tracking-tighter mb-6 border-b-4 border-black pb-2 text-left">
+                SOCIALS
+              </h3>
+              <div className="flex flex-wrap gap-4 justify-start">
+                {data.platforms.map((p) => {
+                  const platform = p.platform?.toLowerCase();
+                  const Icon = PLATFORM_ICONS[platform] || Share2;
+                  return (
+                    <a
+                      key={p.platform}
+                      href={ensureAbsoluteUrl(p.url)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        handleGatedClick(e, p.url, () =>
+                          trackLinkClick(
+                            profile.id,
+                            p.platform || "unknown",
+                            p.url,
+                          ),
+                        );
+                        if (!isGated)
+                          window.open(ensureAbsoluteUrl(p.url), "_blank");
+                      }}
+                      className="w-14 h-14 border-4 border-black flex items-center justify-center bg-white hover:bg-black hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] relative cursor-pointer"
+                    >
+                      <Icon size={24} />
+                      {isGated && (
+                        <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
+                          <Lock size={14} className="text-white" />
+                        </div>
+                      )}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Demographics */}
           {(data.audience_age_group || (Array.isArray(data.audience_interests) && data.audience_interests.length > 0)) && (
@@ -1172,47 +1213,7 @@ export function CreatorProfile({
             </div>
           )}
 
-          {/* Socials */}
-          {Array.isArray(data.platforms) && data.platforms.length > 0 && (
-            <div className="w-full text-center mb-10">
-              <h3 className="font-black text-2xl uppercase tracking-tighter mb-6 border-b-4 border-black pb-2 text-left">
-                SOCIALS
-              </h3>
-              <div className="flex flex-wrap gap-4 justify-start">
-                {data.platforms.map((p) => {
-                  const platform = p.platform?.toLowerCase();
-                  const Icon = PLATFORM_ICONS[platform] || Share2;
-                  return (
-                    <a
-                      key={p.platform}
-                      href={ensureAbsoluteUrl(p.url)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => {
-                        handleGatedClick(e, p.url, () =>
-                          trackLinkClick(
-                            profile.id,
-                            p.platform || "unknown",
-                            p.url,
-                          ),
-                        );
-                        if (!isGated)
-                          window.open(ensureAbsoluteUrl(p.url), "_blank");
-                      }}
-                      className="w-14 h-14 border-4 border-black flex items-center justify-center bg-white hover:bg-black hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] relative cursor-pointer"
-                    >
-                      <Icon size={24} />
-                      {isGated && (
-                        <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
-                          <Lock size={14} className="text-white" />
-                        </div>
-                      )}
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+
 
           {/* Contact / Action */}
           <div className="w-full mt-4 flex flex-col sm:flex-row gap-4 mb-12">
