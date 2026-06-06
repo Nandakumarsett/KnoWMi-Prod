@@ -545,14 +545,19 @@ export function CreatorProfile({
                         }}
                         className="group relative rounded-[32px] overflow-hidden bg-neutral-100 border border-neutral-100 shadow-sm hover:shadow-xl transition-all aspect-video cursor-pointer"
                       >
-                        {thumb || isUploadedVideo ? (
+                        {thumb ? (
                           <img
-                            src={
-                              thumb ||
-                              "https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=2070"
-                            }
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            src={thumb}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 relative z-10"
                             alt={w.title}
+                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                          />
+                        ) : isUploadedVideo ? (
+                          <video 
+                            src={getAssetUrl(w.url)} 
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 relative z-10"
+                            muted
+                            playsInline
                           />
                         ) : isLinkOnly ? (
                           <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 group-hover:from-indigo-200 group-hover:to-purple-200 transition-colors z-10">
