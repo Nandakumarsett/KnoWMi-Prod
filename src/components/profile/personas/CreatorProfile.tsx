@@ -1843,29 +1843,8 @@ export function CreatorProfile({
             </button>
             <div className="bg-gray-50 rounded-[22px] overflow-hidden">
               {(() => {
-                const extUrl = selectedWork.external_url;
                 const uploadUrl = selectedWork.url;
                 
-                const ytRegex = /(?:youtube\.com|youtu\.be|vimeo\.com)/i;
-                const embedUrl = (extUrl && typeof extUrl === 'string' && extUrl.match(ytRegex)) 
-                  ? extUrl 
-                  : (uploadUrl && typeof uploadUrl === 'string' && uploadUrl.match(ytRegex)) 
-                    ? uploadUrl 
-                    : null;
-
-                if (embedUrl) {
-                  return (
-                    <div className="w-full aspect-video bg-black">
-                      <iframe
-                        src={getEmbedUrl(embedUrl)}
-                        className="w-full h-full"
-                        allow="autoplay; encrypted-media"
-                        allowFullScreen
-                      />
-                    </div>
-                  );
-                }
-
                 const isImageFile = uploadUrl && typeof uploadUrl === "string" && uploadUrl.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i);
                 const isUploadedVideo = uploadUrl && !isImageFile && (
                   selectedWork.type === 'video' ||
