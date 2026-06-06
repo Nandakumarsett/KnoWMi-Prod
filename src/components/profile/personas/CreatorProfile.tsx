@@ -758,77 +758,76 @@ export function CreatorProfile({
             )}
 
             <section className="px-4 sm:px-0 mb-12 relative z-10">
-              <div className="relative w-full rounded-[32px] p-[1px] overflow-hidden group">
-                {/* Animated gradient border */}
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-rose-500 to-purple-600 opacity-20 group-hover:opacity-40 transition-opacity duration-700" />
-                
-                {/* Card body */}
-                <div className="relative bg-white/60 backdrop-blur-xl flex flex-col items-center text-center gap-6 p-8 sm:p-10 rounded-[32px] border border-white shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
-                  
-                  {/* Glowing background blob */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-orange-200/30 blur-3xl rounded-full pointer-events-none" />
+              <div className="relative w-full rounded-[32px] overflow-hidden group p-8 sm:p-10 bg-white shadow-[0_2px_40px_-12px_rgba(0,0,0,0.08)] border border-neutral-100 transition-all hover:shadow-[0_8px_40px_-12px_rgba(0,0,0,0.12)]">
+                {/* Background Pattern / Ambient Glow */}
+                <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-gradient-to-br from-orange-100 via-rose-50 to-transparent rounded-full blur-[80px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-gradient-to-tr from-purple-100 to-transparent rounded-full blur-[60px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
-                  <div className="relative flex flex-col items-center w-full">
-                    {/* Pulsing icon */}
-                    <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-rose-100 rounded-2xl flex items-center justify-center mb-4 shadow-inner border border-white">
-                      <Sparkles size={24} className="text-orange-500 animate-pulse" />
-                    </div>
-
-                    <h3 className="text-sm font-black uppercase tracking-[0.3em] bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-rose-600 mb-2">
-                      Open for Collaboration
-                    </h3>
-                    
-                    <p className="text-sm text-neutral-600 font-medium italic mb-6 max-w-md">
-                      {data.collab_types || "Available for strategic creative partnerships."}
-                    </p>
-                    
-                    {/* Tags */}
-                    {data.collab_types_tags && data.collab_types_tags.length > 0 && (
-                      <div className="flex flex-wrap justify-center gap-2 mb-8">
-                        {data.collab_types_tags.map((tag: string) => (
-                          <span key={tag} className="px-4 py-1.5 bg-neutral-900 text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm hover:scale-105 transition-transform cursor-default">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Status & Rates pill */}
-                    {(data.rate_range_min || data.turnaround_time || data.availability_status) && (
-                      <div className="flex flex-wrap justify-center divide-x divide-neutral-200/60 bg-white/80 backdrop-blur-md rounded-2xl border border-neutral-100 shadow-sm w-full max-w-lg mb-8 overflow-hidden">
-                        {data.availability_status && (
-                          <div className="px-6 py-3 flex-1 min-w-[120px] flex flex-col items-center">
-                            <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest mb-1">Status</span>
-                            <div className="flex items-center gap-1.5">
-                              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                              <span className="text-xs font-black text-neutral-900 uppercase tracking-wider">{data.availability_status}</span>
-                            </div>
-                          </div>
-                        )}
-                        {data.turnaround_time && (
-                          <div className="px-6 py-3 flex-1 min-w-[120px] flex flex-col items-center">
-                            <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest mb-1">Turnaround</span>
-                            <span className="text-xs font-black text-neutral-900 uppercase tracking-wider">{data.turnaround_time}</span>
-                          </div>
-                        )}
-                        {data.rate_range_min && (
-                          <div className="px-6 py-3 flex-1 min-w-[120px] flex flex-col items-center">
-                            <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest mb-1">Starting Rate</span>
-                            <span className="text-xs font-black text-neutral-900 uppercase tracking-wider">₹{data.rate_range_min}</span>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                <div className="relative flex flex-col items-center w-full z-10">
+                  {/* Icon */}
+                  <div className="w-14 h-14 bg-white/60 backdrop-blur-md rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-neutral-100 flex items-center justify-center mb-6">
+                    <Sparkles size={24} className="text-orange-500" />
                   </div>
 
+                  {/* Heading */}
+                  <h3 className="text-base sm:text-lg font-black uppercase tracking-[0.2em] text-neutral-900 mb-2">
+                    Open for Collaboration
+                  </h3>
+                  
+                  {/* Subheading */}
+                  <p className="text-sm text-neutral-500 font-medium mb-8 max-w-md text-center">
+                    {data.collab_types || "Available for strategic creative partnerships."}
+                  </p>
+                  
+                  {/* Tags */}
+                  {data.collab_types_tags && data.collab_types_tags.length > 0 && (
+                    <div className="flex flex-wrap justify-center gap-2.5 mb-10">
+                      {data.collab_types_tags.map((tag: string) => (
+                        <span key={tag} className="px-5 py-2 bg-neutral-100/80 text-neutral-700 rounded-full text-[10px] font-black uppercase tracking-[0.15em] border border-neutral-200/60 transition-colors hover:bg-neutral-200/80 cursor-default">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Status & Rates pill - Bento Style */}
+                  {(data.rate_range_min || data.turnaround_time || data.availability_status) && (
+                    <div className="flex flex-wrap justify-center gap-3 w-full max-w-2xl mb-10">
+                      {data.availability_status && (
+                        <div className="flex-1 min-w-[140px] bg-white/80 backdrop-blur-sm border border-neutral-100 rounded-2xl p-5 flex flex-col items-center text-center shadow-sm">
+                          <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-2">Status</span>
+                          <div className="flex items-center gap-2">
+                            <span className="relative flex h-2.5 w-2.5">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                            </span>
+                            <span className="text-sm font-black text-neutral-900 uppercase tracking-wider">{data.availability_status}</span>
+                          </div>
+                        </div>
+                      )}
+                      {data.turnaround_time && (
+                        <div className="flex-1 min-w-[140px] bg-white/80 backdrop-blur-sm border border-neutral-100 rounded-2xl p-5 flex flex-col items-center text-center shadow-sm">
+                          <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-2">Turnaround</span>
+                          <span className="text-sm font-black text-neutral-900 uppercase tracking-wider">{data.turnaround_time}</span>
+                        </div>
+                      )}
+                      {data.rate_range_min && (
+                        <div className="flex-1 min-w-[140px] bg-white/80 backdrop-blur-sm border border-neutral-100 rounded-2xl p-5 flex flex-col items-center text-center shadow-sm">
+                          <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-2">Starting Rate</span>
+                          <span className="text-sm font-black text-neutral-900 uppercase tracking-wider">₹{data.rate_range_min}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {/* CTAs */}
-                  <div className="relative flex flex-wrap items-center justify-center gap-4 w-full">
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
                     {data.contact_email && (
                       <a
                         href={`mailto:${data.contact_email}`}
-                        className="group flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-neutral-100 rounded-2xl hover:border-black hover:shadow-lg transition-all text-xs font-black uppercase tracking-widest text-neutral-900 flex-1 min-w-[200px] max-w-[280px]"
+                        className="group relative flex items-center justify-center gap-2.5 px-8 py-4 bg-white border-2 border-neutral-200 rounded-[20px] hover:border-neutral-900 transition-all text-[11px] font-black uppercase tracking-widest text-neutral-900 w-full sm:w-auto min-w-[220px]"
                       >
-                        <Mail size={16} className="group-hover:scale-110 transition-transform" /> 
+                        <Mail size={16} className="text-neutral-500 group-hover:text-neutral-900 transition-colors" /> 
                         Drop an Email
                       </a>
                     )}
@@ -837,9 +836,9 @@ export function CreatorProfile({
                         href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, "")}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-neutral-900 to-neutral-800 rounded-2xl hover:from-black hover:to-neutral-900 transition-all text-xs font-black uppercase tracking-widest text-white shadow-xl shadow-neutral-900/20 hover:shadow-2xl hover:-translate-y-1 flex-1 min-w-[200px] max-w-[280px]"
+                        className="group flex items-center justify-center gap-2.5 px-8 py-4 bg-[#1C1C1E] rounded-[20px] hover:bg-black transition-all text-[11px] font-black uppercase tracking-widest text-white shadow-[0_8px_20px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 w-full sm:w-auto min-w-[220px]"
                       >
-                        <MessageCircle size={16} className="text-green-400 group-hover:scale-110 transition-transform" /> 
+                        <MessageCircle size={16} className="text-[#25D366] group-hover:scale-110 transition-transform" /> 
                         WhatsApp Me
                       </a>
                     )}
