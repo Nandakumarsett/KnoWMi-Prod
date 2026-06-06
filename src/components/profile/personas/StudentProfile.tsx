@@ -259,7 +259,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                   <BookOpen size={80} className="sm:w-[120px] sm:h-[120px]" />
                 </div>
                 <div className="relative z-10">
-                  <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-5 flex items-center gap-2 sm:gap-3">
+                  <h4 className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-neutral-600 mb-4 sm:mb-5 flex items-center gap-2 sm:gap-3">
                     <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-400" /> The Story
                   </h4>
                   <p className="text-sm sm:text-[15px] text-neutral-700 leading-relaxed sm:leading-loose font-medium text-left">
@@ -272,7 +272,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
           {data.projects && data.projects.length > 0 && (
             <div className="w-full mb-10 text-left">
-              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Projects</h4>
+              <h4 className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-neutral-600 mb-4 sm:mb-6 px-2 text-center">Projects</h4>
               <div className="space-y-4">
                 {data.projects.map((proj: any, i: number) => (
                   <div key={i} className="bg-white p-6 sm:p-8 rounded-3xl border border-neutral-100 shadow-sm flex flex-col gap-3">
@@ -294,7 +294,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           
           {data.hackathons && data.hackathons.length > 0 && (
             <div className="w-full mb-10 text-left">
-              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Hackathons & Events</h4>
+              <h4 className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-neutral-600 mb-4 sm:mb-6 px-2 text-center">Hackathons & Events</h4>
               <div className="space-y-3">
                 {data.hackathons.map((h: any, i: number) => (
                   <div key={i} className="bg-white p-5 rounded-2xl border border-neutral-100 shadow-sm flex items-center justify-between">
@@ -311,7 +311,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
           {data?.platforms && data?.platforms?.length > 0 && (
             <div className="w-full mb-10 text-left">
-              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Digital Footprint</h4>
+              <h4 className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-neutral-600 mb-4 sm:mb-6 px-2 text-center">Digital Footprint</h4>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
                 {data.platforms.map((p: any, i: number) => {
                   const pData = getPlatformData(p.platform);
@@ -345,7 +345,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
           {data.core_skills && data.core_skills.length > 0 && (
             <div className="w-full mb-10 text-left">
-              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Core Superpowers</h4>
+              <h4 className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-neutral-600 mb-4 sm:mb-6 px-2 text-center">Core Superpowers</h4>
               <div className="flex flex-wrap justify-center gap-2">
                 {data.core_skills.map((skill: string, i: number) => (
                   <span key={i} className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-indigo-50 border border-indigo-100 text-[11px] sm:text-xs font-black text-indigo-600 tracking-wider flex items-center gap-2 shadow-sm">
@@ -358,7 +358,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
           {(data.clubs?.length > 0 || data.hobbies?.length > 0) && (
             <div className="w-full mb-10 text-left">
-              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Interests & Activities</h4>
+              <h4 className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-neutral-600 mb-4 sm:mb-6 px-2 text-center">Interests & Activities</h4>
               <div className="flex flex-wrap justify-center gap-2">
                 {data.clubs?.map((club: string, i: number) => (
                   <span key={`club-${i}`} className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-blue-50 border border-blue-100 text-[11px] sm:text-xs font-black text-blue-600 tracking-wider flex items-center gap-2 shadow-sm">
@@ -376,7 +376,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
           {data.thought_bubble && (
             <div className="w-full mb-10 text-center">
-              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2">Advice I Live By</h4>
+              <h4 className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-neutral-600 mb-4 sm:mb-6 px-2">Advice I Live By</h4>
               <div className="bg-emerald-50/50 p-6 rounded-[2rem] border border-emerald-100 italic text-emerald-800 text-lg font-medium">
                 "{data.thought_bubble}"
               </div>
@@ -385,7 +385,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
           {data.upcoming_events && data.upcoming_events.length > 0 && (
             <div className="w-full mb-10 text-left">
-              <h4 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-4 sm:mb-6 px-2 text-center">Upcoming Events</h4>
+              <h4 className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-neutral-600 mb-4 sm:mb-6 px-2 text-center">Upcoming Events</h4>
               <div className="space-y-3">
                 {data.upcoming_events.map((ev: any, i: number) => (
                   <div key={i} className="flex items-center justify-between p-4 bg-white rounded-2xl border border-neutral-100 shadow-sm">
