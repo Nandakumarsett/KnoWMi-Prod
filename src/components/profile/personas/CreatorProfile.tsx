@@ -478,11 +478,6 @@ export function CreatorProfile({
                 <p className="text-xs font-black text-orange-600 uppercase tracking-[0.4em] leading-none mt-2 mb-4">
                   {data.tagline }
                 </p>
-                {profile.bio && (
-                  <p className="text-sm font-black text-neutral-800 leading-tight italic max-w-lg mx-auto">
-                    {profile.bio}
-                  </p>
-                )}
               </div>
             </div>
 
@@ -520,7 +515,7 @@ export function CreatorProfile({
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6 text-center sm:text-left">
                   Professional Narrative
                 </p>
-                <p className="text-base text-neutral-600 leading-relaxed bg-neutral-50/30 py-4 px-6 rounded-[24px] border border-neutral-100/50 max-w-2xl italic">
+                <p className="text-base text-neutral-900 font-semibold leading-relaxed bg-neutral-50/30 py-4 px-6 rounded-[24px] border border-neutral-100/50 max-w-2xl italic">
                   "{data.bio || profile.bio}"
                 </p>
               </div>
