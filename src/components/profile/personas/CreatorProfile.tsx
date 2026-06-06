@@ -1385,7 +1385,13 @@ export function CreatorProfile({
               <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
                 LOCATION
               </span>
-              <span className="text-xl font-black text-white border-b-2 border-[#FF2D78] pb-1 inline-block truncate max-w-full uppercase">
+              <span 
+                className="text-xl font-black border-b-2 pb-1 inline-block truncate max-w-full uppercase"
+                style={{ 
+                  color: cityColor === '#1A1A1A' ? 'white' : cityColor, 
+                  borderColor: cityColor === '#1A1A1A' ? '#FF2D78' : cityColor 
+                }}
+              >
                 {topCity}
               </span>
             </div>
