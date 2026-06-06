@@ -1124,15 +1124,18 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                     </div>
                   </div>
                 )}
-                {data.availability && (
+              </div>
+              
+              {data.availability && (
+                <div className="flex justify-center sm:justify-start mt-4 z-20">
                   <div className="glass-card px-3.5 py-1.5 inline-flex items-center gap-2 no-lift">
                     <Briefcase size={14} className="text-cyan-400" />
                     <span className="text-[13px] font-medium text-cyan-100">
                       Open to: <span className="text-cyan-300">{data.availability}</span>
                     </span>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
 
