@@ -5,6 +5,8 @@ import { CreatorProfile } from './personas/CreatorProfile'
 import { GamerProfile } from './personas/GamerProfile'
 import { FitnessProfile } from './personas/FitnessProfile'
 
+import { ErrorBoundary } from './ErrorBoundary'
+
 interface PersonaRouterProps {
   profile: ProfileData
   recentVisitors?: any[]
@@ -26,7 +28,11 @@ export function PersonaRouter({ profile, recentVisitors = [], stats }: PersonaRo
     case 'creator':
     case 'influencer':
     case 'media':
-      return <CreatorProfile profile={profile} stats={stats} />
+      return (
+        <ErrorBoundary>
+          <CreatorProfile profile={profile} stats={stats} />
+        </ErrorBoundary>
+      )
     case 'gamer':
     case 'gaming':
     case 'esports':

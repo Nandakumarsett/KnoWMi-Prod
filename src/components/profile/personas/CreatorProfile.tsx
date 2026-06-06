@@ -520,7 +520,7 @@ export function CreatorProfile({
               </div>
             )}
 
-            {(data.audience_age_group || data.location || (data.audience_interests && data.audience_interests.length > 0)) && (
+            {(data.audience_age_group || data.location || (Array.isArray(data.audience_interests) && data.audience_interests.length > 0)) && (
               <div className="mb-12">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6">
                   Audience & Demographics
@@ -539,7 +539,7 @@ export function CreatorProfile({
                      </div>
                    )}
                 </div>
-                {data.audience_interests && data.audience_interests.length > 0 && (
+                {Array.isArray(data.audience_interests) && data.audience_interests.length > 0 && (
                    <div className="mt-6">
                      <p className="text-xs uppercase font-bold text-neutral-400 mb-3 tracking-widest">Top Interests</p>
                      <div className="flex flex-wrap gap-2.5">
@@ -554,7 +554,7 @@ export function CreatorProfile({
               </div>
             )}
 
-            {data.past_collaborations && data.past_collaborations.length > 0 && (
+            {Array.isArray(data.past_collaborations) && data.past_collaborations.length > 0 && (
               <div className="mb-12">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6">
                   Past Collaborations
@@ -577,7 +577,7 @@ export function CreatorProfile({
               </div>
             )}
 
-            {data.platforms && data.platforms.length > 0 && (
+            {Array.isArray(data.platforms) && data.platforms.length > 0 && (
               <div className="mb-12">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6">
                   Where you can find me
@@ -672,7 +672,7 @@ export function CreatorProfile({
               </div>
             )}
 
-            {data.works && data.works.length > 0 && (
+            {Array.isArray(data.works) && data.works.length > 0 && (
               <div className="mb-12">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6">
                   Recent Showcase
@@ -780,7 +780,7 @@ export function CreatorProfile({
                   </p>
                   
                   {/* Tags */}
-                  {data.collab_types_tags && data.collab_types_tags.length > 0 && (
+                  {Array.isArray(data.collab_types_tags) && data.collab_types_tags.length > 0 && (
                     <div className="flex flex-wrap justify-center gap-2.5 mb-10">
                       {data.collab_types_tags.map((tag: string) => (
                         <span key={tag} className="px-5 py-2 bg-neutral-100/80 text-neutral-700 rounded-full text-[10px] font-black uppercase tracking-[0.15em] border border-neutral-200/60 transition-colors hover:bg-neutral-200/80 cursor-default">
@@ -833,7 +833,7 @@ export function CreatorProfile({
                     )}
                     {data.contact_whatsapp && (
                       <a
-                        href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, "")}`}
+                        href={`https://wa.me/${String(data.contact_whatsapp).replace(/\s+/g, "")}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group flex items-center justify-center gap-2.5 px-8 py-4 bg-[#1C1C1E] rounded-[20px] hover:bg-black transition-all text-[11px] font-black uppercase tracking-widest text-white shadow-[0_8px_20px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 w-full sm:w-auto min-w-[220px]"
@@ -956,20 +956,11 @@ export function CreatorProfile({
               </span>
               <span className="text-xl font-black uppercase">{topCity}</span>
             </div>
-            <div className="hidden sm:block w-0.5 h-8 bg-black"></div>
-            <div className="text-center">
-              <span className="text-[10px] font-black uppercase tracking-widest block mb-1">
-                VIBE SCORE
-              </span>
-              <span className="text-3xl font-black flex items-end gap-1">
-                {vibeScore}<span className="text-xs mb-1">/100</span>
-              </span>
-            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 w-full text-left mb-12">
             {/* Work List */}
-            {data.content_formats && data.content_formats.length > 0 && (
+            {Array.isArray(data.content_formats) && data.content_formats.length > 0 && (
               <div>
                 <h3 className="font-black text-2xl uppercase tracking-tighter mb-4 border-b-4 border-black pb-2">
                   WORK
@@ -1001,7 +992,7 @@ export function CreatorProfile({
           </div>
 
           {/* Demographics */}
-          {(data.audience_age_group || (data.audience_interests && data.audience_interests.length > 0)) && (
+          {(data.audience_age_group || (Array.isArray(data.audience_interests) && data.audience_interests.length > 0)) && (
             <div className="w-full mb-12">
               <h3 className="font-black text-2xl uppercase tracking-tighter mb-6 border-b-4 border-black pb-2 text-left">
                 DEMOGRAPHICS
@@ -1013,7 +1004,7 @@ export function CreatorProfile({
                     <span className="text-xl font-black">{data.audience_age_group}</span>
                   </div>
                 )}
-                {data.audience_interests && data.audience_interests.length > 0 && (
+                {Array.isArray(data.audience_interests) && data.audience_interests.length > 0 && (
                   <div className="sm:col-span-2 border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white flex flex-col justify-center">
                     <span className="text-[10px] font-black uppercase tracking-widest block mb-3">TOP INTERESTS</span>
                     <div className="flex flex-wrap gap-2">
@@ -1030,7 +1021,7 @@ export function CreatorProfile({
           )}
 
           {/* Past Collaborations */}
-          {data.past_collaborations && data.past_collaborations.length > 0 && (
+          {Array.isArray(data.past_collaborations) && data.past_collaborations.length > 0 && (
             <div className="w-full mb-12">
               <h3 className="font-black text-2xl uppercase tracking-tighter mb-6 border-b-4 border-black pb-2 text-left">
                 CLIENTS
@@ -1053,7 +1044,7 @@ export function CreatorProfile({
           )}
 
           {/* Recent Showcase */}
-          {data.works && data.works.length > 0 && (
+          {Array.isArray(data.works) && data.works.length > 0 && (
             <div className="w-full mb-12">
               <h3 className="font-black text-2xl uppercase tracking-tighter mb-6 border-b-4 border-black pb-2 text-left">
                 SHOWCASE
@@ -1131,7 +1122,7 @@ export function CreatorProfile({
           )}
 
           {/* Open For Collaboration Details */}
-          {(data.collab_types || data.availability_status || data.rate_range_min || data.turnaround_time || (data.collab_types_tags && data.collab_types_tags.length > 0)) && (
+          {(data.collab_types || data.availability_status || data.rate_range_min || data.turnaround_time || (Array.isArray(data.collab_types_tags) && data.collab_types_tags.length > 0)) && (
             <div className="w-full mb-12 border-4 border-black p-6 sm:p-8 bg-neutral-50 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <h3 className="font-black text-2xl uppercase tracking-tighter mb-4 text-center">
                 COLLABORATION
@@ -1143,7 +1134,7 @@ export function CreatorProfile({
                 </p>
               )}
               
-              {data.collab_types_tags && data.collab_types_tags.length > 0 && (
+              {Array.isArray(data.collab_types_tags) && data.collab_types_tags.length > 0 && (
                 <div className="flex flex-wrap justify-center gap-2 mb-8">
                   {data.collab_types_tags.map((tag: string) => (
                     <span key={tag} className="px-3 py-1 border-2 border-black bg-white text-[10px] font-black uppercase tracking-widest">
@@ -1182,7 +1173,7 @@ export function CreatorProfile({
           )}
 
           {/* Socials */}
-          {data.platforms && data.platforms.length > 0 && (
+          {Array.isArray(data.platforms) && data.platforms.length > 0 && (
             <div className="w-full text-center mb-10">
               <h3 className="font-black text-2xl uppercase tracking-tighter mb-6 border-b-4 border-black pb-2 text-left">
                 SOCIALS
@@ -1235,7 +1226,7 @@ export function CreatorProfile({
             )}
             {data.contact_whatsapp && (
               <a
-                href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, "")}`}
+                href={`https://wa.me/${String(data.contact_whatsapp).replace(/\s+/g, "")}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 block w-full py-5 bg-[#25D366] text-black text-center font-black text-xl uppercase tracking-widest hover:bg-white hover:text-[#25D366] hover:border-4 hover:border-[#25D366] transition-all border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]"
@@ -1380,7 +1371,7 @@ export function CreatorProfile({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full max-w-3xl mb-12">
             {/* What I Do */}
-            {data.content_formats && data.content_formats.length > 0 && (
+            {Array.isArray(data.content_formats) && data.content_formats.length > 0 && (
               <div className="bg-black/30 border border-[#FF2D78]/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(255,45,120,0.05)]">
                 <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-[#FF2D78] mb-5">
                   WHAT I DO
@@ -1415,7 +1406,7 @@ export function CreatorProfile({
           </div>
 
           {/* Social Links */}
-          {data.platforms && data.platforms.length > 0 && (
+          {Array.isArray(data.platforms) && data.platforms.length > 0 && (
             <div className="w-full text-center mb-10">
               <div className="flex flex-wrap gap-5 justify-center">
                 {data.platforms.map((p) => {
@@ -1718,7 +1709,7 @@ export function CreatorProfile({
           </div>
 
           {/* Social Links Row */}
-          {data.platforms && data.platforms.length > 0 && (
+          {Array.isArray(data.platforms) && data.platforms.length > 0 && (
             <div className="mt-6 flex flex-wrap justify-center sm:justify-start gap-4 px-4 sm:px-8">
               {data.platforms.map((p) => {
                 const platform = p.platform?.toLowerCase();
@@ -1856,7 +1847,7 @@ export function CreatorProfile({
             {/* Bottom Grid: The Attributes */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {/* Core Focus Card */}
-              {data.content_formats && data.content_formats.length > 0 && (
+              {Array.isArray(data.content_formats) && data.content_formats.length > 0 && (
                 <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col min-h-[120px] lg:col-span-2">
                   <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mb-3">
                     Core Focus
@@ -2035,7 +2026,7 @@ export function CreatorProfile({
         {/* ════════════════════════════════════════════════ */}
         {/* SECTION 5 — THE PROOF (Past Collaborations)     */}
         {/* ════════════════════════════════════════════════ */}
-        {data.past_collaborations && data.past_collaborations.length > 0 && (
+        {Array.isArray(data.past_collaborations) && data.past_collaborations.length > 0 && (
           <section
             className="mb-12 stagger-fade"
             style={{ animationDelay: "0.35s" }}
@@ -2089,7 +2080,7 @@ export function CreatorProfile({
         {/* ════════════════════════════════════════════════ */}
         {/* SECTION 6 — THE MASTERPIECES (Gallery)          */}
         {/* ════════════════════════════════════════════════ */}
-        {data.works && data.works.length > 0 && (
+        {Array.isArray(data.works) && data.works.length > 0 && (
           <section
             className="mb-12 stagger-fade"
             style={{ animationDelay: "0.4s" }}
@@ -2214,7 +2205,7 @@ export function CreatorProfile({
               )}
               {data.contact_whatsapp && (
                 <a
-                  href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, "")}`}
+                  href={`https://wa.me/${String(data.contact_whatsapp).replace(/\s+/g, "")}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto px-10 py-4 bg-white text-gray-900 text-sm font-bold rounded-full border border-gray-200 hover:border-[#25D366] hover:text-[#25D366] transition-all hover:-translate-y-1"
