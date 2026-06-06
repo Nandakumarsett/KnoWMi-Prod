@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { supabase, getAssetUrl } from '../lib/supabase'
 import Navbar from '../components/Navbar'
@@ -18,6 +19,7 @@ const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
 
 export default function Shop() {
   const { user } = useAuth()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [designs, setDesigns] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedDesign, setSelectedDesign] = useState(null)
@@ -63,9 +65,8 @@ export default function Shop() {
   const handleSelect = (d) => {
     setSelectedDesign(d)
     setModalOpen(true)
-    const url = new URL(window.location.href);
-    url.searchParams.set('design', d.id);
-    window.history.pushState({}, '', url);
+    searchParams.set('design', d.id)
+    setSearchParams(searchParams, { replace: true })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -303,9 +304,8 @@ export default function Shop() {
                   onClick={() => {
                     setOrderSuccess(null)
                     setSelectedDesign(null)
-                    const url = new URL(window.location.href);
-                    url.searchParams.delete('design');
-                    window.history.pushState({}, '', url);
+                    searchParams.delete('design')
+                    setSearchParams(searchParams, { replace: true })
                     window.scrollTo(0, 0)
                   }}
                   className="px-8 py-4 bg-black text-white rounded-xl font-black uppercase tracking-widest text-xs hover:bg-neutral-800 transition-colors"
@@ -320,9 +320,8 @@ export default function Shop() {
               <button 
                 onClick={() => {
                   setSelectedDesign(null)
-                  const url = new URL(window.location.href);
-                  url.searchParams.delete('design');
-                  window.history.pushState({}, '', url);
+                  searchParams.delete('design')
+                  setSearchParams(searchParams, { replace: true })
                   window.scrollTo(0, 0)
                 }}
                 className="mb-10 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-neutral-400 hover:text-black transition-colors"

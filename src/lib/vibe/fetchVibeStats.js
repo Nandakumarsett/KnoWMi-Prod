@@ -259,8 +259,8 @@ export async function fetchVibeStats(profileId) {
       const localStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
       return localStr === todayLocalStr;
     });
-    const todayScans = todayViews.length;
-
+    // Calculate unique people for "People who discovered you today"
+    const todayScans = new Set(todayViews.map(v => v.visitor_fp || v.id).filter(Boolean)).size;
 
     // Live counter
     const liveNow = views.filter(v => new Date().getTime() - new Date(v.viewed_at).getTime() < 5*60*1000).length;
@@ -333,14 +333,14 @@ export async function fetchVibeStats(profileId) {
     const busiestHourToday = topHourToday ? { hour: topHourToday[0], count: topHourToday[1] } : null;
 
     const linkCountsToday = {};
-    links.filter(l => new Date(l.clicked_at).toISOString().split('T')[0] === today).forEach(l => {
+    links.filter(l => new Date(l.clicked_at).toISOString().split('T')[0] === todayStr).forEach(l => {
       const t = l.link_type || 'link';
       linkCountsToday[t] = (linkCountsToday[t] || 0) + 1;
     });
     const topLinkEntry = Object.entries(linkCountsToday).sort((a, b) => b[1] - a[1])[0];
     const topLinkToday = topLinkEntry ? { link_type: topLinkEntry[0], count: topLinkEntry[1] } : null;
 
-    const todayRepeats = views.filter(v => v.is_repeat === true && new Date(v.viewed_at).toISOString().split('T')[0] === today).length;
+    const todayRepeats = views.filter(v => v.is_repeat === true && new Date(v.viewed_at).toISOString().split('T')[0] === todayStr).length;
     const yesterdayRepeats = views.filter(v => v.is_repeat === true && new Date(v.viewed_at).toISOString().split('T')[0] === yesterdayStr).length;
 
     const todayCityRows = [...new Set(todayViews.map(v => v.city).filter(Boolean))].map(city => ({

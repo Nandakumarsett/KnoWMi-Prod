@@ -161,179 +161,7 @@ export function CreatorProfile({
     tiktok: "tiktok",
   };
 
-    const renderModals = () => (
-    <>
-      {/* ═══ SELECTED WORK MODAL ═══ */}
-          {selectedWork && (
-            <div
-              className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8 bg-white/80 backdrop-blur-xl animate-fadeIn"
-              onClick={() => setSelectedWork(null)}
-            >
-              <div
-                className="bg-white p-2 rounded-[28px] max-w-3xl w-full relative shadow-[0_24px_80px_rgba(0,0,0,0.12)] animate-zoomIn"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button
-                  onClick={() => setSelectedWork(null)}
-                  className="absolute -top-12 right-0 sm:top-4 sm:right-4 p-3 bg-white text-gray-400 hover:text-gray-900 rounded-full shadow-md transition-all hover:scale-110 z-10"
-                >
-                  <X size={18} strokeWidth={3} />
-                </button>
-                <div className="bg-gray-50 rounded-[22px] overflow-hidden">
-                  {(() => {
-                    const uploadUrl = selectedWork.url;
-                    
-                    const isImageFile = uploadUrl && typeof uploadUrl === "string" && uploadUrl.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i);
-                    const isUploadedVideo = uploadUrl && !isImageFile && (
-                      selectedWork.type === 'video' ||
-                      (typeof uploadUrl === "string" && uploadUrl.match(/\.(mp4|webm|ogg|mov)$/i))
-                    );
-    
-                    if (isUploadedVideo) {
-                      return (
-                        <div className="w-full aspect-video bg-black">
-                          <video
-                            key={uploadUrl}
-                            src={getAssetUrl(uploadUrl)}
-                            className="w-full h-full object-contain"
-                            controls
-                            autoPlay
-                            muted
-                            playsInline
-                            preload="auto"
-                            onTimeUpdate={(e) => {
-                              if (e.currentTarget.currentTime >= 10) {
-                                e.currentTarget.pause();
-                                e.currentTarget.currentTime = 10;
-                              }
-                            }}
-                          />
-                        </div>
-                      );
-                    }
-    
-                    const thumb = getThumbnail(selectedWork);
-                    if (thumb) {
-                      return (
-                        <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center relative">
-                          <Camera size={40} className="text-purple-300 opacity-60 absolute" />
-                          <img
-                            src={thumb}
-                            className="absolute inset-0 w-full h-full object-cover z-10"
-                            alt={selectedWork.title}
-                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                          />
-                        </div>
-                      );
-                    }
-                    return (
-                      <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center relative">
-                        <Camera size={40} className="text-purple-300 opacity-60 absolute" />
-                      </div>
-                    );
-                  })()}
-                  <div className="p-6 sm:p-8">
-                    <h3 className="text-xl font-extrabold text-gray-900 mb-2">
-                      {selectedWork.title}
-                    </h3>
-                    {selectedWork.description && (
-                      <p className="text-sm text-gray-700 font-semibold leading-relaxed">
-                        {selectedWork.description}
-                      </p>
-                    )}
-                    {(() => {
-                      const url = selectedWork.url || selectedWork.external_url;
-                      const isVideoEmbed =
-                        url &&
-                        typeof url === "string" &&
-                        url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
-                      const isUploadedVideo =
-                        selectedWork.type === 'video' ||
-                        (url &&
-                        typeof url === "string" &&
-                        url.match(/\.(mp4|webm|ogg|mov)$/i));
-                      const isImageFile =
-                        selectedWork.type === 'image' ||
-                        (url &&
-                        typeof url === "string" &&
-                        url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i));
-    
-                      const isExternalWebLink =
-                        url &&
-                        typeof url === "string" &&
-                        !isVideoEmbed &&
-                        !isUploadedVideo &&
-                        !isImageFile &&
-                        !url.includes("supabase.co");
-    
-                      if (isExternalWebLink) {
-                        return (
-                          <a
-                            href={ensureAbsoluteUrl(url)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-block mt-4 text-purple-600 font-bold text-sm hover:underline"
-                          >
-                            Visit Link &rarr;
-                          </a>
-                        );
-                      }
-                      if (isVideoEmbed || isUploadedVideo) {
-                        const finalUrl = selectedWork.external_url ? ensureAbsoluteUrl(selectedWork.external_url) : (isUploadedVideo ? getAssetUrl(url) : ensureAbsoluteUrl(url));
-                        return (
-                          <a
-                            href={finalUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-block mt-4 text-purple-600 font-bold text-sm hover:underline"
-                          >
-                            Watch Full Video &rarr;
-                          </a>
-                        );
-                      }
-                      return null;
-                    })()}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-    
-          {/* ═══ FOMO MODAL ═══ */}
-          {showFomoModal && (
-            <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-white/80 backdrop-blur-xl animate-fadeIn">
-              <div className="bg-white border border-gray-100 rounded-[32px] p-10 max-w-sm w-full shadow-[0_24px_80px_rgba(0,0,0,0.1)] relative text-center animate-zoomIn">
-                <button
-                  onClick={() => setShowFomoModal(false)}
-                  className="absolute top-5 right-5 p-2 text-gray-400 hover:text-gray-900 transition-colors"
-                >
-                  <X size={20} />
-                </button>
-                <div className="w-16 h-16 rounded-[20px] bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center mx-auto mb-6">
-                  <Activity size={28} className="text-purple-600 animate-pulse" />
-                </div>
-                <h3 className="text-xl font-extrabold text-gray-900 tracking-tight mb-2">
-                  Unlock Insights
-                </h3>
-                <p className="text-sm text-gray-700 font-semibold mb-8 leading-relaxed">
-                  Upgrade to full tier to view real-time profile scans and audience
-                  telemetry.
-                </p>
-                <button
-                  onClick={() => (window.location.href = "/#pricing")}
-                  className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-[11px] uppercase tracking-widest rounded-full transition-all shadow-lg hover:shadow-purple-500/25 hover:-translate-y-1"
-                >
-                  Claim Tee to Unlock
-                </button>
-              </div>
-            </div>
-          )}
-    
-          <GateModal />
-    </>
-  );
-
-// ----------------------------------------------------
+  // ----------------------------------------------------
   // LAYOUT 0: ORIGINAL CLASSIC STYLE (Classic Theme)
   // ----------------------------------------------------
   if (activeTheme === "classic") {
@@ -717,118 +545,116 @@ export function CreatorProfile({
                         }}
                         className="group relative rounded-[32px] overflow-hidden bg-neutral-100 border border-neutral-100 shadow-sm hover:shadow-xl transition-all aspect-video cursor-pointer"
                       >
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          {isLinkOnly ? (
-                            <div className="flex flex-col items-center justify-center z-10 text-neutral-500 transition-transform group-hover:scale-105">
-                              {w.type === 'video' ? (
-                                <Play size={40} className="mb-2 opacity-80" />
-                              ) : (
-                                <Globe size={40} className="mb-2 opacity-80" />
-                              )}
-                              <span className="text-[10px] font-black uppercase tracking-widest px-4 text-center">
-                                {w.type === 'video' ? 'Click to open video' : 'Click to open link'}
-                              </span>
-                            </div>
-                          ) : (
-                            <Camera size={40} className="text-neutral-300 opacity-60 absolute" />
-                          )}
-                        </div>
-
-                        {thumb ? (
+                        {thumb || isUploadedVideo ? (
                           <img
-                            src={thumb}
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 z-10"
+                            src={
+                              thumb ||
+                              "https://images.unsplash.com/photo-1492724441997-5dc865305da7?q=80&w=2070"
+                            }
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             alt={w.title}
-                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
                           />
-                        ) : (() => {
-                          if (isUploadedVideo) {
-                            return (
-                              <video 
-                                src={getAssetUrl(w.url)} 
-                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 z-10 pointer-events-none"
-                                muted
-                                playsInline
-                              />
-                            );
-                          }
-                          return null;
-                        })()}
-
-                        {w.type === "video" && (thumb || isUploadedVideo) && (
-                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                            <div className="w-16 h-16 rounded-full bg-white/90 backdrop-blur-md shadow-lg flex items-center justify-center text-neutral-800 group-hover:scale-110 transition-transform">
-                              <Play size={22} className="ml-0.5" fill="currentColor" />
-                            </div>
+                        ) : isLinkOnly ? (
+                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 group-hover:from-indigo-200 group-hover:to-purple-200 transition-colors z-10">
+                            {w.type === 'video' ? (
+                              <Play size={32} className="text-purple-400 mb-2 group-hover:scale-110 transition-transform" />
+                            ) : (
+                              <Globe size={32} className="text-purple-400 mb-2 group-hover:scale-110 transition-transform" />
+                            )}
+                            <span className="text-[10px] font-black text-purple-600 uppercase tracking-widest px-4 text-center">
+                              {w.type === 'video' ? 'Click to open video' : 'Click to open link'}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center bg-neutral-100">
+                             <Camera size={40} className="text-neutral-300 opacity-60" />
                           </div>
                         )}
-
-                        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent z-30 pointer-events-none">
+                        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent z-20">
                           <span className="text-[10px] font-black text-white uppercase tracking-widest">
                             {w.title}
                           </span>
-            <section className="px-0 mb-8 relative z-10">
-              <div className="relative overflow-hidden group bg-gradient-to-b from-white to-neutral-50/50 p-8 sm:p-12 rounded-[32px] border border-neutral-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500">
-                {/* Subtle gradient hover effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 via-transparent to-neutral-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                
-                <div className="relative flex flex-col items-center text-center z-10">
-                  <div className="inline-flex items-center justify-center gap-2 mb-4 px-5 py-2 rounded-full bg-orange-50 border border-orange-100/50 shadow-sm">
-                    <Sparkles size={14} className="text-orange-500 animate-pulse" />
-                    <span className="text-[11px] font-black uppercase tracking-[0.25em] text-orange-600">
-                      Open for Collaboration
-                    </span>
-                  </div>
-                  
-                  <p className="text-sm sm:text-base text-neutral-600 font-medium italic mb-8 max-w-lg leading-relaxed">
-                    "{data.collab_types || "Available for strategic creative partnerships."}"
-                  </p>
-                  
-                  {data.collab_types_tags && data.collab_types_tags.length > 0 && (
-                    <div className="flex flex-wrap justify-center gap-2.5 mb-10">
-                      {data.collab_types_tags.map((tag: string) => (
-                        <span key={tag} className="px-4 py-2 bg-neutral-900 text-white rounded-full text-[10px] font-bold uppercase tracking-widest shadow-md hover:bg-orange-500 hover:shadow-orange-500/25 transition-all cursor-default transform hover:-translate-y-0.5">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
-                  {(data.rate_range_min || data.turnaround_time || data.availability_status) && (
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-3xl mb-10">
-                      {data.availability_status && (
-                        <div className="flex flex-col items-center justify-center p-5 rounded-[20px] bg-white border border-neutral-100 shadow-sm group-hover:border-neutral-200 transition-colors">
-                          <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest mb-1.5">Status</span>
-                          <span className="text-xs font-bold text-neutral-900 uppercase tracking-wide flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse" />
-                            {data.availability_status}
-                          </span>
-                        </div>
-                      )}
-                      {data.rate_range_min && (
-                        <div className="flex flex-col items-center justify-center p-5 rounded-[20px] bg-white border border-neutral-100 shadow-sm group-hover:border-neutral-200 transition-colors">
-                          <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest mb-1.5">Starting Rate</span>
-                          <span className="text-xs font-bold text-neutral-900 uppercase tracking-wide">
-                            ₹{data.rate_range_min} {data.rate_range_max ? `- ₹${data.rate_range_max}` : '+'}
-                          </span>
-                        </div>
-                      )}
-                      {data.turnaround_time && (
-                        <div className="flex flex-col items-center justify-center p-5 rounded-[20px] bg-white border border-neutral-100 shadow-sm group-hover:border-neutral-200 transition-colors">
-                          <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest mb-1.5">Turnaround Time</span>
-                          <span className="text-xs font-bold text-neutral-900 uppercase tracking-wide">{data.turnaround_time}</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
+            <section className="px-4 sm:px-0 mb-12 relative z-10">
+              <div className="relative w-full rounded-[32px] p-[1px] overflow-hidden group">
+                {/* Animated gradient border */}
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-400 via-rose-500 to-purple-600 opacity-20 group-hover:opacity-40 transition-opacity duration-700" />
+                
+                {/* Card body */}
+                <div className="relative bg-white/60 backdrop-blur-xl flex flex-col items-center text-center gap-6 p-8 sm:p-10 rounded-[32px] border border-white shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
                   
-                  <div className="flex flex-wrap justify-center gap-4 w-full pt-6 border-t border-neutral-100/80">
+                  {/* Glowing background blob */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-orange-200/30 blur-3xl rounded-full pointer-events-none" />
+
+                  <div className="relative flex flex-col items-center w-full">
+                    {/* Pulsing icon */}
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-rose-100 rounded-2xl flex items-center justify-center mb-4 shadow-inner border border-white">
+                      <Sparkles size={24} className="text-orange-500 animate-pulse" />
+                    </div>
+
+                    <h3 className="text-sm font-black uppercase tracking-[0.3em] bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-rose-600 mb-2">
+                      Open for Collaboration
+                    </h3>
+                    
+                    <p className="text-sm text-neutral-600 font-medium italic mb-6 max-w-md">
+                      {data.collab_types || "Available for strategic creative partnerships."}
+                    </p>
+                    
+                    {/* Tags */}
+                    {data.collab_types_tags && data.collab_types_tags.length > 0 && (
+                      <div className="flex flex-wrap justify-center gap-2 mb-8">
+                        {data.collab_types_tags.map((tag: string) => (
+                          <span key={tag} className="px-4 py-1.5 bg-neutral-900 text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm hover:scale-105 transition-transform cursor-default">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Status & Rates pill */}
+                    {(data.rate_range_min || data.turnaround_time || data.availability_status) && (
+                      <div className="flex flex-wrap justify-center divide-x divide-neutral-200/60 bg-white/80 backdrop-blur-md rounded-2xl border border-neutral-100 shadow-sm w-full max-w-lg mb-8 overflow-hidden">
+                        {data.availability_status && (
+                          <div className="px-6 py-3 flex-1 min-w-[120px] flex flex-col items-center">
+                            <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest mb-1">Status</span>
+                            <div className="flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                              <span className="text-xs font-black text-neutral-900 uppercase tracking-wider">{data.availability_status}</span>
+                            </div>
+                          </div>
+                        )}
+                        {data.turnaround_time && (
+                          <div className="px-6 py-3 flex-1 min-w-[120px] flex flex-col items-center">
+                            <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest mb-1">Turnaround</span>
+                            <span className="text-xs font-black text-neutral-900 uppercase tracking-wider">{data.turnaround_time}</span>
+                          </div>
+                        )}
+                        {data.rate_range_min && (
+                          <div className="px-6 py-3 flex-1 min-w-[120px] flex flex-col items-center">
+                            <span className="text-[9px] font-black text-neutral-400 uppercase tracking-widest mb-1">Starting Rate</span>
+                            <span className="text-xs font-black text-neutral-900 uppercase tracking-wider">₹{data.rate_range_min}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* CTAs */}
+                  <div className="relative flex flex-wrap items-center justify-center gap-4 w-full">
                     {data.contact_email && (
                       <a
                         href={`mailto:${data.contact_email}`}
-                        className="flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-neutral-200 rounded-2xl hover:border-neutral-900 hover:text-neutral-900 transition-all text-xs font-black uppercase tracking-widest text-neutral-600 hover:-translate-y-1 w-full sm:w-auto min-w-[180px]"
+                        className="group flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-neutral-100 rounded-2xl hover:border-black hover:shadow-lg transition-all text-xs font-black uppercase tracking-widest text-neutral-900 flex-1 min-w-[200px] max-w-[280px]"
                       >
-                        <Mail size={16} /> Email Me
+                        <Mail size={16} className="group-hover:scale-110 transition-transform" /> 
+                        Drop an Email
                       </a>
                     )}
                     {data.contact_whatsapp && (
@@ -836,9 +662,10 @@ export function CreatorProfile({
                         href={`https://wa.me/${data.contact_whatsapp.replace(/\s+/g, "")}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 px-8 py-4 bg-neutral-900 text-white rounded-2xl hover:bg-orange-500 transition-all text-xs font-black uppercase tracking-widest shadow-lg hover:shadow-orange-500/25 hover:-translate-y-1 w-full sm:w-auto min-w-[180px]"
+                        className="group flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-neutral-900 to-neutral-800 rounded-2xl hover:from-black hover:to-neutral-900 transition-all text-xs font-black uppercase tracking-widest text-white shadow-xl shadow-neutral-900/20 hover:shadow-2xl hover:-translate-y-1 flex-1 min-w-[200px] max-w-[280px]"
                       >
-                        <MessageCircle size={16} /> WhatsApp
+                        <MessageCircle size={16} className="text-green-400 group-hover:scale-110 transition-transform" /> 
+                        WhatsApp Me
                       </a>
                     )}
                   </div>
@@ -847,7 +674,7 @@ export function CreatorProfile({
             </section>
           </div>
         </section>
-        {renderModals()}
+        <GateModal />
       </div>
     );
   }
@@ -1050,7 +877,7 @@ export function CreatorProfile({
             )}
           </div>
         </div>
-        {renderModals()}
+        <GateModal />
       </div>
     );
   }
@@ -1299,7 +1126,7 @@ export function CreatorProfile({
             </div>
           )}
         </div>
-        {renderModals()}
+        <GateModal />
       </div>
     );
   }
@@ -1592,6 +1419,16 @@ export function CreatorProfile({
               </div>
               <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
                 Impressions
+              </div>
+            </div>
+
+            {/* Most Reached Location */}
+            <div className="stat-item">
+              <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
+                {data.audience_top_location || "Global"}
+              </div>
+              <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+                Most Reached
               </div>
             </div>
 
@@ -1938,7 +1775,7 @@ export function CreatorProfile({
                           return (
                             <video 
                               src={getAssetUrl(w.url)} 
-                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-10 pointer-events-none"
+                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-10"
                               muted
                               playsInline
                             />
@@ -2035,7 +1872,185 @@ export function CreatorProfile({
         </section>
       </main>
 
-      {renderModals()}
+      {/* ═══ SELECTED WORK MODAL ═══ */}
+      {selectedWork && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-8 bg-white/80 backdrop-blur-xl animate-fadeIn"
+          onClick={() => setSelectedWork(null)}
+        >
+          <div
+            className="bg-white p-2 rounded-[28px] max-w-3xl w-full relative shadow-[0_24px_80px_rgba(0,0,0,0.12)] animate-zoomIn"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedWork(null)}
+              className="absolute -top-12 right-0 sm:top-4 sm:right-4 p-3 bg-white text-gray-400 hover:text-gray-900 rounded-full shadow-md transition-all hover:scale-110 z-10"
+            >
+              <X size={18} strokeWidth={3} />
+            </button>
+            <div className="bg-gray-50 rounded-[22px] overflow-hidden">
+              {(() => {
+                const url = selectedWork.url || selectedWork.external_url;
+                const isVideoEmbed =
+                  url &&
+                  typeof url === "string" &&
+                  url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                const isUploadedVideo =
+                  selectedWork.type === 'video' ||
+                  (url &&
+                  typeof url === "string" &&
+                  url.match(/\.(mp4|webm|ogg|mov)$/i));
+
+                if (isVideoEmbed) {
+                  return (
+                    <div className="w-full aspect-video bg-black">
+                      <iframe
+                        src={getEmbedUrl(url)}
+                        className="w-full h-full"
+                        allow="autoplay; encrypted-media"
+                        allowFullScreen
+                      />
+                    </div>
+                  );
+                }
+
+                if (isUploadedVideo) {
+                  return (
+                    <div className="w-full aspect-video bg-black">
+                      <video
+                        src={getAssetUrl(url)}
+                        className="w-full h-full object-contain"
+                        controls
+                        autoPlay
+                        onTimeUpdate={(e) => {
+                          if (e.currentTarget.currentTime >= 10) {
+                            e.currentTarget.pause();
+                            e.currentTarget.currentTime = 10;
+                          }
+                        }}
+                      />
+                    </div>
+                  );
+                }
+
+                const thumb = getThumbnail(selectedWork);
+                if (thumb) {
+                  return (
+                    <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center relative">
+                      <Camera size={40} className="text-purple-300 opacity-60 absolute" />
+                      <img
+                        src={thumb}
+                        className="absolute inset-0 w-full h-full object-cover z-10"
+                        alt={selectedWork.title}
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
+                    </div>
+                  );
+                }
+                return (
+                  <div className="w-full aspect-video bg-gradient-to-br from-fuchsia-100 to-purple-100 flex items-center justify-center relative">
+                    <Camera size={40} className="text-purple-300 opacity-60 absolute" />
+                  </div>
+                );
+              })()}
+              <div className="p-6 sm:p-8">
+                <h3 className="text-xl font-extrabold text-gray-900 mb-2">
+                  {selectedWork.title}
+                </h3>
+                {selectedWork.description && (
+                  <p className="text-sm text-gray-700 font-semibold leading-relaxed">
+                    {selectedWork.description}
+                  </p>
+                )}
+                {(() => {
+                  const url = selectedWork.url || selectedWork.external_url;
+                  const isVideoEmbed =
+                    url &&
+                    typeof url === "string" &&
+                    url.match(/(?:youtube\.com|youtu\.be|vimeo\.com)/i);
+                  const isUploadedVideo =
+                    selectedWork.type === 'video' ||
+                    (url &&
+                    typeof url === "string" &&
+                    url.match(/\.(mp4|webm|ogg|mov)$/i));
+                  const isImageFile =
+                    selectedWork.type === 'image' ||
+                    (url &&
+                    typeof url === "string" &&
+                    url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i));
+
+                  const isExternalWebLink =
+                    url &&
+                    typeof url === "string" &&
+                    !isVideoEmbed &&
+                    !isUploadedVideo &&
+                    !isImageFile &&
+                    !url.includes("supabase.co");
+
+                  if (isExternalWebLink) {
+                    return (
+                      <a
+                        href={ensureAbsoluteUrl(url)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block mt-4 text-purple-600 font-bold text-sm hover:underline"
+                      >
+                        Visit Link &rarr;
+                      </a>
+                    );
+                  }
+                  if (isVideoEmbed || isUploadedVideo) {
+                    const finalUrl = selectedWork.external_url ? ensureAbsoluteUrl(selectedWork.external_url) : (isUploadedVideo ? getAssetUrl(url) : ensureAbsoluteUrl(url));
+                    return (
+                      <a
+                        href={finalUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block mt-4 text-purple-600 font-bold text-sm hover:underline"
+                      >
+                        Watch Full Video &rarr;
+                      </a>
+                    );
+                  }
+                  return null;
+                })()}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ═══ FOMO MODAL ═══ */}
+      {showFomoModal && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-white/80 backdrop-blur-xl animate-fadeIn">
+          <div className="bg-white border border-gray-100 rounded-[32px] p-10 max-w-sm w-full shadow-[0_24px_80px_rgba(0,0,0,0.1)] relative text-center animate-zoomIn">
+            <button
+              onClick={() => setShowFomoModal(false)}
+              className="absolute top-5 right-5 p-2 text-gray-400 hover:text-gray-900 transition-colors"
+            >
+              <X size={20} />
+            </button>
+            <div className="w-16 h-16 rounded-[20px] bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center mx-auto mb-6">
+              <Activity size={28} className="text-purple-600 animate-pulse" />
+            </div>
+            <h3 className="text-xl font-extrabold text-gray-900 tracking-tight mb-2">
+              Unlock Insights
+            </h3>
+            <p className="text-sm text-gray-700 font-semibold mb-8 leading-relaxed">
+              Upgrade to full tier to view real-time profile scans and audience
+              telemetry.
+            </p>
+            <button
+              onClick={() => (window.location.href = "/#pricing")}
+              className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-[11px] uppercase tracking-widest rounded-full transition-all shadow-lg hover:shadow-purple-500/25 hover:-translate-y-1"
+            >
+              Claim Tee to Unlock
+            </button>
+          </div>
+        </div>
+      )}
+
+      <GateModal />
     </div>
   );
 }
