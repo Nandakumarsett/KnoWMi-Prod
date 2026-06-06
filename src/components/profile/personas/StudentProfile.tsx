@@ -1796,8 +1796,15 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             )}
           </div>
 
+          {/* Save Contact / Share CTAs */}
+          <div className="w-full mt-12 mb-2 flex flex-col items-center justify-center z-20">
+            <div className="max-w-[280px] w-full p-2 bg-[#FDF9F1] nb-card rotate-[1deg]">
+              <ProfileCTAs profile={profile} accentColor="#1e3a5f" />
+            </div>
+          </div>
+
           {/* Page number */}
-          <div className="w-full text-center mt-4 nb-pencil opacity-30">
+          <div className="w-full text-center mt-6 nb-pencil opacity-30">
             <span className="nb-handwriting text-sm">— page 1 of 1 —</span>
           </div>
           
