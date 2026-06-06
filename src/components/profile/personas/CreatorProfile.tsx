@@ -1285,21 +1285,13 @@ export function CreatorProfile({
       <div className="w-full pb-24 relative bg-[#0D0B1A] text-white font-sans overflow-x-hidden min-h-screen">
         {/* Neon Background Accents & Banner */}
         {data.featured_work_url && (
-          <div
-            className="absolute top-0 left-0 w-full h-72 sm:h-96 opacity-40 mix-blend-screen pointer-events-none z-0"
-            style={{
-              WebkitMaskImage:
-                "linear-gradient(to bottom, black 0%, transparent 100%)",
-              maskImage:
-                "linear-gradient(to bottom, black 0%, transparent 100%)",
-            }}
-          >
+          <div className="relative w-full h-48 sm:h-72 overflow-hidden shadow-[0_0_30px_rgba(255,45,120,0.2)] z-10">
             <img
               src={getAssetUrl(data.featured_work_url)}
-              className="w-full h-full object-cover filter contrast-125 saturate-150 grayscale"
+              className="w-full h-full object-cover object-center filter contrast-125 saturate-150"
               alt="Banner"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#FF2D78]/40 via-purple-600/20 to-transparent mix-blend-overlay" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#FF2D78]/20 via-[#0D0B1A]/60 to-[#0D0B1A]" />
           </div>
         )}
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#FF2D78]/20 rounded-full blur-[120px] pointer-events-none z-0" />
@@ -1320,7 +1312,7 @@ export function CreatorProfile({
           </div>
         </div>
 
-        <div className="px-6 sm:px-12 pt-24 max-w-4xl mx-auto flex flex-col items-center relative z-20">
+        <div className={`px-6 sm:px-12 max-w-4xl mx-auto flex flex-col items-center relative z-20 ${data.featured_work_url ? '-mt-16 sm:-mt-24' : 'pt-24'}`}>
           {/* Avatar with Neon Ring */}
           <div className="relative mb-8">
             <div
@@ -1357,14 +1349,7 @@ export function CreatorProfile({
             </h2>
           </div>
 
-          {/* Bio */}
-          {profile.bio && (
-            <div className="w-full max-w-lg mx-auto text-center mb-10">
-              <p className="text-sm text-gray-300 leading-relaxed font-light">
-                {profile.bio}
-              </p>
-            </div>
-          )}
+          {/* Removed duplicate bio */}
 
           {/* Stats Bar */}
           <div className="w-full max-w-3xl border border-white/10 bg-black/40 backdrop-blur-md rounded-2xl p-6 mb-10 flex flex-wrap justify-between items-center gap-6 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
@@ -1439,12 +1424,155 @@ export function CreatorProfile({
                 <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-cyan-400 mb-5">
                   NARRATIVE
                 </h3>
-                <p className="text-xs text-gray-300 leading-relaxed font-light">
+                <p className="text-xs text-gray-300 leading-relaxed font-light whitespace-pre-wrap">
                   {data.bio || profile.bio}
                 </p>
               </div>
             )}
           </div>
+
+          {/* System Status / Collaboration */}
+          {(data.collab_types || data.availability_status || data.rate_range_min || data.turnaround_time || (Array.isArray(data.collab_types_tags) && data.collab_types_tags.length > 0)) && (
+            <div className="w-full max-w-3xl mb-12 bg-black/40 border border-purple-500/30 rounded-2xl p-6 sm:p-8 shadow-[0_0_30px_rgba(153,51,255,0.1)]">
+              <h3 className="font-bold text-base uppercase tracking-[0.2em] text-purple-400 mb-6 text-center">
+                SYSTEM STATUS // COLLABORATION
+              </h3>
+              
+              {data.collab_types && (
+                <p className="text-sm text-gray-300 mb-6 text-center">{data.collab_types}</p>
+              )}
+
+              {Array.isArray(data.collab_types_tags) && data.collab_types_tags.length > 0 && (
+                <div className="flex flex-wrap justify-center gap-3 mb-8">
+                  {data.collab_types_tags.map((tag: string) => (
+                    <span key={tag} className="px-4 py-1.5 bg-purple-900/30 border border-purple-500/50 text-purple-200 text-[10px] font-bold uppercase tracking-widest rounded-sm">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {data.availability_status && (
+                  <div className="bg-black/60 border border-white/10 rounded-lg p-4 text-center">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-2">STATUS</span>
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse"></div>
+                      <span className="text-sm font-black text-white uppercase">{data.availability_status}</span>
+                    </div>
+                  </div>
+                )}
+                {data.turnaround_time && (
+                  <div className="bg-black/60 border border-white/10 rounded-lg p-4 text-center">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-2">LATENCY</span>
+                    <span className="text-sm font-black text-white uppercase whitespace-nowrap">{data.turnaround_time}</span>
+                  </div>
+                )}
+                {data.rate_range_min && (
+                  <div className="bg-black/60 border border-white/10 rounded-lg p-4 text-center">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-2">BASE RATE</span>
+                    <span className="text-sm font-black text-[#FF2D78] uppercase drop-shadow-[0_0_8px_rgba(255,45,120,0.8)]">₹{data.rate_range_min}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Equipment & Tools */}
+          {Array.isArray(data.equipment) && data.equipment.length > 0 && (
+            <div className="w-full max-w-3xl mb-12 bg-black/40 border border-cyan-500/30 rounded-2xl p-6 sm:p-8 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
+              <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-cyan-400 mb-6">
+                HARDWARE // SOFTWARE
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {data.equipment.map((item: string) => (
+                  <span key={item} className="px-4 py-2 bg-cyan-900/20 border border-cyan-500/30 text-cyan-300 text-[11px] font-bold uppercase tracking-widest rounded-md hover:bg-cyan-900/40 transition-colors cursor-default">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Past Collaborations */}
+          {Array.isArray(data.past_collaborations) && data.past_collaborations.length > 0 && (
+            <div className="w-full max-w-3xl mb-12">
+              <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-[#FF2D78] mb-6 drop-shadow-[0_0_5px_rgba(255,45,120,0.8)] border-b border-[#FF2D78]/30 pb-2">
+                DATABASE // ALLIANCES
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {data.past_collaborations.map((collab: any, i: number) => (
+                  <a key={i} href={collab.link ? ensureAbsoluteUrl(collab.link) : undefined} target={collab.link ? "_blank" : undefined} rel={collab.link ? "noopener noreferrer" : undefined} className={`bg-black/50 border border-white/10 rounded-xl p-5 flex items-center gap-4 ${collab.link ? 'hover:border-[#FF2D78]/50 hover:bg-black/80 transition-all cursor-pointer group' : ''}`}>
+                    <div className="w-14 h-14 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center p-2 shrink-0">
+                      {collab.logo_url ? (
+                        <img src={getAssetUrl(collab.logo_url)} className="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all" alt={collab.brand_name} />
+                      ) : (
+                        <span className="text-xl font-black text-gray-600">{collab.brand_name?.charAt(0)}</span>
+                      )}
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white uppercase tracking-widest mb-1 group-hover:text-[#FF2D78] transition-colors">{collab.brand_name}</h4>
+                      <p className="text-[10px] text-gray-400 uppercase">{collab.campaign_description}</p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Showcase */}
+          {Array.isArray(data.works) && data.works.length > 0 && (
+            <div className="w-full max-w-3xl mb-12">
+              <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-white mb-6 border-b border-white/20 pb-2">
+                ARCHIVE // MEDIA
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {data.works.map((w, i) => {
+                  const thumb = getThumbnail(w);
+                  const isUploadedVideo = !!w.url && (w.type === 'video' || (typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i)));
+                  const isLinkOnly = !w.url && !!w.external_url;
+                  
+                  return (
+                    <div
+                      key={i}
+                      onClick={() => {
+                        if (isLinkOnly) {
+                          window.open(ensureAbsoluteUrl(w.external_url), "_blank");
+                        } else {
+                          setSelectedWork(w);
+                        }
+                      }}
+                      className="group relative aspect-square rounded-xl overflow-hidden bg-black/50 border border-white/10 cursor-pointer hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all"
+                    >
+                      {thumb ? (
+                        <img src={getAssetUrl(thumb)} alt={w.title || "Showcase"} className="w-full h-full object-cover filter contrast-125 saturate-50 group-hover:saturate-100 transition-all" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-[#1A1A2E]">
+                          <Image size={24} className="text-gray-600" />
+                        </div>
+                      )}
+                      
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
+                      
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest line-clamp-1 group-hover:text-white transition-colors">
+                          {w.title || "File Data"}
+                        </span>
+                      </div>
+                      
+                      {w.type === "video" && (thumb || isUploadedVideo) && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <div className="w-10 h-10 rounded-full bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.5)]">
+                            <Play size={16} className="ml-0.5" fill="currentColor" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Social Links */}
           {Array.isArray(data.platforms) && data.platforms.length > 0 && (
@@ -1485,14 +1613,26 @@ export function CreatorProfile({
             </div>
           )}
 
-          {data.contact_email && (
-            <div className="w-full flex justify-center pb-8">
-              <a
-                href={`mailto:${data.contact_email}`}
-                className="px-10 py-4 bg-transparent border-2 border-cyan-400 text-cyan-400 font-bold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all"
-              >
-                INITIATE CONTACT
-              </a>
+          {(data.contact_email || data.contact_whatsapp) && (
+            <div className="w-full flex justify-center pb-8 gap-4 flex-wrap">
+              {data.contact_email && (
+                <a
+                  href={`mailto:${data.contact_email}`}
+                  className="px-10 py-4 bg-transparent border-2 border-cyan-400 text-cyan-400 font-bold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all"
+                >
+                  INITIATE EMAIL
+                </a>
+              )}
+              {data.contact_whatsapp && (
+                <a
+                  href={`https://wa.me/${String(data.contact_whatsapp).replace(/\s+/g, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-10 py-4 bg-transparent border-2 border-[#25D366] text-[#25D366] font-bold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-[#25D366] hover:text-black hover:shadow-[0_0_25px_rgba(37,211,102,0.6)] transition-all"
+                >
+                  COMMLINK
+                </a>
+              )}
             </div>
           )}
 
