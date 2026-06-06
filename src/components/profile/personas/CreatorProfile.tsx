@@ -1291,8 +1291,10 @@ export function CreatorProfile({
             <div className="absolute inset-0 bg-gradient-to-b from-[#FF2D78]/20 via-[#0D0B1A]/60 to-[#0D0B1A]" />
           </div>
         )}
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#FF2D78]/20 rounded-full blur-[120px] pointer-events-none z-0" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#FF2D78]/20 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/10 rounded-full blur-[100px]" />
+        </div>
 
         {/* Top Right Actions */}
         <div className="absolute top-6 right-6 z-40 flex flex-col items-end gap-2">
