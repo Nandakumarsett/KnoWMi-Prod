@@ -750,7 +750,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
             {/* Row 6: Projects, Connect, Advice */}
             {data.projects && data.projects.length > 0 && (
-              <div className="w-full md:w-[46%] bg-[#FDF9F1] p-6 pb-8 pl-10 cork-shadow rotate-[1deg] relative solid-paper min-h-[220px]">
+              <div className="w-full flex-1 min-w-[280px] max-w-[420px] bg-[#FDF9F1] p-6 pb-8 pl-10 cork-shadow rotate-[1deg] relative solid-paper min-h-[220px]">
                 <div className="pushpin pin-blue" />
                 <div className="paper-holes" />
                 <h4 className="text-xl font-bold text-[#1e3a8a] mb-3 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Projects</h4>
@@ -764,7 +764,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             )}
 
             {data?.platforms && data?.platforms?.length > 0 && (
-              <div className="w-full md:w-[46%] bg-[#FCEB9C] p-6 pb-8 cork-shadow -rotate-1 relative min-h-[220px]">
+              <div className="w-full flex-1 min-w-[280px] max-w-[440px] bg-[#FCEB9C] p-6 pb-8 cork-shadow -rotate-1 relative min-h-[220px]">
                 <div className="pushpin pin-yellow" />
                 <h4 className="text-xl font-bold text-neutral-800 mb-4 uppercase tracking-wide text-center mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Let's Connect</h4>
                 <div className="flex flex-wrap gap-3 justify-center">
@@ -1492,8 +1492,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
       <div className="relative w-full max-w-3xl mx-auto nb-lines min-h-screen">
         {/* ⭐ COVER BANNER (BACKGROUND) ⭐ */}
         {data.featured_work_url && (
-          <div className="absolute top-0 left-0 right-0 h-56 sm:h-72 z-0 pointer-events-none" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)', mixBlendMode: 'multiply' }}>
-            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover opacity-60" alt="Cover Banner" />
+          <div className="absolute top-0 left-0 right-0 h-64 sm:h-80 z-0 pointer-events-none" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' }}>
+            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover opacity-90" alt="Cover Banner" />
           </div>
         )}
 
@@ -1501,7 +1501,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         <div className="absolute top-0 bottom-0 left-[2.5rem] sm:left-[3.5rem] w-[2px] bg-[#c53030]/40 pointer-events-none z-0" />
         <div className="absolute top-0 bottom-0 left-[2.7rem] sm:left-[3.7rem] w-[1px] bg-[#c53030]/25 pointer-events-none z-0" />
 
-        <main className="relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pt-6 pb-12 flex flex-col gap-0 nb-animate">
+        <main className={`relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pb-12 flex flex-col gap-0 nb-animate ${data.featured_work_url ? 'pt-24 sm:pt-32' : 'pt-6'}`}>
           
 
 
