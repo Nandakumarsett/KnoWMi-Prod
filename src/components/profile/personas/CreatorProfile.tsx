@@ -284,15 +284,11 @@ export function CreatorProfile({
                   <div className="w-full aspect-video bg-black">
                     <video
                       src={getAssetUrl(url)}
+                      poster={getThumbnail(selectedWork) ? getAssetUrl(getThumbnail(selectedWork)) : undefined}
                       className="w-full h-full object-contain"
                       controls
                       autoPlay
-                      onTimeUpdate={(e) => {
-                        if (e.currentTarget.currentTime >= 10) {
-                          e.currentTarget.pause();
-                          e.currentTarget.currentTime = 10;
-                        }
-                      }}
+                      playsInline
                     />
                   </div>
                 );
@@ -1283,7 +1279,7 @@ export function CreatorProfile({
   // ----------------------------------------------------
   if (activeTheme === "neon") {
     return (
-      <div className="w-full pb-8 relative bg-[#0D0B1A] text-white font-sans overflow-x-hidden min-h-screen">
+      <div className="w-full pb-8 relative bg-[#0D0B1A] text-white font-sans overflow-x-hidden">
         {/* Neon Background Accents & Banner */}
         {data.featured_work_url && (
           <div className="relative w-full h-48 sm:h-72 overflow-hidden shadow-[0_0_30px_rgba(255,45,120,0.2)] z-10">
@@ -1566,7 +1562,7 @@ export function CreatorProfile({
               <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-white mb-6 border-b border-white/20 pb-2">
                 SHOWCASE
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {data.works.map((w, i) => {
                   const thumb = getThumbnail(w);
                   const isUploadedVideo = !!w.url && (w.type === 'video' || (typeof w.url === 'string' && w.url.match(/\.(mp4|webm|ogg|mov)$/i)));
