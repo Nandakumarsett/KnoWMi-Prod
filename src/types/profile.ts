@@ -1,4 +1,4 @@
-export type PersonaType = 'developer' | 'student' | 'creator' | 'influencer';
+export type PersonaType = 'developer' | 'student' | 'creator';
 
 
 export interface SocialLink {
@@ -150,78 +150,11 @@ export interface CreatorData {
   }>;
 }
 
-export interface GamerData {
-  type: 'gamer';
-  gamer_tag: string;
-  status: 'online' | 'in-game' | 'offline';
-  main_games: Array<{
-    name: string;
-    logo_url?: string;
-    rank?: string;
-  }>;
-  stats: {
-    kd_ratio?: number;
-    total_wins?: number;
-    hours_played?: number;
-    custom_stat_label?: string;
-    custom_stat_value?: string;
-  };
-  achievements: Array<{
-    icon: string;
-    label: string;
-    rarity: 'common' | 'rare' | 'epic' | 'legendary';
-  }>;
-  stream_url?: string;
-}
-
-export interface FitnessData {
-  type: 'fitness';
-  tagline: string;
-  location?: string;
-  streak_days: number;
-  prs_count: number;
-  total_workouts: number;
-  disciplines: string[];
-  goals: Array<{
-    label: string;
-    current: number;
-    target: number;
-    unit: string;
-  }>;
-  achievements: Array<{
-    icon: string;
-    label: string;
-  }>;
-}
-
-export interface InfluencerData {
-  type: 'influencer';
-  tagline: string;
-  is_verified: boolean;
-  total_reach?: string;
-  avg_engagement?: string;
-  categories: string[];
-  collab_types: string[];
-  platforms: Array<{
-    platform: string;
-    url: string;
-    followers: string;
-    metric_label: string;
-  }>;
-  featured_content: Array<{
-    title: string;
-    thumbnail_url?: string;
-    url: string;
-    views?: string;
-  }>;
-}
-
 
 export type PersonaData =
   | DeveloperData
   | StudentData
-  | CreatorData
-  | InfluencerData;
+  | CreatorData;
 
 export interface ProfileData {
   id: string;

@@ -2,8 +2,7 @@ import { ProfileData } from '../../types/profile'
 import { DeveloperProfile } from './personas/DeveloperProfile'
 import { StudentProfile } from './personas/StudentProfile'
 import { CreatorProfile } from './personas/CreatorProfile'
-import { GamerProfile } from './personas/GamerProfile'
-import { FitnessProfile } from './personas/FitnessProfile'
+
 
 import { ErrorBoundary } from './ErrorBoundary'
 
@@ -26,23 +25,11 @@ export function PersonaRouter({ profile, recentVisitors = [], stats }: PersonaRo
     case 'university':
       return <StudentProfile profile={profile} visitors={recentVisitors} stats={stats} />
     case 'creator':
-    case 'influencer':
-    case 'media':
+    default:
       return (
         <ErrorBoundary>
           <CreatorProfile profile={profile} stats={stats} />
         </ErrorBoundary>
       )
-    case 'gamer':
-    case 'gaming':
-    case 'esports':
-      return <GamerProfile profile={profile} />
-    case 'gym':
-    case 'fitness':
-    case 'athlete':
-    case 'sports':
-      return <FitnessProfile profile={profile} />
-    default:
-      return <DeveloperProfile profile={profile} /> // Default to Developer as per high standard
   }
 }

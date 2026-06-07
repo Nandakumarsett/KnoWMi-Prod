@@ -44,7 +44,6 @@ import { usePushNotifications } from '../hooks/usePushNotifications'
 import { DeveloperForm } from '../components/identity/forms/DeveloperForm'
 import { StudentForm } from '../components/identity/forms/StudentForm'
 import { CreatorForm } from '../components/identity/forms/CreatorForm'
-import { GamerForm } from '../components/identity/forms/GamerForm'
 import BusinessNeedsTab from '../components/business/BusinessNeedsTab'
 
 
@@ -506,8 +505,8 @@ const PERSONAS = {
     buttonBg: 'linear-gradient(135deg, #3B9EFF, #5FB4FF)',
     fields: ['github', 'linkedin', 'blog', 'twitter', 'instagram'], stats: ['Built Projects', 'GitHub Stars']
   },
-  influencer: {
-    id: 'influencer', label: 'Content Creator', emoji: '🎬', icon: Rocket, bg: 'linear-gradient(180deg, #2A1810 0%, #3A2418 100%)',
+  creator: {
+    id: 'creator', label: 'Content Creator', emoji: '🎬', icon: Rocket, bg: 'linear-gradient(180deg, #2A1810 0%, #3A2418 100%)',
     accent: '#F59E0B', accentLight: 'rgba(245, 158, 11, 0.15)', cardBg: 'rgba(245, 158, 11, 0.08)',
     textPrimary: '#FFFFFF', textSecondary: '#D4A574', tagBg: 'rgba(245, 158, 11, 0.12)',
     buttonBg: 'linear-gradient(135deg, #F59E0B, #FBBF24)',
@@ -875,7 +874,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
       
       const identityData = {
         id: editingId || `id_${Date.now()}`,
-        persona_type: persona || 'influencer',
+        persona_type: persona || 'creator',
         display_label: PERSONAS[persona]?.label || persona,
 
         avatar_url: avatarUrl,
@@ -909,7 +908,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
 
       // 1. Update main profiles table
       const { error } = await supabase.from('profiles').update({ 
-        persona_type: isMainSync ? (persona || 'influencer') : profile.persona_type, 
+        persona_type: isMainSync ? (persona || 'creator') : profile.persona_type, 
         avatar_url: isMainSync ? avatarUrl : profile.avatar_url,
         persona_data: { 
           ...(profile.persona_data || {}), 
@@ -1015,7 +1014,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                 </div>
                 <p className="text-[10px] font-black text-neutral-400 uppercase tracking-[0.2em]">
                   {(PERSONAS[idnt.persona_type]?.label || 
-                    (idnt.persona_type === 'influencer' ? 'Content Creator' : 
+                    (idnt.persona_type === 'creator' ? 'Content Creator' : 
                      idnt.persona_type === 'developer' ? 'Tech' : 
                      idnt.persona_type === 'dev' ? 'Tech' : 
                      idnt.persona_type.charAt(0).toUpperCase() + idnt.persona_type.slice(1))
@@ -1356,9 +1355,6 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                         {['developer', 'dev'].includes(persona) && <DeveloperForm data={data} onChange={setData} isOwner />}
                         {persona === 'student' && <StudentForm data={data} onChange={setData} />}
                         {persona === 'creator' && <CreatorForm data={data} onChange={setData} />}
-                        {persona === 'gamer' && <GamerForm data={data} onChange={setData} />}
-                        {['fitness', 'gym', 'athlete'].includes(persona) && <FitnessForm data={data} onChange={setData} />}
-                        {persona === 'influencer' && <CreatorForm data={data} onChange={setData} />}
                       </div>
                     </div>
                   </div>
@@ -1422,7 +1418,7 @@ const IdentityPass = ({ profile }) => {
   }
 
   const personaTitle = activeIdentity?.display_label || 
-    (activeIdentity?.persona_type === 'influencer' ? 'Content Creator' : 
+    (activeIdentity?.persona_type === 'creator' ? 'Content Creator' : 
      activeIdentity?.persona_type === 'developer' || activeIdentity?.persona_type === 'dev' ? 'Tech' : 
      activeIdentity?.persona_type ? activeIdentity.persona_type.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) : 'Digital Creator');
 
@@ -2817,7 +2813,26 @@ function Dashboard() {
           
           <div className={`tab-transition ${activeTab === 'business' ? 'tab-visible' : 'tab-hidden'}`}>
             {activeTab === 'business' && (
-              <BusinessNeedsTab profile={profile} />
+              <div className="relative h-[80vh] flex flex-col items-center justify-center p-8 text-center select-none bg-neutral-50/50 rounded-3xl border border-neutral-100">
+                <div className="relative inline-flex items-center justify-center mb-6">
+                  <div className="absolute inset-0 bg-orange-500/20 rounded-full blur-2xl animate-pulse" />
+                  <div className="relative w-24 h-24 bg-white border-2 border-orange-500 rounded-3xl flex items-center justify-center shadow-2xl">
+                    <Crown size={44} className="text-orange-500" />
+                  </div>
+                </div>
+                <h3 
+                  style={{ fontFamily: 'Fraunces, serif' }} 
+                  className="text-3xl font-black mb-3 text-neutral-950"
+                >
+                  Teams & Business Plan
+                </h3>
+                <p className="text-sm font-semibold max-w-sm mb-8 leading-relaxed text-neutral-600">
+                  We are currently crafting exclusive tools for teams and businesses. Team networking, bulk card orders, and corporate branding are coming soon!
+                </p>
+                <div className="px-6 py-3 bg-neutral-900 text-white font-black text-xs uppercase tracking-widest rounded-xl shadow-lg">
+                  Coming Soon
+                </div>
+              </div>
             )}
           </div>
         </main>

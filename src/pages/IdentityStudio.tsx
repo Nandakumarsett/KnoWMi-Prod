@@ -181,7 +181,7 @@ const PLATFORM_ICONS: Record<string, any> = {
 };
 
 const PERSONA_CONFIG: Record<string, any> = {
-  influencer: {
+  creator: {
     label: "Content Creator",
     emoji: "🎬",
     color: "#F97316",
@@ -592,24 +592,24 @@ export default function IdentityStudio() {
   };
 
   const { score, incomplete } = useMemo(
-    () => computeCompletionScore(activePersona || "influencer", data),
+    () => computeCompletionScore(activePersona || "creator", data),
     [activePersona, data],
   );
 
   const activeConfig = useMemo(() => {
-    const persona = (activePersona || "influencer").toLowerCase();
+    const persona = (activePersona || "creator").toLowerCase();
     const key = ["tech", "dev", "developer"].includes(persona)
       ? "developer"
       : persona;
-    return personaConfigs[key] || personaConfigs["influencer"];
+    return personaConfigs[key] || personaConfigs["creator"];
   }, [activePersona]);
 
   const config = useMemo(() => {
-    const persona = (activePersona || "influencer").toLowerCase();
+    const persona = (activePersona || "creator").toLowerCase();
     const key = ["tech", "dev", "developer"].includes(persona)
       ? "developer"
       : persona;
-    return PERSONA_CONFIG[key] || PERSONA_CONFIG["influencer"];
+    return PERSONA_CONFIG[key] || PERSONA_CONFIG["creator"];
   }, [activePersona]);
 
   const aiMessage = useMemo(() => {
@@ -928,7 +928,7 @@ export default function IdentityStudio() {
                       </div>
                     </div>
 
-                    {(activePersona === "influencer" ||
+                    {(activePersona === "creator" ||
                       activePersona === "creator") && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -985,7 +985,7 @@ export default function IdentityStudio() {
                             ];
                           if (
                             activePersona === "creator" ||
-                            activePersona === "influencer"
+                            activePersona === "creator"
                           )
                             options = ["default", "classic", "minimal", "neon"];
 
@@ -1012,7 +1012,7 @@ export default function IdentityStudio() {
                                   ? activePersona === "student"
                                     ? "Notebook"
                                     : activePersona === "creator" ||
-                                        activePersona === "influencer"
+                                        activePersona === "creator"
                                       ? "Glow"
                                       : "Terminal"
                                   : opt === "classic"
@@ -1077,7 +1077,7 @@ export default function IdentityStudio() {
                       />
                     )}
                     {(activePersona === "creator" ||
-                      activePersona === "influencer") && (
+                      activePersona === "creator") && (
                       <CreatorForm
                         data={data}
                         onChange={setData}

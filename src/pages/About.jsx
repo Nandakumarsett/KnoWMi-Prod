@@ -117,8 +117,6 @@ export default function About() {
                   { title: 'Students', desc: 'Building their future.', icon: <Globe /> },
                   { title: 'Creators', desc: 'Sharing their work.', icon: <Sparkles /> },
                   { title: 'Developers', desc: 'Meeting collaborators.', icon: <Users /> },
-                  { title: 'Gamers', desc: 'Finding community.', icon: <Zap /> },
-                  { title: 'Fitness', desc: 'Building identity.', icon: <Heart /> },
                   { title: 'Visionaries', desc: 'Standing out and connecting.', icon: <Target /> },
                 ].map((p, i) => (
                   <div key={i} className="p-8 bg-white border border-neutral-100 rounded-3xl shadow-lg shadow-neutral-100/50 flex items-center gap-6 group hover:border-orange-500/30 transition-all">
