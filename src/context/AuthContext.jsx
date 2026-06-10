@@ -91,8 +91,8 @@ export const AuthProvider = ({ children }) => {
     return () => subscription.unsubscribe()
   }, [])
 
-  const signInWithOtp = async (data) => supabase.auth.signInWithOtp(data)
-  const verifyOtp = async (data) => supabase.auth.verifyOtp(data)
+  const signUp = async (data) => supabase.auth.signUp(data)
+  const signIn = async (data) => supabase.auth.signInWithPassword(data)
 
   const signOut = async () => {
     await supabase.auth.signOut()
@@ -117,8 +117,8 @@ export const AuthProvider = ({ children }) => {
     isOwner,
     isStaff,
     isVerified,
-    signInWithOtp,
-    verifyOtp,
+    signUp,
+    signIn,
     signOut,
     refreshProfile,
   }
