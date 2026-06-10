@@ -743,7 +743,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
       const { data, error } = await supabase.from('profiles').update({
         persona_data: { ...(profile.persona_data || {}), identities: updatedIdentities }
       })
-      .eq('user_id', profile.user_id || user?.id)
+      .eq('user_id', profile.user_id || profile.id)
       .select()
 
       if (error) {

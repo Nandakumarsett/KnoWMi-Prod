@@ -1139,9 +1139,9 @@ export default function IdentityStudio() {
 
       {/* Removed sticky insight strip as requested */}
 
-      {/* 🚀 ACTION-DRIVEN FOOTER */}
+      {/* ⚡ ACTION-DRIVEN FOOTER */}
       {activePersona ? (
-        <footer className="fixed bottom-0 left-0 right-0 z-[60] bg-white/80 backdrop-blur-xl border-t border-neutral-100 p-8 flex items-center justify-center gap-6">
+        <footer className="fixed bottom-0 left-0 right-0 z-[60] bg-white/80 backdrop-blur-xl border-t border-neutral-100 p-6 pb-8 flex flex-col items-center justify-center gap-3">
           <button
             onClick={handleSave}
             disabled={saving}
@@ -1155,6 +1155,10 @@ export default function IdentityStudio() {
               </>
             )}
           </button>
+          <div className="flex items-center gap-1.5 text-neutral-400">
+            <ShieldCheck size={12} />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Secured by KnoWMi Identity Cloud • End-to-End Encrypted</span>
+          </div>
         </footer>
       ) : null}
     </div>

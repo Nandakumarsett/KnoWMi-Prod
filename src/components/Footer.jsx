@@ -80,20 +80,18 @@ export function Footer() {
     Company: [
       { name: 'About Us', href: '/about' },
       { name: 'Leaderboard', href: '/leaderboard' },
+    ],
+    Support: [
+      { name: 'Help Center', href: '/legal#help' },
+      { name: 'Track My Order', href: '/track' },
       { name: 'Contact Us', href: 'mailto:support.knowmi@gmail.com', external: true },
       { name: 'WhatsApp Us', href: 'https://wa.me/917981325397', external: true },
     ],
-    Support: [
-      { name: 'FAQs', href: '/#faq' },
-      { name: 'Track My Order', href: '/track' },
-      { name: 'Return Policy', href: '/legal#refund' },
-      { name: 'Shipping Info', href: '/legal#shipping' },
-    ],
-    Legal: [
+    'Trust & Legal': [
+      { name: 'Security & Data', href: '/legal#security' },
       { name: 'Privacy Policy', href: '/legal#privacy' },
       { name: 'Terms of Service', href: '/legal#terms' },
-      { name: 'Refund Policy', href: '/legal#refund' },
-      { name: 'Shipping Policy', href: '/legal#shipping' },
+      { name: 'Shipping & Returns', href: '/legal#refund' },
     ],
   }
 
@@ -204,8 +202,9 @@ export function Footer() {
           <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)', fontFamily: 'JetBrains Mono, monospace' }}>
             © 2025 KnoWMi. All rights reserved. Made with ❤️ in India.
           </p>
-          <div className="flex items-center gap-3">
-            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.15)', fontFamily: 'JetBrains Mono, monospace' }}>Secure Cloud Checkout</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,153,51,0.05)', border: '1px solid rgba(255,153,51,0.1)' }}>
+            <Lock size={12} className="text-orange-500" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-orange-500/80">256-Bit SSL Encrypted</span>
           </div>
         </div>
       </div>

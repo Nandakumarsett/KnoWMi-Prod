@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import { Footer } from '../components/Footer'
-import { Shield, FileText, RefreshCw, Truck } from 'lucide-react'
+import { Shield, FileText, RefreshCw, Truck, Lock, HelpCircle } from 'lucide-react'
 
 const SECTIONS = {
   privacy: {
@@ -314,6 +314,113 @@ const SECTIONS = {
 
         <Section title="6. International Shipping">
           <p>We currently ship within India only. International shipping is not available at this time. If you are an NRI interested in a KnoWMi, email us — we may be able to arrange something for bulk orders.</p>
+        </Section>
+      </>
+    )
+  },
+
+  security: {
+    title: 'Security & Trust',
+    icon: <Lock size={18} />,
+    updated: '21 May 2025',
+    content: (
+      <>
+        <p className="text-neutral-500 text-sm leading-relaxed mb-8">
+          At KnoWMi, protecting your identity is our highest priority. We treat your data with the same rigorous security standards used by enterprise SaaS and financial platforms.
+        </p>
+
+        <Section title="1. End-to-End Infrastructure Security">
+          <p>Our platform runs on Supabase, an enterprise-grade cloud database infrastructure.</p>
+          <ul>
+            <li><strong>Data at Rest:</strong> All database volumes are encrypted using AES-256 encryption.</li>
+            <li><strong>Data in Transit:</strong> Every connection between your browser and our servers is secured using modern TLS 1.3 encryption.</li>
+            <li><strong>DDoS Protection:</strong> Our endpoints are shielded by Cloudflare's Web Application Firewall (WAF) to prevent malicious attacks.</li>
+          </ul>
+        </Section>
+
+        <Section title="2. Passwordless Authentication">
+          <p>Passwords are the weakest link in modern security. That's why we don't use them.</p>
+          <ul>
+            <li>We use <strong>Magic Links and OTPs (One-Time Passwords)</strong> to authenticate users.</li>
+            <li>Your account can only be accessed by whoever controls the registered email address.</li>
+            <li>Because there are no passwords stored in our database, there are no passwords for hackers to steal.</li>
+          </ul>
+        </Section>
+
+        <Section title="3. Row-Level Security (RLS)">
+          <p>KnoWMi enforces strict Row-Level Security (RLS) directly at the database layer. This means:</p>
+          <ul>
+            <li>No user can edit, delete, or modify any profile data that does not belong to them.</li>
+            <li>Even if a malicious actor attempted to bypass our API, the database itself mathematically prevents unauthorized data access.</li>
+          </ul>
+        </Section>
+
+        <Section title="4. Physical Tee Claim Security">
+          <p>The QR code on your KnoWMi tee is a secure token.</p>
+          <ul>
+            <li><strong>Factory Tokens:</strong> New tees ship with an unassigned factory token. The first person to scan and log in permanently binds that tee to their account via an encrypted Edge Function.</li>
+            <li><strong>Hijack Prevention:</strong> Once a tee is claimed, no one else can scan it to "steal" your profile. Scanning a claimed tee will simply open your public profile.</li>
+          </ul>
+        </Section>
+
+        <Section title="5. Payment Security">
+          <p>We do not store, process, or transmit your credit card or UPI details.</p>
+          <ul>
+            <li>All transactions are securely handled by <strong>Razorpay</strong>, which is PCI-DSS Level 1 compliant (the highest level of security certification in the payments industry).</li>
+            <li>We only receive a secure confirmation token indicating the payment was successful.</li>
+          </ul>
+        </Section>
+      </>
+    )
+  },
+
+  help: {
+    title: 'Help & FAQs',
+    icon: <HelpCircle size={18} />,
+    updated: '21 May 2025',
+    content: (
+      <>
+        <p className="text-neutral-500 text-sm leading-relaxed mb-8">
+          Stuck somewhere? Find answers to the most common questions below. If you still need help, our support team is just an email away.
+        </p>
+
+        <Section title="Getting Started">
+          <SubSection title="How does the KnoWMi tee work?">
+            <p>Your KnoWMi tee comes with a unique QR code printed on it. When someone scans it with their phone camera, they are instantly taken to your personalized digital profile (which you create and manage in your Dashboard).</p>
+          </SubSection>
+          <SubSection title="How do I link my tee to my profile?">
+            <p>It's simple! When your tee arrives, open your phone's camera and scan the QR code. You'll be prompted to log in or create an account. Once logged in, the tee is permanently linked to your profile.</p>
+          </SubSection>
+        </Section>
+
+        <Section title="Profile Management">
+          <SubSection title="Can I change what people see when they scan me?">
+            <p>Yes, absolutely. You have full control. Go to the "Identity" tab in your Dashboard to update your bio, social links, job title, and profile picture. Changes are reflected instantly.</p>
+          </SubSection>
+          <SubSection title="Is my shipping address public?">
+            <p><strong>Never.</strong> Your shipping address and phone number are strictly used for delivering your order. They are never shown on your public profile.</p>
+          </SubSection>
+          <SubSection title="What are 'Identities'?">
+            <p>You might be a Developer by day and a Content Creator by night. Our premium plans allow you to create multiple "Identities" and switch between them. Scanning your tee will always show whichever identity you currently have set as "Active" in your Dashboard.</p>
+          </SubSection>
+        </Section>
+
+        <Section title="Orders & Shipping">
+          <SubSection title="How long does delivery take?">
+            <p>Since every tee is printed on demand, it takes 3–5 business days to produce, followed by 2–5 days for shipping depending on your city. You can track your order using the link sent to your email.</p>
+          </SubSection>
+          <SubSection title="Can I cancel my order?">
+            <p>You can cancel your order within 12 hours of placing it. Once production begins (which is usually the next day), we cannot cancel it since the QR code has already been minted specifically for you.</p>
+          </SubSection>
+        </Section>
+
+        <Section title="Troubleshooting">
+          <SubSection title="My QR code isn't scanning.">
+            <p>Ensure you are in a well-lit area and the fabric is relatively flat. Most modern smartphone cameras natively read QR codes. If the print is physically damaged upon arrival, please record an unboxing video and contact us for a replacement.</p>
+          </SubSection>
+          <SubSection title="I want to deactivate my profile temporarily.">
+            <p>Please email us at support.knowmi@gmail.com from your registered email address, and we will temporarily disable your link within 24 hours.</p>
+          </SubSection>
         </Section>
       </>
     )
