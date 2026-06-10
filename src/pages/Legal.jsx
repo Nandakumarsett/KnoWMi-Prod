@@ -338,12 +338,12 @@ const SECTIONS = {
           </ul>
         </Section>
 
-        <Section title="2. Passwordless Authentication">
-          <p>Passwords are the weakest link in modern security. That's why we don't use them.</p>
+        <Section title="2. Authentication Security">
+          <p>Your KnoWMi account is secured by industry-standard authentication protocols.</p>
           <ul>
-            <li>We use <strong>Magic Links and OTPs (One-Time Passwords)</strong> to authenticate users.</li>
-            <li>Your account can only be accessed by whoever controls the registered email address.</li>
-            <li>Because there are no passwords stored in our database, there are no passwords for hackers to steal.</li>
+            <li>We use <strong>secure hashing algorithms (bcrypt)</strong> to encrypt your password. We never store plain-text passwords.</li>
+            <li>Sessions are securely managed using encrypted JSON Web Tokens (JWTs).</li>
+            <li>We also offer secure OAuth options like <strong>Google Login</strong> for one-click access without needing a password.</li>
           </ul>
         </Section>
 
