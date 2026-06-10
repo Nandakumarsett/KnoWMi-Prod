@@ -338,12 +338,13 @@ const SECTIONS = {
           </ul>
         </Section>
 
-        <Section title="2. Authentication Security">
-          <p>Your KnoWMi account is secured by industry-standard authentication protocols.</p>
+        <Section title="2. Enterprise-Grade Authentication Security">
+          <p>We understand that your digital identity is sensitive. Because we rely on password-based authentication, we have implemented a zero-trust, defense-in-depth architecture to ensure your credentials remain entirely uncompromised.</p>
           <ul>
-            <li>We use <strong>secure hashing algorithms (bcrypt)</strong> to encrypt your password. We never store plain-text passwords.</li>
-            <li>Sessions are securely managed using encrypted JSON Web Tokens (JWTs).</li>
-            <li>We also offer secure OAuth options like <strong>Google Login</strong> for one-click access without needing a password.</li>
+            <li><strong>Cryptographic Hashing (bcrypt):</strong> We employ industry-leading key derivation functions with adaptive computational cost. Your password is never stored or transmitted in plain-text. Even our database administrators cannot see your password.</li>
+            <li><strong>Stateless Secure Sessions:</strong> Once authenticated, your session is governed by strictly-typed, cryptographically signed JSON Web Tokens (JWTs) that prevent session hijacking and cross-site request forgery (CSRF).</li>
+            <li><strong>Brute-Force Protection:</strong> Our authentication endpoints are rate-limited and monitored by Cloudflare's Web Application Firewall (WAF) to instantly block automated credential-stuffing attacks.</li>
+            <li><strong>Secure OAuth Alternatives:</strong> For users who prefer not to manage another password, we offer a frictionless and highly secure <strong>Google Login</strong> integration, delegating authentication directly to Google's enterprise infrastructure.</li>
           </ul>
         </Section>
 
