@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Tshirt3DModel from './Tshirt3DModel';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -174,13 +175,8 @@ export default function ScrollyHome() {
           </div>
           
           <div className="lg:w-1/2 w-full flex justify-center lg:justify-end">
-            <div className="fabric-image relative w-full max-w-md lg:max-w-xl group opacity-0 translate-x-12">
-              <img 
-                src="/assets/scrolly/anime_shirt_nobg.png" 
-                alt="Anime Shirt" 
-                className="w-full h-auto object-contain transition-transform duration-1000 group-hover:scale-[1.05]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="fabric-image relative w-full h-[500px] lg:h-[700px] max-w-md lg:max-w-xl group opacity-0 translate-x-12">
+              <Tshirt3DModel />
             </div>
           </div>
         </div>
