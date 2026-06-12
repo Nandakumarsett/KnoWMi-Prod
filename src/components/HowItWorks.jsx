@@ -57,14 +57,14 @@ export function HowItWorks() {
   const ref = useReveal()
 
   return (
-    <section id="how-it-works" className="py-32 bg-[#FDFDFB] snap-section min-h-screen flex items-center" ref={ref}>
+    <section id="how-it-works" className="py-32 bg-black min-h-screen flex items-center" ref={ref}>
       <div className="max-w-[1200px] mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-24 reveal">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-100 mb-6 text-orange-600 text-[10px] font-black uppercase tracking-widest">
             How It Works
           </div>
-          <h2 className="text-5xl md:text-7xl font-display font-black text-black mb-6 tracking-tight leading-[1.05]">
+          <h2 className="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-[1.05]">
             It's stupidly simple.<br />
             <span className="text-orange-500 italic">That's the point.</span>
           </h2>
@@ -76,14 +76,14 @@ export function HowItWorks() {
         {/* Steps grid */}
         <div className="grid md:grid-cols-3 gap-12 lg:gap-24 relative">
           {/* Connection Line (Desktop) */}
-          <div className="hidden lg:block absolute top-[45px] left-[15%] right-[15%] h-px bg-neutral-100" />
+          <div className="hidden lg:block absolute top-[45px] left-[15%] right-[15%] h-px bg-white/10" />
           
           {steps.map((step, i) => (
             <div key={i} className={`reveal reveal-delay-${i + 1} text-center relative z-10`}>
-              <div className="w-24 h-24 rounded-[2rem] bg-white border border-neutral-100 shadow-xl shadow-neutral-100 flex items-center justify-center mx-auto mb-10 group-hover:scale-105 transition-transform">
+              <div className="w-24 h-24 rounded-[2rem] bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-10 group-hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.05)]">
                 {step.icon}
               </div>
-              <h3 className="text-2xl font-display font-black mb-4 text-black">
+              <h3 className="text-2xl font-display font-black mb-4 text-white">
                 {step.title}
               </h3>
               <p className="text-sm text-neutral-500 font-medium leading-relaxed max-w-[260px] mx-auto">

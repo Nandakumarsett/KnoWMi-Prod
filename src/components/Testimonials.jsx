@@ -74,21 +74,21 @@ export default function Testimonials() {
   const ref = useReveal()
 
   return (
-    <section id="reviews" className="section-pad snap-section min-h-screen flex items-center" ref={ref}>
+    <section id="reviews" className="section-pad min-h-screen flex items-center bg-[#0a0a0a]" ref={ref}>
       <div className="max-w-[1200px] mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-16 reveal">
-          <span className="tag mb-4 inline-block" style={{ background: 'var(--saffron-light)', color: 'var(--saffron)' }}>
+          <span className="tag mb-4 inline-block bg-orange-500/10 text-orange-500 border border-orange-500/20">
             Reviews
           </span>
-          <h2 className="font-display font-bold mb-4" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: 'var(--ink)' }}>
+          <h2 className="font-display font-bold mb-4 text-white" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
             People Are{' '}
             <span className="italic gradient-text">Talking About It</span>
           </h2>
           <div className="flex items-center justify-center gap-3 mb-3">
             <Stars count={5} />
-            <span className="font-display font-bold text-xl" style={{ color: 'var(--ink)' }}>4.9/5</span>
-            <span className="text-sm" style={{ color: 'var(--ink3)' }}>from 2,100+ reviews</span>
+            <span className="font-display font-bold text-xl text-white">4.9/5</span>
+            <span className="text-sm text-neutral-400">from 2,100+ reviews</span>
           </div>
         </div>
 
@@ -98,17 +98,17 @@ export default function Testimonials() {
             <div
               key={i}
               className={`reveal reveal-delay-${(i % 3) + 1} testi-card card-lift rounded-3xl p-5 sm:p-7 relative overflow-hidden`}
-              style={{ background: '#fff', border: '1px solid var(--border)' }}
+              style={{ background: '#111', border: '1px solid rgba(255,255,255,0.05)' }}
             >
               {/* Quote mark */}
               <div className="absolute top-6 right-6 font-display text-6xl font-bold leading-none select-none"
-                style={{ color: 'var(--border)', opacity: 0.8 }} aria-hidden="true">
+                style={{ color: 'rgba(255,255,255,0.05)', opacity: 0.8 }} aria-hidden="true">
                 "
               </div>
 
               <Stars count={t.rating} />
 
-              <blockquote className="mt-4 mb-5 text-xs sm:text-sm leading-relaxed" style={{ color: 'var(--ink2)' }}>
+              <blockquote className="mt-4 mb-5 text-xs sm:text-sm leading-relaxed text-neutral-400">
                 "{t.text}"
               </blockquote>
 
@@ -120,13 +120,13 @@ export default function Testimonials() {
                   </div>
                   <div>
                     <div className="flex items-center gap-1.5 mb-0.5">
-                      <div className="text-sm font-bold" style={{ color: 'var(--ink)' }}>{t.name}</div>
-                      <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-50 text-green-600 border border-green-100">
-                        <CheckCircle size={8} className="fill-green-600 text-white" />
+                      <div className="text-sm font-bold text-white">{t.name}</div>
+                      <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-500/10 text-green-500 border border-green-500/20">
+                        <CheckCircle size={8} className="fill-green-500 text-[#111]" />
                         <span className="text-[8px] font-black uppercase tracking-widest">Verified Buyer</span>
                       </div>
                     </div>
-                    <div className="text-xs" style={{ color: 'var(--ink4)' }}>{t.role}</div>
+                    <div className="text-xs text-neutral-500">{t.role}</div>
                   </div>
                 </div>
                 <div className="text-right">
@@ -147,7 +147,7 @@ export default function Testimonials() {
           <div className="flex flex-wrap justify-center gap-4 items-center">
             {['IIT Delhi Techfest', 'Nasscom Startup Summit', 'Bangalore Design Week', 'Product Hunt India', 'IIM Ahmedabad'].map((v, i) => (
               <span key={i} className="px-4 py-2 rounded-full text-sm font-medium"
-                style={{ background: 'var(--off)', border: '1px solid var(--border)', color: 'var(--ink3)' }}>
+                style={{ background: '#111', border: '1px solid rgba(255,255,255,0.1)', color: '#888' }}>
                 {v}
               </span>
             ))}

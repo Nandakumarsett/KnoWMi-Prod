@@ -166,8 +166,6 @@ export default function ScrollyHome() {
         </div>
       </section>
       
-      {/* Spacer to transition to Pricing which is light mode */}
-      <div className="h-32 bg-gradient-to-b from-black to-[#FDFDFB] w-full absolute bottom-0 left-0" />
     </div>
   );
 }

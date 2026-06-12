@@ -126,7 +126,7 @@ export default function Home() {
       <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] transition-all duration-500 transform ${showSticky ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
         <button
           onClick={() => handleSelectPlan('creator')}
-          className="flex items-center gap-3 px-8 py-4 bg-black text-white rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-black/20 hover:bg-orange-500 transition-all group"
+          className="flex items-center gap-3 px-8 py-4 bg-white text-black rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:bg-orange-500 hover:text-white transition-all group"
         >
           Explore Tees
           <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />

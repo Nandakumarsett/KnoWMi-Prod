@@ -6,7 +6,7 @@ export function CTASection({ onOrderClick }) {
   const ref = useReveal()
 
   return (
-    <section className="section-pad relative overflow-hidden snap-section min-h-screen flex items-center" ref={ref} style={{ background: 'var(--ink)' }}>
+    <section className="section-pad relative overflow-hidden min-h-screen flex items-center" ref={ref} style={{ background: '#0a0a0a' }}>
       {/* Background mesh */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="orb w-96 h-96 -top-20 -left-20" style={{ background: 'rgba(255,153,51,0.12)' }} />

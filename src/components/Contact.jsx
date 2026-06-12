@@ -31,14 +31,14 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-32 relative overflow-hidden bg-white snap-section min-h-screen flex items-center">
+    <section id="contact" className="py-32 relative overflow-hidden bg-[#0a0a0a] min-h-screen flex items-center">
       <div className="max-w-[1200px] mx-auto px-6 relative z-10 w-full">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-100 mb-6 text-orange-700 text-[10px] font-black uppercase tracking-widest">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 mb-6 text-orange-500 text-[10px] font-black uppercase tracking-widest">
               Get In Touch
             </div>
-            <h2 className="text-5xl md:text-7xl font-display font-black text-black mb-8 leading-[1.05] tracking-tight">
+            <h2 className="text-5xl md:text-7xl font-display font-black text-white mb-8 leading-[1.05] tracking-tight">
               Let's Build the Future of <br />
               <span className="text-orange-500 italic">Identity Together.</span>
             </h2>
@@ -47,8 +47,8 @@ export default function Contact() {
             </p>
             
             <div className="space-y-6">
-               <a href="mailto:support.knowmi@gmail.com" className="flex items-center gap-4 text-black font-black uppercase tracking-widest text-xs hover:text-orange-500 transition-colors">
-                  <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500">
+               <a href="mailto:support.knowmi@gmail.com" className="flex items-center gap-4 text-white font-black uppercase tracking-widest text-xs hover:text-orange-500 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500">
                     <Mail size={18} />
                   </div>
                   Email: support.knowmi@gmail.com
@@ -56,15 +56,15 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="bg-neutral-50 rounded-[3rem] p-10 md:p-14 border border-neutral-100 shadow-2xl shadow-neutral-100">
+          <div className="bg-[#111] rounded-[3rem] p-10 md:p-14 border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
             {status === 'success' ? (
               <div className="text-center py-12">
-                <div className="w-20 h-20 bg-orange-100 rounded-[2rem] flex items-center justify-center mx-auto mb-8 text-orange-600">
+                <div className="w-20 h-20 bg-orange-500/10 rounded-[2rem] flex items-center justify-center mx-auto mb-8 text-orange-500">
                   <Send size={32} />
                 </div>
-                <h3 className="text-3xl font-display font-black mb-4 text-black italic">Message Received!</h3>
+                <h3 className="text-3xl font-display font-black mb-4 text-white italic">Message Received!</h3>
                 <p className="text-neutral-500 font-medium leading-relaxed">Your details are safe with us. We'll be in touch personally within 24 hours.</p>
-                <button onClick={() => setStatus('idle')} className="mt-10 px-8 py-3 rounded-xl bg-black text-white text-[10px] font-black uppercase tracking-widest">
+                <button onClick={() => setStatus('idle')} className="mt-10 px-8 py-3 rounded-xl bg-white text-black text-[10px] font-black uppercase tracking-widest hover:bg-orange-500 hover:text-white transition-colors">
                   Send Another
                 </button>
               </div>
@@ -74,13 +74,13 @@ export default function Contact() {
                   <div className="col-span-2 md:col-span-1">
                     <label htmlFor="contact-name" className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-3">Name</label>
                     <input id="contact-name" required type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-6 py-4 rounded-2xl bg-white border border-neutral-100 outline-none focus:border-orange-500 transition-all text-sm font-medium"
+                      className="w-full px-6 py-4 rounded-2xl bg-black border border-white/10 outline-none focus:border-orange-500 transition-all text-sm font-medium text-white"
                       placeholder="John Doe" />
                   </div>
                   <div className="col-span-2 md:col-span-1">
                     <label htmlFor="contact-email" className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-3">Email</label>
                     <input id="contact-email" required type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-6 py-4 rounded-2xl bg-white border border-neutral-100 outline-none focus:border-orange-500 transition-all text-sm font-medium"
+                      className="w-full px-6 py-4 rounded-2xl bg-black border border-white/10 outline-none focus:border-orange-500 transition-all text-sm font-medium text-white"
                       placeholder="john@example.com" />
                   </div>
                 </div>
@@ -88,25 +88,25 @@ export default function Contact() {
                 <div>
                   <label htmlFor="contact-phone" className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-3">WhatsApp / Phone</label>
                   <input id="contact-phone" type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value.replace(/[^0-9+\s()]/g, '') })}
-                    className="w-full px-6 py-4 rounded-2xl bg-white border border-neutral-100 outline-none focus:border-orange-500 transition-all text-sm font-medium"
+                    className="w-full px-6 py-4 rounded-2xl bg-black border border-white/10 outline-none focus:border-orange-500 transition-all text-sm font-medium text-white"
                     placeholder="+91 00000 00000" />
                 </div>
 
                 <div>
                   <label htmlFor="contact-message" className="block text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-3">Message</label>
                   <textarea id="contact-message" rows="4" value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full px-6 py-4 rounded-2xl bg-white border border-neutral-100 outline-none focus:border-orange-500 transition-all text-sm font-medium resize-none"
+                    className="w-full px-6 py-4 rounded-2xl bg-black border border-white/10 outline-none focus:border-orange-500 transition-all text-sm font-medium resize-none text-white"
                     placeholder="Tell us about your squad, team, or custom vision..." />
                 </div>
 
                 {status === 'error' && (
-                  <div className="p-4 rounded-2xl bg-red-50 text-red-600 text-[10px] font-black uppercase tracking-widest text-center">
+                  <div className="p-4 rounded-2xl bg-red-500/10 text-red-500 text-[10px] font-black uppercase tracking-widest text-center border border-red-500/20">
                     {errorMsg}
                   </div>
                 )}
 
                 <button type="submit" disabled={status === 'loading'}
-                  className="w-full py-5 rounded-2xl bg-black text-white font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-black/10 hover:bg-orange-500 transition-all flex items-center justify-center gap-3 disabled:opacity-50">
+                  className="w-full py-5 rounded-2xl bg-white text-black font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-black/10 hover:bg-orange-500 hover:text-white transition-all flex items-center justify-center gap-3 disabled:opacity-50">
                   {status === 'loading' ? 'Sending...' : 'Submit Interest'}
                   {!status === 'loading' && <Send size={14} />}
                 </button>

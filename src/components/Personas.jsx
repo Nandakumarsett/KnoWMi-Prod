@@ -545,15 +545,15 @@ export default function Personas() {
   }, [])
 
   return (
-    <section id="personas" className="section-pad snap-section min-h-screen flex items-center" style={{ background: 'var(--off)' }} ref={ref}>
+    <section id="personas" className="section-pad min-h-screen flex items-center bg-black" ref={ref}>
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-14 reveal">
-          <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-orange-50 border border-orange-100">
-            <span className="text-[10px] font-black uppercase tracking-widest text-orange-600">
+          <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
+            <span className="text-[10px] font-black uppercase tracking-widest text-orange-500">
               Pick Your Identity
             </span>
           </div>
-          <h2 className="text-5xl md:text-7xl font-display font-black text-black mb-6 tracking-tight leading-[1.05]">
+          <h2 className="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-[1.05]">
             What do they see <br />
             <span className="text-orange-500 italic">when they scan you?</span>
           </h2>
@@ -576,11 +576,11 @@ export default function Personas() {
               onMouseLeave={e => {
                 e.currentTarget.style.transform = 'translateY(0)'
                 e.currentTarget.style.boxShadow = 'none'
-                e.currentTarget.style.borderColor = 'var(--border)'
-                e.currentTarget.querySelector('.pname').style.color = 'var(--ink)'
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)'
+                e.currentTarget.querySelector('.pname').style.color = '#fff'
               }}>
               <span className="persona-emoji" role="img" aria-label={p.name}>{p.emoji}</span>
-              <div className="pname persona-name" style={{ color: 'var(--ink)' }}>{p.name}</div>
+              <div className="pname persona-name" style={{ color: '#fff' }}>{p.name}</div>
               <div className="persona-desc">{p.desc}</div>
               <div className="mt-3 text-[11px] font-semibold transition-colors" style={{ color: p.color }}>
                 Tap to preview →
@@ -590,7 +590,7 @@ export default function Personas() {
         </div>
 
         <div className="text-center mt-12 reveal">
-          <p className="text-sm mb-4" style={{ color: 'var(--ink3)' }}>
+          <p className="text-sm text-neutral-400 mb-4">
             Not sure which fits you? You can always update your persona later — for free.
           </p>
           <a href="#pricing" className="btn-primary btn-base px-7 py-3.5 text-sm inline-flex items-center gap-2">
@@ -613,8 +613,8 @@ export default function Personas() {
           border-radius: 24px;
           padding: 32px 24px;
           text-align: center;
-          border: 1.5px solid var(--border);
-          background: #fff;
+          border: 1.5px solid rgba(255,255,255,0.05);
+          background: #111;
           cursor: pointer;
           position: relative;
           overflow: hidden;
@@ -622,7 +622,7 @@ export default function Personas() {
         }
         .persona-emoji { font-size: 40px; margin-bottom: 16px; display: block; }
         .persona-name { font-family: 'Fraunces',serif; font-size: 16px; font-weight: 700; transition: color 0.2s; }
-        .persona-desc { font-size: 12px; color: var(--ink4); margin-top: 8px; line-height: 1.5; }
+        .persona-desc { font-size: 12px; color: #888; margin-top: 8px; line-height: 1.5; }
         @media (max-width: 900px) { .personas-grid { grid-template-columns: repeat(2,1fr); gap: 16px; } }
         @media (max-width: 480px) { .personas-grid { grid-template-columns: 1fr; } }
       `}</style>

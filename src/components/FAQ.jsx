@@ -36,7 +36,7 @@ function FAQItem({ q, a, isOpen, onClick, index }) {
   return (
     <div
       className={`rounded-2xl overflow-hidden transition-all duration-200 reveal reveal-delay-${(index % 3) + 1}`}
-      style={{ border: `1px solid ${isOpen ? 'var(--saffron)' : 'var(--border)'}`, background: isOpen ? 'var(--saffron-light)' : '#fff' }}
+      style={{ border: `1px solid ${isOpen ? 'var(--saffron)' : 'rgba(255,255,255,0.05)'}`, background: isOpen ? 'rgba(249,115,22,0.1)' : '#111' }}
     >
       <button
         className="w-full flex items-start justify-between gap-4 p-6 text-left"
@@ -44,18 +44,18 @@ function FAQItem({ q, a, isOpen, onClick, index }) {
         aria-expanded={isOpen}
         aria-controls={`faq-answer-${index}`}
       >
-        <span className="font-semibold text-sm leading-snug" style={{ color: 'var(--ink)' }}>
+        <span className="font-semibold text-sm leading-snug text-white">
           {q}
         </span>
         <span
           className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-200"
           style={{
-            background: isOpen ? 'var(--saffron)' : 'var(--border2)',
+            background: isOpen ? 'var(--saffron)' : 'rgba(255,255,255,0.1)',
             transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',
           }}
           aria-hidden="true"
         >
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={isOpen ? '#fff' : 'var(--ink3)'} strokeWidth="3" strokeLinecap="round">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={isOpen ? '#fff' : '#888'} strokeWidth="3" strokeLinecap="round">
             <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
         </span>
@@ -66,7 +66,7 @@ function FAQItem({ q, a, isOpen, onClick, index }) {
         className="overflow-hidden transition-all duration-300"
         style={{ maxHeight: isOpen ? '300px' : '0', opacity: isOpen ? 1 : 0 }}
       >
-        <p className="px-6 pb-6 text-sm leading-relaxed" style={{ color: 'var(--ink3)' }}>
+        <p className="px-6 pb-6 text-sm leading-relaxed text-neutral-400">
           {a}
         </p>
       </div>
@@ -79,13 +79,13 @@ export default function FAQ() {
   const ref = useReveal()
 
   return (
-    <section id="faq" className="section-pad snap-section min-h-screen flex items-center" style={{ background: 'var(--off)' }} ref={ref}>
+    <section id="faq" className="section-pad min-h-screen flex items-center bg-black" ref={ref}>
       <div className="max-w-[800px] mx-auto px-6">
         <div className="text-center mb-14 reveal">
-          <span className="tag mb-4 inline-block" style={{ background: 'var(--navy-light)', color: 'var(--navy)' }}>
+          <span className="tag mb-4 inline-block bg-orange-500/10 text-orange-500 border border-orange-500/20">
             FAQs
           </span>
-          <h2 className="font-display font-bold mb-4" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: 'var(--ink)' }}>
+          <h2 className="font-display font-bold mb-4 text-white" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
             Questions? <span className="italic gradient-text">We've Got Answers.</span>
           </h2>
         </div>
