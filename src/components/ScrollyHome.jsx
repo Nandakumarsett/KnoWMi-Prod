@@ -106,34 +106,29 @@ export default function ScrollyHome() {
         </div>
       </section>
 
-      {/* 2. Fabric Section */}
-      <section className="fabric-section min-h-[100svh] w-full relative bg-black flex items-center py-24">
+      {/* 2. Fabric Detail Section */}
+      <section className="fabric-section min-h-[100svh] w-full relative bg-black flex items-center py-24 overflow-hidden">
+        {/* Background Image with Anime Shirt */}
         <div className="absolute inset-0 z-0">
            <img 
-              src="/assets/scrolly/fabric_macro.png" 
-              alt="Fabric Macro" 
-              className="w-full h-full object-cover opacity-30 mix-blend-screen"
+              src="/assets/scrolly/anime_shirt.jpg" 
+              alt="Anime Shirt Background" 
+              className="w-full h-full object-cover opacity-60 mix-blend-luminosity scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+            {/* Gradients to ensure text readability against the potentially bright background */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-black/30" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60" />
         </div>
-        <div className="fabric-text relative z-10 max-w-[1400px] mx-auto px-6 w-full flex flex-col lg:flex-row items-center justify-between gap-12">
-          <div className="max-w-2xl lg:w-1/2">
+        
+        {/* Text Content */}
+        <div className="fabric-text relative z-10 max-w-[1400px] mx-auto px-6 w-full">
+          <div className="max-w-3xl">
             <h2 className="text-5xl md:text-8xl font-black mb-8 uppercase leading-[0.9] tracking-tighter text-white">
               220 GSM<br/>Heavyweight.<br/><span className="text-orange-500">Drop Shoulder.</span>
             </h2>
-            <p className="text-xl md:text-2xl text-neutral-300 font-medium max-w-lg">Uncompromised comfort meets structured streetwear aesthetic. Designed to last a lifetime.</p>
-          </div>
-          
-          <div className="lg:w-1/2 w-full flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-2xl aspect-[4/3] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_0_80px_rgba(249,115,22,0.1)] group">
-              <img 
-                src="/assets/scrolly/anime_shirt.jpg" 
-                alt="Heavyweight Shirt" 
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.03]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            </div>
+            <p className="text-xl md:text-3xl text-neutral-300 font-medium max-w-xl leading-relaxed">
+              Uncompromised comfort meets structured streetwear aesthetic. Designed to last a lifetime.
+            </p>
           </div>
         </div>
       </section>
