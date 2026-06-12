@@ -129,20 +129,24 @@ export default function ScrollyHome() {
 
       {/* 3. QR Section */}
       <section className="qr-section min-h-[100svh] w-full relative bg-black flex flex-col items-center justify-center py-24 px-6">
-        <div className="max-w-7xl w-full mx-auto">
+        <div className="max-w-[1400px] w-full mx-auto">
+          <div className="mb-12 md:mb-16 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-8">
+            <h2 className="text-5xl md:text-8xl font-black uppercase text-white leading-[0.9] tracking-tighter">
+              Invisible <br className="hidden md:block"/><span className="text-orange-500">Tech.</span>
+            </h2>
+            <p className="text-lg md:text-2xl text-neutral-400 font-medium max-w-md text-left">
+              The embedded QR tag. Scan once, bind forever. Your digital identity worn proudly.
+            </p>
+          </div>
+          
           <div className="qr-glow relative w-full aspect-square md:aspect-video rounded-[2.5rem] overflow-hidden shadow-[0_0_120px_rgba(249,115,22,0.15)] border border-white/10 group">
             <img 
               src="/assets/scrolly/invisible_tech_new.jpg" 
-              alt="QR Code" 
-              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              alt="QR Code Grid" 
+              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.02]"
             />
-            {/* Subtle overlay instead of heavy black gradient */}
+            {/* Subtle interactive overlay */}
             <div className="absolute inset-0 bg-black/10 transition-colors group-hover:bg-black/0" />
-            
-            <div className="absolute bottom-6 left-6 md:bottom-12 md:left-12 z-10 max-w-xl p-8 rounded-3xl bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl">
-              <h2 className="text-4xl md:text-7xl font-black uppercase mb-4 text-white leading-none tracking-tighter">Invisible <br/><span className="text-orange-500">Tech.</span></h2>
-              <p className="text-lg md:text-2xl text-neutral-200 font-medium">The embedded QR tag. Scan once, bind forever.</p>
-            </div>
           </div>
         </div>
       </section>
