@@ -92,9 +92,12 @@ export default function Collection({ onSelectDesign }) {
 
   return (
     <>
-    <section id="collection" className="py-24 bg-black min-h-screen flex items-center" ref={sectionRef}>
-      <div className="max-w-[1200px] mx-auto px-6 w-full">
-        <div className="max-w-[1000px] mx-auto w-full">
+    <section id="collection" className="py-24 bg-black min-h-screen flex items-center relative overflow-hidden" ref={sectionRef}>
+      {/* Ambient glow */}
+      <div className="absolute top-1/4 left-0 w-1/3 h-[500px] bg-orange-500/5 rounded-full blur-[150px] pointer-events-none" />
+      
+      <div className="max-w-[1400px] mx-auto px-6 w-full relative z-10">
+        <div className="w-full">
           <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-12 gap-8 text-center md:text-left" ref={headerRef}>
             <div className="flex flex-col items-center md:items-start">
               <div className="flex items-center gap-3 mb-3">
@@ -111,7 +114,7 @@ export default function Collection({ onSelectDesign }) {
           </div>
 
         {designs.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" ref={gridRef}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" ref={gridRef}>
             {designs.map((d) => (
               <div key={d.id} className="group relative bg-[#111] rounded-[2.5rem] overflow-hidden border border-white/10 transition-all duration-500 hover:shadow-2xl hover:shadow-orange-500/10 hover:-translate-y-1.5">
                 <div className="aspect-[4/5] overflow-hidden relative bg-black">
@@ -146,7 +149,7 @@ export default function Collection({ onSelectDesign }) {
             <SeeMoreCard />
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" ref={gridRef}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" ref={gridRef}>
             {[
               { id: 'f1', name: 'Original Black', category: 'Classic', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80&w=800' },
               { id: 'f2', name: 'Arctic White', category: 'Minimal', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&q=80&w=800' },

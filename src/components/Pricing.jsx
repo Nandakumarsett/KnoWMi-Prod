@@ -125,7 +125,10 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
   return (
     <>
     <section id="pricing" className="py-32 bg-black relative overflow-hidden min-h-screen flex flex-col justify-center" ref={sectionRef}>
-      <div className="max-w-[1280px] mx-auto px-6 relative z-10 w-full">
+      {/* Ambient background glow */}
+      <div className="absolute top-1/2 left-1/4 w-1/2 h-[600px] bg-orange-500/5 rounded-full blur-[150px] -translate-y-1/2 pointer-events-none" />
+
+      <div className="max-w-[1400px] mx-auto px-6 relative z-10 w-full">
         
         {/* Global Founding Banner */}
         <div className="mb-20 text-center" ref={headerRef}>
@@ -148,7 +151,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-[1100px] mx-auto pricing-grid">
+        <div className="grid md:grid-cols-3 gap-8 max-w-[1200px] mx-auto pricing-grid">
           {products.map((product, i) => {
             return (
               <div key={product.id} 

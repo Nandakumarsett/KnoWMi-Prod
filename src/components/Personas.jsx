@@ -587,8 +587,11 @@ export default function Personas() {
   }, [dynamicPersonas])
 
   return (
-    <section id="personas" className="py-24 bg-black relative" ref={sectionRef}>
-      <div className="max-w-[1200px] mx-auto px-6">
+    <section id="personas" className="py-24 bg-black relative overflow-hidden" ref={sectionRef}>
+      {/* Ambient glow */}
+      <div className="absolute bottom-1/4 right-0 w-1/3 h-[500px] bg-orange-500/5 rounded-full blur-[150px] pointer-events-none" />
+
+      <div className="max-w-[1400px] mx-auto px-6 relative z-10">
         <div className="text-center mb-14" ref={headerRef}>
           <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
             <span className="text-[10px] font-black uppercase tracking-widest text-orange-500">
@@ -648,13 +651,13 @@ export default function Personas() {
         .personas-grid {
           display: grid;
           grid-template-columns: repeat(3,1fr);
-          gap: 24px;
+          gap: 32px;
           margin: 56px auto 0;
-          max-width: 900px;
+          max-width: 1100px;
         }
         .persona-card {
-          border-radius: 24px;
-          padding: 32px 24px;
+          border-radius: 2.5rem;
+          padding: 48px 32px;
           text-align: center;
           border: 1.5px solid rgba(255,255,255,0.05);
           background: #111;
@@ -663,9 +666,9 @@ export default function Personas() {
           overflow: hidden;
           transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
         }
-        .persona-emoji { font-size: 40px; margin-bottom: 16px; display: block; }
-        .persona-name { font-family: 'Fraunces',serif; font-size: 16px; font-weight: 700; transition: color 0.2s; }
-        .persona-desc { font-size: 12px; color: #888; margin-top: 8px; line-height: 1.5; }
+        .persona-emoji { font-size: 56px; margin-bottom: 24px; display: block; }
+        .persona-name { font-family: 'Fraunces',serif; font-size: 20px; font-weight: 700; transition: color 0.2s; }
+        .persona-desc { font-size: 14px; color: #888; margin-top: 12px; line-height: 1.6; }
         @media (max-width: 900px) { .personas-grid { grid-template-columns: repeat(2,1fr); gap: 16px; } }
         @media (max-width: 480px) { .personas-grid { grid-template-columns: 1fr; } }
       `}</style>

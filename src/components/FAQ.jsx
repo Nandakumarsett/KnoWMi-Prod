@@ -1,5 +1,8 @@
-import { useState } from 'react'
-import { useReveal } from '../hooks/useReveal'
+import { useState, useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const faqs = [
   {
@@ -32,10 +35,11 @@ const faqs = [
   },
 ]
 
-function FAQItem({ q, a, isOpen, onClick, index }) {
+function FAQItem({ q, a, isOpen, onClick, itemRef }) {
   return (
     <div
-      className={`rounded-2xl overflow-hidden transition-all duration-200 reveal reveal-delay-${(index % 3) + 1}`}
+      ref={itemRef}
+      className="rounded-2xl overflow-hidden transition-all duration-200"
       style={{ border: `1px solid ${isOpen ? 'var(--saffron)' : 'rgba(255,255,255,0.05)'}`, background: isOpen ? 'rgba(249,115,22,0.1)' : '#111' }}
     >
       <button
@@ -76,47 +80,112 @@ function FAQItem({ q, a, isOpen, onClick, index }) {
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(0)
-  const ref = useReveal()
+  const sectionRef = useRef(null)
+  const leftColRef = useRef(null)
+  const itemsRef = useRef([])
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Pin/Animate left column
+      gsap.fromTo(leftColRef.current,
+        { opacity: 0, x: -50 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 75%',
+          }
+        }
+      )
+
+      // Stagger right column items
+      gsap.fromTo(itemsRef.current,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: itemsRef.current[0],
+            start: 'top 85%',
+          }
+        }
+      )
+    }, sectionRef)
+    return () => ctx.revert()
+  }, [])
 
   return (
-    <section id="faq" className="section-pad min-h-screen flex items-center bg-black" ref={ref}>
-      <div className="max-w-[800px] mx-auto px-6">
-        <div className="text-center mb-14 reveal">
-          <span className="tag mb-4 inline-block bg-orange-500/10 text-orange-500 border border-orange-500/20">
-            FAQs
-          </span>
-          <h2 className="font-display font-bold mb-4 text-white" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-            Questions? <span className="italic gradient-text">We've Got Answers.</span>
-          </h2>
-        </div>
+    <section id="faq" className="py-32 bg-black relative overflow-hidden" ref={sectionRef}>
+      {/* Ambient background glow */}
+      <div className="absolute top-1/2 left-0 w-1/3 h-[600px] bg-orange-500/5 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
+      
+      <div className="max-w-[1400px] mx-auto px-6 relative z-10">
+        <div className="grid lg:grid-cols-12 gap-16 items-start">
+          
+          {/* Left Column - Header (Sticky on Desktop) */}
+          <div className="lg:col-span-5 lg:sticky lg:top-32" ref={leftColRef}>
+            <span className="tag mb-6 inline-block px-4 py-1.5 rounded-full bg-orange-500/10 text-orange-500 border border-orange-500/20 text-[10px] font-black uppercase tracking-widest">
+              FAQs
+            </span>
+            <h2 className="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-[1.05]">
+              Questions? <br/>
+              <span className="italic text-orange-500">We've Got Answers.</span>
+            </h2>
+            <p className="text-lg text-neutral-400 font-medium mb-10 max-w-md">
+              Everything you need to know about the product, shipping, and the digital profile experience.
+            </p>
+            
+            <div className="hidden lg:block">
+              <p className="text-sm text-neutral-500">
+                Still have questions?{' '}
+                <a
+                  href="https://wa.me/917981325397"
+                  className="font-bold text-orange-500 hover:text-orange-400 transition-colors underline underline-offset-4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Opens in a new tab"
+                >
+                  Chat with us on WhatsApp →
+                </a>
+              </p>
+            </div>
+          </div>
 
-        <div className="flex flex-col gap-3">
-          {faqs.map((faq, i) => (
-            <FAQItem
-              key={i}
-              index={i}
-              q={faq.q}
-              a={faq.a}
-              isOpen={openIndex === i}
-              onClick={() => setOpenIndex(openIndex === i ? -1 : i)}
-            />
-          ))}
-        </div>
+          {/* Right Column - Accordions */}
+          <div className="lg:col-span-7 flex flex-col gap-4">
+            {faqs.map((faq, i) => (
+              <FAQItem
+                key={i}
+                itemRef={el => itemsRef.current[i] = el}
+                q={faq.q}
+                a={faq.a}
+                isOpen={openIndex === i}
+                onClick={() => setOpenIndex(openIndex === i ? -1 : i)}
+              />
+            ))}
+            
+            <div className="lg:hidden mt-8 text-center">
+              <p className="text-sm text-neutral-500">
+                Still have questions?{' '}
+                <a
+                  href="https://wa.me/917981325397"
+                  className="font-bold text-orange-500 hover:text-orange-400 transition-colors underline underline-offset-4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Opens in a new tab"
+                >
+                  Chat with us on WhatsApp →
+                </a>
+              </p>
+            </div>
+          </div>
 
-        <div className="mt-10 text-center reveal">
-          <p className="text-sm" style={{ color: 'var(--ink3)' }}>
-            Still have questions?{' '}
-            <a
-              href="https://wa.me/917981325397"
-              className="font-semibold underline underline-offset-2 transition-colors duration-200"
-              style={{ color: 'var(--saffron)' }}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Opens in a new tab"
-            >
-              Chat with us on WhatsApp →
-            </a>
-          </p>
         </div>
       </div>
     </section>

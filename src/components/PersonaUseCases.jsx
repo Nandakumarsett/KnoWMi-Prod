@@ -91,8 +91,12 @@ export default function PersonaUseCases() {
   }, [])
 
   return (
-    <section id="use-cases" className="py-32 bg-[#0a0a0a] min-h-screen flex items-center" ref={sectionRef}>
-      <div className="max-w-[1200px] mx-auto px-6">
+    <section id="use-cases" className="py-32 bg-[#0a0a0a] min-h-screen flex items-center relative overflow-hidden" ref={sectionRef}>
+      {/* Ambient background glow */}
+      <div className="absolute top-0 right-0 w-1/2 h-[500px] bg-orange-500/5 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-1/3 h-[400px] bg-orange-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="max-w-[1400px] mx-auto px-6 relative z-10 w-full">
         <div className="text-center mb-24" ref={headerRef}>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 mb-6 text-orange-500 text-[10px] font-black uppercase tracking-widest">
             Built For You
@@ -106,9 +110,9 @@ export default function PersonaUseCases() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-8 xl:gap-12">
           {useCases.map((uc, i) => (
-            <div key={uc.id} ref={el => cardsRef.current[i] = el} className="group relative bg-[#111] rounded-[3rem] p-10 border border-white/10 hover:shadow-[0_0_40px_rgba(249,115,22,0.1)] hover:border-orange-500/30 transition-all duration-500 overflow-hidden flex flex-col items-center text-center lg:items-start lg:text-left">
+            <div key={uc.id} ref={el => cardsRef.current[i] = el} className="group relative bg-[#111] rounded-[3rem] p-10 xl:p-12 border border-white/10 hover:shadow-[0_0_40px_rgba(249,115,22,0.1)] hover:border-orange-500/30 transition-all duration-500 overflow-hidden flex flex-col items-center text-center lg:items-start lg:text-left">
               <div className="relative z-10 w-full flex flex-col items-center lg:items-start">
                 <div className="w-14 h-14 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-500 mb-8">
                   {uc.icon}
