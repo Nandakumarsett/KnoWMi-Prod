@@ -18,6 +18,7 @@ export default function CatalogAdmin() {
   const [files, setFiles] = useState({ front: null, back: null, model: null, image4: null, image5: null, image6: null })
   const [uploading, setUploading] = useState(false)
   const [editingInventory, setEditingInventory] = useState(null) // design id being edited
+  const [editingDetails, setEditingDetails] = useState(null) // design object being edited
   const [colorDraft, setColorDraft] = useState([])
 
   useEffect(() => { fetchDesigns() }, [])
@@ -47,36 +48,41 @@ export default function CatalogAdmin() {
     e.preventDefault()
     setUploading(true)
     try {
-      if (!files.front && !files.back && !files.model) {
+      if (!editingDetails && !files.front && !files.back && !files.model) {
         alert('Please upload at least one image.')
         setUploading(false)
         return
       }
-      const frontUrl = await uploadImage(files.front)
-      const backUrl = await uploadImage(files.back)
-      const modelUrl = await uploadImage(files.model)
-      const img4Url = await uploadImage(files.image4)
-      const img5Url = await uploadImage(files.image5)
-      const img6Url = await uploadImage(files.image6)
 
-      const { error } = await supabase.from('persona_designs').insert([{
-        category: 'universal',
+      const updatePayload = {
         name: formData.name,
         price: formData.price,
-        front_image_url: frontUrl,
-        back_image_url: backUrl,
-        model_image_url: modelUrl,
-        image4_url: img4Url,
-        image5_url: img5Url,
-        image6_url: img6Url,
-        available_colors: [],
-        total_stock: 0,
-        is_available: true,
-      }])
-      if (error) throw error
-      alert('Design added!')
+      }
+
+      if (files.front) updatePayload.front_image_url = await uploadImage(files.front)
+      if (files.back) updatePayload.back_image_url = await uploadImage(files.back)
+      if (files.model) updatePayload.model_image_url = await uploadImage(files.model)
+      if (files.image4) updatePayload.image4_url = await uploadImage(files.image4)
+      if (files.image5) updatePayload.image5_url = await uploadImage(files.image5)
+      if (files.image6) updatePayload.image6_url = await uploadImage(files.image6)
+
+      if (editingDetails) {
+        const { error } = await supabase.from('persona_designs').update(updatePayload).eq('id', editingDetails.id)
+        if (error) throw error
+        alert('Design updated!')
+      } else {
+        updatePayload.category = 'universal'
+        updatePayload.available_colors = []
+        updatePayload.total_stock = 0
+        updatePayload.is_available = true
+        const { error } = await supabase.from('persona_designs').insert([updatePayload])
+        if (error) throw error
+        alert('Design added!')
+      }
+      
       setFormData({ name: '', price: 999 })
       setFiles({ front: null, back: null, model: null, image4: null, image5: null, image6: null })
+      setEditingDetails(null)
       document.getElementById('catalog-form').reset()
       fetchDesigns()
     } catch (err) {
@@ -84,6 +90,14 @@ export default function CatalogAdmin() {
     } finally {
       setUploading(false)
     }
+  }
+
+  const handleEditClick = (design) => {
+    setEditingDetails(design)
+    setFormData({ name: design.name, price: design.price || 999 })
+    setFiles({ front: null, back: null, model: null, image4: null, image5: null, image6: null })
+    document.getElementById('catalog-form').reset()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleDelete = async (id) => {
@@ -130,8 +144,10 @@ export default function CatalogAdmin() {
       {/* Upload Form */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1">
-          <form id="catalog-form" onSubmit={handleSubmit} className="bg-white p-6 rounded-xl border border-[var(--border2)]">
-            <h2 className="text-lg font-bold mb-4 font-display text-[var(--ink)]">Add New Design</h2>
+          <form id="catalog-form" onSubmit={handleSubmit} className="bg-white p-6 rounded-xl border border-[var(--border2)] sticky top-28">
+            <h2 className="text-lg font-bold mb-4 font-display text-[var(--ink)]">
+              {editingDetails ? 'Edit Design' : 'Add New Design'}
+            </h2>
             <div className="mb-4">
               <label className="block text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-1">Design Name</label>
               <input type="text" required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} placeholder="e.g. Neon Glitch V1" className="w-full px-3 py-2 rounded-lg border border-[var(--border2)] bg-[var(--off)] outline-none text-sm" />
@@ -148,9 +164,25 @@ export default function CatalogAdmin() {
                 </div>
               ))}
             </div>
-            <button type="submit" disabled={uploading} className="w-full py-3 rounded-xl font-bold text-white text-sm disabled:opacity-50" style={{ background: 'linear-gradient(135deg, var(--sf), var(--gold))' }}>
-              {uploading ? 'Uploading...' : 'Publish Design'}
-            </button>
+            <div className="flex flex-col gap-2">
+              <button type="submit" disabled={uploading} className="w-full py-3 rounded-xl font-bold text-white text-sm disabled:opacity-50" style={{ background: 'linear-gradient(135deg, var(--sf), var(--gold))' }}>
+                {uploading ? 'Saving...' : editingDetails ? 'Update Design' : 'Publish Design'}
+              </button>
+              {editingDetails && (
+                <button 
+                  type="button" 
+                  onClick={() => {
+                    setEditingDetails(null)
+                    setFormData({ name: '', price: 999 })
+                    setFiles({ front: null, back: null, model: null, image4: null, image5: null, image6: null })
+                    document.getElementById('catalog-form').reset()
+                  }} 
+                  className="w-full py-3 rounded-xl font-bold text-neutral-500 bg-neutral-100 hover:bg-neutral-200 transition-colors text-sm"
+                >
+                  Cancel Edit
+                </button>
+              )}
+            </div>
           </form>
         </div>
 
@@ -188,7 +220,10 @@ export default function CatalogAdmin() {
                       </div>
                       <div className="flex gap-3 mt-2">
                         <button onClick={() => openInventoryEditor(d)} className="text-[10px] font-bold text-blue-500 hover:text-blue-700 uppercase tracking-wider">
-                          Manage Colors & Stock
+                          Stock
+                        </button>
+                        <button onClick={() => handleEditClick(d)} className="text-[10px] font-bold text-orange-500 hover:text-orange-700 uppercase tracking-wider">
+                          Edit
                         </button>
                         <button onClick={() => handleDelete(d.id)} className="text-[10px] font-bold text-red-500 hover:text-red-700 uppercase tracking-wider">
                           Delete
