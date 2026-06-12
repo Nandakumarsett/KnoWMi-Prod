@@ -117,12 +117,23 @@ export default function ScrollyHome() {
             <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
         </div>
-        <div className="fabric-text relative z-10 max-w-7xl mx-auto px-6 w-full">
-          <div className="max-w-2xl">
-            <h2 className="text-5xl md:text-8xl font-black mb-8 uppercase leading-[0.9] tracking-tighter">
+        <div className="fabric-text relative z-10 max-w-[1400px] mx-auto px-6 w-full flex flex-col lg:flex-row items-center justify-between gap-12">
+          <div className="max-w-2xl lg:w-1/2">
+            <h2 className="text-5xl md:text-8xl font-black mb-8 uppercase leading-[0.9] tracking-tighter text-white">
               220 GSM<br/>Heavyweight.<br/><span className="text-orange-500">Drop Shoulder.</span>
             </h2>
             <p className="text-xl md:text-2xl text-neutral-300 font-medium max-w-lg">Uncompromised comfort meets structured streetwear aesthetic. Designed to last a lifetime.</p>
+          </div>
+          
+          <div className="lg:w-1/2 w-full flex justify-center lg:justify-end">
+            <div className="relative w-full max-w-2xl aspect-[4/3] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_0_80px_rgba(249,115,22,0.1)] group">
+              <img 
+                src="/assets/scrolly/anime_shirt.jpg" 
+                alt="Heavyweight Shirt" 
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.03]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </div>
           </div>
         </div>
       </section>
