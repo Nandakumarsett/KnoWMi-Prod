@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { ShoppingBag, X } from 'lucide-react';
 
 const RECENT_PURCHASES = [
-  { name: 'Rahul', city: 'Delhi', plan: 'Creator Plan' },
-  { name: 'Priya', city: 'Bangalore', plan: 'Starter Plan' },
-  { name: 'Arjun', city: 'Pune', plan: 'Creator Plan' },
-  { name: 'Sneha', city: 'Hyderabad', plan: 'Team Plan' },
-  { name: 'Karan', city: 'Mumbai', plan: 'Creator Plan' },
-  { name: 'Ananya', city: 'Chennai', plan: 'Starter Plan' },
-  { name: 'Vikram', city: 'Gurgaon', plan: 'Creator Plan' },
-  { name: 'Neha', city: 'Noida', plan: 'Starter Plan' },
+  { name: 'Rahul', city: 'Delhi', item: 'a KnoWMi T-Shirt' },
+  { name: 'Priya', city: 'Bangalore', item: 'an Oversized Tee' },
+  { name: 'Arjun', city: 'Pune', item: 'a Phygital T-Shirt' },
+  { name: 'Sneha', city: 'Hyderabad', item: 'a Classic Fit Tee' },
+  { name: 'Karan', city: 'Mumbai', item: 'an Oversized Tee' },
+  { name: 'Ananya', city: 'Chennai', item: 'a KnoWMi T-Shirt' },
+  { name: 'Vikram', city: 'Gurgaon', item: 'a Phygital T-Shirt' },
+  { name: 'Neha', city: 'Noida', item: 'a Classic Fit Tee' },
 ];
 
 const TIME_AGO = ['Just now', '2 mins ago', '5 mins ago', '12 mins ago', '22 mins ago'];
@@ -79,7 +79,7 @@ export default function LiveSalesPopup() {
             Someone from {purchase.city} just bought
           </p>
           <p className="text-sm font-black text-black my-0.5">
-            a {purchase.plan}
+            {purchase.item}
           </p>
           <div className="flex items-center gap-2 mt-1">
             <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">{timeAgo}</p>
