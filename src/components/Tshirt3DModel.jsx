@@ -98,7 +98,7 @@ export default function Tshirt3DModel() {
           }}
         >
           <img
-            src="/assets/scrolly/tshirt_front.png"
+            src="/assets/scrolly/tshirt_front_v2.png"
             alt="KnoWMi T-Shirt Front"
             className="w-full h-full object-contain drop-shadow-[0_20px_60px_rgba(255,85,0,0.15)]"
             draggable={false}
@@ -114,7 +114,7 @@ export default function Tshirt3DModel() {
           }}
         >
           <img
-            src="/assets/scrolly/tshirt_back.png"
+            src="/assets/scrolly/tshirt_back_v2.png"
             alt="KnoWMi T-Shirt Back"
             className="w-full h-full object-contain drop-shadow-[0_20px_60px_rgba(255,85,0,0.15)]"
             draggable={false}
