@@ -224,17 +224,17 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                  </div>
               </div>
               
-              <div className="bg-[#111111] rounded-3xl p-6 text-white flex items-center gap-6 shadow-2xl shadow-neutral-200">
+              <div className="bg-white border border-neutral-100 rounded-3xl p-5 md:p-6 flex items-center gap-5 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-transform duration-500 group">
                  <div className="flex -space-x-3">
                     {[1,2,3].map(i => (
-                      <div key={i} className="w-10 h-10 rounded-full border-2 border-black bg-neutral-800 flex items-center justify-center overflow-hidden">
-                         <img src={`https://i.pravatar.cc/100?u=knowmi${i}`} alt="User" />
+                      <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-neutral-100 flex items-center justify-center overflow-hidden shadow-sm group-hover:scale-105 transition-transform">
+                         <img src={`https://i.pravatar.cc/100?u=knowmi${i}`} alt="User" className="w-full h-full object-cover" />
                       </div>
                     ))}
                  </div>
                  <div>
-                   <p className="text-sm font-bold leading-tight">Loved by early adopters.</p>
-                   <p className="text-[11px] text-white/50 font-medium">Join our first 100 founding members today.</p>
+                   <p className="text-sm font-black text-black leading-tight mb-0.5">Loved by early adopters.</p>
+                   <p className="text-[11px] text-neutral-500 font-medium">Join our first 100 founding members today.</p>
                  </div>
               </div>
             </div>
