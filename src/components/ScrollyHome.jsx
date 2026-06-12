@@ -36,19 +36,40 @@ export default function ScrollyHome() {
       }, 0);
 
       // 2. Fabric Section
-      gsap.fromTo('.fabric-text', 
-        { opacity: 0, y: 100 },
-        {
-          opacity: 1, 
-          y: 0,
-          scrollTrigger: {
-            trigger: '.fabric-section',
-            start: 'top 70%',
-            end: 'center center',
-            scrub: 1,
-          }
+      const fabricTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.fabric-section',
+          start: 'top 60%',
+          end: 'center center',
+          scrub: 1,
         }
-      );
+      });
+
+      fabricTl.to('.fabric-title', {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        stagger: 0.2,
+        ease: 'power3.out'
+      })
+      .to('.fabric-badge', {
+        y: 0,
+        opacity: 1,
+        duration: 0.5,
+        ease: 'back.out(1.5)'
+      }, "-=0.5")
+      .to('.fabric-desc', {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: 'power2.out'
+      }, "-=0.5")
+      .to('.fabric-image', {
+        x: 0,
+        opacity: 1,
+        duration: 1.5,
+        ease: 'power3.out'
+      }, "-=1.5");
 
       // 3. QR Section
       gsap.fromTo('.qr-glow', 
@@ -122,29 +143,38 @@ export default function ScrollyHome() {
         
         {/* 2-Column Content */}
         <div className="fabric-text relative z-10 max-w-[1400px] mx-auto px-6 w-full flex flex-col lg:flex-row items-center justify-between gap-12">
-          <div className="max-w-2xl lg:w-1/2">
-            <h2 className="text-5xl md:text-8xl font-black mb-8 uppercase leading-[0.9] tracking-tighter text-white">
-              220 GSM<br/>Heavyweight.<br/><span className="text-orange-500">Drop Shoulder.</span>
-            </h2>
-            <p className="text-xl md:text-2xl text-neutral-300 font-medium max-w-lg mb-8">Uncompromised comfort meets structured streetwear aesthetic. Designed to last a lifetime.</p>
+          <div className="max-w-3xl lg:w-3/5 flex flex-col gap-8 md:gap-12 z-10">
+            {/* 220 GSM */}
+            <div className="overflow-hidden">
+              <h2 className="fabric-title text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] tracking-tighter text-white translate-y-full opacity-0">
+                220 GSM<br/>Heavyweight.<br/><span className="text-orange-500">Drop Shoulder.</span>
+              </h2>
+            </div>
+
+            {/* 200 GSM */}
+            <div className="overflow-hidden">
+              <h2 className="fabric-title text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] tracking-tighter text-neutral-600 hover:text-neutral-300 transition-colors duration-500 cursor-pointer translate-y-full opacity-0">
+                200 GSM<br/>Regular Tee.
+              </h2>
+            </div>
             
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-4 group">
-                <span className="w-12 h-[1px] bg-white/30 group-hover:bg-white transition-colors" />
-                <span className="text-lg md:text-xl text-neutral-400 group-hover:text-white transition-colors font-medium">200 GSM Regular Tee</span>
-              </div>
-              <div className="flex items-center gap-4 group opacity-70">
-                <span className="w-12 h-[1px] bg-white/20" />
-                <span className="text-lg md:text-xl text-neutral-500 font-medium flex items-center">
-                  Premium Hoodie 
-                  <span className="text-orange-500 text-xs font-bold tracking-widest uppercase ml-4 px-3 py-1 bg-orange-500/10 rounded-full border border-orange-500/20">Coming Soon</span>
-                </span>
+            {/* Hoodie */}
+            <div className="overflow-hidden relative flex items-start gap-4">
+              <h2 className="fabric-title text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] tracking-tighter text-neutral-800 translate-y-full opacity-0">
+                Premium<br/>Hoodie.
+              </h2>
+              <div className="fabric-badge opacity-0 -translate-y-4">
+                <span className="text-orange-500 text-xs md:text-sm font-bold tracking-widest uppercase px-3 py-1 bg-orange-500/10 rounded-full border border-orange-500/20 mt-2 block shadow-[0_0_15px_rgba(249,115,22,0.2)]">Coming Soon</span>
               </div>
             </div>
+
+            <p className="fabric-desc text-xl md:text-2xl text-neutral-400 font-medium max-w-lg mt-4 opacity-0 translate-y-8">
+              Uncompromised comfort meets structured streetwear aesthetic. Designed to last a lifetime.
+            </p>
           </div>
           
           <div className="lg:w-1/2 w-full flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-md lg:max-w-xl group">
+            <div className="fabric-image relative w-full max-w-md lg:max-w-xl group opacity-0 translate-x-12">
               <img 
                 src="/assets/scrolly/anime_shirt_nobg.png" 
                 alt="Anime Shirt" 
