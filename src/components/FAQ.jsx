@@ -35,7 +35,7 @@ const faqs = [
   },
 ]
 
-function FAQItem({ q, a, isOpen, onClick, itemRef }) {
+function FAQItem({ q, a, isOpen, onClick, itemRef, index }) {
   return (
     <div
       ref={itemRef}
@@ -162,6 +162,7 @@ export default function FAQ() {
             {faqs.map((faq, i) => (
               <FAQItem
                 key={i}
+                index={i}
                 itemRef={el => itemsRef.current[i] = el}
                 q={faq.q}
                 a={faq.a}
