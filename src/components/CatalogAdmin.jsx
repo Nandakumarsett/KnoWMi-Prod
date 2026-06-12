@@ -157,12 +157,23 @@ export default function CatalogAdmin() {
               <input type="number" required value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-[var(--border2)] bg-[var(--off)] outline-none text-sm" />
             </div>
             <div className="space-y-3 mb-6">
-              {['front', 'back', 'model', 'image4', 'image5', 'image6'].map(type => (
-                <div key={type}>
-                  <label className="block text-xs font-bold text-[var(--muted)] mb-1 capitalize">{type} Image (Optional)</label>
-                  <input type="file" accept="image/*" onChange={e => handleFileChange(e, type)} className="text-xs" />
+              {['front', 'back', 'model', 'image4', 'image5', 'image6'].map(type => {
+                const existingUrl = editingDetails ? editingDetails[`${type}_image_url`] : null;
+                return (
+                <div key={type} className="flex flex-col gap-1">
+                  <label className="block text-xs font-bold text-[var(--muted)] capitalize">
+                    {type} Image (Optional)
+                  </label>
+                  <div className="flex items-center gap-3">
+                    {existingUrl && (
+                      <div className="w-8 h-8 rounded overflow-hidden border border-neutral-200 shrink-0 bg-neutral-100">
+                        <img src={getAssetUrl(existingUrl)} alt={type} className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                    <input type="file" accept="image/*" onChange={e => handleFileChange(e, type)} className="text-xs w-full" />
+                  </div>
                 </div>
-              ))}
+              )})}
             </div>
             <div className="flex flex-col gap-2">
               <button type="submit" disabled={uploading} className="w-full py-3 rounded-xl font-bold text-white text-sm disabled:opacity-50" style={{ background: 'linear-gradient(135deg, var(--sf), var(--gold))' }}>
