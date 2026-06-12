@@ -331,7 +331,7 @@ export default function Shop() {
 
               <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
                 {/* Left Column: Grid of high-quality product images */}
-                <div className="w-full lg:w-3/5 grid grid-cols-2 gap-4">
+                <div className="w-full lg:w-[40%] grid grid-cols-2 gap-2 lg:gap-3">
                   {[
                     selectedDesign.front_image_url,
                     selectedDesign.model_image_url,
@@ -344,7 +344,7 @@ export default function Shop() {
                     .map((imgUrl, index) => (
                       <div 
                         key={index} 
-                        className={`w-full aspect-[3/4] bg-neutral-50 overflow-hidden relative border border-neutral-100 ${index === 0 ? 'col-span-2 aspect-[4/5]' : ''}`}
+                        className="w-full aspect-[4/5] bg-neutral-50 overflow-hidden relative border border-neutral-100 rounded-lg"
                       >
                         <img 
                           src={getAssetUrl(imgUrl)} 
@@ -352,18 +352,18 @@ export default function Shop() {
                           alt={`${selectedDesign.name} view ${index + 1}`}
                         />
                         {imgUrl === selectedDesign.front_image_url && (
-                          <span className="absolute bottom-4 left-4 bg-black/80 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">
-                            Front View
+                          <span className="absolute bottom-2 left-2 bg-black/80 text-white text-[8px] font-black uppercase tracking-widest px-2 py-0.5">
+                            Front
                           </span>
                         )}
                         {imgUrl === selectedDesign.model_image_url && imgUrl !== selectedDesign.front_image_url && (
-                          <span className="absolute bottom-4 left-4 bg-black/80 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">
-                            Model Look
+                          <span className="absolute bottom-2 left-2 bg-black/80 text-white text-[8px] font-black uppercase tracking-widest px-2 py-0.5">
+                            Model
                           </span>
                         )}
                         {imgUrl === selectedDesign.back_image_url && (
-                          <span className="absolute bottom-4 left-4 bg-black/80 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">
-                            Back View
+                          <span className="absolute bottom-2 left-2 bg-black/80 text-white text-[8px] font-black uppercase tracking-widest px-2 py-0.5">
+                            Back
                           </span>
                         )}
                       </div>
