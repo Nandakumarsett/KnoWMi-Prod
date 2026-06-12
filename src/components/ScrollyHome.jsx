@@ -8,6 +8,8 @@ export default function ScrollyHome() {
   const containerRef = useRef(null);
 
   useEffect(() => {
+    ScrollTrigger.config({ ignoreMobileResize: true });
+    
     let ctx = gsap.context(() => {
       
       // 1. Hero Reveal
