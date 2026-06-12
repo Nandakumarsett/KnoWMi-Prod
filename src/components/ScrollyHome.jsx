@@ -130,16 +130,18 @@ export default function ScrollyHome() {
       {/* 3. QR Section */}
       <section className="qr-section min-h-[100svh] w-full relative bg-black flex flex-col items-center justify-center py-24 px-6">
         <div className="max-w-7xl w-full mx-auto">
-          <div className="qr-glow relative w-full aspect-video md:aspect-[21/9] rounded-[2.5rem] overflow-hidden shadow-[0_0_120px_rgba(249,115,22,0.15)] border border-white/10 group">
+          <div className="qr-glow relative w-full aspect-square md:aspect-video rounded-[2.5rem] overflow-hidden shadow-[0_0_120px_rgba(249,115,22,0.15)] border border-white/10 group">
             <img 
               src="/assets/scrolly/invisible_tech_new.jpg" 
               alt="QR Code" 
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-            <div className="absolute bottom-8 left-8 md:bottom-16 md:left-16 z-10 max-w-xl">
+            {/* Subtle overlay instead of heavy black gradient */}
+            <div className="absolute inset-0 bg-black/10 transition-colors group-hover:bg-black/0" />
+            
+            <div className="absolute bottom-6 left-6 md:bottom-12 md:left-12 z-10 max-w-xl p-8 rounded-3xl bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl">
               <h2 className="text-4xl md:text-7xl font-black uppercase mb-4 text-white leading-none tracking-tighter">Invisible <br/><span className="text-orange-500">Tech.</span></h2>
-              <p className="text-lg md:text-2xl text-neutral-300 font-medium">The embedded QR tag. Scan once, bind forever.</p>
+              <p className="text-lg md:text-2xl text-neutral-200 font-medium">The embedded QR tag. Scan once, bind forever.</p>
             </div>
           </div>
         </div>
