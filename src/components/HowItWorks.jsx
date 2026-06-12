@@ -1,5 +1,9 @@
-import { useReveal } from '../hooks/useReveal'
+import React, { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Shirt, Smartphone, Zap } from 'lucide-react'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const marqueeItems = [
   '🇮🇳 Made in India', '⚡ Instant QR Profile', '📦 Pan India Delivery',
@@ -54,14 +58,71 @@ export function Marquee() {
 }
 
 export function HowItWorks() {
-  const ref = useReveal()
+  const sectionRef = useRef(null)
+  const headerRef = useRef(null)
+  const stepsRef = useRef([])
+  const lineRef = useRef(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header Animation
+      gsap.fromTo(headerRef.current,
+        { opacity: 0, y: 50 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 1, 
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+          }
+        }
+      )
+
+      // Connection Line Drawing
+      gsap.fromTo(lineRef.current,
+        { scaleX: 0, transformOrigin: 'left center' },
+        {
+          scaleX: 1,
+          duration: 1.5,
+          ease: 'power3.inOut',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 60%',
+          }
+        }
+      )
+
+      // Steps Stagger Animation
+      stepsRef.current.forEach((step, i) => {
+        gsap.fromTo(step,
+          { opacity: 0, y: 50, scale: 0.95 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            ease: 'back.out(1.5)',
+            delay: i * 0.2,
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 60%',
+            }
+          }
+        )
+      })
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [])
 
   return (
-    <section id="how-it-works" className="py-32 bg-black min-h-screen flex items-center" ref={ref}>
+    <section id="how-it-works" className="py-32 bg-black min-h-screen flex items-center" ref={sectionRef}>
       <div className="max-w-[1200px] mx-auto px-6">
         {/* Header */}
-        <div className="text-center mb-24 reveal">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-100 mb-6 text-orange-600 text-[10px] font-black uppercase tracking-widest">
+        <div className="text-center mb-24" ref={headerRef}>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 mb-6 text-orange-500 text-[10px] font-black uppercase tracking-widest">
             How It Works
           </div>
           <h2 className="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-[1.05]">
@@ -76,10 +137,10 @@ export function HowItWorks() {
         {/* Steps grid */}
         <div className="grid md:grid-cols-3 gap-12 lg:gap-24 relative">
           {/* Connection Line (Desktop) */}
-          <div className="hidden lg:block absolute top-[45px] left-[15%] right-[15%] h-px bg-white/10" />
+          <div className="hidden lg:block absolute top-[45px] left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-orange-500/0 via-orange-500/50 to-orange-500/0" ref={lineRef} />
           
           {steps.map((step, i) => (
-            <div key={i} className={`reveal reveal-delay-${i + 1} text-center relative z-10`}>
+            <div key={i} className="text-center relative z-10" ref={el => stepsRef.current[i] = el}>
               <div className="w-24 h-24 rounded-[2rem] bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-10 group-hover:scale-105 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.05)]">
                 {step.icon}
               </div>

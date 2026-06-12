@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react'
-import { useReveal } from '../hooks/useReveal'
+import { useState, useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { supabase, getAssetUrl } from '../lib/supabase'
+
+gsap.registerPlugin(ScrollTrigger)
 import { X, Instagram, Youtube, Twitter, Github, Share2, Terminal, ExternalLink, GraduationCap, FileText, Globe, Trophy, Sparkles, TrendingUp, Music, BookOpen, Rocket, Play, Camera, Film } from 'lucide-react'
 import { DeveloperProfile } from './profile/personas/DeveloperProfile'
 import { StudentProfile } from './profile/personas/StudentProfile'
@@ -507,9 +510,11 @@ function ProfileModal({ persona, onClose }) {
 }
 
 export default function Personas() {
-  const ref = useReveal()
   const [active, setActive] = useState(null)
   const [dynamicPersonas, setDynamicPersonas] = useState(initialPersonas)
+  const sectionRef = useRef(null)
+  const headerRef = useRef(null)
+  const cardsRef = useRef([])
 
   useEffect(() => {
     const loadDynamicData = () => {
@@ -544,10 +549,47 @@ export default function Personas() {
     return () => window.removeEventListener('storage', loadDynamicData)
   }, [])
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header Animation
+      gsap.fromTo(headerRef.current,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 75%',
+          }
+        }
+      )
+
+      // Cards Stagger
+      gsap.fromTo(cardsRef.current,
+        { opacity: 0, y: 100, rotateX: 15 },
+        {
+          opacity: 1,
+          y: 0,
+          rotateX: 0,
+          duration: 1,
+          stagger: 0.15,
+          ease: 'back.out(1.2)',
+          scrollTrigger: {
+            trigger: '.personas-grid',
+            start: 'top 85%',
+          }
+        }
+      )
+    }, sectionRef)
+    return () => ctx.revert()
+  }, [dynamicPersonas])
+
   return (
-    <section id="personas" className="section-pad min-h-screen flex items-center bg-black" ref={ref}>
+    <section id="personas" className="py-24 bg-black relative" ref={sectionRef}>
       <div className="max-w-[1200px] mx-auto px-6">
-        <div className="text-center mb-14 reveal">
+        <div className="text-center mb-14" ref={headerRef}>
           <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
             <span className="text-[10px] font-black uppercase tracking-widest text-orange-500">
               Pick Your Identity
@@ -562,10 +604,11 @@ export default function Personas() {
           </p>
         </div>
 
-        <div className="personas-grid reveal">
-          {dynamicPersonas.map(p => (
+        <div className="personas-grid" style={{ perspective: '1000px' }}>
+          {dynamicPersonas.map((p, idx) => (
             <div key={p.id} onClick={() => setActive(p)}
               className="persona-card"
+              ref={el => cardsRef.current[idx] = el}
               style={{ '--pc': p.color }}
               onMouseEnter={e => {
                 e.currentTarget.style.transform = 'translateY(-6px)'
@@ -589,7 +632,7 @@ export default function Personas() {
           ))}
         </div>
 
-        <div className="text-center mt-12 reveal">
+        <div className="text-center mt-12" style={{ clear: 'both' }}>
           <p className="text-sm text-neutral-400 mb-4">
             Not sure which fits you? You can always update your persona later — for free.
           </p>

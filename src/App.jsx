@@ -18,6 +18,7 @@ import QRIntercept from './pages/QRIntercept'
 import IdentityStudio from './pages/IdentityStudio'
 import VibePage from './pages/VibePage'
 import InsightsPage from './pages/InsightsPage'
+import SmoothScroll from './components/SmoothScroll'
 
 
 export default function App() {
@@ -80,28 +81,29 @@ export default function App() {
   }, [])
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/studio" element={<IdentityStudio />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/s/:code" element={<ScanHandler />} />
-        <Route path="/p/:username" element={<PublicProfile />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/press" element={<PressKit />} />
-        <Route path="/legal" element={<Legal />} />
-        <Route path="/track" element={<TrackOrder />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="/q/:token" element={<QRIntercept />} />
-        <Route path="/dashboard/vibe" element={<VibePage />} />
-        <Route path="/insights" element={<InsightsPage />} />
-        {/* Catch-all route to prevent blank pages on invalid URLs */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-
-    </Router>
+    <SmoothScroll>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/studio" element={<IdentityStudio />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/s/:code" element={<ScanHandler />} />
+          <Route path="/p/:username" element={<PublicProfile />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/press" element={<PressKit />} />
+          <Route path="/legal" element={<Legal />} />
+          <Route path="/track" element={<TrackOrder />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/q/:token" element={<QRIntercept />} />
+          <Route path="/dashboard/vibe" element={<VibePage />} />
+          <Route path="/insights" element={<InsightsPage />} />
+          {/* Catch-all route to prevent blank pages on invalid URLs */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </SmoothScroll>
   )
 }

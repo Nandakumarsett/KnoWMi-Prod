@@ -1,5 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { supabase, getAssetUrl } from '../lib/supabase'
+
+gsap.registerPlugin(ScrollTrigger)
 import { ShoppingBag, ArrowRight, Star } from 'lucide-react'
 import LazyImage from './ui/LazyImage'
 
@@ -24,6 +28,53 @@ export default function Collection({ onSelectDesign }) {
     setLoading(false)
   }
 
+  const sectionRef = useRef(null)
+  const headerRef = useRef(null)
+  const gridRef = useRef(null)
+
+  useEffect(() => {
+    if (loading) return;
+
+    const ctx = gsap.context(() => {
+      // Header Animation
+      gsap.fromTo(headerRef.current,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+          }
+        }
+      )
+
+      // Grid Items Stagger Animation
+      if (gridRef.current) {
+        const cards = gridRef.current.children
+        gsap.fromTo(cards,
+          { opacity: 0, y: 60, scale: 0.95 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 1,
+            stagger: 0.1,
+            ease: 'back.out(1.2)',
+            scrollTrigger: {
+              trigger: gridRef.current,
+              start: 'top 80%',
+            }
+          }
+        )
+      }
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [loading, designs])
+
   const SeeMoreCard = () => (
     <a href="/shop" className="min-w-[280px] md:min-w-0 group relative bg-[#111] rounded-[2.5rem] overflow-hidden border border-dashed border-white/10 transition-all duration-500 hover:border-orange-500/50 hover:bg-orange-500/10 flex flex-col items-center justify-center p-8 text-center min-h-[350px]">
       <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 group-hover:text-orange-500 group-hover:border-orange-500/20 group-hover:scale-110 transition-all duration-500 mb-6 shadow-sm group-hover:shadow-xl group-hover:shadow-orange-500/10">
@@ -41,10 +92,10 @@ export default function Collection({ onSelectDesign }) {
 
   return (
     <>
-    <section id="collection" className="py-24 bg-black min-h-screen flex items-center">
+    <section id="collection" className="py-24 bg-black min-h-screen flex items-center" ref={sectionRef}>
       <div className="max-w-[1200px] mx-auto px-6 w-full">
         <div className="max-w-[1000px] mx-auto w-full">
-          <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-12 gap-8 text-center md:text-left">
+          <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-12 gap-8 text-center md:text-left" ref={headerRef}>
             <div className="flex flex-col items-center md:items-start">
               <div className="flex items-center gap-3 mb-3">
                 <div className="inline-block px-3 py-0.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-[9px] font-black uppercase tracking-widest">Live Designs</div>
@@ -60,7 +111,7 @@ export default function Collection({ onSelectDesign }) {
           </div>
 
         {designs.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" ref={gridRef}>
             {designs.map((d) => (
               <div key={d.id} className="group relative bg-[#111] rounded-[2.5rem] overflow-hidden border border-white/10 transition-all duration-500 hover:shadow-2xl hover:shadow-orange-500/10 hover:-translate-y-1.5">
                 <div className="aspect-[4/5] overflow-hidden relative bg-black">
@@ -95,7 +146,7 @@ export default function Collection({ onSelectDesign }) {
             <SeeMoreCard />
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" ref={gridRef}>
             {[
               { id: 'f1', name: 'Original Black', category: 'Classic', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80&w=800' },
               { id: 'f2', name: 'Arctic White', category: 'Minimal', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&q=80&w=800' },

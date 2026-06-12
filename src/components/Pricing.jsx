@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { useReveal } from '../hooks/useReveal'
+import React, { useState, useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import { Check, Shield, Truck, Lock, Star, ArrowRight, MessageSquare, Zap, BarChart2 } from 'lucide-react'
-// import TeamCheckout from './TeamCheckout' // Preserved for future use
+
+gsap.registerPlugin(ScrollTrigger)
 
 const products = [
   {
@@ -58,7 +60,9 @@ const products = [
 ]
 
 export default function Pricing({ onPlanSelect, selectedDesign }) {
-  const ref = useReveal()
+  const sectionRef = useRef(null)
+  const headerRef = useRef(null)
+  const cardsRef = useRef([])
   const { user, profile } = useAuth()
   const [remainingSpots, setRemainingSpots] = useState(100)
 
@@ -81,13 +85,50 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
     } catch (err) { console.error(err) }
   }
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header Animation
+      gsap.fromTo(headerRef.current,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+          }
+        }
+      )
+
+      // Cards Stagger
+      gsap.fromTo(cardsRef.current,
+        { opacity: 0, y: 80, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1,
+          stagger: 0.2,
+          ease: 'back.out(1.2)',
+          scrollTrigger: {
+            trigger: '.pricing-grid',
+            start: 'top 85%',
+          }
+        }
+      )
+    }, sectionRef)
+    return () => ctx.revert()
+  }, [])
+
   return (
     <>
-    <section id="pricing" className="py-32 bg-black relative overflow-hidden min-h-screen flex flex-col justify-center" ref={ref}>
+    <section id="pricing" className="py-32 bg-black relative overflow-hidden min-h-screen flex flex-col justify-center" ref={sectionRef}>
       <div className="max-w-[1280px] mx-auto px-6 relative z-10 w-full">
         
         {/* Global Founding Banner */}
-        <div className="mb-20 text-center reveal">
+        <div className="mb-20 text-center" ref={headerRef}>
           <div className="inline-flex flex-col md:flex-row items-center gap-4 p-1 pr-6 bg-[#111] border border-orange-500/20 rounded-2xl md:rounded-full shadow-sm mx-auto mb-12 group hover:border-orange-500/50 transition-colors animate-pulse">
              <div className="px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl md:rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-orange-500/30 flex items-center gap-2">
                <Zap size={12} className="fill-white" /> Only {remainingSpots} Spots Left
@@ -107,11 +148,12 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-[1100px] mx-auto pricing-grid">
           {products.map((product, i) => {
             return (
               <div key={product.id} 
-                className={`reveal reveal-delay-${i + 1} relative flex flex-col rounded-[2.5rem] p-8 transition-all duration-500 border group ${
+                ref={el => cardsRef.current[i] = el}
+                className={`group relative rounded-[2.5rem] flex flex-col p-8 transition-all duration-500 border group ${
                   product.featured 
                     ? 'bg-[#1a110a] border-orange-500 shadow-[0_40px_80px_-15px_rgba(255,153,51,0.15)] -translate-y-4 z-20' 
                     : 'bg-[#111] border-white/10 shadow-sm hover:border-white/20 hover:-translate-y-1'

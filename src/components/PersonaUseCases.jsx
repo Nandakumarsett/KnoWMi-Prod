@@ -1,5 +1,9 @@
-import { useReveal } from '../hooks/useReveal'
+import React, { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ArrowRight, GraduationCap, Code, Camera } from 'lucide-react'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const useCases = [
   {
@@ -29,12 +33,67 @@ const useCases = [
 ]
 
 export default function PersonaUseCases() {
-  const ref = useReveal()
+  const sectionRef = useRef(null)
+  const headerRef = useRef(null)
+  const cardsRef = useRef([])
+  const tagsRef = useRef([])
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header Animation
+      gsap.fromTo(headerRef.current,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 75%',
+          }
+        }
+      )
+
+      // Cards Stagger
+      gsap.fromTo(cardsRef.current,
+        { opacity: 0, y: 100 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: cardsRef.current[0],
+            start: 'top 85%',
+          }
+        }
+      )
+
+      // Tags Stagger
+      gsap.fromTo(tagsRef.current,
+        { opacity: 0, scale: 0.8 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: 'back.out(1.5)',
+          scrollTrigger: {
+            trigger: '.tags-container',
+            start: 'top 90%',
+          }
+        }
+      )
+    }, sectionRef)
+    return () => ctx.revert()
+  }, [])
 
   return (
-    <section id="use-cases" className="py-32 bg-[#0a0a0a] min-h-screen flex items-center" ref={ref}>
+    <section id="use-cases" className="py-32 bg-[#0a0a0a] min-h-screen flex items-center" ref={sectionRef}>
       <div className="max-w-[1200px] mx-auto px-6">
-        <div className="text-center mb-24 reveal">
+        <div className="text-center mb-24" ref={headerRef}>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 mb-6 text-orange-500 text-[10px] font-black uppercase tracking-widest">
             Built For You
           </div>
@@ -49,7 +108,7 @@ export default function PersonaUseCases() {
 
         <div className="grid lg:grid-cols-3 gap-8">
           {useCases.map((uc, i) => (
-            <div key={uc.id} className={`reveal reveal-delay-${i + 1} group relative bg-[#111] rounded-[3rem] p-10 border border-white/10 hover:shadow-[0_0_40px_rgba(249,115,22,0.1)] hover:border-orange-500/30 transition-all duration-500 overflow-hidden flex flex-col items-center text-center lg:items-start lg:text-left`}>
+            <div key={uc.id} ref={el => cardsRef.current[i] = el} className="group relative bg-[#111] rounded-[3rem] p-10 border border-white/10 hover:shadow-[0_0_40px_rgba(249,115,22,0.1)] hover:border-orange-500/30 transition-all duration-500 overflow-hidden flex flex-col items-center text-center lg:items-start lg:text-left">
               <div className="relative z-10 w-full flex flex-col items-center lg:items-start">
                 <div className="w-14 h-14 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-500 mb-8">
                   {uc.icon}
@@ -71,11 +130,11 @@ export default function PersonaUseCases() {
           ))}
         </div>
         
-        <div className="mt-16 reveal text-center">
+        <div className="mt-16 text-center tags-container">
           <p className="text-sm text-neutral-400 font-medium mb-6">Also perfect for:</p>
             <div className="flex flex-wrap justify-center gap-4">
-              {['Entrepreneurs', 'Artists', 'Founders', 'Freelancers', 'Athletes'].map(p => (
-                <span key={p} className="px-6 py-3 rounded-2xl bg-[#111] border border-white/10 text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:text-orange-500 hover:border-orange-500/30 hover:bg-orange-500/10 transition-colors cursor-pointer">
+              {['Entrepreneurs', 'Artists', 'Founders', 'Freelancers', 'Athletes'].map((p, i) => (
+                <span key={p} ref={el => tagsRef.current[i] = el} className="px-6 py-3 rounded-2xl bg-[#111] border border-white/10 text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:text-orange-500 hover:border-orange-500/30 hover:bg-orange-500/10 transition-colors cursor-pointer">
                   {p}
                 </span>
               ))}
