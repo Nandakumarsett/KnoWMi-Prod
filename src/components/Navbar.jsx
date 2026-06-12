@@ -12,7 +12,7 @@ const navLinks = [
   { label: 'FAQs', href: '/#faq' },
 ]
 
-export default function Navbar({ onOrderClick, onAuthClick }) {
+export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
   const { user, profile, signOut, isStaff, isVerified, role } = useAuth()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -65,6 +65,8 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
   const firstName = profile?.first_name || user?.user_metadata?.first_name || 'User'
   const status = profile?.status || 'free'
 
+  const useDarkTheme = isDark && !scrolled;
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${scrolled
@@ -93,13 +95,13 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
                   fontFamily: "'Montserrat', sans-serif",
                   fontSize: '32px',
                 }}
-                className="lg:text-[36px] font-black text-[var(--ink)] tracking-tight block leading-[0.9]"
+                className={`lg:text-[36px] font-black tracking-tight block leading-[0.9] ${useDarkTheme ? 'text-white' : 'text-[var(--ink)]'}`}
               >
                 Kno<span style={{ color: 'var(--saffron)' }}>WM</span>i
               </span>
             </div>
             <span
-              className="text-[9px] lg:text-[11px] font-black tracking-[0.15em] text-neutral-400 mt-1 uppercase"
+              className={`text-[9px] lg:text-[11px] font-black tracking-[0.15em] mt-1 uppercase ${useDarkTheme ? 'text-white/60' : 'text-neutral-400'}`}
               style={{ fontFamily: "'Inter', sans-serif" }}
             >
               Scan Me. Know Me.
@@ -117,12 +119,12 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
                 href={l.href}
                 className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-all duration-300 ${
                   isActive 
-                    ? 'bg-white shadow-lg shadow-neutral-200/50 scale-105' 
-                    : 'hover:bg-neutral-50/50'
+                    ? (useDarkTheme ? 'bg-white/20 shadow-lg scale-105' : 'bg-white shadow-lg shadow-neutral-200/50 scale-105')
+                    : (useDarkTheme ? 'hover:bg-white/10' : 'hover:bg-neutral-50/50')
                 }`}
                 style={{ 
-                  color: isActive ? 'var(--saffron)' : 'var(--ink3)',
-                  border: isActive ? '1px solid var(--border2)' : '1px solid transparent'
+                  color: isActive ? (useDarkTheme ? '#fff' : 'var(--saffron)') : (useDarkTheme ? 'rgba(255,255,255,0.7)' : 'var(--ink3)'),
+                  border: isActive ? (useDarkTheme ? '1px solid rgba(255,255,255,0.2)' : '1px solid var(--border2)') : '1px solid transparent'
                 }}
               >
                 {l.label}
@@ -139,10 +141,10 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
               <div className="relative">
                 <button
                   onClick={e => { e.stopPropagation(); setDropdownOpen(!dropdownOpen) }}
-                  className="flex items-center gap-2.5 px-4 h-10 rounded-xl transition-all duration-200 hover:bg-[var(--off)]"
-                  style={{ border: '1.5px solid var(--border)' }}
+                  className={`flex items-center gap-2.5 px-4 h-10 rounded-xl transition-all duration-200 ${useDarkTheme ? 'hover:bg-white/10' : 'hover:bg-[var(--off)]'}`}
+                  style={{ border: useDarkTheme ? '1.5px solid rgba(255,255,255,0.2)' : '1.5px solid var(--border)' }}
                 >
-                  <span className="text-base font-bold" style={{ color: 'var(--ink)' }}>{firstName}</span>
+                  <span className="text-base font-bold" style={{ color: useDarkTheme ? '#fff' : 'var(--ink)' }}>{firstName}</span>
                   {profile ? (
                     role === 'owner' ? (
                       <span
@@ -167,7 +169,7 @@ export default function Navbar({ onOrderClick, onAuthClick }) {
                     <div className="w-[52px] h-[18px] rounded-full bg-neutral-200 animate-pulse opacity-40" />
                   )}
                   {/* Caret */}
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ color: 'var(--muted)' }}>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ color: useDarkTheme ? 'rgba(255,255,255,0.5)' : 'var(--muted)' }}>
                     <path d="M3 5L6 8L9 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>

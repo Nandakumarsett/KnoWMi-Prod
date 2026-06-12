@@ -100,7 +100,7 @@ export default function Home() {
 
   return (
     <>
-      <Navbar onOrderClick={() => handleSelectPlan('creator')} onAuthClick={openAuth} />
+      <Navbar onOrderClick={() => handleSelectPlan('creator')} onAuthClick={openAuth} isDark={true} />
 
       <main id="main-content" className="w-full">
         <ScrollyHome />
