@@ -206,7 +206,7 @@ export default function CatalogAdmin() {
                 {designs.map(d => (
                   <div key={d.id} className="flex gap-4 p-4 rounded-xl border border-[var(--border2)] hover:bg-[var(--off)] transition-colors">
                     <div className="w-20 h-24 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                      <img src={getAssetUrl(d.model_image_url || d.front_image_url || d.back_image_url) || '/assets/tees/front.png'} alt={d.name} className="w-full h-full object-cover" />
+                      <img src={getAssetUrl(d.front_image_url || d.model_image_url || d.back_image_url) || '/assets/tees/front.png'} alt={d.name} className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1 flex flex-col justify-between py-1">
                       <div>

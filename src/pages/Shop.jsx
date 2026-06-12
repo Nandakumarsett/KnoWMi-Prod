@@ -228,7 +228,7 @@ export default function Shop() {
                 >
                   <div className="aspect-[3/4] w-full bg-neutral-50 overflow-hidden relative mb-4 border border-neutral-100/50 group-hover:border-neutral-300 transition-colors">
                     <img 
-                      src={getAssetUrl(d.model_image_url || d.front_image_url) || '/assets/tees/front.png'} 
+                      src={getAssetUrl(d.front_image_url || d.model_image_url) || '/assets/tees/front.png'} 
                       alt={d.name} 
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     />
@@ -330,11 +330,11 @@ export default function Shop() {
               </button>
 
               <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
-                {/* Left Column: Stack of high-quality product images */}
-                <div className="w-full lg:w-3/5 flex flex-col gap-6">
+                {/* Left Column: Grid of high-quality product images */}
+                <div className="w-full lg:w-3/5 grid grid-cols-2 gap-4">
                   {[
-                    selectedDesign.model_image_url,
                     selectedDesign.front_image_url,
+                    selectedDesign.model_image_url,
                     selectedDesign.back_image_url,
                     selectedDesign.image4_url,
                     selectedDesign.image5_url,
@@ -344,25 +344,25 @@ export default function Shop() {
                     .map((imgUrl, index) => (
                       <div 
                         key={index} 
-                        className="w-full aspect-[3/4] bg-neutral-50 overflow-hidden relative border border-neutral-100"
+                        className={`w-full aspect-[3/4] bg-neutral-50 overflow-hidden relative border border-neutral-100 ${index === 0 ? 'col-span-2 aspect-[4/5]' : ''}`}
                       >
                         <img 
                           src={getAssetUrl(imgUrl)} 
-                          className="w-full h-full object-cover" 
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" 
                           alt={`${selectedDesign.name} view ${index + 1}`}
                         />
-                        {index === 0 && selectedDesign.model_image_url && (
-                          <span className="absolute bottom-4 left-4 bg-black text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">
-                            Model Look
-                          </span>
-                        )}
-                        {((index === 1 && selectedDesign.model_image_url) || (index === 0 && !selectedDesign.model_image_url)) && (
-                          <span className="absolute bottom-4 left-4 bg-black text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">
+                        {imgUrl === selectedDesign.front_image_url && (
+                          <span className="absolute bottom-4 left-4 bg-black/80 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">
                             Front View
                           </span>
                         )}
-                        {((index === 2 && selectedDesign.model_image_url) || (index === 1 && !selectedDesign.model_image_url)) && (
-                          <span className="absolute bottom-4 left-4 bg-black text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">
+                        {imgUrl === selectedDesign.model_image_url && imgUrl !== selectedDesign.front_image_url && (
+                          <span className="absolute bottom-4 left-4 bg-black/80 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">
+                            Model Look
+                          </span>
+                        )}
+                        {imgUrl === selectedDesign.back_image_url && (
+                          <span className="absolute bottom-4 left-4 bg-black/80 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1">
                             Back View
                           </span>
                         )}

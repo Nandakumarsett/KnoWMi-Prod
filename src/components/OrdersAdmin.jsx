@@ -187,7 +187,7 @@ export default function OrdersAdmin() {
                     setEditForm({
                       ...editForm, 
                       item_name: design.name, 
-                      model_image_url: design.model_image_url || design.front_image_url,
+                      model_image_url: design.front_image_url || design.model_image_url,
                       amount: design.price
                     })
                   } else {

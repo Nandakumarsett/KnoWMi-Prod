@@ -65,7 +65,7 @@ export default function Collection({ onSelectDesign }) {
               <div key={d.id} className="group relative bg-neutral-50 rounded-[2.5rem] overflow-hidden border border-neutral-100 transition-all duration-500 hover:shadow-2xl hover:shadow-orange-500/10 hover:-translate-y-1.5">
                 <div className="aspect-[4/5] overflow-hidden relative bg-neutral-100">
                   <LazyImage 
-                    src={getAssetUrl(d.model_image_url || d.front_image_url) || '/assets/tees/front.png'} 
+                    src={getAssetUrl(d.front_image_url || d.model_image_url) || '/assets/tees/front.png'} 
                     alt={d.name} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     skeletonClassName="absolute inset-0"
