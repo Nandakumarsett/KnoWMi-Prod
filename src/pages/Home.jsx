@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
-import Hero from '../components/Hero'
+import ScrollyHome from '../components/ScrollyHome'
 import { Marquee, HowItWorks } from '../components/HowItWorks'
 import Personas from '../components/Personas'
 import PersonaUseCases from '../components/PersonaUseCases'
@@ -102,13 +102,9 @@ export default function Home() {
     <>
       <Navbar onOrderClick={() => handleSelectPlan('creator')} onAuthClick={openAuth} />
 
-      <main id="main-content" className="snap-container">
-        <div className="snap-section">
-          <Hero onOrderClick={() => handleSelectPlan('creator')} />
-          <Marquee />
-        </div>
+      <main id="main-content" className="w-full">
+        <ScrollyHome />
 
-        <HowItWorks />
         <Personas />
         <PersonaUseCases />
         <Collection onSelectDesign={(d) => navigate(`/shop?design=${d.id}`)} />
