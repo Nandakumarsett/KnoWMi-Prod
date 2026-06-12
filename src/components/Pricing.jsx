@@ -185,25 +185,25 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
         
         {/* Analytics Pro Upsell Banner */}
         <div className="max-w-3xl mx-auto mb-24 reveal reveal-delay-4">
-          <div className="bg-gradient-to-r from-neutral-900 to-neutral-800 rounded-3xl p-1 shadow-2xl relative overflow-hidden">
-            <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full" />
+          <div className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-3xl p-[2px] shadow-2xl shadow-orange-500/20 relative overflow-hidden group">
+            <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-orange-500/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
             
-            <div className="bg-neutral-900 rounded-[22px] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+            <div className="bg-white rounded-[22px] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
               <div className="flex items-center gap-5">
-                <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center border border-orange-500/30 flex-shrink-0">
-                  <BarChart2 size={24} className="text-orange-400" />
+                <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center border border-orange-100 flex-shrink-0">
+                  <BarChart2 size={24} className="text-orange-500" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-black text-white flex items-center gap-2 mb-1">
+                  <h4 className="text-lg font-black text-black flex items-center gap-2 mb-1">
                     Analytics Pro
-                    <span className="px-2 py-0.5 bg-orange-500 text-white text-[9px] uppercase tracking-widest rounded-full">Optional</span>
+                    <span className="px-2 py-0.5 bg-orange-100 text-orange-600 text-[9px] uppercase tracking-widest rounded-full font-bold">Optional</span>
                   </h4>
-                  <p className="text-sm text-neutral-400 font-medium">Get deep insights on who scans you, from where, and on what device.</p>
+                  <p className="text-sm text-neutral-500 font-medium">Get deep insights on who scans you, from where, and on what device.</p>
                 </div>
               </div>
               <div className="text-center md:text-right flex-shrink-0">
-                <div className="text-2xl font-black text-white mb-1">₹29<span className="text-sm text-neutral-500 font-medium">/mo</span></div>
-                <div className="text-xs font-bold text-orange-400 uppercase tracking-widest">1st Month Free</div>
+                <div className="text-2xl font-black text-black mb-1">₹29<span className="text-sm text-neutral-400 font-medium">/mo</span></div>
+                <div className="text-xs font-bold text-orange-500 uppercase tracking-widest">1st Month Free</div>
               </div>
             </div>
           </div>
