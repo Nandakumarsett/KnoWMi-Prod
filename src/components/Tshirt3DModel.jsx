@@ -6,7 +6,9 @@ function BlockyShirt() {
   const group = useRef();
   
   useFrame((state, delta) => {
-    group.current.rotation.y += delta * 0.2;
+    if (group.current) {
+      group.current.rotation.y += delta * 0.2;
+    }
   });
 
   // Load the QR code texture
@@ -33,7 +35,7 @@ function BlockyShirt() {
           WORK HARD. STAY HUMBLE.
         </Text>
 
-        {/* Back QR Code (Simple Plane instead of Decal to prevent crash) */}
+        {/* Back QR Code */}
         <mesh position={[0, 0, -0.41]} rotation={[0, Math.PI, 0]}>
           <planeGeometry args={[1.5, 1.5]} />
           <meshBasicMaterial map={qrTexture} transparent />
@@ -59,7 +61,6 @@ export default function Tshirt3DModel() {
   return (
     <div className="w-full h-full min-h-[500px] cursor-grab active:cursor-grabbing">
       <Canvas shadows camera={{ position: [0, 0, 6], fov: 45 }}>
-        {/* Safe foolproof lighting */}
         <ambientLight intensity={1.5} />
         <directionalLight position={[10, 10, 10]} intensity={2} />
         <directionalLight position={[-10, -10, -10]} intensity={0.5} />

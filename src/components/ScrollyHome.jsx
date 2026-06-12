@@ -70,7 +70,7 @@ export default function ScrollyHome() {
         opacity: 1,
         duration: 1.5,
         ease: 'power3.out'
-      }, "-=1.5");
+      }, 0);
 
       // 3. QR Section
       gsap.fromTo('.qr-glow', 
