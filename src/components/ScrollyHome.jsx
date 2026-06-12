@@ -130,11 +130,11 @@ export default function ScrollyHome() {
           </div>
           
           <div className="lg:w-1/2 w-full flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-md aspect-[4/5] md:aspect-square lg:max-w-xl rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_0_80px_rgba(249,115,22,0.15)] group">
+            <div className="relative w-full max-w-md lg:max-w-xl group">
               <img 
-                src="/assets/scrolly/anime_shirt.jpg" 
+                src="/assets/scrolly/anime_shirt_nobg.png" 
                 alt="Anime Shirt" 
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.03]"
+                className="w-full h-auto object-contain transition-transform duration-1000 group-hover:scale-[1.05]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
