@@ -108,27 +108,36 @@ export default function ScrollyHome() {
 
       {/* 2. Fabric Detail Section */}
       <section className="fabric-section min-h-[100svh] w-full relative bg-black flex items-center py-24 overflow-hidden">
-        {/* Background Image with Anime Shirt */}
+        {/* Premium HD Background */}
         <div className="absolute inset-0 z-0">
            <img 
-              src="/assets/scrolly/anime_shirt.jpg" 
-              alt="Anime Shirt Background" 
-              className="w-full h-full object-cover opacity-60 mix-blend-luminosity scale-105"
+              src="/assets/scrolly/premium_heavyweight_fabric.png" 
+              alt="Premium Fabric Background" 
+              className="w-full h-full object-cover opacity-50 mix-blend-screen scale-105"
             />
-            {/* Gradients to ensure text readability against the potentially bright background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-black/30" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60" />
+            {/* Cinematic shadows */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
         </div>
         
-        {/* Text Content */}
-        <div className="fabric-text relative z-10 max-w-[1400px] mx-auto px-6 w-full">
-          <div className="max-w-3xl">
+        {/* 2-Column Content */}
+        <div className="fabric-text relative z-10 max-w-[1400px] mx-auto px-6 w-full flex flex-col lg:flex-row items-center justify-between gap-12">
+          <div className="max-w-2xl lg:w-1/2">
             <h2 className="text-5xl md:text-8xl font-black mb-8 uppercase leading-[0.9] tracking-tighter text-white">
               220 GSM<br/>Heavyweight.<br/><span className="text-orange-500">Drop Shoulder.</span>
             </h2>
-            <p className="text-xl md:text-3xl text-neutral-300 font-medium max-w-xl leading-relaxed">
-              Uncompromised comfort meets structured streetwear aesthetic. Designed to last a lifetime.
-            </p>
+            <p className="text-xl md:text-2xl text-neutral-300 font-medium max-w-lg">Uncompromised comfort meets structured streetwear aesthetic. Designed to last a lifetime.</p>
+          </div>
+          
+          <div className="lg:w-1/2 w-full flex justify-center lg:justify-end">
+            <div className="relative w-full max-w-md aspect-[4/5] md:aspect-square lg:max-w-xl rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_0_80px_rgba(249,115,22,0.15)] group">
+              <img 
+                src="/assets/scrolly/anime_shirt.jpg" 
+                alt="Anime Shirt" 
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.03]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </div>
           </div>
         </div>
       </section>
