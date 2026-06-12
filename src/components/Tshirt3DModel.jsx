@@ -82,7 +82,7 @@ export default function Tshirt3DModel() {
     >
       {/* 3D card wrapper */}
       <div
-        className="relative w-[480px] h-[520px] md:w-[550px] md:h-[600px] lg:w-[650px] lg:h-[700px]"
+        className="relative w-[90vw] h-[90vw] max-w-[750px] max-h-[750px] md:w-[600px] md:h-[700px] lg:w-[750px] lg:h-[850px]"
         style={{
           transformStyle: 'preserve-3d',
           transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
