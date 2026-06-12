@@ -132,7 +132,7 @@ export default function ScrollyHome() {
         <div className="max-w-7xl w-full mx-auto">
           <div className="qr-glow relative w-full aspect-video md:aspect-[21/9] rounded-[2.5rem] overflow-hidden shadow-[0_0_120px_rgba(249,115,22,0.15)] border border-white/10 group">
             <img 
-              src="/assets/scrolly/qr_code_glow.png" 
+              src="/assets/scrolly/invisible_tech_new.jpg" 
               alt="QR Code" 
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
             />
