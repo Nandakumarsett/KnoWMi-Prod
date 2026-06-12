@@ -129,9 +129,15 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                   </div>
                   <h3 className="text-2xl font-display font-black mb-4 text-black">{product.name}</h3>
                   
-                  <div className="flex items-baseline gap-1.5 mb-4">
-                    <span className="text-4xl font-display font-black text-black">₹{product.price}</span>
-                  </div>
+                  {product.id !== 'hoodie' ? (
+                    <div className="flex items-baseline gap-1.5 mb-4">
+                      <span className="text-4xl font-display font-black text-black">₹{product.price}</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-baseline gap-1.5 mb-4">
+                      <span className="text-2xl font-display font-black text-neutral-400 italic">Coming Soon</span>
+                    </div>
+                  )}
                   <p className="text-[13px] text-neutral-500 font-medium leading-relaxed">
                     {product.desc}
                   </p>
