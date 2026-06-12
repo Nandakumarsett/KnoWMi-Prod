@@ -126,7 +126,21 @@ export default function ScrollyHome() {
             <h2 className="text-5xl md:text-8xl font-black mb-8 uppercase leading-[0.9] tracking-tighter text-white">
               220 GSM<br/>Heavyweight.<br/><span className="text-orange-500">Drop Shoulder.</span>
             </h2>
-            <p className="text-xl md:text-2xl text-neutral-300 font-medium max-w-lg">Uncompromised comfort meets structured streetwear aesthetic. Designed to last a lifetime.</p>
+            <p className="text-xl md:text-2xl text-neutral-300 font-medium max-w-lg mb-8">Uncompromised comfort meets structured streetwear aesthetic. Designed to last a lifetime.</p>
+            
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-4 group">
+                <span className="w-12 h-[1px] bg-white/30 group-hover:bg-white transition-colors" />
+                <span className="text-lg md:text-xl text-neutral-400 group-hover:text-white transition-colors font-medium">200 GSM Regular Tee</span>
+              </div>
+              <div className="flex items-center gap-4 group opacity-70">
+                <span className="w-12 h-[1px] bg-white/20" />
+                <span className="text-lg md:text-xl text-neutral-500 font-medium flex items-center">
+                  Premium Hoodie 
+                  <span className="text-orange-500 text-xs font-bold tracking-widest uppercase ml-4 px-3 py-1 bg-orange-500/10 rounded-full border border-orange-500/20">Coming Soon</span>
+                </span>
+              </div>
+            </div>
           </div>
           
           <div className="lg:w-1/2 w-full flex justify-center lg:justify-end">
