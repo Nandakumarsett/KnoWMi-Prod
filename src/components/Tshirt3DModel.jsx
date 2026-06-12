@@ -75,9 +75,11 @@ export default function Tshirt3DModel() {
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
         <spotLight position={[-10, 10, -10]} angle={0.15} penumbra={1} intensity={0.5} />
         
-        <BlockyShirt />
+        <React.Suspense fallback={null}>
+          <BlockyShirt />
+          <Environment preset="city" />
+        </React.Suspense>
         
-        <Environment preset="city" />
         <OrbitControls 
           enableZoom={false} 
           enablePan={false}
