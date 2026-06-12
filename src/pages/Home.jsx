@@ -104,6 +104,8 @@ export default function Home() {
 
       <main id="main-content" className="w-full">
         <ScrollyHome />
+        
+        <HowItWorks />
 
         <Personas />
         <PersonaUseCases />

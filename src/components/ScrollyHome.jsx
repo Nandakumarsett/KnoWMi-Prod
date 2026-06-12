@@ -156,11 +156,11 @@ export default function ScrollyHome() {
               A dynamic digital profile bound to your physical garment forever. Manage your identity, track scans, and connect instantly.
             </p>
           </div>
-          <div className="flex-1 flex justify-center items-end relative w-full h-[60vh] md:h-[80vh]">
+          <div className="flex-1 flex justify-center items-end w-full h-[45vh] md:h-[80vh]">
             <img 
               src="/assets/scrolly/digital_profile.png" 
               alt="Digital Profile" 
-              className="phone-mockup absolute bottom-0 w-full max-w-md object-contain origin-bottom drop-shadow-[0_-20px_80px_rgba(249,115,22,0.3)]"
+              className="phone-mockup w-full h-full max-w-md object-contain object-bottom origin-bottom drop-shadow-[0_-20px_80px_rgba(249,115,22,0.3)]"
             />
           </div>
         </div>
