@@ -335,7 +335,10 @@ export default function Shop() {
                   {[
                     selectedDesign.model_image_url,
                     selectedDesign.front_image_url,
-                    selectedDesign.back_image_url
+                    selectedDesign.back_image_url,
+                    selectedDesign.image4_url,
+                    selectedDesign.image5_url,
+                    selectedDesign.image6_url
                   ]
                     .filter(Boolean)
                     .map((imgUrl, index) => (

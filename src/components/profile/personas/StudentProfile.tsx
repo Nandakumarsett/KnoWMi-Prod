@@ -272,7 +272,25 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                   <div key={i} className="bg-white p-6 sm:p-8 rounded-3xl border border-neutral-100 shadow-sm flex flex-col gap-3">
                     <div className="flex items-center gap-3">
                       <span className="text-3xl">{proj.emoji || ''}</span>
-                      <h3 className="text-xl font-black text-neutral-900">{proj.name}</h3>
+                      <h3 className="text-xl font-black text-neutral-900">
+                        {proj.url || proj.github_url ? (
+                          <a href={ensureAbsoluteUrl(proj.url || proj.github_url)} target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-emerald-600 transition-colors">
+                            {proj.name}
+                          </a>
+                        ) : (
+                          proj.name
+                        )}
+                      </h3>
+                      {proj.url && (
+                        <a href={ensureAbsoluteUrl(proj.url)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-emerald-500 transition-colors ml-auto">
+                          <ExternalLink size={18} />
+                        </a>
+                      )}
+                      {proj.github_url && !proj.url && (
+                        <a href={ensureAbsoluteUrl(proj.github_url)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-neutral-900 transition-colors ml-auto">
+                          <Github size={18} />
+                        </a>
+                      )}
                     </div>
                     {proj.description && <p className="text-neutral-600 text-sm">{proj.description}</p>}
                     <div className="flex flex-wrap gap-2 mt-1">
@@ -695,7 +713,9 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 <h4 className="text-xl font-bold text-[#1e3a8a] mb-2 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Projects</h4>
                 <ul className="text-xl text-neutral-800 space-y-1 ml-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   {data.projects.map((p: any, i: number) => (
-                    <li key={i} className="leading-[32px]">• {p.emoji} {p.name}</li>
+                    <li key={i} className="leading-[32px]">
+                      • {p.emoji} {p.url || p.github_url ? <a href={ensureAbsoluteUrl(p.url || p.github_url)} target="_blank" rel="noopener noreferrer" className="hover:text-[#B91C1C] hover:underline transition-colors">{p.name}</a> : p.name}
+                    </li>
                   ))}
                 </ul>
                 <Rocket size={32} className="absolute bottom-6 right-6 text-[#1e3a8a] opacity-60" strokeWidth={1.5} />
@@ -709,9 +729,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 <div className="margin-line" />
                 <h4 className="text-xl font-bold text-[#1e3a8a] mb-2 uppercase tracking-wide mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Current Focus</h4>
                 <ul className="text-xl text-neutral-800 space-y-1 ml-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  <li className="leading-[32px]">• {data.favorite_subject}</li>
+                  {data.favorite_subject && <li className="leading-[32px]">• {data.favorite_subject}</li>}
                   {data.core_skills && data.core_skills.length > 1 && <li className="leading-[32px]">• {data.core_skills[1]}</li>}
-                  <li className="leading-[32px]">• Web Development</li>
                 </ul>
                 <Target size={40} className="absolute bottom-6 right-6 text-[#1e3a8a] opacity-60" strokeWidth={1.5} />
               </div>
@@ -1205,7 +1224,15 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                         <div className="flex items-start gap-3 relative z-10">
                           <span className="text-xl shrink-0">{proj.emoji || ''}</span>
                           <div className="min-w-0">
-                            <h4 className="text-[15px] font-semibold text-white mb-0.5 leading-snug">{proj.name}</h4>
+                            <h4 className="text-[15px] font-semibold text-white mb-0.5 leading-snug">
+                              {proj.url || proj.github_url ? (
+                                <a href={ensureAbsoluteUrl(proj.url || proj.github_url)} target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 hover:underline transition-colors">
+                                  {proj.name}
+                                </a>
+                              ) : (
+                                proj.name
+                              )}
+                            </h4>
                             {proj.description && <p className="text-[13px] text-indigo-200/60 font-light mb-2 leading-relaxed">{proj.description}</p>}
                             {proj.tech && proj.tech.length > 0 && (
                               <div className="flex flex-wrap gap-1.5">
@@ -1371,33 +1398,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           </div>
         )}
 
-        {/* Spotify Modal */}
-        {showSpotifyQR && data.playlist_url && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#030914]/90 backdrop-blur-md" onClick={() => setShowSpotifyQR(false)}>
-            <div className="glass-panel p-8 max-w-sm w-full relative text-center flex flex-col items-center border-[#1DB954]/30 shadow-[0_0_50px_rgba(29,185,84,0.15)]" onClick={e => e.stopPropagation()}>
-              <button onClick={() => setShowSpotifyQR(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-white transition-colors">
-                <X size={24} />
-              </button>
-              <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                <Music className="text-[#1DB954]" />
-                {data.playlist_name || ''}
-              </h3>
-              
-              <div className="bg-white p-4 rounded-xl shadow-inner mb-6 w-full flex justify-center">
-                <QRCodeSVG value={ensureAbsoluteUrl(data.playlist_url)} size={220} fgColor="#1DB954" bgColor="transparent" />
-              </div>
-              
-              <a 
-                href={ensureAbsoluteUrl(data.playlist_url)} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="w-full py-3 bg-[#1DB954] hover:bg-[#1ed760] text-white font-bold text-sm uppercase tracking-wider rounded-xl transition-all hover:shadow-[0_0_20px_rgba(29,185,84,0.4)] flex items-center justify-center gap-2"
-              >
-                Open in Spotify <ExternalLink size={16} />
-              </a>
-            </div>
-          </div>
-        )}
+
 
         <GateModal />
       </div>
@@ -1650,7 +1651,15 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                           <div className="flex items-start gap-2">
                             <span className="text-lg">{proj.emoji || ''}</span>
                             <div className="flex-grow min-w-0">
-                              <h4 className="text-lg font-bold nb-ink nb-handwriting leading-[28px]">{proj.name}</h4>
+                              <h4 className="text-lg font-bold nb-ink nb-handwriting leading-[28px]">
+                                {proj.url || proj.github_url ? (
+                                  <a href={ensureAbsoluteUrl(proj.url || proj.github_url)} target="_blank" rel="noopener noreferrer" className="hover:text-[#c53030] hover:underline transition-colors">
+                                    {proj.name}
+                                  </a>
+                                ) : (
+                                  proj.name
+                                )}
+                              </h4>
                               {proj.description && <p className="nb-pencil text-base nb-handwriting leading-[28px]">{proj.description}</p>}
                               {proj.tech && proj.tech.length > 0 && (
                                 <div className="flex flex-wrap gap-1 mt-1">
@@ -1822,32 +1831,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         </div>
       )}
 
-      {showSpotifyQR && data.playlist_url && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-neutral-900/60 backdrop-blur-sm" onClick={() => setShowSpotifyQR(false)}>
-          <div className="bg-white p-8 max-w-sm w-full shadow-2xl relative text-center rounded-2xl flex flex-col items-center" onClick={e => e.stopPropagation()}>
-            <button onClick={() => setShowSpotifyQR(false)} className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-800 transition-colors">
-              <X size={24} />
-            </button>
-            <h3 className="text-2xl font-bold text-neutral-800 mb-6 flex items-center gap-2">
-              <Music className="text-[#1DB954]" />
-              {data.playlist_name || ''}
-            </h3>
-            
-            <div className="bg-white p-4 rounded-xl shadow-inner mb-6 border border-neutral-100 w-full flex justify-center">
-              <QRCodeSVG value={ensureAbsoluteUrl(data.playlist_url)} size={220} fgColor="#1DB954" bgColor="transparent" />
-            </div>
-            
-            <a 
-              href={ensureAbsoluteUrl(data.playlist_url)} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="w-full py-3 bg-[#1DB954] hover:bg-[#1ed760] text-white font-bold text-lg rounded-xl transition-colors flex items-center justify-center gap-2"
-            >
-              Open in Spotify <ExternalLink size={18} />
-            </a>
-          </div>
-        </div>
-      )}
+
 
       <GateModal />
     </div>

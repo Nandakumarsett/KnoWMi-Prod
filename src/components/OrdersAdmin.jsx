@@ -64,7 +64,7 @@ export default function OrdersAdmin() {
         const { data: authData } = await supabase.functions.invoke('send-email', {
           body: {
             type: 'dispatch',
-            to: editForm._customer_email || '',
+            to: updateData.customer_email || editForm.profiles?.persona_data?.contact_email || editForm._customer_email || '',
             toName: editForm.profiles?.first_name || 'Customer',
             data: {
               firstName: editForm.profiles?.first_name || 'Customer',

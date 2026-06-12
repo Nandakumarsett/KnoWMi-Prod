@@ -485,7 +485,7 @@ export function CreatorProfile({
               className={`mb-16 animate-fadeIn w-full -mt-6 ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
               onClick={() => isFreeProfile && setShowFomoModal(true)}
             >
-              <div className="flex justify-evenly items-start w-full">
+              <div className="flex justify-evenly flex-wrap gap-4 items-start w-full">
                 <div className="flex flex-col items-center text-center">
                   <span
                     className={`text-4xl font-black text-neutral-900 leading-none mb-3 ${isFreeProfile ? "blur-[6px] select-none opacity-50 inline-block px-2" : ""}`}
@@ -496,7 +496,7 @@ export function CreatorProfile({
                     Profile Views
                   </p>
                 </div>
-                <div className="flex flex-col items-center text-center transform translate-x-4">
+                <div className="flex flex-col items-center text-center">
                   <span
                     className={`text-4xl font-black leading-none mb-3 ${isFreeProfile ? "blur-[6px] select-none opacity-50 inline-block px-2" : ""}`}
                     style={{ color: cityColor }}
@@ -507,6 +507,26 @@ export function CreatorProfile({
                     Most Scanned Place
                   </p>
                 </div>
+                {data.total_reach && (
+                  <div className="flex flex-col items-center text-center">
+                    <span className="text-4xl font-black text-neutral-900 leading-none mb-3">
+                      {data.total_reach}
+                    </span>
+                    <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest">
+                      Total Reach
+                    </p>
+                  </div>
+                )}
+                {data.engagement_rate && (
+                  <div className="flex flex-col items-center text-center">
+                    <span className="text-4xl font-black text-neutral-900 leading-none mb-3">
+                      {data.engagement_rate}
+                    </span>
+                    <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest">
+                      Engagement Rate
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -655,13 +675,13 @@ export function CreatorProfile({
               </div>
             )}
 
-            {(data.deliverable_formats || data.content_formats) && (data.deliverable_formats || data.content_formats).length > 0 && (
+            {((data.deliverable_formats && data.deliverable_formats.length > 0) || (data.content_formats && data.content_formats.length > 0)) && (
               <div className="mb-12">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-4">
                   Deliverables & Specialization
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {(data.deliverable_formats || data.content_formats).map((format: string) => (
+                  {[...(data.deliverable_formats || []), ...(data.content_formats || [])].filter((v, i, a) => a.indexOf(v) === i).map((format: string) => (
                     <span
                       key={format}
                       className="px-4 py-2 rounded-xl bg-orange-50 text-xs font-black uppercase tracking-widest text-orange-600 border border-orange-100"
@@ -933,9 +953,9 @@ export function CreatorProfile({
           {/* Tagline */}
 
           {/* Stats Bar */}
-          <div className="w-full border-4 border-black p-4 sm:p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center mb-10 bg-white">
+          <div className="w-full border-4 border-black p-4 sm:p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-wrap items-center justify-center gap-y-4 mb-10 bg-white">
             <div
-              className={`flex-1 text-center ${isFreeProfile ? "cursor-pointer hover:opacity-80" : ""}`}
+              className={`flex-1 min-w-[120px] text-center ${isFreeProfile ? "cursor-pointer hover:opacity-80" : ""}`}
               onClick={() => isFreeProfile && setShowFomoModal(true)}
             >
               <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
@@ -948,16 +968,42 @@ export function CreatorProfile({
               </span>
             </div>
             
-            <div className="w-1 h-12 bg-black mx-2 sm:mx-6 rounded-full"></div>
+            <div className="w-1 h-12 bg-black mx-2 sm:mx-4 rounded-full hidden sm:block"></div>
             
-            <div className="flex-1 text-center">
+            <div className="flex-1 min-w-[120px] text-center">
               <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
-                MOST SCANNED LOCATION
+                LOCATION
               </span>
               <span className="text-2xl font-black uppercase" style={{ color: cityColor }}>
                 {topCity}
               </span>
             </div>
+            {data.total_reach && (
+              <>
+                <div className="w-1 h-12 bg-black mx-2 sm:mx-4 rounded-full hidden sm:block"></div>
+                <div className="flex-1 min-w-[120px] text-center">
+                  <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
+                    TOTAL REACH
+                  </span>
+                  <span className="text-3xl font-black">
+                    {data.total_reach}
+                  </span>
+                </div>
+              </>
+            )}
+            {data.engagement_rate && (
+              <>
+                <div className="w-1 h-12 bg-black mx-2 sm:mx-4 rounded-full hidden sm:block"></div>
+                <div className="flex-1 min-w-[120px] text-center">
+                  <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
+                    ENGAGEMENT
+                  </span>
+                  <span className="text-3xl font-black">
+                    {data.engagement_rate}
+                  </span>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 w-full text-left mb-12">
@@ -968,7 +1014,7 @@ export function CreatorProfile({
                   WORK
                 </h3>
                 <ul className="space-y-3">
-                  {(Array.isArray(data.deliverable_formats) && data.deliverable_formats.length > 0 ? data.deliverable_formats : data.content_formats || []).map((format: string) => (
+                  {[...(Array.isArray(data.deliverable_formats) ? data.deliverable_formats : []), ...(Array.isArray(data.content_formats) ? data.content_formats : [])].filter((v, i, a) => a.indexOf(v) === i).map((format: string) => (
                     <li
                       key={format}
                       className="font-bold text-sm uppercase tracking-widest flex items-center gap-3"
@@ -1385,7 +1431,26 @@ export function CreatorProfile({
                 {topCity}
               </span>
             </div>
-
+            {data.total_reach && (
+              <div className="text-center flex-1 min-w-[80px]">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
+                  REACH
+                </span>
+                <span className="text-2xl font-black text-white border-b-2 border-[#FF2D78] pb-1 inline-block">
+                  {data.total_reach}
+                </span>
+              </div>
+            )}
+            {data.engagement_rate && (
+              <div className="text-center flex-1 min-w-[80px]">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
+                  ENGAGEMENT
+                </span>
+                <span className="text-2xl font-black text-white border-b-2 border-cyan-400 pb-1 inline-block">
+                  {data.engagement_rate}
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col gap-8 w-full max-w-3xl mb-12">
@@ -1513,21 +1578,7 @@ export function CreatorProfile({
             </div>
           )}
 
-          {/* Equipment & Tools */}
-          {Array.isArray((data as any).equipment) && (data as any).equipment.length > 0 && (
-            <div className="w-full max-w-3xl mb-12 bg-black/40 border border-cyan-500/30 rounded-2xl p-6 sm:p-8 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
-              <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-cyan-400 mb-6">
-                EQUIPMENT & TOOLS
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                {(data as any).equipment.map((item: string) => (
-                  <span key={item} className="px-4 py-2 bg-cyan-900/20 border border-cyan-500/30 text-cyan-300 text-[11px] font-bold uppercase tracking-widest rounded-md hover:bg-cyan-900/40 transition-colors cursor-default">
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+
 
           {/* Past Collaborations */}
           {Array.isArray(data.past_collaborations) && data.past_collaborations.length > 0 && (

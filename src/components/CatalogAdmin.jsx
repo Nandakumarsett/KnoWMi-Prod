@@ -15,7 +15,7 @@ export default function CatalogAdmin() {
   const [designs, setDesigns] = useState([])
   const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({ name: '', price: 999 })
-  const [files, setFiles] = useState({ front: null, back: null, model: null })
+  const [files, setFiles] = useState({ front: null, back: null, model: null, image4: null, image5: null, image6: null })
   const [uploading, setUploading] = useState(false)
   const [editingInventory, setEditingInventory] = useState(null) // design id being edited
   const [colorDraft, setColorDraft] = useState([])
@@ -55,6 +55,9 @@ export default function CatalogAdmin() {
       const frontUrl = await uploadImage(files.front)
       const backUrl = await uploadImage(files.back)
       const modelUrl = await uploadImage(files.model)
+      const img4Url = await uploadImage(files.image4)
+      const img5Url = await uploadImage(files.image5)
+      const img6Url = await uploadImage(files.image6)
 
       const { error } = await supabase.from('persona_designs').insert([{
         category: 'universal',
@@ -63,6 +66,9 @@ export default function CatalogAdmin() {
         front_image_url: frontUrl,
         back_image_url: backUrl,
         model_image_url: modelUrl,
+        image4_url: img4Url,
+        image5_url: img5Url,
+        image6_url: img6Url,
         available_colors: [],
         total_stock: 0,
         is_available: true,
@@ -70,7 +76,7 @@ export default function CatalogAdmin() {
       if (error) throw error
       alert('Design added!')
       setFormData({ name: '', price: 999 })
-      setFiles({ front: null, back: null, model: null })
+      setFiles({ front: null, back: null, model: null, image4: null, image5: null, image6: null })
       document.getElementById('catalog-form').reset()
       fetchDesigns()
     } catch (err) {
@@ -135,7 +141,7 @@ export default function CatalogAdmin() {
               <input type="number" required value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-[var(--border2)] bg-[var(--off)] outline-none text-sm" />
             </div>
             <div className="space-y-3 mb-6">
-              {['front', 'back', 'model'].map(type => (
+              {['front', 'back', 'model', 'image4', 'image5', 'image6'].map(type => (
                 <div key={type}>
                   <label className="block text-xs font-bold text-[var(--muted)] mb-1 capitalize">{type} Image (Optional)</label>
                   <input type="file" accept="image/*" onChange={e => handleFileChange(e, type)} className="text-xs" />

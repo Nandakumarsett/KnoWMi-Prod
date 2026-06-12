@@ -62,7 +62,7 @@ export default function TrackOrder() {
       const { data, error: dbError } = await supabase
         .from('orders')
         .select('*')
-        .or(`order_number.ilike.%${q}%,id.eq.${q.length > 10 ? q : '00000000-0000-0000-0000-000000000000'}`)
+        .or(`order_number.eq.${q},id.eq.${q.length > 10 ? q : '00000000-0000-0000-0000-000000000000'}`)
         .limit(1)
         .maybeSingle()
 
