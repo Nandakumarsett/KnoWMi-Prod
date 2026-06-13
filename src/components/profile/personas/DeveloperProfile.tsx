@@ -4,7 +4,8 @@ import { getAssetUrl } from '../../../lib/supabase'
 import { 
   Monitor, Code2, Database, Layout, Box, Globe, ExternalLink, 
   Terminal, Mail, Calendar, Lock, Shield, Cpu, RefreshCw, Layers,
-  FileText, Star, MessageCircle, Phone, Video
+  FileText, Star, MessageCircle, Phone, Video,
+  Github, Twitter, Linkedin
 } from 'lucide-react'
 import { ProfileCTAs } from '../shared/ProfileCTAs'
 import { trackLinkClick } from '../../../lib/analytics/track'
@@ -12,11 +13,11 @@ import { useGatedLink } from '../../../hooks/useGatedLink'
 
 function getPlatformIcon(platform: string) {
   const p = platform.toLowerCase();
-  if (p.includes('github')) return { logo: 'github', color: '#1A1A1A' };
-  if (p.includes('twitter') || p.includes('x')) return { logo: 'x', color: '#000000' };
-  if (p.includes('linkedin')) return { logo: 'linkedin', color: '#0A66C2' };
-  if (p.includes('stackoverflow')) return { logo: 'stackoverflow', color: '#F48024' };
-  return { logo: 'globe', color: '#71B5F5' };
+  if (p.includes('github')) return { Icon: Github, color: '#1A1A1A' };
+  if (p.includes('twitter') || p.includes('x')) return { Icon: Twitter, color: '#000000' };
+  if (p.includes('linkedin')) return { Icon: Linkedin, color: '#0A66C2' };
+  if (p.includes('stackoverflow')) return { Icon: Database, color: '#F48024' };
+  return { Icon: Globe, color: '#71B5F5' };
 }
 
 export function DeveloperProfile({ profile }: { profile: ProfileData }) {
@@ -127,7 +128,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             <div className="w-full flex flex-wrap justify-center gap-6 mt-2 mb-4 z-20">
               {data.platforms.map((p, i) => {
                 if (!p.url) return null
-                const { logo } = getPlatformIcon(p.platform || '')
+                const { Icon } = getPlatformIcon(p.platform || '')
                 return (
                   <a
                     key={i}
@@ -140,16 +141,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                     }}
                     className="relative hover:scale-110 transition-transform duration-300 text-neutral-500 hover:text-[#0A66C2] social-link-item cursor-pointer"
                   >
-                    {logo && logo !== 'globe' ? (
-                      <img 
-                        src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
-                        className="w-5 h-5 object-contain"
-                        style={{ filter: 'brightness(0)' }}
-                        alt={p.platform}
-                      />
-                    ) : (
-                      <Globe size={20} />
-                    )}
+                    <Icon size={20} />
                     {isGated && (
                       <div className="absolute inset-0 rounded-full bg-black/20 flex items-center justify-center">
                         <Lock size={16} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
@@ -519,7 +511,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <div className="flex flex-wrap gap-3">
                 {data.platforms.map((p, i) => {
                   if (!p.url) return null
-                  const { logo } = getPlatformIcon(p.platform || '')
+                  const { Icon } = getPlatformIcon(p.platform || '')
                   return (
                     <a
                       key={i}
@@ -532,16 +524,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                       }}
                       className="blueprint-border bg-[#0A192F] hover:bg-[#64FFDA]/10 px-5 py-3 text-xs flex items-center gap-3 transition-all duration-300 relative group"
                     >
-                      {logo && logo !== 'globe' ? (
-                        <img 
-                          src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
-                          className="w-4 h-4 object-contain opacity-70 group-hover:opacity-100 transition-opacity"
-                          style={{ filter: 'invert(87%) sepia(26%) saturate(692%) hue-rotate(107deg) brightness(101%) contrast(105%)' }}
-                          alt={p.platform}
-                        />
-                      ) : (
-                        <Globe size={16} className="text-[#64FFDA] opacity-70 group-hover:opacity-100" />
-                      )}
+                      <Icon className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
                       <span className="text-[11px] uppercase text-[#8892B0] group-hover:text-[#64FFDA] transition-colors">{p.platform}</span>
                       {isGated && (
                         <div className="absolute inset-0 bg-[#001B2E]/80 flex items-center justify-center">
@@ -819,7 +802,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <div className="flex flex-wrap gap-3">
                 {data.platforms.map((p, i) => {
                   if (!p.url) return null
-                  const { logo } = getPlatformIcon(p.platform || '')
+                  const { Icon } = getPlatformIcon(p.platform || '')
                   return (
                     <a
                       key={i}
@@ -832,12 +815,8 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                       }}
                       className="hacker-border bg-black hover:bg-[#00FF41] hover:text-black px-4 py-2 text-xs flex items-center gap-2 transition-all relative"
                     >
-                      {logo && logo !== 'globe' ? (
-                        <img 
-                          src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
-                          className="w-3.5 h-3.5 object-contain filter brightness-0 invert"
-                          alt={p.platform}
-                        />
+                      {Icon ? (
+                        <Icon size={12} />
                       ) : (
                         <Globe size={12} />
                       )}

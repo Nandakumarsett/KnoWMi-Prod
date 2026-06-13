@@ -229,9 +229,17 @@ export default function PublicProfile() {
     profile.status === "free" ||
     (!profile.status && (!profile.tier || profile.tier === "Starter"));
 
-  // Sort platforms in persona_data so youtube is next to instagram
-  let modifiedPersonaData = { ...profile.persona_data };
-  if (
+    // Extract the active identity's data if identities exist
+    const identities = profile.persona_data?.identities || [];
+    const activeIdentity = identities.find((i: any) => i.active) || identities[0];
+    const identityData = activeIdentity?.data || {};
+
+    // Sort platforms in persona_data so youtube is next to instagram
+    let modifiedPersonaData = { 
+      ...profile.persona_data,
+      ...identityData
+    };
+    if (
     modifiedPersonaData.platforms &&
     Array.isArray(modifiedPersonaData.platforms)
   ) {
