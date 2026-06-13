@@ -122,64 +122,95 @@ export default function InteractiveJourney() {
               )}
             </AnimatePresence>
 
-            {/* Phase 2 & 3: Glow Profile View */}
+            {/* Phase 2 & 3: Default Profile View (Nanda Kumar) */}
             <AnimatePresence>
               {(phase === 2 || phase === 3) && (
                 <motion.div 
                   initial={{ opacity: 0, scale: 1.1 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, filter: "blur(10px)" }}
-                  className="absolute inset-0 bg-[#0A0A0A] overflow-hidden w-full"
+                  className="absolute inset-0 bg-[#f8f8fb] overflow-hidden w-full font-sans text-center px-4 pt-4"
                 >
-                  {/* Ambient Glow Orbs */}
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-[#FF5E00] rounded-full blur-[80px] opacity-20 pointer-events-none" />
-                  <div className="absolute bottom-10 left-10 w-48 h-48 bg-[#00C3FF] rounded-full blur-[80px] opacity-20 pointer-events-none" />
-
-                  {/* Header/Banner */}
-                  <div className="h-32 bg-neutral-900/50 relative border-b border-white/5">
-                    <img src="/logo-square.png" alt="KnoWMi" className="w-8 h-8 absolute top-6 left-6" />
+                  {/* Banner Image */}
+                  <div className="w-full h-32 rounded-3xl bg-black overflow-hidden relative shadow-lg flex flex-col items-start justify-center p-6 border-b-4 border-orange-500">
+                     <h2 className="text-white font-bold text-xl leading-tight text-left">Code.<br/>Build.<br/><span className="text-orange-500">Innovate.</span></h2>
+                  </div>
+                  
+                  {/* Avatar */}
+                  <div className="relative -mt-10 mb-2 w-full flex justify-center">
+                    <div className="w-20 h-20 rounded-[24px] bg-neutral-800 border-4 border-[#f8f8fb] overflow-hidden shadow-lg relative">
+                      <img src="/logo-square.png" alt="Nanda Kumar" className="w-full h-full object-cover" />
+                      <div className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 border-2 border-white rounded-full"></div>
+                    </div>
                   </div>
                   
                   {/* Profile Info */}
-                  <div className="px-6 -mt-12 relative z-10 w-full flex flex-col items-center">
-                    <div className="w-24 h-24 rounded-[28px] bg-neutral-800 border-4 border-[#0A0A0A] mb-4 overflow-hidden shadow-[0_0_30px_rgba(255,94,0,0.15)] ring-2 ring-[#FF5E00]/30 rotate-[-2deg]">
-                      <div className="w-full h-full bg-gradient-to-tr from-[#FF5E00] to-yellow-500" />
-                    </div>
-                    
-                    <h2 className="text-white text-2xl font-bold mb-1 tracking-tight" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Alex KnoWMi</h2>
-                    <p className="text-[#FF5E00] font-medium text-sm mb-6">Digital Creator</p>
-                    
-                    <div className="flex gap-4 mb-8 w-full">
-                      <div className="flex-1 bg-white/5 rounded-2xl p-4 border border-white/10">
-                        <div className="text-white font-bold text-lg">12.4K</div>
-                        <div className="text-neutral-500 text-xs">Scans</div>
-                      </div>
-                      <div className="flex-1 bg-white/5 rounded-2xl p-4 border border-white/10">
-                        <div className="text-white font-bold text-lg">850</div>
-                        <div className="text-neutral-500 text-xs">Tees Sold</div>
-                      </div>
-                    </div>
+                  <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-500 text-2xl font-black mb-1">Nanda Kumar</h2>
+                  <p className="text-slate-600 font-semibold text-xs mb-3">Romantic Creator</p>
+                  
+                  {/* Availability Pill */}
+                  <div className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full shadow-sm border border-slate-100 mb-5">
+                     <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
+                     <span className="text-slate-700 text-[10px] font-semibold">Open</span>
+                     <span className="text-slate-400 text-[10px]">- Responds within 24 hours</span>
+                  </div>
 
-                    {/* Claim Button */}
-                    <div className="relative group w-full">
-                      <motion.div 
-                        animate={phase === 3 ? { scale: [1, 0.95, 1], backgroundColor: ["#f97316", "#ea580c", "#f97316"] } : {}}
-                        transition={{ duration: 0.3, delay: 1 }}
-                        className="w-full py-4 bg-orange-500 rounded-full flex items-center justify-center gap-2 text-black font-black uppercase tracking-widest relative overflow-hidden"
-                      >
-                        <ShoppingCart size={18} />
-                        Claim Your Tee
-                        
-                        {phase === 3 && (
-                          <motion.div 
-                            initial={{ scale: 0, opacity: 0.5 }}
-                            animate={{ scale: 3, opacity: 0 }}
-                            transition={{ duration: 0.6, delay: 1 }}
-                            className="absolute inset-0 bg-white rounded-full origin-center pointer-events-none"
-                          />
-                        )}
-                      </motion.div>
+                  {/* Social Icons */}
+                  <div className="flex justify-center gap-4 mb-6">
+                    <div className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center text-slate-700">
+                      <Scan size={16} />
                     </div>
+                    <div className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center text-slate-700">
+                      <User size={16} />
+                    </div>
+                  </div>
+                  
+                  {/* Stats Row */}
+                  <div className="flex justify-between px-2 mb-6">
+                    <div className="flex flex-col items-center flex-1">
+                      <span className="font-bold text-slate-800 text-lg">48</span>
+                      <span className="text-[8px] font-bold text-slate-500 tracking-widest uppercase">Impressions</span>
+                    </div>
+                    <div className="flex flex-col items-center flex-1 border-x border-slate-200">
+                      <span className="font-bold text-slate-800 text-lg">BNGLR</span>
+                      <span className="text-[8px] font-bold text-slate-500 tracking-widest uppercase">Most Reached</span>
+                    </div>
+                    <div className="flex flex-col items-center flex-1">
+                      <span className="font-bold text-slate-800 text-lg">18-35</span>
+                      <span className="text-[8px] font-bold text-slate-500 tracking-widest uppercase">Audience Age</span>
+                    </div>
+                  </div>
+
+                  {/* Inside the mind */}
+                  <div className="mb-6">
+                    <div className="flex items-center justify-center gap-1 mb-2 text-purple-500">
+                      <Zap size={10} />
+                      <span className="text-[9px] font-bold tracking-widest uppercase">Inside the mind</span>
+                    </div>
+                    <p className="text-sm font-bold text-slate-800 leading-tight px-4">
+                      I am Very enthusiastic towards my work. I respect all work
+                    </p>
+                  </div>
+
+                  {/* Claim Button (Fixed at Bottom for Cinematic Flow) */}
+                  <div className="absolute bottom-6 left-6 right-6 group z-50">
+                    <motion.div 
+                      animate={phase === 3 ? { scale: [1, 0.95, 1], backgroundColor: ["#f97316", "#ea580c", "#f97316"] } : {}}
+                      transition={{ duration: 0.3, delay: 1 }}
+                      className="w-full py-4 bg-orange-500 rounded-2xl flex items-center justify-center gap-2 text-white font-black uppercase tracking-widest relative overflow-hidden shadow-xl"
+                    >
+                      <ShoppingCart size={18} />
+                      Claim Your Tee
+                      
+                      {phase === 3 && (
+                        <motion.div 
+                          initial={{ scale: 0, opacity: 0.5 }}
+                          animate={{ scale: 3, opacity: 0 }}
+                          transition={{ duration: 0.6, delay: 1 }}
+                          className="absolute inset-0 bg-white rounded-full origin-center pointer-events-none"
+                        />
+                      )}
+                    </motion.div>
                   </div>
 
                   {/* Animated Cursor (Phase 3 only) */}
@@ -192,7 +223,7 @@ export default function InteractiveJourney() {
                         transition={{ duration: 0.8, ease: "easeOut" }}
                         className="absolute z-50 pointer-events-none"
                       >
-                        <MousePointer2 size={32} className="text-white drop-shadow-xl" fill="rgba(255,255,255,0.8)" />
+                        <MousePointer2 size={32} className="text-slate-800 drop-shadow-xl" fill="rgba(255,255,255,0.8)" />
                       </motion.div>
                     )}
                   </AnimatePresence>
