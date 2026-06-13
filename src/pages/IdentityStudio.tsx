@@ -986,9 +986,7 @@ export default function IdentityStudio() {
                               "campus",
                               "night owl",
                             ];
-                          if (
-                            activePersona?.toLowerCase().includes("creator")
-                          )
+                          if (isCreatorPersona(activePersona))
                             options = ["default", "classic", "minimal", "neon"];
 
                           return options.map((opt) => (
