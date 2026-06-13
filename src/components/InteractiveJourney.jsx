@@ -9,10 +9,11 @@ export default function InteractiveJourney() {
     // Define the auto-playing sequence timings
     const sequence = [
       { p: 1, delay: 3500 }, // Phase 1: QR Scan (3.5s)
-      { p: 2, delay: 3000 }, // Phase 2: Glow Profile (3s)
+      { p: 2, delay: 3000 }, // Phase 2: Default Profile View (3s)
       { p: 3, delay: 3000 }, // Phase 3: Action Click (3s)
-      { p: 4, delay: 3000 }, // Phase 4: Checkout Success (3s)
-      { p: 5, delay: 5000 }, // Phase 5: Finale Image (5s)
+      { p: 4, delay: 3500 }, // Phase 4: Fake Login (3.5s)
+      { p: 5, delay: 3000 }, // Phase 5: Checkout Success (3s)
+      { p: 6, delay: 5000 }, // Phase 6: Finale Image (5s)
     ];
 
     let currentPhaseIdx = 0;
@@ -34,9 +35,9 @@ export default function InteractiveJourney() {
       {/* Container holding the mock smartphone and finale image */}
       <div className="relative w-full max-w-[320px] h-[650px] transition-all duration-1000 ease-in-out">
         
-        {/* The Finale Image - expands when phase 5 is active */}
+        {/* The Finale Image - expands when phase 6 is active */}
         <AnimatePresence>
-          {phase === 5 && (
+          {phase === 6 && (
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 50 }}
               animate={{ opacity: 1, scale: 1.2, y: -20 }}
@@ -68,8 +69,8 @@ export default function InteractiveJourney() {
         {/* The Mock Smartphone Frame */}
         <motion.div 
           animate={{
-            scale: phase === 5 ? 0.8 : 1,
-            opacity: phase === 5 ? 0 : 1,
+            scale: phase === 6 ? 0.8 : 1,
+            opacity: phase === 6 ? 0 : 1,
             rotateY: phase === 1 ? 5 : 0,
             rotateX: phase === 1 ? 5 : 0
           }}
@@ -94,7 +95,7 @@ export default function InteractiveJourney() {
                   
                   {/* Mock QR Target */}
                   <div className="relative w-48 h-48 border-2 border-white/20 rounded-3xl overflow-hidden mt-8 flex items-center justify-center bg-white/5">
-                    <img src="/logo-square.png" alt="KnoWMi" className="w-16 h-16 opacity-50 absolute z-0" />
+                    <img src="/logo-square.png" alt="KnoWMi" className="w-16 h-16 opacity-100 absolute z-0 shadow-lg drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]" />
                     
                     {/* Scanner Line */}
                     <motion.div 
@@ -231,14 +232,70 @@ export default function InteractiveJourney() {
               )}
             </AnimatePresence>
 
-            {/* Phase 4: Razorpay Checkout */}
+            {/* Phase 4: Fake Login */}
             <AnimatePresence>
               {phase === 4 && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="absolute inset-0 bg-neutral-950 p-6 flex flex-col items-center justify-center z-20"
+                >
+                  <img src="/logo-square.png" alt="KnoWMi" className="w-12 h-12 mb-6" />
+                  <h3 className="text-white text-xl font-bold mb-8">Sign in to KnoWMi</h3>
+                  
+                  <div className="w-full space-y-4">
+                    <div className="w-full bg-neutral-900 rounded-xl p-4 border border-neutral-800">
+                      <div className="text-neutral-500 text-xs mb-1">Email</div>
+                      <motion.div 
+                        initial={{ width: "0%" }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 1, delay: 0.2 }}
+                        className="text-white font-mono overflow-hidden whitespace-nowrap"
+                      >
+                        nanda@knowmi.com
+                      </motion.div>
+                    </div>
+                    
+                    <div className="w-full bg-neutral-900 rounded-xl p-4 border border-neutral-800">
+                      <div className="text-neutral-500 text-xs mb-1">Password</div>
+                      <motion.div 
+                        initial={{ width: "0%" }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 0.8, delay: 1.2 }}
+                        className="text-white font-mono overflow-hidden whitespace-nowrap tracking-widest"
+                      >
+                        ••••••••
+                      </motion.div>
+                    </div>
+
+                    <motion.div
+                      initial={{ scale: 1 }}
+                      animate={{ scale: [1, 0.95, 1], backgroundColor: ["#f97316", "#ea580c", "#f97316"] }}
+                      transition={{ duration: 0.3, delay: 2.2 }}
+                      className="w-full mt-6 py-4 bg-orange-500 rounded-xl flex items-center justify-center text-white font-bold tracking-wide relative overflow-hidden"
+                    >
+                      Login & Continue
+                      <motion.div 
+                        initial={{ scale: 0, opacity: 0.5 }}
+                        animate={{ scale: 3, opacity: 0 }}
+                        transition={{ duration: 0.6, delay: 2.2 }}
+                        className="absolute inset-0 bg-white rounded-full origin-center pointer-events-none"
+                      />
+                    </motion.div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Phase 5: Razorpay Checkout */}
+            <AnimatePresence>
+              {phase === 5 && (
                 <motion.div 
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9 }}
-                  className="absolute inset-0 bg-[#0e1116] p-6 flex flex-col w-full"
+                  className="absolute inset-0 bg-[#0e1116] p-6 flex flex-col w-full z-30"
                 >
                   <div className="flex items-center justify-between mt-4 mb-8">
                     <div className="text-white font-bold flex items-center gap-2">
