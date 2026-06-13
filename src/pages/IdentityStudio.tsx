@@ -973,21 +973,23 @@ export default function IdentityStudio() {
                       <label className="section-label">Profile Theme</label>
                       <div className="grid grid-cols-4 gap-2">
                         {(() => {
-                          let options = [
-                            "default",
-                            "classic",
-                            "blueprint",
-                            "hacker",
-                          ];
-                          if (activePersona === "student")
+                          let options = ["default", "classic", "minimal", "neon"]; // Default to Creator
+                          
+                          if (["tech", "dev", "developer"].includes(activePersona?.toLowerCase() || "")) {
+                            options = [
+                              "default",
+                              "classic",
+                              "blueprint",
+                              "hacker",
+                            ];
+                          } else if (activePersona?.toLowerCase().includes("student")) {
                             options = [
                               "default",
                               "classic",
                               "campus",
                               "night owl",
                             ];
-                          if (isCreatorPersona(activePersona))
-                            options = ["default", "classic", "minimal", "neon"];
+                          }
 
                           return options.map((opt) => (
                             <div
@@ -1009,11 +1011,11 @@ export default function IdentityStudio() {
                                 }`}
                               >
                                 {opt === "default"
-                                  ? activePersona === "student"
-                                    ? "Notebook"
-                                    : activePersona?.toLowerCase().includes("creator")
-                                      ? "Glow"
-                                      : "Terminal"
+                                  ? ["tech", "dev", "developer"].includes(activePersona?.toLowerCase() || "")
+                                    ? "Terminal"
+                                    : activePersona?.toLowerCase().includes("student")
+                                      ? "Notebook"
+                                      : "Glow"
                                   : opt === "classic"
                                     ? "Classic"
                                     : opt}
