@@ -141,14 +141,14 @@ export default function InteractiveJourney() {
                   {/* Avatar */}
                   <div className="relative -mt-10 mb-2 w-full flex justify-center">
                     <div className="w-20 h-20 rounded-[24px] bg-neutral-800 border-4 border-[#f8f8fb] overflow-hidden shadow-lg relative">
-                      <img src="/logo-square.png" alt="Nanda Kumar" className="w-full h-full object-cover" />
+                      <img src="/logo-square.png" alt="Nikhil Kumar" className="w-full h-full object-cover" />
                       <div className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 border-2 border-white rounded-full"></div>
                     </div>
                   </div>
                   
                   {/* Profile Info */}
-                  <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-500 text-2xl font-black mb-1">Nanda Kumar</h2>
-                  <p className="text-slate-600 font-semibold text-xs mb-3">Romantic Creator</p>
+                  <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-500 text-2xl font-black mb-1">Nikhil Kumar</h2>
+                  <p className="text-slate-600 font-semibold text-xs mb-3">Content Creator</p>
                   
                   {/* Availability Pill */}
                   <div className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full shadow-sm border border-slate-100 mb-5">
@@ -254,7 +254,7 @@ export default function InteractiveJourney() {
                         transition={{ duration: 1, delay: 0.2 }}
                         className="text-white font-mono overflow-hidden whitespace-nowrap"
                       >
-                        nanda@knowmi.com
+                        nikhil@knowmi.com
                       </motion.div>
                     </div>
                     
