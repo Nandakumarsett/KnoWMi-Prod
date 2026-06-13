@@ -82,7 +82,7 @@ export default function Tshirt3DModel() {
     >
       {/* 3D card wrapper */}
       <div
-        className="relative w-[90vw] h-[90vw] max-w-[750px] max-h-[750px] md:w-[600px] md:h-[700px] lg:w-[750px] lg:h-[850px]"
+        className="relative w-[90vw] h-[90vw] max-w-[850px] max-h-[850px] md:w-[700px] md:h-[800px] lg:w-[850px] lg:h-[950px]"
         style={{
           transformStyle: 'preserve-3d',
           transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
@@ -100,7 +100,7 @@ export default function Tshirt3DModel() {
           <img
             src="/assets/scrolly/tshirt_front_v3.png"
             alt="KnoWMi T-Shirt Front"
-            className="w-full h-full object-contain drop-shadow-[0_20px_60px_rgba(255,85,0,0.15)]"
+            className="w-full h-full object-contain mix-blend-lighten drop-shadow-[0_20px_60px_rgba(255,85,0,0.15)]"
             draggable={false}
           />
         </div>
@@ -116,7 +116,7 @@ export default function Tshirt3DModel() {
           <img
             src="/assets/scrolly/tshirt_back_v3.png"
             alt="KnoWMi T-Shirt Back"
-            className="w-full h-full object-contain drop-shadow-[0_20px_60px_rgba(255,85,0,0.15)]"
+            className="w-full h-full object-contain mix-blend-lighten drop-shadow-[0_20px_60px_rgba(255,85,0,0.15)]"
             draggable={false}
           />
         </div>
