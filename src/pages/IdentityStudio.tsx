@@ -196,6 +196,12 @@ const PERSONA_CONFIG: Record<string, any> = {
   },
 };
 
+const isCreatorPersona = (p?: string) => {
+  if (!p) return false;
+  const lower = p.toLowerCase();
+  return lower.includes("creator") || ["influencer", "gamer", "fitness"].includes(lower);
+};
+
 const INITIAL_STATE = {
   first_name: "",
   last_name: "",
@@ -598,18 +604,16 @@ export default function IdentityStudio() {
 
   const activeConfig = useMemo(() => {
     const persona = (activePersona || "creator").toLowerCase();
-    const key = ["tech", "dev", "developer"].includes(persona)
-      ? "developer"
-      : persona;
-    return personaConfigs[key] || personaConfigs["creator"];
+    if (["tech", "dev", "developer"].includes(persona)) return personaConfigs["developer"];
+    if (isCreatorPersona(persona)) return personaConfigs["creator"];
+    return personaConfigs[persona] || personaConfigs["creator"];
   }, [activePersona]);
 
   const config = useMemo(() => {
     const persona = (activePersona || "creator").toLowerCase();
-    const key = ["tech", "dev", "developer"].includes(persona)
-      ? "developer"
-      : persona;
-    return PERSONA_CONFIG[key] || PERSONA_CONFIG["creator"];
+    if (["tech", "dev", "developer"].includes(persona)) return PERSONA_CONFIG["developer"];
+    if (isCreatorPersona(persona)) return PERSONA_CONFIG["creator"];
+    return PERSONA_CONFIG[persona] || PERSONA_CONFIG["creator"];
   }, [activePersona]);
 
   const aiMessage = useMemo(() => {
@@ -928,8 +932,7 @@ export default function IdentityStudio() {
                       </div>
                     </div>
 
-                    {(activePersona === "creator" ||
-                      activePersona === "creator") && (
+                    {isCreatorPersona(activePersona) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                         <div>
@@ -1074,8 +1077,7 @@ export default function IdentityStudio() {
                         uploading={uploading}
                       />
                     )}
-                    {(activePersona === "creator" ||
-                      activePersona === "creator") && (
+                    {isCreatorPersona(activePersona) && (
                       <CreatorForm
                         data={data}
                         onChange={setData}
