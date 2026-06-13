@@ -984,8 +984,7 @@ export default function IdentityStudio() {
                               "night owl",
                             ];
                           if (
-                            activePersona === "creator" ||
-                            activePersona === "creator"
+                            activePersona?.toLowerCase().includes("creator")
                           )
                             options = ["default", "classic", "minimal", "neon"];
 
@@ -1011,8 +1010,7 @@ export default function IdentityStudio() {
                                 {opt === "default"
                                   ? activePersona === "student"
                                     ? "Notebook"
-                                    : activePersona === "creator" ||
-                                        activePersona === "creator"
+                                    : activePersona?.toLowerCase().includes("creator")
                                       ? "Glow"
                                       : "Terminal"
                                   : opt === "classic"
