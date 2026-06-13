@@ -310,7 +310,7 @@ export default function PublicProfile() {
             this profile yours.
           </p>
           <button
-            onClick={() => navigate("/dashboard?tab=profile")}
+            onClick={() => navigate("/dashboard?tab=identity")}
             className="px-10 py-5 bg-orange-500 text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-2xl shadow-orange-500/20 active:scale-95 transition-all relative z-10 hover:bg-orange-600"
           >
             Setup Identity

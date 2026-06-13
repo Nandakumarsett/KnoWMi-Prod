@@ -644,7 +644,7 @@ export default function IdentityStudio() {
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 min-h-[80px] py-4 flex flex-row items-center justify-between gap-2 sm:gap-4">
           <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
             <button
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/dashboard?tab=identity")}
               className="w-10 h-10 shrink-0 rounded-xl bg-neutral-50 sm:bg-transparent hover:bg-neutral-100 flex items-center justify-center transition-all"
             >
               <ArrowLeft size={20} className="text-neutral-600" />
