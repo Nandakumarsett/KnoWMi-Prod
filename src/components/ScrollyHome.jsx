@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Tshirt3DModel from './Tshirt3DModel';
+import InteractiveJourney from './InteractiveJourney';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -218,11 +219,9 @@ export default function ScrollyHome() {
             </p>
           </div>
           <div className="flex-1 flex justify-center items-end w-full h-[45vh] md:h-[80vh]">
-            <img 
-              src="/assets/scrolly/digital_profile.png" 
-              alt="Digital Profile" 
-              className="phone-mockup w-full h-full max-w-md object-contain object-bottom origin-bottom drop-shadow-[0_-20px_80px_rgba(249,115,22,0.3)]"
-            />
+            <div className="phone-mockup w-full h-full max-w-md drop-shadow-[0_-20px_80px_rgba(249,115,22,0.3)]">
+              <InteractiveJourney />
+            </div>
           </div>
         </div>
       </section>
