@@ -70,7 +70,7 @@ export default function Tshirt3DModel() {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full min-h-[500px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none relative"
+      className="w-full h-full min-h-[500px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
       onMouseDown={handlePointerDown}
       onMouseMove={handlePointerMove}
       onMouseUp={handlePointerUp}
@@ -78,18 +78,49 @@ export default function Tshirt3DModel() {
       onTouchStart={handlePointerDown}
       onTouchMove={handlePointerMove}
       onTouchEnd={handlePointerUp}
+      style={{ perspective: '1200px' }}
     >
-      {/* T-shirt image — no card, just the shirt */}
-      <img
-        src={showBack ? "/assets/scrolly/tshirt_back_v7.jpg" : "/assets/scrolly/tshirt_front_v5.jpg"}
-        alt={showBack ? "KnoWMi T-Shirt Back" : "KnoWMi T-Shirt Front"}
-        className="max-w-[850px] max-h-[950px] w-[90vw] md:w-[700px] lg:w-[850px] object-contain mix-blend-lighten drop-shadow-[0_20px_60px_rgba(255,85,0,0.15)]"
-        draggable={false}
+      {/* 3D card wrapper */}
+      <div
+        className="relative w-[90vw] h-[90vw] max-w-[850px] max-h-[850px] md:w-[700px] md:h-[800px] lg:w-[850px] lg:h-[950px]"
         style={{
-          transform: `scaleX(${Math.cos((normalizedAngle * Math.PI) / 180)}) rotateX(${rotateX}deg)`,
+          transformStyle: 'preserve-3d',
+          transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
           transition: isDragging ? 'none' : 'transform 0.05s linear',
         }}
-      />
+      >
+        {/* FRONT face */}
+        <div
+          className="absolute inset-0 flex items-center justify-center"
+          style={{
+            backfaceVisibility: 'hidden',
+            transform: 'rotateY(0deg)',
+          }}
+        >
+          <img
+            src="/assets/scrolly/tshirt_front_v6.png"
+            alt="KnoWMi T-Shirt Front"
+            className="w-full h-full object-contain drop-shadow-[0_20px_60px_rgba(255,85,0,0.15)]"
+            draggable={false}
+          />
+        </div>
+
+        {/* BACK face */}
+        <div
+          className="absolute inset-0 flex items-center justify-center"
+          style={{
+            backfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg)',
+          }}
+        >
+          <img
+            src="/assets/scrolly/tshirt_back_v8.png"
+            alt="KnoWMi T-Shirt Back"
+            className="w-full h-full object-contain drop-shadow-[0_20px_60px_rgba(255,85,0,0.15)]"
+            draggable={false}
+          />
+        </div>
+      </div>
 
       {/* Subtle "drag to rotate" hint */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-neutral-500 text-xs tracking-widest uppercase font-medium animate-pulse pointer-events-none">
