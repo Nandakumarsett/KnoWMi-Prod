@@ -93,8 +93,8 @@ export default function InteractiveJourney() {
                   </div>
                   
                   {/* Mock QR Target */}
-                  <div className="relative w-48 h-48 border-2 border-white/20 rounded-3xl overflow-hidden mt-8 flex items-center justify-center">
-                    <img src="/knowmi_logo.png" alt="KnoWMi" className="w-16 h-16 opacity-50 absolute z-0" />
+                  <div className="relative w-48 h-48 border-2 border-white/20 rounded-3xl overflow-hidden mt-8 flex items-center justify-center bg-white/5">
+                    <img src="/logo-square.png" alt="KnoWMi" className="w-16 h-16 opacity-50 absolute z-0" />
                     
                     {/* Scanner Line */}
                     <motion.div 
@@ -131,19 +131,23 @@ export default function InteractiveJourney() {
                   exit={{ opacity: 0, filter: "blur(10px)" }}
                   className="absolute inset-0 bg-[#0A0A0A] overflow-hidden w-full"
                 >
+                  {/* Ambient Glow Orbs */}
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-[#FF5E00] rounded-full blur-[80px] opacity-20 pointer-events-none" />
+                  <div className="absolute bottom-10 left-10 w-48 h-48 bg-[#00C3FF] rounded-full blur-[80px] opacity-20 pointer-events-none" />
+
                   {/* Header/Banner */}
-                  <div className="h-32 bg-gradient-to-b from-orange-900/40 to-transparent relative">
-                    <img src="/knowmi_logo.png" alt="KnoWMi" className="w-8 h-8 absolute top-6 left-6" />
+                  <div className="h-32 bg-neutral-900/50 relative border-b border-white/5">
+                    <img src="/logo-square.png" alt="KnoWMi" className="w-8 h-8 absolute top-6 left-6" />
                   </div>
                   
                   {/* Profile Info */}
-                  <div className="px-6 -mt-12 relative z-10 w-full">
-                    <div className="w-24 h-24 rounded-full bg-neutral-800 border-4 border-[#0A0A0A] mb-4 overflow-hidden shadow-[0_0_30px_rgba(249,115,22,0.2)]">
-                      <div className="w-full h-full bg-gradient-to-tr from-orange-600 to-yellow-500" />
+                  <div className="px-6 -mt-12 relative z-10 w-full flex flex-col items-center">
+                    <div className="w-24 h-24 rounded-[28px] bg-neutral-800 border-4 border-[#0A0A0A] mb-4 overflow-hidden shadow-[0_0_30px_rgba(255,94,0,0.15)] ring-2 ring-[#FF5E00]/30 rotate-[-2deg]">
+                      <div className="w-full h-full bg-gradient-to-tr from-[#FF5E00] to-yellow-500" />
                     </div>
                     
-                    <h2 className="text-white text-2xl font-black mb-1">Alex KnoWMi</h2>
-                    <p className="text-orange-500 font-medium text-sm mb-4">Digital Creator</p>
+                    <h2 className="text-white text-2xl font-bold mb-1 tracking-tight" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Alex KnoWMi</h2>
+                    <p className="text-[#FF5E00] font-medium text-sm mb-6">Digital Creator</p>
                     
                     <div className="flex gap-4 mb-8 w-full">
                       <div className="flex-1 bg-white/5 rounded-2xl p-4 border border-white/10">
