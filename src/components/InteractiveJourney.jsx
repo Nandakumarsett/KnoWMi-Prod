@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Scan, User, ShoppingCart, CheckCircle, MousePointer2, Zap, ArrowRight, X } from 'lucide-react';
-import tshirtFrontImg from '../assets/scrolly/tshirt_front_v9.jpg';
+import tshirtBackImg from '../assets/scrolly/tshirt_back_reveal.png';
 
 export default function InteractiveJourney() {
   const [phase, setPhase] = useState(1);
@@ -47,8 +47,8 @@ export default function InteractiveJourney() {
               className="absolute inset-0 z-50 rounded-[40px] overflow-hidden shadow-[0_0_100px_rgba(249,115,22,0.5)] border border-white/10 bg-black"
             >
               <img 
-                src={tshirtFrontImg} 
-                alt="User wearing KnoWMi Tee"
+                src={tshirtBackImg} 
+                alt="User wearing KnoWMi Tee (Back)"
                 className="w-full h-full object-cover opacity-90"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 flex flex-col justify-end p-8">
