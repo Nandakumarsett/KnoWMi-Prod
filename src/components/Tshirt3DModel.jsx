@@ -98,14 +98,10 @@ export default function Tshirt3DModel() {
           }}
         >
           <img
-            src="/assets/scrolly/tshirt_front_v5.jpg"
+            src="/assets/scrolly/tshirt_front_v10.png"
             alt="KnoWMi T-Shirt Front"
             className="w-full h-full object-contain"
             draggable={false}
-            style={{
-              WebkitMaskImage: 'radial-gradient(ellipse 70% 80% at 50% 50%, black 70%, transparent 100%)',
-              maskImage: 'radial-gradient(ellipse 70% 80% at 50% 50%, black 70%, transparent 100%)'
-            }}
           />
         </div>
 
@@ -118,14 +114,10 @@ export default function Tshirt3DModel() {
           }}
         >
           <img
-            src="/assets/scrolly/tshirt_back_v7.jpg"
+            src="/assets/scrolly/tshirt_back_v10.png"
             alt="KnoWMi T-Shirt Back"
             className="w-full h-full object-contain"
             draggable={false}
-            style={{
-              WebkitMaskImage: 'radial-gradient(ellipse 70% 80% at 50% 50%, black 70%, transparent 100%)',
-              maskImage: 'radial-gradient(ellipse 70% 80% at 50% 50%, black 70%, transparent 100%)'
-            }}
           />
         </div>
       </div>

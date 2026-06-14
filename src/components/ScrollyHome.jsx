@@ -119,7 +119,7 @@ export default function ScrollyHome() {
           alt="KnoWMi T-Shirt" 
           className="hero-shirt absolute inset-0 w-full h-full object-cover opacity-90"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/80 to-white dark:from-transparent dark:via-black/40 dark:to-black pointer-events-none transition-colors duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/0 via-white/60 to-white dark:from-transparent dark:via-black/40 dark:to-black pointer-events-none transition-colors duration-500" />
         <div className="hero-text relative z-10 text-center px-4">
           <p className="text-sm md:text-base font-bold text-orange-500 tracking-[0.3em] uppercase mb-6">Introducing KnoWMi</p>
           <h1 className="text-6xl md:text-9xl font-black tracking-tighter uppercase mb-4 leading-[0.9] text-slate-900 dark:text-white transition-colors duration-500">
@@ -155,14 +155,14 @@ export default function ScrollyHome() {
 
             {/* 200 GSM */}
             <div className="overflow-hidden">
-              <h2 className="fabric-title text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] tracking-tighter text-slate-300 hover:text-slate-400 dark:text-neutral-600 dark:hover:text-neutral-300 transition-colors duration-500 cursor-pointer translate-y-full opacity-0">
+              <h2 className="fabric-title text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] tracking-tighter text-slate-400 hover:text-slate-500 dark:text-neutral-600 dark:hover:text-neutral-300 transition-colors duration-500 cursor-pointer translate-y-full opacity-0">
                 200 GSM<br/>Regular Tee.
               </h2>
             </div>
             
             {/* Hoodie */}
             <div className="overflow-hidden relative flex items-start gap-4">
-              <h2 className="fabric-title text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] tracking-tighter text-slate-200 dark:text-neutral-800 translate-y-full opacity-0">
+              <h2 className="fabric-title text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] tracking-tighter text-slate-300 dark:text-neutral-800 translate-y-full opacity-0">
                 Premium<br/>Hoodie.
               </h2>
               <div className="fabric-badge opacity-0 -translate-y-4">
