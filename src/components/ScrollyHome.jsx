@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Sun, Moon } from 'lucide-react';
 import Tshirt3DModel from './Tshirt3DModel';
 import InteractiveJourney from './InteractiveJourney';
 
@@ -9,22 +8,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function ScrollyHome() {
   const containerRef = useRef(null);
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    }
-    return true;
-  });
-
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-      localStorage.theme = 'dark';
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.theme = 'light';
-    }
-  }, [isDark]);
 
   useEffect(() => {
     ScrollTrigger.config({ ignoreMobileResize: true });
@@ -129,15 +112,6 @@ export default function ScrollyHome() {
   return (
     <div ref={containerRef} className="bg-white dark:bg-black text-slate-900 dark:text-white overflow-hidden relative z-0 pb-32 font-display transition-colors duration-500">
       
-      {/* Theme Toggle Button */}
-      <button 
-        onClick={() => setIsDark(!isDark)}
-        className="fixed top-6 right-6 z-50 p-3 rounded-full bg-slate-100 dark:bg-white/10 backdrop-blur-md border border-slate-200 dark:border-white/10 shadow-lg text-slate-800 dark:text-white transition-all hover:scale-110"
-        aria-label="Toggle Theme"
-      >
-        {isDark ? <Sun size={20} /> : <Moon size={20} />}
-      </button>
-
       {/* 1. Hero Section */}
       <section className="hero-section h-[100svh] w-full relative flex items-center justify-center overflow-hidden bg-white dark:bg-black transition-colors duration-500">
         <img 

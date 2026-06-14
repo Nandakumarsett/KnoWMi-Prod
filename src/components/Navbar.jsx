@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Avatar from './Avatar'
+import { Sun, Moon } from 'lucide-react'
 
 const navLinks = [
   { label: 'How It Works', href: '/#how-it-works' },
@@ -18,6 +19,23 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('')
+
+  const [globalDark, setGlobalDark] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+    return true;
+  });
+
+  useEffect(() => {
+    if (globalDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.theme = 'dark';
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.theme = 'light';
+    }
+  }, [globalDark]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -65,12 +83,12 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
   const firstName = profile?.first_name || user?.user_metadata?.first_name || 'User'
   const status = profile?.status || 'free'
 
-  const useDarkTheme = isDark && !scrolled;
+  const useDarkTheme = globalDark;
 
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${scrolled
-          ? 'bg-white border-b border-[var(--border2)] shadow-lg'
+          ? 'bg-white dark:bg-black border-b border-[var(--border2)] dark:border-neutral-800 shadow-lg'
           : 'bg-transparent'
         }`}
       role="navigation"
@@ -140,6 +158,18 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
 
         {/* Desktop CTA / User Area */}
         <div className="hidden lg:flex items-center gap-2.5 flex-shrink-0 justify-end">
+          {/* Theme Toggle */}
+          <button 
+            onClick={() => setGlobalDark(!globalDark)}
+            className={`p-2 rounded-full transition-all duration-300 hover:scale-110 mr-1 ${
+              useDarkTheme 
+                ? 'bg-white/10 hover:bg-white/20 text-white border border-white/10' 
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200'
+            }`}
+            aria-label="Toggle Theme"
+          >
+            {globalDark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
           {user ? (
             /* Logged in: show name + badge */
             <div className="flex items-center gap-3 relative">
@@ -254,27 +284,35 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={mobileOpen}
         >
-          <span className={`block w-6 h-[3px] bg-ink rounded transition-all duration-200 ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
-          <span className={`block w-6 h-[3px] bg-ink rounded transition-all duration-200 ${mobileOpen ? 'opacity-0' : ''}`} />
-          <span className={`block w-6 h-[3px] bg-ink rounded transition-all duration-200 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          <span className={`block w-6 h-[3px] bg-ink dark:bg-white rounded transition-all duration-200 ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
+          <span className={`block w-6 h-[3px] bg-ink dark:bg-white rounded transition-all duration-200 ${mobileOpen ? 'opacity-0' : ''}`} />
+          <span className={`block w-6 h-[3px] bg-ink dark:bg-white rounded transition-all duration-200 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
         </button>
       </div>
 
       {/* Mobile drawer */}
       <div
-        className={`lg:hidden overflow-hidden transition-all duration-300 bg-white border-t border-[var(--border2)] ${mobileOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
+        className={`lg:hidden overflow-hidden transition-all duration-300 bg-white dark:bg-black border-t border-[var(--border2)] dark:border-neutral-800 ${mobileOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
           }`}
         role="menu"
         aria-hidden={!mobileOpen}
       >
         <div className="px-6 py-4 flex flex-col gap-1">
+          {/* Theme Toggle Mobile */}
+          <button 
+            onClick={() => { setGlobalDark(!globalDark); setMobileOpen(false); }}
+            className="flex items-center gap-3 px-3 py-2.5 mb-2 rounded-lg text-sm font-medium transition-all duration-200 bg-slate-100 dark:bg-white/10 text-slate-800 dark:text-white"
+          >
+            {globalDark ? <Sun size={16} /> : <Moon size={16} />}
+            {globalDark ? 'Light Mode' : 'Dark Mode'}
+          </button>
+
           {navLinks.map(l => (
             <a
               key={l.label}
               href={l.href}
               role="menuitem"
-              className="px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-[var(--off)]"
-              style={{ color: 'var(--ink2)' }}
+              className="px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-[var(--off)] dark:hover:bg-white/10 text-[var(--ink2)] dark:text-neutral-300"
               onClick={() => setMobileOpen(false)}
             >
               {l.label}
@@ -291,7 +329,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
                     <Avatar src={profile?.avatar_url} name={firstName} size="w-9 h-9 ring-2 ring-orange-500 ring-offset-2" />
                   </Link>
                   <div>
-                    <div className="text-sm font-semibold" style={{ color: 'var(--ink)' }}>{firstName}</div>
+                    <div className="text-sm font-semibold text-[var(--ink)] dark:text-white">{firstName}</div>
                     <span
                       className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
                       style={{
