@@ -131,7 +131,7 @@ export default function Tshirt3DModel() {
       </div>
 
       {/* Subtle "drag to rotate" hint */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-neutral-500 text-xs tracking-widest uppercase font-medium animate-pulse pointer-events-none">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-slate-500 dark:text-neutral-500 text-xs tracking-widest uppercase font-medium animate-pulse pointer-events-none transition-colors duration-500">
         ↔ Drag to rotate
       </div>
     </div>
