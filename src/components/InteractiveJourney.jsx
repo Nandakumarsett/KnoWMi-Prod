@@ -34,7 +34,7 @@ export default function InteractiveJourney() {
     <div className="relative w-full h-[60vh] md:h-[80vh] flex items-end justify-center" style={{ perspective: '1000px' }}>
       
       {/* Container holding the mock smartphone and finale image */}
-      <div className="relative w-full max-w-[320px] h-[650px] transition-all duration-1000 ease-in-out">
+      <div className="relative w-full max-w-[300px] sm:max-w-[320px] h-[550px] sm:h-[650px] transition-all duration-1000 ease-in-out">
         
         {/* The Finale Image - expands when phase 6 is active */}
         <AnimatePresence>
@@ -162,44 +162,44 @@ export default function InteractiveJourney() {
                     <div className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center text-slate-700">
                       <Scan size={16} />
                     </div>
-                    <div className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center text-slate-700">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full shadow-md flex items-center justify-center text-slate-700">
                       <User size={16} />
                     </div>
                   </div>
                   
                   {/* Stats Row */}
-                  <div className="flex justify-between px-2 mb-6">
+                  <div className="flex justify-between px-2 mb-4">
                     <div className="flex flex-col items-center flex-1">
-                      <span className="font-bold text-slate-800 text-lg">48</span>
-                      <span className="text-[8px] font-bold text-slate-500 tracking-widest uppercase">Impressions</span>
+                      <span className="font-bold text-slate-800 text-base sm:text-lg">48</span>
+                      <span className="text-[7px] sm:text-[8px] font-bold text-slate-500 tracking-widest uppercase">Impressions</span>
                     </div>
                     <div className="flex flex-col items-center flex-1 border-x border-slate-200">
-                      <span className="font-bold text-slate-800 text-lg">BNGLR</span>
-                      <span className="text-[8px] font-bold text-slate-500 tracking-widest uppercase">Most Reached</span>
+                      <span className="font-bold text-slate-800 text-base sm:text-lg">BNGLR</span>
+                      <span className="text-[7px] sm:text-[8px] font-bold text-slate-500 tracking-widest uppercase">Most Reached</span>
                     </div>
                     <div className="flex flex-col items-center flex-1">
-                      <span className="font-bold text-slate-800 text-lg">18-35</span>
-                      <span className="text-[8px] font-bold text-slate-500 tracking-widest uppercase">Audience Age</span>
+                      <span className="font-bold text-slate-800 text-base sm:text-lg">18-35</span>
+                      <span className="text-[7px] sm:text-[8px] font-bold text-slate-500 tracking-widest uppercase">Audience Age</span>
                     </div>
                   </div>
-
+                  
                   {/* Inside the mind */}
-                  <div className="mb-6">
-                    <div className="flex items-center justify-center gap-1 mb-2 text-purple-500">
+                  <div className="mb-4">
+                    <div className="flex items-center justify-center gap-1 mb-1 sm:mb-2 text-purple-500">
                       <Zap size={10} />
-                      <span className="text-[9px] font-bold tracking-widest uppercase">Inside the mind</span>
+                      <span className="text-[8px] sm:text-[9px] font-bold tracking-widest uppercase">Inside the mind</span>
                     </div>
-                    <p className="text-sm font-bold text-slate-800 leading-tight px-4">
+                    <p className="text-xs sm:text-sm font-bold text-slate-800 leading-tight px-2 sm:px-4">
                       I am Very enthusiastic towards my work. I respect all work
                     </p>
                   </div>
 
-                  {/* Claim Button (Fixed at Bottom for Cinematic Flow) */}
-                  <div className="absolute bottom-6 left-6 right-6 group z-50">
-                    <motion.div 
+                  {/* Claim Button */}
+                  <div className="absolute bottom-4 left-0 w-full px-6 group z-50">
+                    <motion.div
                       animate={phase === 3 ? { scale: [1, 0.95, 1], backgroundColor: ["#f97316", "#ea580c", "#f97316"] } : {}}
                       transition={{ duration: 0.3, delay: 1 }}
-                      className="w-full py-4 bg-orange-500 rounded-2xl flex items-center justify-center gap-2 text-white font-black uppercase tracking-widest relative overflow-hidden shadow-xl"
+                      className="w-full py-3 sm:py-4 bg-orange-500 rounded-2xl flex items-center justify-center gap-2 text-white font-black uppercase text-xs sm:text-sm tracking-widest relative overflow-hidden shadow-xl"
                     >
                       <ShoppingCart size={18} />
                       Claim Your Tee

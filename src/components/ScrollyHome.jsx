@@ -218,7 +218,7 @@ export default function ScrollyHome() {
               A dynamic digital profile bound to your physical garment forever. Manage your identity, track scans, and connect instantly.
             </p>
           </div>
-          <div className="flex-1 flex justify-center items-end w-full h-[45vh] md:h-[80vh]">
+          <div className="flex-1 flex justify-center items-end w-full min-h-[500px] md:h-[80vh] mt-8 md:mt-0">
             <div className="phone-mockup w-full h-full max-w-md drop-shadow-[0_-20px_80px_rgba(249,115,22,0.3)]">
               <InteractiveJourney />
             </div>
