@@ -44,23 +44,23 @@ export default function InteractiveJourney() {
               animate={{ opacity: 1, scale: 1.2, y: -20 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 1.5, ease: "easeOut" }}
-              className="absolute inset-0 z-50 rounded-[40px] overflow-hidden shadow-[0_0_100px_rgba(249,115,22,0.5)] border border-slate-200 dark:border-white/10 bg-white dark:bg-black"
+              className="absolute inset-0 z-50 rounded-[40px] overflow-hidden shadow-[0_0_100px_rgba(249,115,22,0.5)] border border-white/10 bg-black"
             >
               <img 
                 src={tshirtBackImg} 
                 alt="User wearing KnoWMi Tee (Back)"
                 className="w-full h-full object-cover opacity-90"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-transparent to-white/40 dark:from-black/80 dark:via-transparent dark:to-black/30 flex flex-col justify-end p-8 transition-colors duration-500">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 flex flex-col justify-end p-8">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1 }}
                 >
-                  <h3 className="text-slate-900 dark:text-white text-3xl font-black uppercase tracking-tighter mb-2">
+                  <h3 className="text-white text-3xl font-black uppercase tracking-tighter mb-2">
                     KnoWMi <span className="text-orange-500">Live</span>
                   </h3>
-                  <p className="text-slate-600 dark:text-neutral-300 text-sm font-medium">Bound forever to the physical realm.</p>
+                  <p className="text-neutral-300 text-sm font-medium">Bound forever to the physical realm.</p>
                 </motion.div>
               </div>
             </motion.div>
@@ -76,10 +76,10 @@ export default function InteractiveJourney() {
             rotateX: phase === 1 ? 5 : 0
           }}
           transition={{ duration: 1, ease: "easeInOut" }}
-          className="absolute inset-0 bg-white dark:bg-black rounded-[45px] border-[8px] border-slate-300 dark:border-neutral-800 shadow-[0_20px_60px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden z-40 transition-colors duration-500"
+          className="absolute inset-0 bg-black rounded-[45px] border-[8px] border-neutral-800 shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden z-40"
         >
           {/* Dynamic Screen Content */}
-          <div className="relative w-full h-full bg-slate-50 dark:bg-neutral-950 flex flex-col items-center pt-12 overflow-hidden transition-colors duration-500">
+          <div className="relative w-full h-full bg-neutral-950 flex flex-col items-center pt-12 overflow-hidden">
             
             {/* Phase 1: QR Scanning */}
             <AnimatePresence>
@@ -88,15 +88,15 @@ export default function InteractiveJourney() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="absolute inset-0 flex flex-col items-center justify-center bg-white/95 dark:bg-black/90 p-8 transition-colors duration-500"
+                  className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 p-8"
                 >
-                  <div className="absolute top-8 text-slate-500 dark:text-neutral-400 font-medium text-sm flex items-center gap-2">
+                  <div className="absolute top-8 text-neutral-400 font-medium text-sm flex items-center gap-2">
                     <Scan size={16} /> Scanning KnoWMi Garment
                   </div>
                   
                   {/* Mock QR Target */}
-                  <div className="relative w-48 h-48 border-2 border-slate-300 dark:border-white/20 rounded-3xl overflow-hidden mt-8 flex items-center justify-center bg-black/5 dark:bg-white/5 transition-colors duration-500">
-                    <img src="/logo-square.png" alt="KnoWMi" className="w-16 h-16 opacity-100 absolute z-0 shadow-lg drop-shadow-[0_0_15px_rgba(0,0,0,0.2)] dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]" />
+                  <div className="relative w-48 h-48 border-2 border-white/20 rounded-3xl overflow-hidden mt-8 flex items-center justify-center bg-white/5">
+                    <img src="/logo-square.png" alt="KnoWMi" className="w-16 h-16 opacity-100 absolute z-0 shadow-lg drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]" />
                     
                     {/* Scanner Line */}
                     <motion.div 
@@ -240,31 +240,31 @@ export default function InteractiveJourney() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="absolute inset-0 bg-white dark:bg-neutral-950 p-6 flex flex-col items-center justify-center z-20 transition-colors duration-500"
+                  className="absolute inset-0 bg-neutral-950 p-6 flex flex-col items-center justify-center z-20"
                 >
                   <img src="/logo-square.png" alt="KnoWMi" className="w-12 h-12 mb-6" />
-                  <h3 className="text-slate-900 dark:text-white text-xl font-bold mb-8 transition-colors duration-500">Sign in to KnoWMi</h3>
+                  <h3 className="text-white text-xl font-bold mb-8">Sign in to KnoWMi</h3>
                   
                   <div className="w-full space-y-4">
-                    <div className="w-full bg-slate-50 dark:bg-neutral-900 rounded-xl p-4 border border-slate-200 dark:border-neutral-800 transition-colors duration-500">
-                      <div className="text-slate-500 dark:text-neutral-500 text-xs mb-1">Email</div>
+                    <div className="w-full bg-neutral-900 rounded-xl p-4 border border-neutral-800">
+                      <div className="text-neutral-500 text-xs mb-1">Email</div>
                       <motion.div 
                         initial={{ width: "0%" }}
                         animate={{ width: "100%" }}
                         transition={{ duration: 1, delay: 0.2 }}
-                        className="text-slate-900 dark:text-white font-mono overflow-hidden whitespace-nowrap"
+                        className="text-white font-mono overflow-hidden whitespace-nowrap"
                       >
                         nikhil@knowmi.com
                       </motion.div>
                     </div>
                     
-                    <div className="w-full bg-slate-50 dark:bg-neutral-900 rounded-xl p-4 border border-slate-200 dark:border-neutral-800 transition-colors duration-500">
-                      <div className="text-slate-500 dark:text-neutral-500 text-xs mb-1">Password</div>
+                    <div className="w-full bg-neutral-900 rounded-xl p-4 border border-neutral-800">
+                      <div className="text-neutral-500 text-xs mb-1">Password</div>
                       <motion.div 
                         initial={{ width: "0%" }}
                         animate={{ width: "100%" }}
                         transition={{ duration: 0.8, delay: 1.2 }}
-                        className="text-slate-900 dark:text-white font-mono overflow-hidden whitespace-nowrap tracking-widest"
+                        className="text-white font-mono overflow-hidden whitespace-nowrap tracking-widest"
                       >
                         ••••••••
                       </motion.div>
@@ -296,18 +296,18 @@ export default function InteractiveJourney() {
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9 }}
-                  className="absolute inset-0 bg-white dark:bg-[#0e1116] p-6 flex flex-col w-full z-30 transition-colors duration-500"
+                  className="absolute inset-0 bg-[#0e1116] p-6 flex flex-col w-full z-30"
                 >
                   <div className="flex items-center justify-between mt-4 mb-8">
-                    <div className="text-slate-900 dark:text-white font-bold flex items-center gap-2">
+                    <div className="text-white font-bold flex items-center gap-2">
                        <Zap size={18} className="text-blue-500" /> Pay
                     </div>
-                    <X size={20} className="text-slate-500 dark:text-neutral-500" />
+                    <X size={20} className="text-neutral-500" />
                   </div>
                   
-                  <div className="bg-slate-50 dark:bg-neutral-900 rounded-2xl p-6 mb-4 w-full text-left transition-colors duration-500">
-                    <div className="text-slate-500 dark:text-neutral-400 text-sm mb-1">Paying KnoWMi Studios</div>
-                    <div className="text-slate-900 dark:text-white text-4xl font-bold font-mono transition-colors duration-500">₹999.00</div>
+                  <div className="bg-neutral-900 rounded-2xl p-6 mb-4 w-full text-left">
+                    <div className="text-neutral-400 text-sm mb-1">Paying KnoWMi Studios</div>
+                    <div className="text-white text-4xl font-bold font-mono">₹999.00</div>
                   </div>
 
                   <div className="flex-1 flex flex-col items-center justify-center pb-20 w-full">
@@ -323,7 +323,7 @@ export default function InteractiveJourney() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.8 }}
-                      className="text-slate-900 dark:text-white text-xl font-bold mb-2 text-center transition-colors duration-500"
+                      className="text-white text-xl font-bold mb-2 text-center"
                     >
                       Payment Successful
                     </motion.h3>
@@ -331,7 +331,7 @@ export default function InteractiveJourney() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1 }}
-                      className="text-slate-500 dark:text-neutral-400 text-center text-sm px-4"
+                      className="text-neutral-400 text-center text-sm px-4"
                     >
                       Your physical tee is being embedded and prepared for shipment.
                     </motion.p>
@@ -343,7 +343,7 @@ export default function InteractiveJourney() {
           </div>
           
           {/* Mock Phone Notch */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-300 dark:bg-neutral-800 rounded-b-2xl z-50 transition-colors duration-500"></div>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-neutral-800 rounded-b-2xl z-50"></div>
           
         </motion.div>
       </div>

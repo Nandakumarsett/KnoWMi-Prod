@@ -98,10 +98,14 @@ export default function Tshirt3DModel() {
           }}
         >
           <img
-            src="/assets/scrolly/tshirt_front_v10.png"
+            src="/assets/scrolly/tshirt_front_v5.jpg"
             alt="KnoWMi T-Shirt Front"
             className="w-full h-full object-contain"
             draggable={false}
+            style={{
+              WebkitMaskImage: 'radial-gradient(ellipse 70% 80% at 50% 50%, black 70%, transparent 100%)',
+              maskImage: 'radial-gradient(ellipse 70% 80% at 50% 50%, black 70%, transparent 100%)'
+            }}
           />
         </div>
 
@@ -114,16 +118,20 @@ export default function Tshirt3DModel() {
           }}
         >
           <img
-            src="/assets/scrolly/tshirt_back_v10.png"
+            src="/assets/scrolly/tshirt_back_v7.jpg"
             alt="KnoWMi T-Shirt Back"
             className="w-full h-full object-contain"
             draggable={false}
+            style={{
+              WebkitMaskImage: 'radial-gradient(ellipse 70% 80% at 50% 50%, black 70%, transparent 100%)',
+              maskImage: 'radial-gradient(ellipse 70% 80% at 50% 50%, black 70%, transparent 100%)'
+            }}
           />
         </div>
       </div>
 
       {/* Subtle "drag to rotate" hint */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-slate-500 dark:text-neutral-500 text-xs tracking-widest uppercase font-medium animate-pulse pointer-events-none transition-colors duration-500">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-neutral-500 text-xs tracking-widest uppercase font-medium animate-pulse pointer-events-none">
         ↔ Drag to rotate
       </div>
     </div>
