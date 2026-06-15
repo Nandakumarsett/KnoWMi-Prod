@@ -463,58 +463,12 @@ function PreviewContent({ persona }) {
   return null;
 }
 
-function ProfileModal({ persona, onClose }) {
-  const isDark = persona.id === 'developer';
-
-  return (
-    <div 
-      className={`fixed inset-0 z-[20000] flex items-center justify-center p-6 sm:p-12 animate-fadeIn transition-colors duration-500 ${isDark ? 'bg-black/80 backdrop-blur-2xl' : 'bg-white/80 backdrop-blur-xl'}`} 
-      onClick={onClose}
-    >
-      <div 
-        className={`w-full max-w-[440px] h-full max-h-[82vh] overflow-y-auto relative rounded-[48px] animate-profilePop preview-modal-container custom-scrollbar overflow-hidden shadow-[0_20px_100px_rgba(0,0,0,0.15),0_0_0_1px_rgba(0,0,0,0.05)] ${isDark ? 'shadow-[0_0_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)]' : ''}`}
-        style={{ 
-          background: persona.id === 'developer' ? '#0d1117' : persona.id === 'student' ? '#fff9f0' : '#fff',
-        }}
-        onClick={e => e.stopPropagation()}
-      >
-        <button 
-          onClick={onClose}
-          className={`absolute top-6 right-6 z-[21000] w-12 h-12 rounded-full backdrop-blur-xl flex items-center justify-center transition-all shadow-sm hover:scale-110 active:scale-95 border ${isDark ? 'bg-white/10 text-white border-white/10 hover:bg-white/20' : 'bg-black/10 text-black/60 border-black/5 hover:bg-black/20 hover:text-black'}`}
-        >
-          <X size={24} />
-        </button>
-        <div className="preview-content-wrapper min-h-full pointer-events-none select-none">
-          <PreviewContent persona={persona} />
-        </div>
-      </div>
-
-      <style>{`
-        @keyframes profilePop {
-          from { transform: scale(0.95) translateY(20px); opacity: 0; }
-          to { transform: scale(1) translateY(0); opacity: 1; }
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(0,0,0,0.1);
-          border-radius: 10px;
-        }
-      `}</style>
-    </div>
-  )
-}
-
 export default function Personas() {
-  const [active, setActive] = useState(null)
   const [dynamicPersonas, setDynamicPersonas] = useState(initialPersonas)
   const sectionRef = useRef(null)
   const headerRef = useRef(null)
-  const cardsRef = useRef([])
+  const scrollContainerRef = useRef(null)
+  const trackRef = useRef(null)
 
   useEffect(() => {
     const loadDynamicData = () => {
@@ -550,7 +504,7 @@ export default function Personas() {
   }, [])
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    let ctx = gsap.context(() => {
       // Header Animation
       gsap.fromTo(headerRef.current,
         { opacity: 0, y: 50 },
@@ -566,111 +520,124 @@ export default function Personas() {
         }
       )
 
-      // Cards Stagger
-      gsap.fromTo(cardsRef.current,
-        { opacity: 0, y: 100, rotateX: 15 },
-        {
-          opacity: 1,
-          y: 0,
-          rotateX: 0,
-          duration: 1,
-          stagger: 0.15,
-          ease: 'back.out(1.2)',
+      let mm = gsap.matchMedia()
+
+      mm.add("(min-width: 1024px)", () => {
+        let panels = gsap.utils.toArray(".persona-panel");
+        
+        gsap.to(panels, {
+          xPercent: -100 * (panels.length - 1),
+          ease: "none",
           scrollTrigger: {
-            trigger: '.personas-grid',
-            start: 'top 85%',
+            trigger: sectionRef.current,
+            pin: true,
+            scrub: 1,
+            // scroll distance proportional to the width of the track
+            end: () => "+=" + trackRef.current.offsetWidth,
           }
-        }
-      )
+        });
+      })
+
+      mm.add("(max-width: 1023px)", () => {
+        let panels = gsap.utils.toArray(".persona-panel");
+        panels.forEach((panel) => {
+          gsap.fromTo(panel,
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+              scrollTrigger: {
+                trigger: panel,
+                start: 'top 85%'
+              }
+            }
+          )
+        })
+      })
+
     }, sectionRef)
     return () => ctx.revert()
   }, [dynamicPersonas])
 
   return (
-    <section id="personas" className="py-24 bg-black relative overflow-hidden" ref={sectionRef}>
+    <section id="personas" className="bg-black relative overflow-hidden" ref={sectionRef}>
       {/* Ambient glow */}
       <div className="absolute bottom-1/4 right-0 w-1/3 h-[500px] bg-orange-500/5 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="max-w-[1400px] mx-auto px-6 relative z-10">
-        <div className="text-center mb-14" ref={headerRef}>
-          <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
-            <span className="text-[10px] font-black uppercase tracking-widest text-orange-500">
-              Pick Your Identity
-            </span>
-          </div>
-          <h2 className="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-[1.05]">
-            What do they see <br />
-            <span className="text-orange-500 italic">when they scan you?</span>
-          </h2>
-          <p className="text-lg text-neutral-400 font-medium max-w-xl mx-auto">
-            Each tee unlocks a different profile built for your world. Tap a persona below to see it live.
-          </p>
-        </div>
-
-        <div className="personas-grid" style={{ perspective: '1000px' }}>
-          {dynamicPersonas.map((p, idx) => (
-            <div key={p.id} onClick={() => setActive(p)}
-              className="persona-card"
-              ref={el => cardsRef.current[idx] = el}
-              style={{ '--pc': p.color }}
-              onMouseEnter={e => {
-                e.currentTarget.style.transform = 'translateY(-6px)'
-                e.currentTarget.style.boxShadow = `0 16px 40px ${p.color}22`
-                e.currentTarget.style.borderColor = p.color
-                e.currentTarget.querySelector('.pname').style.color = p.color
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = 'none'
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)'
-                e.currentTarget.querySelector('.pname').style.color = '#fff'
-              }}>
-              <span className="persona-emoji" role="img" aria-label={p.name}>{p.emoji}</span>
-              <div className="pname persona-name" style={{ color: '#fff' }}>{p.name}</div>
-              <div className="persona-desc">{p.desc}</div>
-              <div className="mt-3 text-[11px] font-semibold transition-colors" style={{ color: p.color }}>
-                Tap to preview →
-              </div>
+      <div className="relative z-10 lg:min-h-screen flex flex-col justify-center pt-24 lg:pt-32 pb-12">
+        <div className="max-w-[1400px] mx-auto px-6 w-full shrink-0" ref={headerRef}>
+          <div className="text-center mb-8 lg:mb-14">
+            <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
+              <span className="text-[10px] font-black uppercase tracking-widest text-orange-500">
+                Pick Your Identity
+              </span>
             </div>
-          ))}
+            <h2 className="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-[1.05]">
+              What do they see <br />
+              <span className="text-orange-500 italic">when they scan you?</span>
+            </h2>
+            <p className="text-lg text-neutral-400 font-medium max-w-xl mx-auto">
+              Each tee unlocks a different profile built for your world.
+            </p>
+          </div>
         </div>
 
-        <div className="text-center mt-12" style={{ clear: 'both' }}>
-          <p className="text-sm text-neutral-400 mb-4">
-            Not sure which fits you? You can always update your persona later — for free.
-          </p>
-          <a href="#pricing" className="btn-primary btn-base px-7 py-3.5 text-sm inline-flex items-center gap-2">
-            Choose Your Persona →
-          </a>
+        {/* Horizontal track wrapper */}
+        <div className="w-full overflow-hidden" ref={scrollContainerRef}>
+          <div className="flex flex-col lg:flex-row w-full lg:w-[300vw]" ref={trackRef}>
+            {dynamicPersonas.map((p, idx) => {
+              const isDark = p.id === 'developer'
+              return (
+                <div 
+                  key={p.id} 
+                  className="persona-panel w-full lg:w-[100vw] px-6 py-12 lg:py-0 flex items-center justify-center shrink-0"
+                >
+                  <div className="max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+                    
+                    {/* Left: Text Content */}
+                    <div className="text-center lg:text-left order-2 lg:order-1 flex flex-col justify-center">
+                      <span className="text-7xl mb-8 block" role="img" aria-label={p.name}>{p.emoji}</span>
+                      <h3 className="text-4xl md:text-6xl font-display font-black mb-6" style={{ color: p.color }}>
+                        {p.name}
+                      </h3>
+                      <p className="text-xl text-neutral-400 mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+                        {p.desc}
+                      </p>
+                      <div className="flex justify-center lg:justify-start">
+                        <a href="#pricing" className="btn-primary px-8 py-4 text-sm inline-flex items-center justify-center gap-2 text-white font-bold transition-all hover:scale-105 shadow-xl" style={{ backgroundColor: p.color, boxShadow: `0 10px 30px -10px ${p.color}` }}>
+                          Choose {p.name} '
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Right: Mock Phone */}
+                    <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+                      <div 
+                        className={`w-full max-w-[380px] h-[70vh] lg:h-[75vh] max-h-[800px] overflow-y-auto rounded-[48px] custom-scrollbar relative shadow-[0_20px_100px_rgba(0,0,0,0.15),0_0_0_1px_rgba(0,0,0,0.05)] ${isDark ? 'shadow-[0_0_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)] bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fff9f0]' : 'bg-white'}`}
+                      >
+                         <div className="preview-content-wrapper min-h-full pointer-events-none select-none">
+                            <PreviewContent persona={p} />
+                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         </div>
       </div>
 
-      {active && <ProfileModal persona={active} onClose={() => setActive(null)} />}
-
       <style>{`
-        .personas-grid {
-          display: grid;
-          grid-template-columns: repeat(3,1fr);
-          gap: 32px;
-          margin: 56px auto 0;
-          max-width: 1100px;
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
         }
-        .persona-card {
-          border-radius: 2.5rem;
-          padding: 48px 32px;
-          text-align: center;
-          border: 1.5px solid rgba(255,255,255,0.05);
-          background: #111;
-          cursor: pointer;
-          position: relative;
-          overflow: hidden;
-          transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
         }
-        .persona-emoji { font-size: 56px; margin-bottom: 24px; display: block; }
-        .persona-name { font-family: 'Fraunces',serif; font-size: 20px; font-weight: 700; transition: color 0.2s; }
-        .persona-desc { font-size: 14px; color: #888; margin-top: 12px; line-height: 1.6; }
-        @media (max-width: 900px) { .personas-grid { grid-template-columns: repeat(2,1fr); gap: 16px; } }
-        @media (max-width: 480px) { .personas-grid { grid-template-columns: 1fr; } }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(0,0,0,0.1);
+          border-radius: 10px;
+        }
       `}</style>
     </section>
   )
