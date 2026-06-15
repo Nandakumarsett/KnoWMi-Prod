@@ -581,9 +581,9 @@ export default function Personas() {
                     {/* Right: Mock Phone */}
                     <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
                       <div 
-                        className={`w-full max-w-[360px] h-[55vh] lg:h-[65vh] max-h-[700px] overflow-y-auto rounded-[40px] custom-scrollbar relative shadow-[0_20px_100px_rgba(0,0,0,0.15),0_0_0_1px_rgba(0,0,0,0.05)] ${isDark ? 'shadow-[0_0_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)] bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fff9f0]' : 'bg-white'}`}
+                        className={`w-full max-w-[360px] h-[55vh] lg:h-[65vh] max-h-[700px] overflow-x-hidden overflow-y-auto rounded-[40px] custom-scrollbar relative shadow-[0_20px_100px_rgba(0,0,0,0.15),0_0_0_1px_rgba(0,0,0,0.05)] ${isDark ? 'shadow-[0_0_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)] bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fff9f0]' : 'bg-white'}`}
                       >
-                         <div className="preview-content-wrapper min-h-full pointer-events-none select-none">
+                         <div className="w-[133.33%] origin-top-left scale-[0.75] min-h-[133.33%] pointer-events-none select-none">
                             <PreviewContent persona={p} />
                          </div>
                       </div>
