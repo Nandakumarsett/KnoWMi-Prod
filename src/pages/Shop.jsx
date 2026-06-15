@@ -104,7 +104,19 @@ export default function Shop() {
         }
       })
 
-      if (apiError || !orderData) throw new Error(apiError?.message || 'Failed to create order')
+      if (apiError) {
+        let errorMessage = apiError.message;
+        if (apiError.context && typeof apiError.context.json === 'function') {
+          try {
+            const errBody = await apiError.context.json();
+            if (errBody.error) errorMessage = errBody.error;
+          } catch (e) {
+            // ignore
+          }
+        }
+        throw new Error(errorMessage || 'Failed to create order');
+      }
+      if (!orderData) throw new Error('Failed to create order')
 
       // 2. Open Razorpay Modal
       const options = {
