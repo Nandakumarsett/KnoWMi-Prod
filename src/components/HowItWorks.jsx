@@ -64,58 +64,76 @@ export function HowItWorks() {
   const lineRef = useRef(null)
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Header Animation
-      gsap.fromTo(headerRef.current,
-        { opacity: 0, y: 50 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          duration: 1, 
-          ease: 'power3.out',
+    let ctx = gsap.context(() => {
+      let mm = gsap.matchMedia();
+
+      // Desktop Cinematic Animation
+      mm.add("(min-width: 1024px)", () => {
+        const tl = gsap.timeline({
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%',
+            start: 'top top',
+            end: '+=2000',
+            scrub: 1,
+            pin: true,
           }
-        }
-      )
+        });
 
-      // Connection Line Drawing
-      gsap.fromTo(lineRef.current,
-        { scaleX: 0, transformOrigin: 'left center' },
-        {
-          scaleX: 1,
-          duration: 1.5,
-          ease: 'power3.inOut',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 60%',
-          }
-        }
-      )
+        // Initial states
+        gsap.set(headerRef.current, { opacity: 0, y: 50 });
+        gsap.set(stepsRef.current, { opacity: 0, y: 50, scale: 0.9 });
+        gsap.set(lineRef.current, { scaleX: 0, transformOrigin: 'left center' });
 
-      // Steps Stagger Animation
-      stepsRef.current.forEach((step, i) => {
-        gsap.fromTo(step,
-          { opacity: 0, y: 50, scale: 0.95 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.8,
-            ease: 'back.out(1.5)',
-            delay: i * 0.2,
+        tl.to(headerRef.current, { opacity: 1, y: 0, duration: 1 })
+          .to(stepsRef.current[0], { opacity: 1, y: 0, scale: 1, duration: 1 })
+          .to(lineRef.current, { scaleX: 0.5, duration: 1 }, "+=0.5")
+          .to(stepsRef.current[0], { opacity: 0.4, scale: 0.95, duration: 1 }, "<")
+          .to(stepsRef.current[1], { opacity: 1, y: 0, scale: 1, duration: 1 }, "<")
+          .to(lineRef.current, { scaleX: 1, duration: 1 }, "+=0.5")
+          .to(stepsRef.current[1], { opacity: 0.4, scale: 0.95, duration: 1 }, "<")
+          .to(stepsRef.current[2], { opacity: 1, y: 0, scale: 1, duration: 1 }, "<")
+          .to(stepsRef.current, { opacity: 1, scale: 1, duration: 1 }, "+=0.5")
+          .to({}, { duration: 1 });
+      });
+
+      // Mobile / Tablet Animation
+      mm.add("(max-width: 1023px)", () => {
+        gsap.fromTo(headerRef.current,
+          { opacity: 0, y: 30 },
+          { 
+            opacity: 1, 
+            y: 0, 
+            duration: 1, 
+            ease: 'power3.out',
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: 'top 60%',
+              start: 'top 80%',
             }
           }
-        )
-      })
-    }, sectionRef)
+        );
 
-    return () => ctx.revert()
-  }, [])
+        stepsRef.current.forEach((step, i) => {
+          gsap.fromTo(step,
+            { opacity: 0, y: 30, scale: 0.95 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.8,
+              ease: 'back.out(1.5)',
+              scrollTrigger: {
+                trigger: step,
+                start: 'top 85%',
+              }
+            }
+          );
+        });
+      });
+
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section id="how-it-works" className="py-32 bg-black min-h-screen flex items-center" ref={sectionRef}>
