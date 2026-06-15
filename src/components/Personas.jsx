@@ -7,6 +7,7 @@ gsap.registerPlugin(ScrollTrigger)
 import { X, Instagram, Youtube, Twitter, Github, Share2, Terminal, ExternalLink, GraduationCap, FileText, Globe, Trophy, Sparkles, TrendingUp, Music, BookOpen, Rocket, Play, Camera, Film } from 'lucide-react'
 import { DeveloperProfile } from './profile/personas/DeveloperProfile'
 import { StudentProfile } from './profile/personas/StudentProfile'
+import { CreatorProfile } from './profile/personas/CreatorProfile'
 
 const initialPersonas = [
   {
@@ -178,106 +179,43 @@ function PreviewContent({ persona }) {
   };
 
   if (persona.id === 'influencer') {
-    return (
-      <div className="bg-white min-h-full pb-10 relative overflow-hidden">
-        {/* Floating Butterflies & Glitters */}
-        <div className="absolute inset-0 pointer-events-none z-0">
-           {[...Array(15)].map((_, i) => (
-             <div 
-               key={i}
-               className="absolute animate-float-sparkle"
-               style={{ 
-                 top: `${Math.random() * 100}%`, 
-                 left: `${Math.random() * 100}%`,
-                 animationDelay: `${Math.random() * 5}s`,
-                 fontSize: `${Math.random() * 10 + 5}px`
-               }}
-             >
-               {i % 4 === 0 ? '🦋' : '✨'}
-             </div>
-           ))}
-        </div>
-        
-        <div className="h-44 bg-gradient-to-br from-orange-500 to-rose-500 relative z-10">
-          <div className="absolute inset-0 overflow-hidden">
-            {d.banner ? (
-              <img src={getAssetUrl(d.banner)} className="absolute inset-0 w-full h-full object-cover opacity-80" alt="Banner" />
-            ) : (
-              <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
-            )}
-          </div>
-          <div className="absolute -bottom-8 left-8 p-1.5 bg-white rounded-full shadow-2xl z-20">
-             <img src={getAssetUrl(d.avatar)} className="w-24 h-24 rounded-full object-cover border-2 border-orange-50 relative z-20" alt="" />
-          </div>
-          <div className="absolute top-4 right-8 text-white/60 z-20"><Sparkles size={28} className="animate-pulse" /></div>
-        </div>
-        <div className="pt-12 px-8 relative z-20">
-           <div className="flex items-center gap-2 mb-1">
-             <h3 className="text-3xl font-black text-neutral-900 uppercase tracking-tighter" style={{ fontFamily: 'Fraunces, serif' }}>{d.name}</h3>
-             <div className="w-5 h-5 rounded-full bg-orange-500 flex items-center justify-center text-[10px] text-white">✓</div>
-           </div>
-           <p className="text-[10px] font-black text-orange-600 uppercase tracking-[0.3em] mb-4">{d.type}</p>
-           <p className="text-sm italic text-neutral-500 border-l-2 border-orange-200 pl-4 mb-10 leading-relaxed">"{d.tagline}"</p>
-           
-           <div className="grid grid-cols-2 gap-4 mb-10">
-             {d.stats.map(s => (
-               <div key={s.l} className="bg-white/40 backdrop-blur-md p-5 rounded-3xl border border-white/50 text-center shadow-sm">
-                 <div className="text-[8px] font-black text-neutral-400 uppercase tracking-widest mb-1">{s.l}</div>
-                 <div className="text-xl font-black text-neutral-900">{s.v}</div>
-               </div>
-             ))}
-           </div>
-
-           <div className="mb-10">
-             <div className="flex items-center gap-3 mb-6">
-                <div className="w-8 h-8 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500">
-                  <TrendingUp size={16} />
-                </div>
-                <div>
-                   <h4 className="text-[10px] font-black uppercase tracking-widest text-neutral-900">Network Presence</h4>
-                   <p className="text-[8px] font-bold text-neutral-400 uppercase tracking-widest">Connect across ecosystems</p>
-                </div>
-             </div>
-             <div className="grid grid-cols-1 gap-3">
-               {d.links.map(l => (
-                 <div key={l.label} className="p-5 rounded-3xl bg-white/40 backdrop-blur-md border border-white/50 flex items-center gap-4 hover:bg-white hover:shadow-lg transition-all cursor-pointer group">
-                   <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
-                     <l.icon size={20} className="text-neutral-900" />
-                   </div>
-                   <div>
-                      <div className="text-xs font-black text-neutral-900">{l.label}</div>
-                      <div className="text-[10px] text-neutral-400">{l.sub}</div>
-                   </div>
-                 </div>
-               ))}
-             </div>
-           </div>
-
-           <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-8 h-8 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500">
-                  <Camera size={16} />
-                </div>
-                <div>
-                   <h4 className="text-[10px] font-black uppercase tracking-widest text-neutral-900">Recent Works</h4>
-                   <p className="text-[8px] font-bold text-neutral-400 uppercase tracking-widest">A curated visual showcase</p>
-                </div>
-             </div>
-             <WorksGrid works={d.works} />
-           </div>
-        </div>
-
-        <style>{`
-          @keyframes floatSparkle {
-            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.2; }
-            50% { transform: translateY(-40px) rotate(20deg) scale(1.4); opacity: 0.9; }
-          }
-          .animate-float-sparkle {
-            animation: floatSparkle 5s ease-in-out infinite;
-          }
-        `}</style>
-      </div>
-    )
+    const mockProfile = {
+      id: 'mock-creator',
+      display_name: persona.data.name || 'Swetha Kumari',
+      avatar_url: persona.data.avatar,
+      bio: persona.data.tagline || 'Building a community around sustainable luxury and mindful living.',
+      persona: 'creator',
+      tier: 'Pro',
+      pulse: 15420,
+      profile_theme: 'classic',
+      persona_data: {
+        type: 'creator',
+        tagline: persona.data.tagline,
+        featured_work_url: persona.data.banner || 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=800&q=80',
+        content_formats: ['Vlogs', 'Reels', 'Photography'],
+        platforms: persona.data.links?.map(l => ({
+          platform: l.label.toLowerCase(),
+          url: `https://${l.label.toLowerCase()}.com`,
+          followers: l.sub
+        })) || [
+          { platform: 'instagram', url: 'https://instagram.com', followers: '120K+' },
+          { platform: 'youtube', url: 'https://youtube.com', followers: '45K' }
+        ],
+        works: persona.data.works?.map(w => ({
+          title: w.title,
+          url: w.img,
+          type: w.type || 'image'
+        })) || [],
+        total_reach: persona.data.stats?.[0]?.v || '120K+',
+        engagement_rate: persona.data.stats?.[1]?.v || '4.8%',
+        location: 'Mumbai, India',
+        achievements: [
+          { icon: 'Award', label: 'Top Lifestyle Creator 2023' },
+          { icon: 'Star', label: 'Brand Ambassador' }
+        ]
+      }
+    };
+    return <CreatorProfile profile={mockProfile} stats={{ totalViews: 15420, topCities: [{ city: 'Mumbai' }] }} />;
   }
 
   if (persona.id === 'developer') {
