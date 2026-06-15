@@ -119,6 +119,7 @@ function PreviewContent({ persona }) {
       persona: 'student',
       tier: 'Creator',
       pulse: 820,
+      profile_theme: 'campus',
       persona_data: {
         university: 'IIT DELHI',
         major: 'Computer Science & Engineering',
