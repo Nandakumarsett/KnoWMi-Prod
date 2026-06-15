@@ -532,8 +532,9 @@ export default function Personas() {
             trigger: sectionRef.current,
             pin: true,
             scrub: 1,
-            // scroll distance proportional to the width of the track
-            end: () => "+=" + trackRef.current.offsetWidth,
+            snap: 1 / (panels.length - 1),
+            // Reduce scroll distance so it's much faster to cycle through profiles
+            end: () => "+=" + window.innerWidth * 1.2,
           }
         });
       })
