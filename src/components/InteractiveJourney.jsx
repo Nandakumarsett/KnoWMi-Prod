@@ -141,7 +141,7 @@ export default function InteractiveJourney() {
                   {/* Avatar */}
                   <div className="relative -mt-10 mb-2 w-full flex justify-center">
                     <div className="w-20 h-20 rounded-[24px] bg-neutral-800 border-4 border-[#f8f8fb] overflow-hidden shadow-lg relative">
-                      <img src="/logo-square.png" alt="Nikhil Kumar" className="w-full h-full object-cover" />
+                      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Nikhil Kumar" className="w-full h-full object-cover" />
                       <div className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 border-2 border-white rounded-full"></div>
                     </div>
                   </div>
