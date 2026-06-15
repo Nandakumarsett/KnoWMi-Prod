@@ -502,19 +502,19 @@ export default function Personas() {
       {/* Ambient glow */}
       <div className="absolute bottom-1/4 right-0 w-1/3 h-[500px] bg-orange-500/5 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="relative z-10 lg:min-h-screen flex flex-col justify-center pt-24 lg:pt-32 pb-12">
+      <div className="relative z-10 lg:min-h-screen flex flex-col justify-center pt-20 lg:pt-24 pb-8">
         <div className="max-w-[1400px] mx-auto px-6 w-full shrink-0" ref={headerRef}>
-          <div className="text-center mb-8 lg:mb-14">
+          <div className="text-center mb-6 lg:mb-8">
             <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
               <span className="text-[10px] font-black uppercase tracking-widest text-orange-500">
                 Pick Your Identity
               </span>
             </div>
-            <h2 className="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-[1.05]">
+            <h2 className="text-4xl md:text-6xl font-display font-black text-white mb-4 tracking-tight leading-[1.05]">
               What do they see <br />
               <span className="text-orange-500 italic">when they scan you?</span>
             </h2>
-            <p className="text-lg text-neutral-400 font-medium max-w-xl mx-auto">
+            <p className="text-base lg:text-lg text-neutral-400 font-medium max-w-xl mx-auto">
               Each tee unlocks a different profile built for your world.
             </p>
           </div>
@@ -530,15 +530,15 @@ export default function Personas() {
                   key={p.id} 
                   className="persona-panel w-full lg:w-[100vw] px-6 py-12 lg:py-0 flex items-center justify-center shrink-0"
                 >
-                  <div className="max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+                  <div className="max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                     
                     {/* Left: Text Content */}
                     <div className="text-center lg:text-left order-2 lg:order-1 flex flex-col justify-center">
-                      <span className="text-7xl mb-8 block" role="img" aria-label={p.name}>{p.emoji}</span>
-                      <h3 className="text-4xl md:text-6xl font-display font-black mb-6" style={{ color: p.color }}>
+                      <span className="text-6xl lg:text-7xl mb-6 block" role="img" aria-label={p.name}>{p.emoji}</span>
+                      <h3 className="text-4xl md:text-5xl lg:text-6xl font-display font-black mb-4" style={{ color: p.color }}>
                         {p.name}
                       </h3>
-                      <p className="text-xl text-neutral-400 mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+                      <p className="text-lg lg:text-xl text-neutral-400 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">
                         {p.desc}
                       </p>
                       <div className="flex justify-center lg:justify-start">
@@ -551,7 +551,7 @@ export default function Personas() {
                     {/* Right: Mock Phone */}
                     <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
                       <div 
-                        className={`w-full max-w-[380px] h-[70vh] lg:h-[75vh] max-h-[800px] overflow-y-auto rounded-[48px] custom-scrollbar relative shadow-[0_20px_100px_rgba(0,0,0,0.15),0_0_0_1px_rgba(0,0,0,0.05)] ${isDark ? 'shadow-[0_0_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)] bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fff9f0]' : 'bg-white'}`}
+                        className={`w-full max-w-[360px] h-[55vh] lg:h-[65vh] max-h-[700px] overflow-y-auto rounded-[40px] custom-scrollbar relative shadow-[0_20px_100px_rgba(0,0,0,0.15),0_0_0_1px_rgba(0,0,0,0.05)] ${isDark ? 'shadow-[0_0_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)] bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fff9f0]' : 'bg-white'}`}
                       >
                          <div className="preview-content-wrapper min-h-full pointer-events-none select-none">
                             <PreviewContent persona={p} />
