@@ -212,6 +212,36 @@ function PreviewContent({ persona }) {
         achievements: [
           { icon: 'Award', label: 'Top Lifestyle Creator 2023' },
           { icon: 'Star', label: 'Brand Ambassador' }
+        ],
+        // Adding more detailed mock data to fill out the profile
+        availability_status: 'Selective',
+        response_time: 'Within 24 hours',
+        preferred_contact_method: 'Email',
+        collab_types_tags: ['Sponsored Posts', 'Brand Ambassador', 'Event Appearances', 'UGC Content'],
+        rate_range_min: 50000,
+        rate_range_max: 200000,
+        turnaround_time: '3-5 Days',
+        deliverable_formats: ['4K Video', 'Raw Images', 'Stories'],
+        audience_age_group: '18-34 years',
+        audience_interests: ['Fashion', 'Travel', 'Wellness', 'Tech'],
+        visual_style: 'Cinematic',
+        posting_frequency: 'Daily',
+        past_collaborations: [
+          {
+            brand_name: 'Nykaa',
+            campaign_description: 'Pink Friday Sale Ambassador',
+            logo_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=128&q=80'
+          },
+          {
+            brand_name: 'Dyson',
+            campaign_description: 'Airwrap Product Launch Video',
+            logo_url: 'https://images.unsplash.com/photo-1556740714-a8395b3bf30f?auto=format&fit=crop&w=128&q=80'
+          },
+          {
+            brand_name: 'L\'Oréal',
+            campaign_description: 'Skincare Routine Integration',
+            logo_url: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=128&q=80'
+          }
         ]
       }
     };
