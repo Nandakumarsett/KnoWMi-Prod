@@ -187,7 +187,7 @@ function PreviewContent({ persona }) {
       persona: 'creator',
       tier: 'Pro',
       pulse: 15420,
-      profile_theme: 'classic',
+      profile_theme: 'glow',
       persona_data: {
         type: 'creator',
         tagline: persona.data.tagline,
