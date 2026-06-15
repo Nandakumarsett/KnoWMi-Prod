@@ -142,7 +142,11 @@ function PreviewContent({ persona }) {
           { title: 'Kaggle Gold Medalist', description: 'Ranked top 1% in Global DL challenge.', year: '2023' }
         ],
         resume_url: 'https://knowmi.me',
-        playlist_url: 'https://spotify.com'
+        playlist_url: 'https://spotify.com',
+        playlist_name: 'Coding Focus',
+        campus_rank_pct: 2,
+        courses_completed: 14,
+        study_buddies: 28
       }
     };
     return <StudentProfile profile={mockProfile} stats={{ totalViews: 820 }} />;
