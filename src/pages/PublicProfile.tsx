@@ -22,6 +22,7 @@ import { personaConfigs } from "../config/personaConfig";
 import { useAuth } from "../context/AuthContext";
 import { supabase } from "../lib/supabase";
 import { getAnalyticsData } from "../lib/analytics/data-source";
+import AuthModal from "../components/AuthModal";
 
 export default function PublicProfile() {
   const { username } = useParams();
@@ -29,6 +30,7 @@ export default function PublicProfile() {
   const [searchParams] = useSearchParams();
   const { user, loading: authLoading } = useAuth();
   const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [authOpen, setAuthOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
   const [showQR, setShowQR] = useState(false);

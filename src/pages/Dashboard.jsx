@@ -1777,6 +1777,9 @@ function Dashboard() {
           }
 
           if (refreshProfile) refreshProfile()
+          
+          // Post-Claim Welcome Wizard Redirect
+          navigate('/studio?welcome=true')
         } catch (e) {
           console.error("Claim error", e)
         }

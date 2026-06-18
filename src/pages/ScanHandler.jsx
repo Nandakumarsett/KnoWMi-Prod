@@ -46,22 +46,8 @@ export default function ScanHandler() {
 
         setProfile(foundProfile)
         
-        // Seamlessly resolve IP-based location without prompting
-        try {
-          const res = await fetch('https://api.bigdatacloud.net/data/reverse-geocode-client')
-          if (res.ok) {
-            const data = await res.json()
-            const city = data.city || data.locality || 'Unknown'
-            const country = data.countryName || 'India'
-            finishScan(foundProfile, city !== 'Unknown' ? city : 'Unknown', country)
-            return
-          }
-        } catch (e) {
-          console.error('IP location failed:', e)
-        }
-        
-        // Fallback if IP location fails
-        finishScan(foundProfile, 'Unknown', 'India')
+        // Immediately trigger the finishScan logic which navigates and fires analytics
+        finishScan(foundProfile)
         
       } catch (err) {
         console.error('Error fetching profile:', err)
@@ -69,28 +55,9 @@ export default function ScanHandler() {
       }
     }
 
-    fetchProfile()
-  }, [code, navigate])
-
-  const finishScan = async (resolvedProfile, resolvedCity, resolvedCountry) => {
-    setStatus('redirecting')
-    try {
-      const userAgent = navigator.userAgent
-      const isIOS = /iPad|iPhone|iPod/.test(userAgent)
-      const isAndroid = /Android/.test(userAgent)
-      const isMobile = isIOS || isAndroid || /Mobi/i.test(userAgent)
+    const finishScan = (resolvedProfile) => {
+      setStatus('redirecting')
       
-      let device = 'Desktop'
-      if (isIOS) device = 'iPhone'
-      else if (isAndroid) device = 'Android'
-      else if (isMobile) device = 'Mobile'
-
-      let fp = 'anonymous'
-      try {
-        const { buildFingerprint } = await import('../lib/analytics/fingerprint')
-        fp = await buildFingerprint()
-      } catch (e) {}
-
       const finalSlug = resolvedProfile.secure_slug || resolvedProfile.id
 
       // Factory Claim Flow: Unclaimed shirt
@@ -104,40 +71,79 @@ export default function ScanHandler() {
         navigate(`/p/${finalSlug}?ghost=true`)
         return
       }
-      
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      try {
-        await supabase.from('qr_scan_events').insert({
-          profile_id: resolvedProfile.id,
-          device_type: device.toLowerCase(),
-          browser: 'Webview/Browser',
-          os: navigator.platform,
-          scanner_fp: fp,
-          scanned_at: new Date().toISOString(),
-          scanner_id: user?.id,
-          city: resolvedCity,
-          country: resolvedCountry
-        })
-      } catch (e) {}
 
-      if (resolvedProfile.user_id) {
-        supabase.functions.invoke('send-push-notification', {
-          body: {
-            userId: resolvedProfile.user_id,
-            title: 'New Scan Alert! 🔥',
-            body: `Someone just scanned your KnoWMi profile using a ${device} in ${resolvedCity}!`,
-            url: '/dashboard',
-            metadata: { device, city: resolvedCity }
+      // Immediately navigate for a seamless, fast user experience
+      navigate(`/p/${finalSlug}?src=qr`)
+
+      // FIRE AND FORGET ANALYTICS IN BACKGROUND
+      const runAnalytics = async () => {
+        try {
+          const userAgent = navigator.userAgent
+          const isIOS = /iPad|iPhone|iPod/.test(userAgent)
+          const isAndroid = /Android/.test(userAgent)
+          const isMobile = isIOS || isAndroid || /Mobi/i.test(userAgent)
+          
+          let device = 'Desktop'
+          if (isIOS) device = 'iPhone'
+          else if (isAndroid) device = 'Android'
+          else if (isMobile) device = 'Mobile'
+
+          let fp = 'anonymous'
+          try {
+            const { buildFingerprint } = await import('../lib/analytics/fingerprint')
+            fp = await buildFingerprint()
+          } catch (e) {}
+          
+          let resolvedCity = 'Unknown'
+          let resolvedCountry = 'India'
+
+          // Resolve IP-based location silently
+          try {
+            const res = await fetch('https://api.bigdatacloud.net/data/reverse-geocode-client')
+            if (res.ok) {
+              const data = await res.json()
+              resolvedCity = data.city || data.locality || 'Unknown'
+              resolvedCountry = data.countryName || 'India'
+            }
+          } catch (e) {}
+
+          const { data: { user } } = await supabase.auth.getUser();
+          
+          try {
+            await supabase.from('qr_scan_events').insert({
+              profile_id: resolvedProfile.id,
+              device_type: device.toLowerCase(),
+              browser: 'Webview/Browser',
+              os: navigator.platform,
+              scanner_fp: fp,
+              scanned_at: new Date().toISOString(),
+              scanner_id: user?.id,
+              city: resolvedCity,
+              country: resolvedCountry
+            })
+          } catch (e) {}
+
+          if (resolvedProfile.user_id) {
+            supabase.functions.invoke('send-push-notification', {
+              body: {
+                userId: resolvedProfile.user_id,
+                title: 'New Scan Alert! 🔥',
+                body: `Someone just scanned your KnoWMi profile using a ${device} in ${resolvedCity}!`,
+                url: '/dashboard',
+                metadata: { device, city: resolvedCity }
+              }
+            }).catch(() => {});
           }
-        }).catch(() => {});
+        } catch (err) {
+          console.error('Background analytics error:', err)
+        }
       }
 
-      navigate(`/p/${finalSlug}?src=qr`)
-    } catch (e) {
-      navigate('/')
+      runAnalytics()
     }
-  }
+
+    fetchProfile()
+  }, [code, navigate])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#080808] text-white">
