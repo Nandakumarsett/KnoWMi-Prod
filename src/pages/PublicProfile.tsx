@@ -521,7 +521,7 @@ export default function PublicProfile() {
         )}
 
         {/* Full Mobile Persona Router below */}
-        <div className="px-2">
+        <div className={`px-2 ${isGhostMode ? "ghost-blur-socials" : ""}`}>
           <PersonaRouter
             profile={displayProfile}
             recentVisitors={recentVisitors}
