@@ -218,9 +218,8 @@ export default function PublicProfile() {
   const activeConfig = personaConfigs[pAlias] || personaConfigs.developer;
   const fromSrc = searchParams.get("src");
   const isClaimFlow = searchParams.get("claim") === "true" || !profile.user_id;
-  const isGhostMode =
-    isScanner &&
-    (searchParams.get("ghost") === "true" || profile?.ghost_mode === true);
+  // Apply ghost mode if the profile has it enabled, OR if forced via URL (for testing)
+  const isGhostMode = profile?.ghost_mode === true || searchParams.get("ghost") === "true";
   const fromTab = searchParams.get("from") || "analytics";
   const accentColor = activeConfig?.theme?.accent || "#C1440E";
   const isFreeProfile =
