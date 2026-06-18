@@ -45,7 +45,7 @@ export function Marquee() {
     >
       <div className="flex">
         <div className="marquee-track flex">
-          {[...marqueeItems, ...marqueeItems].map((item, i) => (
+          {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
             <span key={i} className="text-[10px] font-black uppercase tracking-[0.2em] px-8 flex items-center gap-2 whitespace-nowrap text-white/50">
               {item}
               <span className="w-1 h-1 rounded-full bg-orange-500/50" />

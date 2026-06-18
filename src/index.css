@@ -265,7 +265,7 @@
 
   /* ── Marquee ── */
   .marquee-track {
-    animation: marquee 22s linear infinite;
+    animation: marquee 44s linear infinite;
     display: flex;
     gap: 0;
     width: max-content;
