@@ -650,12 +650,213 @@ img {
     scroll-behavior: auto !important;
     transition-duration: 0s !important;
     transition-delay: 0s !important;
+  --teal-glow:   #a7f3d0;
+  --amber:       #f59e0b;
+  --amber-dim:   #fef3c7;
+  --coral:       #ef4444;
+  --coral-dim:   #fee2e2;
+  --purple:      #8b5cf6;
+  --purple-dim:  #ede9fe;
+  --pink:        #ec4899;
+  --r:           16px;
+  --r-sm:        10px;
+
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.vibe-page.dark {
+  /* Dark Theme (3D Premium) */
+  --bg:          transparent;
+  --surface:     linear-gradient(145deg, rgba(40,40,55,0.7) 0%, rgba(15,15,22,0.5) 100%);
+  --surface2:    rgba(35, 35, 48, 0.6);
+  --border:      rgba(255, 255, 255, 0.08);
+  --border2:     rgba(255, 255, 255, 0.12);
+  --text:        #f0eff8;
+  --muted:       #7a7890;
+  --teal:        #1dce96;
+  --teal-dim:    #1dce961a;
+  --teal-glow:   #1dce9640;
+  --amber:       #f5a623;
+  --amber-dim:   #f5a6231a;
+  --coral:       #ff6b6b;
+  --coral-dim:   #ff6b6b1a;
+  --purple:      #a78bfa;
+  --purple-dim:  #a78bfa1a;
+}
+
+/* Premium 3D Vibe Card Class */
+.vibe-card {
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  box-shadow: 
+    0 12px 32px -10px rgba(0, 0, 0, 0.06), 
+    0 24px 60px -15px rgba(0, 0, 0, 0.04), 
+    inset 0 1px 1px rgba(255, 255, 255, 1),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.02);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+.vibe-page.dark .vibe-card {
+  box-shadow: 
+    0 12px 32px -10px rgba(0, 0, 0, 0.5), 
+    0 30px 60px -15px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.12),
+    inset 0 -2px 8px rgba(0, 0, 0, 0.3);
+}
+.vibe-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 
+    0 16px 40px -12px rgba(0, 0, 0, 0.12), 
+    0 32px 70px -16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 1),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.02);
+}
+.vibe-page.dark .vibe-card:hover {
+  box-shadow: 
+    0 16px 40px -12px rgba(0, 0, 0, 0.6), 
+    0 40px 80px -16px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15),
+    inset 0 -2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Fade-up entrance animations */
+@keyframes vibeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.vibe-fade-in {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: vibeUp 0.5s ease forwards;
+}
+
+.vibe-d1 { animation-delay: 0.05s; }
+.vibe-d2 { animation-delay: 0.12s; }
+.vibe-d3 { animation-delay: 0.20s; }
+.vibe-d4 { animation-delay: 0.28s; }
+.vibe-d5 { animation-delay: 0.36s; }
+.vibe-d6 { animation-delay: 0.44s; }
+.vibe-d7 { animation-delay: 0.52s; }
+.vibe-d8 { animation-delay: 0.60s; }
+
+/* Live pulse dot */
+@keyframes vibePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* Ping for city map dots */
+@keyframes vibePing {
+  0%        { transform: scale(1); opacity: 1; }
+  80%, 100% { transform: scale(2.5); opacity: 0; }
+}
+
+/* Skeleton shimmer */
+@keyframes vibeSkeleton {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.8; }
+}
+
+/* ============================================================
+   GLOBAL IMAGE OPTIMISATION
+   Prevents flicker, flash-of-unstyled-content, and layout shift
+   ============================================================ */
+
+/* LazyImage shimmer animation */
+@keyframes knowmi-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Every <img> on the site: GPU composited, no layout shift */
+img {
+  display: block;
+  max-width: 100%;
+  /* Prevent the default "broken image" icon from flashing */
+  color: transparent;
+  /* Smooth rendering on high-DPI screens */
+  image-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Utility: fade-in an image once the browser loads it */
+.img-fade {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.img-fade.loaded {
+  opacity: 1;
+}
+
+/* Prevent layout shift on images inside flex/grid containers */
+.img-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Logo — never flash */
+.site-logo {
+  will-change: auto;
+  contain: layout style;
+}
+
+/* Vibecard slide down animation */
+@keyframes vibeSlideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Dashboard skeleton */
+@keyframes animate-slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slideUp {
+  animation: animate-slideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Prevent images from stretching during load inside aspect-ratio containers */
+[style*="aspect-ratio"] img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* WCAG 2.2 SC 2.2.2 prefers-reduced-motion compliance */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-delay: -1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    background-attachment: initial !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
   }
 }
 
 .ghost-protection {-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;-webkit-touch-callout: none;}
 .ghost-protection img {pointer-events: none;-webkit-user-drag: none;}
-.ghost-blur-socials { pointer-events: none; user-select: none; }
-.ghost-blur-socials .social-link-item,
-.ghost-blur-socials a,
-.ghost-blur-socials button { filter: blur(4px); opacity: 0.5; pointer-events: none; }
+  .ghost-blur-socials { pointer-events: none !important; user-select: none !important; }
+  .ghost-blur-socials .social-link-item,
+  .ghost-blur-socials a,
+  .ghost-blur-socials button { 
+    filter: blur(8px) !important; 
+    opacity: 0.1 !important; 
+    pointer-events: none !important; 
+    color: transparent !important;
+    text-shadow: none !important;
+  }
