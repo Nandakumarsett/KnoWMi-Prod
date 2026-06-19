@@ -228,25 +228,25 @@ function RememberedVisual() {
         }
         .profile-card { animation: profilePop 3s ease-in-out infinite; }
       `}</style>
-      <div className="profile-card w-56 bg-[#1a1a1a] border border-white/10 rounded-3xl p-5 text-center">
+      <div className="profile-card w-56 bg-white border border-neutral-200 rounded-3xl p-5 text-center shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
         <img
           src="https://i.pravatar.cc/100?u=knowmi_demo"
           alt="Profile avatar"
-          className="w-14 h-14 rounded-full mx-auto mb-3 border-2 border-orange-500/50 object-cover"
+          className="w-14 h-14 rounded-full mx-auto mb-3 border-2 border-orange-500/60 object-cover"
         />
-        <p className="text-sm font-black text-white mb-0.5">Arjun Mehta</p>
-        <p className="text-[10px] text-neutral-500 font-medium mb-3">Full-Stack Dev · Mumbai</p>
+        <p className="text-sm font-black text-neutral-900 mb-0.5">Arjun Mehta</p>
+        <p className="text-[10px] text-neutral-400 font-medium mb-3">Full-Stack Dev · Mumbai</p>
         <div className="flex justify-center gap-3">
-          <div className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 hover:text-orange-500 hover:border-orange-500/40 transition-colors">
+          <div className="w-7 h-7 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-orange-500 hover:border-orange-500/40 transition-colors">
             <Twitter size={12} />
           </div>
-          <div className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 hover:text-orange-500 hover:border-orange-500/40 transition-colors">
+          <div className="w-7 h-7 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-orange-500 hover:border-orange-500/40 transition-colors">
             <Linkedin size={12} />
           </div>
-          <div className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 hover:text-orange-500 hover:border-orange-500/40 transition-colors">
+          <div className="w-7 h-7 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-orange-500 hover:border-orange-500/40 transition-colors">
             <Github size={12} />
           </div>
-          <div className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 hover:text-orange-500 hover:border-orange-500/40 transition-colors">
+          <div className="w-7 h-7 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-orange-500 hover:border-orange-500/40 transition-colors">
             <Instagram size={12} />
           </div>
         </div>
@@ -254,6 +254,7 @@ function RememberedVisual() {
           ● Live Profile
         </div>
       </div>
+
     </div>
   )
 }
