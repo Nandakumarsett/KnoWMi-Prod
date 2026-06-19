@@ -265,7 +265,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                   </a>
                 )}
                 {data.quick_talk_url && (
-                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-[12px] font-black uppercase tracking-wider hover:bg-blue-700 transition-colors">
+                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-[12px] font-black uppercase tracking-wider hover:bg-blue-700 transition-colors privacy-target">
                     <Video size={16} /> Book Chat
                   </a>
                 )}
@@ -564,7 +564,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                   </a>
                 )}
                 {data.quick_talk_url && (
-                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="text-xs uppercase text-[#58A6FF] border border-[#58A6FF]/30 px-4 py-2 flex items-center gap-2 hover:bg-[#58A6FF]/10 transition-colors">
+                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="text-xs uppercase text-[#58A6FF] border border-[#58A6FF]/30 px-4 py-2 flex items-center gap-2 hover:bg-[#58A6FF]/10 transition-colors privacy-target">
                     <Video size={14} /> SYNC_LINK
                   </a>
                 )}
@@ -861,7 +861,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                   </a>
                 )}
                 {data.quick_talk_url && (
-                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="text-xs uppercase text-[#00FF41] border border-[#00FF41]/50 bg-black px-4 py-2 flex items-center gap-2 hover:bg-[#00FF41] hover:text-black transition-colors">
+                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="text-xs uppercase text-[#00FF41] border border-[#00FF41]/50 bg-black px-4 py-2 flex items-center gap-2 hover:bg-[#00FF41] hover:text-black transition-colors privacy-target">
                     <Video size={14} /> ./tcp_sync
                   </a>
                 )}
@@ -1105,7 +1105,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                   </a>
                 )}
                 {data.quick_talk_url && (
-                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="text-[#FFBD2E] hover:text-white transition-colors flex items-center gap-2 text-xs">
+                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="text-[#FFBD2E] hover:text-white transition-colors flex items-center gap-2 text-xs privacy-target">
                     <Video size={14} /> Schedule Sync
                   </a>
                 )}
