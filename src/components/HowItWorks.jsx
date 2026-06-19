@@ -88,7 +88,7 @@ export function SocialProofStrip() {
 
 /* ─────────────────────── STEP VISUALS ─────────────────────── */
 
-/** Step 1: Person wearing a KnoWMi tshirt (half body) */
+/** Step 1: Person wearing a KnoWMi tshirt with QR on back (HD generated) */
 function WearItVisual() {
   return (
     <div className="relative flex items-center justify-center h-52">
@@ -99,15 +99,15 @@ function WearItVisual() {
         }
         .float-person { animation: floatPerson 3.5s ease-in-out infinite; }
       `}</style>
-      <div className="float-person relative w-40 h-48 overflow-hidden rounded-2xl shadow-[0_20px_50px_rgba(249,115,22,0.2)]">
+      <div className="float-person relative w-44 h-48 overflow-hidden rounded-2xl shadow-[0_20px_50px_rgba(249,115,22,0.3)]">
         <img
-          src="https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?q=80&w=400&auto=format&fit=crop&crop=top"
-          alt="Person wearing KnoWMi tee"
-          className="w-full h-full object-cover object-top"
+          src="/assets/scrolly/knowmi_wear_it.png"
+          alt="Person wearing KnoWMi tee with QR code"
+          className="w-full h-full object-cover object-center"
           loading="lazy"
         />
-        {/* Orange tint overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
+        {/* Subtle vignette */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
       </div>
     </div>
   )
