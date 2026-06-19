@@ -70,11 +70,9 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
-        scrolled
-          ? useDarkTheme 
-            ? 'bg-black/80 backdrop-blur-md border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]' 
-            : 'bg-white/90 backdrop-blur-md border-b border-neutral-200 shadow-sm'
-          : 'bg-transparent'
+        useDarkTheme 
+          ? `border-b border-white/20 ${scrolled ? 'bg-black/80 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.5)]' : 'bg-transparent'}`
+          : `${scrolled ? 'bg-white/90 backdrop-blur-md border-b border-neutral-200 shadow-sm' : 'bg-transparent'}`
       }`}
       role="navigation"
       aria-label="Main navigation"
