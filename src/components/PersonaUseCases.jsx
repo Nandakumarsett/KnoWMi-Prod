@@ -184,40 +184,43 @@ export default function PersonaUseCases() {
             <div
               key={uc.id}
               ref={el => (cardsRef.current[i] = el)}
-              className="puc-card group relative rounded-[2.5rem] overflow-hidden border border-white/10 min-h-[420px] flex flex-col justify-end cursor-pointer"
+              className="puc-card group relative rounded-[2.5rem] overflow-hidden border border-white/10 flex flex-col cursor-pointer bg-[#0f0f0f] h-[500px]"
             >
-              {/* Full-bleed background image — blurred for glassmorphism effect */}
-              <div className="absolute inset-0 overflow-hidden rounded-[2.5rem]">
+              {/* 60% Background Image Area */}
+              <div className="relative h-[60%] w-full overflow-hidden">
                 <img
                   src={uc.image}
                   alt={uc.title}
-                  className="puc-card-img w-full h-full object-cover object-center"
-                  style={{ filter: 'blur(6px)', transform: 'scale(1.12)' }}
+                  className="puc-card-img w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                  style={{ filter: 'blur(4px)', transform: 'scale(1.1)' }}
                   loading="lazy"
                   referrerPolicy="no-referrer"
                   crossOrigin="anonymous"
                 />
+                {/* Smooth blend into the bottom solid color */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-[#0f0f0f]/40 to-transparent" />
+                
+                {/* Large emoji badge at top */}
+                <div className="absolute top-6 left-6 text-5xl drop-shadow-lg z-10 select-none">
+                  {uc.emoji}
+                </div>
               </div>
 
-              {/* Gradient overlay — subtle darkening to boost text contrast on blur */}
-              <div className="absolute inset-0 rounded-[2.5rem]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.2) 70%, rgba(0,0,0,0.05) 100%)' }} />
-
-              {/* Large emoji badge at top */}
-              <div className="absolute top-6 left-6 text-5xl drop-shadow-lg z-10 select-none">
-                {uc.emoji}
-              </div>
-
-              {/* Card content at bottom */}
-              <div className="relative z-10 p-8">
+              {/* 30% Content Area */}
+              <div className="relative z-10 px-8 pt-2 flex flex-col justify-end h-[30%]">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-orange-500 mb-2">
                   {uc.title}
                 </p>
-                <h3 className="text-3xl font-display font-black text-white leading-tight mb-3">
+                <h3 className="text-2xl font-display font-black text-white leading-tight mb-2">
                   {uc.benefit}
                 </h3>
-                <p className="text-sm text-neutral-400 font-medium leading-relaxed mb-6">
+                <p className="text-sm text-neutral-400 font-medium leading-relaxed line-clamp-2">
                   {uc.desc}
                 </p>
+              </div>
+
+              {/* 10% Highlight / CTA Area */}
+              <div className="relative z-10 px-8 flex items-center h-[10%] pb-6">
                 <a
                   href="#pricing"
                   className="inline-flex items-center gap-2 text-orange-500 font-black text-[11px] uppercase tracking-widest group-hover:text-orange-400 transition-colors"
