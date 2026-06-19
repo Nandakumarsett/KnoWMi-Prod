@@ -209,7 +209,7 @@ export default function PersonaUseCases() {
 
               {/* Card content at bottom */}
               <div className="relative z-10 p-8">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500 mb-2">
+                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-orange-500 mb-2">
                   {uc.title}
                 </p>
                 <h3 className="text-3xl font-display font-black text-white leading-tight mb-3">
