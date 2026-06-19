@@ -65,14 +65,17 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
   const firstName = profile?.first_name || user?.user_metadata?.first_name || 'User'
   const status = profile?.status || 'free'
 
-  const useDarkTheme = isDark && !scrolled;
+  const useDarkTheme = isDark;
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${scrolled
-          ? 'bg-white border-b border-[var(--border2)] shadow-lg'
+      className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
+        scrolled
+          ? useDarkTheme 
+            ? 'bg-black/80 backdrop-blur-md border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]' 
+            : 'bg-white/90 backdrop-blur-md border-b border-neutral-200 shadow-sm'
           : 'bg-transparent'
-        }`}
+      }`}
       role="navigation"
       aria-label="Main navigation"
     >
