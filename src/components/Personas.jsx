@@ -540,14 +540,14 @@ export default function Personas() {
       <div className="relative z-10 lg:min-h-screen flex flex-col justify-center pt-20 lg:pt-24 pb-8">
         <div className="max-w-[1400px] mx-auto px-6 w-full shrink-0" ref={headerRef}>
           <div className="text-center mb-6 lg:mb-8">
-            <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
-              <span className="text-[10px] font-black uppercase tracking-widest text-orange-500">
+            <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-lg bg-orange-500 border-[3px] border-black shadow-[3px_3px_0px_#000]">
+              <span className="text-[10px] font-black uppercase tracking-widest text-black">
                 Pick Your Identity
               </span>
             </div>
-            <h2 className="text-4xl md:text-6xl font-display font-black text-white mb-4 tracking-tight leading-[1.05]">
+            <h2 className="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight leading-[1.05] uppercase">
               What do they see <br />
-              <span className="text-orange-500 italic">when they scan you?</span>
+              <span className="bg-orange-500 text-black px-3 py-1 inline-block mt-2 rounded-lg border-[3px] border-black shadow-[5px_5px_0px_#000] rotate-1">when they scan you?</span>
             </h2>
             <p className="text-base lg:text-lg text-neutral-400 font-medium max-w-xl mx-auto">
               Each tee unlocks a different profile built for your world.
@@ -577,7 +577,7 @@ export default function Personas() {
                         {p.desc}
                       </p>
                       <div className="flex justify-center lg:justify-start">
-                        <a href="#pricing" className="btn-primary px-8 py-4 text-sm inline-flex items-center justify-center gap-2 text-white font-bold transition-all hover:scale-105 shadow-xl" style={{ backgroundColor: p.color, boxShadow: `0 10px 30px -10px ${p.color}` }}>
+                        <a href="#pricing" className="px-8 py-4 text-sm inline-flex items-center justify-center gap-2 text-black border-[3px] border-black rounded-lg font-black uppercase tracking-wider transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none shadow-[4px_4px_0px_#000]" style={{ backgroundColor: p.color }}>
                           Choose {p.name}
                         </a>
                       </div>
@@ -586,7 +586,7 @@ export default function Personas() {
                     {/* Right: Mock Phone */}
                     <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
                       <div 
-                        className={`w-full max-w-[360px] h-[55vh] lg:h-[65vh] max-h-[700px] overflow-x-hidden overflow-hidden lg:overflow-y-auto rounded-[40px] custom-scrollbar relative shadow-[0_20px_100px_rgba(0,0,0,0.15),0_0_0_1px_rgba(0,0,0,0.05)] ${isDark ? 'shadow-[0_0_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)] bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fff9f0]' : 'bg-white'}`}
+                        className={`w-full max-w-[360px] h-[55vh] lg:h-[65vh] max-h-[700px] overflow-x-hidden overflow-hidden lg:overflow-y-auto rounded-xl custom-scrollbar relative border-[3px] border-white shadow-[8px_8px_0px_#F97316] ${isDark ? 'bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fff9f0]' : 'bg-white'}`}
                       >
                          <div className="w-[133.33%] origin-top-left scale-[0.75] min-h-[133.33%] pointer-events-none select-none">
                             <PreviewContent persona={p} />

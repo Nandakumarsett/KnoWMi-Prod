@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     q: 'Is the T-shirt quality actually premium?',
-    a: "Absolutely. We use 220 GSM heavyweight combed cotton. It’s thick, soft, and built to last. The QR code is printed using high-durability ink that stays crisp and scannable even after 50+ washes.",
+    a: "Absolutely. We use 220 GSM heavyweight combed cotton. It's thick, soft, and built to last. The QR code is printed using high-durability ink that stays crisp and scannable even after 50+ washes.",
   },
   {
     q: 'What is the "Founding 100" Perk?',
@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: 'What is your return or replacement policy?',
-    a: "We want you to love your identity. If there’s any defect in the fabric or if the QR code doesn't scan perfectly, we will send you a replacement at zero cost. No questions asked, just a photo of the issue within 7 days.",
+    a: "We want you to love your identity. If there's any defect in the fabric or if the QR code doesn't scan perfectly, we will send you a replacement at zero cost. No questions asked, just a photo of the issue within 7 days.",
   },
   {
     q: 'Can I order for my whole team or squad?',
@@ -39,8 +39,11 @@ function FAQItem({ q, a, isOpen, onClick, itemRef, index }) {
   return (
     <div
       ref={itemRef}
-      className="rounded-2xl overflow-hidden transition-all duration-200"
-      style={{ border: `1px solid ${isOpen ? 'var(--saffron)' : 'rgba(255,255,255,0.05)'}`, background: isOpen ? 'rgba(249,115,22,0.1)' : '#111' }}
+      className={`rounded-xl overflow-hidden transition-all duration-200 mb-4 bg-[#1a1a1a] border-[3px] ${
+        isOpen
+          ? 'border-orange-500 shadow-[4px_4px_0px_#fff]'
+          : 'border-white shadow-[4px_4px_0px_#F97316]'
+      }`}
     >
       <button
         className="w-full flex items-start justify-between gap-4 p-6 text-left"
@@ -48,18 +51,16 @@ function FAQItem({ q, a, isOpen, onClick, itemRef, index }) {
         aria-expanded={isOpen}
         aria-controls={`faq-answer-${index}`}
       >
-        <span className="font-semibold text-sm leading-snug text-white">
+        <span className="font-black text-white text-lg leading-snug">
           {q}
         </span>
         <span
-          className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-200"
-          style={{
-            background: isOpen ? 'var(--saffron)' : 'rgba(255,255,255,0.1)',
-            transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',
-          }}
+          className={`flex-shrink-0 w-8 h-8 rounded-lg border-[2px] border-black flex items-center justify-center transition-transform duration-200 ${
+            isOpen ? 'bg-orange-500 rotate-45' : 'bg-orange-500/80'
+          }`}
           aria-hidden="true"
         >
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={isOpen ? '#fff' : '#888'} strokeWidth="3" strokeLinecap="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="4" strokeLinecap="round">
             <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
         </span>
@@ -70,7 +71,7 @@ function FAQItem({ q, a, isOpen, onClick, itemRef, index }) {
         className="overflow-hidden transition-all duration-300"
         style={{ maxHeight: isOpen ? '300px' : '0', opacity: isOpen ? 1 : 0 }}
       >
-        <p className="px-6 pb-6 text-sm leading-relaxed text-neutral-400">
+        <p className="px-6 pb-6 text-sm leading-relaxed text-neutral-300 font-medium">
           {a}
         </p>
       </div>
@@ -121,44 +122,38 @@ export default function FAQ() {
   }, [])
 
   return (
-    <section id="faq" className="py-32 bg-black relative overflow-hidden" ref={sectionRef}>
-      {/* Ambient background glow */}
-      <div className="absolute top-1/2 left-0 w-1/3 h-[600px] bg-orange-500/5 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
-      
+    <section id="faq" className="py-32 bg-[#0a0a0a] relative overflow-hidden" ref={sectionRef}>
       <div className="max-w-[1400px] mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-12 gap-16 items-start">
           
           {/* Left Column - Header (Sticky on Desktop) */}
           <div className="lg:col-span-5 lg:sticky lg:top-32" ref={leftColRef}>
-            <span className="tag mb-6 inline-block px-4 py-1.5 rounded-full bg-orange-500/10 text-orange-500 border border-orange-500/20 text-[10px] font-black uppercase tracking-widest">
+            <span className="tag mb-6 inline-block px-4 py-1.5 rounded-lg bg-orange-500 text-black border-[3px] border-black text-[10px] font-black uppercase tracking-widest shadow-[3px_3px_0px_#000]">
               FAQs
             </span>
-            <h2 className="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-[1.05]">
+            <h2 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-[1.05] uppercase">
               Questions? <br/>
-              <span className="italic text-orange-500">We've Got Answers.</span>
+              <span className="text-orange-500">We've Got Answers.</span>
             </h2>
-            <p className="text-lg text-neutral-400 font-medium mb-10 max-w-md">
+            <p className="text-lg text-neutral-400 font-bold mb-10 max-w-md">
               Everything you need to know about the product, shipping, and the digital profile experience.
             </p>
             
             <div className="hidden lg:block">
-              <p className="text-sm text-neutral-500">
-                Still have questions?{' '}
-                <a
-                  href="https://wa.me/917981325397"
-                  className="font-bold text-orange-500 hover:text-orange-400 transition-colors underline underline-offset-4"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="Opens in a new tab"
-                >
-                  Chat with us on WhatsApp →
-                </a>
-              </p>
+              <a
+                href="https://wa.me/917981325397"
+                className="inline-block px-6 py-3 bg-orange-500 text-black font-black text-sm uppercase tracking-wider border-[3px] border-black rounded-xl shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Opens in a new tab"
+              >
+                Chat on WhatsApp →
+              </a>
             </div>
           </div>
 
           {/* Right Column - Accordions */}
-          <div className="lg:col-span-7 flex flex-col gap-4">
+          <div className="lg:col-span-7 flex flex-col">
             {faqs.map((faq, i) => (
               <FAQItem
                 key={i}
@@ -172,18 +167,15 @@ export default function FAQ() {
             ))}
             
             <div className="lg:hidden mt-8 text-center">
-              <p className="text-sm text-neutral-500">
-                Still have questions?{' '}
-                <a
-                  href="https://wa.me/917981325397"
-                  className="font-bold text-orange-500 hover:text-orange-400 transition-colors underline underline-offset-4"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="Opens in a new tab"
-                >
-                  Chat with us on WhatsApp →
-                </a>
-              </p>
+              <a
+                href="https://wa.me/917981325397"
+                className="inline-block px-6 py-3 bg-orange-500 text-black font-black text-sm uppercase tracking-wider border-[3px] border-black rounded-xl shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Opens in a new tab"
+              >
+                Chat on WhatsApp →
+              </a>
             </div>
           </div>
 

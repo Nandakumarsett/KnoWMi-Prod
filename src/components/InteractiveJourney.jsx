@@ -95,26 +95,26 @@ export default function InteractiveJourney() {
                   </div>
                   
                   {/* Mock QR Target */}
-                  <div className="relative w-48 h-48 border-2 border-white/20 rounded-3xl overflow-hidden mt-8 flex items-center justify-center bg-white/5">
-                    {/* Replaced broken image logo with clean typographic logo */}
-                    <div className="absolute z-0 flex flex-col items-center">
-                      <span className="text-3xl font-black tracking-tight text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-                        Kno<span className="text-orange-500">WM</span>i
+                  <div className="relative w-56 h-56 border-[4px] border-orange-500 rounded-xl overflow-hidden mt-8 flex items-center justify-center bg-black shadow-[8px_8px_0px_#F97316]">
+                    {/* Brutalist typographic logo */}
+                    <div className="absolute z-0 flex flex-col items-center justify-center w-full h-full gap-1">
+                      <span className="text-5xl font-black tracking-tighter text-white leading-none">
+                        Kno
+                      </span>
+                      <span className="text-5xl font-black tracking-tighter bg-orange-500 text-black px-2 leading-none border-[3px] border-white -rotate-2">
+                        WM
+                      </span>
+                      <span className="text-5xl font-black tracking-tighter text-white leading-none">
+                        i
                       </span>
                     </div>
                     
                     {/* Scanner Line */}
                     <motion.div 
-                      animate={{ y: [-100, 100, -100] }}
+                      animate={{ y: [-112, 112, -112] }}
                       transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-                      className="absolute w-full h-1 bg-orange-500 shadow-[0_0_20px_#f97316] z-10"
+                      className="absolute w-full h-1.5 bg-white shadow-[0_0_15px_#fff] z-10"
                     />
-                    
-                    {/* Corner accents */}
-                    <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-orange-500 rounded-tl-3xl" />
-                    <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-orange-500 rounded-tr-3xl" />
-                    <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-orange-500 rounded-bl-3xl" />
-                    <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-orange-500 rounded-br-3xl" />
                   </div>
 
                   <motion.div 
@@ -139,84 +139,77 @@ export default function InteractiveJourney() {
                   className="absolute inset-0 bg-[#f8f8fb] overflow-hidden w-full font-sans text-center px-4 pt-4"
                 >
                   {/* Banner Image */}
-                  <div className="w-full h-32 rounded-3xl bg-black overflow-hidden relative shadow-lg flex flex-col items-start justify-center p-6 border-b-4 border-orange-500">
-                     <h2 className="text-white font-bold text-xl leading-tight text-left">Code.<br/>Build.<br/><span className="text-orange-500">Innovate.</span></h2>
+                  <div className="w-full h-32 rounded-xl bg-black overflow-hidden relative border-[3px] border-black shadow-[4px_4px_0px_#000] flex flex-col items-start justify-center p-6 mb-4">
+                     <h2 className="text-white font-black text-2xl uppercase tracking-tighter leading-tight text-left">Code.<br/>Build.<br/><span className="text-orange-500">Innovate.</span></h2>
                   </div>
                   
                   {/* Avatar */}
                   <div className="relative -mt-10 mb-2 w-full flex justify-center">
-                    <div className="w-20 h-20 rounded-[24px] bg-neutral-800 border-4 border-[#f8f8fb] overflow-hidden shadow-lg relative">
+                    <div className="w-20 h-20 rounded-xl bg-neutral-800 border-[3px] border-black overflow-hidden shadow-[4px_4px_0px_#000] relative">
                       <img src="/mock-profile.jpg" alt="Nikhil Kumar" className="w-full h-full object-cover" />
-                      <div className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 border-2 border-white rounded-full"></div>
+                      <div className="absolute bottom-0 right-0 w-4 h-4 bg-orange-500 border-2 border-black rounded-full"></div>
                     </div>
                   </div>
                   
                   {/* Profile Info */}
-                  <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-500 text-2xl font-black mb-1">Nikhil Kumar</h2>
-                  <p className="text-slate-600 font-semibold text-xs mb-3">Content Creator</p>
+                  <h2 className="text-black text-3xl font-black mb-1 uppercase tracking-tight">Nikhil Kumar</h2>
+                  <p className="text-black font-black text-xs mb-3 uppercase tracking-wider bg-orange-500 inline-block px-2 py-0.5 border-[2px] border-black -rotate-1 shadow-[2px_2px_0px_#000]">Content Creator</p>
                   
                   {/* Availability Pill */}
-                  <div className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full shadow-sm border border-slate-100 mb-5">
-                     <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
-                     <span className="text-slate-700 text-[10px] font-semibold">Open</span>
-                     <span className="text-slate-400 text-[10px]">- Responds within 24 hours</span>
+                  <div className="inline-flex items-center justify-center w-full mt-2 mb-5">
+                    <div className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border-[2px] border-black shadow-[2px_2px_0px_#000]">
+                       <div className="w-2 h-2 bg-orange-500 rounded-full border border-black"></div>
+                       <span className="text-black text-[10px] font-black uppercase">Open</span>
+                       <span className="text-neutral-500 font-bold text-[10px]">- Responds fast</span>
+                    </div>
                   </div>
 
                   {/* Social Icons */}
                   <div className="flex justify-center gap-4 mb-6">
-                    <div className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center text-slate-700">
-                      <Scan size={16} />
+                    <div className="w-10 h-10 bg-orange-500 rounded-lg border-[2px] border-black shadow-[2px_2px_0px_#000] flex items-center justify-center text-black">
+                      <Scan size={18} strokeWidth={3} />
                     </div>
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full shadow-md flex items-center justify-center text-slate-700">
-                      <User size={16} />
+                    <div className="w-10 h-10 bg-white rounded-lg border-[2px] border-black shadow-[2px_2px_0px_#000] flex items-center justify-center text-black">
+                      <User size={18} strokeWidth={3} />
                     </div>
                   </div>
                   
                   {/* Stats Row */}
-                  <div className="flex justify-between px-2 mb-4">
+                  <div className="flex justify-between px-2 mb-4 bg-white border-[3px] border-black shadow-[4px_4px_0px_#000] rounded-xl py-2 mx-2">
                     <div className="flex flex-col items-center flex-1">
-                      <span className="font-bold text-slate-800 text-base sm:text-lg">48</span>
-                      <span className="text-[7px] sm:text-[8px] font-bold text-slate-500 tracking-widest uppercase">Impressions</span>
+                      <span className="font-black text-black text-lg">48K</span>
+                      <span className="text-[8px] font-black text-neutral-500 tracking-widest uppercase">Reach</span>
                     </div>
-                    <div className="flex flex-col items-center flex-1 border-x border-slate-200">
-                      <span className="font-bold text-slate-800 text-base sm:text-lg">BNGLR</span>
-                      <span className="text-[7px] sm:text-[8px] font-bold text-slate-500 tracking-widest uppercase">Most Reached</span>
+                    <div className="flex flex-col items-center flex-1 border-x-[3px] border-black">
+                      <span className="font-black text-black text-lg">DEL</span>
+                      <span className="text-[8px] font-black text-neutral-500 tracking-widest uppercase">Top City</span>
                     </div>
                     <div className="flex flex-col items-center flex-1">
-                      <span className="font-bold text-slate-800 text-base sm:text-lg">18-35</span>
-                      <span className="text-[7px] sm:text-[8px] font-bold text-slate-500 tracking-widest uppercase">Audience Age</span>
+                      <span className="font-black text-black text-lg">18-35</span>
+                      <span className="text-[8px] font-black text-neutral-500 tracking-widest uppercase">Age Group</span>
                     </div>
                   </div>
                   
                   {/* Inside the mind */}
-                  <div className="mb-4">
-                    <div className="flex items-center justify-center gap-1 mb-1 sm:mb-2 text-purple-500">
-                      <Zap size={10} />
-                      <span className="text-[8px] sm:text-[9px] font-bold tracking-widest uppercase">Inside the mind</span>
+                  <div className="mb-4 mx-2 bg-orange-500 border-[3px] border-black shadow-[4px_4px_0px_#000] p-3 rounded-xl text-left">
+                    <div className="flex items-center gap-2 mb-1 text-black">
+                      <Zap size={14} strokeWidth={3} />
+                      <span className="text-[10px] font-black tracking-widest uppercase">Inside the mind</span>
                     </div>
-                    <p className="text-xs sm:text-sm font-bold text-slate-800 leading-tight px-2 sm:px-4">
-                      I am Very enthusiastic towards my work. I respect all work
+                    <p className="text-xs font-black text-black leading-tight">
+                      Very enthusiastic towards my work. I respect all work. Let's collaborate.
                     </p>
                   </div>
 
                   {/* Claim Button */}
-                  <div className="absolute bottom-4 left-0 w-full px-6 group z-50">
+                  <div className="absolute bottom-4 left-0 w-full px-4 group z-50">
                     <motion.div
-                      animate={phase === 3 ? { scale: [1, 0.95, 1], backgroundColor: ["#f97316", "#ea580c", "#f97316"] } : {}}
+                      animate={phase === 3 ? { scale: [1, 0.95, 1], x: [0, 2, 0], y: [0, 2, 0], boxShadow: ["4px 4px 0px #000", "0px 0px 0px #000", "4px 4px 0px #000"] } : {}}
                       transition={{ duration: 0.3, delay: 1 }}
-                      className="w-full py-3 sm:py-4 bg-orange-500 rounded-2xl flex items-center justify-center gap-2 text-white font-black uppercase text-xs sm:text-sm tracking-widest relative overflow-hidden shadow-xl"
+                      className="w-full py-4 bg-orange-500 rounded-lg flex items-center justify-center gap-2 text-black border-[3px] border-black font-black uppercase text-sm tracking-widest shadow-[4px_4px_0px_#000] relative overflow-hidden"
                     >
-                      <ShoppingCart size={18} />
+                      <ShoppingCart size={18} strokeWidth={3} />
                       Claim Your Tee
-                      
-                      {phase === 3 && (
-                        <motion.div 
-                          initial={{ scale: 0, opacity: 0.5 }}
-                          animate={{ scale: 3, opacity: 0 }}
-                          transition={{ duration: 0.6, delay: 1 }}
-                          className="absolute inset-0 bg-white rounded-full origin-center pointer-events-none"
-                        />
-                      )}
                     </motion.div>
                   </div>
 

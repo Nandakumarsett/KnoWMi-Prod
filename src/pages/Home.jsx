@@ -148,13 +148,13 @@ export default function Home() {
       </main>
 
       {/* Sticky CTA */}
-      <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] transition-all duration-500 transform ${showSticky ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
+      <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] transition-all duration-300 transform ${showSticky ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
         <button
           onClick={() => handleSelectPlan('creator')}
-          className="flex items-center gap-3 px-8 py-4 bg-white text-black rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:bg-orange-500 hover:text-white transition-all group"
+          className="flex items-center gap-3 px-8 py-4 bg-orange-500 text-black rounded-xl font-black text-xs uppercase tracking-[0.2em] border-[3px] border-black shadow-[5px_5px_0px_#000] hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none transition-all group"
         >
           Explore Tees
-          <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+          <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
 

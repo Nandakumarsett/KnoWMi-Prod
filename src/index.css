@@ -93,20 +93,18 @@
     border-radius: inherit;
   }
 
-  /* ── Glassmorphism card ── */
+  /* ── Neo-Brutalism card (replaces glassmorphism) ── */
   .glass {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: #1a1a1a;
+    border: 3px solid #fff;
+    box-shadow: 5px 5px 0px #F97316;
     will-change: transform, opacity;
   }
 
   .glass-dark {
-    background: rgba(10, 10, 15, 0.7);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #1a1a1a;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 4px 4px 0px #000;
   }
 
   /* ── Gradient text ── */
@@ -137,34 +135,41 @@
   }
 
   .btn-primary {
-    @apply btn-base px-7 py-3.5 text-white text-sm;
-    background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-dark) 100%);
-    box-shadow: 0 4px 20px rgba(255,153,51,.35), 0 1px 4px rgba(0,0,0,.1);
+    @apply btn-base px-7 py-3.5 text-black text-sm font-black uppercase tracking-wider;
+    background: #F97316;
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0px #000;
+    border-radius: 12px;
   }
   .btn-primary:hover {
-    box-shadow: 0 6px 28px rgba(255,153,51,.5), 0 2px 8px rgba(0,0,0,.12);
-    transform: translateY(-1px);
+    box-shadow: none;
+    transform: translate(3px, 3px);
   }
-  .btn-primary:active { transform: scale(0.97); }
+  .btn-primary:active { transform: translate(3px, 3px); }
 
   .btn-outline {
-    @apply btn-base px-7 py-3.5 text-sm;
-    border: 1.5px solid var(--border);
-    color: var(--ink);
+    @apply btn-base px-7 py-3.5 text-sm font-black;
+    border: 3px solid #fff;
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 4px 4px 0px #F97316;
   }
   .btn-outline:hover {
-    border-color: var(--saffron);
-    color: var(--saffron);
-    background: var(--saffron-light);
+    background: #F97316;
+    border-color: #000;
+    color: #000;
+    box-shadow: none;
+    transform: translate(3px, 3px);
   }
 
   .btn-ghost {
-    @apply btn-base px-7 py-3.5 text-sm text-white;
-    background: rgba(255,255,255,0.1);
-    border: 1.5px solid rgba(255,255,255,0.2);
-    backdrop-filter: blur(8px);
+    @apply btn-base px-7 py-3.5 text-sm text-white font-black;
+    background: #1a1a1a;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 12px;
+    box-shadow: 3px 3px 0px rgba(255,255,255,0.2);
   }
-  .btn-ghost:hover { background: rgba(255,255,255,0.18); }
+  .btn-ghost:hover { background: #F97316; color: #000; border-color: #000; box-shadow: none; transform: translate(2px, 2px); }
 
   .btn-lg {
     @apply px-9 py-4 text-base rounded-2xl;
@@ -177,17 +182,19 @@
 
   /* ── Tag pill ── */
   .tag {
-    @apply inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold tracking-wider uppercase;
+    @apply inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-black tracking-wider uppercase;
     font-family: 'JetBrains Mono', monospace;
+    border: 3px solid #000;
+    box-shadow: 3px 3px 0px #000;
   }
 
-  /* ── Card hover lift ── */
+  /* ── Card hover lift (Neo-Brutalism) ── */
   .card-lift {
-    @apply transition-all duration-300;
+    @apply transition-all duration-200;
   }
   .card-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.1), 0 4px 16px rgba(0,0,0,0.06);
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0px #F97316;
   }
 
   /* ── Reveal animation ── */

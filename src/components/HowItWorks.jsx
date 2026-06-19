@@ -15,11 +15,11 @@ const marqueeItems = [
 export function Marquee() {
   return (
     <div
-      className="overflow-hidden py-3.5"
+      className="overflow-hidden py-4"
       style={{
         background: '#0a0a0a',
-        borderTop: '1px solid rgba(255,255,255,0.05)',
-        borderBottom: '1px solid rgba(255,255,255,0.05)',
+        borderTop: '3px solid #F97316',
+        borderBottom: '3px solid #F97316',
       }}
       aria-label="Feature highlights"
       aria-hidden="true"
@@ -29,10 +29,10 @@ export function Marquee() {
           {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
             <span
               key={i}
-              className="text-[10px] font-black uppercase tracking-[0.2em] px-8 flex items-center gap-2 whitespace-nowrap text-white/50"
+              className="text-xs font-black uppercase tracking-[0.2em] px-8 flex items-center gap-2 whitespace-nowrap text-white"
             >
               {item}
-              <span className="w-1 h-1 rounded-full bg-orange-500/50" />
+              <span className="w-2 h-2 rounded-sm bg-orange-500 border border-black" />
             </span>
           ))}
         </div>
@@ -51,31 +51,19 @@ const stats = [
 
 export function SocialProofStrip() {
   return (
-    <section className="py-10 bg-[#0d0d0d] border-y border-white/5 relative overflow-hidden">
-      <style>{`
-        @keyframes statGlow {
-          0%, 100% { text-shadow: 0 0 20px rgba(249,115,22,0.5); }
-          50% { text-shadow: 0 0 40px rgba(249,115,22,0.9), 0 0 80px rgba(249,115,22,0.3); }
-        }
-        .stat-value {
-          animation: statGlow 2.5s ease-in-out infinite;
-        }
-      `}</style>
-      {/* Orange ambient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-500/3 to-transparent pointer-events-none" />
-
+    <section className="py-12 bg-[#0a0a0a] border-y-[3px] border-white relative overflow-hidden">
       <div className="max-w-[1200px] mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0 md:divide-x md:divide-white/10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((s, i) => (
-            <div key={i} className="flex flex-col items-center text-center gap-2 px-6">
+            <div
+              key={i}
+              className="flex flex-col items-center text-center gap-2 px-6 py-5 bg-[#1a1a1a] border-[3px] border-orange-500 rounded-xl shadow-[4px_4px_0px_#fff]"
+            >
               <span className="text-3xl mb-1">{s.icon}</span>
-              <span
-                className="stat-value text-3xl md:text-4xl font-display font-black text-orange-500"
-                style={{ animationDelay: `${i * 0.4}s` }}
-              >
+              <span className="text-3xl md:text-5xl font-black text-orange-500">
                 {s.value}
               </span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500">
+              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-neutral-300">
                 {s.label}
               </span>
             </div>
@@ -99,15 +87,13 @@ function WearItVisual() {
         }
         .float-person { animation: floatPerson 3.5s ease-in-out infinite; }
       `}</style>
-      <div className="float-person relative w-44 h-48 overflow-hidden rounded-2xl shadow-[0_20px_50px_rgba(249,115,22,0.3)]">
+      <div className="float-person relative w-44 h-48 overflow-hidden rounded-xl border-[3px] border-white shadow-[4px_4px_0px_#F97316]">
         <img
           src="/assets/scrolly/knowmi_wear_it.png"
           alt="Person wearing KnoWMi tee with QR code"
           className="w-full h-full object-cover object-center"
           loading="lazy"
         />
-        {/* Subtle vignette */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
       </div>
     </div>
   )
@@ -136,10 +122,9 @@ function ScanItVisual() {
           animation: scanLineQR 2.2s ease-in-out infinite;
           position: absolute;
           left: 6px; right: 6px;
-          height: 2px;
-          background: linear-gradient(90deg, transparent, #f97316 40%, #f97316 60%, transparent);
-          box-shadow: 0 0 10px rgba(249,115,22,0.9);
-          border-radius: 99px;
+          height: 3px;
+          background: #f97316;
+          border-radius: 0;
           z-index: 20;
         }
         .qr-corner-br { animation: cornerPulseQR 1.5s ease-in-out infinite; }
@@ -150,7 +135,7 @@ function ScanItVisual() {
       <div className="scanner-float relative">
         {/* QR code image */}
         <div
-          className="relative w-40 h-40 rounded-xl overflow-hidden bg-white p-2 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+          className="relative w-40 h-40 rounded-xl overflow-hidden bg-white p-2 border-[3px] border-black shadow-[4px_4px_0px_#F97316]"
           style={{ isolation: 'isolate' }}
         >
           {/* Real QR pattern using SVG */}
@@ -206,11 +191,11 @@ function ScanItVisual() {
 
         {/* "Scanning..." label */}
         <div className="mt-3 flex items-center justify-center gap-2">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-sm bg-orange-500 opacity-75" />
+            <span className="relative inline-flex rounded-sm h-2.5 w-2.5 bg-orange-500" />
           </span>
-          <span className="text-[10px] font-black uppercase tracking-widest text-orange-400">Scanning…</span>
+          <span className="text-[11px] font-black uppercase tracking-widest text-orange-500">Scanning…</span>
         </div>
       </div>
     </div>
@@ -221,40 +206,32 @@ function ScanItVisual() {
 function RememberedVisual() {
   return (
     <div className="relative flex items-center justify-center h-52">
-      <style>{`
-        @keyframes profilePop {
-          0%, 100% { transform: scale(1); box-shadow: 0 8px 32px rgba(249,115,22,0.1); }
-          50% { transform: scale(1.03); box-shadow: 0 16px 48px rgba(249,115,22,0.25); }
-        }
-        .profile-card { animation: profilePop 3s ease-in-out infinite; }
-      `}</style>
-      <div className="profile-card w-56 bg-white border border-neutral-200 rounded-3xl p-5 text-center shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
+      <div className="w-56 bg-white border-[3px] border-black rounded-xl p-5 text-center shadow-[5px_5px_0px_#F97316]">
         <img
           src="https://i.pravatar.cc/100?u=knowmi_demo"
           alt="Profile avatar"
-          className="w-14 h-14 rounded-full mx-auto mb-3 border-2 border-orange-500/60 object-cover"
+          className="w-14 h-14 rounded-xl mx-auto mb-3 border-[3px] border-orange-500 object-cover"
         />
         <p className="text-sm font-black text-neutral-900 mb-0.5">Arjun Mehta</p>
-        <p className="text-[10px] text-neutral-400 font-medium mb-3">Full-Stack Dev · Mumbai</p>
-        <div className="flex justify-center gap-3">
-          <div className="w-7 h-7 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-orange-500 hover:border-orange-500/40 transition-colors">
-            <Twitter size={12} />
+        <p className="text-[10px] text-neutral-500 font-black uppercase mb-3">Full-Stack Dev · Mumbai</p>
+        <div className="flex justify-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Twitter size={13} />
           </div>
-          <div className="w-7 h-7 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-orange-500 hover:border-orange-500/40 transition-colors">
-            <Linkedin size={12} />
+          <div className="w-8 h-8 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Linkedin size={13} />
           </div>
-          <div className="w-7 h-7 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-orange-500 hover:border-orange-500/40 transition-colors">
-            <Github size={12} />
+          <div className="w-8 h-8 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Github size={13} />
           </div>
-          <div className="w-7 h-7 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-orange-500 hover:border-orange-500/40 transition-colors">
-            <Instagram size={12} />
+          <div className="w-8 h-8 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Instagram size={13} />
           </div>
         </div>
-        <div className="mt-3 text-[9px] font-black uppercase tracking-widest text-orange-500">
+        <div className="mt-3 text-[10px] font-black uppercase tracking-widest text-orange-500 bg-orange-500/10 border-[2px] border-orange-500 rounded-lg py-1 px-2 inline-block">
           ● Live Profile
         </div>
       </div>
-
     </div>
   )
 }
@@ -262,21 +239,24 @@ function RememberedVisual() {
 const steps = [
   {
     num: '01',
-    title: 'Wear It',
+    title: 'WEAR IT',
     desc: 'A premium 220 GSM tee that carries your entire digital world. People notice. Conversations start.',
     Visual: WearItVisual,
+    accent: '#F97316',
   },
   {
     num: '02',
-    title: 'Scan It',
+    title: 'SCAN IT',
     desc: 'Instantly pulls up your live profile on any phone camera. No app. No friction. Just magic.',
     Visual: ScanItVisual,
+    accent: '#EC4899',
   },
   {
     num: '03',
-    title: "You're Remembered",
+    title: "YOU'RE REMEMBERED",
     desc: 'Your links, portfolio, and story — all in one place. Every scan becomes a connection that lasts.',
     Visual: RememberedVisual,
+    accent: '#22D3EE',
   },
 ]
 
@@ -362,30 +342,30 @@ export function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="py-32 bg-black min-h-screen flex items-center"
+      className="py-32 bg-[#0a0a0a] min-h-screen flex items-center"
       ref={sectionRef}
     >
       <div className="max-w-[1200px] mx-auto px-6 w-full">
         {/* Header */}
         <div className="text-center mb-20" ref={headerRef}>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 mb-6 text-orange-500 text-[10px] font-black uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-orange-500 text-black border-[3px] border-black shadow-[3px_3px_0px_#000] mb-6 text-[11px] font-black uppercase tracking-widest">
             How It Works
           </div>
-          <h2 className="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-[1.05]">
-            It&apos;s stupidly simple.
+          <h2 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-[1.05]">
+            IT&apos;S STUPIDLY SIMPLE.
             <br />
-            <span className="text-orange-500 italic">That&apos;s the point.</span>
+            <span className="text-orange-500" style={{ WebkitTextStroke: '2px #F97316' }}>THAT&apos;S THE POINT.</span>
           </h2>
-          <p className="text-lg text-neutral-400 font-medium max-w-xl mx-auto">
+          <p className="text-lg text-neutral-300 font-black max-w-xl mx-auto">
             No complicated setup. No downloaded apps. Just a tee that works as hard as you do.
           </p>
         </div>
 
         {/* Steps grid */}
         <div className="grid md:grid-cols-3 gap-12 lg:gap-16 relative">
-          {/* Connection Line — sits below visuals at title level, never overlaps them */}
+          {/* Connection Line — solid brutal style */}
           <div
-            className="hidden lg:block absolute top-[248px] left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-orange-500/0 via-orange-500/40 to-orange-500/0"
+            className="hidden lg:block absolute top-[248px] left-[15%] right-[15%] h-[3px] bg-orange-500"
             ref={lineRef}
           />
 
@@ -394,31 +374,26 @@ export function HowItWorks() {
             return (
               <div
                 key={i}
-                className="relative z-10 flex flex-col items-center text-center"
+                className="relative z-10 flex flex-col items-center text-center bg-[#1a1a1a] border-[3px] border-white rounded-xl p-6 shadow-[5px_5px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150"
                 ref={el => (stepsRef.current[i] = el)}
               >
-                {/* Huge decorative step number */}
+                {/* HUGE step number badge */}
                 <div
-                  className="absolute -top-8 left-1/2 -translate-x-1/2 text-[8rem] font-black leading-none select-none pointer-events-none"
-                  style={{
-                    color: 'transparent',
-                    WebkitTextStroke: '1px rgba(255,255,255,0.04)',
-                    fontFamily: 'var(--font-display)',
-                  }}
-                  aria-hidden="true"
+                  className="w-14 h-14 rounded-xl font-black text-2xl flex items-center justify-center border-[3px] border-black shadow-[3px_3px_0px_#000] mb-4 text-black"
+                  style={{ backgroundColor: step.accent }}
                 >
                   {step.num}
                 </div>
 
                 {/* Visual demo */}
-                <div className="relative z-10 w-full">
+                <div className="relative z-10 w-full border-[2px] border-white/20 rounded-xl p-2 mb-4 bg-[#111]">
                   <Visual />
                 </div>
 
-                <h3 className="text-2xl font-display font-black mb-3 text-white mt-4">
+                <h3 className="text-2xl font-black mb-3 text-white uppercase tracking-wide">
                   {step.title}
                 </h3>
-                <p className="text-sm text-neutral-500 font-medium leading-relaxed max-w-[260px]">
+                <p className="text-sm text-neutral-400 font-bold leading-relaxed max-w-[260px]">
                   {step.desc}
                 </p>
               </div>

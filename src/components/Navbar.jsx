@@ -72,8 +72,8 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
       className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
         scrolled
           ? useDarkTheme 
-            ? 'bg-black/80 backdrop-blur-md border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]' 
-            : 'bg-white/90 backdrop-blur-md border-b border-neutral-200 shadow-sm'
+            ? 'bg-[#0a0a0a] border-b-[3px] border-white shadow-[0_4px_0_#F97316]' 
+            : 'bg-white border-b-[3px] border-black shadow-[0_4px_0_#000]'
           : 'bg-transparent'
       }`}
       role="navigation"
@@ -222,13 +222,13 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
             <>
               <button
                 onClick={() => onAuthClick?.('signin')}
-                className="btn-outline btn-base px-5 py-2.5 text-[13px] rounded-xl"
+                className={`px-5 py-2.5 text-[13px] font-black uppercase tracking-wider rounded-lg border-[3px] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none shadow-[3px_3px_0px_#000] ${useDarkTheme ? 'bg-black text-white border-white shadow-[3px_3px_0px_#fff]' : 'bg-white text-black border-black'}`}
               >
                 Sign In
               </button>
               <button
                 onClick={() => onAuthClick?.('signup')}
-                className="btn-primary btn-base px-5 py-2.5 text-[13px] rounded-xl font-bold flex items-center gap-2"
+                className="px-5 py-2.5 text-[13px] font-black uppercase tracking-wider rounded-lg bg-orange-500 text-black border-[3px] border-black shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center gap-2"
               >
                 Sign Up Free
               </button>
@@ -237,15 +237,12 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
         </div>
 
         {/* Mobile hamburger */}
-        <button
-          className="lg:hidden ml-auto p-2 flex flex-col gap-1.5"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={mobileOpen}
-        >
-          <span className={`block w-6 h-[3px] bg-ink rounded transition-all duration-200 ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
-          <span className={`block w-6 h-[3px] bg-ink rounded transition-all duration-200 ${mobileOpen ? 'opacity-0' : ''}`} />
-          <span className={`block w-6 h-[3px] bg-ink rounded transition-all duration-200 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+        <button className="md:hidden p-2 rounded-lg bg-orange-500 border-[3px] border-black text-black shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
+          <div className="w-6 h-5 relative flex flex-col justify-between">
+            <span className={`w-full h-1 bg-black rounded-full transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
+            <span className={`w-full h-1 bg-black rounded-full transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`} />
+            <span className={`w-full h-1 bg-black rounded-full transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          </div>
         </button>
       </div>
 
@@ -306,10 +303,10 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
               </>
             ) : (
               <>
-                <button onClick={() => { onAuthClick?.('signin'); setMobileOpen(false) }} className="btn-outline btn-base py-3 text-sm rounded-xl w-full text-center">
+                <button onClick={() => { onAuthClick?.('signin'); setMobileOpen(false) }} className="w-full py-4 bg-white text-black border-[3px] border-black rounded-lg font-black text-sm tracking-widest uppercase shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
                   Sign In
                 </button>
-                <button onClick={() => { onAuthClick?.('signup'); setMobileOpen(false) }} className="btn-primary btn-base py-3 text-sm rounded-xl w-full text-center">
+                <button onClick={() => { onAuthClick?.('signup'); setMobileOpen(false) }} className="w-full mt-4 py-4 bg-orange-500 text-black border-[3px] border-black rounded-lg font-black text-sm tracking-widest uppercase shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
                   Sign Up Free ↗
                 </button>
               </>

@@ -53,11 +53,11 @@ const testimonials = [
   },
 ]
 
-function Stars({ count, size = 14 }) {
+function Stars({ count, size = 20 }) {
   return (
-    <div className="flex gap-0.5" aria-label={`${count} out of 5 stars`} role="img">
+    <div className="flex gap-1" aria-label={`${count} out of 5 stars`} role="img">
       {[...Array(5)].map((_, i) => (
-        <svg key={i} width={size} height={size} viewBox="0 0 24 24" fill={i < count ? '#FF9933' : '#333'} aria-hidden="true">
+        <svg key={i} width={size} height={size} viewBox="0 0 24 24" fill={i < count ? '#F97316' : '#333'} stroke={i < count ? '#000' : 'none'} strokeWidth="1.5" aria-hidden="true">
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
         </svg>
       ))}
@@ -72,106 +72,98 @@ export default function Testimonials() {
     <section id="reviews" className="section-pad min-h-screen flex items-center bg-[#0a0a0a] relative overflow-hidden" ref={ref}>
       <style>{`
         @keyframes viralBadgePulse {
-          0%, 100% { transform: scale(1) rotate(-2deg); }
-          50% { transform: scale(1.08) rotate(-2deg); }
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); }
         }
         .viral-badge {
           animation: viralBadgePulse 2s ease-in-out infinite;
         }
-        .testi-card-enhanced {
-          transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        .testi-card-brutal {
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
-        .testi-card-enhanced:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 24px 60px rgba(0,0,0,0.5);
-          border-color: rgba(249,115,22,0.2) !important;
+        .testi-card-brutal:hover {
+          transform: translate(-3px, -3px);
+          box-shadow: 8px 8px 0px #F97316 !important;
         }
       `}</style>
-
-      {/* Ambient glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-[400px] bg-orange-500/4 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="max-w-[1200px] mx-auto px-6 relative z-10 w-full">
         {/* Header */}
         <div className="text-center mb-16 reveal">
-          <span className="tag mb-4 inline-block bg-orange-500/10 text-orange-500 border border-orange-500/20">
-            Reviews
+          <span className="inline-block mb-4 px-5 py-2 bg-orange-500 text-black text-xs font-black uppercase tracking-widest border-[3px] border-black rounded-lg shadow-[3px_3px_0px_#000]">
+            ★ REVIEWS ★
           </span>
 
           {/* Huge rating display */}
           <div className="mb-6">
-            <div className="text-6xl md:text-7xl font-display font-black text-white leading-none mb-3">
+            <div className="text-7xl md:text-8xl font-black text-white leading-none mb-3" style={{ fontFamily: "'Montserrat', sans-serif" }}>
               4.9
             </div>
-            <div className="flex justify-center mb-2">
-              <Stars count={5} size={20} />
+            <div className="flex justify-center mb-3">
+              <Stars count={5} size={28} />
             </div>
-            <p className="text-sm text-neutral-400 font-medium">from 2,100+ verified reviews</p>
+            <p className="text-sm text-neutral-400 font-black uppercase tracking-wider">FROM 2,100+ VERIFIED REVIEWS</p>
           </div>
 
-          <h2 className="font-display font-bold mb-4 text-white" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-            People Are{' '}
-            <span className="italic gradient-text">Talking About It</span>
+          <h2 className="font-black mb-4 text-white uppercase tracking-tight" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontFamily: "'Montserrat', sans-serif" }}>
+            PEOPLE ARE{' '}
+            <span className="text-orange-500">TALKING ABOUT IT</span>
           </h2>
         </div>
 
         {/* Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((t, i) => (
             <div
               key={i}
-              className={`testi-card-enhanced reveal reveal-delay-${(i % 3) + 1} rounded-3xl overflow-hidden relative`}
+              className={`testi-card-brutal reveal reveal-delay-${(i % 3) + 1} bg-[#1a1a1a] border-[3px] border-white rounded-xl overflow-hidden relative`}
               style={{
-                background: '#111',
-                border: '1px solid rgba(255,255,255,0.07)',
+                boxShadow: '5px 5px 0px #F97316',
               }}
             >
-              {/* Light gradient top accent */}
+              {/* Top accent bar — solid, no gradient */}
               <div
-                className="absolute top-0 left-0 right-0 h-24 opacity-30 pointer-events-none"
-                style={{
-                  background: `linear-gradient(180deg, ${t.color}22 0%, transparent 100%)`,
-                }}
+                className="h-2 w-full"
+                style={{ backgroundColor: t.color }}
               />
 
               {/* Viral badge on featured */}
               {t.featured && (
-                <div className="viral-badge absolute top-4 right-4 z-20">
-                  <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-orange-500/40">
-                    🔥 Going Viral
+                <div className="viral-badge absolute top-5 right-4 z-20">
+                  <span className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 text-black text-[10px] font-black uppercase tracking-widest border-[3px] border-black rounded-lg shadow-[3px_3px_0px_#000]">
+                    🔥 GOING VIRAL
                   </span>
                 </div>
               )}
 
-              <div className="p-6 sm:p-7 pt-8 relative z-10 flex flex-col h-full">
+              <div className="p-6 sm:p-7 relative z-10 flex flex-col h-full">
                 <Stars count={t.rating} />
 
-                <blockquote className="mt-4 mb-5 text-xs sm:text-sm leading-relaxed text-neutral-300 flex-1">
+                <blockquote className="mt-4 mb-5 text-sm leading-relaxed text-neutral-200 font-bold flex-1">
                   &ldquo;{t.text}&rdquo;
                 </blockquote>
 
-                <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
+                <div className="flex items-center justify-between mt-auto pt-4 border-t-[3px] border-white/20">
                   <div className="flex items-center gap-3">
                     <img
                       src={`https://i.pravatar.cc/100?u=knowmi_${t.name.toLowerCase().replace(' ', '_')}`}
                       alt={t.name}
-                      className="w-10 h-10 rounded-2xl object-cover border-2 flex-shrink-0"
-                      style={{ borderColor: `${t.color}66` }}
+                      className="w-11 h-11 rounded-lg object-cover border-[3px] border-orange-500 flex-shrink-0"
                       loading="lazy"
                     />
                     <div>
-                      <div className="flex items-center gap-1.5 mb-0.5">
-                        <div className="text-sm font-bold text-white">{t.name}</div>
-                        <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-500/10 text-green-500 border border-green-500/20">
-                          <CheckCircle size={8} className="fill-green-500 text-[#111]" />
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <div className="text-sm font-black text-white">{t.name}</div>
+                        <div className="flex items-center gap-1 px-2 py-0.5 bg-green-500 text-black border-[2px] border-black rounded-md">
+                          <CheckCircle size={10} className="text-black" strokeWidth={3} />
                           <span className="text-[8px] font-black uppercase tracking-widest">Verified</span>
                         </div>
                       </div>
-                      <div className="text-xs text-neutral-500">{t.role}</div>
+                      <div className="text-xs text-neutral-400 font-bold">{t.role}</div>
                     </div>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <div className="text-xs font-bold text-orange-500" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                    <div className="text-xs font-black text-orange-500 bg-orange-500/10 border-[2px] border-orange-500 rounded-md px-2 py-1" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
                       {t.scans}
                     </div>
                   </div>
@@ -183,13 +175,12 @@ export default function Testimonials() {
 
         {/* Worn at */}
         <div className="mt-16 reveal text-center">
-          <p className="text-xs font-bold uppercase tracking-widest mb-6" style={{ color: 'var(--ink4)', fontFamily: 'JetBrains Mono, monospace' }}>
-            Worn at
+          <p className="text-xs font-black uppercase tracking-widest mb-6 text-neutral-500" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+            WORN AT
           </p>
           <div className="flex flex-wrap justify-center gap-4 items-center">
             {['IIT Delhi Techfest', 'Nasscom Startup Summit', 'Bangalore Design Week', 'Product Hunt India', 'IIM Ahmedabad'].map((v, i) => (
-              <span key={i} className="px-4 py-2 rounded-full text-sm font-medium"
-                style={{ background: '#111', border: '1px solid rgba(255,255,255,0.1)', color: '#888' }}>
+              <span key={i} className="px-4 py-2 rounded-lg text-sm font-black bg-[#1a1a1a] text-neutral-300 border-[2px] border-white/30 shadow-[3px_3px_0px_#333]">
                 {v}
               </span>
             ))}

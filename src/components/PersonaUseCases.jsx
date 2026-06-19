@@ -134,40 +134,33 @@ export default function PersonaUseCases() {
         .puc-card:hover .puc-card-img {
           transform: scale(1.05);
         }
-        .puc-card {
-          transition: border-color 0.35s ease, box-shadow 0.35s ease;
-        }
-        .puc-card:hover {
-          border-color: rgb(249 115 22 / 0.6) !important;
-          box-shadow: 0 0 50px rgba(249,115,22,0.15);
-        }
       `}</style>
 
-      {/* Ambient glow */}
-      <div className="absolute top-0 right-0 w-1/2 h-[500px] bg-orange-500/5 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-1/3 h-[400px] bg-orange-500/5 rounded-full blur-[120px] pointer-events-none" />
+      {/* Decorative blocks */}
+      <div className="absolute top-10 right-10 w-24 h-24 border-[3px] border-orange-500/20 rounded-lg rotate-12 pointer-events-none" />
+      <div className="absolute bottom-10 left-10 w-16 h-16 bg-orange-500/10 border-[3px] border-orange-500/20 rounded-md -rotate-6 pointer-events-none" />
 
       <div className="max-w-[1400px] mx-auto px-6 relative z-10 w-full">
         {/* Section Header */}
         <div className="text-center mb-20" ref={headerRef}>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 mb-6 text-orange-500 text-[10px] font-black uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-md bg-orange-500 border-[3px] border-black mb-6 text-black text-[10px] font-black uppercase tracking-widest shadow-[3px_3px_0px_#000]">
             Built For You
           </div>
           <h2 className="text-6xl md:text-7xl lg:text-8xl font-display font-black text-white mb-6 tracking-tight leading-[1.0]">
             Who wears <br />
-            <span className="text-orange-500 italic">KnoWMi?</span>
+            <span className="bg-orange-500 text-black px-4 py-1 rounded-md inline-block mt-2 -rotate-1">KnoWMi?</span>
           </h2>
           <p className="text-lg text-neutral-400 font-medium max-w-xl mx-auto mb-10">
             Anyone who&apos;s tired of being forgotten. Creators, students, founders, techies — your tee tells your story.
           </p>
 
           {/* Live Scan Counter */}
-          <div className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-3 px-5 py-3 rounded-lg bg-[#1a1a1a] border-[3px] border-white shadow-[4px_4px_0px_#F97316]">
             <span className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
             </span>
-            <span className="text-neutral-400 text-sm font-medium">Total QR Scans Today:</span>
+            <span className="text-neutral-300 text-sm font-black">Total QR Scans Today:</span>
             <span
               ref={counterRef}
               className="text-xl font-black text-orange-500"
@@ -184,7 +177,7 @@ export default function PersonaUseCases() {
             <div
               key={uc.id}
               ref={el => (cardsRef.current[i] = el)}
-              className="puc-card group relative rounded-[2.5rem] overflow-hidden border border-white/10 flex flex-col cursor-pointer bg-[#0f0f0f] h-[500px]"
+              className="puc-card group relative rounded-xl overflow-hidden border-[3px] border-white flex flex-col cursor-pointer bg-[#1a1a1a] h-[500px] shadow-[6px_6px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[9px_9px_0px_#F97316] transition-all duration-300"
             >
               {/* 60% Background Image Area */}
               <div className="relative h-[60%] w-full overflow-hidden">
@@ -192,25 +185,25 @@ export default function PersonaUseCases() {
                   src={uc.image}
                   alt={uc.title}
                   className="puc-card-img w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                  style={{ filter: 'blur(4px)', transform: 'scale(1.1)' }}
+                  style={{ filter: 'none', transform: 'none' }}
                   loading="lazy"
                   referrerPolicy="no-referrer"
                   crossOrigin="anonymous"
                 />
-                {/* Smooth blend into the bottom solid color */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-[#0f0f0f]/40 to-transparent" />
+                {/* Bottom fade overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                 
                 {/* Large emoji badge at top */}
-                <div className="absolute top-6 left-6 text-5xl drop-shadow-lg z-10 select-none">
+                <div className="absolute top-5 left-5 text-4xl bg-[#1a1a1a] border-[3px] border-black rounded-lg w-14 h-14 flex items-center justify-center shadow-[3px_3px_0px_#000] z-10 select-none">
                   {uc.emoji}
                 </div>
               </div>
 
               {/* 30% Content Area */}
               <div className="relative z-10 px-8 pt-2 flex flex-col justify-end h-[30%]">
-                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-orange-500 mb-2">
+                <span className="bg-orange-500 text-black px-3 py-1 rounded-md border-2 border-black font-black text-[11px] uppercase tracking-[0.15em] inline-block mb-2">
                   {uc.title}
-                </p>
+                </span>
                 <h3 className="text-2xl font-display font-black text-white leading-tight mb-2">
                   {uc.benefit}
                 </h3>
@@ -223,7 +216,7 @@ export default function PersonaUseCases() {
               <div className="relative z-10 px-8 flex items-center h-[10%] pb-6">
                 <a
                   href="#pricing"
-                  className="inline-flex items-center gap-2 text-orange-500 font-black text-[11px] uppercase tracking-widest group-hover:text-orange-400 transition-colors"
+                  className="inline-flex items-center gap-2 bg-orange-500 text-black px-5 py-2 rounded-lg border-[3px] border-black shadow-[3px_3px_0px_#000] font-black text-[11px] uppercase tracking-widest hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
                   Get Yours{' '}
                   <span className="puc-arrow-cta text-lg">→</span>
@@ -241,7 +234,7 @@ export default function PersonaUseCases() {
               <span
                 key={p}
                 ref={el => (tagsRef.current[i] = el)}
-                className="px-6 py-3 rounded-2xl bg-[#111] border border-white/10 text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:text-orange-500 hover:border-orange-500/30 hover:bg-orange-500/10 transition-colors cursor-pointer"
+                className="px-6 py-3 rounded-lg bg-[#1a1a1a] border-[3px] border-white text-[10px] font-black uppercase tracking-widest text-neutral-300 hover:bg-orange-500 hover:text-black hover:border-black hover:shadow-none shadow-[3px_3px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer"
               >
                 {p}
               </span>

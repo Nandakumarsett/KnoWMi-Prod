@@ -123,7 +123,7 @@ export default function ScrollyHome() {
         <div className="hero-text relative z-10 text-center px-4">
           <p className="text-sm md:text-base font-bold text-orange-500 tracking-[0.3em] uppercase mb-6">Introducing KnoWMi</p>
           <h1 className="text-6xl md:text-9xl font-black tracking-tighter uppercase mb-4 leading-[0.9]">
-            The Phygital<br/>Era <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600 italic">Begins</span>
+            The Phygital<br/>Era <span className="bg-orange-500 text-black px-4 py-1 rounded-xl inline-block mt-2 border-[3px] border-black shadow-[5px_5px_0px_#000] rotate-2">Begins</span>
           </h1>
           <p className="text-sm text-neutral-400 font-medium tracking-widest uppercase mt-12 animate-pulse">Scroll to unlock</p>
         </div>
@@ -166,7 +166,7 @@ export default function ScrollyHome() {
                 Premium<br/>Hoodie.
               </h2>
               <div className="fabric-badge opacity-0 -translate-y-4">
-                <span className="text-orange-500 text-xs md:text-sm font-bold tracking-widest uppercase px-3 py-1 bg-orange-500/10 rounded-full border border-orange-500/20 mt-2 block shadow-[0_0_15px_rgba(249,115,22,0.2)]">Coming Soon</span>
+                <span className="text-black text-xs md:text-sm font-black tracking-widest uppercase px-3 py-1.5 bg-orange-500 rounded-lg border-[3px] border-black mt-2 block shadow-[3px_3px_0px_#000]">Coming Soon</span>
               </div>
             </div>
 
@@ -195,7 +195,7 @@ export default function ScrollyHome() {
             </p>
           </div>
           
-          <div className="qr-glow relative w-full aspect-square md:aspect-video rounded-[2.5rem] overflow-hidden shadow-[0_0_120px_rgba(249,115,22,0.15)] border border-white/10 group">
+          <div className="qr-glow relative w-full aspect-square md:aspect-video rounded-xl overflow-hidden border-[3px] border-white shadow-[8px_8px_0px_#F97316] group">
             <img 
               src="/assets/scrolly/invisible_tech_new.jpg" 
               alt="QR Code Grid" 
@@ -212,14 +212,14 @@ export default function ScrollyHome() {
         <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="flex-1 z-10 md:pr-12 text-center md:text-left">
             <h2 className="text-5xl md:text-8xl font-black uppercase mb-8 leading-[0.9] tracking-tighter">
-              Your Life,<br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Embedded.</span>
+              Your Life,<br/><span className="text-orange-500 underline decoration-[6px] underline-offset-8">Embedded.</span>
             </h2>
             <p className="text-xl md:text-2xl text-neutral-400 mb-8 max-w-lg mx-auto md:mx-0 font-medium">
               A dynamic digital profile bound to your physical garment forever. Manage your identity, track scans, and connect instantly.
             </p>
           </div>
           <div className="flex-1 flex justify-center items-end w-full min-h-[500px] md:h-[80vh] mt-8 md:mt-0">
-            <div className="phone-mockup w-full h-full max-w-md drop-shadow-[0_-20px_80px_rgba(249,115,22,0.3)]">
+            <div className="phone-mockup w-full h-full max-w-md drop-shadow-[8px_8px_0px_#F97316]">
               <InteractiveJourney />
             </div>
           </div>
