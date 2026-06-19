@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
 import ScrollyHome from '../components/ScrollyHome'
-import { Marquee, HowItWorks } from '../components/HowItWorks'
+import { Marquee, HowItWorks, SocialProofStrip } from '../components/HowItWorks'
 import Personas from '../components/Personas'
 import PersonaUseCases from '../components/PersonaUseCases'
 import Pricing from '../components/Pricing'
@@ -106,6 +106,7 @@ export default function Home() {
         <ScrollyHome />
         
         <HowItWorks />
+        <SocialProofStrip />
 
         <Personas />
         <PersonaUseCases />

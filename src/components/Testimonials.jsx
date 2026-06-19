@@ -5,26 +5,24 @@ const testimonials = [
   {
     name: 'Priya Sharma',
     role: 'UX Designer · Bangalore',
-    initial: 'P',
     color: '#FF9933',
     rating: 5,
     text: "Wore this to a startup meetup and got 14 LinkedIn connections in one evening. People literally came up to scan my tee. It's the most effective networking tool I've ever owned.",
     scans: '312 scans',
+    featured: true,
   },
   {
     name: 'Rahul Verma',
     role: 'CS Student · IIT Delhi',
-    initial: 'R',
-    color: '#000080',
+    color: '#3B82F6',
     rating: 5,
-    text: 'Got the Creator plan for my college hackathon. My team lead scanned it and offered me a internship right there. Seriously no joke. KnoWMi is built different.',
+    text: 'Got the Creator plan for my college hackathon. My team lead scanned it and offered me an internship right there. Seriously no joke. KnoWMi is built different.',
     scans: '189 scans',
   },
   {
     name: 'Ananya Iyer',
     role: 'Freelance Photographer · Mumbai',
-    initial: 'A',
-    color: '#138808',
+    color: '#10B981',
     rating: 5,
     text: "Updated my portfolio link three times since I got the tee — each time I just update the profile, not the tee. That's the whole magic. My QR is always current.",
     scans: '427 scans',
@@ -32,7 +30,6 @@ const testimonials = [
   {
     name: 'Karan Mehta',
     role: 'Founder · Delhi',
-    initial: 'K',
     color: '#9B59B6',
     rating: 5,
     text: "Ordered 25 tees for our company offsite. Every team member now has their own QR profile tee. The team dashboard makes it so easy to manage. Worth every rupee.",
@@ -41,8 +38,7 @@ const testimonials = [
   {
     name: 'Sneha Reddy',
     role: 'Content Creator · Hyderabad',
-    initial: 'S',
-    color: '#E07A00',
+    color: '#F59E0B',
     rating: 5,
     text: "The quality of the tee itself is amazing — I've washed it 30+ times and the QR still scans perfectly. And my scan analytics show people even click my YouTube link from it!",
     scans: '891 scans',
@@ -50,7 +46,6 @@ const testimonials = [
   {
     name: 'Arjun Nair',
     role: 'Product Manager · Pune',
-    initial: 'A',
     color: '#1DA1F2',
     rating: 5,
     text: "At first I thought it was a gimmick. Then I wore it to a product conference and had 40+ people ask about it. My LinkedIn grew by 200 followers that week. Converted now.",
@@ -58,12 +53,12 @@ const testimonials = [
   },
 ]
 
-function Stars({ count }) {
+function Stars({ count, size = 14 }) {
   return (
     <div className="flex gap-0.5" aria-label={`${count} out of 5 stars`} role="img">
       {[...Array(5)].map((_, i) => (
-        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill={i < count ? '#FF9933' : '#E8E8EE'} aria-hidden="true">
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        <svg key={i} width={size} height={size} viewBox="0 0 24 24" fill={i < count ? '#FF9933' : '#333'} aria-hidden="true">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
         </svg>
       ))}
     </div>
@@ -74,22 +69,50 @@ export default function Testimonials() {
   const ref = useReveal()
 
   return (
-    <section id="reviews" className="section-pad min-h-screen flex items-center bg-[#0a0a0a]" ref={ref}>
-      <div className="max-w-[1200px] mx-auto px-6">
+    <section id="reviews" className="section-pad min-h-screen flex items-center bg-[#0a0a0a] relative overflow-hidden" ref={ref}>
+      <style>{`
+        @keyframes viralBadgePulse {
+          0%, 100% { transform: scale(1) rotate(-2deg); }
+          50% { transform: scale(1.08) rotate(-2deg); }
+        }
+        .viral-badge {
+          animation: viralBadgePulse 2s ease-in-out infinite;
+        }
+        .testi-card-enhanced {
+          transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .testi-card-enhanced:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+          border-color: rgba(249,115,22,0.2) !important;
+        }
+      `}</style>
+
+      {/* Ambient glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-[400px] bg-orange-500/4 rounded-full blur-[150px] pointer-events-none" />
+
+      <div className="max-w-[1200px] mx-auto px-6 relative z-10 w-full">
         {/* Header */}
         <div className="text-center mb-16 reveal">
           <span className="tag mb-4 inline-block bg-orange-500/10 text-orange-500 border border-orange-500/20">
             Reviews
           </span>
+
+          {/* Huge rating display */}
+          <div className="mb-6">
+            <div className="text-6xl md:text-7xl font-display font-black text-white leading-none mb-3">
+              4.9
+            </div>
+            <div className="flex justify-center mb-2">
+              <Stars count={5} size={20} />
+            </div>
+            <p className="text-sm text-neutral-400 font-medium">from 2,100+ verified reviews</p>
+          </div>
+
           <h2 className="font-display font-bold mb-4 text-white" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
             People Are{' '}
             <span className="italic gradient-text">Talking About It</span>
           </h2>
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <Stars count={5} />
-            <span className="font-display font-bold text-xl text-white">4.9/5</span>
-            <span className="text-sm text-neutral-400">from 2,100+ reviews</span>
-          </div>
         </div>
 
         {/* Grid */}
@@ -97,41 +120,60 @@ export default function Testimonials() {
           {testimonials.map((t, i) => (
             <div
               key={i}
-              className={`reveal reveal-delay-${(i % 3) + 1} testi-card card-lift rounded-3xl p-5 sm:p-7 relative overflow-hidden`}
-              style={{ background: '#111', border: '1px solid rgba(255,255,255,0.05)' }}
+              className={`testi-card-enhanced reveal reveal-delay-${(i % 3) + 1} rounded-3xl overflow-hidden relative`}
+              style={{
+                background: '#111',
+                border: '1px solid rgba(255,255,255,0.07)',
+              }}
             >
-              {/* Quote mark */}
-              <div className="absolute top-6 right-6 font-display text-6xl font-bold leading-none select-none"
-                style={{ color: 'rgba(255,255,255,0.05)', opacity: 0.8 }} aria-hidden="true">
-                "
-              </div>
+              {/* Light gradient top accent */}
+              <div
+                className="absolute top-0 left-0 right-0 h-24 opacity-30 pointer-events-none"
+                style={{
+                  background: `linear-gradient(180deg, ${t.color}22 0%, transparent 100%)`,
+                }}
+              />
 
-              <Stars count={t.rating} />
-
-              <blockquote className="mt-4 mb-5 text-xs sm:text-sm leading-relaxed text-neutral-400">
-                "{t.text}"
-              </blockquote>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
-                    style={{ background: t.color }}>
-                    {t.initial}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5 mb-0.5">
-                      <div className="text-sm font-bold text-white">{t.name}</div>
-                      <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-500/10 text-green-500 border border-green-500/20">
-                        <CheckCircle size={8} className="fill-green-500 text-[#111]" />
-                        <span className="text-[8px] font-black uppercase tracking-widest">Verified Buyer</span>
-                      </div>
-                    </div>
-                    <div className="text-xs text-neutral-500">{t.role}</div>
-                  </div>
+              {/* Viral badge on featured */}
+              {t.featured && (
+                <div className="viral-badge absolute top-4 right-4 z-20">
+                  <span className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-orange-500/40">
+                    🔥 Going Viral
+                  </span>
                 </div>
-                <div className="text-right">
-                  <div className="text-xs font-bold" style={{ color: 'var(--saffron)', fontFamily: 'JetBrains Mono, monospace' }}>
-                    {t.scans}
+              )}
+
+              <div className="p-6 sm:p-7 pt-8 relative z-10 flex flex-col h-full">
+                <Stars count={t.rating} />
+
+                <blockquote className="mt-4 mb-5 text-xs sm:text-sm leading-relaxed text-neutral-300 flex-1">
+                  &ldquo;{t.text}&rdquo;
+                </blockquote>
+
+                <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={`https://i.pravatar.cc/100?u=knowmi_${t.name.toLowerCase().replace(' ', '_')}`}
+                      alt={t.name}
+                      className="w-10 h-10 rounded-2xl object-cover border-2 flex-shrink-0"
+                      style={{ borderColor: `${t.color}66` }}
+                      loading="lazy"
+                    />
+                    <div>
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <div className="text-sm font-bold text-white">{t.name}</div>
+                        <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-500/10 text-green-500 border border-green-500/20">
+                          <CheckCircle size={8} className="fill-green-500 text-[#111]" />
+                          <span className="text-[8px] font-black uppercase tracking-widest">Verified</span>
+                        </div>
+                      </div>
+                      <div className="text-xs text-neutral-500">{t.role}</div>
+                    </div>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <div className="text-xs font-bold text-orange-500" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                      {t.scans}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -139,7 +181,7 @@ export default function Testimonials() {
           ))}
         </div>
 
-        {/* As seen in */}
+        {/* Worn at */}
         <div className="mt-16 reveal text-center">
           <p className="text-xs font-bold uppercase tracking-widest mb-6" style={{ color: 'var(--ink4)', fontFamily: 'JetBrains Mono, monospace' }}>
             Worn at
