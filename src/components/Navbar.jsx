@@ -72,8 +72,8 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
       className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
         scrolled
           ? useDarkTheme 
-            ? 'bg-[#0a0a0a] border-b-[3px] border-white shadow-[0_4px_0_#F97316]' 
-            : 'bg-white border-b-[3px] border-black shadow-[0_4px_0_#000]'
+            ? 'bg-[#0a0a0a]' 
+            : 'bg-white'
           : 'bg-transparent'
       }`}
       role="navigation"
