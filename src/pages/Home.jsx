@@ -7,8 +7,8 @@ import { Marquee, HowItWorks, SocialProofStrip } from '../components/HowItWorks'
 import Personas from '../components/Personas'
 import PersonaUseCases from '../components/PersonaUseCases'
 import Pricing from '../components/Pricing'
-
 import Testimonials from '../components/Testimonials'
+import SecurityPrivacy from '../components/SecurityPrivacy'
 import FAQ from '../components/FAQ'
 import { Footer } from '../components/Footer'
 import PWABanner from '../components/PWABanner'
@@ -137,6 +137,7 @@ export default function Home() {
         <Pricing onPlanSelect={handleSelectPlan} />
 
         <Testimonials />
+        <SecurityPrivacy />
         <FAQ />
 
         <Contact />
