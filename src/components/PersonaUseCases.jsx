@@ -186,20 +186,21 @@ export default function PersonaUseCases() {
               ref={el => (cardsRef.current[i] = el)}
               className="puc-card group relative rounded-[2.5rem] overflow-hidden border border-white/10 min-h-[420px] flex flex-col justify-end cursor-pointer"
             >
-              {/* Full-bleed background image */}
+              {/* Full-bleed background image — blurred for glassmorphism effect */}
               <div className="absolute inset-0 overflow-hidden rounded-[2.5rem]">
                 <img
                   src={uc.image}
                   alt={uc.title}
                   className="puc-card-img w-full h-full object-cover object-center"
+                  style={{ filter: 'blur(6px)', transform: 'scale(1.12)' }}
                   loading="lazy"
                   referrerPolicy="no-referrer"
                   crossOrigin="anonymous"
                 />
               </div>
 
-              {/* Gradient overlay — fully transparent at top, dark only at bottom 50% for text */}
-              <div className="absolute inset-0 rounded-[2.5rem]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 35%, rgba(0,0,0,0.1) 65%, transparent 100%)' }} />
+              {/* Gradient overlay — subtle darkening to boost text contrast on blur */}
+              <div className="absolute inset-0 rounded-[2.5rem]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.2) 70%, rgba(0,0,0,0.05) 100%)' }} />
 
               {/* Large emoji badge at top */}
               <div className="absolute top-6 left-6 text-5xl drop-shadow-lg z-10 select-none">
