@@ -1021,23 +1021,24 @@ export default function PublicProfile() {
           <span>Protocol</span>
         </div>
       </footer>
+
       {/* Floating Visitor CTA Pill */}
-      {!user && (
+      {(!user || user?.id !== profile?.user_id) && !isClaimFlow && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[340px] px-4 animate-slideUp">
           <div
-            onClick={() => (window.location.href = "/?auth=signup")}
+            onClick={() => (window.location.href = !user ? "/?auth=signup" : "/dashboard")}
             className="bg-black/85 backdrop-blur-md border border-white/10 p-3.5 rounded-[20px] shadow-2xl flex items-center justify-between gap-4 cursor-pointer hover:bg-black transition-all hover:scale-[1.03] active:scale-[0.98] group"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-500 to-rose-500 flex items-center justify-center text-white text-lg animate-pulse">
-                ✦
+                👕
               </div>
               <div className="text-left">
                 <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-0.5">
                   Powered by KnoWMi
                 </p>
                 <p className="text-xs font-bold text-white tracking-wide">
-                  Claim Your Free Profile
+                  Claim Your Tee
                 </p>
               </div>
             </div>
