@@ -96,7 +96,12 @@ export default function InteractiveJourney() {
                   
                   {/* Mock QR Target */}
                   <div className="relative w-48 h-48 border-2 border-white/20 rounded-3xl overflow-hidden mt-8 flex items-center justify-center bg-white/5">
-                    <img src="/logo-square.png" alt="KnoWMi" className="w-16 h-16 opacity-100 absolute z-0 shadow-lg drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]" />
+                    {/* Replaced broken image logo with clean typographic logo */}
+                    <div className="absolute z-0 flex flex-col items-center">
+                      <span className="text-3xl font-black tracking-tight text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                        Kno<span className="text-orange-500">WM</span>i
+                      </span>
+                    </div>
                     
                     {/* Scanner Line */}
                     <motion.div 
