@@ -284,18 +284,18 @@ export function HowItWorks() {
         })
 
         gsap.set(headerRef.current, { opacity: 0, y: 50 })
-        gsap.set(stepsRef.current, { opacity: 0, y: 50, scale: 0.9 })
+        gsap.set(stepsRef.current, { opacity: 0, y: 50, scale: 0.9, filter: 'brightness(1)' })
         gsap.set(lineRef.current, { scaleX: 0, transformOrigin: 'left center' })
 
         tl.to(headerRef.current, { opacity: 1, y: 0, duration: 1 })
           .to(stepsRef.current[0], { opacity: 1, y: 0, scale: 1, duration: 1 })
           .to(lineRef.current, { scaleX: 0.5, duration: 1 }, '+=0.5')
-          .to(stepsRef.current[0], { opacity: 0.4, scale: 0.95, duration: 1 }, '<')
+          .to(stepsRef.current[0], { filter: 'brightness(0.4)', scale: 0.95, duration: 1 }, '<')
           .to(stepsRef.current[1], { opacity: 1, y: 0, scale: 1, duration: 1 }, '<')
           .to(lineRef.current, { scaleX: 1, duration: 1 }, '+=0.5')
-          .to(stepsRef.current[1], { opacity: 0.4, scale: 0.95, duration: 1 }, '<')
+          .to(stepsRef.current[1], { filter: 'brightness(0.4)', scale: 0.95, duration: 1 }, '<')
           .to(stepsRef.current[2], { opacity: 1, y: 0, scale: 1, duration: 1 }, '<')
-          .to(stepsRef.current, { opacity: 1, scale: 1, duration: 1 }, '+=0.5')
+          .to(stepsRef.current, { filter: 'brightness(1)', scale: 1, duration: 1 }, '+=0.5')
           .to({}, { duration: 1 })
       })
 
