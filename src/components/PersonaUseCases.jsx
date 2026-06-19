@@ -11,7 +11,7 @@ const useCases = [
     title: 'For Students',
     benefit: 'Stop handing out paper. Start standing out.',
     desc: 'At hackathons, fests, and networking events — your tee speaks before you do.',
-    image: 'https://images.unsplash.com/photo-1523240715630-36d93339008f?q=80&w=1200&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1523240715630-36d93339008f?w=1200&auto=format&fit=crop&q=80',
   },
   {
     id: 'creators',
@@ -19,7 +19,7 @@ const useCases = [
     title: 'For Creators',
     benefit: 'Your content is everywhere. Now so are you.',
     desc: 'Turn every "where do I follow you?" into an instant connection.',
-    image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1200&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1200&auto=format&fit=crop&q=80',
   },
   {
     id: 'developers',
@@ -27,7 +27,7 @@ const useCases = [
     title: 'For Developers',
     benefit: 'Your GitHub speaks. Make them listen.',
     desc: 'At meetups and conferences — skip the small talk. One scan away.',
-    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&auto=format&fit=crop&q=80',
   },
 ]
 
@@ -196,8 +196,10 @@ export default function PersonaUseCases() {
                 />
               </div>
 
-              {/* Dark gradient overlay from bottom */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/10 rounded-[2.5rem]" />
+              {/* Dark gradient overlay — strong enough to always make text readable */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/30 rounded-[2.5rem]" />
+              {/* Extra bottom darkener for text area */}
+              <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-black to-transparent rounded-b-[2.5rem]" />
 
               {/* Large emoji badge at top */}
               <div className="absolute top-6 left-6 text-5xl drop-shadow-lg z-10 select-none">

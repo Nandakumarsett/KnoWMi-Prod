@@ -217,22 +217,6 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                     </div>
                   )}
 
-                  {/* Product image floating above card content */}
-                  <div className="flex justify-center mb-4 -mt-2">
-                    {product.image ? (
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className={`h-36 w-auto object-contain ${product.featured ? 'pricing-tee' : 'pricing-tee-neutral'}`}
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="pricing-tee-neutral">
-                        <HoodiePlaceholder />
-                      </div>
-                    )}
-                  </div>
-
                   <div className="mb-8">
                     <div className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-2">
                       {product.tagline}

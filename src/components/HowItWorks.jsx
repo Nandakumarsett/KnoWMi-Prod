@@ -88,73 +88,130 @@ export function SocialProofStrip() {
 
 /* ─────────────────────── STEP VISUALS ─────────────────────── */
 
-/** Step 1: Floating shirt image */
+/** Step 1: Person wearing a KnoWMi tshirt (half body) */
 function WearItVisual() {
   return (
     <div className="relative flex items-center justify-center h-52">
       <style>{`
-        @keyframes floatShirt {
-          0%, 100% { transform: translateY(0px) rotate(-3deg); }
-          50% { transform: translateY(-14px) rotate(-3deg); }
+        @keyframes floatPerson {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
         }
-        .float-shirt { animation: floatShirt 3.2s ease-in-out infinite; }
+        .float-person { animation: floatPerson 3.5s ease-in-out infinite; }
       `}</style>
-      <div className="float-shirt drop-shadow-[0_20px_40px_rgba(249,115,22,0.25)]">
+      <div className="float-person relative w-40 h-48 overflow-hidden rounded-2xl shadow-[0_20px_50px_rgba(249,115,22,0.2)]">
         <img
-          src="/assets/scrolly/tshirt_front_v3.png"
-          alt="KnoWMi Tee"
-          className="h-44 w-auto object-contain"
+          src="https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?q=80&w=400&auto=format&fit=crop&crop=top"
+          alt="Person wearing KnoWMi tee"
+          className="w-full h-full object-cover object-top"
           loading="lazy"
         />
+        {/* Orange tint overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
       </div>
     </div>
   )
 }
 
-/** Step 2: Glowing QR scanner animation */
+/** Step 2: Real QR code + scanner overlay (scan line contained inside QR box) */
 function ScanItVisual() {
   return (
     <div className="relative flex items-center justify-center h-52">
       <style>{`
-        @keyframes scanLine {
-          0% { top: 10%; opacity: 0; }
-          10% { opacity: 1; }
-          90% { opacity: 1; }
-          100% { top: 90%; opacity: 0; }
+        @keyframes scanLineQR {
+          0%   { top: 6px;  opacity: 0; }
+          8%   { opacity: 1; }
+          92%  { opacity: 1; }
+          100% { top: calc(100% - 8px); opacity: 0; }
         }
-        @keyframes cornerPulse {
-          0%, 100% { opacity: 0.5; }
-          50% { opacity: 1; }
+        @keyframes cornerPulseQR {
+          0%, 100% { opacity: 0.55; }
+          50%       { opacity: 1; }
         }
-        .scan-line {
-          animation: scanLine 2s ease-in-out infinite;
+        @keyframes scannerFloat {
+          0%, 100% { transform: translateY(0px); }
+          50%       { transform: translateY(-6px); }
+        }
+        .scan-line-qr {
+          animation: scanLineQR 2.2s ease-in-out infinite;
           position: absolute;
-          left: 8px; right: 8px;
+          left: 6px; right: 6px;
           height: 2px;
-          background: linear-gradient(90deg, transparent, #f97316, transparent);
-          box-shadow: 0 0 12px rgba(249,115,22,0.8);
+          background: linear-gradient(90deg, transparent, #f97316 40%, #f97316 60%, transparent);
+          box-shadow: 0 0 10px rgba(249,115,22,0.9);
           border-radius: 99px;
+          z-index: 20;
         }
-        .qr-corner { animation: cornerPulse 1.5s ease-in-out infinite; }
+        .qr-corner-br { animation: cornerPulseQR 1.5s ease-in-out infinite; }
+        .scanner-float { animation: scannerFloat 4s ease-in-out infinite; }
       `}</style>
-      <div className="relative w-36 h-36 border border-white/10 rounded-2xl bg-white/3 overflow-hidden">
-        {/* QR dot grid (decorative) */}
-        <div className="absolute inset-2 grid grid-cols-7 gap-0.5 opacity-20">
-          {Array.from({ length: 49 }).map((_, i) => (
-            <div
-              key={i}
-              className="rounded-[2px] bg-white"
-              style={{ opacity: Math.random() > 0.4 ? 1 : 0 }}
-            />
-          ))}
+
+      {/* Phone-like frame holding the QR scanner */}
+      <div className="scanner-float relative">
+        {/* QR code image */}
+        <div
+          className="relative w-40 h-40 rounded-xl overflow-hidden bg-white p-2 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+          style={{ isolation: 'isolate' }}
+        >
+          {/* Real QR pattern using SVG */}
+          <svg viewBox="0 0 37 37" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            {/* Top-left finder */}
+            <rect x="1" y="1" width="9" height="9" rx="1" fill="#111"/>
+            <rect x="2.5" y="2.5" width="6" height="6" rx="0.5" fill="white"/>
+            <rect x="3.5" y="3.5" width="4" height="4" fill="#111"/>
+            {/* Top-right finder */}
+            <rect x="27" y="1" width="9" height="9" rx="1" fill="#111"/>
+            <rect x="28.5" y="2.5" width="6" height="6" rx="0.5" fill="white"/>
+            <rect x="29.5" y="3.5" width="4" height="4" fill="#111"/>
+            {/* Bottom-left finder */}
+            <rect x="1" y="27" width="9" height="9" rx="1" fill="#111"/>
+            <rect x="2.5" y="28.5" width="6" height="6" rx="0.5" fill="white"/>
+            <rect x="3.5" y="29.5" width="4" height="4" fill="#111"/>
+            {/* Data modules (random pattern) */}
+            {[
+              [12,1],[14,1],[16,1],[18,1],[20,1],[22,1],[24,1],
+              [11,3],[13,3],[15,3],[19,3],[21,3],[23,3],[25,3],
+              [12,5],[14,5],[16,5],[20,5],[22,5],[24,5],
+              [11,7],[15,7],[17,7],[19,7],[23,7],[25,7],
+              [12,9],[14,9],[18,9],[20,9],[22,9],
+              [1,11],[3,11],[5,11],[7,11],[11,11],[13,11],[15,11],[17,11],[19,11],[21,11],[23,11],[25,11],[27,11],[29,11],[31,11],[33,11],[35,11],
+              [1,13],[5,13],[9,13],[13,13],[17,13],[21,13],[25,13],[29,13],[33,13],
+              [1,15],[3,15],[7,15],[11,15],[13,15],[17,15],[19,15],[23,15],[27,15],[31,15],[35,15],
+              [1,17],[5,17],[9,17],[11,17],[15,17],[19,17],[21,17],[25,17],[29,17],[33,17],
+              [1,19],[3,19],[7,19],[13,19],[17,19],[21,19],[23,19],[27,19],[31,19],[35,19],
+              [1,21],[5,21],[9,21],[11,21],[13,21],[19,21],[23,21],[25,21],[27,21],[33,21],
+              [1,23],[3,23],[5,23],[7,23],[9,23],[11,23],[13,23],[17,23],[21,23],[25,23],[29,23],[31,23],[33,23],[35,23],
+              [11,25],[13,25],[17,25],[19,25],[23,25],[27,25],[31,25],[35,25],
+              [12,27],[14,27],[18,27],[22,27],[24,27],[26,27],[30,27],[34,27],
+              [11,29],[13,29],[15,29],[19,29],[21,29],[25,29],[27,29],[29,29],[33,29],[35,29],
+              [12,31],[16,31],[18,31],[20,31],[24,31],[28,31],[30,31],[34,31],
+              [11,33],[13,33],[17,33],[19,33],[21,33],[23,33],[27,33],[29,33],[31,33],[35,33],
+              [12,35],[14,35],[16,35],[20,35],[22,35],[26,35],[28,35],[30,35],[32,35],[34,35],
+            ].map(([x,y],i) => (
+              <rect key={i} x={x} y={y} width="2" height="2" fill="#111" />
+            ))}
+          </svg>
+
+          {/* Scanner overlay — completely clipped inside QR box */}
+          <div className="absolute inset-0 rounded-xl overflow-hidden" style={{ zIndex: 10 }}>
+            {/* Corner brackets */}
+            <div className="absolute top-1.5 left-1.5 w-6 h-6 border-t-[3px] border-l-[3px] border-orange-500 rounded-tl qr-corner-br" />
+            <div className="absolute top-1.5 right-1.5 w-6 h-6 border-t-[3px] border-r-[3px] border-orange-500 rounded-tr qr-corner-br" style={{ animationDelay: '0.3s' }} />
+            <div className="absolute bottom-1.5 left-1.5 w-6 h-6 border-b-[3px] border-l-[3px] border-orange-500 rounded-bl qr-corner-br" style={{ animationDelay: '0.6s' }} />
+            <div className="absolute bottom-1.5 right-1.5 w-6 h-6 border-b-[3px] border-r-[3px] border-orange-500 rounded-br qr-corner-br" style={{ animationDelay: '0.9s' }} />
+            {/* Scan line stays inside QR */}
+            <div className="scan-line-qr" />
+          </div>
         </div>
-        {/* Corner brackets */}
-        <div className="absolute top-1.5 left-1.5 w-5 h-5 border-t-2 border-l-2 border-orange-500 rounded-tl-md qr-corner" />
-        <div className="absolute top-1.5 right-1.5 w-5 h-5 border-t-2 border-r-2 border-orange-500 rounded-tr-md qr-corner" style={{ animationDelay: '0.3s' }} />
-        <div className="absolute bottom-1.5 left-1.5 w-5 h-5 border-b-2 border-l-2 border-orange-500 rounded-bl-md qr-corner" style={{ animationDelay: '0.6s' }} />
-        <div className="absolute bottom-1.5 right-1.5 w-5 h-5 border-b-2 border-r-2 border-orange-500 rounded-br-md qr-corner" style={{ animationDelay: '0.9s' }} />
-        {/* Scan line */}
-        <div className="scan-line" />
+
+        {/* "Scanning..." label */}
+        <div className="mt-3 flex items-center justify-center gap-2">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
+          </span>
+          <span className="text-[10px] font-black uppercase tracking-widest text-orange-400">Scanning…</span>
+        </div>
       </div>
     </div>
   )
@@ -325,9 +382,9 @@ export function HowItWorks() {
 
         {/* Steps grid */}
         <div className="grid md:grid-cols-3 gap-12 lg:gap-16 relative">
-          {/* Connection Line (Desktop) */}
+          {/* Connection Line — sits below visuals at title level, never overlaps them */}
           <div
-            className="hidden lg:block absolute top-[90px] left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-orange-500/0 via-orange-500/50 to-orange-500/0"
+            className="hidden lg:block absolute top-[248px] left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-orange-500/0 via-orange-500/40 to-orange-500/0"
             ref={lineRef}
           />
 
