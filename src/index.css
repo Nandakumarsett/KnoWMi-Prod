@@ -5,6 +5,15 @@
 @tailwind utilities;
 
 @layer base {
+  img, svg {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    user-select: none;
+  }
+
   :root {
     /* Audited Brand Palette (X1) - Premium Edition */
     --saffron:         #F97316;   
