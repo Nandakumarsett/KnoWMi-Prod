@@ -11,7 +11,7 @@ const useCases = [
     title: 'For Students',
     benefit: 'Stop handing out paper. Start standing out.',
     desc: 'At hackathons, fests, and networking events — your tee speaks before you do.',
-    image: 'https://images.unsplash.com/photo-1523240715630-36d93339008f?w=1200&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&fit=crop&auto=format&q=80',
   },
   {
     id: 'creators',
@@ -19,15 +19,15 @@ const useCases = [
     title: 'For Creators',
     benefit: 'Your content is everywhere. Now so are you.',
     desc: 'Turn every "where do I follow you?" into an instant connection.',
-    image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1200&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&fit=crop&auto=format&q=80',
   },
   {
-    id: 'developers',
+    id: 'tech',
     emoji: '💻',
-    title: 'For Developers',
+    title: 'For Tech',
     benefit: 'Your GitHub speaks. Make them listen.',
     desc: 'At meetups and conferences — skip the small talk. One scan away.',
-    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&fit=crop&auto=format&q=80',
   },
 ]
 
@@ -191,13 +191,15 @@ export default function PersonaUseCases() {
                 <img
                   src={uc.image}
                   alt={uc.title}
-                  className="puc-card-img w-full h-full object-cover"
+                  className="puc-card-img w-full h-full object-cover object-center"
                   loading="lazy"
+                  referrerPolicy="no-referrer"
+                  crossOrigin="anonymous"
                 />
               </div>
 
-              {/* Gradient overlay — light at top so image shows, dark only at bottom for text readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent rounded-[2.5rem]" />
+              {/* Gradient overlay — fully transparent at top, dark only at bottom 50% for text */}
+              <div className="absolute inset-0 rounded-[2.5rem]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 35%, rgba(0,0,0,0.1) 65%, transparent 100%)' }} />
 
               {/* Large emoji badge at top */}
               <div className="absolute top-6 left-6 text-5xl drop-shadow-lg z-10 select-none">
