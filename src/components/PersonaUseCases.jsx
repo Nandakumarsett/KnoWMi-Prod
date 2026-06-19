@@ -196,10 +196,8 @@ export default function PersonaUseCases() {
                 />
               </div>
 
-              {/* Dark gradient overlay — strong enough to always make text readable */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/30 rounded-[2.5rem]" />
-              {/* Extra bottom darkener for text area */}
-              <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-black to-transparent rounded-b-[2.5rem]" />
+              {/* Gradient overlay — light at top so image shows, dark only at bottom for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent rounded-[2.5rem]" />
 
               {/* Large emoji badge at top */}
               <div className="absolute top-6 left-6 text-5xl drop-shadow-lg z-10 select-none">
