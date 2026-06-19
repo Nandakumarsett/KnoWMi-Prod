@@ -23,6 +23,7 @@ export default function Home() {
   const [authOpen, setAuthOpen] = useState(false)
   const [authTab, setAuthTab] = useState('signup')
   const [showSticky, setShowSticky] = useState(false)
+  const [showSalesPopup, setShowSalesPopup] = useState(false)
   const [pendingRedirect, setPendingRedirect] = useState(null)
 
   const navigate = useNavigate()
@@ -33,10 +34,32 @@ export default function Home() {
   }
 
   useEffect(() => {
-    const handleScroll = () => setShowSticky(window.scrollY > 800);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    const handleScroll = () => {
+      // Show sticky CTA if scrolled past 800px AND we haven't reached the collection section
+      const collectionSection = document.getElementById('collection')
+      const isPastCollection = collectionSection ? window.scrollY >= (collectionSection.offsetTop - window.innerHeight + 100) : false
+      
+      setShowSticky(window.scrollY > 800 && !isPastCollection)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    // Observe pricing section to only show sales popup there
+    const pricingSection = document.getElementById('pricing')
+    if (!pricingSection) return
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        setShowSalesPopup(entry.isIntersecting)
+      })
+    }, { threshold: 0.1 }) // Trigger when 10% of pricing is visible
+
+    observer.observe(pricingSection)
+    return () => observer.disconnect()
+  }, [])
 
 
 
@@ -142,7 +165,7 @@ export default function Home() {
         redirectAfter={pendingRedirect}
         defaultTab={authTab}
       />
-      <LiveSalesPopup />
+      <LiveSalesPopup isActive={showSalesPopup} />
     </>
   )
 }

@@ -14,7 +14,7 @@ const RECENT_PURCHASES = [
 
 const TIME_AGO = ['Just now', '2 mins ago', '5 mins ago', '12 mins ago', '22 mins ago'];
 
-export default function LiveSalesPopup() {
+export default function LiveSalesPopup({ isActive = true }) {
   const [visible, setVisible] = useState(false);
   const [purchase, setPurchase] = useState(null);
   const [timeAgo, setTimeAgo] = useState('Just now');
@@ -54,12 +54,12 @@ export default function LiveSalesPopup() {
     }, 5000);
   };
 
-  if (closed || !purchase) return null;
+  if (closed || !purchase || !isActive) return null;
 
   return (
     <div
       className={`fixed bottom-6 left-6 z-[90] transition-all duration-700 ease-out ${
-        visible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0 pointer-events-none'
+        visible && isActive ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0 pointer-events-none'
       }`}
     >
       <div className="bg-white rounded-2xl p-4 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-neutral-100 flex items-start gap-4 max-w-sm relative">
