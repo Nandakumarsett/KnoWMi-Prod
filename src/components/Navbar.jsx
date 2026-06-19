@@ -81,22 +81,8 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
     >
       <div className="max-w-[1200px] mx-auto pl-2 pr-4 md:px-6 flex items-center justify-between lg:justify-start h-20 lg:h-[110px] gap-0 w-full relative">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-0 flex-shrink-0" aria-label="KnoWMi home">
-          <div className="relative">
-            {useDarkTheme && (
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 blur-[16px] rounded-full pointer-events-none" />
-            )}
-            <img
-              src="/logo-square.png"
-              alt="KnoWMi"
-              width="96"
-              height="96"
-              loading="eager"
-              fetchpriority="high"
-              className={`h-20 lg:h-24 w-auto object-contain relative z-10 transition-all duration-500 ${useDarkTheme ? 'drop-shadow-[0_0_1px_rgba(255,255,255,0.4)]' : ''}`}
-            />
-          </div>
-          <div className="flex flex-col leading-none -ml-4 lg:-ml-6 relative z-20">
+        <a href="/" className="flex items-center flex-shrink-0" aria-label="KnoWMi home">
+          <div className="flex flex-col leading-none relative z-20">
             <div className="relative">
               <span
                 style={{
@@ -105,7 +91,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
                 }}
                 className={`lg:text-[36px] font-black tracking-tight block leading-[0.9] ${useDarkTheme ? 'text-white' : 'text-[var(--ink)]'}`}
               >
-                Kno<span style={{ color: 'var(--saffron)' }}>WM</span>i
+                Kno<span className="text-orange-500">WM</span>i
               </span>
             </div>
             <span
