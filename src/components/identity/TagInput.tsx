@@ -54,7 +54,7 @@ export function TagInput({ value = [], onChange, suggestions = [], placeholder =
             onChange={e => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={value.length === 0 ? placeholder : ''}
-            className="flex-1 min-w-[120px] bg-transparent border-0 outline-none p-1 text-xs text-[#1A1A1A] font-medium placeholder:text-neutral-400"
+            className="flex-1 min-w-[120px] bg-transparent border-0 outline-none p-1 text-xs text-white font-medium placeholder:text-neutral-400"
           />
           {input.trim() && (
             <button 

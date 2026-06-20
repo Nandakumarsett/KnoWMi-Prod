@@ -60,12 +60,12 @@ export default function ReturnRequestsAdmin() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: 'Total Requests', value: counts.total, color: 'var(--ink)' },
+          { label: 'Total Requests', value: counts.total, color: '#ffffff' },
           { label: 'Pending', value: counts.pending, color: '#D97706' },
           { label: 'Approved', value: counts.approved, color: '#059669' },
         ].map(s => (
-          <div key={s.label} className="rounded-xl p-4" style={{ background: 'white', border: '1px solid var(--border2)' }}>
-            <div className="text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--muted)' }}>{s.label}</div>
+          <div key={s.label} className="rounded-xl p-4 bg-[#1a1a1a] border-[3px] border-white rounded-xl shadow-[4px_4px_0px_#fff]">
+            <div className="text-[10px] font-bold uppercase tracking-wider mb-1 text-neutral-400 font-bold">{s.label}</div>
             <div className="text-2xl font-black" style={{ color: s.color }}>{s.value}</div>
           </div>
         ))}
@@ -73,7 +73,7 @@ export default function ReturnRequestsAdmin() {
 
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="font-bold text-sm" style={{ color: 'var(--ink)' }}>Return & Exchange Requests</h2>
+        <h2 className="font-bold text-sm text-white">Return & Exchange Requests</h2>
         <button onClick={fetchRequests} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold"
           style={{ background: 'var(--off)', border: '1px solid var(--border)' }}>
           <RefreshCw size={12} /> Refresh
@@ -81,11 +81,11 @@ export default function ReturnRequestsAdmin() {
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-sm" style={{ color: 'var(--muted)' }}>Loading requests...</div>
+        <div className="text-center py-12 text-sm text-neutral-400 font-bold">Loading requests...</div>
       ) : requests.length === 0 ? (
         <div className="text-center py-16 rounded-2xl" style={{ background: 'white', border: '1px dashed var(--border)' }}>
           <CheckCircle size={32} className="mx-auto mb-3 text-neutral-200" />
-          <p className="text-sm font-bold" style={{ color: 'var(--muted)' }}>No return requests yet</p>
+          <p className="text-sm font-bold text-neutral-400 font-bold">No return requests yet</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -93,22 +93,22 @@ export default function ReturnRequestsAdmin() {
             const style = STATUS_STYLES[r.status] || STATUS_STYLES.pending
             const isExpanded = expanded === r.id
             return (
-              <div key={r.id} className="rounded-xl overflow-hidden" style={{ background: 'white', border: '1px solid var(--border2)' }}>
+              <div key={r.id} className="rounded-xl overflow-hidden bg-[#1a1a1a] border-[3px] border-white rounded-xl shadow-[4px_4px_0px_#fff]">
                 <div className="flex items-start justify-between p-4 gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <span className="text-xs font-black" style={{ color: 'var(--ink)', fontFamily: 'JetBrains Mono' }}>
+                      <span className="text-xs font-black" style={{ color: '#ffffff', fontFamily: 'JetBrains Mono' }}>
                         {r.order_number || r.order_id}
                       </span>
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
                         style={{ background: style.bg, color: style.color }}>
                         {style.label}
                       </span>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-500">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#2a2a2a] text-neutral-400 font-bold">
                         {ISSUE_LABELS[r.issue_type] || r.issue_type}
                       </span>
                     </div>
-                    <p className="text-sm text-neutral-600 truncate">{r.description}</p>
+                    <p className="text-sm text-neutral-400 truncate">{r.description}</p>
                     <p className="text-[11px] text-neutral-400 mt-1">
                       {new Date(r.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </p>
@@ -125,7 +125,7 @@ export default function ReturnRequestsAdmin() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <p className="text-[10px] font-bold uppercase text-neutral-400 mb-1">Description</p>
-                        <p className="text-sm text-neutral-700 leading-relaxed">{r.description}</p>
+                        <p className="text-sm text-neutral-300 leading-relaxed">{r.description}</p>
                       </div>
                       {r.video_url && (
                         <div>
@@ -139,7 +139,7 @@ export default function ReturnRequestsAdmin() {
                       {r.admin_notes && (
                         <div className="col-span-2">
                           <p className="text-[10px] font-bold uppercase text-neutral-400 mb-1">Previous Admin Notes</p>
-                          <p className="text-sm text-neutral-600">{r.admin_notes}</p>
+                          <p className="text-sm text-neutral-400">{r.admin_notes}</p>
                         </div>
                       )}
                     </div>

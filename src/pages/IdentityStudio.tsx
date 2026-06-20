@@ -56,77 +56,83 @@ const STYLES = `
   
   .studio-page {
     font-family: 'Inter', sans-serif;
-    background-color: #FAFAF9;
-    color: #1A1A1A;
+    background-color: #0a0a0a;
+    color: #ffffff;
     min-height: 100vh;
   }
   
-  .font-display { font-family: 'Montserrat', sans-serif; }
+  .font-display { font-family: 'Montserrat', sans-serif; text-transform: uppercase; }
   
   .glass-card {
-    background: white;
-    border-radius: 24px;
-    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.04);
-    border: 1px solid #F1F1EF;
+    background: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 8px 8px 0px #fff;
+    border: 4px solid #fff;
     transition: all 0.3s ease;
   }
   
   .glass-card:hover {
-    box-shadow: 0 20px 60px -15px rgba(0,0,0,0.08);
-    transform: translateY(-2px);
+    box-shadow: none;
+    transform: translate(2px, 2px);
   }
 
   .input-field {
     width: 100%;
     padding: 12px 16px;
-    background: #F8F8F7;
-    border: 1.5px solid transparent;
-    border-radius: 12px;
+    background: #0a0a0a;
+    border: 3px solid #fff;
+    border-radius: 8px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 800;
     transition: all 0.2s;
     outline: none;
+    color: white;
+    box-shadow: 4px 4px 0px #fff;
   }
   
   .input-field:focus {
-    background: white;
     border-color: #F97316;
-    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+    box-shadow: 4px 4px 0px #F97316;
   }
 
   .section-label {
     font-size: 10px;
-    font-weight: 800;
+    font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    color: #8C8276;
+    color: #a3a3a3;
     margin-bottom: 12px;
     display: flex;
     align-items: center;
     gap: 8px;
+    border-bottom: 3px solid #333;
+    padding-bottom: 4px;
   }
 
   .chip {
     padding: 8px 16px;
-    background: white;
-    border: 1.5px solid #F1F1EF;
-    border-radius: 12px;
+    background: #1a1a1a;
+    border: 3px solid #fff;
+    border-radius: 8px;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 900;
     cursor: pointer;
     transition: all 0.2s;
+    color: white;
+    text-transform: uppercase;
+    box-shadow: 4px 4px 0px #fff;
   }
 
   .chip:hover {
-    border-color: #F97316;
-    color: #F97316;
-    background: #FFF7ED;
+    transform: translate(2px, 2px);
+    box-shadow: none;
   }
 
   .chip.active {
     background: #F97316;
-    color: white;
-    border-color: #F97316;
+    color: black;
+    border-color: #000;
+    box-shadow: 4px 4px 0px #000;
   }
 
   .progress-ring {
@@ -154,15 +160,17 @@ const STYLES = `
 
   .status-badge {
     padding: 4px 10px;
-    border-radius: 8px;
+    border-radius: 4px;
     font-size: 9px;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.1em;
+    border: 2px solid #000;
+    box-shadow: 2px 2px 0px #000;
   }
 
-  .status-badge.completed { background: #ECFDF5; color: #10B981; }
-  .status-badge.missing { background: #FFF7ED; color: #F97316; }
+  .status-badge.completed { background: #34d399; color: #000; }
+  .status-badge.missing { background: #F97316; color: #000; }
 `;
 
 // --- HELPERS ---
@@ -640,14 +648,14 @@ export default function IdentityStudio() {
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
 
       {/* 🔝 HEADER */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-neutral-100">
+      <header className="sticky top-0 z-50 bg-[#0a0a0a] border-b-[4px] border-white">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 min-h-[80px] py-4 flex flex-row items-center justify-between gap-2 sm:gap-4">
           <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
             <button
               onClick={() => navigate("/dashboard?tab=profile")}
-              className="w-10 h-10 shrink-0 rounded-xl bg-neutral-50 sm:bg-transparent hover:bg-neutral-100 flex items-center justify-center transition-all"
+              className="w-10 h-10 shrink-0 rounded-xl bg-white text-black border-[3px] border-black shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center transition-all"
             >
-              <ArrowLeft size={20} className="text-neutral-600" />
+              <ArrowLeft size={20} />
             </button>
             <div className="flex-1 min-w-0">
               <h1 className="text-lg sm:text-xl font-black font-display tracking-tight truncate">
@@ -672,10 +680,10 @@ export default function IdentityStudio() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="hidden md:flex px-6 py-2.5 bg-[#F97316] text-white text-[11px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-600 transition-all items-center gap-2 shadow-lg shadow-orange-500/20 disabled:opacity-50"
+                className="hidden md:flex px-6 py-2.5 bg-orange-500 text-black border-[3px] border-black text-[11px] font-black uppercase tracking-widest rounded-xl hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all items-center gap-2 shadow-[4px_4px_0px_#000] disabled:opacity-50"
               >
                 {saving ? (
-                  <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <div className="w-3 h-3 border-2 border-black border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <Save size={14} />
                 )}
@@ -733,11 +741,11 @@ export default function IdentityStudio() {
             {!activePersona && (
               <section className="space-y-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center font-black text-lg border-2 border-white shadow-lg">
+                  <div className="w-12 h-12 rounded-xl bg-orange-500 text-black flex items-center justify-center font-black text-lg border-[3px] border-black shadow-[4px_4px_0px_#000]">
                     01
                   </div>
                   <div>
-                    <h2 className="text-2xl font-display font-black text-[#1A1A1A]">
+                    <h2 className="text-2xl font-display font-black text-white">
                       Choose Your Path
                     </h2>
                     <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
@@ -765,7 +773,7 @@ export default function IdentityStudio() {
                         }}
                         className="glass-card group p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:border-orange-500 transition-all"
                       >
-                        <div className="w-16 h-16 rounded-2xl bg-neutral-50 flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition-transform">
+                        <div className="w-16 h-16 rounded-xl bg-[#0a0a0a] border-[3px] border-white flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition-transform">
                           {p.emoji}
                         </div>
                         <h3 className="text-lg font-black uppercase tracking-wider">
@@ -783,19 +791,15 @@ export default function IdentityStudio() {
             {activePersona && (
               <>
                 <section
-                  className="glass-card p-10 animate-slideUp mb-8"
-                  style={{
-                    background:
-                      "linear-gradient(to right, rgba(249, 115, 22, 0.05), transparent)",
-                  }}
+                  className="glass-card p-10 animate-slideUp mb-8 bg-[#1a1a1a]"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div className="flex items-center gap-5">
-                      <div className="w-14 h-14 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center shadow-inner">
+                      <div className="w-14 h-14 rounded-xl bg-orange-500 text-black border-[3px] border-black flex items-center justify-center shadow-[4px_4px_0px_#000]">
                         <Eye size={28} />
                       </div>
                       <div>
-                        <h3 className="text-xl font-black font-display tracking-tight text-orange-500">
+                        <h3 className="text-xl font-black font-display tracking-tight text-white">
                           Public Profile
                         </h3>
                         <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mt-1">
@@ -803,13 +807,13 @@ export default function IdentityStudio() {
                         </p>
                       </div>
                     </div>
-                    <button
+                     <button
                       onClick={() =>
                         navigate(
                           `/p/${profile?.username || profile?.id}?from=studio`,
                         )
                       }
-                      className="px-6 py-3 bg-neutral-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-neutral-800 transition-all shadow-md flex items-center justify-center gap-2 shrink-0"
+                      className="px-6 py-3 bg-white text-black border-[3px] border-black rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center gap-2 shrink-0"
                     >
                       <Eye size={16} /> View Profile
                     </button>
@@ -822,11 +826,11 @@ export default function IdentityStudio() {
                 >
                   <div className="flex items-center justify-between mb-10">
                     <div className="flex items-center gap-5">
-                      <div className="w-14 h-14 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center shadow-inner">
+                      <div className="w-14 h-14 rounded-xl bg-orange-500 text-black border-[3px] border-black flex items-center justify-center shadow-[4px_4px_0px_#000]">
                         <User size={28} />
                       </div>
                       <div>
-                        <h3 className="text-xl font-black font-display tracking-tight">
+                        <h3 className="text-xl font-black font-display tracking-tight text-white">
                           Basic Identity
                         </h3>
                         <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mt-1">
@@ -844,7 +848,7 @@ export default function IdentityStudio() {
                   {/* Avatar Upload Sub-section */}
                   <div className="flex items-center gap-8 pb-10 mb-10 border-b border-neutral-100">
                     <div className="relative group">
-                      <div className="w-24 h-24 rounded-[32px] bg-neutral-100 border-4 border-white shadow-xl overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                      <div className="w-24 h-24 rounded-xl bg-[#0a0a0a] border-[4px] border-white shadow-[6px_6px_0px_#fff] overflow-hidden group-hover:scale-105 transition-transform duration-500">
                         <Avatar
                           src={data.avatar_url}
                           name={`${data.first_name} ${data.last_name}`}
@@ -857,7 +861,7 @@ export default function IdentityStudio() {
                           </div>
                         )}
                       </div>
-                      <label className="absolute -bottom-2 -right-2 w-10 h-10 bg-white border border-neutral-200 rounded-xl shadow-lg flex items-center justify-center text-neutral-600 hover:text-orange-500 hover:scale-110 transition-all cursor-pointer">
+                      <label className="absolute -bottom-2 -right-2 w-10 h-10 bg-orange-500 border-[3px] border-black rounded-lg shadow-[3px_3px_0px_#000] flex items-center justify-center text-black hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
                         <Camera size={18} />
                         <input
                           type="file"
@@ -871,7 +875,7 @@ export default function IdentityStudio() {
                       </label>
                     </div>
                     <div>
-                      <h4 className="text-xl font-black text-neutral-900 mb-1 tracking-tighter">
+                      <h4 className="text-xl font-black text-white mb-1 tracking-tighter">
                         {data.first_name || data.last_name
                           ? `${data.first_name} ${data.last_name}`
                           : "New Identity"}
@@ -880,7 +884,7 @@ export default function IdentityStudio() {
                         JPG or PNG • Max 2MB
                       </p>
                       <div className="flex gap-3">
-                        <label className="px-4 py-2 bg-neutral-900 text-white text-[9px] font-black uppercase tracking-widest rounded-lg hover:bg-black transition-colors cursor-pointer">
+                        <label className="px-4 py-2 bg-white text-black border-[2px] border-black shadow-[2px_2px_0px_#000] text-[9px] font-black uppercase tracking-widest rounded-lg hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all cursor-pointer">
                           Upload New
                           <input
                             type="file"
@@ -995,19 +999,19 @@ export default function IdentityStudio() {
                             <div
                               key={opt}
                               onClick={() => updateField("profile_theme", opt)}
-                              className={`p-3 rounded-xl border-2 cursor-pointer transition-all text-center flex flex-col justify-center items-center ${
+                              className={`p-3 rounded-xl border-[3px] cursor-pointer transition-all text-center flex flex-col justify-center items-center ${
                                 (data.profile_theme?.toLowerCase() ||
                                   "default") === opt
-                                  ? "border-orange-500 bg-orange-50"
-                                  : "border-neutral-200 hover:border-orange-300"
+                                  ? "border-orange-500 bg-orange-500 text-black shadow-[4px_4px_0px_#000] translate-y-[2px] translate-x-[2px]"
+                                  : "border-white bg-[#0a0a0a] hover:border-orange-500 shadow-[4px_4px_0px_#fff]"
                               }`}
                             >
                               <p
                                 className={`text-[10px] font-black uppercase tracking-wider ${
                                   (data.profile_theme?.toLowerCase() ||
                                     "default") === opt
-                                    ? "text-orange-600"
-                                    : "text-neutral-500"
+                                    ? "text-black"
+                                    : "text-neutral-400"
                                 }`}
                               >
                                 {opt === "default"
@@ -1046,11 +1050,11 @@ export default function IdentityStudio() {
                   style={{ animationDelay: "0.2s" }}
                 >
                   <div className="flex items-center gap-5 mb-10">
-                    <div className="w-14 h-14 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center shadow-inner">
+                    <div className="w-14 h-14 rounded-xl bg-orange-500 text-black border-[3px] border-black flex items-center justify-center shadow-[4px_4px_0px_#000]">
                       <Target size={28} />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black font-display tracking-tight">
+                      <h3 className="text-xl font-black font-display tracking-tight text-white">
                         Detailed Persona Attributes
                       </h3>
                       <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mt-1">
@@ -1096,11 +1100,11 @@ export default function IdentityStudio() {
                 >
                   <div className="flex items-center justify-between mb-10">
                     <div className="flex items-center gap-5">
-                      <div className="w-14 h-14 rounded-2xl bg-gold/10 text-gold flex items-center justify-center shadow-inner">
+                      <div className="w-14 h-14 rounded-xl bg-orange-500 text-black border-[3px] border-black flex items-center justify-center shadow-[4px_4px_0px_#000]">
                         <Trophy size={28} />
                       </div>
                       <div>
-                        <h3 className="text-xl font-black font-display tracking-tight">
+                        <h3 className="text-xl font-black font-display tracking-tight text-white">
                           Achievements
                         </h3>
                         <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mt-1">
@@ -1141,11 +1145,11 @@ export default function IdentityStudio() {
 
       {/* ⚡ ACTION-DRIVEN FOOTER */}
       {activePersona ? (
-        <footer className="fixed bottom-0 left-0 right-0 z-[60] bg-white/80 backdrop-blur-xl border-t border-neutral-100 p-6 pb-8 flex flex-col items-center justify-center gap-3">
+        <footer className="fixed bottom-0 left-0 right-0 z-[60] bg-[#0a0a0a] border-t-[4px] border-white p-6 pb-8 flex flex-col items-center justify-center gap-3">
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-14 py-4 rounded-2xl bg-[#F97316] text-white font-black text-xs uppercase tracking-widest hover:bg-orange-600 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-orange-500/20 disabled:opacity-50 flex items-center gap-2"
+            className="px-14 py-4 rounded-xl bg-orange-500 text-black border-[4px] border-black font-black text-xs uppercase tracking-widest hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all shadow-[6px_6px_0px_#000] disabled:opacity-50 flex items-center gap-2"
           >
             {saving ? (
               "Saving Profile..."

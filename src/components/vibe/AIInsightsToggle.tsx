@@ -12,7 +12,7 @@ export function AIInsightsToggle({ profileId }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="w-full max-w-[800px] mx-auto mt-6 bg-[#13131a] border border-neutral-800 rounded-3xl p-4 md:p-6 shadow-xl transition-all duration-300">
+    <div className="w-full max-w-[800px] mx-auto mt-6 bg-[#13131a] border border-neutral-800 rounded-3xl p-4 md:p-6 shadow-[8px_8px_0px_#fff] transition-all duration-300">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-orange-500/10 text-orange-500 rounded-2xl flex items-center justify-center shadow-inner">
@@ -30,7 +30,7 @@ export function AIInsightsToggle({ profileId }: Props) {
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-2 bg-orange-500 text-white font-black text-xs uppercase tracking-wider px-4 py-3 rounded-2xl hover:bg-orange-600 transition-all duration-300 shadow-lg shadow-orange-500/20 active:scale-95 select-none"
+          className="flex items-center gap-2 bg-orange-500 text-white font-black text-xs uppercase tracking-wider px-4 py-3 rounded-2xl hover:bg-orange-600 transition-all duration-300 shadow-[6px_6px_0px_#fff] shadow-orange-500/20 active:scale-95 select-none"
         >
           {isOpen ? (
             <>

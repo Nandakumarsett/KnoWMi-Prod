@@ -62,9 +62,9 @@ export default function AnalyticsAdmin({ users }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* User Acquisition Chart */}
-        <div className="bg-white p-6 rounded-[32px] border border-[var(--border2)] shadow-sm">
+        <div className="bg-[#1a1a1a] p-6 rounded-[32px] border border-[var(--border2)] shadow-[2px_2px_0px_#fff]">
           <div className="flex justify-between items-center mb-8">
-            <h3 className="font-bold text-lg font-display" style={{ color: 'var(--ink)' }}>User Acquisition</h3>
+            <h3 className="font-bold text-lg font-display text-white">User Acquisition</h3>
             <span className="text-[10px] font-bold text-[var(--muted)] uppercase bg-[var(--off)] px-2 py-1 rounded">Last 7 Days</span>
           </div>
           <div className="h-[250px] w-full">
@@ -88,8 +88,8 @@ export default function AnalyticsAdmin({ users }) {
         </div>
 
         {/* Plan Distribution */}
-        <div className="bg-white p-6 rounded-[32px] border border-[var(--border2)] shadow-sm">
-          <h3 className="font-bold text-lg font-display mb-8" style={{ color: 'var(--ink)' }}>User Distribution</h3>
+        <div className="bg-[#1a1a1a] p-6 rounded-[32px] border border-[var(--border2)] shadow-[2px_2px_0px_#fff]">
+          <h3 className="font-bold text-lg font-display mb-8 text-white">User Distribution</h3>
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="h-[200px] w-[200px]">
               <ResponsiveContainer width="100%" height="100%">

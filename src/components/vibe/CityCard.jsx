@@ -206,7 +206,7 @@ export default function CityCard({ topCities = [], totalCities = 0 }) {
                 <Marker key={i} position={coords} icon={orangeIcon}>
                    <Popup className="premium-popup">
                       <div className="text-center font-sans">
-                        <p className="font-black text-xs text-neutral-900">{city.city}</p>
+                        <p className="font-black text-xs text-white">{city.city}</p>
                         <p className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest">{city.country}</p>
                       </div>
                    </Popup>

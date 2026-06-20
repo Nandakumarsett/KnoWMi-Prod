@@ -16,7 +16,7 @@ export function CompletionRing({ score, incomplete, grade, onFillClick }: Comple
   const color = score >= 71 ? '#22c55e' : score >= 41 ? '#eab308' : '#ef4444'
 
   return (
-    <div className="p-6 bg-white border border-[#E5D5C4] rounded-[12px] flex flex-col items-center shadow-sm text-[#1A1A1A]">
+    <div className="p-6 bg-white border border-[#E5D5C4] rounded-[12px] flex flex-col items-center shadow-sm text-white">
       <div className="relative flex items-center justify-center w-36 h-36 mb-4">
         <svg className="w-full h-full transform -rotate-90">
           <circle
@@ -42,7 +42,7 @@ export function CompletionRing({ score, incomplete, grade, onFillClick }: Comple
           />
         </svg>
         <div className="absolute flex flex-col items-center justify-center">
-          <span className="text-3xl font-black text-[#1A1A1A]">{score}%</span>
+          <span className="text-3xl font-black text-white">{score}%</span>
           <span className="text-[9px] font-black uppercase tracking-widest text-[#8C8276]">Profile Power</span>
         </div>
       </div>
@@ -64,7 +64,7 @@ export function CompletionRing({ score, incomplete, grade, onFillClick }: Comple
               className="w-full flex justify-between items-center text-left py-2.5 px-3 rounded-[8px] hover:bg-[#FDF6EC] transition-all group"
             >
               <div>
-                <span className="block text-xs font-bold text-[#1A1A1A] group-hover:text-[#C1440E] transition-colors">
+                <span className="block text-xs font-bold text-white group-hover:text-[#C1440E] transition-colors">
                   {section.label}
                 </span>
                 <span className="text-[10px] font-black uppercase text-[#8C8276]">+{section.points} pts</span>

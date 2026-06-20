@@ -99,7 +99,7 @@ function ReturnRequestForm({ user, latestOrder, supabaseClient }) {
         <div>
           <label className="block text-[10px] font-black uppercase tracking-wide text-neutral-400 mb-1.5">Issue Type</label>
           <select value={form.issue_type} onChange={e => setForm(f => ({ ...f, issue_type: e.target.value }))}
-            className="w-full px-4 py-2.5 rounded-xl text-sm outline-none border border-neutral-200 bg-neutral-50">
+            className="w-full px-4 py-2.5 rounded-xl text-sm outline-none border border-white/20 bg-neutral-50">
             <option value="defect">Damaged Product / Defect (Free)</option>
             <option value="qr_issue">QR Fade Issue (Free)</option>
             <option value="color_issue">T-Shirt Color Issue (Free)</option>
@@ -111,14 +111,14 @@ function ReturnRequestForm({ user, latestOrder, supabaseClient }) {
           <label className="block text-[10px] font-black uppercase tracking-wide text-neutral-400 mb-1.5">Unboxing Video Link</label>
           <input type="url" value={form.video_url} onChange={e => setForm(f => ({ ...f, video_url: e.target.value }))}
             placeholder="Google Drive / YouTube link"
-            className="w-full px-4 py-2.5 rounded-xl text-sm outline-none border border-neutral-200 bg-neutral-50" />
+            className="w-full px-4 py-2.5 rounded-xl text-sm outline-none border border-white/20 bg-neutral-50" />
         </div>
       </div>
       <div>
         <label className="block text-[10px] font-black uppercase tracking-wide text-neutral-400 mb-1.5">Describe the Issue</label>
         <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
           rows={3} required placeholder="Be specific — what is the defect, what did you receive, etc."
-          className="w-full px-4 py-3 rounded-xl text-sm outline-none border border-neutral-200 bg-neutral-50 resize-none" />
+          className="w-full px-4 py-3 rounded-xl text-sm outline-none border border-white/20 bg-[#1a1a1a] resize-none" />
       </div>
       <div className="p-3 bg-amber-50 border border-amber-100 rounded-xl text-xs text-amber-700 leading-relaxed">
         ⚠️ A valid, continuous, uncut unboxing video is <strong>mandatory</strong> for all return requests. No video = No return/exchange.
@@ -257,7 +257,7 @@ function AccountDeletionButton({ user, supabaseClient, profile }) {
         <button
           onClick={handleCancel}
           disabled={cancelling}
-          className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-60 shadow-md active:scale-95"
+          className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-60 shadow-[4px_4px_0px_#fff] active:scale-95"
         >
           {cancelling ? 'Restoring...' : 'Cancel Deletion Request & Restore Account'}
         </button>
@@ -283,14 +283,14 @@ function AccountDeletionButton({ user, supabaseClient, profile }) {
       <p className="text-sm font-bold text-red-700">Are you sure? This will permanently delete your profile and all associated data within 7 working days. All QR links linked to your Tee will redirect to KnoWMi's "Claim Your Tee" page.</p>
       <textarea value={reason} onChange={e => setReason(e.target.value)} rows={2}
         placeholder="Optional: reason for leaving"
-        className="w-full px-3 py-2 rounded-xl text-sm border border-red-200 bg-white resize-none outline-none" />
+        className="w-full px-3 py-2 rounded-xl text-sm border border-red-200 bg-[#1a1a1a] resize-none outline-none" />
       <div className="flex gap-3">
         <button onClick={handleRequest} disabled={submitting}
           className="px-5 py-2.5 bg-red-500 text-white rounded-xl text-sm font-bold disabled:opacity-60">
           {submitting ? 'Submitting...' : 'Yes, Delete My Account'}
         </button>
         <button onClick={() => setConfirming(false)}
-          className="px-5 py-2.5 text-neutral-500 text-sm font-bold hover:text-neutral-800">
+          className="px-5 py-2.5 text-neutral-400 font-bold text-sm font-bold hover:text-neutral-200">
           Cancel
         </button>
       </div>
@@ -321,20 +321,19 @@ const STYLES = `
     --pink-light: #FDF2F8;
   }
 
-  body { background: #FAFAF9; color: #111111; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+  body { background: #0a0a0a; color: #ffffff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
   .font-display { font-family: 'Montserrat', sans-serif; font-weight: 800; }
   .font-mono { font-family: 'JetBrains Mono', monospace; }
 
-  .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-  .glass-morphism { 
-    background: rgba(255, 255, 255, 0.4); 
-    backdrop-filter: blur(12px); 
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  .glass { background: #1a1a1a; border: 2px solid white; }
+  .glass-morphism {
+    background: #1a1a1a;
+    border: 3px solid white;
+    box-shadow: 4px 4px 0px #fff;
   }
 
-  .card { background: white; border: 1px solid #E7E5E4; border-radius: 24px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-  .card:hover { border-color: #D6D3D1; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.05); transform: translateY(-2px); }
+  .card { background: #1a1a1a; border: 3px solid #ffffff; border-radius: 12px; box-shadow: 4px 4px 0px #ffffff; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  .card:hover { border-color: #f97316; box-shadow: 6px 6px 0px #f97316; transform: translateY(-2px); }
 
   .three-d-container { perspective: 1200px; }
   .three-d-card {
@@ -546,11 +545,11 @@ const FIELD_META = {
 
 const StatCard = ({ label, value, color, icon: Icon, delay = 0 }) => (
   <div className="card p-8 animate-slideUp group hover:border-orange-500/30" style={{ animationDelay: `${delay}s` }}>
-    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 group-hover:scale-110 shadow-lg" style={{ background: `${color}15`, color, boxShadow: `0 8px 20px ${color}15` }}>
+    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 group-hover:scale-110 shadow-[6px_6px_0px_#fff]" style={{ background: `${color}15`, color, boxShadow: `0 8px 20px ${color}15` }}>
       <Icon size={24} strokeWidth={2.5} />
     </div>
     <p className="text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-2">{label}</p>
-    <h3 className="text-4xl font-black font-display text-neutral-900 tracking-tight">{value.toLocaleString()}</h3>
+    <h3 className="text-4xl font-black font-display text-white tracking-tight">{value.toLocaleString()}</h3>
   </div>
 )
 const PersonaEditor = ({ profile, onUpdate }) => {
@@ -946,7 +945,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
     return (
       <div className="max-w-2xl mx-auto space-y-6">
         {/* Ghost Mode Toggle */}
-        <div className="card p-6 bg-neutral-900 text-white rounded-3xl flex items-center justify-between shadow-xl">
+        <div className="card p-6 bg-neutral-900 text-white rounded-3xl flex items-center justify-between shadow-[8px_8px_0px_#fff]">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <h3 className="font-display font-black text-lg text-white">Privacy Mode</h3>
@@ -975,7 +974,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
             }}
             className={`w-14 h-8 rounded-full transition-all relative ${profile?.ghost_mode ? 'bg-red-500' : 'bg-neutral-700'}`}
           >
-            <div className={`w-6 h-6 bg-white rounded-full absolute top-1 transition-all ${profile?.ghost_mode ? 'left-7' : 'left-1'}`} />
+            <div className={`w-6 h-6 bg-[#1a1a1a] rounded-full absolute top-1 transition-all ${profile?.ghost_mode ? 'left-7' : 'left-1'}`} />
           </button>
         </div>
 
@@ -990,23 +989,23 @@ const PersonaEditor = ({ profile, onUpdate }) => {
             <div 
               key={idnt.id} 
               onClick={() => navigate(`/studio?persona=${idnt.persona_type}&edit=${idnt.id}`)}
-              className="card p-6 bg-white flex items-center gap-6 shadow-xl relative overflow-hidden group cursor-pointer hover:border-orange-500/30 transition-all active:scale-[0.98]"
+              className="card p-6 bg-[#1a1a1a] flex items-center gap-6 shadow-[8px_8px_0px_#fff] relative overflow-hidden group cursor-pointer hover:border-orange-500/30 transition-all active:scale-[0.98]"
             >
               <div className={`absolute top-0 left-0 w-1.5 h-full ${idnt.active ? 'bg-orange-500' : 'bg-neutral-200'}`} />
-              <div className="w-16 h-16 rounded-2xl overflow-hidden bg-neutral-100 shrink-0">
+              <div className="w-16 h-16 rounded-2xl overflow-hidden bg-[#2a2a2a] shrink-0">
                 <Avatar src={idnt.avatar_url} name={`${idnt.first_name} ${idnt.last_name}`} username={profile?.username} size="w-full h-full text-2xl" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-display font-black text-xl">{idnt.first_name} {idnt.last_name}</h3>
+                  <h3 className="font-display font-black text-xl text-white">{idnt.first_name} {idnt.last_name}</h3>
                   {idnt.active ? (
-                    <div className="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase rounded-md border border-emerald-100 flex items-center gap-1">
+                    <div className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase rounded-md border border-emerald-500/30 flex items-center gap-1">
                       <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" /> Live
                     </div>
                   ) : (
                     <button 
                       onClick={(e) => { e.stopPropagation(); toggleActive(idnt.id); }} 
-                      className="px-2 py-0.5 bg-neutral-50 text-neutral-400 text-[9px] font-black uppercase rounded-md border border-neutral-200 hover:border-orange-200 hover:text-orange-500 transition-all relative z-10"
+                      className="px-2 py-0.5 bg-[#1a1a1a] text-neutral-400 text-[9px] font-black uppercase rounded-md border border-white/20 hover:border-orange-200 hover:text-orange-500 transition-all relative z-10"
                     >
                       Make Live
                     </button>
@@ -1031,13 +1030,13 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                       e.preventDefault();
                       handleDelete(idnt.id, e);
                     }}
-                    className="w-10 h-10 rounded-xl bg-neutral-50 flex items-center justify-center text-neutral-300 hover:text-ruby-500 hover:bg-ruby-50 transition-all active:scale-90 relative z-20"
+                    className="w-10 h-10 rounded-xl bg-[#1a1a1a] flex items-center justify-center text-neutral-300 hover:text-ruby-500 hover:bg-ruby-50 transition-all active:scale-90 relative z-20"
                     title="Delete Identity"
                   >
                     <Trash2 size={18} />
                   </button>
                 )}
-                <div className="w-10 h-10 rounded-xl bg-neutral-50 flex items-center justify-center text-neutral-300 group-hover:text-orange-500 group-hover:bg-orange-50 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-[#1a1a1a] flex items-center justify-center text-neutral-300 group-hover:text-orange-500 group-hover:bg-orange-50 transition-all">
                   <ChevronRight size={20} />
                 </div>
               </div>
@@ -1047,8 +1046,8 @@ const PersonaEditor = ({ profile, onUpdate }) => {
 
         {/* Add New Identity Button (Creator Plan / Free First Slot Limit Check) */}
         {identities.length < (isPaid ? 3 : 1) ? (
-          <button onClick={() => navigate('/studio?mode=new')} className="w-full h-24 border-2 border-dashed border-neutral-200 rounded-3xl flex flex-col items-center justify-center gap-2 text-neutral-400 hover:border-orange-500 hover:text-orange-500 hover:bg-orange-50/30 transition-all group">
-            <div className="w-10 h-10 rounded-full bg-neutral-50 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-all">
+          <button onClick={() => navigate('/studio?mode=new')} className="w-full h-24 border-2 border-dashed border-white/20 rounded-3xl flex flex-col items-center justify-center gap-2 text-neutral-400 hover:border-orange-500 hover:text-orange-500 hover:bg-orange-50/30 transition-all group">
+            <div className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-all">
               <Plus size={24} />
             </div>
             <span className="text-[10px] font-black uppercase tracking-[0.2em]">Add New Identity</span>
@@ -1058,11 +1057,11 @@ const PersonaEditor = ({ profile, onUpdate }) => {
             <div className="card p-8 bg-orange-50 border border-orange-100 text-center">
               <Lock size={32} className="mx-auto mb-4 text-orange-500 opacity-50" />
               <h3 className="text-lg font-bold mb-1">Upgrade to Creator Plan</h3>
-              <p className="text-xs text-neutral-500 mb-6">Unlock up to 3 different identities for your phygital scans.</p>
+              <p className="text-xs text-neutral-400 font-bold mb-6">Unlock up to 3 different identities for your phygital scans.</p>
               <button onClick={() => navigate('/shop')} className="btn-primary px-8 py-3 text-sm">Upgrade Now</button>
             </div>
           ) : (
-            <div className="text-center py-4 px-6 bg-neutral-50 rounded-2xl border border-neutral-100">
+            <div className="text-center py-4 px-6 bg-[#1a1a1a] rounded-2xl border border-white/20">
               <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Max 3 Identities Reached</p>
             </div>
           )
@@ -1076,26 +1075,26 @@ const PersonaEditor = ({ profile, onUpdate }) => {
       <div className="max-w-[850px] mx-auto">
         <div className="space-y-12 animate-slideUp">
           {/* Header Section - STICKY */}
-          <div className="sticky top-0 z-40 glass-morphism p-6 sm:p-8 rounded-b-[40px] border-b border-white/20 shadow-2xl relative overflow-hidden group">
+          <div className="sticky top-0 z-40 glass-morphism p-6 sm:p-8 rounded-b-[40px] border-b border-white/20 shadow-[8px_8px_0px_#fff] relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-orange-500/5 to-transparent rounded-full -mr-32 -mt-32" />
             <div className="relative z-10">
               <div className="flex items-center justify-between gap-6 mb-6">
                 <div className="flex items-center gap-4">
                   <button 
                     onClick={() => setIsEditing(false)}
-                    className="w-10 h-10 flex items-center justify-center bg-white border border-neutral-200 text-neutral-400 rounded-xl hover:text-neutral-900 hover:border-neutral-900 transition-all active:scale-90"
+                    className="w-10 h-10 flex items-center justify-center bg-[#1a1a1a] border border-white/20 text-neutral-400 rounded-xl hover:text-white hover:border-neutral-900 transition-all active:scale-90"
                   >
                     <ArrowLeft size={20} />
                   </button>
                   <div>
-                    <h1 className="text-2xl font-display font-black text-[#1A1A1A]">Build your Identity</h1>
+                    <h1 className="text-2xl font-display font-black text-white">Build your Identity</h1>
                     <p className="text-[9px] font-bold text-orange-500 uppercase tracking-[0.2em]">{persona ? `${persona} active` : 'Configuring...'}</p>
                   </div>
                 </div>
                 <button 
                   onClick={handleSave} 
                   disabled={saving}
-                  className="px-8 py-3 bg-[#C1440E] text-white rounded-xl font-black uppercase tracking-wider text-[10px] shadow-lg shadow-orange-500/20 hover:bg-[#A0350B] transition-all flex items-center gap-2 active:scale-95 disabled:opacity-50"
+                  className="px-8 py-3 bg-[#C1440E] text-white rounded-xl font-black uppercase tracking-wider text-[10px] shadow-[6px_6px_0px_#fff] shadow-orange-500/20 hover:bg-[#A0350B] transition-all flex items-center gap-2 active:scale-95 disabled:opacity-50"
                 >
                   {saving ? <Loader2 className="animate-spin" size={16} /> : <><Save size={16}/> Save Profile</>}
                 </button>
@@ -1106,7 +1105,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                   <span>Profile Power</span>
                   <span className="text-orange-600 font-bold">{calculateStrength()}%</span>
                 </div>
-                <div className="h-2 w-full bg-neutral-100 rounded-full overflow-hidden border border-neutral-200/50">
+                <div className="h-2 w-full bg-[#2a2a2a] rounded-full overflow-hidden border border-white/20/50">
                   <div 
                     className="h-full bg-gradient-to-r from-orange-400 to-orange-600 transition-all duration-300"
                     style={{ width: `${calculateStrength()}%` }}
@@ -1120,9 +1119,9 @@ const PersonaEditor = ({ profile, onUpdate }) => {
           {!persona && (
             <section className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center font-black text-lg border-2 border-white shadow-lg floating">01</div>
+                <div className="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center font-black text-lg border-2 border-white shadow-[6px_6px_0px_#fff] floating">01</div>
                 <div>
-                  <h2 className="text-2xl font-display font-black text-[#1A1A1A] glow-text">Choose Your Path</h2>
+                  <h2 className="text-2xl font-display font-black text-white glow-text">Choose Your Path</h2>
                   <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Select your core identity theme</p>
                 </div>
               </div>
@@ -1140,7 +1139,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                           navigate(`/studio?persona=${p.id}&mode=new`);
                         }
                       }} 
-                      className={`persona-card group h-56 flex flex-col items-center justify-center text-center three-d-card overflow-hidden relative cursor-pointer ${persona === p.id ? 'active ring-4 ring-orange-500 shadow-2xl scale-105' : 'bg-white/40 backdrop-blur-xl border-white/60 hover:bg-white/80'} ${exists ? 'opacity-80' : ''}`} 
+                      className={`persona-card group h-56 flex flex-col items-center justify-center text-center three-d-card overflow-hidden relative cursor-pointer ${persona === p.id ? 'active ring-4 ring-orange-500 shadow-[8px_8px_0px_#fff] scale-105' : 'bg-[#1a1a1a]/40 backdrop-blur-xl border-white/60 hover:bg-[#1a1a1a]/80'} ${exists ? 'opacity-80' : ''}`} 
                       style={{ 
                         background: persona === p.id ? p.bg : undefined,
                         borderColor: persona === p.id ? 'white' : undefined
@@ -1148,7 +1147,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                     >
                       {exists && (
                         <div className="absolute top-4 left-0 right-0 z-20">
-                          <span className="bg-orange-500 text-white text-[8px] font-black uppercase px-2 py-1 rounded-full shadow-lg">Persona Exists</span>
+                          <span className="bg-orange-500 text-white text-[8px] font-black uppercase px-2 py-1 rounded-full shadow-[6px_6px_0px_#fff]">Persona Exists</span>
                         </div>
                       )}
                      {/* Background Glow for unselected */}
@@ -1160,19 +1159,19 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                      )}
 
                      <div 
-                       className="w-16 h-16 rounded-2xl flex items-center justify-center text-4xl mb-5 shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 relative z-10" 
+                       className="w-16 h-16 rounded-2xl flex items-center justify-center text-4xl mb-5 shadow-[8px_8px_0px_#fff] transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 relative z-10" 
                        style={{ background: persona === p.id ? 'rgba(255,255,255,0.1)' : p.accentLight }}
                      >
                        {p.emoji}
                        {persona === p.id && (
-                         <div className="absolute -top-2 -right-2 bg-white text-orange-600 rounded-full p-1 shadow-lg border border-orange-100">
+                         <div className="absolute -top-2 -right-2 bg-[#1a1a1a] text-orange-600 rounded-full p-1 shadow-[6px_6px_0px_#fff] border border-orange-100">
                            <Check size={14} />
                          </div>
                        )}
                      </div>
 
                      <div className="relative z-10">
-                       <h3 className={`text-lg font-display font-black mb-1 uppercase tracking-wider transition-colors ${persona === p.id ? 'text-white' : 'text-[#1A1A1A]'}`}>
+                       <h3 className={`text-lg font-display font-black mb-1 uppercase tracking-wider transition-colors ${persona === p.id ? 'text-white' : 'text-white'}`}>
                          {p.label}
                        </h3>
                        <p 
@@ -1197,32 +1196,32 @@ const PersonaEditor = ({ profile, onUpdate }) => {
               {/* Section 2: Basic Info */}
               <section className="space-y-6 three-d-container">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center font-black text-lg border-2 border-white shadow-lg floating">01</div>
+                  <div className="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center font-black text-lg border-2 border-white shadow-[6px_6px_0px_#fff] floating">01</div>
                   <div>
-                    <h2 className="text-2xl font-display font-black text-[#1A1A1A] glow-text">Your Identity</h2>
+                    <h2 className="text-2xl font-display font-black text-white glow-text">Your Identity</h2>
                     <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Tell us who you are</p>
                   </div>
                 </div>
-                <div className="space-y-8 bg-white/60 backdrop-blur-xl p-8 sm:p-10 rounded-[48px] border-2 border-white shadow-2xl three-d-card">
-                  <div className="flex items-center gap-8 pb-8 border-b border-neutral-100">
+                <div className="space-y-8 bg-[#1a1a1a]/60 backdrop-blur-xl p-8 sm:p-10 rounded-[48px] border-2 border-white shadow-[8px_8px_0px_#fff] three-d-card">
+                  <div className="flex items-center gap-8 pb-8 border-b border-white/20">
                     <div className="relative group">
-                      <div className="w-28 h-28 rounded-[40px] bg-neutral-100 border-4 border-white shadow-2xl overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                      <div className="w-28 h-28 rounded-[40px] bg-[#2a2a2a] border-4 border-white shadow-[8px_8px_0px_#fff] overflow-hidden group-hover:scale-105 transition-transform duration-500">
                         <Avatar src={avatarUrl} name={`${firstName} ${lastName}`} username={profile?.username} size="w-full h-full text-4xl" />
                       </div>
-                      <label className="absolute -bottom-2 -right-2 w-12 h-12 bg-white border border-[#E5D5C4] rounded-2xl shadow-xl flex items-center justify-center text-neutral-600 hover:text-orange-500 hover:scale-110 transition-all cursor-pointer">
+                      <label className="absolute -bottom-2 -right-2 w-12 h-12 bg-[#1a1a1a] border border-[#E5D5C4] rounded-2xl shadow-[8px_8px_0px_#fff] flex items-center justify-center text-neutral-400 hover:text-orange-500 hover:scale-110 transition-all cursor-pointer">
                         <Camera size={20} />
                         <input type="file" className="hidden" onChange={(e) => handleAvatarUpload(e.target.files[0])} />
                       </label>
                     </div>
                     <div>
-                      <h4 className="text-base font-black uppercase text-neutral-900 mb-1">Profile Picture</h4>
+                      <h4 className="text-base font-black uppercase text-white mb-1">Profile Picture</h4>
                       <p className="text-[11px] text-neutral-400 font-bold mb-4 uppercase tracking-widest">JPG or PNG • Max 2MB</p>
                       <div className="flex gap-3">
                         <label className="px-5 py-2.5 bg-neutral-900 text-white text-[10px] font-black uppercase rounded-xl hover:bg-black transition-colors cursor-pointer">
                           Upload New
                           <input type="file" className="hidden" onChange={(e) => handleAvatarUpload(e.target.files[0])} />
                         </label>
-                        <button className="px-5 py-2.5 bg-white border border-neutral-200 text-neutral-600 text-[10px] font-black uppercase rounded-xl hover:bg-neutral-50 transition-colors">Remove</button>
+                        <button className="px-5 py-2.5 bg-[#1a1a1a] border border-white/20 text-neutral-400 text-[10px] font-black uppercase rounded-xl hover:bg-[#1a1a1a] transition-colors">Remove</button>
                       </div>
                     </div>
                   </div>
@@ -1230,16 +1229,16 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     <div className="space-y-3">
                       <label className="text-[11px] font-black uppercase tracking-widest text-[#5C5246] ml-1">First Name</label>
-                      <input className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-800 focus:outline-none focus:border-[#C1440E] transition-all" value={firstName} maxLength={50} onChange={e => setFirstName(e.target.value)} />
+                      <input className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-200 focus:outline-none focus:border-[#C1440E] transition-all" value={firstName} maxLength={50} onChange={e => setFirstName(e.target.value)} />
                     </div>
                     <div className="space-y-3">
                       <label className="text-[11px] font-black uppercase tracking-widest text-[#5C5246] ml-1">Last Name</label>
-                      <input className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-800 focus:outline-none focus:border-[#C1440E] transition-all" value={lastName} maxLength={50} onChange={e => setLastName(e.target.value)} />
+                      <input className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-200 focus:outline-none focus:border-[#C1440E] transition-all" value={lastName} maxLength={50} onChange={e => setLastName(e.target.value)} />
                     </div>
                   </div>
                   <div className="space-y-3">
                     <label className="text-[11px] font-black uppercase tracking-widest text-[#5C5246] ml-1">Public Tagline</label>
-                    <input className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-800 focus:outline-none focus:border-[#C1440E] transition-all" value={data.tagline || ''} maxLength={100} onChange={e => setData({...data, tagline: e.target.value})} placeholder="e.g. Building the future..." />
+                    <input className="w-full bg-[#FDF6EC]/30 border border-[#E5D5C4] rounded-2xl px-6 py-4 text-sm font-bold text-neutral-200 focus:outline-none focus:border-[#C1440E] transition-all" value={data.tagline || ''} maxLength={100} onChange={e => setData({...data, tagline: e.target.value})} placeholder="e.g. Building the future..." />
                   </div>
                 </div>
               </section>
@@ -1247,19 +1246,19 @@ const PersonaEditor = ({ profile, onUpdate }) => {
               {/* Section 3: Audience Reach */}
               <section className="space-y-6 three-d-container">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center font-black text-lg border-2 border-white shadow-lg floating" style={{ animationDelay: '0.5s' }}>02</div>
+                  <div className="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center font-black text-lg border-2 border-white shadow-[6px_6px_0px_#fff] floating" style={{ animationDelay: '0.5s' }}>02</div>
                   <div>
-                    <h2 className="text-2xl font-display font-black text-[#1A1A1A] glow-text">Audience Reach</h2>
+                    <h2 className="text-2xl font-display font-black text-white glow-text">Audience Reach</h2>
                     <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Show your impact</p>
                   </div>
                 </div>
-                <div className="space-y-8 bg-white/60 backdrop-blur-xl p-8 sm:p-10 rounded-[48px] border-2 border-white shadow-2xl three-d-card">
+                <div className="space-y-8 bg-[#1a1a1a]/60 backdrop-blur-xl p-8 sm:p-10 rounded-[48px] border-2 border-white shadow-[8px_8px_0px_#fff] three-d-card">
                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                       {theme.stats.map(s => (
                         <div key={s} className={`p-8 rounded-3xl border transition-all ${statErrors[s] ? 'bg-red-50 border-red-200' : 'bg-[#FDF6EC]/30 border-[#E5D5C4]'}`}>
                           <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest mb-3">{s}</p>
                           <input 
-                            className={`w-full text-3xl font-display font-black outline-none bg-transparent ${statErrors[s] ? 'text-ruby-500' : 'text-neutral-900'}`} 
+                            className={`w-full text-3xl font-display font-black outline-none bg-transparent ${statErrors[s] ? 'text-ruby-500' : 'text-white'}`} 
                             placeholder={['Gym Name', 'University', 'League Rank', 'Club', 'Team'].some(kw => s.includes(kw)) ? `Enter Your ${s}` : "0"} 
                             value={data[s] || ''} 
                             onChange={e => {
@@ -1279,7 +1278,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                         </div>
                       ))}
                    </div>
-                   <div className="pt-8 border-t border-neutral-100">
+                   <div className="pt-8 border-t border-white/20">
                       <div className="flex items-center justify-between mb-6">
                         <p className="text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400">Linked Platforms</p>
                         <div className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 rounded-lg">
@@ -1292,8 +1291,8 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                           const isLocked = profile?.status !== 'paid' && profile?.role !== 'owner' && ['instagram', 'youtube'].includes(f)
                           const hasError = errors[f]
                           return (
-                            <div key={f} className={`flex items-center gap-5 p-5 rounded-[24px] border transition-all ${isLocked ? 'opacity-60 bg-neutral-50 border-neutral-200' : 'bg-white border-[#E5D5C4] shadow-sm hover:border-[#C1440E] hover:shadow-lg hover:shadow-orange-500/5'} ${hasError ? 'border-ruby-500 bg-red-50' : ''}`}>
-                              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shadow-sm ${hasError ? 'bg-ruby-100 text-ruby-500' : 'bg-neutral-50'}`}>{FIELD_META[f]?.emoji}</div>
+                            <div key={f} className={`flex items-center gap-5 p-5 rounded-[24px] border transition-all ${isLocked ? 'opacity-60 bg-[#1a1a1a] border-white/20' : 'bg-[#1a1a1a] border-[#E5D5C4] shadow-[2px_2px_0px_#fff] hover:border-[#C1440E] hover:shadow-[6px_6px_0px_#fff] hover:shadow-orange-500/5'} ${hasError ? 'border-ruby-500 bg-red-50' : ''}`}>
+                              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shadow-[2px_2px_0px_#fff] ${hasError ? 'bg-ruby-100 text-ruby-500' : 'bg-neutral-50'}`}>{FIELD_META[f]?.emoji}</div>
                               <div className="flex-1 min-w-0">
                                 <p className={`text-[9px] font-black uppercase tracking-wider truncate mb-1.5 ${hasError ? 'text-ruby-500' : 'text-neutral-400'}`}>{f}</p>
                                 {isLocked ? (
@@ -1303,7 +1302,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                                   </div>
                                 ) : (
                                   <input
-                                    className="w-full bg-transparent border-0 outline-none p-0 text-xs font-bold text-neutral-800 placeholder:text-neutral-300"
+                                    className="w-full bg-transparent border-0 outline-none p-0 text-xs font-bold text-neutral-200 placeholder:text-neutral-300"
                                     placeholder={FIELD_META[f]?.prefix || 'Your username...'}
                                     value={data[f] || ''}
                                     onChange={e => setData({...data, [f]: e.target.value})}
@@ -1322,16 +1321,16 @@ const PersonaEditor = ({ profile, onUpdate }) => {
               <section className="space-y-6 three-d-container">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-orange-600 text-white flex items-center justify-center font-black text-lg border-2 border-white shadow-lg floating" style={{ animationDelay: '1s' }}>03</div>
+                    <div className="w-12 h-12 rounded-2xl bg-orange-600 text-white flex items-center justify-center font-black text-lg border-2 border-white shadow-[6px_6px_0px_#fff] floating" style={{ animationDelay: '1s' }}>03</div>
                     <div>
-                      <h2 className="text-2xl font-display font-black text-[#1A1A1A] glow-text">Detailed Attributes</h2>
+                      <h2 className="text-2xl font-display font-black text-white glow-text">Detailed Attributes</h2>
                       <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Customize your persona specific data</p>
                     </div>
                   </div>
                   {!showDetailedPersona && (
                     <button 
                       onClick={() => setShowDetailedPersona(true)}
-                      className="px-6 py-3 bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-orange-500/20 hover:bg-orange-600 transition-all flex items-center gap-2 active:scale-95"
+                      className="px-6 py-3 bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest rounded-xl shadow-[6px_6px_0px_#fff] shadow-orange-500/20 hover:bg-orange-600 transition-all flex items-center gap-2 active:scale-95"
                     >
                       Configure Details <Plus size={14} />
                     </button>
@@ -1344,12 +1343,12 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                       <button 
                         type="button" 
                         onClick={() => setShowDetailedPersona(false)}
-                        className="px-4 py-2 bg-neutral-100 text-[10px] font-black uppercase tracking-widest text-neutral-500 hover:text-neutral-900 rounded-xl flex items-center gap-2 transition-colors"
+                        className="px-4 py-2 bg-[#2a2a2a] text-[10px] font-black uppercase tracking-widest text-neutral-400 font-bold hover:text-white rounded-xl flex items-center gap-2 transition-colors"
                       >
                         <ChevronDown size={14} className="rotate-180" /> Collapse Attributes
                       </button>
                     </div>
-                    <div className="p-8 sm:p-12 bg-white border border-[#E5D5C4] rounded-[48px] shadow-2xl shadow-[#E5D5C4]/30 animate-slideUp overflow-hidden relative">
+                    <div className="p-8 sm:p-12 bg-[#1a1a1a] border border-[#E5D5C4] rounded-[48px] shadow-[8px_8px_0px_#fff] shadow-[#E5D5C4]/30 animate-slideUp overflow-hidden relative">
                       <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-full -mr-16 -mt-16" />
                       <div className="relative z-10">
                         {['developer', 'dev'].includes(persona) && <DeveloperForm data={data} onChange={setData} isOwner />}
@@ -1365,7 +1364,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
               <div className="pt-10 flex items-center justify-center gap-6">
                 <button 
                   onClick={() => setIsEditing(false)}
-                  className="group flex items-center gap-2 px-10 py-4 bg-white border-2 border-neutral-100 text-neutral-400 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-neutral-50 hover:border-neutral-200 hover:text-neutral-900 transition-all"
+                  className="group flex items-center gap-2 px-10 py-4 bg-[#1a1a1a] border-2 border-white/20 text-neutral-400 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#1a1a1a] hover:border-white/20 hover:text-white transition-all"
                 >
                   <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                   Back
@@ -1373,7 +1372,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                 <button 
                   onClick={handleSave} 
                   disabled={saving}
-                  className="px-14 py-4 bg-[#C1440E] text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-orange-500/20 hover:bg-[#A0350B] transition-all flex items-center gap-3 active:scale-95 disabled:opacity-50"
+                  className="px-14 py-4 bg-[#C1440E] text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-[8px_8px_0px_#fff] shadow-orange-500/20 hover:bg-[#A0350B] transition-all flex items-center gap-3 active:scale-95 disabled:opacity-50"
                 >
                   {saving ? <Loader2 className="animate-spin" /> : <><Save size={20}/> Save Changes</>}
                 </button>
@@ -1434,7 +1433,7 @@ const IdentityPass = ({ profile }) => {
               navigator.clipboard.writeText(profileLink);
               toast.success("Profile link copied to clipboard! 🔗");
             }} 
-            className="h-12 px-8 text-sm font-black bg-neutral-900 text-white rounded-2xl hover:bg-neutral-800 flex items-center gap-2 transition-all active:scale-95 shadow-md shrink-0"
+            className="h-12 px-8 text-sm font-black bg-neutral-900 text-white rounded-2xl hover:bg-neutral-800 flex items-center gap-2 transition-all active:scale-95 shadow-[4px_4px_0px_#fff] shrink-0"
           >
             <Share2 size={18}/> Share My Profile
           </button>
@@ -1458,7 +1457,7 @@ const IdentityPass = ({ profile }) => {
         <div className="relative group">
           <div 
             onClick={() => navigate(`/p/${profile?.secure_slug || profile?.first_name || profile?.id}`)}
-            className="qr-print-card card p-12 flex flex-col items-center bg-white shadow-2xl relative overflow-hidden cursor-pointer hover:shadow-orange-500/10 transition-all border-none"
+            className="qr-print-card card p-12 flex flex-col items-center bg-[#1a1a1a] shadow-[8px_8px_0px_#fff] relative overflow-hidden cursor-pointer hover:shadow-orange-500/10 transition-all border-none"
           >
             <div className="absolute top-6 right-8 flex items-center gap-1.5 bg-emerald-50/50 px-2.5 py-1.5 rounded-xl backdrop-blur-sm border border-emerald-500/10">
               <div className="live-dot"/>
@@ -1482,7 +1481,7 @@ const IdentityPass = ({ profile }) => {
               />
               <div className="absolute inset-0 z-10" />
               {isPaid && (
-                <div className="absolute inset-0 m-auto w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg border border-neutral-100 p-0.5 z-20 select-none overflow-hidden">
+                <div className="absolute inset-0 m-auto w-10 h-10 bg-[#1a1a1a] rounded-full flex items-center justify-center shadow-[6px_6px_0px_#fff] border border-white/20 p-0.5 z-20 select-none overflow-hidden">
                   <img src="/favicon.png" className="w-full h-full object-contain rounded-full" alt="KnoWMi Logo" />
                 </div>
               )}
@@ -1517,7 +1516,7 @@ const IdentityPass = ({ profile }) => {
               <div className="w-12 h-12 rounded-2xl bg-orange-500 flex items-center justify-center text-white shrink-0"><Crown size={24}/></div>
               <div>
                 <h4 className="text-lg font-bold mb-1">{isPaid ? 'You are our Premium Customer Now' : 'Upgrade to Premium (Buy A Tee)'}</h4>
-                <p className="text-sm text-neutral-600 mb-6">
+                <p className="text-sm text-neutral-400 mb-6">
                   {isPaid 
                     ? 'Your physical identity is active. Enjoy unmasked QR access, detailed scan locations, and advanced persona statistics.' 
                     : 'Buy A Tee to unlock QR Analytics, location tracking, and advanced persona profile statistics.'}
@@ -1542,7 +1541,7 @@ const IdentityPass = ({ profile }) => {
                     "Priority 24/7 WhatsApp Support",
                     "Location-Based Scan Tracking"
                   ].map((benefit, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs font-bold text-neutral-600">
+                    <div key={i} className="flex items-center gap-2 text-xs font-bold text-neutral-400">
                       <Check size={14} className="text-emerald-500" /> {benefit}
                     </div>
                   ))}
@@ -1583,13 +1582,13 @@ const GamificationTab = ({ profile, completion, stats }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {badges.map(badge => (
-          <div key={badge.id} className={`card p-6 border-2 transition-all duration-300 ${badge.unlocked ? 'border-orange-500/30 bg-white shadow-xl shadow-orange-500/5 hover:-translate-y-1' : 'border-neutral-100 bg-neutral-50/50 opacity-60 grayscale'}`}>
+          <div key={badge.id} className={`card p-6 border-2 transition-all duration-300 ${badge.unlocked ? 'border-orange-500/30 bg-[#1a1a1a] shadow-[8px_8px_0px_#fff] shadow-orange-500/5 hover:-translate-y-1' : 'border-white/20 bg-neutral-50/50 opacity-60 grayscale'}`}>
             <div className="flex items-center gap-4">
               <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${badge.unlocked ? badge.bg + ' ' + badge.color : 'bg-neutral-200 text-neutral-400'}`}>
                 <badge.icon size={28} />
               </div>
               <div>
-                <h4 className="text-lg font-black text-neutral-900 tracking-tight">{badge.name}</h4>
+                <h4 className="text-lg font-black text-white tracking-tight">{badge.name}</h4>
                 <p className="text-[10px] font-bold text-neutral-400 mt-1 uppercase tracking-wider">{badge.desc}</p>
               </div>
             </div>
@@ -1612,7 +1611,7 @@ const GamificationTab = ({ profile, completion, stats }) => {
                </div>
                <div className="w-full h-3 bg-neutral-900 rounded-full overflow-hidden">
                  <div className="h-full bg-orange-500 rounded-full relative transition-all duration-1000" style={{ width: `${completion}%` }}>
-                   <div className="absolute inset-0 bg-white/20 w-full animate-shimmer" />
+                   <div className="absolute inset-0 bg-[#1a1a1a]/20 w-full animate-shimmer" />
                  </div>
                </div>
              </div>
@@ -1727,7 +1726,7 @@ function Dashboard() {
   }, [activeTab])
 
   const [analyticsView, setAnalyticsView] = useState('vibe')
-  const [vibeTheme, setVibeTheme] = useState('light')
+  const [vibeTheme, setVibeTheme] = useState('dark')
   const [vibeStats, setVibeStats] = useState(null)
   const [selectedRange, setSelectedRange] = useState('today')
   const [vibeLoading, setVibeLoading] = useState(false)
@@ -1933,14 +1932,14 @@ function Dashboard() {
 
 
 
-  if (authLoading || loading) return <div className="min-h-screen bg-[#FAFAF9] p-10"><style dangerouslySetInnerHTML={{ __html: STYLES }}/><div className="skeleton h-20 w-full rounded-2xl mb-6"/><div className="skeleton h-64 w-full rounded-2xl"/></div>
+  if (authLoading || loading) return <div className="min-h-screen bg-[#0a0a0a] p-10"><style dangerouslySetInnerHTML={{ __html: STYLES }}/><div className="skeleton h-20 w-full rounded-2xl mb-6"/><div className="skeleton h-64 w-full rounded-2xl"/></div>
 
   // Bypassed absolute verification gate so new unverified users can view their analytics instantly.
 
   const isVibeDark = activeTab === 'analytics' && vibeTheme === 'dark';
 
   return (
-    <div className={`min-h-screen pb-32 transition-colors duration-300 relative overflow-hidden ${isVibeDark ? 'bg-[#000000] text-[#f0eff8] vibe-page dark' : 'bg-[#FAFAF9] text-[#111111]'}`}>
+    <div className={`min-h-screen pb-32 transition-colors duration-300 relative overflow-hidden ${isVibeDark ? 'bg-[#000000] text-[#f0eff8] vibe-page dark' : 'bg-[#0a0a0a] text-white'}`}>
       <div className="fixed inset-0 z-0 pointer-events-none transition-opacity duration-700 opacity-60" style={{
         backgroundImage: isVibeDark 
           ? 'radial-gradient(circle at 15% 50%, rgba(249, 115, 22, 0.08), transparent 35%), radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08), transparent 35%)'
@@ -1951,22 +1950,22 @@ function Dashboard() {
         <style dangerouslySetInnerHTML={{ __html: `
           body { background-color: #000000 !important; }
           .dark .vibe-card { background-color: #0a0a0a !important; color: #fff !important; border-color: rgba(255,255,255,0.08) !important; }
-          .dark .bg-white { background-color: #0a0a0a !important; color: #fff !important; border-color: rgba(255,255,255,0.08) !important; }
-          .dark .border-neutral-100,
+          .dark .bg-[#1a1a1a] { background-color: #0a0a0a !important; color: #fff !important; border-color: rgba(255,255,255,0.08) !important; }
+          .dark .border-white/20,
           .dark .border-neutral-50,
-          .dark .border-neutral-200 { border-color: rgba(255,255,255,0.08) !important; }
-          .dark .text-neutral-900,
-          .dark .text-neutral-800,
-          .dark .text-neutral-700 { color: #f0eff8 !important; }
-          .dark .text-neutral-600,
-          .dark .text-neutral-500 { color: #aaa5c3 !important; }
+          .dark .border-white/20 { border-color: rgba(255,255,255,0.08) !important; }
+          .dark .text-white,
+          .dark .text-neutral-200,
+          .dark .text-neutral-300 { color: #f0eff8 !important; }
+          .dark .text-neutral-400,
+          .dark .text-neutral-400 font-bold { color: #aaa5c3 !important; }
           .dark .text-neutral-400 { color: #9c97b8 !important; }
           .dark .text-neutral-300 { color: #8a85a4 !important; }
           .dark .bg-neutral-50,
           .dark .bg-neutral-50\\/30,
           .dark .bg-neutral-50\\/20,
           .dark .bg-neutral-50\\/10,
-          .dark .bg-neutral-100 { background-color: #111111 !important; }
+          .dark .bg-[#2a2a2a] { background-color: #111111 !important; }
           .dark .recharts-default-legend .recharts-legend-item-text { color: #f0eff8 !important; }
           .dark p[style*="color: var(--muted)"] { color: #9c97b8 !important; }
           .dark p[style*="color: var(--text)"] { color: #f0eff8 !important; }
@@ -1975,7 +1974,7 @@ function Dashboard() {
       )}
       
       {/* Personalized Navigation */}
-      <header className={`h-20 backdrop-blur-md border-b flex items-center px-4 md:px-8 sticky top-0 z-50 transition-colors duration-300 ${isVibeDark ? 'bg-[#13131a]/80 border-white/10' : 'bg-white/80 border-neutral-100'}`}>
+      <header className={`h-20 backdrop-blur-md border-b flex items-center px-4 md:px-8 sticky top-0 z-50 transition-colors duration-300 ${isVibeDark ? 'bg-[#13131a]/80 border-white/10' : 'bg-[#1a1a1a]/80 border-white/20'}`}>
         <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
           <div className="flex items-center gap-6">
             <button 
@@ -1993,17 +1992,17 @@ function Dashboard() {
                   navigate('/')
                 }
               }}
-              className={`p-2 rounded-xl transition-colors flex items-center gap-2 group ${isVibeDark ? 'text-neutral-400 hover:bg-white/5' : 'text-neutral-400 hover:bg-neutral-100'}`}
+              className={`p-2 rounded-xl transition-colors flex items-center gap-2 group ${isVibeDark ? 'text-neutral-400 hover:bg-[#1a1a1a]/5' : 'text-neutral-400 hover:bg-neutral-100'}`}
             >
               <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
               <span className="text-xs font-bold uppercase tracking-widest hidden sm:inline">
                 {searchParams.get('mode') === 'edit' ? 'Back to Identities' : activeTab === 'analytics' ? 'Home' : 'Back to Analytics'}
               </span>
             </button>
-            <div className={`h-8 w-px hidden sm:block ${isVibeDark ? 'bg-white/10' : 'bg-neutral-100'}`} />
+            <div className={`h-8 w-px hidden sm:block ${isVibeDark ? 'bg-[#1a1a1a]/10' : 'bg-neutral-100'}`} />
             <div className="flex flex-col">
-              <h1 className={`font-display text-2xl tracking-tight-premium transition-colors duration-300 ${isVibeDark ? 'text-white' : 'text-[#111111]'}`}>
-                {profile?.first_name ? `${profile.first_name}'s` : 'KnoWMi'} <span className={`font-light text-xl ${isVibeDark ? 'text-neutral-500' : 'text-neutral-300'}`}>| Analytics</span>
+              <h1 className={`font-display text-2xl tracking-tight-premium transition-colors duration-300 ${isVibeDark ? 'text-white' : 'text-white'}`}>
+                {profile?.first_name ? `${profile.first_name}'s` : 'KnoWMi'} <span className={`font-light text-xl ${isVibeDark ? 'text-neutral-400 font-bold' : 'text-neutral-300'}`}>| Analytics</span>
               </h1>
               <p className="text-[10px] font-black text-orange-500 uppercase tracking-luxury leading-none mt-2">Scan Me. Know Me.</p>
             </div>
@@ -2029,10 +2028,10 @@ function Dashboard() {
               return (
                 <div 
                   onClick={() => navigate(`/p/${profile?.secure_slug || profile?.id}?from=${activeTab}`)}
-                  className={`flex items-center gap-3 pl-3 pr-1 py-1 rounded-2xl border transition-all cursor-pointer group ${isVibeDark ? 'bg-white/5 border-white/10 hover:border-orange-500/50' : 'bg-neutral-50 border-neutral-100 hover:border-orange-200'}`}
+                  className={`flex items-center gap-3 pl-3 pr-1 py-1 rounded-2xl border transition-all cursor-pointer group ${isVibeDark ? 'bg-[#1a1a1a]/5 border-white/10 hover:border-orange-500/50' : 'bg-[#1a1a1a] border-white/20 hover:border-orange-200'}`}
                 >
                   <div className="text-right hidden sm:block">
-                    <p className={`text-xs font-black leading-none transition-colors duration-300 ${isVibeDark ? 'text-white' : 'text-neutral-900'}`}>{displayName}</p>
+                    <p className={`text-xs font-black leading-none transition-colors duration-300 ${isVibeDark ? 'text-white' : 'text-white'}`}>{displayName}</p>
                     <p className="text-[9px] font-black text-neutral-400 uppercase tracking-luxury mt-2">{wmCode}</p>
                     {profile?.is_verified && (
                       <p className="text-[8px] font-black text-orange-500 uppercase tracking-widest mt-1">✦ Founding Member</p>
@@ -2042,7 +2041,7 @@ function Dashboard() {
                     src={avatarSrc} 
                     name={displayName} 
                     username={profile?.username} 
-                    size="w-9 h-9 border-2 border-white shadow-sm group-hover:border-orange-500/20 transition-all" 
+                    size="w-9 h-9 border-2 border-white shadow-[2px_2px_0px_#fff] group-hover:border-orange-500/20 transition-all" 
                   />
                 </div>
               );
@@ -2056,13 +2055,13 @@ function Dashboard() {
         {/* Sleek Profile Completion Progress Bar */}
         {activeTab === 'profile' && (
           <div className="mb-10 w-full animate-slideUp">
-            <div className="bg-white border border-neutral-100 rounded-[28px] p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="bg-[#1a1a1a] border border-white/20 rounded-[28px] p-6 shadow-[2px_2px_0px_#fff] flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4 w-full md:w-auto">
               <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center shrink-0 shadow-inner">
                 <Target size={24} className="animate-pulse" />
               </div>
               <div className="text-left">
-                <h3 className="text-sm font-black text-neutral-900 uppercase tracking-widest leading-none mb-2">Profile Setup Completion</h3>
+                <h3 className="text-sm font-black text-white uppercase tracking-widest leading-none mb-2">Profile Setup Completion</h3>
                 <p className="text-[11px] font-bold text-neutral-400">
                   {profileCompletion < 100 
                     ? `Complete your path to get the physical smart T-shirt & unlock 100% of features!` 
@@ -2077,9 +2076,9 @@ function Dashboard() {
                   <span className="text-[10px] font-black text-orange-500 uppercase tracking-wider">{profileCompletion}% Complete</span>
                   <span className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">Level {profileCompletion === 100 ? 'Max' : '1'}</span>
                 </div>
-                <div className="w-full h-3 bg-neutral-100 rounded-full overflow-hidden p-0.5 border border-neutral-200">
+                <div className="w-full h-3 bg-[#2a2a2a] rounded-full overflow-hidden p-0.5 border border-white/20">
                   <div 
-                    className="h-full bg-gradient-to-r from-orange-500 to-orange-400 rounded-full transition-all duration-1000 shadow-md"
+                    className="h-full bg-gradient-to-r from-orange-500 to-orange-400 rounded-full transition-all duration-1000 shadow-[4px_4px_0px_#fff]"
                     style={{ width: `${profileCompletion}%` }}
                   />
                 </div>
@@ -2087,7 +2086,7 @@ function Dashboard() {
               {profileCompletion < 100 && (
                 <button 
                   onClick={() => navigate('/shop')}
-                  className="px-5 py-3 bg-orange-500 hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95 whitespace-nowrap"
+                  className="px-5 py-3 bg-orange-500 hover:bg-orange-600 text-white font-black text-[9px] uppercase tracking-widest rounded-xl transition-all shadow-[4px_4px_0px_#fff] active:scale-95 whitespace-nowrap"
                 >
                   Unlock 100% 🚀
                 </button>
@@ -2105,22 +2104,22 @@ function Dashboard() {
                 <div className="absolute inset-x-0 top-0 z-50 flex flex-col items-center justify-start pt-16 p-8 text-center select-none">
                   <div className="relative inline-flex items-center justify-center mb-6">
                     <div className="absolute inset-0 bg-orange-500/25 rounded-full blur-2xl animate-pulse" />
-                    <div className="relative w-24 h-24 bg-white dark:bg-neutral-950 border-2 border-orange-500 rounded-3xl flex items-center justify-center shadow-2xl">
+                    <div className="relative w-24 h-24 bg-[#1a1a1a] dark:bg-neutral-950 border-2 border-orange-500 rounded-3xl flex items-center justify-center shadow-[8px_8px_0px_#fff]">
                       <Lock size={44} className="text-orange-500 animate-bounce" />
                     </div>
                   </div>
                   <h3 
                     style={{ fontFamily: 'Fraunces, serif' }} 
-                    className={`text-3xl font-black mb-3 ${isVibeDark ? 'text-white' : 'text-neutral-950'}`}
+                    className={`text-3xl font-black mb-3 ${isVibeDark ? 'text-white' : 'text-white'}`}
                   >
                     Unlock Analytics on a Paid Plan
                   </h3>
-                  <p className={`text-sm font-semibold max-w-sm mb-8 leading-relaxed ${isVibeDark ? 'text-neutral-300' : 'text-neutral-700'}`}>
+                  <p className={`text-sm font-semibold max-w-sm mb-8 leading-relaxed ${isVibeDark ? 'text-neutral-300' : 'text-neutral-300'}`}>
                     View advanced vibe statistics, traffic intelligence, repeat scores, global reach, and live scan tracking.
                   </p>
                   <button
                     onClick={() => navigate('/#pricing')}
-                    className="px-10 py-4 bg-orange-500 text-white font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-orange-600 active:scale-95 transition-all shadow-xl shadow-orange-500/30"
+                    className="px-10 py-4 bg-orange-500 text-white font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-orange-600 active:scale-95 transition-all shadow-[8px_8px_0px_#fff] shadow-orange-500/30"
                   >
                     Buy a Tee to Unlock 🚀
                   </button>
@@ -2170,19 +2169,6 @@ function Dashboard() {
                     Link Stats
                   </button>
                 </div>
-                <button
-                  onClick={() => setVibeTheme(vibeTheme === 'light' ? 'dark' : 'light')}
-                  style={{
-                    padding: '10px 24px', borderRadius: 24, fontWeight: 800, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em',
-                    border: 'none', cursor: 'pointer', transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    background: isVibeDark ? '#ffffff' : '#111111', 
-                    color: isVibeDark ? '#111111' : '#ffffff',
-                    boxShadow: isVibeDark ? '0 8px 24px rgba(255,255,255,0.15)' : '0 8px 24px rgba(0,0,0,0.2)'
-                  }}
-                  className={`hover:scale-105 active:scale-95 flex items-center gap-2`}
-                >
-                  {isVibeDark ? '☀️ Light Mode' : '🌙 Dark Mode'}
-                </button>
               </div>
 
               {/* ── VIBE STATS VIEW ── */}
@@ -2204,11 +2190,11 @@ function Dashboard() {
                           <button
                             type="button"
                             onClick={(e) => { e.preventDefault(); navigate('/insights'); }}
-                            className="w-full bg-white border border-neutral-200 text-neutral-800 font-black text-xs uppercase tracking-wider px-6 py-4 rounded-2xl hover:border-orange-500/50 hover:bg-orange-50/20 transition-all duration-300 shadow-sm flex items-center justify-between gap-3 active:scale-95 select-none"
+                            className="w-full bg-[#1a1a1a] border border-white/20 text-neutral-200 font-black text-xs uppercase tracking-wider px-6 py-4 rounded-2xl hover:border-orange-500/50 hover:bg-orange-50/20 transition-all duration-300 shadow-[2px_2px_0px_#fff] flex items-center justify-between gap-3 active:scale-95 select-none"
                           >
                             <div className="flex items-center gap-3">
                               <span className="w-8 h-8 bg-orange-500/10 text-orange-600 rounded-xl flex items-center justify-center animate-pulse">✦</span>
-                              <span className="text-sm font-bold font-display text-neutral-900">AI Insights (Beta)</span>
+                              <span className="text-sm font-bold font-display text-white">AI Insights (Beta)</span>
                             </div>
                             <span className="text-[11px] font-black uppercase tracking-wider text-orange-600 bg-orange-50 px-3 py-1.5 rounded-xl">View Details →</span>
                           </button>
@@ -2259,11 +2245,11 @@ function Dashboard() {
 
               {(vibeLoading || !vibeStats) && analyticsView === 'classic' && (
                 <div className="space-y-8 p-4">
-                  <div className="h-12 w-full bg-neutral-100 rounded-2xl animate-pulse" />
+                  <div className="h-12 w-full bg-[#2a2a2a] rounded-2xl animate-pulse" />
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                    {[1,2,3,4].map(i => <div key={i} className="h-32 bg-neutral-100 rounded-2xl animate-pulse" />)}
+                    {[1,2,3,4].map(i => <div key={i} className="h-32 bg-[#2a2a2a] rounded-2xl animate-pulse" />)}
                   </div>
-                  <div className="h-96 w-full bg-neutral-100 rounded-3xl animate-pulse" />
+                  <div className="h-96 w-full bg-[#2a2a2a] rounded-3xl animate-pulse" />
                 </div>
               )}
 
@@ -2280,7 +2266,7 @@ function Dashboard() {
                 <button 
                   onClick={pushSubscribed ? pushUnsubscribe : pushSubscribe}
                   disabled={pushLoading}
-                  className={`flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all shadow-lg ${pushSubscribed ? 'bg-orange-500 text-white shadow-orange-500/20 hover:scale-105' : 'bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-50'}`}
+                  className={`flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all shadow-[6px_6px_0px_#fff] ${pushSubscribed ? 'bg-orange-500 text-white shadow-orange-500/20 hover:scale-105' : 'bg-[#1a1a1a] text-neutral-400 border border-white/20 hover:bg-neutral-50'}`}
                 >
                   <Bell size={12} className={pushSubscribed ? 'fill-current' : ''} />
                   {pushLoading ? 'Loading...' : pushSubscribed ? 'Alerts On' : 'Enable Scan Alerts'}
@@ -2289,7 +2275,7 @@ function Dashboard() {
               <select
                 value={selectedRange}
                 onChange={(e) => setSelectedRange(e.target.value)}
-                className={`px-4 py-2 border rounded-xl text-[10px] font-black uppercase tracking-wider cursor-pointer outline-none transition-all ${isVibeDark ? 'bg-[#1c1c26] border-white/10 text-white hover:border-white/20' : 'bg-white border-neutral-100 text-neutral-800 hover:border-neutral-200'}`}
+                className={`px-4 py-2 border rounded-xl text-[10px] font-black uppercase tracking-wider cursor-pointer outline-none transition-all ${isVibeDark ? 'bg-[#1c1c26] border-white/10 text-white hover:border-white/20' : 'bg-[#1a1a1a] border-white/20 text-neutral-200 hover:border-white/20'}`}
               >
                 <option value="today">Today Only</option>
                 <option value="yesterday">Yesterday</option>
@@ -2299,13 +2285,13 @@ function Dashboard() {
                 <option value="ytd">Year to Date (YTD)</option>
                 <option value="all">All Time</option>
               </select>
-              <button className="px-4 py-2 bg-[#3B82F6] text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-lg shadow-blue-500/20 hover:scale-105 transition-all">Export</button>
+              <button className="px-4 py-2 bg-[#3B82F6] text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-[6px_6px_0px_#fff] shadow-blue-500/20 hover:scale-105 transition-all">Export</button>
             </div>
           </div>
           
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { label: 'Total Views', value: totalProfileViews.toLocaleString(), sub: 'Scans & Web', trend: 'Live', color: 'text-neutral-900', tooltip: 'Total number of times your profile page or phygital products have been loaded or scanned.' },
+              { label: 'Total Views', value: totalProfileViews.toLocaleString(), sub: 'Scans & Web', trend: 'Live', color: 'text-white', tooltip: 'Total number of times your profile page or phygital products have been loaded or scanned.' },
               { label: 'Unique Views', value: uniqueScans.toLocaleString(), sub: 'Real Individuals', trend: 'Verified', color: 'text-blue-500', tooltip: 'Number of unique visitors who viewed or scanned your profile, based on verification.' },
               { label: 'QR Scan Rate', value: qrScanRateLabel, sub: 'Physical to Digital', trend: 'Calculated', color: 'text-orange-500', tooltip: 'The percentage of visitors who scanned physical QR products versus accessing direct links.' },
               { label: 'Repeat Score', value: `${repeatScore}%`, sub: repeatScoreLabel, trend: 'Active', color: 'text-emerald-500', tooltip: 'The percentage of users who returned to view your profile again after their first visit.' }
@@ -2314,8 +2300,8 @@ function Dashboard() {
                 <div className="flex justify-between items-center mb-4">
                   <p className="text-xs font-black uppercase tracking-widest text-neutral-400">{stat.label}</p>
                   <div className="relative group/tooltip flex shrink-0">
-                    <div className="w-4 h-4 rounded-full bg-neutral-100 text-[10px] font-bold text-neutral-400 flex items-center justify-center cursor-help shrink-0 select-none hover:bg-neutral-200 transition-colors">i</div>
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2.5 bg-neutral-900 text-white text-[10px] font-medium rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 pointer-events-none z-50 shadow-xl border border-neutral-800 font-sans normal-case tracking-normal leading-normal select-none">
+                    <div className="w-4 h-4 rounded-full bg-[#2a2a2a] text-[10px] font-bold text-neutral-400 flex items-center justify-center cursor-help shrink-0 select-none hover:bg-neutral-200 transition-colors">i</div>
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2.5 bg-neutral-900 text-white text-[10px] font-medium rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 pointer-events-none z-50 shadow-[8px_8px_0px_#fff] border border-neutral-800 font-sans normal-case tracking-normal leading-normal select-none">
                       {stat.tooltip}
                     </div>
                   </div>
@@ -2334,16 +2320,16 @@ function Dashboard() {
             <div className="md:col-span-4 vibe-card overflow-hidden flex flex-col animate-slideUp">
               <div className="p-8 border-b border-neutral-50 flex justify-between items-center bg-neutral-50/20">
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900 mb-1">Traffic Intelligence</h3>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-white mb-1">Traffic Intelligence</h3>
                   <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">7-Day Engagement Window</p>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-lg shadow-blue-500/20" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[6px_6px_0px_#fff] shadow-blue-500/20" />
                     <span className="text-[9px] font-black uppercase tracking-widest text-neutral-400">Total Views</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/20" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[6px_6px_0px_#fff] shadow-emerald-500/20" />
                     <span className="text-[9px] font-black uppercase tracking-widest text-neutral-400">Unique Views</span>
                   </div>
                 </div>
@@ -2361,7 +2347,7 @@ function Dashboard() {
             {/* Latest Activity - Vertical Bento Piece */}
             <div className="md:col-span-2 vibe-card overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.1s' }}>
               <div className="p-8 border-b border-neutral-50 bg-neutral-50/20">
-                <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900 flex items-center gap-2">
+                <h3 className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
                   Live Feed
                   <span className="flex h-2 w-2 relative">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
@@ -2372,7 +2358,7 @@ function Dashboard() {
               <div className="flex-1 p-8 overflow-y-auto">
                 {!vibeStats.latestActivity?.length ? (
                   <div className="h-full flex flex-col items-center justify-center text-center opacity-40">
-                    <div className="w-16 h-16 bg-neutral-50 rounded-full flex items-center justify-center mb-4">
+                    <div className="w-16 h-16 bg-[#1a1a1a] rounded-full flex items-center justify-center mb-4">
                        <Clock size={28} className="text-neutral-300" />
                     </div>
                     <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Listening for Scans...</p>
@@ -2390,21 +2376,21 @@ function Dashboard() {
                                className="rounded-2xl" 
                              />
                            ) : (
-                             <div className="w-10 h-10 rounded-2xl bg-neutral-50 border border-neutral-100 flex items-center justify-center">
+                             <div className="w-10 h-10 rounded-2xl bg-[#1a1a1a] border border-white/20 flex items-center justify-center">
                                <Activity size={16} className="text-blue-500" />
                              </div>
                            )}
                         </div>
                         <div className="flex-1">
                            <div className="flex justify-between items-start">
-                             <p className="text-[11px] font-black text-neutral-900 leading-tight">
+                             <p className="text-[11px] font-black text-white leading-tight">
                                {ev.visitor ? (
                                  <span className="text-orange-500">{ev.visitor.first_name}</span>
                                ) : (
                                  ev.is_repeat ? 'Repeat Visit' : (ev.referrer === 'qr' ? 'QR Code Scan' : 'Direct Link')
                                )}
                              </p>
-                             <span className="text-[9px] font-bold text-neutral-500 ml-2 whitespace-nowrap">
+                             <span className="text-[9px] font-bold text-neutral-400 font-bold ml-2 whitespace-nowrap">
                                {formatDistanceToNow(new Date(typeof ev.viewed_at || ev.scanned_at === 'string' ? ev.viewed_at || ev.scanned_at.replace(' ', 'T') : ev.viewed_at || ev.scanned_at), { addSuffix: true })}
                              </span>
                            </div>
@@ -2427,19 +2413,19 @@ function Dashboard() {
             {/* Referral Sources */}
             <div className="vibe-card overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.3s' }}>
               <div className="p-8 border-b border-neutral-50 bg-neutral-50/20">
-                <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900">Referral Sources</h3>
+                <h3 className="text-sm font-black uppercase tracking-widest text-white">Referral Sources</h3>
               </div>
               <div className="p-8 space-y-6">
                 {Object.entries(vibeStats.topReferrers).length > 0 ? (
                   Object.entries(vibeStats.topReferrers).map(([ref, count], i) => (
                     <div key={i} className="flex items-center justify-between">
                        <div className="flex items-center gap-4">
-                         <div className="w-10 h-10 rounded-2xl bg-neutral-100 border border-neutral-200 flex items-center justify-center">
-                           <Share2 size={16} className="text-neutral-500" />
+                         <div className="w-10 h-10 rounded-2xl bg-[#2a2a2a] border border-white/20 flex items-center justify-center">
+                           <Share2 size={16} className="text-neutral-400 font-bold" />
                          </div>
-                         <span className="text-[13px] font-black text-neutral-800 capitalize">{ref}</span>
+                         <span className="text-[13px] font-black text-neutral-200 capitalize">{ref}</span>
                        </div>
-                       <span className="text-[13px] font-black text-neutral-900">{count}</span>
+                       <span className="text-[13px] font-black text-white">{count}</span>
                     </div>
                   ))
                 ) : (
@@ -2453,7 +2439,7 @@ function Dashboard() {
             {/* Top Fans */}
             <div className="vibe-card overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.4s' }}>
               <div className="p-8 border-b border-neutral-50 bg-neutral-50/20">
-                <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900">Top Returning Fans</h3>
+                <h3 className="text-sm font-black uppercase tracking-widest text-white">Top Returning Fans</h3>
               </div>
               <div className="p-8 space-y-6">
                 {vibeStats.topFans?.length > 0 ? (
@@ -2468,15 +2454,15 @@ function Dashboard() {
                              className="rounded-2xl" 
                            />
                          ) : (
-                           <div className="w-10 h-10 rounded-2xl bg-neutral-100 border border-neutral-200 flex items-center justify-center">
-                             <Activity size={16} className="text-neutral-500" />
+                           <div className="w-10 h-10 rounded-2xl bg-[#2a2a2a] border border-white/20 flex items-center justify-center">
+                             <Activity size={16} className="text-neutral-400 font-bold" />
                            </div>
                          )}
                          <div className="flex flex-col">
-                           <span className="text-[13px] font-black text-neutral-800 capitalize">{fan.name}</span>
+                           <span className="text-[13px] font-black text-neutral-200 capitalize">{fan.name}</span>
                          </div>
                        </div>
-                       <span className="text-[13px] font-black text-neutral-900">{fan.count} Views</span>
+                       <span className="text-[13px] font-black text-white">{fan.count} Views</span>
                     </div>
                   ))
                 ) : (
@@ -2491,11 +2477,11 @@ function Dashboard() {
           <div className="grid lg:grid-cols-2 gap-6 animate-slideUp" style={{ animationDelay: '0.4s' }}>
             <div className="vibe-card overflow-visible flex flex-col">
               <div className="p-6 border-b border-neutral-50 flex justify-between items-center bg-neutral-50/30">
-                <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900 flex items-center gap-1.5">
+                <h3 className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-1.5">
                   Device Distribution
                   <div className="relative group flex shrink-0">
                     <div className="w-3.5 h-3.5 rounded-full bg-neutral-200 text-[9px] font-bold text-neutral-400 flex items-center justify-center cursor-help shrink-0 select-none hover:bg-neutral-300 transition-colors">i</div>
-                    <div className="absolute top-full left-0 mt-2 w-48 p-2.5 bg-neutral-900 text-white text-[10px] font-medium rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50 shadow-xl border border-neutral-800 font-sans normal-case tracking-normal leading-normal select-none">
+                    <div className="absolute top-full left-0 mt-2 w-48 p-2.5 bg-neutral-900 text-white text-[10px] font-medium rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50 shadow-[8px_8px_0px_#fff] border border-neutral-800 font-sans normal-case tracking-normal leading-normal select-none">
                       Devices (Mobile, Desktop, Tablet) used to scan or view your profile.
                     </div>
                   </div>
@@ -2517,8 +2503,8 @@ function Dashboard() {
                         <Target size={24} strokeWidth={2.5} />
                       </div>
                       <p className="text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-2">Intent Rate</p>
-                      <h3 className="text-5xl font-black font-display text-neutral-900 tracking-tight">{vibeStats.linkStats?.engagementIntentRate || 0}%</h3>
-                      <p className="text-xs text-neutral-500 font-medium mt-4">of profile viewers tapped a link.</p>
+                      <h3 className="text-5xl font-black font-display text-white tracking-tight">{vibeStats.linkStats?.engagementIntentRate || 0}%</h3>
+                      <p className="text-xs text-neutral-400 font-bold font-medium mt-4">of profile viewers tapped a link.</p>
                     </div>
 
                     <div className="vibe-card p-8 flex flex-col items-center justify-center text-center">
@@ -2526,8 +2512,8 @@ function Dashboard() {
                         <TrendingDown size={24} strokeWidth={2.5} />
                       </div>
                       <p className="text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-2">Bounce Rate</p>
-                      <h3 className="text-5xl font-black font-display text-neutral-900 tracking-tight">{vibeStats.linkStats?.bounceRate || 0}%</h3>
-                      <p className="text-xs text-neutral-500 font-medium mt-4">viewed but left without clicking.</p>
+                      <h3 className="text-5xl font-black font-display text-white tracking-tight">{vibeStats.linkStats?.bounceRate || 0}%</h3>
+                      <p className="text-xs text-neutral-400 font-bold font-medium mt-4">viewed but left without clicking.</p>
                     </div>
 
                     <div className="vibe-card p-8 flex flex-col items-center justify-center text-center">
@@ -2535,25 +2521,25 @@ function Dashboard() {
                         <Crown size={24} strokeWidth={2.5} />
                       </div>
                       <p className="text-[11px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-2">Top Link</p>
-                      <h3 className="text-4xl font-black font-display text-neutral-900 tracking-tight capitalize truncate w-full px-4">{vibeStats.linkStats?.topLink || 'None'}</h3>
-                      <p className="text-xs text-neutral-500 font-medium mt-4">most popular destination.</p>
+                      <h3 className="text-4xl font-black font-display text-white tracking-tight capitalize truncate w-full px-4">{vibeStats.linkStats?.topLink || 'None'}</h3>
+                      <p className="text-xs text-neutral-400 font-bold font-medium mt-4">most popular destination.</p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="vibe-card p-8">
-                      <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900 mb-6">Clicks by Platform</h3>
+                      <h3 className="text-sm font-black uppercase tracking-widest text-white mb-6">Clicks by Platform</h3>
                       <div className="space-y-4">
                         {vibeStats.linkStats?.clicksByPlatform && Object.keys(vibeStats.linkStats.clicksByPlatform).length > 0 ? (
                           Object.entries(vibeStats.linkStats.clicksByPlatform).map(([platform, count], i) => {
                             const ctr = vibeStats.uniqueViews > 0 ? Math.round((count / vibeStats.uniqueViews) * 100) : 0;
                             return (
-                            <div key={i} className="flex flex-col border-b border-neutral-100 pb-4 last:border-0 last:pb-0 pt-2">
+                            <div key={i} className="flex flex-col border-b border-white/20 pb-4 last:border-0 last:pb-0 pt-2">
                               <div className="flex items-center justify-between mb-2">
-                                <span className="text-[13px] font-black text-neutral-800 capitalize">{platform}</span>
-                                <span className="text-[13px] font-black text-neutral-900 bg-neutral-100 px-3 py-1 rounded-full">{count} clicks</span>
+                                <span className="text-[13px] font-black text-neutral-200 capitalize">{platform}</span>
+                                <span className="text-[13px] font-black text-white bg-[#2a2a2a] px-3 py-1 rounded-full">{count} clicks</span>
                               </div>
-                              <div className="w-full bg-neutral-100 rounded-full h-1.5 overflow-hidden">
+                              <div className="w-full bg-[#2a2a2a] rounded-full h-1.5 overflow-hidden">
                                 <div className="bg-neutral-900 h-full rounded-full transition-all duration-1000 ease-out" style={{ width: `${Math.min(ctr, 100)}%` }} />
                               </div>
                               <div className="text-[10px] font-bold text-neutral-400 mt-2 tracking-wider uppercase">{ctr}% Click-Through Rate</div>
@@ -2571,14 +2557,14 @@ function Dashboard() {
                     </div>
                     
                     <div className="vibe-card p-8">
-                      <h3 className="text-sm font-black uppercase tracking-widest text-neutral-900 mb-6">Recent Clicks</h3>
+                      <h3 className="text-sm font-black uppercase tracking-widest text-white mb-6">Recent Clicks</h3>
                       <div className="space-y-4">
                         {vibeStats.linkStats?.recentClicks?.length > 0 ? (
                           vibeStats.linkStats.recentClicks.map((click, i) => (
-                            <div key={i} className="flex items-center justify-between border-b border-neutral-100 pb-3 last:border-0 last:pb-0">
+                            <div key={i} className="flex items-center justify-between border-b border-white/20 pb-3 last:border-0 last:pb-0">
                               <div>
-                                <span className="text-[13px] font-black text-neutral-800 capitalize">{click.platform}</span>
-                                <p className="text-[10px] text-neutral-500 font-bold mt-1">{new Date(typeof click.clicked_at === 'string' ? click.clicked_at.replace(' ', 'T') : click.clicked_at).toLocaleString()}</p>
+                                <span className="text-[13px] font-black text-neutral-200 capitalize">{click.platform}</span>
+                                <p className="text-[10px] text-neutral-400 font-bold font-bold mt-1">{new Date(typeof click.clicked_at === 'string' ? click.clicked_at.replace(' ', 'T') : click.clicked_at).toLocaleString()}</p>
                               </div>
                               <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest bg-orange-50 px-2 py-1 rounded">Guest</span>
                             </div>
@@ -2616,8 +2602,8 @@ function Dashboard() {
                 </div>
 
                 {connections.length === 0 ? (
-                  <div className="card p-20 text-center bg-white shadow-xl">
-                    <div className="w-20 h-20 bg-neutral-50 rounded-full flex items-center justify-center mx-auto mb-6 text-neutral-300">
+                  <div className="card p-20 text-center bg-[#1a1a1a] shadow-[8px_8px_0px_#fff]">
+                    <div className="w-20 h-20 bg-[#1a1a1a] rounded-full flex items-center justify-center mx-auto mb-6 text-neutral-300">
                       <Users size={40} />
                     </div>
                     <h3 className="text-xl font-bold mb-2">No connections yet</h3>
@@ -2626,10 +2612,10 @@ function Dashboard() {
                 ) : (
                   <div className="grid gap-4">
                     {connections.map((conn, idx) => (
-                      <div key={idx} className="card p-6 bg-white shadow-sm flex items-center justify-between border border-neutral-100 hover:border-orange-500 transition-colors">
+                      <div key={idx} className="card p-6 bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] flex items-center justify-between border border-white/20 hover:border-orange-500 transition-colors">
                         <div>
-                          <h4 className="text-lg font-black text-neutral-900">{conn.visitor_name}</h4>
-                          <p className="text-sm text-neutral-500">{conn.visitor_email}</p>
+                          <h4 className="text-lg font-black text-white">{conn.visitor_name}</h4>
+                          <p className="text-sm text-neutral-400 font-bold">{conn.visitor_email}</p>
                           {conn.visitor_social && <p className="text-xs text-orange-500 font-bold mt-1">{conn.visitor_social}</p>}
                           {conn.visitor_message && <p className="text-sm italic text-neutral-400 mt-2">"{conn.visitor_message}"</p>}
                         </div>
@@ -2658,7 +2644,7 @@ function Dashboard() {
 
                 {!latestOrder ? (
                   <div className="card p-20 text-center">
-                    <div className="w-20 h-20 bg-neutral-50 rounded-full flex items-center justify-center mx-auto mb-6 text-neutral-300">
+                    <div className="w-20 h-20 bg-[#1a1a1a] rounded-full flex items-center justify-center mx-auto mb-6 text-neutral-300">
                       <ShoppingBag size={40} />
                     </div>
                     <h3 className="text-xl font-bold mb-2">No active orders</h3>
@@ -2668,7 +2654,7 @@ function Dashboard() {
                 ) : (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                     <div className="space-y-6">
-                      <div className="card p-8 bg-white shadow-xl border-none">
+                      <div className="card p-8 bg-[#1a1a1a] shadow-[8px_8px_0px_#fff] border-none">
                         <div className="flex justify-between items-start mb-10">
                           <div>
                             <p className="text-[10px] font-black uppercase text-neutral-400 mb-1">Order Placed</p>
@@ -2695,12 +2681,12 @@ function Dashboard() {
                             
                             return (
                               <div key={i} className={`flex gap-6 relative z-10 ${isCompleted ? 'opacity-100' : 'opacity-30'}`}>
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-4 border-white shadow-sm transition-all ${isCompleted ? 'bg-orange-500 text-white' : 'bg-neutral-100 text-neutral-400'}`}>
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-4 border-white shadow-[2px_2px_0px_#fff] transition-all ${isCompleted ? 'bg-orange-500 text-white' : 'bg-[#2a2a2a] text-neutral-400'}`}>
                                   <step.icon size={14} strokeWidth={3} />
                                 </div>
                                 <div className="pb-2">
-                                  <h4 className={`text-sm font-black uppercase tracking-wider mb-0.5 ${isCurrent ? 'text-orange-600' : 'text-neutral-900'}`}>{step.label}</h4>
-                                  <p className="text-xs text-neutral-500">{isCompleted ? step.desc : 'Waiting...'}</p>
+                                  <h4 className={`text-sm font-black uppercase tracking-wider mb-0.5 ${isCurrent ? 'text-orange-600' : 'text-white'}`}>{step.label}</h4>
+                                  <p className="text-xs text-neutral-400 font-bold">{isCompleted ? step.desc : 'Waiting...'}</p>
                                 </div>
                               </div>
                             )
@@ -2708,8 +2694,8 @@ function Dashboard() {
                         </div>
                       </div>
 
-                      <div className="card p-6 border-dashed bg-transparent flex items-center gap-4 text-neutral-500">
-                        <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-sm"><Globe size={24}/></div>
+                      <div className="card p-6 border-dashed bg-transparent flex items-center gap-4 text-neutral-400 font-bold">
+                        <div className="w-12 h-12 rounded-2xl bg-[#1a1a1a] flex items-center justify-center shadow-[2px_2px_0px_#fff]"><Globe size={24}/></div>
                         <div>
                           <p className="text-xs font-bold">Estimated Delivery</p>
                           <p className="text-[10px]">{latestOrder.estimated_delivery || 'Calculating based on your city...'}</p>
@@ -2717,13 +2703,13 @@ function Dashboard() {
                       </div>
                     </div>
 
-                    <div className="card p-6 lg:p-8 bg-white border border-neutral-100 shadow-xl rounded-[32px] flex flex-col justify-between">
+                    <div className="card p-6 lg:p-8 bg-[#1a1a1a] border border-white/20 shadow-[8px_8px_0px_#fff] rounded-[32px] flex flex-col justify-between">
                       <div>
                         <h3 className="text-xs font-black uppercase tracking-widest text-neutral-400 mb-6">Order Summary</h3>
                         
                         {/* Item Details */}
-                        <div className="flex items-center gap-4 py-4 border-b border-neutral-100">
-                          <div className="relative w-20 h-24 bg-neutral-50 rounded-2xl border border-neutral-100 overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
+                        <div className="flex items-center gap-4 py-4 border-b border-white/20">
+                          <div className="relative w-20 h-24 bg-[#1a1a1a] rounded-2xl border border-white/20 overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
                             <img 
                               src={getAssetUrl(latestOrder.model_image_url) || '/assets/tees/front.png'} 
                               className="w-full h-full object-cover" 
@@ -2739,7 +2725,7 @@ function Dashboard() {
                           </div>
                           
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-black text-sm text-neutral-950 leading-snug truncate">
+                            <h4 className="font-black text-sm text-white leading-snug truncate">
                               {latestOrder.item_name || 'Creator Identity Tee'}
                             </h4>
                             <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mt-1">
@@ -2751,17 +2737,17 @@ function Dashboard() {
                           </div>
 
                           <div className="text-right">
-                            <span className="font-black text-sm text-neutral-950">₹{latestOrder.amount || '999'}</span>
+                            <span className="font-black text-sm text-white">₹{latestOrder.amount || '999'}</span>
                           </div>
                         </div>
 
                         {/* Financial Breakdown */}
-                        <div className="py-6 border-b border-neutral-100 space-y-3.5 text-xs">
-                          <div className="flex justify-between items-center text-neutral-500 font-medium">
+                        <div className="py-6 border-b border-white/20 space-y-3.5 text-xs">
+                          <div className="flex justify-between items-center text-neutral-400 font-bold font-medium">
                             <span>Subtotal</span>
-                            <span className="font-bold text-neutral-950">₹{latestOrder.amount || '999'}</span>
+                            <span className="font-bold text-white">₹{latestOrder.amount || '999'}</span>
                           </div>
-                          <div className="flex justify-between items-center text-neutral-500 font-medium">
+                          <div className="flex justify-between items-center text-neutral-400 font-bold font-medium">
                             <span>Taxes & Shipping</span>
                             <span className="font-bold text-emerald-600">₹0 (All Inclusive)</span>
                           </div>
@@ -2774,7 +2760,7 @@ function Dashboard() {
                           <span className="text-xs font-black uppercase tracking-widest text-neutral-400">Total Paid</span>
                         </div>
                         <div className="text-right">
-                          <span className="font-black text-2xl text-neutral-950">₹{latestOrder.amount || '999'}</span>
+                          <span className="font-black text-2xl text-white">₹{latestOrder.amount || '999'}</span>
                           <span className="block text-[8px] font-bold text-neutral-400 uppercase tracking-widest mt-0.5">INR (Indian Rupee)</span>
                         </div>
                       </div>
@@ -2783,7 +2769,7 @@ function Dashboard() {
                 )}
 
                 {/* Return Request Form */}
-                <div className="card p-8 bg-white shadow-sm border border-neutral-100">
+                <div className="card p-8 bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] border border-white/20">
                   <div className="mb-6">
                     <p className="text-[11px] font-black uppercase text-orange-500 tracking-[0.2em] mb-1">Support</p>
                     <h3 className="text-2xl font-display font-black tracking-tight">Report an Issue</h3>
@@ -2793,9 +2779,9 @@ function Dashboard() {
                 </div>
 
                 {/* Account Deletion */}
-                <div className="card p-8 bg-white shadow-sm border border-red-50">
+                <div className="card p-8 bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] border border-red-50">
                   <p className="text-[11px] font-black uppercase text-red-400 tracking-[0.2em] mb-1">Danger Zone</p>
-                  <h3 className="text-xl font-display font-black tracking-tight text-neutral-800 mb-2">Delete My Account</h3>
+                  <h3 className="text-xl font-display font-black tracking-tight text-neutral-200 mb-2">Delete My Account</h3>
                   <p className="text-sm text-neutral-400 mb-5 leading-relaxed">Request permanent deletion of your KnoWMi account and personal data. This cannot be undone. Order records are retained for 7 years for tax compliance.</p>
                   <AccountDeletionButton user={user} supabaseClient={supabase} profile={profile} />
                 </div>
@@ -2816,23 +2802,23 @@ function Dashboard() {
           
           <div className={`tab-transition ${activeTab === 'business' ? 'tab-visible' : 'tab-hidden'}`}>
             {activeTab === 'business' && (
-              <div className="relative h-[80vh] flex flex-col items-center justify-center p-8 text-center select-none bg-neutral-50/50 rounded-3xl border border-neutral-100">
+              <div className="relative h-[80vh] flex flex-col items-center justify-center p-8 text-center select-none bg-neutral-50/50 rounded-3xl border border-white/20">
                 <div className="relative inline-flex items-center justify-center mb-6">
                   <div className="absolute inset-0 bg-orange-500/20 rounded-full blur-2xl animate-pulse" />
-                  <div className="relative w-24 h-24 bg-white border-2 border-orange-500 rounded-3xl flex items-center justify-center shadow-2xl">
+                  <div className="relative w-24 h-24 bg-[#1a1a1a] border-2 border-orange-500 rounded-3xl flex items-center justify-center shadow-[8px_8px_0px_#fff]">
                     <Crown size={44} className="text-orange-500" />
                   </div>
                 </div>
                 <h3 
                   style={{ fontFamily: 'Fraunces, serif' }} 
-                  className="text-3xl font-black mb-3 text-neutral-950"
+                  className="text-3xl font-black mb-3 text-white"
                 >
                   Teams & Business Plan
                 </h3>
-                <p className="text-sm font-semibold max-w-sm mb-8 leading-relaxed text-neutral-600">
+                <p className="text-sm font-semibold max-w-sm mb-8 leading-relaxed text-neutral-400">
                   We are currently crafting exclusive tools for teams and businesses. Team networking, bulk card orders, and corporate branding are coming soon!
                 </p>
-                <div className="px-6 py-3 bg-neutral-900 text-white font-black text-xs uppercase tracking-widest rounded-xl shadow-lg">
+                <div className="px-6 py-3 bg-neutral-900 text-white font-black text-xs uppercase tracking-widest rounded-xl shadow-[6px_6px_0px_#fff]">
                   Coming Soon
                 </div>
               </div>
@@ -2843,8 +2829,8 @@ function Dashboard() {
         {/* Global Live Toast Notification - TOP BANNER */}
         {isLive && (
           <div className="fixed top-0 left-0 right-0 z-[9999] animate-vibeSlideDown">
-            <div className="bg-orange-500 text-white px-6 py-3 flex items-center justify-center gap-3 shadow-2xl">
-              <div className="w-2 h-2 rounded-full bg-white animate-ping" />
+            <div className="bg-orange-500 text-white px-6 py-3 flex items-center justify-center gap-3 shadow-[8px_8px_0px_#fff]">
+              <div className="w-2 h-2 rounded-full bg-[#1a1a1a] animate-ping" />
               <Eye size={18} className="animate-pulse" />
               <span className="text-xs font-black uppercase tracking-[0.2em]">
                 Live: Someone is seeing your profile right now!
@@ -2874,7 +2860,7 @@ function Dashboard() {
               className={`flex flex-col items-center justify-center flex-1 h-14 rounded-[20px] transition-all duration-300 relative group
                 ${activeTab === tab.id 
                   ? (isVibeDark ? 'bg-orange-500/20 text-orange-400 shadow-[0_4px_12px_rgba(234,88,12,0.1)] -translate-y-1' : 'bg-orange-50 text-orange-600 shadow-[0_4px_12px_rgba(224,123,26,0.08)] -translate-y-1') 
-                  : (isVibeDark ? 'text-neutral-500 hover:text-white' : 'text-neutral-400')}`}
+                  : (isVibeDark ? 'text-neutral-400 font-bold hover:text-white' : 'text-neutral-400')}`}
             >
               <tab.icon size={22} className={`transition-all duration-300 ${activeTab === tab.id ? 'drop-shadow-[0_0_8px_rgba(224,123,26,0.3)] scale-110' : 'group-hover:scale-110'}`}/>
               <span className={`text-[9px] font-black uppercase tracking-wider mt-1 transition-all duration-300 ${activeTab === tab.id ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>
@@ -2887,12 +2873,12 @@ function Dashboard() {
 
       {showOnboardingModal && (
         <div className="fixed inset-0 z-[150] bg-black/70 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn text-white select-none">
-          <div className="bg-gradient-to-r from-neutral-900 to-neutral-950 text-white rounded-[32px] p-8 md:p-10 shadow-2xl relative overflow-hidden border border-white/5 max-w-4xl w-full">
+          <div className="bg-gradient-to-r from-neutral-900 to-neutral-950 text-white rounded-[32px] p-8 md:p-10 shadow-[8px_8px_0px_#fff] relative overflow-hidden border border-white/5 max-w-4xl w-full">
             <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-[100px] -mr-20 -mt-20 pointer-events-none" />
             
             <button 
               onClick={() => setShowOnboardingModal(false)} 
-              className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white transition-colors"
+              className="absolute top-6 right-6 p-2 rounded-xl bg-[#1a1a1a]/5 hover:bg-[#1a1a1a]/10 text-neutral-400 hover:text-white transition-colors"
               title="Close guide"
             >
               <X size={18} />
@@ -2911,7 +2897,7 @@ function Dashboard() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-white">
                 {/* Step 1 */}
-                <div className={`p-6 rounded-2xl border transition-all duration-300 ${profile?.persona_type ? 'bg-white/5 border-emerald-500/20' : 'bg-white/[0.02] border-white/5'}`}>
+                <div className={`p-6 rounded-2xl border transition-all duration-300 ${profile?.persona_type ? 'bg-[#1a1a1a]/5 border-emerald-500/20' : 'bg-[#1a1a1a]/[0.02] border-white/5'}`}>
                   <div className="flex justify-between items-start mb-4">
                     <span className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${profile?.persona_type ? 'bg-emerald-500/15 text-emerald-400' : 'bg-orange-500/15 text-orange-400'}`}>
                       {profile?.persona_type ? '✓' : '1'}
@@ -2937,7 +2923,7 @@ function Dashboard() {
                 </div>
 
                 {/* Step 2 */}
-                <div className={`p-6 rounded-2xl border transition-all duration-300 ${hasPreviewed ? 'bg-white/5 border-emerald-500/20' : 'bg-white/[0.02] border-white/5'}`}>
+                <div className={`p-6 rounded-2xl border transition-all duration-300 ${hasPreviewed ? 'bg-[#1a1a1a]/5 border-emerald-500/20' : 'bg-[#1a1a1a]/[0.02] border-white/5'}`}>
                   <div className="flex justify-between items-start mb-4">
                     <span className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${hasPreviewed ? 'bg-emerald-500/15 text-emerald-400' : 'bg-orange-500/15 text-orange-400'}`}>
                       {hasPreviewed ? '✓' : '2'}
@@ -2957,7 +2943,7 @@ function Dashboard() {
                         setHasPreviewed(true);
                       }} 
                       disabled={!profile?.persona_type}
-                      className="w-full py-2.5 bg-white/5 hover:bg-white/10 text-white border border-white/10 font-black text-[10px] uppercase tracking-widest rounded-xl transition-all disabled:opacity-30 disabled:hover:bg-transparent"
+                      className="w-full py-2.5 bg-[#1a1a1a]/5 hover:bg-[#1a1a1a]/10 text-white border border-white/10 font-black text-[10px] uppercase tracking-widest rounded-xl transition-all disabled:opacity-30 disabled:hover:bg-transparent"
                     >
                       Preview live
                     </button>
@@ -2969,7 +2955,7 @@ function Dashboard() {
                 </div>
 
                 {/* Step 3 */}
-                <div className={`p-6 rounded-2xl border transition-all duration-300 ${hasShared ? 'bg-white/5 border-emerald-500/20' : 'bg-white/[0.02] border-white/5'}`}>
+                <div className={`p-6 rounded-2xl border transition-all duration-300 ${hasShared ? 'bg-[#1a1a1a]/5 border-emerald-500/20' : 'bg-[#1a1a1a]/[0.02] border-white/5'}`}>
                   <div className="flex justify-between items-start mb-4">
                     <span className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${hasShared ? 'bg-emerald-500/15 text-emerald-400' : 'bg-orange-500/15 text-orange-400'}`}>
                       {hasShared ? '✓' : '3'}
@@ -2991,7 +2977,7 @@ function Dashboard() {
                         toast.success("Profile link copied! 🔗");
                       }} 
                       disabled={!profile?.persona_type || !hasPreviewed}
-                      className="w-full py-2.5 bg-white/5 hover:bg-white/10 text-white border border-white/10 font-black text-[10px] uppercase tracking-widest rounded-xl transition-all disabled:opacity-30 disabled:hover:bg-transparent"
+                      className="w-full py-2.5 bg-[#1a1a1a]/5 hover:bg-[#1a1a1a]/10 text-white border border-white/10 font-black text-[10px] uppercase tracking-widest rounded-xl transition-all disabled:opacity-30 disabled:hover:bg-transparent"
                     >
                       Copy Share Link
                     </button>
@@ -3006,7 +2992,7 @@ function Dashboard() {
           </div>
         </div>
       )}
-      {showComingSoon && <div className="fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full flex items-center gap-2 shadow-2xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-5 font-bold text-sm whitespace-nowrap" style={{ background: '#ea580c', color: 'white', zIndex: 9999 }}><Lock size={16} /> Business Center Coming Soon!</div>}
+      {showComingSoon && <div className="fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full flex items-center gap-2 shadow-[8px_8px_0px_#fff] transition-all duration-300 animate-in fade-in slide-in-from-bottom-5 font-bold text-sm whitespace-nowrap" style={{ background: '#ea580c', color: 'white', zIndex: 9999 }}><Lock size={16} /> Business Center Coming Soon!</div>}
       </div>
     )
   }

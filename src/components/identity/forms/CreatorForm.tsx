@@ -46,8 +46,8 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
   }
 
   // Helper for consistent input styling
-  const inputBaseClasses = "w-full bg-neutral-50/50 border border-neutral-200 hover:border-neutral-300 rounded-xl px-4 py-3 text-sm font-semibold text-neutral-900 focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 transition-all outline-none placeholder:text-neutral-400";
-  const labelClasses = "block text-[11px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5";
+  const inputBaseClasses = "w-full bg-[#1a1a1a] border-[3px] border-white/20 text-white shadow-[inset_0px_2px_4px_rgba(0,0,0,0.5)] hover:border-white/40 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:bg-[#1a1a1a] focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 transition-all outline-none placeholder:text-neutral-400";
+  const labelClasses = "block text-[11px] font-bold uppercase tracking-wider text-neutral-400 font-bold mb-1.5";
   const charCountClasses = (current: number, max: number) => 
     `text-[10px] font-bold absolute right-3 top-1.5 ${current > max ? 'text-red-500' : 'text-neutral-400'}`;
 
@@ -55,18 +55,18 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
     <div className="space-y-8 sm:space-y-12 py-6 animate-fadeIn max-w-4xl mx-auto pb-20">
       
       {/* BRAND & AESTHETIC */}
-      <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60 relative overflow-hidden">
+      <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60 relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
           <Sparkles size={100} />
         </div>
         
         <div className="flex items-center gap-3 mb-6 relative z-10">
-          <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
             <Camera size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-black text-neutral-900">Brand Identity & Aesthetic</h3>
-            <p className="text-xs font-medium text-neutral-500">Your profile banner and core style</p>
+            <h3 className="text-lg font-black text-white">Brand Identity & Aesthetic</h3>
+            <p className="text-xs font-medium text-neutral-400 font-bold">Your profile banner and core style</p>
           </div>
         </div>
 
@@ -75,7 +75,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
           <div className="flex flex-col">
             <label className={labelClasses}>Profile Banner</label>
             <div className="relative group flex-1 min-h-[160px]">
-              <div className="w-full h-full rounded-2xl overflow-hidden bg-neutral-50 border-2 border-dashed border-neutral-200 hover:border-purple-400 transition-all flex flex-col items-center justify-center cursor-pointer relative">
+              <div className="w-full h-full rounded-2xl overflow-hidden bg-[#1a1a1a] border-2 border-dashed border-white/20 hover:border-purple-400 transition-all flex flex-col items-center justify-center cursor-pointer relative">
                 {data.featured_work_url ? (
                   <>
                     <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Banner Preview" />
@@ -88,7 +88,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
                   <div className="flex flex-col items-center gap-2 text-neutral-400 p-4 text-center">
                     <Camera size={28} className="text-purple-400" />
                     <div>
-                      <span className="text-xs font-bold text-neutral-700">Upload Banner</span>
+                      <span className="text-xs font-bold text-neutral-300">Upload Banner</span>
                       <p className="text-[10px] mt-0.5">1200x400 JPG/PNG</p>
                     </div>
                   </div>
@@ -108,7 +108,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
                 />
               </div>
               {uploading && (
-                <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-2xl flex items-center justify-center z-20">
+                <div className="absolute inset-0 bg-[#1a1a1a]/80 backdrop-blur-sm rounded-2xl flex items-center justify-center z-20">
                   <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               )}
@@ -148,14 +148,14 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         {/* AVAILABILITY */}
-        <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60">
+        <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
               <Clock size={20} />
             </div>
             <div>
-              <h3 className="text-lg font-black text-neutral-900">Availability Status</h3>
-              <p className="text-xs font-medium text-neutral-500">Real-time signal for brands</p>
+              <h3 className="text-lg font-black text-white">Availability Status</h3>
+              <p className="text-xs font-medium text-neutral-400 font-bold">Real-time signal for brands</p>
             </div>
           </div>
 
@@ -179,7 +179,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
                <input type="text" value={data.preferred_contact_method || ''} onChange={e => updateField('preferred_contact_method', e.target.value.slice(0, 20))} placeholder="e.g. Email, DM" className={inputBaseClasses} />
                <span className={charCountClasses((data.preferred_contact_method || '').length, 20)}>{(data.preferred_contact_method || '').length}/20</span>
             </div>
-            <div className="pt-4 border-t border-neutral-100">
+            <div className="pt-4 border-t border-white/20">
                <label className={labelClasses}>Contact Email</label>
                <input type="email" value={data.contact_email || ''} onChange={e => updateField('contact_email', e.target.value)} placeholder="hello@yourbrand.com" className={inputBaseClasses} />
             </div>
@@ -197,14 +197,14 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
         </section>
 
         {/* COLLAB PREFERENCES */}
-        <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60">
+        <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
               <Briefcase size={20} />
             </div>
             <div>
-              <h3 className="text-lg font-black text-neutral-900">Collab Preferences</h3>
-              <p className="text-xs font-medium text-neutral-500">How you work with brands</p>
+              <h3 className="text-lg font-black text-white">Collab Preferences</h3>
+              <p className="text-xs font-medium text-neutral-400 font-bold">How you work with brands</p>
             </div>
           </div>
 
@@ -216,7 +216,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
             </div>
             <div>
               <div className="flex justify-between items-end mb-1.5">
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-500 m-0">Collab Types (Max 4)</label>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 font-bold m-0">Collab Types (Max 4)</label>
                 <span className="text-[10px] font-bold text-neutral-400">{(data.collab_types_tags || []).length}/4</span>
               </div>
               <TagInput 
@@ -240,7 +240,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
             </div>
             <div>
               <div className="flex justify-between items-end mb-1.5">
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-500 m-0">Deliverable Formats (Max 5)</label>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 font-bold m-0">Deliverable Formats (Max 5)</label>
                 <span className="text-[10px] font-bold text-neutral-400">{(data.deliverable_formats || []).length}/5</span>
               </div>
               <TagInput 
@@ -255,14 +255,14 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
       </div>
 
       {/* SECTION 3: AUDIENCE SNAPSHOT */}
-      <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60">
+      <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
             <Users size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-black text-neutral-900">Audience Snapshot</h3>
-            <p className="text-xs font-medium text-neutral-500">Quick self-declared demographics</p>
+            <h3 className="text-lg font-black text-white">Audience Snapshot</h3>
+            <p className="text-xs font-medium text-neutral-400 font-bold">Quick self-declared demographics</p>
           </div>
         </div>
 
@@ -280,7 +280,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
         </div>
         <div>
           <div className="flex justify-between items-end mb-1.5">
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-500 m-0">Top Interests (Max 5, 20 chars each)</label>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 font-bold m-0">Top Interests (Max 5, 20 chars each)</label>
             <span className="text-[10px] font-bold text-neutral-400">{(data.audience_interests || []).length}/5</span>
           </div>
           <TagInput 
@@ -293,32 +293,32 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
       </section>
 
       {/* SECTION 5: PAST COLLABORATIONS */}
-      <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60">
+      <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
               <Target size={20} />
             </div>
             <div>
-              <h3 className="text-lg font-black text-neutral-900">Past Collaborations</h3>
-              <p className="text-xs font-medium text-neutral-500">Showcase up to 3 major brand deals</p>
+              <h3 className="text-lg font-black text-white">Past Collaborations</h3>
+              <p className="text-xs font-medium text-neutral-400 font-bold">Showcase up to 3 major brand deals</p>
             </div>
           </div>
-          <span className="text-xs font-bold text-neutral-400 bg-neutral-100 px-3 py-1 rounded-full">
+          <span className="text-xs font-bold text-neutral-400 bg-[#2a2a2a] px-3 py-1 rounded-full">
             {(data.past_collaborations || []).length}/3
           </span>
         </div>
 
         <div className="space-y-6">
           {(data.past_collaborations || []).map((collab: any, i: number) => (
-            <div key={i} className="p-5 sm:p-6 bg-neutral-50 border border-neutral-200 rounded-3xl relative group flex flex-col sm:flex-row gap-6">
+            <div key={i} className="p-5 sm:p-6 bg-[#1a1a1a] border border-white/20 rounded-3xl relative group flex flex-col sm:flex-row gap-6">
               <button type="button" onClick={() => {
                 const cCopy = [...(data.past_collaborations || [])]; cCopy.splice(i, 1); updateField('past_collaborations', cCopy);
-              }} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm z-10 hover:bg-red-500 hover:text-white">
+              }} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[2px_2px_0px_#fff] z-10 hover:bg-red-500 hover:text-white">
                 <Trash2 size={16} />
               </button>
 
-              <div className="w-24 h-24 rounded-2xl bg-white border border-neutral-200 overflow-hidden relative flex-shrink-0">
+              <div className="w-24 h-24 rounded-2xl bg-[#1a1a1a] border border-white/20 overflow-hidden relative flex-shrink-0">
                 <div className="w-full h-full relative group/media cursor-pointer flex flex-col items-center justify-center">
                   {collab.logo_url ? (
                     <>
@@ -330,7 +330,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
                   ) : (
                     <div className="flex flex-col items-center gap-1 text-neutral-400">
                       <Upload size={20} className="text-indigo-400" />
-                      <span className="text-[9px] font-bold uppercase text-neutral-500 text-center px-1">Logo</span>
+                      <span className="text-[9px] font-bold uppercase text-neutral-400 font-bold text-center px-1">Logo</span>
                     </div>
                   )}
                   <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10" onChange={(e) => {
@@ -360,8 +360,8 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
           ))}
 
           {(data.past_collaborations || []).length < 3 && (
-            <button type="button" onClick={() => updateField('past_collaborations', [...(data.past_collaborations || []), { brand_name: '', campaign_description: '', logo_url: '', link: '' }])} className="w-full py-6 border-2 border-dashed border-neutral-200 rounded-3xl text-sm font-bold text-neutral-500 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 transition-all flex flex-col items-center justify-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm">
+            <button type="button" onClick={() => updateField('past_collaborations', [...(data.past_collaborations || []), { brand_name: '', campaign_description: '', logo_url: '', link: '' }])} className="w-full py-6 border-2 border-dashed border-white/20 rounded-3xl text-sm font-bold text-neutral-400 font-bold hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 transition-all flex flex-col items-center justify-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center shadow-[2px_2px_0px_#fff]">
                 <Plus size={20} />
               </div>
               Add Collaboration
@@ -371,18 +371,18 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
       </section>
 
       {/* CURATED PORTFOLIO (Existing logic kept for backward compatibility/value) */}
-      <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60">
+      <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
               <Layout size={20} />
             </div>
             <div>
-              <h3 className="text-lg font-black text-neutral-900">Showcase Gallery</h3>
-              <p className="text-xs font-medium text-neutral-500">Up to 2 masterpieces</p>
+              <h3 className="text-lg font-black text-white">Showcase Gallery</h3>
+              <p className="text-xs font-medium text-neutral-400 font-bold">Up to 2 masterpieces</p>
             </div>
           </div>
-          <span className="text-xs font-bold text-neutral-400 bg-neutral-100 px-3 py-1 rounded-full">
+          <span className="text-xs font-bold text-neutral-400 bg-[#2a2a2a] px-3 py-1 rounded-full">
             {(data.works || []).length}/2
           </span>
         </div>
@@ -390,14 +390,14 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
         <div className="space-y-6">
           {(data.works || []).map((work: any, i: number) => {
             return (
-              <div key={i} className="p-5 sm:p-6 bg-neutral-50 border border-neutral-200 rounded-3xl relative group flex flex-col lg:flex-row gap-6">
+              <div key={i} className="p-5 sm:p-6 bg-[#1a1a1a] border border-white/20 rounded-3xl relative group flex flex-col lg:flex-row gap-6">
                 <button type="button" onClick={() => {
                   const wCopy = [...(data.works || [])]; wCopy.splice(i, 1); updateField('works', wCopy);
-                }} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm z-10 hover:bg-red-500 hover:text-white">
+                }} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[2px_2px_0px_#fff] z-10 hover:bg-red-500 hover:text-white">
                   <Trash2 size={16} />
                 </button>
 
-                <div className="w-full lg:w-56 h-40 rounded-2xl bg-white border border-neutral-200 overflow-hidden relative flex-shrink-0">
+                <div className="w-full lg:w-56 h-40 rounded-2xl bg-[#1a1a1a] border border-white/20 overflow-hidden relative flex-shrink-0">
                   <div className="w-full h-full relative group/media cursor-pointer flex flex-col items-center justify-center">
                     {work.url ? (
                       <>
@@ -415,7 +415,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
                       <div className="flex flex-col items-center gap-2 text-neutral-400">
                         <Upload size={24} className="text-orange-400" />
                         <div className="text-center">
-                          <span className="text-[10px] font-bold uppercase text-neutral-500">Upload Media</span>
+                          <span className="text-[10px] font-bold uppercase text-neutral-400 font-bold">Upload Media</span>
                         </div>
                       </div>
                     )}
@@ -452,8 +452,8 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
           })}
 
           {(data.works || []).length < 2 && (
-            <button type="button" onClick={() => updateField('works', [...(data.works || []), { title: '', type: 'image', url: '', thumbnail_url: '', external_url: '' }])} className="w-full py-8 border-2 border-dashed border-neutral-200 rounded-3xl text-sm font-bold text-neutral-500 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-300 transition-all flex flex-col items-center justify-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm">
+            <button type="button" onClick={() => updateField('works', [...(data.works || []), { title: '', type: 'image', url: '', thumbnail_url: '', external_url: '' }])} className="w-full py-8 border-2 border-dashed border-white/20 rounded-3xl text-sm font-bold text-neutral-400 font-bold hover:bg-orange-50 hover:text-orange-600 hover:border-orange-300 transition-all flex flex-col items-center justify-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center shadow-[2px_2px_0px_#fff]">
                 <Plus size={20} />
               </div>
               Add Another Masterpiece
@@ -463,28 +463,28 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
       </section>
 
       {/* NETWORK PRESENCE (Socials) */}
-      <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60 flex flex-col">
+      <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60 flex flex-col">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
               <Globe size={20} />
             </div>
             <div>
-              <h3 className="text-lg font-black text-neutral-900">Network Presence</h3>
-              <p className="text-xs font-medium text-neutral-500">Max 6 platforms</p>
+              <h3 className="text-lg font-black text-white">Network Presence</h3>
+              <p className="text-xs font-medium text-neutral-400 font-bold">Max 6 platforms</p>
             </div>
           </div>
-          <span className="text-xs font-bold text-neutral-400 bg-neutral-100 px-3 py-1 rounded-full">
+          <span className="text-xs font-bold text-neutral-400 bg-[#2a2a2a] px-3 py-1 rounded-full">
             {(data.platforms || []).length}/6
           </span>
         </div>
 
         <div className="space-y-4 flex-1">
           {(data.platforms || []).map((p: any, i: number) => (
-            <div key={i} className="flex flex-col sm:flex-row gap-3 p-4 bg-neutral-50 border border-neutral-200 rounded-2xl relative group">
+            <div key={i} className="flex flex-col sm:flex-row gap-3 p-4 bg-[#1a1a1a] border border-white/20 rounded-2xl relative group">
               <button type="button" onClick={() => {
                 const pCopy = [...(data.platforms || [])]; pCopy.splice(i, 1); updateField('platforms', pCopy);
-              }} className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-red-100 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm z-10 hover:bg-red-500 hover:text-white">
+              }} className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-red-100 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[2px_2px_0px_#fff] z-10 hover:bg-red-500 hover:text-white">
                 <Trash2 size={14} />
               </button>
               <div className="w-full sm:w-1/3">
@@ -516,7 +516,7 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
           ))}
           
           {(data.platforms || []).length < 6 && (
-            <button type="button" onClick={() => updateField('platforms', [...(data.platforms || []), { platform: '', url: '', followers: '' }])} className="w-full py-4 border-2 border-dashed border-neutral-200 rounded-2xl text-xs font-bold text-neutral-500 hover:bg-neutral-50 hover:text-sky-600 hover:border-sky-300 transition-all flex items-center justify-center gap-2 mt-auto">
+            <button type="button" onClick={() => updateField('platforms', [...(data.platforms || []), { platform: '', url: '', followers: '' }])} className="w-full py-4 border-2 border-dashed border-white/20 rounded-2xl text-xs font-bold text-neutral-400 font-bold hover:bg-[#1a1a1a] hover:text-sky-600 hover:border-sky-300 transition-all flex items-center justify-center gap-2 mt-auto">
               <Plus size={16} /> Add Social Link
             </button>
           )}

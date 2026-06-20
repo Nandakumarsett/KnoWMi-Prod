@@ -42,7 +42,7 @@ export function BestTimeCard({ profileId }: Props) {
         <span className={`text-[10px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full ${
           bestTime.confidence === 'high' ? 'bg-green-500/10 text-green-500' :
           bestTime.confidence === 'medium' ? 'bg-orange-500/10 text-orange-500' :
-          'bg-neutral-500/10 text-neutral-500'
+          'bg-neutral-500/10 text-neutral-400 font-bold'
         }`}>
           {bestTime.confidence} confidence
         </span>
@@ -50,7 +50,7 @@ export function BestTimeCard({ profileId }: Props) {
 
       <div className="space-y-3">
         <div className="flex items-baseline justify-between gap-4">
-          <span className="text-xs text-neutral-500 font-bold uppercase tracking-wider">
+          <span className="text-xs text-neutral-400 font-bold font-bold uppercase tracking-wider">
             Optimal Window:
           </span>
           <span className="text-xl font-display font-black text-white">

@@ -20,9 +20,9 @@ export default function ScoreBreakdownBars({ score }: { score: any }) {
         <div key={item.label}>
           <div className="flex justify-between items-end mb-2">
             <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">{item.label}</span>
-            <span className="text-xs font-bold text-neutral-900">{item.value} <span className="text-neutral-300">/ {item.max}</span></span>
+            <span className="text-xs font-bold text-white">{item.value} <span className="text-neutral-300">/ {item.max}</span></span>
           </div>
-          <div className="h-1.5 w-full bg-neutral-100 rounded-full overflow-hidden">
+          <div className="h-1.5 w-full bg-[#2a2a2a] rounded-full overflow-hidden">
             <div 
               style={{ 
                 width: mounted ? `${(item.value / item.max) * 100}%` : '0%',

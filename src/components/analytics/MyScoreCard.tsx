@@ -37,15 +37,15 @@ export default function MyScoreCard({ profileId }: { profileId: string }) {
     if (profileId) fetchData();
   }, [profileId]);
 
-  if (loading) return <div className="h-96 bg-white animate-pulse rounded-[2.5rem]" />;
+  if (loading) return <div className="h-96 bg-[#1a1a1a] animate-pulse rounded-[2.5rem]" />;
   if (!score) return null;
 
   const potentialGain = Math.round((1 - score.score_completeness / 120) * 120);
 
   return (
-    <div className="bg-white rounded-[2.5rem] border border-neutral-200 shadow-sm overflow-hidden flex flex-col">
+    <div className="bg-[#1a1a1a] rounded-[2.5rem] border border-white/20 shadow-[2px_2px_0px_#fff] overflow-hidden flex flex-col">
       {/* Top Section: Hero Score */}
-      <div className="p-8 bg-gradient-to-br from-neutral-50 to-white border-b border-neutral-100">
+      <div className="p-8 bg-gradient-to-br from-neutral-50 to-white border-b border-white/20">
         <div className="flex justify-between items-start mb-6">
           <div>
             <h3 className="text-sm font-display text-neutral-400 uppercase tracking-widest mb-1">Your KnoWMi Score</h3>
@@ -55,7 +55,7 @@ export default function MyScoreCard({ profileId }: { profileId: string }) {
             </div>
           </div>
           <div className="flex flex-col items-end">
-            <div className="flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 rounded-2xl shadow-lg">
+            <div className="flex items-center gap-2 bg-neutral-900 text-white px-4 py-2 rounded-2xl shadow-[6px_6px_0px_#fff]">
               <Trophy size={18} className="text-amber-400" />
               <span className="font-black">Rank #{score.rank}</span>
             </div>
@@ -71,9 +71,9 @@ export default function MyScoreCard({ profileId }: { profileId: string }) {
       </div>
 
       {/* Middle Section: Breakdown */}
-      <div className="p-8 border-b border-neutral-100">
+      <div className="p-8 border-b border-white/20">
         <div className="flex items-center justify-between mb-8">
-          <h4 className="text-sm font-display text-neutral-900 uppercase tracking-widest">Score Breakdown</h4>
+          <h4 className="text-sm font-display text-white uppercase tracking-widest">Score Breakdown</h4>
           <Info size={16} className="text-neutral-300" />
         </div>
         <ScoreBreakdownBars score={score} />
@@ -82,7 +82,7 @@ export default function MyScoreCard({ profileId }: { profileId: string }) {
       {/* Bottom Section: Trend */}
       <div className="p-8 flex-1">
         <div className="flex items-center justify-between mb-8">
-          <h4 className="text-sm font-display text-neutral-900 uppercase tracking-widest">30-Day Trend</h4>
+          <h4 className="text-sm font-display text-white uppercase tracking-widest">30-Day Trend</h4>
           <div className="flex items-center gap-1 text-emerald-500 text-xs font-bold">
             <TrendingUp size={14} />
             Stable Growth
@@ -100,8 +100,8 @@ export default function MyScoreCard({ profileId }: { profileId: string }) {
             <AlertCircle size={20} />
           </div>
           <div>
-            <p className="text-sm font-bold text-neutral-900 mb-1">Boost Your Score</p>
-            <p className="text-xs text-neutral-500 leading-relaxed">
+            <p className="text-sm font-bold text-white mb-1">Boost Your Score</p>
+            <p className="text-xs text-neutral-400 font-bold leading-relaxed">
               Your score could improve by <span className="font-bold text-orange-600">~{potentialGain} points</span> if you complete your profile bio and social links.
             </p>
           </div>

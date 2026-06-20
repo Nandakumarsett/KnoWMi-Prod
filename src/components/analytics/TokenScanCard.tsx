@@ -23,7 +23,7 @@ export default function TokenScanCard({ stats }: TokenScanCardProps) {
           <Activity size={10} className="text-orange-500" />
           <span>Total Scans</span>
         </div>
-        <p className="text-lg font-black text-neutral-900">{total_scans.toLocaleString()}</p>
+        <p className="text-lg font-black text-white">{total_scans.toLocaleString()}</p>
       </div>
 
       <div className="space-y-1">
@@ -31,7 +31,7 @@ export default function TokenScanCard({ stats }: TokenScanCardProps) {
           <Users size={10} className="text-blue-500" />
           <span>Unique Reach</span>
         </div>
-        <p className="text-lg font-black text-neutral-900">{unique_scans.toLocaleString()}</p>
+        <p className="text-lg font-black text-white">{unique_scans.toLocaleString()}</p>
       </div>
 
       <div className="space-y-1">
@@ -39,7 +39,7 @@ export default function TokenScanCard({ stats }: TokenScanCardProps) {
           <MapPin size={10} className="text-emerald-500" />
           <span>Top Location</span>
         </div>
-        <p className="text-xs font-bold text-neutral-700 truncate">
+        <p className="text-xs font-bold text-neutral-300 truncate">
           {top_city ? `${top_city}, ${top_country}` : 'No data yet'}
         </p>
       </div>

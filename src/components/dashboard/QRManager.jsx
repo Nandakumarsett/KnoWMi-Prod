@@ -15,23 +15,23 @@ export default function QRManager({ initialTokens, profileId, profileSlug, isPai
   
   if (!isPaid) {
     return (
-      <div className="bg-white rounded-3xl p-12 text-center border border-neutral-100 max-w-2xl mx-auto flex flex-col items-center justify-center min-h-[400px] premium-shimmer relative overflow-hidden">
+      <div className="bg-[#1a1a1a] rounded-3xl p-12 text-center border border-white/20 max-w-2xl mx-auto flex flex-col items-center justify-center min-h-[400px] premium-shimmer relative overflow-hidden">
         <div className="relative z-10 flex flex-col items-center">
           <div className="relative inline-flex items-center justify-center mb-6">
             <div className="absolute inset-0 bg-orange-500/10 rounded-full blur-2xl animate-pulse" />
-            <div className="relative w-20 h-20 bg-orange-50 border border-orange-200 rounded-3xl flex items-center justify-center shadow-lg">
+            <div className="relative w-20 h-20 bg-orange-50 border border-orange-200 rounded-3xl flex items-center justify-center shadow-[6px_6px_0px_#fff]">
               <Lock size={36} className="text-orange-500 animate-bounce" />
             </div>
           </div>
-          <h3 className="text-2xl font-display font-black mb-3 text-neutral-900">
+          <h3 className="text-2xl font-display font-black mb-3 text-white">
             Buy a Tee to Unlock QR Studio
           </h3>
-          <p className="text-sm font-semibold max-w-sm text-neutral-500 mb-8 leading-relaxed">
+          <p className="text-sm font-semibold max-w-sm text-neutral-400 font-bold mb-8 leading-relaxed">
             Get your physical Smart Tee to activate your official QR Studio, generate custom scan tracking tokens, and export high-resolution QR codes for print.
           </p>
           <button
             onClick={() => window.location.href = '/#pricing'}
-            className="px-8 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-xs uppercase tracking-widest rounded-2xl transition-all shadow-lg active:scale-95"
+            className="px-8 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black text-xs uppercase tracking-widest rounded-2xl transition-all shadow-[6px_6px_0px_#fff] active:scale-95"
           >
             Buy a Tee to Unlock 🚀
           </button>
@@ -132,14 +132,14 @@ export default function QRManager({ initialTokens, profileId, profileSlug, isPai
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-10">
       <div className="space-y-8">
         {/* Create Token Form */}
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-neutral-100 premium-shimmer overflow-hidden relative">
+        <div className="bg-[#1a1a1a] rounded-3xl p-8 shadow-[8px_8px_0px_#fff] border border-white/20 premium-shimmer overflow-hidden relative">
           <div className="relative z-10">
             <h3 className="text-xl font-display font-black mb-6">Generate Tracking Token</h3>
             <form onSubmit={handleCreateToken} className="flex flex-col md:flex-row gap-4">
               <input 
                 type="text" 
                 placeholder="e.g. Black Oversized Tee - L - Batch 2025" 
-                className="flex-1 bg-neutral-50 border-none rounded-2xl px-6 py-4 text-sm font-bold focus:ring-2 focus:ring-orange-500/20 transition-all outline-none"
+                className="flex-1 bg-[#1a1a1a] border-none rounded-2xl px-6 py-4 text-sm font-bold focus:ring-2 focus:ring-orange-500/20 transition-all outline-none"
                 value={label}
                 onChange={(e) => setLabel(e.target.value)}
                 required
@@ -166,8 +166,8 @@ export default function QRManager({ initialTokens, profileId, profileSlug, isPai
           </div>
           
           {tokens.length === 0 ? (
-            <div className="bg-white rounded-3xl p-20 text-center border-2 border-dashed border-neutral-100">
-              <div className="w-16 h-16 bg-neutral-50 rounded-full flex items-center justify-center mx-auto mb-4 text-neutral-200">
+            <div className="bg-[#1a1a1a] rounded-3xl p-20 text-center border-2 border-dashed border-white/20">
+              <div className="w-16 h-16 bg-[#1a1a1a] rounded-full flex items-center justify-center mx-auto mb-4 text-neutral-200">
                 <QrCode size={32} />
               </div>
               <p className="text-sm font-black text-neutral-300 uppercase tracking-widest">No tracking tokens found</p>
@@ -175,15 +175,15 @@ export default function QRManager({ initialTokens, profileId, profileSlug, isPai
           ) : (
             <div className="grid grid-cols-1 gap-4">
               {tokens.map(token => (
-                <div key={token.id} className="bg-white rounded-3xl p-6 border border-neutral-100 hover:border-orange-500/20 transition-all group shadow-sm hover:shadow-xl hover:shadow-orange-500/5">
+                <div key={token.id} className="bg-[#1a1a1a] rounded-3xl p-6 border border-white/20 hover:border-orange-500/20 transition-all group shadow-[2px_2px_0px_#fff] hover:shadow-[8px_8px_0px_#fff] hover:shadow-orange-500/5">
                   <div className="flex flex-col md:flex-row items-start justify-between gap-8">
                     <div className="flex-1 space-y-6 w-full">
                       <div className="flex items-center justify-between md:justify-start gap-4">
                         <div className="flex items-center gap-3">
                           <div className={`w-2.5 h-2.5 rounded-full ${token.is_active ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse' : 'bg-neutral-300'}`} />
-                          <h4 className="font-black text-neutral-900 tracking-tight">{token.label || 'Unnamed Token'}</h4>
+                          <h4 className="font-black text-white tracking-tight">{token.label || 'Unnamed Token'}</h4>
                         </div>
-                        <span className="text-[10px] font-black text-neutral-300 font-mono bg-neutral-50 px-2 py-0.5 rounded-md">ID: {token.scan_token.slice(0, 8)}</span>
+                        <span className="text-[10px] font-black text-neutral-300 font-mono bg-[#1a1a1a] px-2 py-0.5 rounded-md">ID: {token.scan_token.slice(0, 8)}</span>
                       </div>
                       
                       <div className="bg-neutral-50/50 rounded-2xl p-4">
@@ -192,7 +192,7 @@ export default function QRManager({ initialTokens, profileId, profileSlug, isPai
                     </div>
 
                     <div className="flex flex-row md:flex-col gap-3 w-full md:w-auto shrink-0">
-                      <div className="p-4 bg-white rounded-2xl border border-neutral-50 shadow-inner relative flex items-center justify-center">
+                      <div className="p-4 bg-[#1a1a1a] rounded-2xl border border-neutral-50 shadow-inner relative flex items-center justify-center">
                         <QRCodeSVG 
                           id={`qr-${token.id}`}
                           value={`https://knowmi.in/q/${token.scan_token}?src=tshirt`}
@@ -210,7 +210,7 @@ export default function QRManager({ initialTokens, profileId, profileSlug, isPai
                       <div className="flex-1 flex flex-col gap-2">
                         <button 
                           onClick={() => downloadQR(token.id, token.label)}
-                          className="w-full bg-orange-500 text-white h-11 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black tracking-widest uppercase hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20"
+                          className="w-full bg-orange-500 text-white h-11 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black tracking-widest uppercase hover:bg-orange-600 transition-all shadow-[6px_6px_0px_#fff] shadow-orange-500/20"
                         >
                           <Download size={14} />
                           Export
@@ -251,7 +251,7 @@ export default function QRManager({ initialTokens, profileId, profileSlug, isPai
                 { title: 'Resolution', desc: 'Our export tool generates 1200px PNGs for museum-grade print quality.', icon: Activity }
               ].map((item, i) => (
                 <div key={i} className="flex gap-4">
-                   <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                   <div className="w-8 h-8 rounded-xl bg-[#1a1a1a]/10 flex items-center justify-center shrink-0">
                       <item.icon size={14} className="text-orange-500" />
                    </div>
                    <div>
@@ -265,13 +265,13 @@ export default function QRManager({ initialTokens, profileId, profileSlug, isPai
           <div className="absolute bottom-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl -mb-16 -mr-16" />
         </div>
         
-        <div className="bg-white rounded-[32px] p-8 border border-neutral-100">
+        <div className="bg-[#1a1a1a] rounded-[32px] p-8 border border-white/20">
           <div className="flex items-center gap-3 mb-4">
             <Signal size={16} className="text-orange-500" />
-            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-900">Legacy Traffic</h4>
+            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white">Legacy Traffic</h4>
           </div>
-          <p className="text-[10px] text-neutral-500 font-bold leading-relaxed">
-            Direct profile links <span className="text-neutral-900 underline">/p/[id]</span> still work globally but will not appear in this studio. For per-t-shirt tracking, migrate to the new <span className="text-orange-600">/q/[token]</span> codes.
+          <p className="text-[10px] text-neutral-400 font-bold font-bold leading-relaxed">
+            Direct profile links <span className="text-white underline">/p/[id]</span> still work globally but will not appear in this studio. For per-t-shirt tracking, migrate to the new <span className="text-orange-600">/q/[token]</span> codes.
           </p>
         </div>
       </div>

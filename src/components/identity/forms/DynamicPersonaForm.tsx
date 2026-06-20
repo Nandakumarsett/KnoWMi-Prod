@@ -27,7 +27,7 @@ export function DynamicPersonaForm({ config, data = {}, onChange }: DynamicPerso
             value={val || ''}
             onChange={e => onFieldChange(e.target.value)}
             placeholder={field.placeholder}
-            className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-white/20 transition-all"
+            className="w-full bg-[#1a1a1a]/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-white/20 transition-all"
           />
         )
 
@@ -36,11 +36,11 @@ export function DynamicPersonaForm({ config, data = {}, onChange }: DynamicPerso
           <select
             value={val || ''}
             onChange={e => onFieldChange(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-white/20 transition-all"
+            className="w-full bg-[#1a1a1a]/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-white/20 transition-all"
           >
-            <option value="" className="text-black">Select {field.label}</option>
+            <option value="" className="text-white">Select {field.label}</option>
             {(field.options || []).map(opt => (
-              <option key={opt} value={opt} className="text-black">{opt}</option>
+              <option key={opt} value={opt} className="text-white">{opt}</option>
             ))}
           </select>
         )
@@ -59,7 +59,7 @@ export function DynamicPersonaForm({ config, data = {}, onChange }: DynamicPerso
         return (
           <div className="space-y-4">
             {arr.map((item: any, idx: number) => (
-              <div key={idx} className="p-5 rounded-[28px] bg-white/5 border border-white/10 space-y-4 relative">
+              <div key={idx} className="p-5 rounded-[28px] bg-[#1a1a1a]/5 border border-white/10 space-y-4 relative">
                 <button
                   type="button"
                   onClick={() => {
@@ -96,7 +96,7 @@ export function DynamicPersonaForm({ config, data = {}, onChange }: DynamicPerso
                 })
                 onFieldChange([...arr, newItem])
               }}
-              className="w-full p-4 border border-dashed border-white/10 rounded-[28px] hover:bg-white/5 transition-colors text-xs font-black uppercase opacity-60 flex items-center justify-center gap-2"
+              className="w-full p-4 border border-dashed border-white/10 rounded-[28px] hover:bg-[#1a1a1a]/5 transition-colors text-xs font-black uppercase opacity-60 flex items-center justify-center gap-2"
             >
               <Plus size={16} /> Add {field.label}
             </button>
@@ -117,7 +117,7 @@ export function DynamicPersonaForm({ config, data = {}, onChange }: DynamicPerso
             {field.label}
           </label>
           {field.type !== 'array' ? (
-            <div className="bg-white/5 p-4 rounded-[28px] border border-white/10">
+            <div className="bg-[#1a1a1a]/5 p-4 rounded-[28px] border border-white/10">
               {renderField(field, data, (val) => updateField(field.key, val))}
             </div>
           ) : (

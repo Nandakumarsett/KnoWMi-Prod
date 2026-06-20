@@ -202,7 +202,7 @@ export default function Shop() {
   )
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0a0a0a]">
       <Navbar />
       {sizeGuideOpen && <SizeGuideModal />}
       
@@ -210,16 +210,16 @@ export default function Shop() {
         <div className="max-w-[1200px] mx-auto">
           {/* Header - Only show if no design selected */}
           {!selectedDesign && (
-            <header className="mb-12 border-b border-neutral-100 pb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <header className="mb-12 border-b-[4px] border-white pb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
               <div>
-                <h1 className="text-4xl md:text-5xl font-display font-black text-black uppercase tracking-wide">
-                  Explore <span className="text-orange-500 italic">Designs</span>
+                <h1 className="text-4xl md:text-5xl font-display font-black text-white uppercase tracking-tighter">
+                  Explore <span className="text-orange-500">Designs</span>
                 </h1>
                 <p className="text-sm text-neutral-400 mt-2 tracking-wider uppercase font-bold text-[10px]">
                   Premium Heavyweight Phygital Streetwear Series
                 </p>
               </div>
-              <div className="text-[10px] font-black uppercase tracking-[0.2em] bg-black text-white px-4 py-2">
+              <div className="text-[10px] font-black uppercase tracking-[0.2em] bg-orange-500 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] px-4 py-2">
                 {designs.length} Limited Editions
               </div>
             </header>
@@ -238,7 +238,7 @@ export default function Shop() {
                   className="group cursor-pointer flex flex-col"
                   onClick={() => handleSelect(d)}
                 >
-                  <div className="aspect-[3/4] w-full bg-neutral-50 overflow-hidden relative mb-4 border border-neutral-100/50 group-hover:border-neutral-300 transition-colors">
+                  <div className="aspect-[3/4] w-full bg-[#1a1a1a] overflow-hidden relative mb-4 border-[3px] border-white shadow-[6px_6px_0px_#fff] group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-none transition-all">
                     <img 
                       src={getAssetUrl(d.front_image_url || d.model_image_url) || '/assets/tees/front.png'} 
                       alt={d.name} 
@@ -251,7 +251,7 @@ export default function Shop() {
                         e.stopPropagation();
                         toast.success(`Saved to wishlist: ${d.name}`);
                       }}
-                      className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 hover:bg-black text-white flex items-center justify-center transition-colors shadow-sm"
+                      className="absolute top-4 left-4 w-9 h-9 rounded-lg bg-white border-[2px] border-black text-black flex items-center justify-center transition-all shadow-[2px_2px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
                     >
                       <svg 
                         xmlns="http://www.w3.org/2000/svg" 
@@ -270,17 +270,17 @@ export default function Shop() {
                     </button>
 
                     {/* Oversized absolute bottom-center tag */}
-                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] select-none">
+                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-black border-[2px] border-black shadow-[2px_2px_0px_#000] px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] select-none whitespace-nowrap">
                       Oversized
                     </div>
                   </div>
                   
-                  <div className="px-1">
-                    <h3 className="text-xs font-black text-neutral-900 uppercase tracking-wider truncate mb-1">
+                  <div className="px-1 mt-2">
+                    <h3 className="text-xs font-black text-white uppercase tracking-wider truncate mb-1">
                       {d.name}
                     </h3>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-black text-neutral-900">₹599</span>
+                      <span className="text-xs font-black text-orange-500">₹599</span>
                       <span className="text-[10px] text-neutral-400 line-through">
                         {d.price ? `₹${d.price}` : '₹1999'}
                       </span>
@@ -291,24 +291,24 @@ export default function Shop() {
             </div>
           ) : orderSuccess ? (
             <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
-              <div className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
+              <div className="w-24 h-24 bg-[#34d399] text-black border-[4px] border-white shadow-[6px_6px_0px_#fff] rounded-xl flex items-center justify-center mb-6">
                 <Check size={48} />
               </div>
-              <h2 className="text-4xl font-display font-black text-black mb-4">
+              <h2 className="text-4xl font-display font-black text-white mb-4 uppercase tracking-tighter">
                 Hurray! Your order is placed.
               </h2>
-              <p className="text-lg text-neutral-500 max-w-md mx-auto mb-8">
+              <p className="text-lg text-neutral-400 max-w-md mx-auto mb-8 font-bold">
                 We've received your payment and are preparing your KnoWMi gear. An invoice and order confirmation has been sent to your email.
               </p>
-              <div className="bg-neutral-50 p-6 rounded-2xl border border-neutral-100 mb-8 inline-block text-left min-w-[300px]">
-                <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-2">Order Details</p>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-bold">Payment ID</span>
-                  <span className="text-sm font-mono text-neutral-600">{orderSuccess.paymentId}</span>
+              <div className="bg-[#1a1a1a] p-6 rounded-xl border-[4px] border-white mb-8 inline-block text-left min-w-[300px] shadow-[8px_8px_0px_#fff]">
+                <p className="text-xs font-black text-neutral-400 uppercase tracking-widest mb-4">Order Details</p>
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-sm font-black text-white">Payment ID</span>
+                  <span className="text-sm font-mono text-neutral-400 font-bold">{orderSuccess.paymentId}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-bold">Design</span>
-                  <span className="text-sm text-neutral-600">{selectedDesign.name} (Size {selectedSize})</span>
+                  <span className="text-sm font-black text-white">Design</span>
+                  <span className="text-sm text-neutral-400 font-bold">{selectedDesign.name} (Size {selectedSize})</span>
                 </div>
               </div>
               <div>
@@ -320,7 +320,7 @@ export default function Shop() {
                     setSearchParams(searchParams, { replace: true })
                     window.scrollTo(0, 0)
                   }}
-                  className="px-8 py-4 bg-black text-white rounded-xl font-black uppercase tracking-widest text-xs hover:bg-neutral-800 transition-colors"
+                  className="px-8 py-4 bg-orange-500 text-black border-[3px] border-black rounded-xl font-black uppercase tracking-widest text-xs shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
                   Continue Shopping
                 </button>
@@ -336,9 +336,9 @@ export default function Shop() {
                   setSearchParams(searchParams, { replace: true })
                   window.scrollTo(0, 0)
                 }}
-                className="mb-10 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-neutral-400 hover:text-black transition-colors"
+                className="mb-10 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-neutral-400 hover:text-white transition-colors"
               >
-                <ChevronRight size={14} className="rotate-180 text-black" /> Back to Designs
+                <ChevronRight size={14} className="rotate-180 text-white" /> Back to Designs
               </button>
 
               <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
@@ -356,7 +356,7 @@ export default function Shop() {
                     .map((imgUrl, index) => (
                       <div 
                         key={index} 
-                        className="w-full aspect-[4/5] bg-neutral-50 overflow-hidden relative border border-neutral-100 rounded-lg"
+                        className="w-full aspect-[4/5] bg-[#1a1a1a] overflow-hidden relative border-[3px] border-white rounded-xl shadow-[4px_4px_0px_#fff]"
                       >
                         <img 
                           src={getAssetUrl(imgUrl)} 
@@ -387,14 +387,14 @@ export default function Shop() {
                 <div className="w-full lg:w-2/5 lg:sticky lg:top-28 py-2">
                   <div className="mb-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-[9px] font-black uppercase tracking-[0.2em] bg-neutral-100 text-neutral-800 px-2.5 py-1 rounded-sm">
+                      <span className="text-[9px] font-black uppercase tracking-[0.2em] bg-white text-black border-[2px] border-black shadow-[2px_2px_0px_#000] px-2.5 py-1 rounded-lg">
                         Oversized Fit
                       </span>
-                      <span className="text-[9px] font-black uppercase tracking-[0.2em] bg-orange-50 text-orange-600 px-2.5 py-1 rounded-sm">
+                      <span className="text-[9px] font-black uppercase tracking-[0.2em] bg-orange-500 text-black border-[2px] border-black shadow-[2px_2px_0px_#000] px-2.5 py-1 rounded-lg">
                         Phygital Edition
                       </span>
                     </div>
-                    <h1 className="text-3xl font-black text-neutral-900 uppercase tracking-wide mb-3 leading-tight font-display">
+                    <h1 className="text-3xl font-black text-white uppercase tracking-tighter mb-3 leading-tight font-display">
                       {selectedDesign.name}
                     </h1>
                     <p className="text-xs text-neutral-400 tracking-widest font-bold uppercase text-[9px] mb-4">
@@ -402,14 +402,14 @@ export default function Shop() {
                     </p>
                     
                     {/* Price display based on Selected Product */}
-                    <div className="flex items-baseline gap-3 mb-6 border-b border-neutral-100 pb-5">
-                      <span className="text-3xl font-black text-neutral-900">
+                    <div className="flex items-baseline gap-3 mb-6 border-b-[4px] border-white pb-5">
+                      <span className="text-3xl font-black text-orange-500">
                         ₹{PRODUCTS.find(p => p.id === selectedProductType)?.price || 999}
                       </span>
-                      <span className="text-base text-neutral-400 line-through">
+                      <span className="text-base text-neutral-400 line-through font-bold">
                         {selectedProductType === 'regular' ? '₹1499' : selectedProductType === 'oversized' ? '₹1999' : '₹2999'}
                       </span>
-                      <span className="text-[10px] font-black text-green-600 uppercase tracking-widest bg-green-50 px-2.5 py-1">
+                      <span className="text-[10px] font-black text-black uppercase tracking-widest bg-[#34d399] border-[2px] border-black shadow-[2px_2px_0px_#000] px-2.5 py-1 rounded-lg">
                         Save {selectedProductType === 'regular' ? '47%' : selectedProductType === 'oversized' ? '50%' : '50%'}
                       </span>
                     </div>
@@ -428,11 +428,11 @@ export default function Shop() {
                             if (!p.disabled) setSelectedProductType(p.id)
                           }}
                           disabled={p.disabled}
-                          className={`flex flex-col items-center justify-center p-3.5 border transition-all text-center ${
-                            p.disabled ? 'opacity-50 cursor-not-allowed bg-neutral-50 border-neutral-100' :
+                          className={`flex flex-col items-center justify-center p-3.5 border-[3px] transition-all text-center rounded-xl ${
+                            p.disabled ? 'opacity-50 cursor-not-allowed bg-[#1a1a1a] border-neutral-800 text-neutral-600' :
                             selectedProductType === p.id 
-                              ? 'border-black bg-black text-white' 
-                              : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-400'
+                              ? 'border-orange-500 bg-orange-500 text-black shadow-[4px_4px_0px_#000] translate-y-[2px] translate-x-[2px]' 
+                              : 'border-white bg-[#1a1a1a] text-white hover:border-orange-500 shadow-[4px_4px_0px_#fff]'
                           }`}
                         >
                           <span className="text-[11px] font-black uppercase tracking-wider">{p.name}</span>
@@ -451,7 +451,7 @@ export default function Shop() {
                       </label>
                       <button 
                         onClick={() => setSizeGuideOpen(!sizeGuideOpen)}
-                        className="text-[9px] font-black text-neutral-800 uppercase tracking-widest flex items-center gap-1 hover:text-black border-b border-black"
+                        className="text-[9px] font-black text-orange-500 uppercase tracking-widest flex items-center gap-1 hover:text-white border-b-2 border-orange-500 hover:border-white"
                       >
                         Size Chart
                       </button>
@@ -461,10 +461,10 @@ export default function Shop() {
                         <button 
                           key={s}
                           onClick={() => setSelectedSize(s)}
-                          className={`w-11 h-11 text-xs font-black uppercase transition-all border ${
+                          className={`w-11 h-11 text-xs font-black uppercase transition-all border-[3px] rounded-lg ${
                             selectedSize === s 
-                              ? 'border-black bg-black text-white' 
-                              : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-400'
+                              ? 'border-orange-500 bg-orange-500 text-black shadow-[4px_4px_0px_#000] translate-y-[2px] translate-x-[2px]' 
+                              : 'border-white bg-[#1a1a1a] text-white hover:border-orange-500 shadow-[4px_4px_0px_#fff]'
                           }`}
                         >
                           {s}
@@ -504,49 +504,49 @@ export default function Shop() {
                   </div>
 
                   {/* Specifications Summary */}
-                  <div className="border-t border-b border-neutral-100 py-4 mb-6 grid grid-cols-2 gap-y-2 gap-x-4 text-xs">
+                  <div className="border-t-[4px] border-b-[4px] border-white py-4 mb-6 grid grid-cols-2 gap-y-2 gap-x-4 text-xs">
                     <div>
                       <span className="text-neutral-400 font-bold uppercase tracking-wider block text-[8px]">Fabric grade</span>
-                      <span className="text-neutral-800 font-black uppercase text-[10px]">100% Premium Cotton</span>
+                      <span className="text-white font-black uppercase text-[10px]">100% Premium Cotton</span>
                     </div>
                     <div>
                       <span className="text-neutral-400 font-bold uppercase tracking-wider block text-[8px]">Weight/thickness</span>
-                      <span className="text-neutral-800 font-black uppercase text-[10px]">{PRODUCTS.find(p => p.id === selectedProductType)?.gsm || '220 GSM'}</span>
+                      <span className="text-white font-black uppercase text-[10px]">{PRODUCTS.find(p => p.id === selectedProductType)?.gsm || '220 GSM'}</span>
                     </div>
                     <div>
                       <span className="text-neutral-400 font-bold uppercase tracking-wider block text-[8px]">Garment fit</span>
-                      <span className="text-neutral-800 font-black uppercase text-[10px]">{selectedProductType === 'regular' ? 'Regular Fit' : selectedProductType === 'hoodie' ? 'Relaxed Fit' : 'Oversized / Boxy Fit'}</span>
+                      <span className="text-white font-black uppercase text-[10px]">{selectedProductType === 'regular' ? 'Regular Fit' : selectedProductType === 'hoodie' ? 'Relaxed Fit' : 'Oversized / Boxy Fit'}</span>
                     </div>
                     <div>
                       <span className="text-neutral-400 font-bold uppercase tracking-wider block text-[8px]">Print style</span>
-                      <span className="text-neutral-800 font-black uppercase text-[10px]">Premium HD PUFF PRINT</span>
+                      <span className="text-white font-black uppercase text-[10px]">Premium HD PUFF PRINT</span>
                     </div>
                   </div>
 
                   {/* E-Commerce Receipt & Finance details */}
-                  <div className="mb-6 bg-neutral-50 p-4 border border-neutral-100 space-y-2.5 text-xs text-neutral-600 font-medium">
+                  <div className="mb-6 bg-[#1a1a1a] p-4 border-[3px] border-white shadow-[4px_4px_0px_#fff] space-y-2.5 text-xs text-neutral-300 font-medium rounded-xl">
                     <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Receipt Details</p>
                     <div className="flex justify-between items-center">
-                      <span>{PRODUCTS.find(p => p.id === selectedProductType)?.name}</span>
-                      <span className="line-through text-neutral-400 font-bold">₹{selectedProductType === 'regular' ? '1499' : selectedProductType === 'oversized' ? '1999' : '2999'}</span>
+                      <span className="font-bold">{PRODUCTS.find(p => p.id === selectedProductType)?.name}</span>
+                      <span className="line-through text-neutral-500 font-bold">₹{selectedProductType === 'regular' ? '1499' : selectedProductType === 'oversized' ? '1999' : '2999'}</span>
                     </div>
-                    <div className="flex justify-between items-center text-red-600 font-bold">
+                    <div className="flex justify-between items-center text-[#f87171] font-bold">
                       <span>Founding Member Special Promo</span>
                       <span>-₹{selectedProductType === 'regular' ? '700' : selectedProductType === 'oversized' ? '1000' : '1500'}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span>Priority Shipping & Customization</span>
-                      <span className="text-green-600 font-bold">FREE (₹0)</span>
+                      <span className="font-bold">Priority Shipping & Customization</span>
+                      <span className="text-[#34d399] font-black">FREE (₹0)</span>
                     </div>
-                    <div className="border-t border-neutral-200 pt-2.5 flex justify-between items-center text-sm font-black text-black">
+                    <div className="border-t-[3px] border-white/20 pt-2.5 flex justify-between items-center text-sm font-black text-white">
                       <span>Total Amount (all inclusive)</span>
-                      <span className="text-lg">₹{PRODUCTS.find(p => p.id === selectedProductType)?.price || 999}</span>
+                      <span className="text-lg text-orange-500">₹{PRODUCTS.find(p => p.id === selectedProductType)?.price || 999}</span>
                     </div>
                   </div>
 
                   {/* Sticky Checkout Action button */}
                   <div className="pt-2">
-                    <div className="mb-4 bg-black text-white p-3.5 text-center flex flex-col items-center justify-center relative overflow-hidden">
+                    <div className="mb-4 bg-[#1a1a1a] border-[3px] border-orange-500 text-white p-3.5 text-center flex flex-col items-center justify-center relative overflow-hidden rounded-xl shadow-[4px_4px_0px_#f97316]">
                       <span className="text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
                         <span className="relative flex h-2 w-2">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -554,7 +554,7 @@ export default function Shop() {
                         </span>
                         Strictly Limited Founding Spots
                       </span>
-                      <span className="text-[9px] uppercase tracking-widest mt-1 text-neutral-400 font-bold">
+                      <span className="text-[9px] uppercase tracking-widest mt-1 text-orange-500 font-bold">
                         Only {remainingSpots} remaining spots active
                       </span>
                     </div>
@@ -562,10 +562,10 @@ export default function Shop() {
                     <button 
                       onClick={triggerCheckout}
                       disabled={checkoutLoading}
-                      className="w-full bg-black text-white py-4.5 font-black uppercase tracking-[0.2em] text-sm hover:bg-neutral-900 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                      className="w-full bg-white text-black border-[4px] border-black py-4.5 rounded-xl font-black uppercase tracking-[0.2em] text-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none shadow-[6px_6px_0px_#000] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                     >
                       {checkoutLoading ? (
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <div className="w-5 h-5 border-[3px] border-black border-t-transparent rounded-full animate-spin" />
                       ) : (
                         <Lock size={15} />
                       )}
@@ -577,18 +577,18 @@ export default function Shop() {
                     
                     <div className="flex flex-col gap-2 mt-4 text-[9px] text-neutral-500 font-bold uppercase tracking-wider">
                       <div className="flex items-center gap-2">
-                        <Truck size={14} className="text-black" />
+                        <Truck size={14} className="text-white" />
                         <span>Dispatched in 24-48 Hours • Free Delivery Across India</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Shield size={14} className="text-black" />
+                        <Shield size={14} className="text-white" />
                         <span>256-Bit SSL Encrypted secure transactions</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Modern Streetwear Collapsible Accordions */}
-                  <div className="mt-8 border-t border-neutral-100 divide-y divide-neutral-100">
+                  <div className="mt-8 border-t-[4px] border-white divide-y-[4px] divide-white">
                     {[
                       {
                         id: 'fabric',
@@ -614,18 +614,18 @@ export default function Shop() {
                       <div key={item.id} className="py-4">
                         <button 
                           onClick={() => toggleAccordion(item.id)}
-                          className="w-full flex items-center justify-between text-left text-xs font-black uppercase tracking-wider text-black py-1"
+                          className="w-full flex items-center justify-between text-left text-xs font-black uppercase tracking-wider text-white hover:text-orange-500 transition-colors py-1"
                         >
                           <span>{item.title}</span>
                           <ChevronRight 
                             size={14} 
-                            className={`text-black transition-transform duration-300 ${activeAccordion === item.id ? 'rotate-90' : ''}`} 
+                            className={`transition-transform duration-300 ${activeAccordion === item.id ? 'rotate-90 text-orange-500' : 'text-white'}`} 
                           />
                         </button>
                         <div className={`transition-all duration-300 overflow-hidden ${
                           activeAccordion === item.id ? 'max-h-40 mt-3' : 'max-h-0'
                         }`}>
-                          <p className="text-xs text-neutral-500 leading-relaxed font-normal normal-case">
+                          <p className="text-xs text-neutral-400 font-bold leading-relaxed normal-case">
                             {item.content}
                           </p>
                         </div>

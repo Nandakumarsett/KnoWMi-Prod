@@ -99,7 +99,7 @@ export default function TrackOrder() {
     : formattedDate
 
   return (
-    <div className="min-h-screen bg-[#FCFAF6] text-neutral-900 font-sans antialiased selection:bg-orange-500/20">
+    <div className="min-h-screen bg-[#0a0a0a] text-white font-sans antialiased selection:bg-orange-500/20">
       <Navbar />
 
       <main className="pt-32 pb-24 px-6">
@@ -116,7 +116,7 @@ export default function TrackOrder() {
                 url.searchParams.delete('id');
                 window.history.pushState({}, '', url);
               }}
-              className="mb-8 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-neutral-400 hover:text-orange-500 transition-colors select-none"
+              className="mb-8 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-neutral-400 hover:text-white transition-colors select-none"
             >
               <ArrowLeft size={16} /> Track Another Order
             </button>
@@ -125,30 +125,30 @@ export default function TrackOrder() {
           {/* Search Form (Hero State) */}
           {!order && (
             <div className="max-w-[640px] mx-auto py-12 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-[24px] bg-orange-100/50 mb-6 shadow-sm">
-                <Package className="w-8 h-8 text-orange-600" />
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-orange-500 border-[3px] border-black text-black mb-6 shadow-[4px_4px_0px_#000]">
+                <Package className="w-8 h-8" />
               </div>
-              <h1 className="text-4xl md:text-5xl font-display font-black mb-3 tracking-tight text-neutral-900">
-                Track your <span className="text-orange-500 italic">order</span>
+              <h1 className="text-4xl md:text-5xl font-display font-black mb-3 tracking-tighter text-white uppercase">
+                Track your <span className="text-orange-500">order</span>
               </h1>
-              <p className="text-neutral-500 text-sm max-w-[420px] mx-auto leading-relaxed mb-10">
+              <p className="text-neutral-400 text-sm max-w-[420px] mx-auto leading-relaxed mb-10 font-bold">
                 Enter the receipt number from your confirmation email to check progress.
               </p>
 
               <form onSubmit={handleTrack} className="max-w-md mx-auto mb-10">
                 <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
                   <input
                     type="text"
                     placeholder="e.g. KWM-XXXXXXXX"
-                    className="w-full bg-white border border-neutral-200 rounded-[20px] py-4.5 pl-12 pr-32 font-bold focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all text-sm outline-none"
+                    className="w-full bg-[#1a1a1a] border-[3px] border-white rounded-xl py-4.5 pl-12 pr-32 font-bold focus:outline-none focus:border-orange-500 transition-all text-sm outline-none text-white shadow-[4px_4px_0px_#fff] focus:shadow-[4px_4px_0px_#f97316]"
                     value={query}
                     onChange={e => setQuery(e.target.value)}
                   />
                   <button 
                     type="submit" 
                     disabled={loading}
-                    className="absolute right-2.5 top-2.5 bottom-2.5 px-6 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl font-black text-xs uppercase tracking-widest transition-all disabled:opacity-60"
+                    className="absolute right-2.5 top-2.5 bottom-2.5 px-6 bg-orange-500 hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none shadow-[2px_2px_0px_#000] border-[2px] border-black text-black rounded-lg font-black text-xs uppercase tracking-widest transition-all disabled:opacity-60"
                   >
                     {loading ? '...' : 'Track'}
                   </button>
@@ -156,16 +156,16 @@ export default function TrackOrder() {
               </form>
 
               {error && (
-                <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-100 rounded-2xl text-left text-xs text-red-700 max-w-md mx-auto">
+                <div className="flex items-start gap-3 p-4 bg-red-500 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] rounded-xl text-left text-xs max-w-md mx-auto">
                   <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-black mb-1">Order not found</p>
-                    <p className="mb-2 leading-relaxed">{error}</p>
+                    <p className="mb-2 leading-relaxed font-bold">{error}</p>
                     <a 
                       href="https://wa.me/917981325397" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="font-bold text-orange-500 hover:underline inline-flex items-center gap-1"
+                      className="font-black hover:underline inline-flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg border-[2px] border-black shadow-[2px_2px_0px_#fff]"
                     >
                       WhatsApp Help →
                     </a>
@@ -180,12 +180,12 @@ export default function TrackOrder() {
                   { icon: Clock, title: 'In Production', desc: 'Watch your custom smart tee get printed and programmed.' },
                   { icon: Truck, title: 'Live Transit Tracking', desc: 'Courier partnership updates directly on your timeline.' },
                 ].map(({ icon: Icon, title, desc }) => (
-                  <div key={title} className="p-6 bg-white rounded-[24px] border border-neutral-100 shadow-sm">
-                    <div className="w-10 h-10 rounded-xl bg-neutral-50 flex items-center justify-center mb-4 border border-neutral-100">
-                      <Icon className="w-5 h-5 text-orange-500" />
+                  <div key={title} className="p-6 bg-[#1a1a1a] rounded-xl border-[3px] border-white shadow-[4px_4px_0px_#fff]">
+                    <div className="w-10 h-10 rounded-lg bg-orange-500 border-[2px] border-black flex items-center justify-center mb-4 shadow-[2px_2px_0px_#000]">
+                      <Icon className="w-5 h-5 text-black" />
                     </div>
-                    <h4 className="font-black mb-1 text-sm text-neutral-900">{title}</h4>
-                    <p className="text-xs text-neutral-500 leading-relaxed font-medium">{desc}</p>
+                    <h4 className="font-black mb-1 text-sm text-white">{title}</h4>
+                    <p className="text-xs text-neutral-400 leading-relaxed font-bold">{desc}</p>
                   </div>
                 ))}
               </div>
@@ -201,23 +201,23 @@ export default function TrackOrder() {
                 
                 {/* Header Card */}
                 <div>
-                  <h1 className="text-3xl font-display font-black tracking-tight text-neutral-900 mb-1.5">
+                  <h1 className="text-3xl font-display font-black tracking-tighter text-white uppercase mb-1.5">
                     Order {order.order_number || order.id.slice(0, 8).toUpperCase()}
                   </h1>
-                  <p className="text-xs text-neutral-400 font-bold uppercase tracking-widest">
+                  <p className="text-xs text-orange-500 font-black uppercase tracking-widest">
                     Confirmed {formattedDate}
                   </p>
                 </div>
 
                 {/* Link/Help Alert Box */}
-                <div className="bg-white border border-neutral-200 rounded-[24px] p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                <div className="bg-[#1a1a1a] border-[3px] border-white rounded-xl p-6 shadow-[4px_4px_0px_#fff] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500 shrink-0 border border-orange-100">
+                    <div className="w-10 h-10 rounded-lg bg-orange-500 flex items-center justify-center text-black shrink-0 border-[2px] border-black shadow-[2px_2px_0px_#000]">
                       <HelpCircle size={20} />
                     </div>
                     <div>
-                      <h4 className="text-xs font-black uppercase tracking-widest text-neutral-900 mb-1">Need help or changes?</h4>
-                      <p className="text-xs text-neutral-500 leading-relaxed font-medium">
+                      <h4 className="text-xs font-black uppercase tracking-widest text-white mb-1">Need help or changes?</h4>
+                      <p className="text-xs text-neutral-400 leading-relaxed font-bold">
                         If you need to edit your delivery address, size preference, or contact details, ping our WhatsApp desk.
                       </p>
                     </div>
@@ -227,13 +227,13 @@ export default function TrackOrder() {
                       href="https://wa.me/917981325397" 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="flex-1 sm:flex-initial px-4 py-2.5 bg-neutral-50 border border-neutral-200 hover:bg-neutral-100 rounded-xl font-black text-[10px] uppercase tracking-widest text-center transition-colors flex items-center justify-center gap-1.5 shrink-0"
+                      className="flex-1 sm:flex-initial px-4 py-2.5 bg-white border-[2px] border-black hover:bg-neutral-200 text-black rounded-lg font-black text-[10px] uppercase tracking-widest text-center transition-all flex items-center justify-center gap-1.5 shrink-0 shadow-[2px_2px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
                     >
                       <MessageSquare size={12} /> Contact Us
                     </a>
                     <a 
                       href="/dashboard"
-                      className="flex-1 sm:flex-initial px-4 py-2.5 bg-[#C1440E] hover:bg-[#A0350B] text-white rounded-xl font-black text-[10px] uppercase tracking-widest text-center transition-colors flex items-center justify-center gap-1.5 shrink-0 shadow-md shadow-orange-700/10"
+                      className="flex-1 sm:flex-initial px-4 py-2.5 bg-orange-500 border-[2px] border-black hover:bg-orange-600 text-black rounded-lg font-black text-[10px] uppercase tracking-widest text-center transition-all flex items-center justify-center gap-1.5 shrink-0 shadow-[2px_2px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
                     >
                       <User size={12} /> Dashboard
                     </a>
@@ -241,20 +241,20 @@ export default function TrackOrder() {
                 </div>
 
                 {/* Order Update Box */}
-                <div className="bg-white border border-neutral-200 rounded-[24px] overflow-hidden shadow-sm">
+                <div className="bg-[#1a1a1a] border-[3px] border-white rounded-xl overflow-hidden shadow-[4px_4px_0px_#fff]">
                   <button 
                     onClick={() => setIsUpdateExpanded(!isUpdateExpanded)}
-                    className="w-full px-6 py-5 flex items-center justify-between text-left font-black text-xs uppercase tracking-widest text-neutral-900 hover:bg-neutral-50/50 transition-colors"
+                    className="w-full px-6 py-5 flex items-center justify-between text-left font-black text-xs uppercase tracking-widest text-white hover:text-orange-500 transition-colors"
                   >
                     <span className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-orange-500 animate-pulse" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-orange-500 border border-black animate-pulse shadow-[1px_1px_0px_#000]" />
                       Order status updated on {formattedUpdateDate}
                     </span>
-                    <ChevronDown size={16} className={`text-neutral-400 transition-transform ${isUpdateExpanded ? 'rotate-180' : ''}`} />
+                    <ChevronDown size={16} className={`text-white transition-transform ${isUpdateExpanded ? 'rotate-180 text-orange-500' : ''}`} />
                   </button>
                   
                   {isUpdateExpanded && (
-                    <div className="px-6 pb-6 border-t border-neutral-100 pt-5 text-neutral-600 text-xs leading-relaxed space-y-2.5 font-medium">
+                    <div className="px-6 pb-6 border-t-[3px] border-white/20 pt-5 text-neutral-400 text-xs leading-relaxed space-y-2.5 font-bold">
                       {order.status === 'pending' && (
                         <p>We have successfully initiated your order. Our finance gateway has validated your receipt, and your tee is scheduled to move to printing.</p>
                       )}
@@ -268,28 +268,28 @@ export default function TrackOrder() {
                         <p>Congratulations! Your KnoWMi physical item has been signed and delivered. Scan your T-shirt QR to fully unlock your phygital experience.</p>
                       )}
                       {order.status === 'cancelled' && (
-                        <p className="text-red-600">This order has been cancelled. If you believe this is in error, contact support immediately.</p>
+                        <p className="text-[#f87171] font-black">This order has been cancelled. If you believe this is in error, contact support immediately.</p>
                       )}
                     </div>
                   )}
                 </div>
 
                 {/* Progress Stepper Timeline */}
-                <div className="bg-white border border-neutral-200 rounded-[24px] p-6 shadow-sm">
+                <div className="bg-[#1a1a1a] border-[3px] border-white rounded-xl p-6 shadow-[4px_4px_0px_#fff]">
                   <h3 className="text-xs font-black uppercase tracking-widest text-neutral-400 mb-6">Delivery Progress</h3>
                   
                   {order.status === 'cancelled' ? (
-                    <div className="flex items-start gap-4 p-4 bg-red-50/50 border border-red-100 rounded-2xl text-xs text-red-700">
+                    <div className="flex items-start gap-4 p-4 bg-[#f87171] border-[2px] border-black shadow-[2px_2px_0px_#000] rounded-lg text-xs text-black">
                       <X size={18} className="shrink-0" />
                       <div>
                         <p className="font-black mb-0.5">Order Cancelled</p>
-                        <p className="font-medium text-neutral-500">This order has been cancelled and is no longer active.</p>
+                        <p className="font-bold text-neutral-900">This order has been cancelled and is no longer active.</p>
                       </div>
                     </div>
                   ) : (
                     <div className="relative space-y-8 pl-1">
                       {/* Vertical line connector */}
-                      <div className="absolute left-[19px] top-3 bottom-3 w-0.5 bg-neutral-100" />
+                      <div className="absolute left-[19px] top-3 bottom-3 w-1 bg-white/20" />
                       
                       {STEPS.map((step, i) => {
                         const isActive = cfg.step >= step.activeFrom
@@ -300,14 +300,13 @@ export default function TrackOrder() {
                           <div key={i} className="flex items-start gap-5 relative">
                             {/* Circle badge */}
                             <div 
-                              className={`w-10 h-10 rounded-full flex items-center justify-center z-10 border transition-all duration-300 ${
+                              className={`w-10 h-10 rounded-lg flex items-center justify-center z-10 border-[2px] transition-all duration-300 ${
                                 isActive 
-                                  ? 'bg-neutral-900 border-neutral-900 text-white shadow-lg shadow-neutral-900/20' 
-                                  : 'bg-neutral-50 border-neutral-200 text-neutral-400'
+                                  ? 'bg-white border-black text-black shadow-[2px_2px_0px_#000]' 
+                                  : 'bg-neutral-800 border-neutral-700 text-neutral-500'
                               }`}
                               style={{
-                                boxShadow: isCurrent ? `0 0 0 4px ${cfg.color}15` : undefined,
-                                borderColor: isCurrent ? cfg.color : undefined,
+                                borderColor: isCurrent ? '#000' : undefined,
                                 backgroundColor: isCurrent ? cfg.color : undefined
                               }}
                             >
@@ -316,10 +315,10 @@ export default function TrackOrder() {
                             
                             {/* Step labels */}
                             <div className="pt-1 select-text">
-                              <h4 className={`text-sm font-black tracking-tight ${isActive ? 'text-neutral-900' : 'text-neutral-300'}`}>
+                              <h4 className={`text-sm font-black tracking-tight ${isActive ? 'text-white' : 'text-neutral-500'}`}>
                                 {step.label}
                               </h4>
-                              <p className={`text-xs mt-0.5 font-medium leading-relaxed ${isCurrent ? 'font-bold' : 'text-neutral-400'}`} style={{ color: isCurrent ? cfg.color : undefined }}>
+                              <p className={`text-xs mt-0.5 font-bold leading-relaxed ${isCurrent ? 'text-white' : 'text-neutral-500'}`}>
                                 {step.sub}
                               </p>
                             </div>
@@ -332,19 +331,19 @@ export default function TrackOrder() {
 
                 {/* Transit Details */}
                 {order.tracking_info && order.status === 'shipped' && (
-                  <div className="bg-white border border-neutral-200 rounded-[24px] p-6 shadow-sm">
+                  <div className="bg-[#1a1a1a] border-[3px] border-white rounded-xl p-6 shadow-[4px_4px_0px_#fff]">
                     <h3 className="text-xs font-black uppercase tracking-widest text-neutral-400 mb-4">Courier Information</h3>
-                    <div className="p-4 bg-neutral-50 rounded-2xl border border-neutral-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="p-4 bg-black rounded-lg border-[2px] border-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div>
                         <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Partner Courier</p>
-                        <p className="font-black text-sm text-neutral-950">{courierName || 'Delhivery'}</p>
+                        <p className="font-black text-sm text-white">{courierName || 'Delhivery'}</p>
                       </div>
                       <div>
                         <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Tracking Number</p>
-                        <p className="font-black text-md font-mono text-neutral-950 select-text">{trackingNum}</p>
+                        <p className="font-black text-md font-mono text-white select-text">{trackingNum}</p>
                       </div>
                     </div>
-                    <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mt-4">
+                    <p className="text-[10px] text-orange-500 font-black uppercase tracking-widest mt-4">
                       Copy the tracking number above to check real-time courier updates.
                     </p>
                   </div>
@@ -355,28 +354,28 @@ export default function TrackOrder() {
               <div className="lg:col-span-2 space-y-6 lg:sticky lg:top-28">
                 
                 {/* Order Summary Card */}
-                <div className="bg-white border border-neutral-200 rounded-[32px] p-6 lg:p-8 shadow-sm">
+                <div className="bg-[#1a1a1a] border-[3px] border-white rounded-xl p-6 lg:p-8 shadow-[4px_4px_0px_#fff]">
                   <h3 className="text-xs font-black uppercase tracking-widest text-neutral-400 mb-6">Order Summary</h3>
                   
                   {/* Item Details */}
-                  <div className="flex items-center gap-4 py-4 border-b border-neutral-100">
-                    <div className="relative w-20 h-25 bg-neutral-50 rounded-2xl border border-neutral-100 overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
+                  <div className="flex items-center gap-4 py-4 border-b-[3px] border-white/20">
+                    <div className="relative w-20 h-25 bg-[#2a2a2a] rounded-lg border-[2px] border-black overflow-hidden shrink-0 flex items-center justify-center shadow-[2px_2px_0px_#000]">
                       <img 
                         src={getAssetUrl(order.model_image_url) || '/assets/tees/front.png'} 
-                        className="w-full h-full object-cover" 
+                        className="w-full h-full object-cover grayscale brightness-90" 
                         alt="Tee preview" 
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = '/assets/tees/front.png';
                         }}
                       />
-                      <div className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-neutral-900 text-white rounded-full flex items-center justify-center text-[10px] font-black border-2 border-white select-none">
+                      <div className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-orange-500 text-black rounded-full flex items-center justify-center text-[10px] font-black border-[2px] border-black select-none">
                         1
                       </div>
                     </div>
                     
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-black text-sm text-neutral-950 leading-snug truncate">
+                      <h4 className="font-black text-sm text-white leading-snug truncate">
                         {order.item_name || 'KnoWMi Identity Tee'}
                       </h4>
                       <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mt-1">
@@ -385,19 +384,19 @@ export default function TrackOrder() {
                     </div>
 
                     <div className="text-right">
-                      <span className="font-black text-sm text-neutral-950">₹{order.amount || '999'}</span>
+                      <span className="font-black text-sm text-white">₹{order.amount || '999'}</span>
                     </div>
                   </div>
 
                   {/* Financial Breakdown */}
-                  <div className="py-6 border-b border-neutral-100 space-y-3.5 text-xs">
-                    <div className="flex justify-between items-center text-neutral-500 font-medium">
+                  <div className="py-6 border-b-[3px] border-white/20 space-y-3.5 text-xs font-bold text-neutral-400">
+                    <div className="flex justify-between items-center">
                       <span>Subtotal</span>
-                      <span className="font-bold text-neutral-950">₹{order.amount || '999'}</span>
+                      <span className="font-black text-white">₹{order.amount || '999'}</span>
                     </div>
-                    <div className="flex justify-between items-center text-neutral-500 font-medium">
+                    <div className="flex justify-between items-center">
                       <span>Taxes & Shipping</span>
-                      <span className="font-bold text-emerald-600">₹0 (All Inclusive)</span>
+                      <span className="font-black text-[#34d399]">₹0 (All Inclusive)</span>
                     </div>
                   </div>
 
@@ -407,19 +406,19 @@ export default function TrackOrder() {
                       <span className="text-xs font-black uppercase tracking-widest text-neutral-400">Total Paid</span>
                     </div>
                     <div className="text-right">
-                      <span className="font-black text-2xl text-neutral-950">₹{order.amount || '999'}</span>
+                      <span className="font-black text-2xl text-orange-500">₹{order.amount || '999'}</span>
                       <span className="block text-[8px] font-bold text-neutral-400 uppercase tracking-widest mt-0.5">INR (Indian Rupee)</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Secure Trust Badges */}
-                <div className="p-6 bg-neutral-50 rounded-[24px] border border-neutral-200 flex flex-col gap-4">
+                <div className="p-6 bg-black rounded-xl border-[2px] border-white shadow-[4px_4px_0px_#fff] flex flex-col gap-4">
                   <div className="flex items-center gap-3">
-                    <ShieldCheck size={20} className="text-emerald-600 shrink-0" />
+                    <ShieldCheck size={20} className="text-[#34d399] shrink-0" />
                     <div>
-                      <h4 className="text-[10px] font-black uppercase tracking-widest text-neutral-900">QR Secure Protocol</h4>
-                      <p className="text-[10px] text-neutral-500 font-medium leading-relaxed">
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-white">QR Secure Protocol</h4>
+                      <p className="text-[10px] text-neutral-400 font-bold leading-relaxed">
                         Every KnoWMi physical item is custom printed with a secure cryptographic web3 identity QR code.
                       </p>
                     </div>

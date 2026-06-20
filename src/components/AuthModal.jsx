@@ -171,32 +171,25 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4"
-      style={{ background: 'rgba(10,10,15,0.75)', backdropFilter: 'blur(12px)' }}
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80"
       onClick={e => { if (e.target === e.currentTarget) handleClose() }}
       role="dialog"
       aria-modal="true"
       aria-label="Sign in to KnoWMi"
     >
       <div
-        className="relative w-full max-w-md rounded-3xl overflow-hidden"
+        className="relative w-full max-w-md bg-[#1a1a1a] rounded-xl overflow-hidden border-[3px] border-white shadow-[8px_8px_0px_#F97316]"
         style={{
-          background: 'var(--paper)',
-          border: '1px solid var(--border)',
-          boxShadow: '0 40px 80px rgba(0,0,0,0.35)',
           animation: 'authPop 0.35s cubic-bezier(0.34,1.56,0.64,1)',
         }}
       >
         {/* Top accent bar */}
-        <div className="h-1 w-full" style={{ background: 'linear-gradient(90deg, var(--sf), var(--gold))' }} />
+        <div className="h-2 w-full bg-orange-500 border-b-[3px] border-white" />
 
         {/* Close */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-all"
-          style={{ background: 'var(--paper2)', color: 'var(--muted)', fontSize: '16px' }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'var(--sf)'; e.currentTarget.style.color = '#fff' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'var(--paper2)'; e.currentTarget.style.color = 'var(--muted)' }}
+          className="absolute top-5 right-5 w-8 h-8 rounded-lg bg-white border-[2px] border-black flex items-center justify-center text-black font-black shadow-[2px_2px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all"
           aria-label="Close"
         >✕</button>
 
@@ -204,26 +197,14 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
           {/* Header */}
           <div className="text-center mb-7">
             <div className="inline-flex items-center gap-2 mb-3">
-              <img src="/logo-square.png" alt="Logo" className="h-10 w-auto object-contain" />
-              <div className="relative inline-block">
-                <span
-                  style={{
-                    fontFamily: "'Montserrat', sans-serif",
-                    fontSize: '42px',
-                    fontWeight: 900,
-                    lineHeight: 0.9,
-                    color: 'var(--ink)',
-                    letterSpacing: '-0.06em'
-                  }}
-                >
-                  Kno<span style={{ color: 'var(--saffron)' }}>WM</span>i
-                </span>
-              </div>
+              <span className="text-4xl font-black tracking-tighter text-white leading-none">
+                Kno<span className="text-orange-500">WM</span>i
+              </span>
             </div>
-            <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: '26px', fontWeight: 700, color: 'var(--ink)' }}>
-              {tab === 'signup' ? 'Create your identity' : tab === 'forgot' ? 'Reset Password' : 'Welcome back'}
+            <h2 className="text-2xl font-black uppercase tracking-wide text-white">
+              {tab === 'signup' ? 'Create Identity' : tab === 'forgot' ? 'Reset Password' : 'Welcome back'}
             </h2>
-            <p style={{ fontSize: '14px', color: 'var(--muted)', marginTop: '6px' }}>
+            <p className="text-xs font-bold text-neutral-400 mt-2 uppercase tracking-widest">
               {tab === 'signup' ? 'Join 12,000+ wearers across India' : tab === 'forgot' ? 'We will send you a reset link' : 'Continue to your KnoWMi'}
             </p>
           </div>
@@ -231,15 +212,10 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
           <>
             {/* Tab toggle */}
           {tab !== 'forgot' && !localStorage.getItem('knowmi_pending_claim') && (
-            <div className="flex rounded-xl overflow-hidden mb-6" style={{ border: '1.5px solid var(--border)', background: 'var(--paper2)' }}>
+            <div className="flex rounded-lg overflow-hidden mb-6 border-[3px] border-white bg-[#0a0a0a]">
               {['signup', 'signin'].map(t => (
                 <button key={t} onClick={() => { setTab(t); setError(''); setSuccessMsg('') }}
-                  className="flex-1 py-2.5 text-sm font-semibold transition-all"
-                  style={{
-                    background: tab === t ? 'var(--sf)' : 'transparent',
-                    color: tab === t ? '#fff' : 'var(--muted)',
-                    fontFamily: 'DM Sans, sans-serif',
-                  }}>
+                  className={`flex-1 py-2.5 text-xs font-black uppercase tracking-widest transition-all ${tab === t ? 'bg-orange-500 text-black border-none' : 'text-neutral-400 hover:text-white'}`}>
                   {t === 'signup' ? 'Sign Up' : 'Sign In'}
                 </button>
               ))}
@@ -251,8 +227,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
             <button
               onClick={handleGoogleLogin}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-3 py-3 rounded-xl font-bold text-sm transition-all border-2 border-neutral-100 hover:bg-neutral-50 hover:border-neutral-200"
-              style={{ color: 'var(--ink)' }}
+              className="w-full flex items-center justify-center gap-3 py-3 bg-white border-[3px] border-black rounded-xl text-black font-black uppercase tracking-widest text-xs shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -263,39 +238,34 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
               Continue with Google
             </button>
             <div className="relative mt-6 mb-6">
-              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-neutral-100"></div></div>
-              <div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-3 text-neutral-400 font-bold tracking-widest">or email</span></div>
+              <div className="absolute inset-0 flex items-center"><div className="w-full border-t-[3px] border-white/20"></div></div>
+              <div className="relative flex justify-center text-xs uppercase"><span className="bg-[#1a1a1a] px-3 text-white font-black tracking-widest">or email</span></div>
             </div>
           </div>
 
           {/* Error message */}
           {error && (
-            <div className="mb-4 px-4 py-2.5 rounded-xl text-sm font-medium" 
-              style={{ background: 'rgba(220,38,38,0.08)', color: '#dc2626', border: '1px solid rgba(220,38,38,0.15)' }}>
+            <div className="mb-4 px-4 py-3 rounded-lg text-xs font-black uppercase tracking-wide bg-red-500 text-black border-[3px] border-black shadow-[3px_3px_0px_#000]">
               {error}
             </div>
           )}
 
           {/* Success message */}
           {successMsg && (
-            <div className="mb-4 px-4 py-2.5 rounded-xl text-sm font-medium" 
-              style={{ background: 'rgba(19,136,8,0.08)', color: '#138808', border: '1px solid rgba(19,136,8,0.15)' }}>
+            <div className="mb-4 px-4 py-3 rounded-lg text-xs font-black uppercase tracking-wide bg-green-500 text-black border-[3px] border-black shadow-[3px_3px_0px_#000]">
               {successMsg}
             </div>
           )}
 
-          <form onSubmit={tab === 'signup' ? handleSignUp : tab === 'forgot' ? handleForgotPassword : handleSignIn} className="flex flex-col gap-3">
+          <form onSubmit={tab === 'signup' ? handleSignUp : tab === 'forgot' ? handleForgotPassword : handleSignIn} className="flex flex-col gap-4">
             {/* Name field - only for signup */}
             {tab === 'signup' && (
               <input
                 type="text"
-                placeholder="User Name"
+                placeholder="USER NAME"
                 value={firstName}
                 onChange={e => setFirstName(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                style={{ border: '1.5px solid var(--border)', background: 'var(--paper)', color: 'var(--ink)', fontFamily: 'DM Sans, sans-serif' }}
-                onFocus={e => { e.currentTarget.style.borderColor = 'var(--sf)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(224,123,26,0.12)' }}
-                onBlur={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'none' }}
+                className="w-full px-4 py-3 bg-white text-black font-black uppercase tracking-widest text-xs border-[3px] border-black rounded-lg outline-none focus:shadow-[4px_4px_0px_#F97316] transition-shadow"
                 autoComplete="given-name"
               />
             )}
@@ -303,13 +273,10 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
             {/* Email / Username */}
             <input
               type={tab === 'signup' || tab === 'forgot' ? 'email' : 'text'}
-              placeholder={tab === 'signup' || tab === 'forgot' ? 'Email address' : 'Email or Username'}
+              placeholder={tab === 'signup' || tab === 'forgot' ? 'EMAIL ADDRESS' : 'EMAIL OR USERNAME'}
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-              style={{ border: '1.5px solid var(--border)', background: 'var(--paper)', color: 'var(--ink)', fontFamily: 'DM Sans, sans-serif' }}
-              onFocus={e => { e.currentTarget.style.borderColor = 'var(--sf)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(224,123,26,0.12)' }}
-              onBlur={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'none' }}
+              className="w-full px-4 py-3 bg-white text-black font-black uppercase tracking-widest text-xs border-[3px] border-black rounded-lg outline-none focus:shadow-[4px_4px_0px_#F97316] transition-shadow"
               autoComplete="email"
             />
 
@@ -318,20 +285,17 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
               <div className="relative">
                 <input
                   type="password"
-                  placeholder={tab === 'signup' ? 'Create password (min 6 chars)' : 'Password'}
+                  placeholder={tab === 'signup' ? 'CREATE PASSWORD (MIN 6 CHARS)' : 'PASSWORD'}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                  style={{ border: '1.5px solid var(--border)', background: 'var(--paper)', color: 'var(--ink)', fontFamily: 'DM Sans, sans-serif' }}
-                  onFocus={e => { e.currentTarget.style.borderColor = 'var(--sf)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(224,123,26,0.12)' }}
-                  onBlur={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'none' }}
+                  className="w-full px-4 py-3 bg-white text-black font-black uppercase tracking-widest text-xs border-[3px] border-black rounded-lg outline-none focus:shadow-[4px_4px_0px_#F97316] transition-shadow"
                   autoComplete={tab === 'signup' ? 'new-password' : 'current-password'}
                 />
                 {tab === 'signin' && (
                   <button 
                     type="button" 
                     onClick={() => { setTab('forgot'); setError(''); setSuccessMsg('') }}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-[var(--sf)] hover:underline"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase tracking-widest text-orange-500 hover:text-black hover:bg-orange-500 px-2 py-1 rounded-sm transition-colors"
                   >
                     FORGOT?
                   </button>
@@ -343,13 +307,10 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
             {tab === 'signup' && (
               <input
                 type="text"
-                placeholder="Referral Code (Optional)"
+                placeholder="REFERRAL CODE (OPTIONAL)"
                 value={referralCode}
                 onChange={e => setReferralCode(e.target.value.toUpperCase())}
-                className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                style={{ border: '1.5px solid var(--border)', background: 'var(--paper)', color: 'var(--ink)', fontFamily: 'JetBrains Mono, monospace' }}
-                onFocus={e => { e.currentTarget.style.borderColor = 'var(--sf)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(224,123,26,0.12)' }}
-                onBlur={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'none' }}
+                className="w-full px-4 py-3 bg-white text-black font-black uppercase tracking-widest text-xs border-[3px] border-black rounded-lg outline-none focus:shadow-[4px_4px_0px_#F97316] transition-shadow"
               />
             )}
 
@@ -357,17 +318,11 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl font-semibold text-sm text-white transition-all mt-1"
-              style={{
-                background: 'linear-gradient(135deg, var(--sf), var(--gold))',
-                fontFamily: 'DM Sans, sans-serif',
-                boxShadow: '0 4px 16px rgba(224,123,26,0.3)',
-                opacity: loading ? 0.7 : 1,
-              }}
+              className="w-full py-4 mt-2 bg-orange-500 text-black border-[3px] border-black rounded-xl font-black uppercase tracking-widest shadow-[5px_5px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50"
             >
               {loading
-                ? (tab === 'signup' ? 'Creating account...' : tab === 'forgot' ? 'Sending link...' : 'Signing in...')
-                : (tab === 'signup' ? 'Create Account →' : tab === 'forgot' ? 'Send Reset Link' : 'Sign In →')
+                ? (tab === 'signup' ? 'CREATING...' : tab === 'forgot' ? 'SENDING...' : 'SIGNING IN...')
+                : (tab === 'signup' ? 'CREATE ACCOUNT →' : tab === 'forgot' ? 'SEND RESET LINK' : 'SIGN IN →')
               }
             </button>
             
@@ -375,17 +330,17 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
               <button 
                 type="button" 
                 onClick={() => setTab('signin')} 
-                className="text-xs font-bold text-[var(--muted)] hover:text-[var(--ink)] mt-2"
+                className="text-[10px] font-black text-white hover:text-orange-500 uppercase tracking-widest mt-2"
               >
-                ← Back to Sign In
+                ← BACK TO SIGN IN
               </button>
             )}
           </form>
 
-          <p style={{ fontSize: '11px', color: 'var(--muted)', textAlign: 'center', marginTop: '16px', lineHeight: 1.6 }}>
+          <p className="text-[10px] font-bold text-neutral-500 text-center mt-6 uppercase tracking-widest">
             By continuing, you agree to KnoWMi's{' '}
-            <a href="/legal#terms" style={{ color: 'var(--sf)', textDecoration: 'underline' }}>Terms</a> &{' '}
-            <a href="/legal#privacy" style={{ color: 'var(--sf)', textDecoration: 'underline' }}>Privacy Policy</a>
+            <a href="/legal#terms" className="text-white hover:text-orange-500 underline decoration-2">Terms</a> &{' '}
+            <a href="/legal#privacy" className="text-white hover:text-orange-500 underline decoration-2">Privacy Policy</a>
           </p>
           </>
         </div>

@@ -44,23 +44,23 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
       {/* SECTION: CURRENT ENDEAVORS */}
       <section className="space-y-10">
         <div className="flex items-center gap-4 mb-2">
-          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
             <Briefcase size={24} />
           </div>
           <div>
-            <h3 className="text-lg font-black uppercase tracking-widest text-[#1A1A1A]">Current Endeavors</h3>
+            <h3 className="text-lg font-black uppercase tracking-widest text-white">Current Endeavors</h3>
             <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">What are you working on right now?</p>
           </div>
         </div>
 
-        <div className="p-10 bg-white border border-[#E5D5C4] rounded-[40px] shadow-xl shadow-blue-500/5 space-y-8">
+        <div className="p-10 bg-[#1a1a1a] border border-[#E5D5C4] rounded-[40px] shadow-[8px_8px_0px_#fff] shadow-blue-500/5 space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-2">
               <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Current Status</label>
               <select
                 value={data.about?.status || ''}
                 onChange={e => updateAbout('status', e.target.value)}
-                className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none"
+                className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none"
               >
                 <option value="">Select Status</option>
                 <option value="Freelancing">Freelancing / Self-Employed</option>
@@ -78,7 +78,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                 value={data.about?.company || ''}
                 onChange={e => updateAbout('company', e.target.value)}
                 placeholder="e.g. Google, Stripe, Freelance"
-                className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none"
+                className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none"
               />
             </div>
 
@@ -89,7 +89,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                 value={data.about?.role || ''}
                 onChange={e => updateAbout('role', e.target.value)}
                 placeholder="e.g. Full-Stack Developer"
-                className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none"
+                className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none"
               />
               <p className="text-[9px] text-neutral-400 uppercase font-bold tracking-widest mt-1">This title appears under your name</p>
             </div>
@@ -101,7 +101,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                 value={data.about?.mission || ''}
                 onChange={e => updateAbout('mission', e.target.value)}
                 placeholder="e.g. Engineering the future of decentralized identity."
-                className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none resize-none"
+                className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none resize-none"
               />
             </div>
 
@@ -112,7 +112,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                 value={data.bio || ''}
                 onChange={e => updateField('bio', e.target.value)}
                 placeholder="Tell the world about your engineering journey..."
-                className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none resize-none"
+                className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none resize-none"
               />
             </div>
           </div>
@@ -122,21 +122,21 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
       {/* SECTION: BRAND IDENTITY (BANNER) */}
       <section className="space-y-10">
         <div className="flex items-center gap-4 mb-2">
-          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
             <Camera size={24} />
           </div>
           <div>
-            <h3 className="text-lg font-black uppercase tracking-widest text-[#1A1A1A]">Brand Identity</h3>
+            <h3 className="text-lg font-black uppercase tracking-widest text-white">Brand Identity</h3>
             <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Customize your profile backdrop</p>
           </div>
         </div>
 
-        <div className="p-10 bg-white border border-[#E5D5C4] rounded-[40px] shadow-xl shadow-blue-500/5">
+        <div className="p-10 bg-[#1a1a1a] border border-[#E5D5C4] rounded-[40px] shadow-[8px_8px_0px_#fff] shadow-blue-500/5">
           {/* Banner Upload */}
           <div className="flex flex-col space-y-2">
             <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Profile Banner</label>
             <div className="relative group min-h-[200px]">
-              <div className="w-full h-full rounded-2xl overflow-hidden bg-[#F0F7FF] border-2 border-dashed border-blue-200 hover:border-blue-500 transition-all flex flex-col items-center justify-center cursor-pointer relative py-8">
+              <div className="w-full h-full rounded-2xl overflow-hidden bg-[#1a1a1a] border-2 border-dashed border-blue-200 hover:border-blue-500 transition-all flex flex-col items-center justify-center cursor-pointer relative py-8">
                 {data.featured_work_url ? (
                   <>
                     <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Banner Preview" />
@@ -149,7 +149,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                   <div className="flex flex-col items-center gap-2 text-blue-400 p-4 text-center">
                     <Camera size={28} className="text-blue-500" />
                     <div>
-                      <span className="text-xs font-bold text-neutral-700">Upload Banner</span>
+                      <span className="text-xs font-bold text-neutral-300">Upload Banner</span>
                       <p className="text-[10px] mt-0.5 text-neutral-400">1200x400 JPG/PNG</p>
                     </div>
                   </div>
@@ -169,7 +169,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                 />
               </div>
               {uploading && (
-                <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-2xl flex items-center justify-center z-20">
+                <div className="absolute inset-0 bg-[#1a1a1a]/80 backdrop-blur-sm rounded-2xl flex items-center justify-center z-20">
                   <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               )}
@@ -181,20 +181,20 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
       {/* SECTION: COLLABORATION & CONTACT */}
       <section className="space-y-10">
         <div className="flex items-center gap-4 mb-2">
-          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
             <Mail size={24} />
           </div>
           <div>
-            <h3 className="text-lg font-black uppercase tracking-widest text-[#1A1A1A]">Contact & Collaboration</h3>
+            <h3 className="text-lg font-black uppercase tracking-widest text-white">Contact & Collaboration</h3>
             <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Define your professional gateways</p>
           </div>
         </div>
 
-        <div className="p-10 bg-white border border-[#E5D5C4] rounded-[40px] shadow-xl shadow-blue-500/5">
+        <div className="p-10 bg-[#1a1a1a] border border-[#E5D5C4] rounded-[40px] shadow-[8px_8px_0px_#fff] shadow-blue-500/5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
              <div className="space-y-2">
                <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Professional Email</label>
-               <input type="email" value={data.contact_email || ''} onChange={e => updateField('contact_email', e.target.value)} placeholder="hello@yourbrand.com" className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none" />
+               <input type="email" value={data.contact_email || ''} onChange={e => updateField('contact_email', e.target.value)} placeholder="hello@yourbrand.com" className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none" />
              </div>
              <div className="space-y-2">
                <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">WhatsApp Number</label>
@@ -203,16 +203,16 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                  if (!val.startsWith('+')) val = '+' + val.replace(/\D/g, '');
                  else val = '+' + val.replace(/\D/g, '');
                  updateField('contact_whatsapp', val);
-               }} placeholder="+91 00000 00000" className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none" />
+               }} placeholder="+91 00000 00000" className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none" />
                <p className="text-[10px] text-neutral-400 mt-1">This will display when scanned, please be aware. Make sure to enable private mode if you would not like to display personal info when scanned.</p>
              </div>
              <div className="space-y-2 md:col-span-2">
                <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Quick Talk URL (Calendly, etc)</label>
-               <input type="url" value={data.quick_talk_url || ''} onChange={e => updateField('quick_talk_url', e.target.value)} placeholder="https://calendly.com/yourusername" className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none" />
+               <input type="url" value={data.quick_talk_url || ''} onChange={e => updateField('quick_talk_url', e.target.value)} placeholder="https://calendly.com/yourusername" className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none" />
              </div>
              <div className="space-y-2 md:col-span-2">
                <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Collaboration Interest</label>
-               <textarea rows={2} value={data.collab_types || ''} onChange={e => updateField('collab_types', e.target.value)} placeholder="e.g. Open to Freelance, Mentorship..." className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none resize-none" />
+               <textarea rows={2} value={data.collab_types || ''} onChange={e => updateField('collab_types', e.target.value)} placeholder="e.g. Open to Freelance, Mentorship..." className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none resize-none" />
              </div>
           </div>
         </div>
@@ -222,31 +222,31 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
       <section className="space-y-10">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
+            <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
               <Globe size={24} />
             </div>
             <div>
-              <h3 className="text-lg font-black uppercase tracking-widest text-[#1A1A1A]">Network Presence</h3>
+              <h3 className="text-lg font-black uppercase tracking-widest text-white">Network Presence</h3>
               <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Connect up to 6 platforms</p>
             </div>
           </div>
-          <span className="px-4 py-2 bg-neutral-100 rounded-full text-[10px] font-black uppercase text-neutral-400 tracking-widest">
+          <span className="px-4 py-2 bg-[#2a2a2a] rounded-full text-[10px] font-black uppercase text-neutral-400 tracking-widest">
             {(data.platforms || []).length}/6 Active
           </span>
         </div>
 
-        <div className="p-10 bg-white border border-[#E5D5C4] rounded-[40px] shadow-xl shadow-blue-500/5 space-y-4">
+        <div className="p-10 bg-[#1a1a1a] border border-[#E5D5C4] rounded-[40px] shadow-[8px_8px_0px_#fff] shadow-blue-500/5 space-y-4">
           {(data.platforms || []).map((p: any, i: number) => (
-            <div key={i} className="flex flex-col sm:flex-row gap-4 p-6 bg-neutral-50 border border-neutral-200 rounded-[24px] relative group">
+            <div key={i} className="flex flex-col sm:flex-row gap-4 p-6 bg-[#1a1a1a] border border-white/20 rounded-[24px] relative group">
               <button type="button" onClick={() => {
                 const pCopy = [...(data.platforms || [])]; pCopy.splice(i, 1); updateField('platforms', pCopy);
-              }} className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm z-10 hover:bg-red-500 hover:text-white">
+              }} className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[2px_2px_0px_#fff] z-10 hover:bg-red-500 hover:text-white">
                 <Trash2 size={14} />
               </button>
               <div className="w-full sm:w-1/3">
                 <select value={p.platform || ''} onChange={e => {
                   const pCopy = [...(data.platforms || [])]; pCopy[i] = { ...p, platform: e.target.value }; updateField('platforms', pCopy);
-                }} className="w-full bg-white border-2 border-transparent rounded-xl px-4 py-3 text-sm font-black text-[#1A1A1A] focus:border-blue-500 transition-all outline-none appearance-none">
+                }} className="w-full bg-[#1a1a1a] border-2 border-transparent rounded-xl px-4 py-3 text-sm font-black text-white focus:border-blue-500 transition-all outline-none appearance-none">
                   <option value="">Platform</option>
                   <option value="GitHub">GitHub</option>
                   <option value="StackOverflow">StackOverflow</option>
@@ -263,10 +263,10 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
               <div className="w-full sm:flex-1 grid grid-cols-2 gap-4">
                 <input type="text" value={p.followers || ''} onChange={e => {
                   const pCopy = [...(data.platforms || [])]; pCopy[i] = { ...p, followers: e.target.value }; updateField('platforms', pCopy);
-                }} placeholder="Stats/Followers (e.g. 1.2K)" className="w-full bg-white border-2 border-transparent rounded-xl px-4 py-3 text-sm font-black text-[#1A1A1A] focus:border-blue-500 transition-all outline-none" />
+                }} placeholder="Stats/Followers (e.g. 1.2K)" className="w-full bg-[#1a1a1a] border-2 border-transparent rounded-xl px-4 py-3 text-sm font-black text-white focus:border-blue-500 transition-all outline-none" />
                 <input type="url" value={p.url || ''} onChange={e => {
                   const pCopy = [...(data.platforms || [])]; pCopy[i] = { ...p, url: e.target.value }; updateField('platforms', pCopy);
-                }} placeholder="https://..." className="w-full bg-white border-2 border-transparent rounded-xl px-4 py-3 text-sm font-black text-[#1A1A1A] focus:border-blue-500 transition-all outline-none" />
+                }} placeholder="https://..." className="w-full bg-[#1a1a1a] border-2 border-transparent rounded-xl px-4 py-3 text-sm font-black text-white focus:border-blue-500 transition-all outline-none" />
               </div>
             </div>
           ))}
@@ -282,17 +282,17 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
       {/* SECTION: TECH ARSENAL */}
       <section className="space-y-10">
         <div className="flex items-center gap-4 mb-2">
-          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
             <Code2 size={24} />
           </div>
           <div>
-            <h3 className="text-lg font-black uppercase tracking-widest text-[#1A1A1A]">Tech Arsenal</h3>
+            <h3 className="text-lg font-black uppercase tracking-widest text-white">Tech Arsenal</h3>
             <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Mastered languages and frameworks</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-8">
-          <div className="p-8 bg-neutral-50/50 rounded-[32px] border border-neutral-100">
+          <div className="p-8 bg-[#1a1a1a] rounded-[32px] border border-white/20">
             <label className="block text-xs font-black uppercase tracking-widest text-[#5C5246] mb-4">Core Programming Languages</label>
             <TagInput
               value={data.about?.languages || []}
@@ -302,7 +302,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
             />
           </div>
 
-          <div className="p-8 bg-neutral-50/50 rounded-[32px] border border-neutral-100">
+          <div className="p-8 bg-[#1a1a1a] rounded-[32px] border border-white/20">
             <label className="block text-xs font-black uppercase tracking-widest text-[#5C5246] mb-4">Full Tech Stack</label>
             <TagInput
               value={data.tech_stack || []}
@@ -318,22 +318,22 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
       <section className="space-y-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
+            <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
               <Layout size={24} />
             </div>
             <div>
-              <h3 className="text-lg font-black uppercase tracking-widest text-[#1A1A1A]">Built Masterpieces</h3>
+              <h3 className="text-lg font-black uppercase tracking-widest text-white">Built Masterpieces</h3>
               <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Showcase your top repositories</p>
             </div>
           </div>
-          <span className="px-4 py-2 bg-neutral-100 rounded-full text-[10px] font-black uppercase text-neutral-400 tracking-widest">
+          <span className="px-4 py-2 bg-[#2a2a2a] rounded-full text-[10px] font-black uppercase text-neutral-400 tracking-widest">
             {data.projects?.length || 0} Slots Active
           </span>
         </div>
 
         <div className="grid grid-cols-1 gap-10">
           {(data.projects || []).map((p: any, i: number) => (
-            <div key={i} className="group p-10 bg-white border border-neutral-100 rounded-[48px] shadow-sm hover:shadow-2xl transition-all relative overflow-hidden">
+            <div key={i} className="group p-10 bg-[#1a1a1a] border border-white/20 rounded-[48px] shadow-[2px_2px_0px_#fff] hover:shadow-[8px_8px_0px_#fff] transition-all relative overflow-hidden">
               <button
                 type="button"
                 onClick={() => {
@@ -348,7 +348,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 {/* Media Selector */}
-                <div className="relative h-64 rounded-[32px] overflow-hidden bg-neutral-50 border-4 border-dashed border-neutral-100 hover:border-blue-500 transition-all flex flex-col items-center justify-center group/media">
+                <div className="relative h-64 rounded-[32px] overflow-hidden bg-[#1a1a1a] border-4 border-dashed border-white/20 hover:border-blue-500 transition-all flex flex-col items-center justify-center group/media">
                   {p.url ? (
                     <>
                       <img src={getAssetUrl(p.url)} className="absolute inset-0 w-full h-full object-cover group-hover/media:scale-110 transition-transform duration-700" alt="" />
@@ -359,10 +359,10 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                     </>
                   ) : (
                     <div className="text-center p-6">
-                      <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center mx-auto mb-4">
+                      <div className="w-16 h-16 rounded-2xl bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] flex items-center justify-center mx-auto mb-4">
                         <Layout size={28} className="text-blue-500" />
                       </div>
-                      <span className="text-xs font-black uppercase text-neutral-900 tracking-widest">Project Screenshot</span>
+                      <span className="text-xs font-black uppercase text-white tracking-widest">Project Screenshot</span>
                       <p className="text-[10px] font-bold text-neutral-400 mt-2 uppercase tracking-widest">Recommended: 1200x800</p>
                     </div>
                   )}
@@ -382,7 +382,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                     }}
                   />
                   {uploading && (
-                    <div className="absolute inset-0 bg-white/90 flex items-center justify-center z-20">
+                    <div className="absolute inset-0 bg-[#1a1a1a]/90 flex items-center justify-center z-20">
                       <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
                     </div>
                   )}
@@ -401,7 +401,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                           pCopy[i] = { ...p, name: e.target.value }
                           updateField('projects', pCopy)
                         }}
-                        className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none"
+                        className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none"
                       />
                     </div>
                     <div>
@@ -414,7 +414,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                           pCopy[i] = { ...p, stars: Number(e.target.value) }
                           updateField('projects', pCopy)
                         }}
-                        className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none"
+                        className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none"
                       />
                     </div>
                   </div>
@@ -429,7 +429,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                         pCopy[i] = { ...p, description: e.target.value }
                         updateField('projects', pCopy)
                       }}
-                      className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none resize-none"
+                      className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none resize-none"
                     />
                   </div>
 
@@ -444,7 +444,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                         updateField('projects', pCopy)
                       }}
                       placeholder="https://github.com/... or https://yourproject.com"
-                      className="w-full bg-[#F0F7FF] border-2 border-transparent rounded-2xl px-6 py-4 text-sm font-black text-[#1A1A1A] focus:bg-white focus:border-blue-500 transition-all outline-none"
+                      className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none"
                     />
                   </div>
                 </div>
@@ -460,9 +460,9 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                 { name: 'New Project', description: '', stars: 0, github_url: '', live_url: '', tech: [] }
               ])
             }}
-            className="w-full py-16 bg-neutral-50 border-2 border-dashed border-neutral-200 rounded-[48px] hover:bg-blue-50 hover:border-blue-200 transition-all text-xs font-black uppercase text-blue-600 flex flex-col items-center justify-center gap-4 group"
+            className="w-full py-16 bg-[#1a1a1a] border-2 border-dashed border-white/20 rounded-[48px] hover:bg-blue-50 hover:border-blue-200 transition-all text-xs font-black uppercase text-blue-600 flex flex-col items-center justify-center gap-4 group"
           >
-            <div className="w-16 h-16 rounded-[24px] bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div className="w-16 h-16 rounded-[24px] bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] flex items-center justify-center group-hover:scale-110 transition-transform">
                <Plus size={32} />
             </div>
             Feature Another Masterpiece
@@ -473,22 +473,22 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
       {/* SECTION: COMMAND CENTER */}
       <section className="space-y-10">
         <div className="flex items-center gap-4 mb-2">
-          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
             <FileText size={24} />
           </div>
           <div>
-            <h3 className="text-lg font-black uppercase tracking-widest text-[#1A1A1A]">Command Center</h3>
+            <h3 className="text-lg font-black uppercase tracking-widest text-white">Command Center</h3>
             <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Upload your developer CV or Resume</p>
           </div>
         </div>
 
-        <div className="p-10 bg-white border border-[#E5D5C4] rounded-[40px] shadow-xl shadow-blue-500/5">
+        <div className="p-10 bg-[#1a1a1a] border border-[#E5D5C4] rounded-[40px] shadow-[8px_8px_0px_#fff] shadow-blue-500/5">
           <div className="flex items-center gap-8 p-10 border-4 border-dashed border-neutral-50 rounded-[32px] hover:border-blue-500 hover:bg-blue-50/50 transition-all group relative">
-            <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-neutral-400 group-hover:text-blue-500 shadow-xl transition-all">
+            <div className="w-20 h-20 bg-[#1a1a1a] rounded-3xl flex items-center justify-center text-neutral-400 group-hover:text-blue-500 shadow-[8px_8px_0px_#fff] transition-all">
               <FileText size={40} />
             </div>
             <div className="flex-1">
-              <h4 className="text-xl font-black text-neutral-900 mb-1 tracking-tighter">
+              <h4 className="text-xl font-black text-white mb-1 tracking-tighter">
                 {data.resume_url ? 'CV Deployed ✓' : 'Upload Resume / CV'}
               </h4>
               <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest">
@@ -516,7 +516,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
               disabled={uploading}
             />
             {uploading && (
-              <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center rounded-[32px] z-20">
+              <div className="absolute inset-0 bg-[#1a1a1a]/60 backdrop-blur-sm flex items-center justify-center rounded-[32px] z-20">
                 <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
               </div>
             )}

@@ -136,14 +136,13 @@ export default function HomepagePreviewsAdmin() {
     <div className="max-w-4xl mx-auto pb-20">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h2 className="text-2xl font-bold" style={{ color: 'var(--ink)', fontFamily: 'Fraunces, serif' }}>Homepage Previews</h2>
-          <p className="text-sm" style={{ color: 'var(--muted)' }}>Upload DPs and Recent Works (Images/Videos) for the persona showcase.</p>
+          <h2 className="text-2xl font-bold" style={{ color: '#ffffff', fontFamily: 'Fraunces, serif' }}>Homepage Previews</h2>
+          <p className="text-sm text-neutral-400 font-bold">Upload DPs and Recent Works (Images/Videos) for the persona showcase.</p>
         </div>
         <button 
           onClick={handleSave}
           disabled={loading}
-          className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white transition-all shadow-lg hover:shadow-xl active:scale-95 disabled:opacity-50"
-          style={{ background: 'var(--ink)' }}
+          className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white transition-all shadow-[6px_6px_0px_#fff] hover:shadow-[8px_8px_0px_#fff] active:scale-95 disabled:opacity-50 bg-white text-black"
         >
           {loading ? <RefreshCw size={18} className="animate-spin" /> : <Save size={18} />}
           {loading ? 'Saving...' : 'Save Changes'}
@@ -158,12 +157,12 @@ export default function HomepagePreviewsAdmin() {
 
       <div className="grid grid-cols-1 gap-12">
         {Object.entries(previews).map(([id, p]) => (
-          <div key={id} className="p-8 rounded-[40px] border border-[var(--border2)] bg-white shadow-sm hover:shadow-md transition-shadow space-y-8">
+          <div key={id} className="p-8 rounded-[40px] border border-[var(--border2)] bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] hover:shadow-[4px_4px_0px_#fff] transition-shadow space-y-8">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-neutral-50 flex items-center justify-center text-2xl">
+              <div className="w-12 h-12 rounded-2xl bg-[#1a1a1a] flex items-center justify-center text-2xl">
                 {id === 'influencer' ? '🎬' : id === 'developer' ? '💻' : '🎓'}
               </div>
-              <h3 className="text-xl font-bold uppercase tracking-tight" style={{ color: 'var(--ink)' }}>
+              <h3 className="text-xl font-bold uppercase tracking-tight text-white">
                 {id === 'influencer' ? 'Content Creator' : id === 'developer' ? 'Tech' : 'Student'}
               </h3>
             </div>
@@ -177,7 +176,7 @@ export default function HomepagePreviewsAdmin() {
                     type="text" 
                     value={p.name}
                     onChange={e => updateField(id, 'name', e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-neutral-200 outline-none focus:border-orange-500 transition-colors"
+                    className="w-full px-4 py-3 rounded-xl border border-white/20 outline-none focus:border-orange-500 transition-colors"
                   />
                 </div>
                 <div>
@@ -186,7 +185,7 @@ export default function HomepagePreviewsAdmin() {
                     rows={3}
                     value={id === 'influencer' ? p.tagline : id === 'developer' ? p.mission : p.bio}
                     onChange={e => updateField(id, id === 'influencer' ? 'tagline' : id === 'developer' ? 'mission' : 'bio', e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-neutral-200 outline-none focus:border-orange-500 transition-colors resize-none"
+                    className="w-full px-4 py-3 rounded-xl border border-white/20 outline-none focus:border-orange-500 transition-colors resize-none"
                   />
                 </div>
               </div>
@@ -196,19 +195,19 @@ export default function HomepagePreviewsAdmin() {
                 <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3">Profile Picture (Upload)</label>
                 <div className="flex items-center gap-6">
                   <div className="relative group">
-                    <div className="w-24 h-24 rounded-full border-4 border-white shadow-xl overflow-hidden bg-neutral-50 flex-shrink-0">
+                    <div className="w-24 h-24 rounded-full border-4 border-white shadow-[8px_8px_0px_#fff] overflow-hidden bg-[#1a1a1a] flex-shrink-0">
                       <img src={getAssetUrl(p.avatar)} className="w-full h-full object-cover" alt="" />
                     </div>
                     {uploading === `${id}-avatar` && (
-                      <div className="absolute inset-0 bg-white/60 flex items-center justify-center rounded-full">
+                      <div className="absolute inset-0 bg-[#1a1a1a]/60 flex items-center justify-center rounded-full">
                         <RefreshCw size={20} className="animate-spin text-orange-500" />
                       </div>
                     )}
                   </div>
                   <label className="flex-1 cursor-pointer">
-                    <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-neutral-200 rounded-3xl hover:border-orange-500 hover:bg-orange-50 transition-all group">
+                    <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-white/20 rounded-3xl hover:border-orange-500 hover:bg-orange-50 transition-all group">
                       <Upload size={20} className="text-neutral-400 group-hover:text-orange-500 mb-2" />
-                      <span className="text-[11px] font-bold text-neutral-500 group-hover:text-orange-500 uppercase tracking-widest">Replace DP</span>
+                      <span className="text-[11px] font-bold text-neutral-400 font-bold group-hover:text-orange-500 uppercase tracking-widest">Replace DP</span>
                     </div>
                     <input type="file" className="hidden" accept="image/*" onChange={e => handleFileUpload(e, id, 'avatar')} />
                   </label>
@@ -217,15 +216,15 @@ export default function HomepagePreviewsAdmin() {
             </div>
 
             {/* Recent Works Section */}
-            <div className="pt-6 border-t border-neutral-100">
+            <div className="pt-6 border-t border-white/20">
               <div className="flex justify-between items-center mb-6">
                 <div>
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-neutral-900">Recent Works</h4>
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-white">Recent Works</h4>
                   <p className="text-[8px] font-bold text-neutral-400 uppercase tracking-widest">Photos or Videos (Max 10MB)</p>
                 </div>
                 <button 
                   onClick={() => addWorkItem(id)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl border border-neutral-200 text-[10px] font-black uppercase tracking-widest hover:bg-neutral-50 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/20 text-[10px] font-black uppercase tracking-widest hover:bg-[#1a1a1a] transition-colors"
                 >
                   <Plus size={14} /> Add Item
                 </button>
@@ -233,16 +232,16 @@ export default function HomepagePreviewsAdmin() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {p.works?.map((work, idx) => (
-                  <div key={idx} className="p-5 rounded-3xl border border-neutral-100 bg-neutral-50/50 space-y-4 relative group">
+                  <div key={idx} className="p-5 rounded-3xl border border-white/20 bg-neutral-50/50 space-y-4 relative group">
                     <button 
                       onClick={() => removeWorkItem(id, idx)}
-                      className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center text-red-500 opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110 active:scale-95"
+                      className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-[#1a1a1a] shadow-[4px_4px_0px_#fff] flex items-center justify-center text-red-500 opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110 active:scale-95"
                     >
                       <Trash2 size={14} />
                     </button>
                     
                     <div className="flex gap-4">
-                      <label className="w-32 h-32 rounded-2xl overflow-hidden bg-neutral-100 border-2 border-white shadow-sm flex-shrink-0 cursor-pointer relative">
+                      <label className="w-32 h-32 rounded-2xl overflow-hidden bg-[#2a2a2a] border-2 border-white shadow-[2px_2px_0px_#fff] flex-shrink-0 cursor-pointer relative">
                         {work.img ? (
                           work.type === 'video' ? (
                             <video src={getAssetUrl(work.img)} className="w-full h-full object-cover" />
@@ -256,7 +255,7 @@ export default function HomepagePreviewsAdmin() {
                           </div>
                         )}
                         {uploading === `${id}-work-${idx}` && (
-                          <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
+                          <div className="absolute inset-0 bg-[#1a1a1a]/60 flex items-center justify-center">
                             <RefreshCw size={16} className="animate-spin text-orange-500" />
                           </div>
                         )}
@@ -271,7 +270,7 @@ export default function HomepagePreviewsAdmin() {
                             type="text" 
                             value={work.title}
                             onChange={e => updateWorkField(id, idx, 'title', e.target.value)}
-                            className="w-full px-3 py-2 rounded-lg border border-neutral-200 text-xs font-bold outline-none focus:border-orange-500"
+                            className="w-full px-3 py-2 rounded-lg border border-white/20 text-xs font-bold outline-none focus:border-orange-500"
                           />
                         </div>
                         <div className="flex items-center gap-2">

@@ -144,7 +144,7 @@ export default function CatalogAdmin() {
       {/* Upload Form */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1">
-          <form id="catalog-form" onSubmit={handleSubmit} className="bg-white p-6 rounded-xl border border-[var(--border2)] sticky top-28">
+          <form id="catalog-form" onSubmit={handleSubmit} className="bg-[#1a1a1a] p-6 rounded-xl border border-[var(--border2)] sticky top-28">
             <h2 className="text-lg font-bold mb-4 font-display text-[var(--ink)]">
               {editingDetails ? 'Edit Design' : 'Add New Design'}
             </h2>
@@ -166,7 +166,7 @@ export default function CatalogAdmin() {
                   </label>
                   <div className="flex items-center gap-3">
                     {existingUrl && (
-                      <div className="w-8 h-8 rounded overflow-hidden border border-neutral-200 shrink-0 bg-neutral-100">
+                      <div className="w-8 h-8 rounded overflow-hidden border border-white/20 shrink-0 bg-neutral-100">
                         <img src={getAssetUrl(existingUrl)} alt={type} className="w-full h-full object-cover" />
                       </div>
                     )}
@@ -188,7 +188,7 @@ export default function CatalogAdmin() {
                     setFiles({ front: null, back: null, model: null, image4: null, image5: null, image6: null })
                     document.getElementById('catalog-form').reset()
                   }} 
-                  className="w-full py-3 rounded-xl font-bold text-neutral-500 bg-neutral-100 hover:bg-neutral-200 transition-colors text-sm"
+                  className="w-full py-3 rounded-xl font-bold text-neutral-400 font-bold bg-[#2a2a2a] hover:bg-neutral-200 transition-colors text-sm"
                 >
                   Cancel Edit
                 </button>
@@ -199,7 +199,7 @@ export default function CatalogAdmin() {
 
         {/* Catalog List */}
         <div className="lg:col-span-2">
-          <div className="bg-white p-6 rounded-xl border border-[var(--border2)]">
+          <div className="bg-[#1a1a1a] p-6 rounded-xl border border-[var(--border2)]">
             <h2 className="text-lg font-bold mb-4 font-display text-[var(--ink)]">Current Catalog</h2>
             {loading ? <p className="text-sm text-[var(--muted)]">Loading...</p> : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -217,7 +217,7 @@ export default function CatalogAdmin() {
                           {(d.available_colors || []).length > 0
                             ? d.available_colors.map(c => (
                                 <span key={c.id} title={`${c.label}: ${c.stock} pcs`}
-                                  className="w-4 h-4 rounded-full border border-neutral-300 inline-block"
+                                  className="w-4 h-4 rounded-full border border-white/40 inline-block"
                                   style={{ backgroundColor: c.hex }} />
                               ))
                             : <span className="text-[10px] text-orange-400 font-bold uppercase tracking-wider">No colors set</span>
@@ -253,15 +253,15 @@ export default function CatalogAdmin() {
       {/* Inventory Editor Modal */}
       {editingInventory && (
         <div className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setEditingInventory(null)}>
-          <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl" onClick={e => e.stopPropagation()}>
-            <h3 className="text-lg font-black text-neutral-900 mb-1">Colour & Stock Manager</h3>
+          <div className="bg-[#1a1a1a] rounded-2xl p-8 w-full max-w-md shadow-[8px_8px_0px_#fff]" onClick={e => e.stopPropagation()}>
+            <h3 className="text-lg font-black text-white mb-1">Colour & Stock Manager</h3>
             <p className="text-xs text-neutral-400 font-medium mb-6">Set available stock per colour. Set to 0 to hide that colour from customers.</p>
             <div className="space-y-3">
               {colorDraft.map(color => (
                 <div key={color.id} className="flex items-center gap-4">
-                  <div className="w-8 h-8 rounded-full border-2 border-neutral-200 flex-shrink-0" style={{ backgroundColor: color.hex }} />
+                  <div className="w-8 h-8 rounded-full border-2 border-white/20 flex-shrink-0" style={{ backgroundColor: color.hex }} />
                   <div className="flex-1">
-                    <p className="text-sm font-bold text-neutral-700">{color.label}</p>
+                    <p className="text-sm font-bold text-neutral-300">{color.label}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <label className="text-[10px] text-neutral-400 font-bold uppercase">Stock</label>
@@ -270,7 +270,7 @@ export default function CatalogAdmin() {
                       min="0"
                       value={color.stock}
                       onChange={e => updateColorStock(color.id, e.target.value)}
-                      className="w-20 px-2 py-1.5 rounded-lg border border-neutral-200 text-sm font-bold text-center focus:outline-none focus:border-orange-400"
+                      className="w-20 px-2 py-1.5 rounded-lg border border-white/20 text-sm font-bold text-center focus:outline-none focus:border-orange-400"
                     />
                     {color.stock > 0 && <CheckCircle size={16} className="text-emerald-500" />}
                   </div>
@@ -278,7 +278,7 @@ export default function CatalogAdmin() {
               ))}
             </div>
             <div className="flex gap-3 mt-8">
-              <button onClick={() => setEditingInventory(null)} className="flex-1 py-3 rounded-xl border border-neutral-200 text-sm font-bold text-neutral-500 hover:bg-neutral-50 transition-colors">
+              <button onClick={() => setEditingInventory(null)} className="flex-1 py-3 rounded-xl border border-white/20 text-sm font-bold text-neutral-400 font-bold hover:bg-[#1a1a1a] transition-colors">
                 Cancel
               </button>
               <button onClick={saveInventory} className="flex-1 py-3 rounded-xl bg-black text-white text-sm font-bold hover:bg-orange-500 transition-colors">

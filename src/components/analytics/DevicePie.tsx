@@ -49,10 +49,10 @@ export default function DevicePie({ data }: { data: any }) {
         </PieChart>
       </ResponsiveContainer>
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8">
-        <p className="text-2xl font-black text-neutral-900">
+        <p className="text-2xl font-black text-white">
           {!isEmpty && dominant.name !== 'No Data' ? `${Math.round(dominant.value)}%` : '—'}
         </p>
-        <p className="text-[10px] font-black text-neutral-500 uppercase tracking-widest mt-0.5">
+        <p className="text-[10px] font-black text-neutral-400 font-bold uppercase tracking-widest mt-0.5">
           {!isEmpty && dominant.name !== 'No Data' ? dominant.name : 'Devices'}
         </p>
       </div>

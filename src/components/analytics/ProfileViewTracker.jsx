@@ -136,34 +136,34 @@ export default function ProfileViewTracker({ profileId }) {
 
   return (
     <div className="fixed bottom-4 left-4 right-4 z-[9999] md:left-auto md:right-4 md:w-96 animate-slideUp">
-      <div className="bg-white/95 backdrop-blur-xl border border-neutral-200 rounded-2xl p-6 shadow-2xl">
+      <div className="bg-[#1a1a1a]/95 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-[8px_8px_0px_#fff]">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center text-orange-500">
               <MapPin size={20} />
             </div>
             <div>
-              <h3 className="text-sm font-black text-neutral-900">Accurate Analytics</h3>
+              <h3 className="text-sm font-black text-white">Accurate Analytics</h3>
               <p className="text-[10px] uppercase tracking-widest font-bold text-neutral-400">KnoWMi Protocol</p>
             </div>
           </div>
-          <button onClick={() => handleLocation(false, null)} className="text-neutral-400 hover:text-neutral-600 transition-colors">
+          <button onClick={() => handleLocation(false, null)} className="text-neutral-400 hover:text-neutral-400 transition-colors">
             <X size={16} />
           </button>
         </div>
-        <p className="text-xs text-neutral-600 mb-5 leading-relaxed font-medium">
+        <p className="text-xs text-neutral-400 mb-5 leading-relaxed font-medium">
           To provide 100% accurate scan analytics to the creator as outlined in our Privacy Policy, we request your location.
         </p>
         <div className="flex gap-2">
           <button
             onClick={() => handleLocation(true, null)}
-            className="flex-1 py-2.5 bg-orange-500 text-white text-[11px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-600 transition-colors flex items-center justify-center gap-1.5 shadow-md"
+            className="flex-1 py-2.5 bg-orange-500 text-white text-[11px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-600 transition-colors flex items-center justify-center gap-1.5 shadow-[4px_4px_0px_#fff]"
           >
             <ShieldCheck size={14} /> Allow
           </button>
           <button
             onClick={() => handleLocation(false, null)}
-            className="flex-1 py-2.5 bg-neutral-100 text-neutral-600 text-[11px] font-black uppercase tracking-widest rounded-xl hover:bg-neutral-200 transition-colors flex items-center justify-center"
+            className="flex-1 py-2.5 bg-[#2a2a2a] text-neutral-400 text-[11px] font-black uppercase tracking-widest rounded-xl hover:bg-neutral-200 transition-colors flex items-center justify-center"
           >
             Skip
           </button>

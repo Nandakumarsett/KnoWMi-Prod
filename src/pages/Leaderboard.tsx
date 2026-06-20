@@ -124,9 +124,7 @@ export default function Leaderboard() {
   }, [profiles]);
 
   const filteredProfiles = useMemo(() => {
-    // Filter out legacy dummy profiles (like gamer, fitness, developer, student, etc.)
-    const legacyCategories = ['dev', 'developer', 'student', 'gamer', 'gaming', 'fitness', 'gym', 'chef', 'musician', 'athlete', 'sports', 'education', 'coder', 'tech'];
-    let result = profiles.filter(p => !legacyCategories.includes(p.profile_category?.toLowerCase() || ''));
+    let result = profiles;
 
     if (category !== 'All') result = result.filter(p => p.profile_category?.toLowerCase() === category.toLowerCase());
     if (search) {
@@ -139,10 +137,17 @@ export default function Leaderboard() {
 
   // If searching or filtering, show all matches. Otherwise, strictly limit to Top 10 as requested.
   const displayLimit = (search || category !== 'All') ? filteredProfiles.length : 10;
-  const top10Profiles = filteredProfiles.slice(0, displayLimit);
+  
+  // Ensure profiles have ranks by sorting by score if rank is missing
+  const sortedProfiles = [...filteredProfiles].sort((a, b) => (b.knowmi_score || 0) - (a.knowmi_score || 0)).map((p, i) => ({
+    ...p,
+    rank: p.rank || (i + 1)
+  }));
+  
+  const top10Profiles = sortedProfiles.slice(0, displayLimit);
 
   const podium = top10Profiles.filter(p => p.rank <= 3).sort((a, b) => {
-    if (a.rank === 1) return 0;
+    if (a.rank === 1) return -1;
     if (b.rank === 1) return 1;
     return a.rank === 2 ? -1 : 1;
   });
@@ -184,77 +189,79 @@ export default function Leaderboard() {
   }, [shareProfile]);
 
   if (loading) return (
-    <div className="min-h-screen bg-[#0A0A0B] flex flex-col items-center justify-center p-10 relative overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-orange-500/10 rounded-full blur-[120px]" />
-      <div className="animate-spin rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent mb-4 relative z-10" />
-      <p className="text-sm font-bold text-neutral-400 uppercase tracking-widest animate-pulse relative z-10">Calculating Global Ranks...</p>
+    <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center p-10 relative overflow-hidden text-white">
+      <div className="w-24 h-24 rounded-xl border-[4px] border-orange-500 bg-[#1a1a1a] shadow-[6px_6px_0px_#F97316] flex items-center justify-center animate-pulse mb-6">
+        <Sparkles size={32} className="text-orange-500" />
+      </div>
+      <p className="text-sm font-black text-white uppercase tracking-widest relative z-10 border-[3px] border-white px-4 py-2 bg-[#1a1a1a] shadow-[4px_4px_0px_#fff]">Calculating Global Ranks...</p>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-white pb-32 font-sans relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-orange-500/10 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-violet-600/10 rounded-full blur-[150px] pointer-events-none" />
-      
-      <header className="h-20 bg-[#0A0A0B]/80 backdrop-blur-xl border-b border-white/5 flex items-center px-8 sticky top-0 z-50">
+    <div className="min-h-screen bg-[#0a0a0a] text-white pb-32 font-sans relative overflow-hidden">
+      <header className="h-20 bg-[#0a0a0a] border-b-[4px] border-white flex items-center px-8 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
           <div className="flex flex-col">
-            <a href="/" className="font-display text-2xl tracking-tight text-white hover:text-orange-500 transition-colors">KnoWMi <span className="text-neutral-500 font-light text-xl">| Leaderboard</span></a>
-            <p className="text-[10px] font-bold text-orange-500 uppercase tracking-[0.2em] leading-none mt-1">Scan Me. Know Me.</p>
+            <a href="/" className="font-black text-2xl tracking-tighter text-white uppercase transition-colors flex items-center gap-2">
+              KnoWMi <span className="text-orange-500 text-lg">| Leaderboard</span>
+            </a>
+            <p className="text-[10px] font-black text-orange-500 uppercase tracking-[0.2em] leading-none mt-1">Scan Me. Know Me.</p>
           </div>
           <div className="flex items-center gap-3">
-            <a href="/dashboard" className="text-xs font-bold text-neutral-400 hover:text-white transition-colors">← Back to Dashboard</a>
+            <a href="/dashboard" className="px-4 py-2 bg-white text-black border-[3px] border-black rounded-lg text-[10px] font-black uppercase tracking-widest shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center gap-2">
+              <ArrowLeft size={14} /> Back
+            </a>
           </div>
         </div>
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-xl flex items-center gap-4 hover:bg-white/10 transition-colors">
-            <div className="w-12 h-12 rounded-2xl bg-orange-500/20 flex items-center justify-center text-orange-400"><Users size={24} /></div>
+          <div className="bg-[#1a1a1a] p-6 rounded-xl border-[4px] border-orange-500 shadow-[8px_8px_0px_#F97316] flex items-center gap-4 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
+            <div className="w-16 h-16 rounded-xl bg-orange-500 border-[3px] border-black flex items-center justify-center text-black shadow-[3px_3px_0px_#000]"><Users size={32} /></div>
             <div>
-              <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Global Profiles</p>
-              <p className="text-2xl font-black text-white">{stats.totalProfiles.toLocaleString()}</p>
+              <p className="text-[10px] font-black text-white uppercase tracking-widest border-b-[2px] border-white/20 pb-1 mb-1">Global Profiles</p>
+              <p className="text-4xl font-black text-orange-500 tracking-tighter">{stats.totalProfiles.toLocaleString()}</p>
             </div>
           </div>
-          <div className="bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-xl flex items-center gap-4 hover:bg-white/10 transition-colors">
-            <div className="w-12 h-12 rounded-2xl bg-teal-500/20 flex items-center justify-center text-teal-400"><Activity size={24} /></div>
+          <div className="bg-[#1a1a1a] p-6 rounded-xl border-[4px] border-teal-400 shadow-[8px_8px_0px_#2dd4bf] flex items-center gap-4 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
+            <div className="w-16 h-16 rounded-xl bg-teal-400 border-[3px] border-black flex items-center justify-center text-black shadow-[3px_3px_0px_#000]"><Activity size={32} /></div>
             <div>
-              <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Avg Total Views</p>
-              <p className="text-2xl font-black text-white">{stats.avgScore}</p>
+              <p className="text-[10px] font-black text-white uppercase tracking-widest border-b-[2px] border-white/20 pb-1 mb-1">Avg Total Views</p>
+              <p className="text-4xl font-black text-teal-400 tracking-tighter">{stats.avgScore}</p>
             </div>
           </div>
-          <div className="bg-white/5 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-xl flex items-center gap-4 hover:bg-white/10 transition-colors">
-            <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center text-blue-400"><Clock size={24} /></div>
+          <div className="bg-[#1a1a1a] p-6 rounded-xl border-[4px] border-white shadow-[8px_8px_0px_#fff] flex items-center gap-4 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
+            <div className="w-16 h-16 rounded-xl bg-white border-[3px] border-black flex items-center justify-center text-black shadow-[3px_3px_0px_#000]"><Clock size={32} /></div>
             <div>
-              <p className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Last Updated</p>
-              <p className="text-2xl font-black text-blue-400">{formatTime(stats.lastUpdated)}</p>
+              <p className="text-[10px] font-black text-white uppercase tracking-widest border-b-[2px] border-white/20 pb-1 mb-1">Last Updated</p>
+              <p className="text-2xl font-black text-white uppercase tracking-wider mt-2">{formatTime(stats.lastUpdated)}</p>
             </div>
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
-          <h1 className="text-4xl font-black text-white tracking-tight flex items-center gap-3">
-             <span>Kno<span className="text-orange-500">WM</span>i</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">Elite</span>
-             <Sparkles className="text-orange-500" size={28} />
+          <h1 className="text-4xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
+             <span className="bg-white text-black px-4 py-1 border-[4px] border-orange-500 shadow-[4px_4px_0px_#F97316]">KnoWMi Elite</span>
+             <Sparkles className="text-orange-500" size={32} />
           </h1>
           <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
             <div className="relative group flex-1 sm:w-64">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 group-focus-within:text-orange-500 transition-colors" size={18} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white" size={18} />
               <input
                 type="text"
                 placeholder="Search by name..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-12 pr-4 outline-none focus:border-orange-500 focus:bg-white/10 text-white shadow-sm transition-all placeholder:text-neutral-600"
+                className="w-full bg-[#1a1a1a] border-[3px] border-white rounded-xl py-3 pl-12 pr-4 outline-none focus:border-orange-500 text-white shadow-[4px_4px_0px_#fff] transition-all font-bold placeholder:text-neutral-500"
               />
             </div>
-            <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 shadow-sm backdrop-blur-md">
+            <div className="flex bg-[#1a1a1a] p-1.5 rounded-xl border-[3px] border-white shadow-[4px_4px_0px_#fff]">
               {CATEGORIES.map(cat => (
                 <button
                   key={cat}
                   onClick={() => setCategory(cat)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${category === cat ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/20' : 'text-neutral-400 hover:text-white hover:bg-white/5'}`}
+                  className={`px-4 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${category === cat ? 'bg-orange-500 text-black border-[2px] border-black shadow-[2px_2px_0px_#000]' : 'text-neutral-400 hover:text-white'}`}
                 >
                   {cat}
                 </button>
@@ -276,52 +283,51 @@ export default function Leaderboard() {
                       const slug = p.secure_slug || p.id;
                       navigate(`/p/${slug}?src=leaderboard`);
                     }}
-                    className={`relative group flex flex-col items-center pt-16 pb-10 px-8 rounded-[3rem] border transition-all duration-500 cursor-pointer shadow-2xl hover:-translate-y-2 w-full md:w-72 backdrop-blur-xl ${isFirst ? 'bg-white/10 border-orange-500/50 shadow-orange-500/20 h-auto md:min-h-[540px] z-20' : 'bg-white/5 border-white/10 h-auto md:min-h-[460px] z-10'}`}
+                    className={`relative group flex flex-col items-center pt-16 pb-10 px-8 rounded-xl border-[4px] border-black transition-all duration-300 cursor-pointer shadow-[8px_8px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none w-full md:w-72 bg-[#1a1a1a] z-10 ${isFirst ? 'border-orange-500 shadow-[8px_8px_0px_#F97316] h-auto md:min-h-[540px]' : 'h-auto md:min-h-[460px]'}`}
                   >
-                  {isFirst && <div className="absolute inset-0 bg-gradient-to-b from-orange-500/10 to-transparent rounded-[3rem] pointer-events-none" />}
-                  <div className={`relative p-1.5 rounded-full mb-8 transition-transform duration-500 group-hover:scale-110 shadow-lg ${isFirst ? 'bg-gradient-to-tr from-orange-400 via-amber-300 to-orange-500 shadow-orange-500/50' : isSecond ? 'bg-gradient-to-tr from-slate-300 to-slate-500' : 'bg-gradient-to-tr from-orange-800 to-orange-900'}`}>
-                    <div className="rounded-full border-4 border-[#0A0A0B] overflow-hidden bg-[#0A0A0B]">
+                  <div className={`relative p-2 rounded-xl mb-8 shadow-[4px_4px_0px_#000] border-[3px] border-black ${isFirst ? 'bg-orange-500' : isSecond ? 'bg-teal-400' : 'bg-white'}`}>
+                    <div className="rounded-lg border-[3px] border-[#0a0a0a] overflow-hidden bg-[#0a0a0a]">
                       <Avatar src={p.avatar_url} name={p.display_name} username={p.username} size={isFirst ? "xl" : "lg"} />
                     </div>
                     {isFirst && (
-                      <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center text-white border-4 border-[#0A0A0B] shadow-lg">
-                        <Trophy size={18} />
+                      <div className="absolute -bottom-3 -right-3 w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center text-black border-[3px] border-black shadow-[3px_3px_0px_#000]">
+                        <Trophy size={20} />
                       </div>
                     )}
                   </div>
                   <div className="text-center mb-8 flex-1 relative z-10">
-                    <h3 className="text-2xl font-black text-white line-clamp-1 mb-1 tracking-tight">{p.display_name}</h3>
+                    <h3 className="text-2xl font-black text-white line-clamp-1 mb-1 tracking-tight uppercase">{p.display_name}</h3>
                     <p className="text-sm font-bold text-neutral-400 mb-3">@{p.username}</p>
-                    <div className={`inline-block px-4 py-1.5 rounded-full shadow-md font-black text-[10px] uppercase tracking-widest text-white mb-3 ${isFirst ? 'bg-gradient-to-r from-orange-500 to-amber-500 shadow-orange-500/20' : isSecond ? 'bg-white/20' : 'bg-white/10'}`}>
+                    <div className={`inline-block px-4 py-1.5 rounded-md font-black text-[10px] uppercase tracking-widest text-black border-[2px] border-black shadow-[2px_2px_0px_#000] mb-3 ${isFirst ? 'bg-orange-500' : isSecond ? 'bg-teal-400' : 'bg-white'}`}>
                       Global Rank #{p.rank}
                     </div>
-                    <div className="flex justify-center">
+                    <div className="flex justify-center mt-2">
                       <BadgePill badge={p.badge} />
                     </div>
                   </div>
-                  <div className={`w-full rounded-[2rem] p-5 flex items-center justify-between border relative z-10 ${isFirst ? 'border-orange-500/30 bg-orange-500/10' : 'border-white/5 bg-black/20'}`}>
+                  <div className={`w-full rounded-xl p-5 flex items-center justify-between border-[3px] border-black relative z-10 ${isFirst ? 'bg-orange-500 text-black shadow-[4px_4px_0px_#000]' : 'bg-[#0a0a0a] border-white shadow-[4px_4px_0px_#fff]'}`}>
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 mb-1">Total Views</span>
-                      <span className={`text-3xl font-black ${isFirst ? 'text-orange-400' : 'text-white'}`}>{p.knowmi_score}</span>
+                      <span className={`text-[10px] font-black uppercase tracking-wider mb-1 ${isFirst ? 'text-black/70' : 'text-neutral-400'}`}>Total Views</span>
+                      <span className={`text-3xl font-black ${isFirst ? 'text-black' : 'text-white'}`}>{p.knowmi_score}</span>
                     </div>
                     <div className="flex flex-col items-end">
-                      <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 mb-1">Trend</span>
-                      <div className={`flex items-center gap-1 font-bold text-sm ${p.rank_delta >= 0 ? (isFirst ? 'text-orange-400' : 'text-teal-400') : 'text-rose-400'}`}>
+                      <span className={`text-[10px] font-black uppercase tracking-wider mb-1 ${isFirst ? 'text-black/70' : 'text-neutral-400'}`}>Trend</span>
+                      <div className={`flex items-center gap-1 font-bold text-sm ${p.rank_delta >= 0 ? (isFirst ? 'text-black' : 'text-teal-400') : 'text-rose-400'}`}>
                         {p.rank_delta >= 0 ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
                         <span>{p.rank_delta === 0 ? 'Steady' : `${p.rank_delta > 0 ? '+' : ''}${p.rank_delta}%`}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex justify-between w-full mt-5 relative z-10 gap-3">
+                  <div className="flex justify-between w-full mt-6 relative z-10 gap-3">
                     <button 
                       onClick={(e) => { e.stopPropagation(); setShareProfile(p); }} 
-                      className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-2xl text-neutral-300 font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-white/5 hover:text-orange-400 hover:border-orange-500/30"
+                      className="flex-1 py-3 bg-white text-black border-[3px] border-black rounded-lg font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
                     >
                       <Share2 size={16} /> Share
                     </button>
                     <a 
                       href={`/p/${p.secure_slug || p.id}?src=leaderboard`} 
-                      className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-2xl text-neutral-300 font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-white/5 hover:text-blue-400 hover:border-blue-500/30"
+                      className="flex-1 py-3 bg-white text-black border-[3px] border-black rounded-lg font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
                     >
                       <Eye size={16} /> View
                     </a>
@@ -342,41 +348,41 @@ export default function Leaderboard() {
                 const slug = p.secure_slug || p.id;
                 window.location.href = `/p/${slug}?src=leaderboard`;
               }}
-              className="group min-w-[280px] w-[280px] flex-shrink-0 snap-start bg-white/5 backdrop-blur-sm hover:bg-white/10 p-6 rounded-[2.5rem] border border-white/5 shadow-sm transition-all duration-300 cursor-pointer flex flex-col items-center gap-6 hover:shadow-xl hover:shadow-orange-500/10 hover:border-orange-500/30 hover:-translate-y-1"
+              className="group min-w-[280px] w-[280px] flex-shrink-0 snap-start bg-[#1a1a1a] p-6 rounded-xl border-[4px] border-white shadow-[6px_6px_0px_#fff] transition-all duration-300 cursor-pointer flex flex-col items-center gap-6 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
             >
-              <div className="w-full flex justify-between items-center">
-                <div className="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center font-black text-sm shadow-lg group-hover:bg-orange-500 transition-colors">
+              <div className="w-full flex justify-between items-center mb-2">
+                <div className="px-3 py-1 rounded-sm bg-white text-black border-[2px] border-black flex items-center justify-center font-black text-xs shadow-[2px_2px_0px_#000] group-hover:bg-orange-500 transition-colors">
                   #{p.rank}
                 </div>
                 <BadgePill badge={p.badge} />
               </div>
 
               <div className="flex flex-col items-center text-center">
-                <div className="relative p-1 rounded-full bg-black/50 border border-white/10 group-hover:border-orange-400 transition-colors mb-4">
+                <div className="relative p-1.5 rounded-lg bg-white border-[3px] border-black shadow-[3px_3px_0px_#000] mb-4 group-hover:bg-orange-500 transition-colors">
                   <Avatar src={p.avatar_url} name={p.display_name} username={p.username} size="md" />
                 </div>
-                <h4 className="text-xl font-black text-white leading-tight mb-1">{p.display_name}</h4>
+                <h4 className="text-xl font-black text-white uppercase tracking-tight mb-1">{p.display_name}</h4>
                 <span className="text-xs font-bold text-neutral-400">@{p.username}</span>
               </div>
 
-              <div className="w-full border-t border-white/5 pt-5 flex items-center justify-between">
+              <div className="w-full border-t-[3px] border-white/20 pt-5 flex items-center justify-between mt-auto">
                 <div className="flex flex-col">
                   <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Total Views</span>
-                  <span className="text-2xl font-black text-orange-400">{p.knowmi_score}</span>
+                  <span className="text-2xl font-black text-orange-500">{p.knowmi_score}</span>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setShareProfile(p);
                     }}
-                    className="p-2.5 text-neutral-400 hover:text-orange-400 hover:bg-orange-500/20 rounded-2xl transition-all"
+                    className="p-2.5 bg-white text-black border-[2px] border-black shadow-[2px_2px_0px_#000] hover:bg-orange-500 rounded-md transition-all active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
                   >
                     <Share2 size={16} />
                   </button>
                   <a 
                     href={`/p/${p.secure_slug || p.id}?src=leaderboard`} 
-                    className="p-2.5 text-neutral-400 hover:text-blue-400 hover:bg-blue-500/20 rounded-2xl transition-all"
+                    className="p-2.5 bg-white text-black border-[2px] border-black shadow-[2px_2px_0px_#000] hover:bg-teal-400 rounded-md transition-all active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
                   >
                     <Eye size={16} />
                   </a>
@@ -387,25 +393,23 @@ export default function Leaderboard() {
         </div>
 
         {shareProfile && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-all duration-300">
-            <div className="bg-[#0A0A0B] rounded-[3rem] w-full max-w-xl max-h-[95vh] overflow-y-auto shadow-2xl shadow-orange-500/20 animate-in zoom-in-95 duration-300 border border-white/10" style={{ scrollbarWidth: 'none' }}>
-              <div className="p-8 border-b border-white/5 flex justify-between items-center">
-                <h2 className="text-2xl font-black text-white">Elite Achievement</h2>
-                <button onClick={() => setShareProfile(null)} className="p-2 hover:bg-white/10 rounded-full text-neutral-400 transition-colors"><X size={24} /></button>
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 transition-all duration-300">
+            <div className="bg-[#0a0a0a] rounded-xl w-full max-w-xl max-h-[95vh] overflow-y-auto shadow-[8px_8px_0px_#F97316] border-[4px] border-white animate-in zoom-in-95 duration-300" style={{ scrollbarWidth: 'none' }}>
+              <div className="p-8 border-b-[4px] border-white flex justify-between items-center bg-[#1a1a1a]">
+                <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Elite Achievement</h2>
+                <button onClick={() => setShareProfile(null)} className="p-2 bg-white text-black border-[3px] border-black rounded-lg shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"><X size={24} /></button>
               </div>
-              <div className="p-8">
-                <div className="aspect-[4/5] bg-black rounded-[2.5rem] p-10 text-white relative overflow-hidden shadow-inner group border border-white/10">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/30 rounded-full blur-[100px] -mr-32 -mt-32" />
-                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-600/30 rounded-full blur-[100px] -ml-32 -mb-32" />
-                  <div className="absolute inset-0 border border-white/5 rounded-[2.5rem] pointer-events-none" />
+              <div className="p-8 bg-[#0a0a0a]">
+                <div className="aspect-[4/5] bg-black rounded-xl p-10 text-white relative overflow-hidden group border-[4px] border-orange-500 shadow-[8px_8px_0px_#fff]">
+                  <div className="absolute inset-0 border-[4px] border-white rounded-xl pointer-events-none" />
                   <div className="relative z-10 flex justify-between items-start">
                     <div>
-                      <h1 className="font-display text-3xl tracking-tighter font-black">Kno<span className="text-orange-500">WM</span>i</h1>
-                      <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.3em]">Verified Identity</p>
+                      <h1 className="font-black text-3xl tracking-tighter uppercase">Kno<span className="text-orange-500">WM</span>i</h1>
+                      <p className="text-[10px] font-black text-white bg-orange-500 px-2 py-0.5 border-[2px] border-black shadow-[2px_2px_0px_#000] uppercase tracking-[0.3em] inline-block mt-1">Verified Identity</p>
                     </div>
-                    <div className="bg-white/10 backdrop-blur-xl px-4 py-2 rounded-2xl border border-white/10 flex items-center gap-2">
-                      <Sparkles size={14} className="text-orange-400" />
-                      <span className="text-xs font-black uppercase">Elite Status</span>
+                    <div className="bg-white text-black px-4 py-2 rounded-lg border-[3px] border-black flex items-center gap-2 shadow-[3px_3px_0px_#000]">
+                      <Sparkles size={14} className="text-orange-500" />
+                      <span className="text-xs font-black uppercase tracking-widest">Elite Status</span>
                     </div>
                   </div>
                   <div className="relative z-10 mt-12">
@@ -413,54 +417,56 @@ export default function Leaderboard() {
                     <h2 className="text-6xl font-black tracking-tight leading-[0.9]">Ranked #{shareProfile.rank}</h2>
                   </div>
                   <div className="relative z-10 mt-12 flex items-center gap-5">
-                    <Avatar src={shareProfile.avatar_url} name={shareProfile.display_name} username={shareProfile.username} size="lg" className="border-4 border-orange-500/30" />
+                    <div className="p-1.5 bg-orange-500 rounded-xl border-[4px] border-white shadow-[4px_4px_0px_#fff]">
+                      <Avatar src={shareProfile.avatar_url} name={shareProfile.display_name} username={shareProfile.username} size="lg" />
+                    </div>
                     <div>
-                      <h3 className="text-3xl font-black tracking-tight">{shareProfile.display_name}</h3>
-                      <p className="text-neutral-400 font-bold">@{shareProfile.username}</p>
+                      <h3 className="text-3xl font-black tracking-tight uppercase">{shareProfile.display_name}</h3>
+                      <p className="text-neutral-400 font-bold bg-[#1a1a1a] px-3 py-1 rounded-md border-[2px] border-white inline-block mt-1">@{shareProfile.username}</p>
                     </div>
                   </div>
                   <div className="relative z-10 mt-12 grid grid-cols-2 gap-4">
                     {/* Total Views */}
-                    <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-5 border border-white/10 flex flex-col justify-between h-32 hover:bg-white/10 transition-colors">
+                    <div className="bg-[#1a1a1a] rounded-xl p-5 border-[3px] border-white flex flex-col justify-between h-32 shadow-[4px_4px_0px_#fff]">
                       <div className="flex justify-between items-center">
                         <Activity size={20} className="text-teal-400" />
                       </div>
                       <div>
-                        <p className="text-3xl font-black">{shareStats?.totalViews?.toLocaleString() || '0'}</p>
-                        <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Total Views</p>
+                        <p className="text-3xl font-black text-white">{shareStats?.totalViews?.toLocaleString() || '0'}</p>
+                        <p className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">Total Views</p>
                       </div>
                     </div>
                     
                     {/* Unique Visitors */}
-                    <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-5 border border-white/10 flex flex-col justify-between h-32 hover:bg-white/10 transition-colors">
+                    <div className="bg-[#1a1a1a] rounded-xl p-5 border-[3px] border-white flex flex-col justify-between h-32 shadow-[4px_4px_0px_#fff]">
                       <div className="flex justify-between items-center">
                         <Users size={20} className="text-violet-400" />
                       </div>
                       <div>
-                        <p className="text-3xl font-black">{shareStats?.uniqueViews?.toLocaleString() || '0'}</p>
-                        <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Unique Visitors</p>
+                        <p className="text-3xl font-black text-white">{shareStats?.uniqueViews?.toLocaleString() || '0'}</p>
+                        <p className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">Unique Visitors</p>
                       </div>
                     </div>
 
                     {/* Streak Record */}
-                    <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl p-5 flex flex-col justify-between h-32 shadow-lg shadow-orange-500/20">
+                    <div className="bg-orange-500 rounded-xl p-5 border-[3px] border-black flex flex-col justify-between h-32 shadow-[4px_4px_0px_#000]">
                       <div className="flex justify-between items-center">
-                        <Flame size={20} className="text-white" />
+                        <Flame size={20} className="text-black" />
                       </div>
                       <div>
-                        <p className="text-3xl font-black">{shareStats?.streak?.best || '0'}</p>
-                        <p className="text-[10px] font-bold text-white/80 uppercase tracking-wider">Best Streak Days</p>
+                        <p className="text-3xl font-black text-black">{shareStats?.streak?.best || '0'}</p>
+                        <p className="text-[10px] font-black text-black uppercase tracking-wider border-b-[2px] border-black/20 pb-1">Best Streak Days</p>
                       </div>
                     </div>
 
                     {/* Top City */}
-                    <div className="bg-white/5 backdrop-blur-lg rounded-3xl p-5 border border-white/10 flex flex-col justify-between h-32 hover:bg-white/10 transition-colors">
+                    <div className="bg-[#1a1a1a] rounded-xl p-5 border-[3px] border-white flex flex-col justify-between h-32 shadow-[4px_4px_0px_#fff]">
                       <div className="flex justify-between items-center">
                         <MapPin size={20} className="text-blue-400" />
                       </div>
                       <div>
-                        <p className="text-xl font-black truncate">{shareStats?.topCities?.[0]?.city || 'Global'}</p>
-                        <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mt-1">{shareStats?.topCities?.[0]?.flag || '🌍'} Top Location</p>
+                        <p className="text-xl font-black truncate text-white uppercase">{shareStats?.topCities?.[0]?.city || 'Global'}</p>
+                        <p className="text-[10px] font-black text-neutral-400 uppercase tracking-wider mt-1">{shareStats?.topCities?.[0]?.flag || '🌍'} Top Location</p>
                       </div>
                     </div>
                   </div>
@@ -471,10 +477,10 @@ export default function Leaderboard() {
                     const fresh = `${window.location.origin}/p/${slug}?src=leaderboard_share`;
                     navigator.clipboard.writeText(fresh);
                     toast.success('Link copied to clipboard!');
-                  }} className="flex items-center justify-center gap-3 py-5 bg-white/10 hover:bg-white/20 border border-white/10 text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
+                  }} className="flex items-center justify-center gap-3 py-5 bg-[#1a1a1a] text-white border-[4px] border-white rounded-xl font-black uppercase tracking-widest text-sm transition-all shadow-[6px_6px_0px_#fff] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none">
                     <Copy size={20} /> Copy Link
                   </button>
-                  <button onClick={() => toast('Download feature coming soon! 🎨', { icon: '🚀' })} className="flex items-center justify-center gap-3 py-5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-[2rem] font-black text-lg transition-all shadow-xl active:scale-95">
+                  <button onClick={() => toast('Download feature coming soon! 🎨', { icon: '🚀' })} className="flex items-center justify-center gap-3 py-5 bg-orange-500 text-black border-[4px] border-black rounded-xl font-black uppercase tracking-widest text-sm transition-all shadow-[6px_6px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none">
                     <Download size={20} /> Save Poster
                   </button>
                 </div>

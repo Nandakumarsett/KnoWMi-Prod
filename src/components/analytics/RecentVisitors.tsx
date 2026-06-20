@@ -21,7 +21,7 @@ export default function RecentVisitors({ events }: { events: any[] }) {
     <div className="overflow-x-auto">
       <table className="w-full text-left min-w-[500px]">
         <thead>
-          <tr className="border-b border-neutral-100">
+          <tr className="border-b border-white/20">
             {['Visitor', 'Time', 'Device', 'Source', 'Country', 'Type'].map(h => (
               <th key={h} className="pb-4 text-[10px] font-black uppercase tracking-widest text-neutral-400">{h}</th>
             ))}
@@ -36,12 +36,12 @@ export default function RecentVisitors({ events }: { events: any[] }) {
             </tr>
           ) : (
             events.map((event, i) => (
-              <tr key={i} className="group hover:bg-neutral-50 transition-colors">
+              <tr key={i} className="group hover:bg-[#1a1a1a] transition-colors">
                 <td className="py-4">
                   <div className="flex items-center gap-3">
                     {event.visitor ? (
                       <>
-                        <div className="w-8 h-8 rounded-full overflow-hidden bg-neutral-100 border border-neutral-200">
+                        <div className="w-8 h-8 rounded-full overflow-hidden bg-[#2a2a2a] border border-white/20">
                           <img 
                             src={event.visitor.avatar_url?.startsWith('http') ? event.visitor.avatar_url : `https://mrtbqfkhvpsrtvdyunqr.supabase.co/storage/v1/object/public/avatars/${event.visitor.avatar_url?.replace('/content/avatars/', '')}`} 
                             alt={event.visitor.first_name}
@@ -51,11 +51,11 @@ export default function RecentVisitors({ events }: { events: any[] }) {
                             }}
                           />
                         </div>
-                        <span className="text-sm font-bold text-neutral-900">{event.visitor.first_name}</span>
+                        <span className="text-sm font-bold text-white">{event.visitor.first_name}</span>
                       </>
                     ) : (
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-neutral-50 border border-neutral-100 flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-full bg-[#1a1a1a] border border-white/20 flex items-center justify-center">
                           <span className="text-[10px] font-bold text-neutral-400">?</span>
                         </div>
                         <span className="text-sm font-medium text-neutral-400 italic">Anonymous</span>
@@ -63,10 +63,10 @@ export default function RecentVisitors({ events }: { events: any[] }) {
                     )}
                   </div>
                 </td>
-                <td className="py-4 text-sm font-bold text-neutral-900">{getRelativeTime(event.viewed_at)}</td>
-                <td className="py-4 text-sm font-medium text-neutral-500 capitalize">{event.device_type}</td>
-                <td className="py-4 text-sm font-medium text-neutral-500 capitalize">{event.referrer}</td>
-                <td className="py-4 text-sm font-medium text-neutral-500">{event.country}</td>
+                <td className="py-4 text-sm font-bold text-white">{getRelativeTime(event.viewed_at)}</td>
+                <td className="py-4 text-sm font-medium text-neutral-400 font-bold capitalize">{event.device_type}</td>
+                <td className="py-4 text-sm font-medium text-neutral-400 font-bold capitalize">{event.referrer}</td>
+                <td className="py-4 text-sm font-medium text-neutral-400 font-bold">{event.country}</td>
                 <td className="py-4">
                   <span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter ${
                     event.is_repeat 

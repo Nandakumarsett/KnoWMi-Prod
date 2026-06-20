@@ -10,7 +10,7 @@ const SECTIONS = {
     updated: '21 May 2025',
     content: (
       <>
-        <p className="text-neutral-500 text-sm leading-relaxed mb-8">
+        <p className="text-neutral-400 text-sm font-bold leading-relaxed mb-8">
           This Privacy Policy describes how KnoWMi ("we", "us", or "our") collects, uses, and protects information about you when you use our website, products, and services. We take your privacy seriously — this document is written in plain language so you actually understand what we do with your data.
         </p>
 
@@ -106,7 +106,7 @@ const SECTIONS = {
     updated: '21 May 2025',
     content: (
       <>
-        <p className="text-neutral-500 text-sm leading-relaxed mb-8">
+        <p className="text-neutral-400 text-sm font-bold leading-relaxed mb-8">
           These Terms of Service govern your use of KnoWMi's website, products, and services. By purchasing a KnoWMi tee or creating an account, you agree to these terms. Please read them — they are written in plain language.
         </p>
 
@@ -192,7 +192,7 @@ const SECTIONS = {
     updated: '21 May 2025',
     content: (
       <>
-        <p className="text-neutral-500 text-sm leading-relaxed mb-8">
+        <p className="text-neutral-400 text-sm font-bold leading-relaxed mb-8">
           Every KnoWMi tee is made to order. We print and fulfil each piece only after your order is confirmed — which means we can't resell a returned item. This shapes our returns policy. We've written it clearly below so there are no surprises.
         </p>
 
@@ -268,7 +268,7 @@ const SECTIONS = {
     updated: '21 May 2025',
     content: (
       <>
-        <p className="text-neutral-500 text-sm leading-relaxed mb-8">
+        <p className="text-neutral-400 text-sm font-bold leading-relaxed mb-8">
           We ship across India. Every tee is made to order — so we ask for a small amount of time to get it right before it leaves our facility.
         </p>
 
@@ -325,7 +325,7 @@ const SECTIONS = {
     updated: '21 May 2025',
     content: (
       <>
-        <p className="text-neutral-500 text-sm leading-relaxed mb-8">
+        <p className="text-neutral-400 text-sm font-bold leading-relaxed mb-8">
           At KnoWMi, protecting your identity is our highest priority. We treat your data with the same rigorous security standards used by enterprise SaaS and financial platforms.
         </p>
 
@@ -381,7 +381,7 @@ const SECTIONS = {
     updated: '21 May 2025',
     content: (
       <>
-        <p className="text-neutral-500 text-sm leading-relaxed mb-8">
+        <p className="text-neutral-400 text-sm font-bold leading-relaxed mb-8">
           Stuck somewhere? Find answers to the most common questions below. If you still need help, our support team is just an email away.
         </p>
 
@@ -432,11 +432,11 @@ const SECTIONS = {
 
 function Section({ title, children }) {
   return (
-    <div className="mb-10">
-      <h3 className="text-base font-black text-neutral-900 mb-4 pb-2 border-b border-neutral-100">
+    <div className="mb-10 p-6 bg-black rounded-xl border-[3px] border-white shadow-[4px_4px_0px_#fff]">
+      <h3 className="text-lg font-black text-white uppercase tracking-tighter mb-4 pb-4 border-b-[3px] border-white/20">
         {title}
       </h3>
-      <div className="space-y-3 text-[15px] text-neutral-600 leading-relaxed [&_ul]:mt-3 [&_ul]:ml-5 [&_ul]:space-y-2 [&_ul]:list-disc [&_li]:leading-relaxed">
+      <div className="space-y-3 text-[15px] text-neutral-400 font-bold leading-relaxed [&_ul]:mt-3 [&_ul]:ml-5 [&_ul]:space-y-2 [&_ul]:list-disc [&_li]:leading-relaxed [&_a]:text-orange-500 [&_a]:underline [&_a]:decoration-2 [&_a]:underline-offset-2 [&_strong]:text-white [&_strong]:font-black">
         {children}
       </div>
     </div>
@@ -445,9 +445,9 @@ function Section({ title, children }) {
 
 function SubSection({ title, children }) {
   return (
-    <div className="mt-5">
-      <p className="text-sm font-bold text-neutral-700 mb-2">{title}</p>
-      <div className="space-y-2 text-[15px] text-neutral-600 [&_ul]:ml-5 [&_ul]:space-y-2 [&_ul]:list-disc [&_li]:leading-relaxed">
+    <div className="mt-5 p-4 bg-[#1a1a1a] rounded-lg border-[2px] border-white">
+      <p className="text-sm font-black text-orange-500 uppercase tracking-tighter mb-2">{title}</p>
+      <div className="space-y-2 text-[15px] text-neutral-400 font-bold [&_ul]:ml-5 [&_ul]:space-y-2 [&_ul]:list-disc [&_li]:leading-relaxed">
         {children}
       </div>
     </div>
@@ -470,7 +470,7 @@ export default function Legal() {
   const active = SECTIONS[activeTab]
 
   return (
-    <div className="min-h-screen bg-[#FAFAF9] text-black">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
       <Navbar />
 
       <main className="pt-28 pb-24 px-5 sm:px-6">
@@ -478,13 +478,13 @@ export default function Legal() {
 
           {/* Page header */}
           <div className="mb-12 text-center">
-            <span className="inline-block text-[10px] font-black uppercase tracking-widest text-orange-500 bg-orange-50 border border-orange-100 px-4 py-1.5 rounded-full mb-4">
+            <span className="inline-block text-[10px] font-black uppercase tracking-widest text-black bg-orange-500 border-[2px] border-black shadow-[2px_2px_0px_#000] px-4 py-1.5 rounded-full mb-4">
               Legal & Policies
             </span>
-            <h1 className="text-4xl md:text-5xl font-display font-black text-neutral-900 tracking-tight mb-4">
+            <h1 className="text-4xl md:text-5xl font-display font-black text-white uppercase tracking-tighter mb-4">
               KnoWMi Legal Center
             </h1>
-            <p className="text-neutral-400 text-sm font-medium max-w-lg mx-auto leading-relaxed">
+            <p className="text-neutral-400 text-sm font-bold max-w-lg mx-auto leading-relaxed">
               Written in plain language. No legalese. If anything is unclear, email us and we'll explain it.
             </p>
           </div>
@@ -493,15 +493,15 @@ export default function Legal() {
 
             {/* Sidebar */}
             <aside className="w-full md:w-56 flex-shrink-0">
-              <nav className="md:sticky md:top-28 bg-white rounded-2xl border border-neutral-100 p-3 shadow-sm">
+              <nav className="md:sticky md:top-28 bg-[#1a1a1a] rounded-xl border-[3px] border-white p-3 shadow-[4px_4px_0px_#fff]">
                 {Object.entries(SECTIONS).map(([id, sec]) => (
                   <button
                     key={id}
                     onClick={() => { setActiveTab(id); window.history.replaceState(null, '', `#${id}`); }}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all mb-1 last:mb-0 text-left ${
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-black uppercase tracking-tighter transition-all mb-1 last:mb-0 text-left ${
                       activeTab === id
-                        ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20'
-                        : 'text-neutral-400 hover:bg-neutral-50 hover:text-neutral-700'
+                        ? 'bg-orange-500 text-black border-[2px] border-black shadow-[2px_2px_0px_#000]'
+                        : 'text-neutral-400 hover:bg-[#2a2a2a] hover:text-white border-[2px] border-transparent'
                     }`}
                   >
                     <span className="flex-shrink-0">{sec.icon}</span>
@@ -509,11 +509,11 @@ export default function Legal() {
                   </button>
                 ))}
 
-                <div className="mt-4 pt-4 border-t border-neutral-100 px-4">
-                  <p className="text-[10px] font-black text-neutral-300 uppercase tracking-widest mb-1">Need help?</p>
+                <div className="mt-4 pt-4 border-t-[3px] border-white/20 px-4">
+                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-1">Need help?</p>
                   <a
                     href="mailto:support.knowmi@gmail.com"
-                    className="text-[11px] font-bold text-orange-500 hover:underline break-all"
+                    className="text-[11px] font-black text-orange-500 hover:underline break-all"
                   >
                     support.knowmi@gmail.com
                   </a>
@@ -523,18 +523,18 @@ export default function Legal() {
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <div className="bg-white border border-neutral-100 rounded-3xl p-8 md:p-12 shadow-sm">
+              <div className="bg-[#1a1a1a] border-[3px] border-white rounded-xl p-8 md:p-12 shadow-[4px_4px_0px_#fff]">
 
                 {/* Section header */}
-                <div className="flex items-start gap-4 mb-10 pb-8 border-b border-neutral-100">
-                  <div className="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-500 flex-shrink-0">
+                <div className="flex items-start gap-4 mb-10 pb-8 border-b-[3px] border-white/20">
+                  <div className="w-12 h-12 rounded-lg bg-orange-500 flex items-center justify-center text-black border-[2px] border-black shadow-[2px_2px_0px_#000] flex-shrink-0">
                     {active.icon}
                   </div>
                   <div>
-                    <h2 className="text-3xl font-display font-black text-neutral-900 tracking-tight">
+                    <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter">
                       {active.title}
                     </h2>
-                    <p className="text-[11px] font-black text-neutral-300 uppercase tracking-widest mt-1.5">
+                    <p className="text-[11px] font-black text-neutral-400 uppercase tracking-widest mt-1.5">
                       Last updated: {active.updated}
                     </p>
                   </div>
@@ -546,14 +546,14 @@ export default function Legal() {
                 </div>
 
                 {/* Footer bar */}
-                <div className="mt-14 pt-8 border-t border-neutral-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+                <div className="mt-14 pt-8 border-t-[3px] border-white/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
                   <div>
-                    <p className="text-[11px] font-black uppercase tracking-widest text-neutral-300 mb-1">
+                    <p className="text-[11px] font-black uppercase tracking-widest text-neutral-400 mb-1">
                       Questions about this policy?
                     </p>
                     <a
                       href="mailto:support.knowmi@gmail.com"
-                      className="text-sm font-bold text-orange-500 hover:underline"
+                      className="text-sm font-black text-orange-500 hover:underline"
                     >
                       support.knowmi@gmail.com
                     </a>
@@ -563,7 +563,7 @@ export default function Legal() {
                       <button
                         key={id}
                         onClick={() => { setActiveTab(id); window.history.replaceState(null, '', `#${id}`); window.scrollTo(0,0); }}
-                        className="text-[11px] font-bold text-neutral-300 hover:text-neutral-700 transition-colors"
+                        className="text-[11px] font-black text-neutral-400 uppercase tracking-tighter hover:text-orange-500 transition-colors"
                       >
                         {sec.title} →
                       </button>

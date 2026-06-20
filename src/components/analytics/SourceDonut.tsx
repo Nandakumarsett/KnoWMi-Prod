@@ -22,7 +22,7 @@ export default function SourceDonut({ data }: { data: any[] }) {
   return (
     <div className="h-[250px] w-full relative">
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        <span className="text-3xl font-black text-neutral-900">{qrPercent}%</span>
+        <span className="text-3xl font-black text-white">{qrPercent}%</span>
         <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Scan Rate</span>
       </div>
       <ResponsiveContainer width="100%" height="100%">

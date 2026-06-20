@@ -19,14 +19,14 @@ function StatusBadge({ status }) {
 // ── One test card ─────────────────────────────────────────
 function TestCard({ icon: Icon, title, desc, btnLabel, onRun, status, detail, color = '#F97316' }) {
   return (
-    <div className="rounded-xl p-5" style={{ background: 'white', border: '1px solid var(--border2)' }}>
+    <div className="rounded-xl p-5 bg-[#1a1a1a] border-[3px] border-white rounded-xl shadow-[4px_4px_0px_#fff]">
       <div className="flex items-start gap-3 mb-4">
         <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
           style={{ background: color + '18' }}>
           <Icon size={17} style={{ color }} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-bold" style={{ color: 'var(--ink)' }}>{title}</p>
+          <p className="text-sm font-bold text-white">{title}</p>
           <p className="text-[11px] text-neutral-400 mt-0.5">{desc}</p>
         </div>
         <StatusBadge status={status} />
@@ -58,14 +58,14 @@ function CopyBox({ label, value }) {
     setTimeout(() => setCopied(false), 2000)
   }
   return (
-    <div className="rounded-lg overflow-hidden" style={{ border: '1px solid var(--border2)' }}>
+    <div className="rounded-lg overflow-hidden border-[3px] border-white/20">
       <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide"
-        style={{ background: 'var(--off)', color: 'var(--muted)', borderBottom: '1px solid var(--border2)' }}>
+        style={{ background: 'var(--off)', color: '#a3a3a3', borderBottom: '1px solid var(--border2)' }}>
         {label}
       </div>
       <div className="flex items-center gap-2 px-3 py-2">
-        <code className="text-xs flex-1 text-neutral-700 break-all font-mono">{value}</code>
-        <button onClick={copy} className="flex-shrink-0 p-1 rounded hover:bg-neutral-100 transition-all">
+        <code className="text-xs flex-1 text-neutral-300 break-all font-mono">{value}</code>
+        <button onClick={copy} className="flex-shrink-0 p-1 rounded hover:bg-[#2a2a2a] transition-all">
           {copied ? <Check size={13} className="text-green-500" /> : <Copy size={13} className="text-neutral-400" />}
         </button>
       </div>
@@ -265,7 +265,7 @@ export default function TestCenterAdmin() {
               value={testEmail}
               onChange={(e) => setTestEmail(e.target.value)}
               placeholder="Your Resend registered email"
-              className="w-full px-3 py-1.5 text-xs rounded border border-indigo-200 focus:outline-none focus:border-indigo-400 bg-white"
+              className="w-full px-3 py-1.5 text-xs rounded border border-indigo-200 focus:outline-none focus:border-indigo-400 bg-[#1a1a1a]"
             />
           </div>
         </div>
@@ -273,7 +273,7 @@ export default function TestCenterAdmin() {
 
       {/* ── Email Tests ───────────────────────────── */}
       <div>
-        <p className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: 'var(--muted)' }}>
+        <p className="text-[10px] font-black uppercase tracking-widest mb-3 text-neutral-400 font-bold">
           📧 Email Templates — Send to {testEmail || '...'}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -327,7 +327,7 @@ export default function TestCenterAdmin() {
 
       {/* ── Order Tracking Review ────────────────── */}
       <div>
-        <p className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: 'var(--muted)' }}>
+        <p className="text-[10px] font-black uppercase tracking-widest mb-3 text-neutral-400 font-bold">
           🧪 Order Tracking & Layout Review
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -345,7 +345,7 @@ export default function TestCenterAdmin() {
 
       {/* ── System Health Checks ──────────────────── */}
       <div>
-        <p className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: 'var(--muted)' }}>
+        <p className="text-[10px] font-black uppercase tracking-widest mb-3 text-neutral-400 font-bold">
           🔧 System Health Checks
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

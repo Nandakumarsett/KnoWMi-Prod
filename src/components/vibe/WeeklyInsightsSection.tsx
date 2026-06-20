@@ -40,7 +40,7 @@ export function WeeklyInsightsSection({ profileId }: Props) {
         <div className="font-display text-xs font-black tracking-widest text-neutral-400 uppercase">
           ✦ This week's insights
         </div>
-        <div className="text-[10px] text-neutral-500 uppercase tracking-wider font-bold">
+        <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider font-bold">
           Based on your data
         </div>
       </div>
@@ -52,7 +52,7 @@ export function WeeklyInsightsSection({ profileId }: Props) {
           ))}
         </div>
       ) : cards.length === 0 ? (
-        <div className="p-8 text-center bg-[#13131a] rounded-3xl border border-dashed border-neutral-800 text-neutral-500 text-xs font-black uppercase tracking-widest select-none">
+        <div className="p-8 text-center bg-[#13131a] rounded-3xl border border-dashed border-neutral-800 text-neutral-400 font-bold text-xs font-black uppercase tracking-widest select-none">
           No insights available yet. Get more views!
         </div>
       ) : (

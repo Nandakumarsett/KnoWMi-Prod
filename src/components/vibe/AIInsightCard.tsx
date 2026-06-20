@@ -17,7 +17,7 @@ export function AIInsightCard({ card, index }: Props) {
 
   return (
     <div 
-      className="border-l-4 border-orange-500 bg-[#13131a] rounded-2xl p-5 mb-3 transition-all animate-slideUp duration-300 relative shadow-md"
+      className="border-l-4 border-orange-500 bg-[#13131a] rounded-2xl p-5 mb-3 transition-all animate-slideUp duration-300 relative shadow-[4px_4px_0px_#fff]"
       style={{
         animationDelay: `${index * 80}ms`,
       }}

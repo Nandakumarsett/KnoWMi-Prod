@@ -42,7 +42,7 @@ export function NudgeBar({ profileId }: Props) {
 
   return (
     <div 
-      className="bg-[#13131a] border-l-4 border-orange-500 rounded-2xl p-4 mb-6 shadow-xl flex items-center justify-between gap-4 animate-slideUp"
+      className="bg-[#13131a] border-l-4 border-orange-500 rounded-2xl p-4 mb-6 shadow-[8px_8px_0px_#fff] flex items-center justify-between gap-4 animate-slideUp"
     >
       <div className="flex items-center gap-3">
         <span className="text-2xl select-none leading-none">{nudge.emoji}</span>
@@ -64,7 +64,7 @@ export function NudgeBar({ profileId }: Props) {
       {nudge.dismissible && (
         <button 
           onClick={handleDismiss} 
-          className="p-1 rounded-full text-neutral-600 hover:text-neutral-400 hover:bg-white/5 transition-colors duration-150"
+          className="p-1 rounded-full text-neutral-400 hover:text-neutral-400 hover:bg-[#1a1a1a]/5 transition-colors duration-150"
           aria-label="Dismiss nudge"
         >
           <X size={16} />

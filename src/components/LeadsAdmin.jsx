@@ -24,13 +24,13 @@ export default function LeadsAdmin() {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-[var(--border2)] overflow-hidden">
+    <div className="bg-[#1a1a1a] rounded-xl border border-[var(--border2)] overflow-hidden">
       <div className="p-6 border-b border-[var(--border2)] flex justify-between items-center bg-[var(--off)]">
         <div>
           <h2 className="text-lg font-bold font-display text-[var(--ink)]">Interested Customers</h2>
           <p className="text-xs text-[var(--muted)]">People who submitted the contact form on the homepage.</p>
         </div>
-        <button onClick={fetchLeads} className="px-4 py-2 rounded-lg text-sm font-bold bg-white border border-[var(--border2)] hover:bg-gray-50 transition-colors">
+        <button onClick={fetchLeads} className="px-4 py-2 rounded-lg text-sm font-bold bg-[#1a1a1a] border border-[var(--border2)] hover:bg-gray-50 transition-colors">
           ↻ Refresh
         </button>
       </div>
@@ -60,7 +60,7 @@ export default function LeadsAdmin() {
               </div>
               
               {lead.message && (
-                <div className="bg-white p-4 rounded-lg border border-[var(--border2)] text-sm text-[var(--ink)] italic">
+                <div className="bg-[#1a1a1a] p-4 rounded-lg border border-[var(--border2)] text-sm text-[var(--ink)] italic">
                   "{lead.message}"
                 </div>
               )}

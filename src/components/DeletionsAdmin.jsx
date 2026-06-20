@@ -112,25 +112,25 @@ export default function DeletionsAdmin() {
       {/* Stats */}
       <div className="grid grid-cols-4 gap-3">
         {[
-          { label: 'Total Requests', value: counts.total, color: 'var(--ink)' },
+          { label: 'Total Requests', value: counts.total, color: '#ffffff' },
           { label: '⏳ Pending', value: counts.pending, color: '#D97706' },
           { label: '🚨 Deleted', value: counts.completed, color: '#DC2626' },
           { label: '✓ Restored', value: counts.cancelled, color: '#059669' },
         ].map(s => (
-          <div key={s.label} className="rounded-xl p-4" style={{ background: 'white', border: '1px solid var(--border2)' }}>
-            <div className="text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--muted)' }}>{s.label}</div>
+          <div key={s.label} className="rounded-xl p-4 bg-[#1a1a1a] border-[3px] border-white rounded-xl shadow-[4px_4px_0px_#fff]">
+            <div className="text-[10px] font-bold uppercase tracking-wider mb-1 text-neutral-400 font-bold">{s.label}</div>
             <div className="text-2xl font-black" style={{ color: s.color }}>{s.value}</div>
           </div>
         ))}
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-neutral-100 pb-px">
+      <div className="flex gap-2 border-b border-white/20 pb-px">
         {['pending', 'completed', 'cancelled'].map(t => (
           <button
             key={t}
             onClick={() => setActiveFilter(t)}
-            className={`pb-3 text-xs font-black uppercase tracking-widest border-b-2 px-1 transition-all ${activeFilter === t ? 'border-orange-500 text-orange-500' : 'border-transparent text-neutral-400 hover:text-neutral-600'}`}
+            className={`pb-3 text-xs font-black uppercase tracking-widest border-b-2 px-1 transition-all ${activeFilter === t ? 'border-orange-500 text-orange-500' : 'border-transparent text-neutral-400 hover:text-neutral-400'}`}
           >
             {t} Requests ({counts[t]})
           </button>
@@ -139,7 +139,7 @@ export default function DeletionsAdmin() {
 
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="font-bold text-sm" style={{ color: 'var(--ink)' }}>Account Deletion Queue</h2>
+        <h2 className="font-bold text-sm text-white">Account Deletion Queue</h2>
         <button onClick={fetchRequests} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold"
           style={{ background: 'var(--off)', border: '1px solid var(--border)' }}>
           <RefreshCw size={12} /> Refresh
@@ -147,11 +147,11 @@ export default function DeletionsAdmin() {
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-sm" style={{ color: 'var(--muted)' }}>Loading queue...</div>
+        <div className="text-center py-12 text-sm text-neutral-400 font-bold">Loading queue...</div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-16 rounded-2xl" style={{ background: 'white', border: '1px dashed var(--border)' }}>
           <CheckCircle size={32} className="mx-auto mb-3 text-neutral-200" />
-          <p className="text-sm font-bold" style={{ color: 'var(--muted)' }}>No requests in this queue</p>
+          <p className="text-sm font-bold text-neutral-400 font-bold">No requests in this queue</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -159,7 +159,7 @@ export default function DeletionsAdmin() {
             const style = STATUS_STYLES[r.status] || STATUS_STYLES.pending
             const isPending = r.status === 'pending'
             return (
-              <div key={r.id} className="rounded-xl overflow-hidden p-5" style={{ background: 'white', border: '1px solid var(--border2)' }}>
+              <div key={r.id} className="rounded-xl overflow-hidden p-5 bg-[#1a1a1a] border-[3px] border-white rounded-xl shadow-[4px_4px_0px_#fff]">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex-1 min-w-0 space-y-2">
                     <div className="flex items-center gap-3 flex-wrap">
@@ -170,10 +170,10 @@ export default function DeletionsAdmin() {
                         style={{ background: style.bg, color: style.color }}>
                         {style.label}
                       </span>
-                      <span className="text-[9px] font-black text-neutral-300 font-mono bg-neutral-50 px-2 py-0.5 rounded-md">ID: {r.id.slice(0, 8)}</span>
+                      <span className="text-[9px] font-black text-neutral-300 font-mono bg-[#1a1a1a] px-2 py-0.5 rounded-md">ID: {r.id.slice(0, 8)}</span>
                     </div>
                     {r.reason && (
-                      <p className="text-xs text-neutral-500 font-medium bg-neutral-50/50 border border-neutral-100 p-2.5 rounded-lg">
+                      <p className="text-xs text-neutral-400 font-bold font-medium bg-neutral-50/50 border border-white/20 p-2.5 rounded-lg">
                         <strong>Reason:</strong> {r.reason}
                       </p>
                     )}
@@ -190,14 +190,14 @@ export default function DeletionsAdmin() {
                       <button
                         onClick={() => handleCancelRequest(r.id, r.user_id)}
                         disabled={actioning === r.id}
-                        className="px-3.5 py-2 hover:bg-neutral-50 rounded-xl text-xs font-bold transition-all border border-neutral-200"
+                        className="px-3.5 py-2 hover:bg-[#1a1a1a] rounded-xl text-xs font-bold transition-all border border-white/20"
                       >
                         Cancel & Restore
                       </button>
                       <button
                         onClick={() => handleDeleteUser(r.id, r.user_id, r.email)}
                         disabled={actioning === r.id}
-                        className="flex items-center gap-1.5 px-4 py-2 bg-red-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-red-700 transition-all shadow-md shadow-red-600/10"
+                        className="flex items-center gap-1.5 px-4 py-2 bg-red-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-red-700 transition-all shadow-[4px_4px_0px_#fff] shadow-red-600/10"
                       >
                         <Trash2 size={13} />
                         Permanently Delete

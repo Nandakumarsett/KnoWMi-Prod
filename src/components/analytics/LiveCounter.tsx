@@ -43,12 +43,12 @@ export default function LiveCounter({ profileId }: { profileId: string }) {
   }, [profileId]);
 
   return (
-    <div className="flex items-center gap-3 px-4 py-2 bg-white border border-neutral-200 rounded-full shadow-sm hover:shadow-md transition-shadow">
+    <div className="flex items-center gap-3 px-4 py-2 bg-[#1a1a1a] border border-white/20 rounded-full shadow-[2px_2px_0px_#fff] hover:shadow-[4px_4px_0px_#fff] transition-shadow">
       <div className="relative flex h-2 w-2">
         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
         <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
       </div>
-      <span className="text-[10px] font-black uppercase tracking-widest text-neutral-600">
+      <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400">
         <span className="text-orange-500 font-bold">{liveCount}</span> views in last hour
       </span>
     </div>

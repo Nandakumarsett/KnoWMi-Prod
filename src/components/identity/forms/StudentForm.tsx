@@ -23,25 +23,25 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
   }
 
   // Helper for consistent input styling
-  const inputBaseClasses = "w-full bg-neutral-50/50 border border-neutral-200 hover:border-neutral-300 rounded-xl px-4 py-3 text-sm font-semibold text-neutral-900 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none placeholder:text-neutral-400";
-  const labelClasses = "block text-[11px] font-bold uppercase tracking-wider text-neutral-500 mb-1.5";
+  const inputBaseClasses = "w-full bg-[#1a1a1a] border-[3px] border-white/20 text-white shadow-[inset_0px_2px_4px_rgba(0,0,0,0.5)] hover:border-white/40 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:bg-[#1a1a1a] focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none placeholder:text-neutral-400";
+  const labelClasses = "block text-[11px] font-bold uppercase tracking-wider text-neutral-400 font-bold mb-1.5";
 
   return (
     <div className="space-y-8 sm:space-y-12 py-6 animate-fadeIn max-w-4xl mx-auto">
       
       {/* SECTION: ABOUT ME & AESTHETICS (COMBINED) */}
-      <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60 relative overflow-hidden">
+      <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60 relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
           <BookOpen size={100} />
         </div>
         
         <div className="flex items-center gap-3 mb-6 relative z-10">
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
             <Sparkles size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-black text-neutral-900">Identity & Story</h3>
-            <p className="text-xs font-medium text-neutral-500">Your visual banner and personal pitch</p>
+            <h3 className="text-lg font-black text-white">Identity & Story</h3>
+            <p className="text-xs font-medium text-neutral-400 font-bold">Your visual banner and personal pitch</p>
           </div>
         </div>
 
@@ -50,7 +50,7 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
           <div className="flex flex-col">
             <label className={labelClasses}>Profile Banner</label>
             <div className="relative group flex-1 min-h-[160px]">
-              <div className="w-full h-full rounded-2xl overflow-hidden bg-neutral-50 border-2 border-dashed border-neutral-200 hover:border-emerald-400 transition-all flex flex-col items-center justify-center cursor-pointer relative">
+              <div className="w-full h-full rounded-2xl overflow-hidden bg-[#1a1a1a] border-2 border-dashed border-white/20 hover:border-emerald-400 transition-all flex flex-col items-center justify-center cursor-pointer relative">
                 {data.featured_work_url ? (
                   <>
                     <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Banner Preview" />
@@ -63,7 +63,7 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
                   <div className="flex flex-col items-center gap-2 text-neutral-400 p-4 text-center">
                     <Camera size={28} className="text-emerald-400" />
                     <div>
-                      <span className="text-xs font-bold text-neutral-700">Upload Banner</span>
+                      <span className="text-xs font-bold text-neutral-300">Upload Banner</span>
                       <p className="text-[10px] mt-0.5">1200x400 JPG/PNG</p>
                     </div>
                   </div>
@@ -83,7 +83,7 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
                 />
               </div>
               {uploading && (
-                <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-2xl flex items-center justify-center z-20">
+                <div className="absolute inset-0 bg-[#1a1a1a]/80 backdrop-blur-sm rounded-2xl flex items-center justify-center z-20">
                   <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               )}
@@ -117,14 +117,14 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
       </section>
       
       {/* SECTION: ACADEMIC CORE */}
-      <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60 relative overflow-hidden">
+      <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60 relative overflow-hidden">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
             <GraduationCap size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-black text-neutral-900">Academic Core</h3>
-            <p className="text-xs font-medium text-neutral-500">Your university footprint</p>
+            <h3 className="text-lg font-black text-white">Academic Core</h3>
+            <p className="text-xs font-medium text-neutral-400 font-bold">Your university footprint</p>
           </div>
         </div>
 
@@ -168,7 +168,7 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
             </select>
           </div>
           
-          <div className="col-span-1 sm:col-span-2 lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4 border-t border-neutral-100 mt-2">
+          <div className="col-span-1 sm:col-span-2 lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4 border-t border-white/20 mt-2">
             <div>
               <label className={labelClasses}>Portfolio / Website</label>
               <div className="relative">
@@ -188,14 +188,14 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         {/* PROFESSIONAL GATEWAY */}
-        <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60">
+        <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
               <ShieldCheck size={20} />
             </div>
             <div>
-              <h3 className="text-lg font-black text-neutral-900">Professional Gateway</h3>
-              <p className="text-xs font-medium text-neutral-500">Skills and metrics</p>
+              <h3 className="text-lg font-black text-white">Professional Gateway</h3>
+              <p className="text-xs font-medium text-neutral-400 font-bold">Skills and metrics</p>
             </div>
           </div>
 
@@ -230,13 +230,13 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
 
             <div className="pt-2">
               <label className={labelClasses}>Academic CV (PDF)</label>
-              <div className="relative flex items-center gap-4 p-4 border border-neutral-200 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors">
-                <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-orange-400 shadow-sm">
+              <div className="relative flex items-center gap-4 p-4 border border-white/20 rounded-xl bg-[#1a1a1a] hover:bg-[#2a2a2a] transition-colors">
+                <div className="w-12 h-12 bg-[#1a1a1a] rounded-lg flex items-center justify-center text-orange-400 shadow-[2px_2px_0px_#fff]">
                   <FileText size={24} />
                 </div>
                 <div className="flex-1 overflow-hidden">
-                  <p className="text-sm font-bold text-neutral-900 truncate">{data.resume_url ? 'Resume Attached ✓' : 'Upload Resume'}</p>
-                  <p className="text-[10px] text-neutral-500 font-medium mt-0.5">{data.resume_url ? 'Click to replace file' : 'Max 5MB'}</p>
+                  <p className="text-sm font-bold text-white truncate">{data.resume_url ? 'Resume Attached ✓' : 'Upload Resume'}</p>
+                  <p className="text-[10px] text-neutral-400 font-bold font-medium mt-0.5">{data.resume_url ? 'Click to replace file' : 'Max 5MB'}</p>
                 </div>
                 <input type="file" accept=".pdf" disabled={uploading} className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => {
                   const file = e.target.files?.[0];
@@ -251,14 +251,14 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
         <section className="flex flex-col gap-8">
           
           {/* ECOSYSTEM */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60">
+          <div className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
                 <Users size={20} />
               </div>
               <div>
-                <h3 className="text-lg font-black text-neutral-900">Ecosystem</h3>
-                <p className="text-xs font-medium text-neutral-500">Clubs and events</p>
+                <h3 className="text-lg font-black text-white">Ecosystem</h3>
+                <p className="text-xs font-medium text-neutral-400 font-bold">Clubs and events</p>
               </div>
             </div>
             
@@ -300,7 +300,7 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
                       </button>
                     </div>
                   ))}
-                  <button type="button" onClick={() => updateField('hackathons', [...(data.hackathons || []), { name: '', year: '', achievement: '' }])} className="w-full py-2 border-2 border-dashed border-neutral-200 rounded-xl text-xs font-bold text-neutral-500 hover:bg-neutral-50 flex items-center justify-center gap-2">
+                  <button type="button" onClick={() => updateField('hackathons', [...(data.hackathons || []), { name: '', year: '', achievement: '' }])} className="w-full py-2 border-2 border-dashed border-white/20 rounded-xl text-xs font-bold text-neutral-400 font-bold hover:bg-[#1a1a1a] flex items-center justify-center gap-2">
                     <Plus size={14} /> Add Achievement
                   </button>
                 </div>
@@ -332,7 +332,7 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
                     </div>
                   ))}
                   {(data.upcoming_events || []).length < 4 && (
-                    <button type="button" onClick={() => updateField('upcoming_events', [...(data.upcoming_events || []), { title: '', date: '' }])} className="w-full py-2 border-2 border-dashed border-neutral-200 rounded-xl text-xs font-bold text-neutral-500 hover:bg-neutral-50 flex items-center justify-center gap-2">
+                    <button type="button" onClick={() => updateField('upcoming_events', [...(data.upcoming_events || []), { title: '', date: '' }])} className="w-full py-2 border-2 border-dashed border-white/20 rounded-xl text-xs font-bold text-neutral-400 font-bold hover:bg-[#1a1a1a] flex items-center justify-center gap-2">
                       <Plus size={14} /> Add Event
                     </button>
                   )}
@@ -342,12 +342,12 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
           </div>
 
           {/* VIBES */}
-          <div className="bg-[#1A1A1A] rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-800 text-white relative overflow-hidden">
+          <div className="bg-[#1A1A1A] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-neutral-800 text-white relative overflow-hidden">
             <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
               <Music size={80} />
             </div>
             <div className="flex items-center gap-3 mb-6 relative z-10">
-              <div className="w-10 h-10 rounded-xl bg-white/10 text-emerald-400 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-[#1a1a1a]/10 text-emerald-400 flex items-center justify-center">
                 <Music size={20} />
               </div>
               <div>
@@ -358,11 +358,11 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
             <div className="space-y-5 relative z-10">
               <div>
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Playlist Name</label>
-                <input type="text" value={data.playlist_name || ''} onChange={e => updateField('playlist_name', e.target.value)} placeholder="e.g. Deep Focus" className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:bg-white/10 focus:border-emerald-400 transition-all outline-none placeholder:text-neutral-600" />
+                <input type="text" value={data.playlist_name || ''} onChange={e => updateField('playlist_name', e.target.value)} placeholder="e.g. Deep Focus" className="w-full bg-[#1a1a1a]/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:bg-[#1a1a1a]/10 focus:border-emerald-400 transition-all outline-none placeholder:text-neutral-400" />
               </div>
               <div>
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5">Spotify/Apple URL</label>
-                <input type="url" value={data.playlist_url || ''} onChange={e => updateField('playlist_url', e.target.value)} placeholder="https://..." className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:bg-white/10 focus:border-emerald-400 transition-all outline-none placeholder:text-neutral-600" />
+                <input type="url" value={data.playlist_url || ''} onChange={e => updateField('playlist_url', e.target.value)} placeholder="https://..." className="w-full bg-[#1a1a1a]/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:bg-[#1a1a1a]/10 focus:border-emerald-400 transition-all outline-none placeholder:text-neutral-400" />
               </div>
             </div>
           </div>
@@ -373,14 +373,14 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         {/* DIRECT CONTACT */}
-        <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60 h-fit">
+        <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60 h-fit">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
               <MessageCircle size={20} />
             </div>
             <div>
-              <h3 className="text-lg font-black text-neutral-900">Direct Contact</h3>
-              <p className="text-xs font-medium text-neutral-500">How to reach you</p>
+              <h3 className="text-lg font-black text-white">Direct Contact</h3>
+              <p className="text-xs font-medium text-neutral-400 font-bold">How to reach you</p>
             </div>
           </div>
           <div className="space-y-5">
@@ -396,28 +396,28 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
         </section>
 
         {/* NETWORK PRESENCE */}
-        <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60">
+        <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
                 <Globe size={20} />
               </div>
               <div>
-                <h3 className="text-lg font-black text-neutral-900">Social Links</h3>
-                <p className="text-xs font-medium text-neutral-500">Max 4 platforms</p>
+                <h3 className="text-lg font-black text-white">Social Links</h3>
+                <p className="text-xs font-medium text-neutral-400 font-bold">Max 4 platforms</p>
               </div>
             </div>
-            <span className="text-xs font-bold text-neutral-400 bg-neutral-100 px-3 py-1 rounded-full">
+            <span className="text-xs font-bold text-neutral-400 bg-[#2a2a2a] px-3 py-1 rounded-full">
               {(data.platforms || []).length}/4
             </span>
           </div>
 
           <div className="space-y-4">
             {(data.platforms || []).map((p: any, i: number) => (
-              <div key={i} className="flex flex-col sm:flex-row gap-3 p-4 bg-neutral-50 border border-neutral-200 rounded-2xl relative group">
+              <div key={i} className="flex flex-col sm:flex-row gap-3 p-4 bg-[#1a1a1a] border border-white/20 rounded-2xl relative group">
                 <button type="button" onClick={() => {
                   const pCopy = [...(data.platforms || [])]; pCopy.splice(i, 1); updateField('platforms', pCopy);
-                }} className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-red-100 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm z-10 hover:bg-red-500 hover:text-white">
+                }} className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-red-100 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[2px_2px_0px_#fff] z-10 hover:bg-red-500 hover:text-white">
                   <Trash2 size={14} />
                 </button>
                 <div className="w-full sm:w-1/3">
@@ -444,7 +444,7 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
             ))}
             
             {(data.platforms || []).length < 4 && (
-              <button type="button" onClick={() => updateField('platforms', [...(data.platforms || []), { platform: '', url: '' }])} className="w-full py-4 border-2 border-dashed border-neutral-200 rounded-2xl text-xs font-bold text-neutral-500 hover:bg-neutral-50 hover:text-indigo-600 hover:border-indigo-300 transition-all flex items-center justify-center gap-2">
+              <button type="button" onClick={() => updateField('platforms', [...(data.platforms || []), { platform: '', url: '' }])} className="w-full py-4 border-2 border-dashed border-white/20 rounded-2xl text-xs font-bold text-neutral-400 font-bold hover:bg-[#1a1a1a] hover:text-indigo-600 hover:border-indigo-300 transition-all flex items-center justify-center gap-2">
                 <Plus size={16} /> Add Social Link
               </button>
             )}
@@ -453,33 +453,33 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
       </div>
 
       {/* SECTION: INNOVATION LAB */}
-      <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-neutral-200/60">
+      <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
               <Rocket size={20} />
             </div>
             <div>
-              <h3 className="text-lg font-black text-neutral-900">Innovation Lab</h3>
-              <p className="text-xs font-medium text-neutral-500">Showcase your top projects (Max 3)</p>
+              <h3 className="text-lg font-black text-white">Innovation Lab</h3>
+              <p className="text-xs font-medium text-neutral-400 font-bold">Showcase your top projects (Max 3)</p>
             </div>
           </div>
-          <span className="text-xs font-bold text-neutral-400 bg-neutral-100 px-3 py-1 rounded-full">
+          <span className="text-xs font-bold text-neutral-400 bg-[#2a2a2a] px-3 py-1 rounded-full">
             {(data.projects || []).length}/3
           </span>
         </div>
 
         <div className="space-y-6">
           {(data.projects || []).map((p: any, i: number) => (
-            <div key={i} className="p-5 sm:p-6 bg-neutral-50 border border-neutral-200 rounded-3xl relative group flex flex-col lg:flex-row gap-6">
+            <div key={i} className="p-5 sm:p-6 bg-[#1a1a1a] border border-white/20 rounded-3xl relative group flex flex-col lg:flex-row gap-6">
               <button type="button" onClick={() => {
                 const pCopy = [...(data.projects || [])]; pCopy.splice(i, 1); updateField('projects', pCopy);
-              }} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm z-10 hover:bg-red-500 hover:text-white">
+              }} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[2px_2px_0px_#fff] z-10 hover:bg-red-500 hover:text-white">
                 <Trash2 size={16} />
               </button>
 
               {/* Project Image */}
-              <div className="w-full lg:w-48 h-40 rounded-2xl bg-white border border-neutral-200 overflow-hidden relative group/img flex-shrink-0 cursor-pointer flex items-center justify-center">
+              <div className="w-full lg:w-48 h-40 rounded-2xl bg-[#1a1a1a] border border-white/20 overflow-hidden relative group/img flex-shrink-0 cursor-pointer flex items-center justify-center">
                 {p.url ? (
                   <>
                     <img src={getAssetUrl(p.url)} className="absolute inset-0 w-full h-full object-cover" alt="" />
@@ -491,7 +491,7 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
                 ) : (
                   <div className="flex flex-col items-center gap-2 text-neutral-400">
                     <Layout size={24} className="text-neutral-300" />
-                    <span className="text-[10px] font-bold uppercase text-neutral-500">Add Image</span>
+                    <span className="text-[10px] font-bold uppercase text-neutral-400 font-bold">Add Image</span>
                   </div>
                 )}
                 <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10" onChange={(e) => {
@@ -536,8 +536,8 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
           ))}
 
           {(data.projects || []).length < 3 && (
-            <button type="button" onClick={() => updateField('projects', [...(data.projects || []), { name: '', description: '', url: '', emoji: '🚀', tech: [], github_url: '' }])} className="w-full py-8 border-2 border-dashed border-neutral-200 rounded-3xl text-sm font-bold text-neutral-500 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 transition-all flex flex-col items-center justify-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm">
+            <button type="button" onClick={() => updateField('projects', [...(data.projects || []), { name: '', description: '', url: '', emoji: '🚀', tech: [], github_url: '' }])} className="w-full py-8 border-2 border-dashed border-white/20 rounded-3xl text-sm font-bold text-neutral-400 font-bold hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 transition-all flex flex-col items-center justify-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center shadow-[2px_2px_0px_#fff]">
                 <Plus size={20} />
               </div>
               Feature New Project

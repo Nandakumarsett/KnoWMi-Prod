@@ -202,15 +202,15 @@ export default function QRStudioAdmin() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-8 animate-fadeIn">
       {/* Search and Select User Sidebar */}
-      <div className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-sm flex flex-col gap-4">
+      <div className="bg-[#1a1a1a] rounded-2xl p-6 border border-white/20 shadow-[2px_2px_0px_#fff] flex flex-col gap-4">
         <button 
           onClick={() => { setFactoryMode(true); setSelectedUser(null); }}
-          className={`w-full py-3 rounded-xl font-black uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-2 ${factoryMode ? 'bg-neutral-900 text-white shadow-xl' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'}`}
+          className={`w-full py-3 rounded-xl font-black uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-2 ${factoryMode ? 'bg-neutral-900 text-white shadow-[8px_8px_0px_#fff]' : 'bg-orange-50 text-orange-600 hover:bg-orange-100'}`}
         >
           <Users size={16} /> Factory Bulk Generator
         </button>
-        <div className="h-px bg-neutral-100 my-2 w-full" />
-        <h3 className="text-sm font-black uppercase tracking-wider text-neutral-800">1. Select Customer</h3>
+        <div className="h-px bg-[#2a2a2a] my-2 w-full" />
+        <h3 className="text-sm font-black uppercase tracking-wider text-neutral-200">1. Select Customer</h3>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" size={16} />
           <input 
@@ -218,7 +218,7 @@ export default function QRStudioAdmin() {
             placeholder="Search Name or WM code..." 
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-neutral-200 outline-none focus:border-orange-500 transition-all text-xs"
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-white/20 outline-none focus:border-orange-500 transition-all text-xs"
           />
         </div>
         
@@ -230,12 +230,12 @@ export default function QRStudioAdmin() {
               <button
                 key={u.id}
                 onClick={() => handleSelectUser(u)}
-                className={`p-3.5 rounded-xl text-left border flex flex-col gap-1.5 transition-all hover:bg-orange-50/30 ${selectedUser?.id === u.id ? 'bg-orange-50 border-orange-200 ring-2 ring-orange-500/20' : 'bg-white border-neutral-100'}`}
+                className={`p-3.5 rounded-xl text-left border flex flex-col gap-1.5 transition-all hover:bg-orange-50/30 ${selectedUser?.id === u.id ? 'bg-orange-50 border-orange-200 ring-2 ring-orange-500/20' : 'bg-[#1a1a1a] border-white/20'}`}
               >
-                <span className="font-bold text-neutral-900 text-sm leading-none">{u.first_name || 'Unknown'}</span>
+                <span className="font-bold text-white text-sm leading-none">{u.first_name || 'Unknown'}</span>
                 <div className="flex justify-between items-center w-full">
                   <span className="text-[10px] font-bold text-neutral-400 uppercase">{(u.wm_code || 'WM-NEW-000').replace('PT-', 'WM-')}</span>
-                  <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-md ${u.status === 'paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-neutral-50 text-neutral-400'}`}>{u.status || 'free'}</span>
+                  <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-md ${u.status === 'paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-[#1a1a1a] text-neutral-400'}`}>{u.status || 'free'}</span>
                 </div>
               </button>
             ))}
@@ -249,50 +249,50 @@ export default function QRStudioAdmin() {
       {/* Admin QR Studio Generator UI */}
       <div className="flex flex-col gap-6">
         {factoryMode ? (
-          <div className="bg-white rounded-2xl p-8 border border-neutral-100 shadow-sm flex flex-col gap-6 animate-fadeIn h-full">
+          <div className="bg-[#1a1a1a] rounded-2xl p-8 border border-white/20 shadow-[2px_2px_0px_#fff] flex flex-col gap-6 animate-fadeIn h-full">
             <div>
               <div className="w-16 h-16 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center mb-4">
                 <Users size={32} />
               </div>
-              <h2 className="text-2xl font-black font-display text-neutral-900">Factory Bulk Generator</h2>
-              <p className="text-sm text-neutral-500 mt-2">Generate blank, unclaimed physical tees. Download a CSV to provide to the factory for QR code printing. When a user scans the printed QR, they will be prompted to claim and pair the tee to their account.</p>
+              <h2 className="text-2xl font-black font-display text-white">Factory Bulk Generator</h2>
+              <p className="text-sm text-neutral-400 font-bold mt-2">Generate blank, unclaimed physical tees. Download a CSV to provide to the factory for QR code printing. When a user scans the printed QR, they will be prompted to claim and pair the tee to their account.</p>
             </div>
             
             <form onSubmit={handleGenerateFactoryBatch} className="space-y-6 mt-4">
               <div>
                 <label className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-2 block">Batch Label</label>
-                <input type="text" value={batchLabel} onChange={e => setBatchLabel(e.target.value)} className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-orange-500/20 transition-all outline-none" required />
+                <input type="text" value={batchLabel} onChange={e => setBatchLabel(e.target.value)} className="w-full bg-[#1a1a1a] border border-white/20 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-orange-500/20 transition-all outline-none" required />
               </div>
               <div>
                 <label className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-2 block">Quantity</label>
-                <input type="number" min="1" max="1000" value={batchSize} onChange={e => setBatchSize(Number(e.target.value))} className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-orange-500/20 transition-all outline-none" required />
+                <input type="number" min="1" max="1000" value={batchSize} onChange={e => setBatchSize(Number(e.target.value))} className="w-full bg-[#1a1a1a] border border-white/20 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-orange-500/20 transition-all outline-none" required />
               </div>
-              <button disabled={generatingBatch} type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-6 py-4 font-black uppercase text-[12px] tracking-widest transition-all shadow-lg shadow-orange-500/20 disabled:opacity-50">
+              <button disabled={generatingBatch} type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-6 py-4 font-black uppercase text-[12px] tracking-widest transition-all shadow-[6px_6px_0px_#fff] shadow-orange-500/20 disabled:opacity-50">
                 {generatingBatch ? 'Generating...' : 'Generate & Download CSV'}
               </button>
             </form>
           </div>
         ) : !selectedUser ? (
-          <div className="bg-white rounded-2xl p-20 text-center border-2 border-dashed border-neutral-200 flex flex-col items-center justify-center gap-4 h-full">
-            <div className="w-16 h-16 bg-neutral-50 rounded-full flex items-center justify-center text-neutral-300">
+          <div className="bg-[#1a1a1a] rounded-2xl p-20 text-center border-2 border-dashed border-white/20 flex flex-col items-center justify-center gap-4 h-full">
+            <div className="w-16 h-16 bg-[#1a1a1a] rounded-full flex items-center justify-center text-neutral-300">
               <QrCode size={32} />
             </div>
             <div>
-              <p className="text-sm font-black text-neutral-700 uppercase tracking-wider mb-1">Owner Admin QR Studio</p>
+              <p className="text-sm font-black text-neutral-300 uppercase tracking-wider mb-1">Owner Admin QR Studio</p>
               <p className="text-xs text-neutral-400 font-medium">Select a customer profile on the left to enter their dedicated QR Studio, generate, and print phygital codes on T-shirts.</p>
             </div>
           </div>
         ) : (
           <div className="flex flex-col gap-6">
-            <div className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-sm flex items-center justify-between">
+            <div className="bg-[#1a1a1a] rounded-2xl p-6 border border-white/20 shadow-[2px_2px_0px_#fff] flex items-center justify-between">
               <div>
                 <p className="text-[10px] font-black uppercase text-orange-500 tracking-wider">Active Workspace</p>
-                <h3 className="text-lg font-black text-neutral-900 leading-tight">{selectedUser.first_name}'s QR Builder</h3>
+                <h3 className="text-lg font-black text-white leading-tight">{selectedUser.first_name}'s QR Builder</h3>
                 <p className="text-xs font-bold text-neutral-400 uppercase mt-1">{(selectedUser.wm_code || 'WM-NEW-000').replace('PT-', 'WM-')} · {selectedUser.status} Status</p>
               </div>
               <button 
                 onClick={() => setSelectedUser(null)}
-                className="px-4 py-2 border border-neutral-200 hover:bg-neutral-50 rounded-xl text-xs font-bold transition-all"
+                className="px-4 py-2 border border-white/20 hover:bg-[#1a1a1a] rounded-xl text-xs font-bold transition-all"
               >
                 Change Customer
               </button>
@@ -307,7 +307,7 @@ export default function QRStudioAdmin() {
                   The <code>qr_tokens</code> table restricts creation when performed by the Owner Admin for another user's workspace.
                   To resolve this error permanently, copy the SQL below and run it in your <strong>Supabase Dashboard &gt; SQL Editor</strong>:
                 </p>
-                <pre className="p-3.5 bg-white border border-amber-100 rounded-xl text-xs font-mono text-amber-900 select-all overflow-x-auto">
+                <pre className="p-3.5 bg-[#1a1a1a] border border-amber-100 rounded-xl text-xs font-mono text-amber-900 select-all overflow-x-auto">
 {`CREATE POLICY "Owners manage all tokens" ON public.qr_tokens FOR ALL
 USING (EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role = 'owner'));`}
                 </pre>
@@ -315,13 +315,13 @@ USING (EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role
             )}
 
             {/* Create Tracking Token */}
-            <div className="bg-white rounded-2xl p-6 border border-neutral-100 shadow-sm relative overflow-hidden">
-              <h3 className="text-sm font-black uppercase tracking-wider text-neutral-800 mb-4">Generate T-Shirt Token</h3>
+            <div className="bg-[#1a1a1a] rounded-2xl p-6 border border-white/20 shadow-[2px_2px_0px_#fff] relative overflow-hidden">
+              <h3 className="text-sm font-black uppercase tracking-wider text-neutral-200 mb-4">Generate T-Shirt Token</h3>
               <form onSubmit={handleCreateToken} className="flex flex-col md:flex-row gap-3">
                 <input 
                   type="text" 
                   placeholder="e.g. Signature Tee - L - May Batch" 
-                  className="flex-1 bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-orange-500/20 transition-all outline-none"
+                  className="flex-1 bg-[#1a1a1a] border border-white/20 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-orange-500/20 transition-all outline-none"
                   value={label}
                   onChange={(e) => setLabel(e.target.value)}
                   required
@@ -345,10 +345,10 @@ USING (EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role
               </div>
               
               {fetchingTokens ? (
-                <div className="text-center py-10 bg-white rounded-2xl border border-neutral-100 text-xs font-bold uppercase tracking-wider text-neutral-400">Loading Tokens...</div>
+                <div className="text-center py-10 bg-[#1a1a1a] rounded-2xl border border-white/20 text-xs font-bold uppercase tracking-wider text-neutral-400">Loading Tokens...</div>
               ) : tokens.length === 0 ? (
-                <div className="bg-white rounded-2xl p-12 text-center border-2 border-dashed border-neutral-200">
-                  <div className="w-12 h-12 bg-neutral-50 rounded-full flex items-center justify-center mx-auto mb-3 text-neutral-300">
+                <div className="bg-[#1a1a1a] rounded-2xl p-12 text-center border-2 border-dashed border-white/20">
+                  <div className="w-12 h-12 bg-[#1a1a1a] rounded-full flex items-center justify-center mx-auto mb-3 text-neutral-300">
                     <QrCode size={24} />
                   </div>
                   <p className="text-xs font-black text-neutral-400 uppercase tracking-wider">No tokens exist for this user yet.</p>
@@ -356,20 +356,20 @@ USING (EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role
               ) : (
                 <div className="grid grid-cols-1 gap-4">
                   {tokens.map(token => (
-                    <div key={token.id} className="bg-white rounded-2xl p-5 border border-neutral-100 hover:border-orange-500/20 transition-all shadow-sm">
+                    <div key={token.id} className="bg-[#1a1a1a] rounded-2xl p-5 border border-white/20 hover:border-orange-500/20 transition-all shadow-[2px_2px_0px_#fff]">
                       <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                         <div className="flex-1 space-y-4 w-full">
                           <div className="flex items-center justify-between md:justify-start gap-4">
                             <div className="flex items-center gap-3">
                               <div className={`w-2.5 h-2.5 rounded-full ${token.is_active ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse' : 'bg-neutral-300'}`} />
-                              <h4 className="font-black text-neutral-900 tracking-tight text-sm">{token.label || 'Unnamed Token'}</h4>
+                              <h4 className="font-black text-white tracking-tight text-sm">{token.label || 'Unnamed Token'}</h4>
                             </div>
-                            <span className="text-[9px] font-black text-neutral-300 font-mono bg-neutral-50 px-2 py-0.5 rounded-md">ID: {token.scan_token.slice(0, 8)}</span>
+                            <span className="text-[9px] font-black text-neutral-300 font-mono bg-[#1a1a1a] px-2 py-0.5 rounded-md">ID: {token.scan_token.slice(0, 8)}</span>
                           </div>
                         </div>
 
                         <div className="flex flex-row md:flex-col gap-3 w-full md:w-auto shrink-0">
-                          <div className="p-3 bg-white rounded-xl border border-neutral-100 flex items-center justify-center relative">
+                          <div className="p-3 bg-[#1a1a1a] rounded-xl border border-white/20 flex items-center justify-center relative">
                             <QRCodeSVG 
                               id={`qr-${token.id}`}
                               value={`${window.location.origin}/q/${token.scan_token}?src=tshirt`}
@@ -387,7 +387,7 @@ USING (EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role
                           <div className="flex-1 flex flex-col gap-2">
                             <button 
                               onClick={() => downloadQR(token.id, token.label)}
-                              className="w-full bg-orange-500 text-white h-10 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black tracking-widest uppercase hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20"
+                              className="w-full bg-orange-500 text-white h-10 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black tracking-widest uppercase hover:bg-orange-600 transition-all shadow-[6px_6px_0px_#fff] shadow-orange-500/20"
                             >
                               <Download size={12} />
                               Export QR

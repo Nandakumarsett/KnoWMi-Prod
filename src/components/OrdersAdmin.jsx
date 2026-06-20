@@ -107,7 +107,7 @@ export default function OrdersAdmin() {
     pending: 'bg-amber-100 text-amber-700 border-amber-200',
     paid: 'bg-emerald-100 text-emerald-700 border-emerald-200',
     shipped: 'bg-blue-100 text-blue-700 border-blue-200',
-    delivered: 'bg-neutral-100 text-neutral-700 border-neutral-200',
+    delivered: 'bg-[#2a2a2a] text-neutral-300 border-white/20',
     cancelled: 'bg-red-100 text-red-700 border-red-200'
   }
 
@@ -127,7 +127,7 @@ export default function OrdersAdmin() {
             placeholder="Search Order #, Customer, or City..." 
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 outline-none focus:border-orange-500 transition-all"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-white/20 outline-none focus:border-orange-500 transition-all"
           />
         </div>
         <div className="flex gap-3 w-full md:w-auto">
@@ -149,7 +149,7 @@ export default function OrdersAdmin() {
           </button>
           <button 
             onClick={fetchOrders}
-            className="px-6 py-2.5 bg-white border border-neutral-200 rounded-xl font-bold text-sm hover:bg-neutral-50 transition-all flex items-center justify-center gap-2"
+            className="px-6 py-2.5 bg-[#1a1a1a] border border-white/20 rounded-xl font-bold text-sm hover:bg-[#1a1a1a] transition-all flex items-center justify-center gap-2"
           >
             {loading ? <Loader2 className="animate-spin" size={16} /> : <RefreshCcw size={16} />}
           </button>
@@ -173,7 +173,7 @@ export default function OrdersAdmin() {
                     setEditForm({...editForm, profile_id: wmMatch.id, customer_name: wmMatch.first_name})
                   }
                 }}
-                className="w-full px-4 py-2.5 rounded-xl text-sm border-none bg-white shadow-sm outline-none focus:ring-2 ring-orange-500/20"
+                className="w-full px-4 py-2.5 rounded-xl text-sm border-none bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] outline-none focus:ring-2 ring-orange-500/20"
               />
               {editForm.customer_name && <p className="text-[10px] text-orange-600 font-bold mt-1">✓ Found: {editForm.customer_name}</p>}
             </div>
@@ -194,7 +194,7 @@ export default function OrdersAdmin() {
                     setEditForm({...editForm, item_name: e.target.value})
                   }
                 }}
-                className="w-full px-4 py-2.5 rounded-xl text-sm border-none bg-white shadow-sm outline-none"
+                className="w-full px-4 py-2.5 rounded-xl text-sm border-none bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] outline-none"
               >
                 <option value="">Select from Catalog</option>
                 {catalog.map(d => (
@@ -209,7 +209,7 @@ export default function OrdersAdmin() {
                 type="text"
                 value={editForm.order_number}
                 onChange={e => setEditForm({...editForm, order_number: e.target.value})}
-                className="w-full px-4 py-2.5 rounded-xl text-sm border-none bg-white shadow-sm outline-none"
+                className="w-full px-4 py-2.5 rounded-xl text-sm border-none bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] outline-none"
               />
             </div>
             <div>
@@ -219,7 +219,7 @@ export default function OrdersAdmin() {
                 value={editForm.estimated_delivery || ''}
                 onChange={e => setEditForm({...editForm, estimated_delivery: e.target.value})}
                 placeholder="e.g. 5 Days"
-                className="w-full px-4 py-2.5 rounded-xl text-sm border-none bg-white shadow-sm outline-none"
+                className="w-full px-4 py-2.5 rounded-xl text-sm border-none bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] outline-none"
               />
             </div>
           </div>
@@ -252,10 +252,10 @@ export default function OrdersAdmin() {
 
       <div className="grid grid-cols-1 gap-4">
         {filtered.map(o => (
-          <div key={o.id} className="card p-6 bg-white shadow-sm hover:shadow-md transition-all border-neutral-100 overflow-hidden relative">
+          <div key={o.id} className="card p-6 bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] hover:shadow-[4px_4px_0px_#fff] transition-all border-white/20 overflow-hidden relative">
             <div className="flex flex-col lg:flex-row gap-6">
               {/* Order Image / Model */}
-              <div className="w-full lg:w-32 h-32 bg-neutral-50 rounded-2xl flex items-center justify-center shrink-0 border-2 border-neutral-50 overflow-hidden">
+              <div className="w-full lg:w-32 h-32 bg-[#1a1a1a] rounded-2xl flex items-center justify-center shrink-0 border-2 border-neutral-50 overflow-hidden">
                 {o.model_image_url ? (
                   <img src={o.model_image_url} className="w-full h-full object-cover" />
                 ) : (
@@ -285,29 +285,29 @@ export default function OrdersAdmin() {
                   <div>
                     <p className="text-[10px] font-black uppercase text-neutral-400 mb-1">Customer</p>
                     <p className="font-bold">{o.profiles?.first_name} {o.profiles?.last_name}</p>
-                    <p className="text-xs text-neutral-500">{o.profiles?.wm_code}</p>
+                    <p className="text-xs text-neutral-400 font-bold">{o.profiles?.wm_code}</p>
                   </div>
                   <div>
                     <p className="text-[10px] font-black uppercase text-neutral-400 mb-1">Product</p>
                     <p className="font-bold">{o.item_name}</p>
-                    <p className="text-xs text-neutral-500">Size: {o.size} · SKU: {o.sku || 'N/A'}</p>
+                    <p className="text-xs text-neutral-400 font-bold">Size: {o.size} · SKU: {o.sku || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-[10px] font-black uppercase text-neutral-400 mb-1">Delivery City</p>
                     <p className="font-bold flex items-center gap-1.5"><MapPin size={14} className="text-neutral-400" /> {o.delivery_city || 'Not Set'}</p>
-                    <p className="text-xs text-neutral-500">Value: ₹{o.amount}</p>
+                    <p className="text-xs text-neutral-400 font-bold">Value: ₹{o.amount}</p>
                   </div>
                 </div>
 
                 {editingId === o.id ? (
-                  <div className="p-4 bg-neutral-50 rounded-2xl space-y-4 border border-neutral-200 animate-slideUp">
+                  <div className="p-4 bg-[#1a1a1a] rounded-2xl space-y-4 border border-white/20 animate-slideUp">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
                         <label className="text-[10px] font-black uppercase mb-1 block">Status</label>
                         <select 
                           value={editForm.status} 
                           onChange={e => setEditForm({...editForm, status: e.target.value})}
-                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-white shadow-sm outline-none"
+                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] outline-none"
                         >
                           <option value="pending">Pending</option>
                           <option value="paid">Paid</option>
@@ -323,7 +323,7 @@ export default function OrdersAdmin() {
                           value={editForm.order_number || ''}
                           onChange={e => setEditForm({...editForm, order_number: e.target.value})}
                           placeholder="e.g. ORD-1001"
-                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-white shadow-sm outline-none"
+                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] outline-none"
                         />
                       </div>
                       <div>
@@ -333,7 +333,7 @@ export default function OrdersAdmin() {
                           value={editForm.tracking_info || ''}
                           onChange={e => setEditForm({...editForm, tracking_info: e.target.value})}
                           placeholder="e.g. Bluedart: 123456"
-                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-white shadow-sm outline-none"
+                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] outline-none"
                         />
                       </div>
                       <div>
@@ -343,7 +343,7 @@ export default function OrdersAdmin() {
                           value={editForm.delivery_city || ''}
                           onChange={e => setEditForm({...editForm, delivery_city: e.target.value})}
                           placeholder="e.g. Mumbai"
-                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-white shadow-sm outline-none"
+                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] outline-none"
                         />
                       </div>
                       <div>
@@ -353,7 +353,7 @@ export default function OrdersAdmin() {
                           value={editForm.sku || ''}
                           onChange={e => setEditForm({...editForm, sku: e.target.value})}
                           placeholder="e.g. SIG-TEE-BLK"
-                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-white shadow-sm outline-none"
+                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] outline-none"
                         />
                       </div>
                       <div>
@@ -363,7 +363,7 @@ export default function OrdersAdmin() {
                           value={editForm.estimated_delivery || ''}
                           onChange={e => setEditForm({...editForm, estimated_delivery: e.target.value})}
                           placeholder="e.g. 3-5 Business Days"
-                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-white shadow-sm outline-none"
+                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] outline-none"
                         />
                       </div>
                       <div>
@@ -372,7 +372,7 @@ export default function OrdersAdmin() {
                           type="date"
                           value={editForm.order_date || ''}
                           onChange={e => setEditForm({...editForm, order_date: e.target.value})}
-                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-white shadow-sm outline-none"
+                          className="w-full px-3 py-2 rounded-lg text-sm border-none bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] outline-none"
                         />
                       </div>
                     </div>
@@ -388,7 +388,7 @@ export default function OrdersAdmin() {
                   </div>
                 ) : (
                   <div className="pt-4 border-t border-neutral-50 flex items-center justify-between">
-                    <div className="flex items-center gap-4 text-xs text-neutral-500">
+                    <div className="flex items-center gap-4 text-xs text-neutral-400 font-bold">
                        <span className="flex items-center gap-1.5"><Truck size={14} /> {o.tracking_info || 'No tracking yet'}</span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -404,7 +404,7 @@ export default function OrdersAdmin() {
                           setEditingId(o.id)
                           setEditForm(o)
                         }}
-                        className="px-4 py-2 bg-neutral-50 hover:bg-neutral-100 rounded-xl text-xs font-bold transition-all flex items-center gap-2"
+                        className="px-4 py-2 bg-[#1a1a1a] hover:bg-[#2a2a2a] rounded-xl text-xs font-bold transition-all flex items-center gap-2"
                       >
                         <Edit3 size={14} /> Manage Order
                       </button>
@@ -417,7 +417,7 @@ export default function OrdersAdmin() {
         ))}
 
         {filtered.length === 0 && !loading && (
-          <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-neutral-200">
+          <div className="text-center py-20 bg-[#1a1a1a] rounded-3xl border border-dashed border-white/20">
              <Package size={48} className="mx-auto text-neutral-200 mb-4" />
              <p className="text-neutral-400 font-medium">No orders found matching your search.</p>
           </div>
