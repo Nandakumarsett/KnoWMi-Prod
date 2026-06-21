@@ -5,7 +5,7 @@ import Avatar from '../components/Avatar';
 import {
   Search, Trophy, Users, Activity, Clock,
   TrendingUp, TrendingDown, Minus, Share2,
-  X, Copy, Linkedin, Eye, Sparkles, QrCode, Star, Download, Flame, MapPin, Medal, Globe
+  X, Copy, Linkedin, Eye, Sparkles, QrCode, Star, Download, Flame, MapPin, Medal, Globe, ArrowLeft
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { Trie } from '../lib/leaderboard/trie';
@@ -117,8 +117,8 @@ export default function Leaderboard() {
   const trie = useMemo(() => {
     const t = new Trie();
     profiles.forEach(p => {
-      t.insert(p.display_name, p.username);
-      t.insert(p.username, p.username);
+      if (p.display_name && p.username) t.insert(p.display_name, p.username);
+      if (p.username) t.insert(p.username, p.username);
     });
     return t;
   }, [profiles]);

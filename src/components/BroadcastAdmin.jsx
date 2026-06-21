@@ -151,9 +151,8 @@ export default function BroadcastAdmin() {
 
           <button
             type="submit"
-            disabled={sending || !form.summary.trim()}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all"
-            className={sending ? "bg-neutral-600" : "bg-white text-black"} style={{opacity: (!form.summary.trim() || sending) ? 0.6 : 1}}
+              disabled={sending || !form.summary.trim()}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all ${sending ? "bg-neutral-600" : "bg-white text-black"}`} style={{opacity: (!form.summary.trim() || sending) ? 0.6 : 1}}
           >
             <Send size={14} />
             {sending ? 'Sending to all users...' : 'Send Policy Notification to All Users'}
