@@ -51,40 +51,15 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
         });
       }
 
-      const linksPromise = supabase.from('link_click_events').select('*').eq('profile_id', profileId);
-
       try {
-        const [payload, linksData] = await Promise.all([edgePromise, linksPromise]);
+        const payload = await edgePromise;
         
         if (payload) {
           views = payload.views || [];
           scans = payload.scans || [];
-          links = linksData.data || payload.links || [];
-          if (linksData.error) linksError = linksData.error;
+          links = payload.links || [];
 
-          // PATCH: Run city patching concurrently if needed
-          const needsScanPatch = scans.length > 0 && (!('city' in scans[0]) || scans[0].city == null);
-          const needsViewPatch = views.length > 0 && (!('city' in views[0]) || views[0].city == null);
-          
-          if (needsScanPatch || needsViewPatch) {
-            const patchPromises = [];
-            if (needsScanPatch) patchPromises.push(supabase.from('qr_scan_events').select('id, city, country').eq('profile_id', profileId));
-            else patchPromises.push(Promise.resolve({ data: null }));
-            
-            if (needsViewPatch) patchPromises.push(supabase.from('profile_view_events').select('id, city, country').eq('profile_id', profileId));
-            else patchPromises.push(Promise.resolve({ data: null }));
-
-            const [scanRes, viewRes] = await Promise.all(patchPromises);
-            
-            if (scanRes?.data) {
-              const scanMap = new Map(scanRes.data.map(s => [s.id, s]));
-              scans.forEach(s => { const p = scanMap.get(s.id); if (p) Object.assign(s, p); });
-            }
-            if (viewRes?.data) {
-              const viewMap = new Map(viewRes.data.map(v => [v.id, v]));
-              views.forEach(v => { const p = viewMap.get(v.id); if (p) Object.assign(v, p); });
-            }
-          }
+          // Removed unnecessary city patch logic that was causing 2x load times
         } else {
           throw new Error('No session or edge payload');
         }
@@ -93,16 +68,16 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
         const [viewRes, scanRes, linksRes] = await Promise.all([
           supabase.from('profile_view_events').select('*').eq('profile_id', profileId),
           supabase.from('qr_scan_events').select('*').eq('profile_id', profileId),
-          linksPromise
+          supabase.from('link_click_events').select('*').eq('profile_id', profileId)
         ]);
         
         if (viewRes.error) console.error("Analytics: Error fetching views:", viewRes.error.message);
         if (scanRes.error) console.error("Analytics: Error fetching scans:", scanRes.error.message);
+        if (linksRes.error) linksError = linksRes.error;
         
         views = viewRes.data || [];
         scans = scanRes.data || [];
         links = linksRes.data || [];
-        linksError = linksRes.error;
       }
     } catch (authErr) {
       console.error("Auth error in analytics:", authErr);
