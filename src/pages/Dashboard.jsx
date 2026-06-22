@@ -2291,23 +2291,26 @@ function Dashboard() {
           
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { label: 'Total Views', value: totalProfileViews.toLocaleString(), sub: 'Scans & Web', trend: 'Live', color: 'text-white', tooltip: 'Total number of times your profile page or phygital products have been loaded or scanned.' },
-              { label: 'Unique Views', value: uniqueScans.toLocaleString(), sub: 'Real Individuals', trend: 'Verified', color: 'text-blue-500', tooltip: 'Number of unique visitors who viewed or scanned your profile, based on verification.' },
-              { label: 'QR Scan Rate', value: qrScanRateLabel, sub: 'Physical to Digital', trend: 'Calculated', color: 'text-orange-500', tooltip: 'The percentage of visitors who scanned physical QR products versus accessing direct links.' },
-              { label: 'Repeat Score', value: `${repeatScore}%`, sub: repeatScoreLabel, trend: 'Active', color: 'text-emerald-500', tooltip: 'The percentage of users who returned to view your profile again after their first visit.' }
+              { label: 'Total Views', value: totalProfileViews.toLocaleString(), sub: 'Scans & Web', color: 'text-cyan-300', accent: 'from-cyan-500/15 to-blue-600/10', border: 'border-cyan-500/20', dot: 'bg-cyan-400', tooltip: 'Total number of times your profile page or phygital products have been loaded or scanned.' },
+              { label: 'Unique Views', value: uniqueScans.toLocaleString(), sub: 'Real Individuals', color: 'text-blue-300', accent: 'from-blue-500/15 to-indigo-600/10', border: 'border-blue-500/20', dot: 'bg-blue-400', tooltip: 'Number of unique visitors who viewed or scanned your profile, based on verification.' },
+              { label: 'QR Scan Rate', value: qrScanRateLabel, sub: 'Physical to Digital', color: 'text-orange-300', accent: 'from-orange-500/15 to-amber-600/10', border: 'border-orange-500/20', dot: 'bg-orange-400', tooltip: 'The percentage of visitors who scanned physical QR products versus accessing direct links.' },
+              { label: 'Repeat Score', value: `${repeatScore}%`, sub: repeatScoreLabel, color: 'text-emerald-300', accent: 'from-emerald-500/15 to-teal-600/10', border: 'border-emerald-500/20', dot: 'bg-emerald-400', tooltip: 'The percentage of users who returned to view your profile again after their first visit.' }
             ].map((stat, i) => (
-              <div key={i} className="p-6 vibe-card relative group">
+              <div key={i} className={`p-6 rounded-2xl bg-gradient-to-br ${stat.accent} border ${stat.border} relative group transition-all duration-300 hover:-translate-y-1`}>
                 <div className="flex justify-between items-center mb-4">
-                  <p className="text-xs font-black uppercase tracking-widest text-neutral-400">{stat.label}</p>
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${stat.dot} animate-pulse`} />
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">{stat.label}</p>
+                  </div>
                   <div className="relative group/tooltip flex shrink-0">
-                    <div className="w-4 h-4 rounded-full bg-[#2a2a2a] text-[10px] font-bold text-neutral-400 flex items-center justify-center cursor-help shrink-0 select-none hover:bg-neutral-200 transition-colors">i</div>
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2.5 bg-neutral-900 text-white text-[10px] font-medium rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 pointer-events-none z-50 shadow-[8px_8px_0px_#fff] border border-neutral-800 font-sans normal-case tracking-normal leading-normal select-none">
+                    <div className="w-4 h-4 rounded-full bg-white/5 text-[10px] font-bold text-neutral-500 flex items-center justify-center cursor-help shrink-0 select-none hover:bg-white/10 transition-colors">i</div>
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2.5 bg-neutral-900 text-white text-[10px] font-medium rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 pointer-events-none z-50 border border-neutral-800 font-sans normal-case tracking-normal leading-normal select-none">
                       {stat.tooltip}
                     </div>
                   </div>
                 </div>
-                <p className={`text-4xl font-black mb-1.5 ${stat.color}`}>{stat.value}</p>
-                <p className="text-xs font-bold text-neutral-300 uppercase tracking-tighter">{stat.sub}</p>
+                <p className={`text-4xl font-bold mb-1.5 ${stat.color}`}>{stat.value}</p>
+                <p className="text-[11px] font-medium text-neutral-400 uppercase tracking-wider">{stat.sub}</p>
               </div>
             ))}
           </div>
@@ -2317,84 +2320,82 @@ function Dashboard() {
           {/* BENTO GRID: Analytics */}
           <div className="grid grid-cols-1 md:grid-cols-6 gap-6 mb-8">
             {/* Main Traffic Chart - Large Bento Piece */}
-            <div className="md:col-span-4 vibe-card overflow-hidden flex flex-col animate-slideUp">
-              <div className="p-8 border-b border-neutral-50 flex justify-between items-center bg-neutral-50/20">
+            <div className="md:col-span-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-violet-600/5 border border-blue-500/15 overflow-hidden flex flex-col animate-slideUp">
+              <div className="p-6 border-b border-blue-500/10 flex justify-between items-center bg-blue-500/5">
                 <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-white mb-1">Traffic Intelligence</h3>
-                  <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">7-Day Engagement Window</p>
+                  <h3 className="text-sm font-semibold text-white mb-1 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                    Traffic Intelligence
+                  </h3>
+                  <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-wider">7-Day Engagement Window</p>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[6px_6px_0px_#fff] shadow-blue-500/20" />
-                    <span className="text-[9px] font-black uppercase tracking-widest text-neutral-400">Total Views</span>
+                    <div className="w-2 h-2 rounded-full bg-blue-400" />
+                    <span className="text-[10px] font-medium text-neutral-400">Total Views</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[6px_6px_0px_#fff] shadow-emerald-500/20" />
-                    <span className="text-[9px] font-black uppercase tracking-widest text-neutral-400">Unique Views</span>
+                    <div className="w-2 h-2 rounded-full bg-emerald-400" />
+                    <span className="text-[10px] font-medium text-neutral-400">Unique Views</span>
                   </div>
                 </div>
               </div>
-              <div className="p-8 flex-1">
+              <div className="p-6 flex-1">
                 <div className="h-[320px] w-full">
                   <ViewsChart data={vibeStats.dailyStats} />
                 </div>
               </div>
-              <div className="px-8 py-5 border-t border-neutral-50 bg-neutral-50/10 text-center">
-                 <button className="text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:text-blue-500 transition-all">Deep Data Analysis •••</button>
+              <div className="px-6 py-4 border-t border-blue-500/10 bg-blue-500/5 text-center">
+                 <button className="text-[10px] font-semibold uppercase tracking-wider text-blue-400 hover:text-blue-300 transition-all">Deep Data Analysis →</button>
               </div>
             </div>
 
             {/* Latest Activity - Vertical Bento Piece */}
-            <div className="md:col-span-2 vibe-card overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.1s' }}>
-              <div className="p-8 border-b border-neutral-50 bg-neutral-50/20">
-                <h3 className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
-                  Live Feed
+            <div className="md:col-span-2 rounded-2xl bg-gradient-to-br from-orange-500/10 to-rose-600/5 border border-orange-500/15 overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.1s' }}>
+              <div className="p-6 border-b border-orange-500/10 bg-orange-500/5">
+                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
                   <span className="flex h-2 w-2 relative">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
                   </span>
+                  Live Feed
                 </h3>
               </div>
-              <div className="flex-1 p-8 overflow-y-auto">
+              <div className="flex-1 p-6 overflow-y-auto">
                 {!vibeStats.latestActivity?.length ? (
                   <div className="h-full flex flex-col items-center justify-center text-center opacity-40">
-                    <div className="w-16 h-16 bg-[#1a1a1a] rounded-full flex items-center justify-center mb-4">
-                       <Clock size={28} className="text-neutral-300" />
+                    <div className="w-14 h-14 bg-orange-500/10 rounded-2xl flex items-center justify-center mb-3">
+                       <Clock size={24} className="text-orange-300" />
                     </div>
-                    <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Listening for Scans...</p>
+                    <p className="text-[10px] font-medium text-neutral-500 uppercase tracking-wider">Listening for Scans...</p>
                   </div>
                 ) : (
-                  <div className="space-y-8">
+                  <div className="space-y-5">
                     {vibeStats.latestActivity.slice(0, 5).map((ev, i) => (
-                      <div key={i} className="flex gap-5 items-start group">
-                        <div className="shrink-0 group-hover:scale-110 transition-transform">
+                      <div key={i} className="flex gap-3 items-start group p-3 rounded-xl hover:bg-white/4 transition-all">
+                        <div className="shrink-0">
                            {ev.visitor ? (
-                             <Avatar 
-                               src={ev.visitor.avatar_url} 
-                               name={ev.visitor.first_name} 
-                               size="w-10 h-10" 
-                               className="rounded-2xl" 
-                             />
+                             <Avatar src={ev.visitor.avatar_url} name={ev.visitor.first_name} size="w-9 h-9" className="rounded-xl" />
                            ) : (
-                             <div className="w-10 h-10 rounded-2xl bg-[#1a1a1a] border border-white/20 flex items-center justify-center">
-                               <Activity size={16} className="text-blue-500" />
+                             <div className="w-9 h-9 rounded-xl bg-orange-500/15 border border-orange-500/20 flex items-center justify-center">
+                               <Activity size={14} className="text-orange-400" />
                              </div>
                            )}
                         </div>
-                        <div className="flex-1">
-                           <div className="flex justify-between items-start">
-                             <p className="text-[11px] font-black text-white leading-tight">
+                        <div className="flex-1 min-w-0">
+                           <div className="flex justify-between items-start gap-2">
+                             <p className="text-[11px] font-semibold text-white leading-tight truncate">
                                {ev.visitor ? (
-                                 <span className="text-orange-500">{ev.visitor.first_name}</span>
+                                 <span className="text-orange-300">{ev.visitor.first_name}</span>
                                ) : (
                                  ev.is_repeat ? 'Repeat Visit' : (ev.referrer === 'qr' ? 'QR Code Scan' : 'Direct Link')
                                )}
                              </p>
-                             <span className="text-[9px] font-bold text-neutral-400 font-bold ml-2 whitespace-nowrap">
+                             <span className="text-[9px] font-medium text-neutral-500 whitespace-nowrap shrink-0">
                                {formatDistanceToNow(new Date(typeof ev.viewed_at || ev.scanned_at === 'string' ? ev.viewed_at || ev.scanned_at.replace(' ', 'T') : ev.viewed_at || ev.scanned_at), { addSuffix: true })}
                              </span>
                            </div>
-                           <p className="text-[9px] font-bold text-neutral-400 uppercase tracking-tight mt-1">
+                           <p className="text-[10px] font-medium text-neutral-500 mt-0.5">
                              {ev.visitor ? (ev.is_repeat ? 'Returned to see you' : 'Just discovered you') : `${ev.device_type} • ${ev.city || 'Unknown'}`}
                            </p>
                         </div>
@@ -2403,71 +2404,75 @@ function Dashboard() {
                   </div>
                 )}
               </div>
-              <div className="p-5 border-t border-neutral-50 bg-neutral-50/10 text-center">
-                 <button className="text-[10px] font-black uppercase tracking-widest text-neutral-400 hover:text-orange-500 transition-all">Live Logs ›</button>
+              <div className="px-5 py-4 border-t border-orange-500/10 bg-orange-500/5 text-center">
+                 <button className="text-[10px] font-semibold uppercase tracking-wider text-orange-400 hover:text-orange-300 transition-all">Live Logs →</button>
               </div>
             </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Referral Sources */}
-            <div className="vibe-card overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.3s' }}>
-              <div className="p-8 border-b border-neutral-50 bg-neutral-50/20">
-                <h3 className="text-sm font-black uppercase tracking-widest text-white">Referral Sources</h3>
+            <div className="rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-600/5 border border-violet-500/15 overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.3s' }}>
+              <div className="p-6 border-b border-violet-500/10 bg-violet-500/5">
+                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-violet-400" />
+                  Referral Sources
+                </h3>
               </div>
-              <div className="p-8 space-y-6">
+              <div className="p-6 space-y-4">
                 {Object.entries(vibeStats.topReferrers).length > 0 ? (
-                  Object.entries(vibeStats.topReferrers).map(([ref, count], i) => (
-                    <div key={i} className="flex items-center justify-between">
-                       <div className="flex items-center gap-4">
-                         <div className="w-10 h-10 rounded-2xl bg-[#2a2a2a] border border-white/20 flex items-center justify-center">
-                           <Share2 size={16} className="text-neutral-400 font-bold" />
+                  Object.entries(vibeStats.topReferrers).map(([ref, count], i) => {
+                    const colors = ['bg-violet-400','bg-blue-400','bg-cyan-400','bg-pink-400','bg-indigo-400'];
+                    return (
+                    <div key={i} className="flex items-center justify-between p-3 rounded-xl hover:bg-white/4 transition-all">
+                       <div className="flex items-center gap-3">
+                         <div className={`w-8 h-8 rounded-xl ${colors[i % colors.length].replace('bg-','bg-').replace('-400','-500/20')} border border-white/10 flex items-center justify-center`}>
+                           <Share2 size={13} className={`${colors[i % colors.length].replace('bg-','text-')}`} />
                          </div>
-                         <span className="text-[13px] font-black text-neutral-200 capitalize">{ref}</span>
+                         <span className="text-[13px] font-medium text-neutral-200 capitalize">{ref}</span>
                        </div>
-                       <span className="text-[13px] font-black text-white">{count}</span>
+                       <span className={`text-[13px] font-semibold ${colors[i % colors.length].replace('bg-','text-')}`}>{count}</span>
                     </div>
-                  ))
+                  )})
                 ) : (
-                  <div className="h-full flex flex-col items-center justify-center text-center opacity-30">
-                     <p className="text-[10px] font-black uppercase tracking-widest">No Referral Data</p>
+                  <div className="h-full flex flex-col items-center justify-center text-center opacity-30 py-8">
+                     <p className="text-[10px] font-medium uppercase tracking-wider">No Referral Data</p>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Top Fans */}
-            <div className="vibe-card overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.4s' }}>
-              <div className="p-8 border-b border-neutral-50 bg-neutral-50/20">
-                <h3 className="text-sm font-black uppercase tracking-widest text-white">Top Returning Fans</h3>
+            <div className="rounded-2xl bg-gradient-to-br from-pink-500/10 to-rose-600/5 border border-pink-500/15 overflow-hidden flex flex-col animate-slideUp" style={{ animationDelay: '0.4s' }}>
+              <div className="p-6 border-b border-pink-500/10 bg-pink-500/5">
+                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-pink-400" />
+                  Top Returning Fans
+                </h3>
               </div>
-              <div className="p-8 space-y-6">
+              <div className="p-6 space-y-4">
                 {vibeStats.topFans?.length > 0 ? (
                   vibeStats.topFans.map((fan, i) => (
-                    <div key={i} className="flex items-center justify-between">
-                       <div className="flex items-center gap-4">
+                    <div key={i} className="flex items-center justify-between p-3 rounded-xl hover:bg-white/4 transition-all">
+                       <div className="flex items-center gap-3">
                          {fan.avatar ? (
-                           <Avatar 
-                             src={fan.avatar} 
-                             name={fan.name} 
-                             size="w-10 h-10" 
-                             className="rounded-2xl" 
-                           />
+                           <Avatar src={fan.avatar} name={fan.name} size="w-9 h-9" className="rounded-xl ring-2 ring-pink-500/20" />
                          ) : (
-                           <div className="w-10 h-10 rounded-2xl bg-[#2a2a2a] border border-white/20 flex items-center justify-center">
-                             <Activity size={16} className="text-neutral-400 font-bold" />
+                           <div className="w-9 h-9 rounded-xl bg-pink-500/15 border border-pink-500/20 flex items-center justify-center">
+                             <Activity size={14} className="text-pink-400" />
                            </div>
                          )}
                          <div className="flex flex-col">
-                           <span className="text-[13px] font-black text-neutral-200 capitalize">{fan.name}</span>
+                           <span className="text-[13px] font-medium text-neutral-200 capitalize">{fan.name}</span>
+                           <span className="text-[10px] text-neutral-500">Returning viewer</span>
                          </div>
                        </div>
-                       <span className="text-[13px] font-black text-white">{fan.count} Views</span>
+                       <span className="text-[12px] font-semibold text-pink-300 bg-pink-500/10 px-3 py-1 rounded-lg border border-pink-500/20">{fan.count} Views</span>
                     </div>
                   ))
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center text-center opacity-30 pt-8">
-                     <p className="text-[10px] font-black uppercase tracking-widest">No Returning Fans Yet</p>
+                     <p className="text-[10px] font-medium uppercase tracking-wider">No Returning Fans Yet</p>
                   </div>
                 )}
               </div>
@@ -2475,13 +2480,14 @@ function Dashboard() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6 animate-slideUp" style={{ animationDelay: '0.4s' }}>
-            <div className="vibe-card overflow-visible flex flex-col">
-              <div className="p-6 border-b border-neutral-50 flex justify-between items-center bg-neutral-50/30">
-                <h3 className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-1.5">
+            <div className="rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-600/5 border border-emerald-500/15 overflow-visible flex flex-col">
+              <div className="p-6 border-b border-emerald-500/10 bg-emerald-500/5 flex justify-between items-center">
+                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
                   Device Distribution
                   <div className="relative group flex shrink-0">
-                    <div className="w-3.5 h-3.5 rounded-full bg-neutral-200 text-[9px] font-bold text-neutral-400 flex items-center justify-center cursor-help shrink-0 select-none hover:bg-neutral-300 transition-colors">i</div>
-                    <div className="absolute top-full left-0 mt-2 w-48 p-2.5 bg-neutral-900 text-white text-[10px] font-medium rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50 shadow-[8px_8px_0px_#fff] border border-neutral-800 font-sans normal-case tracking-normal leading-normal select-none">
+                    <div className="w-4 h-4 rounded-full bg-white/5 text-[9px] font-medium text-neutral-500 flex items-center justify-center cursor-help shrink-0 select-none hover:bg-white/10 transition-colors">i</div>
+                    <div className="absolute top-full left-0 mt-2 w-48 p-2.5 bg-neutral-900 text-white text-[10px] font-medium rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50 border border-neutral-800 font-sans normal-case tracking-normal leading-normal select-none">
                       Devices (Mobile, Desktop, Tablet) used to scan or view your profile.
                     </div>
                   </div>
