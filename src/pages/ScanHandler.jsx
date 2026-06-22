@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { getAccurateLocation } from '../lib/analytics/geolocation'
+import { buildFingerprint } from '../lib/analytics/fingerprint'
 import { MapPin, ShieldCheck, X } from 'lucide-react'
 
 export default function ScanHandler() {
@@ -90,7 +91,6 @@ export default function ScanHandler() {
 
           let fp = 'anonymous'
           try {
-            const { buildFingerprint } = await import('../lib/analytics/fingerprint')
             fp = await buildFingerprint()
           } catch (e) {}
           

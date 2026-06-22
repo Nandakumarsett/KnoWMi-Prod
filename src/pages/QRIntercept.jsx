@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { getAccurateLocation } from '../lib/analytics/geolocation';
+import { buildFingerprint } from '../lib/analytics/fingerprint';
 import { Loader2, QrCode, Sparkles, ArrowRight, ShieldCheck, Heart, MapPin, X } from 'lucide-react';
 import AuthModal from '../components/AuthModal';
 
@@ -62,7 +63,6 @@ export default function QRIntercept() {
 
       if (viewerProfile) {
         try {
-          const { buildFingerprint } = await import('../lib/analytics/fingerprint');
           const fp = await buildFingerprint();
           const mapKey = `fp_mapped_${viewerProfile.id}`;
           if (!localStorage.getItem(mapKey)) {
@@ -85,7 +85,6 @@ export default function QRIntercept() {
 
       let currentFp = 'anonymous';
       try {
-        const { buildFingerprint } = await import('../lib/analytics/fingerprint');
         currentFp = await buildFingerprint();
       } catch (e) {}
       
