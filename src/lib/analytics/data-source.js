@@ -36,87 +36,76 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
 
+      let edgePromise = Promise.resolve(null);
       if (token) {
-        const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-profile-analytics`, {
+        edgePromise = fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-profile-analytics`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({ profileId }),
+        }).then(res => {
+          if (!res.ok) throw new Error('Edge function failed');
+          return res.json();
         });
+      }
 
-        if (res.ok) {
-          const payload = await res.json();
+      const linksPromise = supabase.from('link_click_events').select('*').eq('profile_id', profileId);
+
+      try {
+        const [payload, linksData] = await Promise.all([edgePromise, linksPromise]);
+        
+        if (payload) {
           views = payload.views || [];
           scans = payload.scans || [];
-          
-          // The edge function might not fetch link_click_events (if it hasn't been updated),
-          // so we fetch it directly here. Since the user owns the profile, RLS allows this.
-          const { data: directLinks, error: directLinksErr } = await supabase.from('link_click_events').select('*').eq('profile_id', profileId);
-          links = directLinks || payload.links || [];
-          if (directLinksErr) linksError = directLinksErr;
+          links = linksData.data || payload.links || [];
+          if (linksData.error) linksError = linksData.error;
 
-          console.log(`Analytics loaded via edge function: ${views.length} views, ${scans.length} scans. Links fetched directly: ${links.length}`);
-          
-          // PATCH: Edge function might not return city/country if it's an older deployment.
-          // Fetch them directly using RLS (since user is the owner, they can read their own analytics).
+          // PATCH: Run city patching concurrently if needed
           const needsScanPatch = scans.length > 0 && (!('city' in scans[0]) || scans[0].city == null);
           const needsViewPatch = views.length > 0 && (!('city' in views[0]) || views[0].city == null);
           
           if (needsScanPatch || needsViewPatch) {
-            console.log("Patching missing city/country data from direct query...");
-            try {
-              const promises = [];
-              if (needsScanPatch) promises.push(supabase.from('qr_scan_events').select('*').eq('profile_id', profileId));
-              else promises.push(Promise.resolve({ data: null }));
-              
-              if (needsViewPatch) promises.push(supabase.from('profile_view_events').select('*').eq('profile_id', profileId));
-              else promises.push(Promise.resolve({ data: null }));
+            const patchPromises = [];
+            if (needsScanPatch) patchPromises.push(supabase.from('qr_scan_events').select('id, city, country').eq('profile_id', profileId));
+            else patchPromises.push(Promise.resolve({ data: null }));
+            
+            if (needsViewPatch) patchPromises.push(supabase.from('profile_view_events').select('id, city, country').eq('profile_id', profileId));
+            else patchPromises.push(Promise.resolve({ data: null }));
 
-              const [scanRes, viewRes] = await Promise.all(promises);
-              
-              if (scanRes && scanRes.data) {
-                const scanMap = {};
-                scanRes.data.forEach(s => scanMap[s.id] = s);
-                scans.forEach(s => {
-                  if (scanMap[s.id]) Object.assign(s, scanMap[s.id]);
-                });
-              }
-              if (viewRes && viewRes.data) {
-                const viewMap = {};
-                viewRes.data.forEach(v => viewMap[v.id] = v);
-                views.forEach(v => {
-                  if (viewMap[v.id]) Object.assign(v, viewMap[v.id]);
-                });
-              }
-            } catch(e) {
-              console.warn("Could not patch cities via direct query:", e);
+            const [scanRes, viewRes] = await Promise.all(patchPromises);
+            
+            if (scanRes?.data) {
+              const scanMap = new Map(scanRes.data.map(s => [s.id, s]));
+              scans.forEach(s => { const p = scanMap.get(s.id); if (p) Object.assign(s, p); });
+            }
+            if (viewRes?.data) {
+              const viewMap = new Map(viewRes.data.map(v => [v.id, v]));
+              views.forEach(v => { const p = viewMap.get(v.id); if (p) Object.assign(v, p); });
             }
           }
-
         } else {
-          console.warn('get-profile-analytics edge function returned error, falling back to direct queries');
-          throw new Error('Edge function failed');
+          throw new Error('No session or edge payload');
         }
-      } else {
-        throw new Error('No session');
+      } catch (edgeFnErr) {
+        console.warn('Using direct Supabase queries for analytics (fallback):', edgeFnErr.message);
+        const [viewRes, scanRes, linksRes] = await Promise.all([
+          supabase.from('profile_view_events').select('*').eq('profile_id', profileId),
+          supabase.from('qr_scan_events').select('*').eq('profile_id', profileId),
+          linksPromise
+        ]);
+        
+        if (viewRes.error) console.error("Analytics: Error fetching views:", viewRes.error.message);
+        if (scanRes.error) console.error("Analytics: Error fetching scans:", scanRes.error.message);
+        
+        views = viewRes.data || [];
+        scans = scanRes.data || [];
+        links = linksRes.data || [];
+        linksError = linksRes.error;
       }
-    } catch (edgeFnErr) {
-      // Fallback: direct queries (may be limited by RLS but better than nothing)
-      console.warn('Using direct Supabase queries for analytics (RLS may limit results):', edgeFnErr.message);
-      const viewRes = await supabase.from('profile_view_events').select('*').eq('profile_id', profileId);
-      if (viewRes.error) console.error("Analytics: Error fetching views:", viewRes.error.message);
-
-      const scanRes = await supabase.from('qr_scan_events').select('*').eq('profile_id', profileId);
-      if (scanRes.error) console.error("Analytics: Error fetching scans:", scanRes.error.message);
-
-      const { data: linksData, error: linksErr } = await supabase.from('link_click_events').select('*').eq('profile_id', profileId);
-      linksError = linksErr;
-
-      views = viewRes.data || [];
-      scans = scanRes.data || [];
-      links = linksData || [];
+    } catch (authErr) {
+      console.error("Auth error in analytics:", authErr);
     }
 
 
@@ -434,94 +423,99 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       };
     }
 
-    let bestMoment = null;
-    if (bestDay) {
-      // Sort ALL views chronologically descending by viewed_at to get the most recent overall
-      const sortedAllViews = [...views].sort((a, b) => new Date(b.viewed_at).getTime() - new Date(a.viewed_at).getTime());
+    // Sort all views chronologically
+    const sortedAllViews = [...views].sort((a, b) => new Date(b.viewed_at).getTime() - new Date(a.viewed_at).getTime());
+    const top5Views = sortedAllViews.slice(0, 5);
+    const top20Views = sortedAllViews.slice(0, 20);
 
-      // Take top 5 most recent views
-      const top5Views = sortedAllViews.slice(0, 5);
+    // Identify guest FPs that might have known viewer IDs
+    const guestFps = top5Views
+      .filter(v => !(v.viewer_id || v.user_id))
+      .map(v => v.visitor_fp)
+      .filter(Boolean);
 
-      // Build a map of visitor_fp -> viewer_id from all views in the fetched dataset
-      const fpToViewerMap = {};
-      views.forEach(v => {
-        const vId = v.viewer_id || v.user_id;
-        if (v.visitor_fp && vId) {
-          fpToViewerMap[v.visitor_fp] = vId;
+    // Identify top fans
+    const topFansRaw = Object.entries(fpCounts)
+      .filter(([fp, count]) => count > 1)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+    const topFanIds = topFansRaw.map(([fp]) => fp).filter(fp => fp && fp.length > 20);
+
+    // PRE-FETCH ALL REQUIRED IDENTITIES IN PARALLEL
+    const fpToViewerMap = {};
+    let viewerProfilesMap = {};
+    
+    try {
+      const mappingPromises = [];
+      
+      // 1. Resolve FPs from best moment
+      if (guestFps.length > 0) {
+        mappingPromises.push(
+          supabase.from('profile_view_events').select('visitor_fp, viewer_id').in('visitor_fp', guestFps).not('viewer_id', 'is', null).limit(100),
+          supabase.from('qr_scan_events').select('scanner_fp, scanner_id').in('scanner_fp', guestFps).not('scanner_id', 'is', null).limit(100)
+        );
+      }
+      
+      const mappingResults = await Promise.all(mappingPromises);
+      mappingResults.forEach(res => {
+        if (res?.data) {
+          res.data.forEach(m => {
+            if (m.viewer_id) fpToViewerMap[m.visitor_fp] = m.viewer_id;
+            if (m.scanner_id) fpToViewerMap[m.scanner_fp] = m.scanner_id;
+          });
         }
       });
 
-      const guestFps = top5Views
-        .filter(v => !(v.viewer_id || v.user_id || fpToViewerMap[v.visitor_fp]))
-        .map(v => v.visitor_fp)
-        .filter(Boolean);
-
-      if (guestFps.length > 0) {
-        try {
-          // Query profile_view_events globally
-          const { data: viewFpMappings } = await supabase
-            .from('profile_view_events')
-            .select('visitor_fp, viewer_id')
-            .in('visitor_fp', guestFps)
-            .not('viewer_id', 'is', null);
-            
-          if (viewFpMappings) {
-            viewFpMappings.forEach(m => {
-              if (m.viewer_id) {
-                fpToViewerMap[m.visitor_fp] = m.viewer_id;
-              }
-            });
-          }
-
-          // Query qr_scan_events for scanner_fp mappings
-          const missingFps = guestFps.filter(fp => !fpToViewerMap[fp]);
-          if (missingFps.length > 0) {
-            const { data: scanFpMappings } = await supabase
-              .from('qr_scan_events')
-              .select('scanner_fp, scanner_id')
-              .in('scanner_fp', missingFps)
-              .not('scanner_id', 'is', null);
-              
-            if (scanFpMappings) {
-              scanFpMappings.forEach(m => {
-                if (m.scanner_id) {
-                  fpToViewerMap[m.scanner_fp] = m.scanner_id;
-                }
-              });
-            }
-          }
-        } catch (e) {
-          console.warn("Analytics: Error fetching global fp mappings:", e);
-        }
-      }
-
-      // Collect all resolved viewer IDs to fetch profiles in a single query
-      const targetViewerIds = [...new Set(top5Views.map(v => v.viewer_id || v.user_id || fpToViewerMap[v.visitor_fp]).filter(Boolean))];
-      let viewerProfilesMap = {};
+      // 2. Fetch all unique profiles needed globally
+      const allNeededIds = new Set();
       
-      if (targetViewerIds.length > 0) {
-        try {
-          const { data: profilesList, error } = await supabase
+      // From top 5 best moment
+      top5Views.forEach(v => {
+        const id = v.viewer_id || v.user_id || fpToViewerMap[v.visitor_fp];
+        if (id) allNeededIds.add(id);
+      });
+      // From top 20 latest activity
+      top20Views.forEach(v => {
+        const id = v.viewer_id || v.user_id;
+        if (id) allNeededIds.add(id);
+      });
+      // From top fans
+      topFanIds.forEach(id => allNeededIds.add(id));
+
+      const uniqueIdsArray = [...allNeededIds];
+
+      if (uniqueIdsArray.length > 0) {
+        // Chunk IDs to avoid huge query string
+        const idChunks = [];
+        for (let i = 0; i < uniqueIdsArray.length; i += 50) {
+          idChunks.push(uniqueIdsArray.slice(i, i + 50));
+        }
+
+        const profilePromises = idChunks.map(chunk => {
+          const filterStr = chunk.map(id => `"${id}"`).join(',');
+          return supabase
             .from('profiles')
             .select('id, user_id, first_name, last_name, avatar_url, secure_slug')
-            .or(`id.in.(${targetViewerIds.map(id => `"${id}"`).join(',')}),user_id.in.(${targetViewerIds.map(id => `"${id}"`).join(',')})`);
-          
-          if (error) {
-            console.error("Analytics: Supabase error fetching viewer profiles:", error);
-          }
-          
-          if (profilesList) {
-            profilesList.forEach(p => {
+            .or(`id.in.(${filterStr}),user_id.in.(${filterStr})`);
+        });
+
+        const profileResults = await Promise.all(profilePromises);
+        profileResults.forEach(res => {
+          if (res?.data) {
+            res.data.forEach(p => {
               if (p.id) viewerProfilesMap[p.id] = p;
               if (p.user_id) viewerProfilesMap[p.user_id] = p;
             });
           }
-        } catch (e) {
-          console.warn("Analytics: Error fetching viewer profiles for bestMoment top 5:", e);
-        }
+        });
       }
+    } catch (e) {
+      console.warn("Analytics: Error running parallel bulk profile lookups", e);
+    }
 
-      // Build the viewers list
+    // Now populate Best Moment using the pre-fetched maps
+    let bestMoment = null;
+    if (bestDay) {
       const viewers = top5Views.map(v => {
         const vId = v.viewer_id || v.user_id || fpToViewerMap[v.visitor_fp];
         const profile = vId ? viewerProfilesMap[vId] : null;
@@ -534,11 +528,8 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
           name = fullName || 'KnoWMi Member';
           avatar = profile.avatar_url;
         } else {
-          // If guest, enhance with location if available
           const locationParts = [v.city, v.country].filter(Boolean);
-          if (locationParts.length > 0) {
-            name = `Guest from ${locationParts.join(', ')}`;
-          }
+          if (locationParts.length > 0) name = `Guest from ${locationParts.join(', ')}`;
         }
 
         return {
@@ -556,6 +547,35 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       };
     }
 
+    // Latest activity using the pre-fetched maps
+    const latestActivity = top20Views.map(v => {
+      const vId = v.viewer_id || v.user_id;
+      const prof = viewerProfilesMap[vId] || null;
+      return {
+        viewed_at: v.viewed_at,
+        referrer: v.referrer,
+        device_type: v.device_type,
+        city: v.city,
+        country: v.country,
+        is_repeat: v.is_repeat,
+        visitor: prof
+      };
+    });
+
+    // Top Fans using the pre-fetched maps
+    const topFans = topFansRaw.map(([fp, count]) => {
+      const prof = viewerProfilesMap[fp] || null;
+      const relatedView = views.find(v => v.viewer_id === fp || v.visitor_fp === fp);
+      const location = relatedView ? [relatedView.city, relatedView.country].filter(Boolean).join(', ') : '';
+
+      return {
+        count,
+        name: prof ? [prof.first_name, prof.last_name].filter(Boolean).join(' ').trim() || 'KnoWMi Member' : (location ? `Guest from ${location}` : 'Anonymous Guest'),
+        avatar: prof ? prof.avatar_url : null,
+        secureSlug: prof ? prof.secure_slug : null
+      };
+    });
+
     // Peak scan hour
     const hourCounts = {};
     views.forEach(v => {
@@ -568,44 +588,6 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       peakHour = `${sortedHours[0][0]}:00`;
     }
 
-    // Sort and slice top 20 latest views
-    const topViews = [...views]
-      .sort((a, b) => new Date(b.viewed_at).getTime() - new Date(a.viewed_at).getTime())
-      .slice(0, 20);
-
-    // Fetch visitor profiles for these top views to display on the dashboard privately
-    const viewerIds = [...new Set(topViews.map(v => v.viewer_id || v.user_id).filter(Boolean))];
-    let visitorProfiles = [];
-    if (viewerIds.length > 0) {
-      try {
-        const { data: profs } = await supabase
-          .from('profiles')
-          .select('id, user_id, first_name, last_name, avatar_url')
-          .or(`id.in.(${viewerIds.map(id => `"${id}"`).join(',')}),user_id.in.(${viewerIds.map(id => `"${id}"`).join(',')})`);
-        if (profs) {
-          visitorProfiles = profs;
-        }
-      } catch (e) {
-        console.warn("Analytics: Error fetching visitor profiles for activity log:", e);
-      }
-    }
-
-    // Latest activity
-    const latestActivity = topViews
-      .map(v => {
-        const vId = v.viewer_id || v.user_id;
-        const prof = visitorProfiles.find(p => p.id === vId || p.user_id === vId) || null;
-        return {
-          viewed_at: v.viewed_at,
-          referrer: v.referrer,
-          device_type: v.device_type,
-          city: v.city,
-          country: v.country,
-          is_repeat: v.is_repeat,
-          visitor: prof
-        };
-      });
-
     // Referral Sources
     const referrerCounts = {};
     [...views, ...scans].forEach(row => {
@@ -617,40 +599,7 @@ export async function getAnalyticsData(profileId, dateRange = 'all') {
       .slice(0, 5)
       .reduce((acc, [ref, count]) => ({ ...acc, [ref]: count }), {});
 
-    // Top Fans
-    const topFansRaw = Object.entries(fpCounts)
-      .filter(([fp, count]) => count > 1)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5);
 
-    const topFanIds = topFansRaw.map(([fp]) => fp).filter(fp => fp && fp.length > 20); // roughly UUID length
-
-    let topFanProfiles = [];
-    if (topFanIds.length > 0) {
-      try {
-        const { data: profs } = await supabase
-          .from('profiles')
-          .select('id, user_id, first_name, last_name, avatar_url, secure_slug')
-          .or(`id.in.(${topFanIds.map(id => `"${id}"`).join(',')}),user_id.in.(${topFanIds.map(id => `"${id}"`).join(',')})`);
-        if (profs) topFanProfiles = profs;
-      } catch(e) {
-        console.warn("Analytics: Error fetching top fan profiles", e);
-      }
-    }
-
-    const topFans = topFansRaw.map(([fp, count]) => {
-      const prof = topFanProfiles.find(p => p.id === fp || p.user_id === fp);
-      
-      const relatedView = views.find(v => v.viewer_id === fp || v.visitor_fp === fp);
-      const location = relatedView ? [relatedView.city, relatedView.country].filter(Boolean).join(', ') : '';
-
-      return {
-        count,
-        name: prof ? [prof.first_name, prof.last_name].filter(Boolean).join(' ').trim() || 'KnoWMi Member' : (location ? `Guest from ${location}` : 'Anonymous Guest'),
-        avatar: prof ? prof.avatar_url : null,
-        secureSlug: prof ? prof.secure_slug : null
-      };
-    });
 
       const clicksByPlatform = links.reduce((acc, l) => {
         const plat = (l.platform || 'unknown').toLowerCase();
