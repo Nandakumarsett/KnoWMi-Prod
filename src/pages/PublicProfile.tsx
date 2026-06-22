@@ -378,6 +378,8 @@ export default function PublicProfile() {
             <img
               src="/logo-square.png"
               alt="Logo"
+              fetchpriority="high"
+              loading="eager"
               className="w-6 h-6 rounded-lg object-cover"
             />
             <span
@@ -514,6 +516,8 @@ export default function PublicProfile() {
               <div className="flex items-center gap-2 mb-6 mt-2">
                 <img
                   src="/logo-square.png"
+                  fetchpriority="high"
+                  loading="eager"
                   className="w-6 h-6 object-cover rounded"
                   alt="KW"
                 />
@@ -552,12 +556,16 @@ export default function PublicProfile() {
                       draggable="false"
                       onDragStart={(e) => e.preventDefault()}
                       onContextMenu={(e) => e.preventDefault()}
+                      fetchpriority="high"
+                      loading="eager"
                       alt="QR Code"
                     />
                     <div className="absolute inset-0 z-10" />
                     <div className="absolute inset-0 m-auto w-10 h-10 bg-white border-[3px] border-orange-500 rounded-xl flex items-center justify-center z-20 select-none overflow-hidden">
                       <img
                         src="/favicon.png"
+                        fetchpriority="high"
+                        loading="eager"
                         className="w-full h-full object-contain rounded-full"
                         alt="KnoWMi Logo"
                       />
@@ -808,12 +816,16 @@ export default function PublicProfile() {
                             draggable="false"
                             onDragStart={(e) => e.preventDefault()}
                             onContextMenu={(e) => e.preventDefault()}
+                            fetchpriority="high"
+                            loading="eager"
                             alt="QR Code"
                           />
                           <div className="absolute inset-0 z-10" />
                           <div className="absolute inset-0 m-auto w-10 h-10 bg-white border-[3px] border-orange-500 rounded-xl flex items-center justify-center z-20 select-none overflow-hidden">
                             <img
                               src="/favicon.png"
+                              fetchpriority="high"
+                              loading="eager"
                               className="w-full h-full object-contain"
                               alt="KnoWMi Logo"
                             />
@@ -827,6 +839,7 @@ export default function PublicProfile() {
                         size={176}
                         shape="circle"
                         className="select-none animate-fadeIn"
+                        priorityLoad={true}
                       />
                     )}
                   </div>

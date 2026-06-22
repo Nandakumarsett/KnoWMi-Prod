@@ -8,6 +8,7 @@ interface ProfileAvatarProps {
   shape?: 'circle' | 'hexagon' | 'rounded'
   accentColor?: string    // gradient/border accent
   className?: string
+  priorityLoad?: boolean  // Eager load and high fetchpriority
 }
 
 /** Deterministic color from name so initials always have a consistent bg */
@@ -26,7 +27,8 @@ export function ProfileAvatar({
   size = 128,
   shape = 'circle',
   accentColor,
-  className = ''
+  className = '',
+  priorityLoad = false
 }: ProfileAvatarProps) {
   const [imgError, setImgError] = useState(false)
   const initial = (name || 'U').charAt(0).toUpperCase()
@@ -74,6 +76,8 @@ export function ProfileAvatar({
             alt={name}
             onContextMenu={(e) => e.preventDefault()}
             onError={() => setImgError(true)}
+            loading={priorityLoad ? "eager" : "lazy"}
+            {...(priorityLoad ? { fetchPriority: 'high' } : {})}
             className="w-full h-full object-cover object-center select-none pointer-events-none bg-neutral-100"
             draggable="false"
           />
