@@ -3,11 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { buildInsightContext } from '../lib/insights/build-context';
 import { computeAllInsights, InsightCard, Nudge, BestTimeResult } from '../lib/insights/insight-engine';
-import { ArrowLeft, Sparkles, ChevronRight, CheckCircle2, Clock, Trophy, Calendar, User, Zap, TrendingUp, HelpCircle, Info } from 'lucide-react';
+import { ArrowLeft, Sparkles, ChevronRight, CheckCircle2, Clock, Trophy, Calendar, User, Zap, TrendingUp, HelpCircle, Info, Star, Flame } from 'lucide-react';
 import { BarChart, Bar, Cell, ResponsiveContainer, XAxis, Tooltip as RechartsTooltip } from 'recharts';
 import Avatar from '../components/Avatar';
 
-// Mock data for the bar chart if needed
 const SCAN_ACTIVITY = [
   { day: 'M', value: 30 },
   { day: 'T', value: 45 },
@@ -16,8 +15,22 @@ const SCAN_ACTIVITY = [
   { day: 'F', value: 90, active: true },
   { day: 'S', value: 40 },
   { day: 'S', value: 35 },
-  { day: 'S', value: 30 },
 ];
+
+// Color map per insight type
+const TYPE_COLORS: Record<string, { bg: string; text: string; border: string; glow: string }> = {
+  best_time:    { bg: 'from-violet-600/20 to-purple-800/10',  text: 'text-violet-300',  border: 'border-violet-500/30', glow: '#7c3aed' },
+  streak:       { bg: 'from-orange-600/20 to-amber-800/10',   text: 'text-orange-300',  border: 'border-orange-500/30', glow: '#ea580c' },
+  growth:       { bg: 'from-emerald-600/20 to-teal-800/10',   text: 'text-emerald-300', border: 'border-emerald-500/30', glow: '#059669' },
+  trending:     { bg: 'from-cyan-600/20 to-sky-800/10',       text: 'text-cyan-300',    border: 'border-cyan-500/30',   glow: '#0891b2' },
+  achievement:  { bg: 'from-yellow-600/20 to-amber-800/10',   text: 'text-yellow-300',  border: 'border-yellow-500/30', glow: '#d97706' },
+  profile:      { bg: 'from-pink-600/20 to-rose-800/10',      text: 'text-pink-300',    border: 'border-pink-500/30',   glow: '#db2777' },
+  default:      { bg: 'from-indigo-600/20 to-blue-800/10',    text: 'text-indigo-300',  border: 'border-indigo-500/30', glow: '#4f46e5' },
+};
+
+function getTypeColor(type: string) {
+  return TYPE_COLORS[type] || TYPE_COLORS.default;
+}
 
 export default function InsightsPage() {
   const navigate = useNavigate();
@@ -34,14 +47,8 @@ export default function InsightsPage() {
       try {
         setLoading(true);
         const { data: { user } } = await supabase.auth.getUser();
+        if (!user) { navigate('/'); return; }
 
-        // Auth guard — never show another user's data
-        if (!user) {
-          navigate('/');
-          return;
-        }
-
-        let profId = '';
         const { data: prof } = await supabase
           .from('profiles')
           .select('*')
@@ -51,36 +58,14 @@ export default function InsightsPage() {
         if (prof) {
           const identities = prof.persona_data?.identities || [];
           const activeIden = identities.find((i: any) => i.active);
-          
-          if (activeIden) {
-            setProfile({
-              ...prof,
-              first_name: activeIden.first_name || prof.first_name,
-              avatar_url: activeIden.avatar_url || prof.avatar_url
-            });
-          } else {
-            setProfile(prof);
-          }
-          profId = prof.id;
-        }
-
-        if (profId) {
-          const context = await buildInsightContext(profId, supabase);
+          setProfile(activeIden ? { ...prof, first_name: activeIden.first_name || prof.first_name, avatar_url: activeIden.avatar_url || prof.avatar_url } : prof);
+          const context = await buildInsightContext(prof.id, supabase);
           const dismissed = JSON.parse(localStorage.getItem('dismissed_nudges') ?? '[]');
           const results = computeAllInsights(context, dismissed);
-          
-          if (active) {
-            setCtx(context);
-            setCards(results.weeklyCards);
-            setNudge(results.nudge);
-            setBestTime(results.bestTime);
-          }
+          if (active) { setCtx(context); setCards(results.weeklyCards); setNudge(results.nudge); setBestTime(results.bestTime); }
         }
-      } catch (err) {
-        // silently fail — no console in prod
-      } finally {
-        if (active) setLoading(false);
-      }
+      } catch (_) {}
+      finally { if (active) setLoading(false); }
     }
     load();
     return () => { active = false; };
@@ -96,234 +81,283 @@ export default function InsightsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAFAF9] flex items-center justify-center font-sans">
+      <div className="min-h-screen bg-[#09090b] flex items-center justify-center font-sans">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
-          <p className="text-[10px] font-black tracking-[0.2em] text-neutral-400 uppercase animate-pulse">Deep Analyzing context...</p>
+          <div className="w-16 h-16 rounded-full border-2 border-violet-500/30 border-t-violet-400 animate-spin mx-auto mb-6" />
+          <p className="text-[11px] font-semibold tracking-widest text-neutral-500 uppercase animate-pulse">Analyzing your data...</p>
         </div>
       </div>
     );
   }
 
+  const score = ctx?.profile?.completionScore || 0;
+  const circumference = 2 * Math.PI * 45;
+  const dashOffset = circumference * (1 - score / 100);
+  const filteredCards = cards.filter(c => c.type !== 'best_time');
+
   return (
-    <div className="min-h-screen bg-[#FAFAF9] pb-32 font-sans text-neutral-900 selection:bg-orange-100">
+    <div className="min-h-screen bg-[#09090b] pb-32 font-sans text-white selection:bg-violet-500/30">
       <style dangerouslySetInnerHTML={{ __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
         .font-display { font-family: 'Montserrat', sans-serif; }
-        .animate-float { animation: float 6s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.4); }
-        .insight-row:hover { transform: translateX(8px); background: #fff; box-shadow: 0 20px 40px rgba(0,0,0,0.04); }
+        .insight-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .insight-card:hover { transform: translateY(-3px); }
+        .glow-violet { box-shadow: 0 0 40px rgba(124,58,237,0.15); }
+        .glow-orange { box-shadow: 0 0 40px rgba(234,88,12,0.15); }
+        .glow-emerald { box-shadow: 0 0 40px rgba(5,150,105,0.15); }
+        @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .animate-slideUp { animation: slideUp 0.5s ease forwards; }
+        @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(139,92,246,0.4); } 70% { box-shadow: 0 0 0 15px rgba(139,92,246,0); } 100% { box-shadow: 0 0 0 0 rgba(139,92,246,0); } }
+        .pulse-ring { animation: pulse-ring 2.5s ease-out infinite; }
       `}} />
 
-      {/* Header */}
-      <header className="sticky top-0 bg-white/80 backdrop-blur-xl border-b border-neutral-100/50 z-50">
-        <div className="max-w-[800px] mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-5">
-            <button 
-              type="button"
+      {/* ── Header ── */}
+      <header className="sticky top-0 z-50 bg-[#09090b]/80 backdrop-blur-xl border-b border-white/5">
+        <div className="max-w-[860px] mx-auto px-6 h-18 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
               onClick={() => navigate('/dashboard')}
-              className="w-12 h-12 rounded-2xl border border-neutral-100 bg-white hover:border-orange-200 flex items-center justify-center transition-all duration-300 shadow-sm active:scale-90 group"
+              className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-all active:scale-90"
             >
-              <ArrowLeft size={20} className="text-neutral-500 group-hover:text-orange-500 transition-colors" />
+              <ArrowLeft size={18} className="text-neutral-400" />
             </button>
             <div>
-              <div className="flex items-center gap-3 mb-1">
-                <h1 className="text-2xl font-black font-display tracking-tight text-neutral-900">AI Insights</h1>
-                <span className="text-[10px] bg-violet-100 text-violet-600 font-black px-2.5 py-1 rounded-lg uppercase tracking-wider">BETA</span>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-display font-black text-white tracking-tight">AI Insights</h1>
+                <span className="text-[9px] bg-violet-500/20 text-violet-300 font-semibold px-2 py-0.5 rounded-md uppercase tracking-wider border border-violet-500/20">BETA</span>
               </div>
-              <p className="text-xs text-neutral-400 font-medium">Smart insights to grow your visibility</p>
+              <p className="text-[11px] text-neutral-500 font-medium mt-0.5">Smart insights to grow your visibility</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 pr-2">
+          <div className="flex items-center gap-3">
             <div className="text-right hidden sm:block">
-              <p className="text-xs font-black leading-none text-neutral-900">{profile?.first_name || 'User'}</p>
-              <p className="text-[9px] font-black text-orange-500 uppercase tracking-luxury mt-1.5">Premium Member</p>
+              <p className="text-sm font-semibold text-white leading-none">{profile?.first_name || 'User'}</p>
+              <p className="text-[10px] text-orange-400 font-medium mt-1">Premium Member</p>
             </div>
-            <Avatar 
-              src={profile?.avatar_url} 
-              name={profile?.first_name} 
-              size="w-10 h-10 rounded-2xl" 
-            />
+            <div className="ring-2 ring-orange-500/30 rounded-full">
+              <Avatar src={profile?.avatar_url} name={profile?.first_name} size="w-9 h-9 rounded-full" />
+            </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-[800px] mx-auto px-6 pt-10">
-        
-        {/* Top Hero Insight Card */}
-        <div className="bg-white rounded-[40px] p-10 mb-10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.06)] border border-neutral-100 relative overflow-hidden group animate-slideUp">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 rounded-full blur-[80px] -mr-32 -mt-32" />
-          
-          <div className="flex flex-col lg:flex-row gap-12 relative z-10">
+      <main className="max-w-[860px] mx-auto px-6 pt-10 space-y-8">
+
+        {/* ── Hero Peak Time Card ── */}
+        <div className="animate-slideUp relative rounded-3xl overflow-hidden border border-white/8 bg-gradient-to-br from-[#13101f] to-[#0d0d14] glow-violet">
+          {/* Gradient orbs */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-violet-600/20 rounded-full blur-[100px] -mr-20 -mt-20 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-60 h-60 bg-indigo-600/10 rounded-full blur-[80px] -ml-20 -mb-20 pointer-events-none" />
+
+          <div className="relative z-10 p-8 flex flex-col lg:flex-row gap-8">
+            {/* Left: Peak Time */}
             <div className="flex-1 flex flex-col justify-between">
-              <div className="flex items-center gap-2 mb-8">
-                <span className="text-[10px] bg-orange-50 text-orange-600 font-black px-3 py-1.5 rounded-xl uppercase tracking-[0.2em] flex items-center gap-2 border border-orange-100">
-                  <Sparkles size={12} className="fill-orange-600/10" /> Top Insight
+              <div className="flex items-center gap-2 mb-6">
+                <span className="text-[10px] bg-violet-500/20 text-violet-300 font-semibold px-3 py-1 rounded-lg uppercase tracking-wider flex items-center gap-1.5 border border-violet-500/20">
+                  <Sparkles size={11} /> Top Insight
                 </span>
-                <span className="text-[10px] bg-emerald-50 text-emerald-600 font-black px-3 py-1.5 rounded-xl uppercase tracking-[0.2em] flex items-center gap-2 border border-emerald-100 ml-auto lg:ml-0">
-                  <CheckCircle2 size={12} /> High Confidence
+                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-semibold px-3 py-1 rounded-lg uppercase tracking-wider flex items-center gap-1.5 border border-emerald-500/20 ml-auto lg:ml-0">
+                  <CheckCircle2 size={11} /> High Confidence
                 </span>
               </div>
 
-              <div className="mb-10">
-                <div className="flex items-center gap-6 mb-4">
-                  <div className="w-24 h-24 rounded-[32px] bg-violet-50 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-500">
-                    <Sparkles size={40} className="text-violet-500 animate-pulse" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-neutral-400 mb-1">Your peak time is</p>
-                    <h2 className="text-6xl font-display font-black text-neutral-900 tracking-tighter">
-                      {bestTime?.optimalWindow || '6:42 PM'}
-                    </h2>
-                  </div>
-                </div>
-                <p className="text-lg font-medium text-neutral-600 max-w-sm leading-relaxed">
-                  People are <span className="text-violet-600 font-black">3.2x</span> more likely to scan you at this time.
+              <div className="mb-8">
+                <p className="text-xs font-medium text-neutral-400 mb-2">Your peak engagement window</p>
+                <h2 className="text-5xl font-display font-black text-white tracking-tight mb-3">
+                  {bestTime?.optimalWindow || '6:42 PM'}
+                </h2>
+                <p className="text-sm font-medium text-neutral-400 leading-relaxed max-w-xs">
+                  People are <span className="text-violet-300 font-semibold">3.2×</span> more likely to engage with your profile during this window.
                 </p>
               </div>
 
-              <button className="w-fit bg-white border-2 border-violet-100 text-violet-600 font-black text-xs uppercase tracking-widest px-8 py-4 rounded-2xl hover:bg-violet-600 hover:text-white hover:border-violet-600 transition-all duration-300 shadow-sm active:scale-95 flex items-center gap-3">
-                Take Action <ArrowLeft size={16} className="rotate-180" />
+              <button className="w-fit bg-violet-600 hover:bg-violet-500 text-white text-[11px] font-semibold uppercase tracking-wider px-6 py-3 rounded-xl transition-all duration-300 flex items-center gap-2 active:scale-95">
+                Take Action <ArrowLeft size={14} className="rotate-180" />
               </button>
             </div>
 
-            <div className="flex-1 bg-neutral-50/50 rounded-[32px] p-8 border border-neutral-100">
-               <div className="flex justify-between items-center mb-6">
-                 <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400">Scan activity (last 7 days)</p>
-               </div>
-               
-               <div className="h-48 w-full mb-6">
-                 <ResponsiveContainer width="100%" height="100%">
-                   <BarChart data={ctx?.analytics?.weekSparkline?.map((v: number, i: number) => ({
-                     day: ['S','M','T','W','T','F','S'][(new Date(Date.now() - (6-i)*86400000)).getDay()],
-                     value: v || 0,
-                     active: i === 6
-                   })) || SCAN_ACTIVITY}>
-                     <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{fontSize: 10, fontWeight: 700, fill: '#A3A3A3'}} dy={10} />
-                     <RechartsTooltip cursor={{fill: 'transparent'}} content={() => null} />
-                     <Bar dataKey="value" radius={[6, 6, 6, 6]} barSize={12}>
-                       {(ctx?.analytics?.weekSparkline || SCAN_ACTIVITY).map((entry: any, index: number) => (
-                         <Cell key={`cell-${index}`} fill={index === 6 ? '#8B5CF6' : '#E5E5E5'} />
-                       ))}
-                     </Bar>
-                   </BarChart>
-                 </ResponsiveContainer>
-               </div>
-
-               <div className="bg-violet-100/50 rounded-2xl py-3 px-6 text-center border border-violet-200/50">
-                 <p className="text-[11px] font-black text-violet-700 uppercase tracking-widest">
-                   Peak window: {bestTime?.optimalWindow || 'Calculating...'}
-                 </p>
-               </div>
+            {/* Right: Bar Chart */}
+            <div className="flex-1 bg-white/4 rounded-2xl p-6 border border-white/6">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-neutral-500 mb-4">Scan activity (last 7 days)</p>
+              <div className="h-44 w-full mb-4">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={ctx?.analytics?.weekSparkline?.map((v: number, i: number) => ({
+                    day: ['S','M','T','W','T','F','S'][(new Date(Date.now() - (6-i)*86400000)).getDay()],
+                    value: v || 0,
+                    active: i === 6
+                  })) || SCAN_ACTIVITY}>
+                    <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 600, fill: '#525252' }} dy={8} />
+                    <RechartsTooltip cursor={{ fill: 'rgba(255,255,255,0.03)' }} content={() => null} />
+                    <Bar dataKey="value" radius={[6, 6, 6, 6]} barSize={14}>
+                      {(ctx?.analytics?.weekSparkline || SCAN_ACTIVITY).map((_: any, index: number) => (
+                        <Cell key={`cell-${index}`} fill={index === (ctx?.analytics?.weekSparkline?.length - 1 || 4) ? '#8B5CF6' : '#27272a'} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="bg-violet-500/10 rounded-xl py-2.5 px-4 text-center border border-violet-500/20">
+                <p className="text-[11px] font-semibold text-violet-300 uppercase tracking-wider">
+                  Peak: {bestTime?.optimalWindow || 'Calculating...'}
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-
-        {/* Insight Details Section */}
-        <div className="flex items-center justify-between mb-8 px-2">
+        {/* ── Section Header ── */}
+        <div className="flex items-center justify-between px-1 animate-slideUp" style={{ animationDelay: '100ms' }}>
           <div className="flex items-center gap-3">
-             <div className="w-1.5 h-6 bg-orange-500 rounded-full" />
-             <h3 className="text-lg font-display font-black text-neutral-900">AI Insight Details</h3>
+            <div className="w-1 h-5 bg-gradient-to-b from-orange-400 to-pink-500 rounded-full" />
+            <h3 className="text-base font-display font-black text-white">AI Insight Details</h3>
+            <span className="text-[10px] bg-white/5 text-neutral-400 px-2 py-0.5 rounded-md border border-white/8">
+              {filteredCards.length} insights
+            </span>
           </div>
-          <button className="flex items-center gap-2 text-[10px] font-black text-neutral-400 uppercase tracking-widest hover:text-orange-500 transition-colors group">
-            <HelpCircle size={14} /> How it works?
+          <button className="flex items-center gap-1.5 text-[10px] font-medium text-neutral-500 hover:text-orange-400 uppercase tracking-wider transition-colors">
+            <HelpCircle size={13} /> How it works?
           </button>
         </div>
 
-        <div className="space-y-4 mb-16">
-          {cards.filter(c => c.type !== 'best_time').length === 0 ? (
-            <div className="p-20 text-center bg-white rounded-[40px] border border-dashed border-neutral-200">
-               <div className="w-16 h-16 bg-neutral-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-neutral-300">
-                 <Info size={32} />
-               </div>
-               <p className="text-xs font-black text-neutral-400 uppercase tracking-widest">No active insights. Wear your Tee to generate data.</p>
+        {/* ── Insight Cards ── */}
+        <div className="space-y-3">
+          {filteredCards.length === 0 ? (
+            <div className="py-20 text-center bg-white/3 rounded-2xl border border-white/8 border-dashed">
+              <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-4 text-neutral-600">
+                <Info size={28} />
+              </div>
+              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider">No active insights. Wear your Tee to generate data.</p>
             </div>
-          ) : cards.filter(c => c.type !== 'best_time').map((item, idx) => (
-            <div key={item.id} className="insight-row bg-white border border-neutral-100 rounded-[32px] p-6 flex items-center gap-8 transition-all duration-300 animate-slideUp cursor-pointer group" style={{ animationDelay: `${idx * 100}ms` }}>
-               <div className={`w-16 h-16 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center shrink-0 shadow-sm group-hover:rotate-12 transition-transform`}>
-                 <span className="text-2xl">{item.emoji || '✦'}</span>
-               </div>
-               <div className="flex-1">
-                 <span className="text-[9px] font-black tracking-widest text-neutral-400 uppercase mb-1 block">{item.type.replace('_', ' ')}</span>
-                 <h4 className="text-base font-black font-display text-neutral-900 mb-1">{item.headline}</h4>
-                 <p className="text-xs text-neutral-500 font-medium leading-relaxed">{item.body}</p>
-               </div>
-               
-               <div className="text-right hidden md:block px-6 border-x border-neutral-50 h-10 flex flex-col justify-center min-w-[140px]">
-                  <p className="text-sm font-black text-neutral-900">{item.data_point || 'Real-time'}</p>
-                  <p className="text-[9px] font-bold text-neutral-400 uppercase tracking-tight">Verified Data</p>
-               </div>
+          ) : filteredCards.map((item, idx) => {
+            const colors = getTypeColor(item.type);
+            return (
+              <div
+                key={item.id}
+                className={`insight-card bg-gradient-to-r ${colors.bg} border ${colors.border} rounded-2xl p-5 flex items-center gap-5 cursor-pointer group animate-slideUp`}
+                style={{ animationDelay: `${idx * 80}ms` }}
+              >
+                {/* Icon */}
+                <div className="w-14 h-14 rounded-xl bg-black/20 border border-white/8 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <span className="text-2xl">{item.emoji || '✦'}</span>
+                </div>
 
-               {item.cta ? (
-                 <a 
-                   href={item.cta_url || '#'}
-                   onClick={(e) => { if (!item.cta_url) e.preventDefault(); }}
-                   className="h-12 px-6 rounded-2xl border border-neutral-100 text-[10px] font-black uppercase tracking-widest hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-all flex items-center gap-2 group/btn"
-                 >
-                   {item.cta} <ChevronRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
-                 </a>
-               ) : (
-                 <div className="w-12 h-12 rounded-2xl bg-neutral-50 flex items-center justify-center text-neutral-300">
-                   <ChevronRight size={18} />
-                 </div>
-               )}
-            </div>
-          ))}
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <span className={`text-[9px] font-semibold tracking-widest ${colors.text} uppercase mb-1 block`}>
+                    {item.type.replace(/_/g, ' ')}
+                  </span>
+                  <h4 className="text-sm font-semibold text-white mb-1 leading-snug">{item.headline}</h4>
+                  <p className="text-[11px] text-neutral-400 font-medium leading-relaxed truncate">{item.body}</p>
+                </div>
+
+                {/* Data point */}
+                <div className="text-right px-5 border-x border-white/6 hidden md:block min-w-[120px]">
+                  <p className="text-sm font-semibold text-white">{item.data_point || 'Real-time'}</p>
+                  <p className="text-[9px] font-medium text-neutral-500 uppercase tracking-wider">Verified Data</p>
+                </div>
+
+                {/* CTA */}
+                {item.cta ? (
+                  <a
+                    href={item.cta_url || '#'}
+                    onClick={(e) => { if (!item.cta_url) e.preventDefault(); }}
+                    className={`h-10 px-5 rounded-xl bg-black/20 border border-white/8 text-[10px] font-semibold uppercase tracking-wider ${colors.text} hover:bg-black/40 transition-all flex items-center gap-2 shrink-0`}
+                  >
+                    {item.cta} <ChevronRight size={13} className="group-hover:translate-x-1 transition-transform" />
+                  </a>
+                ) : (
+                  <div className="w-10 h-10 rounded-xl bg-black/10 flex items-center justify-center text-neutral-600 shrink-0">
+                    <ChevronRight size={16} />
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
-        {/* Growth Score Summary */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 mb-12 animate-slideUp" style={{ animationDelay: '600ms' }}>
-          <div className="bg-white border border-neutral-100 rounded-[40px] p-10 flex items-center gap-10 shadow-sm">
-            <div className="relative w-36 h-36 shrink-0">
-               <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                 <circle cx="50" cy="50" r="45" fill="none" stroke="#F5F3FF" strokeWidth="8" />
-                 <circle cx="50" cy="50" r="45" fill="none" stroke="#8B5CF6" strokeWidth="8" strokeDasharray="283" strokeDashoffset={283 * (1 - (ctx?.profile?.completionScore || 0) / 100)} strokeLinecap="round" />
-               </svg>
-               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-                 <span className="text-3xl font-display font-black text-neutral-900">{ctx?.profile?.completionScore || 0}%</span>
-                 <p className="text-[8px] font-black text-neutral-400 uppercase tracking-widest leading-tight">Growth Score</p>
-               </div>
+        {/* ── Growth Score + Milestone ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-5 animate-slideUp" style={{ animationDelay: '400ms' }}>
+
+          {/* Score Ring */}
+          <div className="bg-gradient-to-br from-[#12101f] to-[#0f0f18] border border-white/8 rounded-2xl p-8 flex items-center gap-8">
+            <div className="relative w-32 h-32 shrink-0">
+              <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#1c1c2e" strokeWidth="8" />
+                <circle cx="50" cy="50" r="45" fill="none"
+                  stroke="url(#scoreGrad)" strokeWidth="8"
+                  strokeDasharray={circumference}
+                  strokeDashoffset={dashOffset}
+                  strokeLinecap="round"
+                />
+                <defs>
+                  <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#8B5CF6" />
+                    <stop offset="100%" stopColor="#06b6d4" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-2xl font-display font-black text-white">{score}%</span>
+                <p className="text-[8px] font-medium text-neutral-500 uppercase tracking-wider">Score</p>
+              </div>
             </div>
             <div>
-              <h4 className="text-lg font-display font-black text-neutral-900 mb-2">Insight Summary</h4>
-              <p className="text-sm text-neutral-500 leading-relaxed font-medium">
-                {(ctx?.profile?.completionScore || 0) < 70 
-                  ? `Your profile is ${ctx?.profile?.completionScore || 0}% optimized. Complete your identity sections to unlock professional credibility and advanced analytics.`
-                  : "Excellent optimization! Your identity is sharp and ready for professional discovery."}
+              <h4 className="text-base font-display font-black text-white mb-2">Insight Summary</h4>
+              <p className="text-sm text-neutral-400 leading-relaxed font-medium">
+                {score < 70
+                  ? `Your profile is ${score}% optimized. Complete your identity sections to unlock professional credibility and advanced analytics.`
+                  : 'Excellent! Your identity is sharp and ready for professional discovery.'}
               </p>
+              {/* Mini metric pills */}
+              <div className="flex gap-2 mt-4 flex-wrap">
+                {[
+                  { label: 'Views', value: ctx?.analytics?.totalViews || 0, color: 'text-cyan-300 bg-cyan-500/10 border-cyan-500/20' },
+                  { label: 'Streak', value: `${ctx?.analytics?.currentStreak || 0}d`, color: 'text-orange-300 bg-orange-500/10 border-orange-500/20' },
+                  { label: 'Rank', value: `#${ctx?.profile?.rank || '—'}`, color: 'text-violet-300 bg-violet-500/10 border-violet-500/20' },
+                ].map(m => (
+                  <span key={m.label} className={`text-[10px] font-semibold px-3 py-1 rounded-lg border ${m.color} flex items-center gap-1`}>
+                    <span className="text-neutral-500">{m.label}</span> {m.value}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="bg-[#13131a] rounded-[40px] p-8 text-white relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-violet-600/20 rounded-full blur-3xl" />
+          {/* Milestone Card */}
+          <div className="bg-gradient-to-br from-orange-600/15 to-amber-900/10 border border-orange-500/20 rounded-2xl p-7 relative overflow-hidden glow-orange">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
             <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-6">
-                 <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white/40"><Info size={20}/></div>
-                 <p className="text-[10px] font-black uppercase tracking-widest">Next Milestone</p>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-9 h-9 rounded-xl bg-orange-500/20 flex items-center justify-center">
+                  <Star size={18} className="text-orange-400" />
+                </div>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-orange-300">Next Milestone</p>
               </div>
-              <p className="text-sm font-medium leading-relaxed mb-8 text-neutral-400">
-                Reach <span className="text-white font-black">70%</span> to unlock advanced audience insights.
+              <p className="text-sm font-medium leading-relaxed mb-6 text-neutral-300">
+                Reach <span className="text-orange-300 font-semibold">70%</span> to unlock advanced audience insights and analytics.
               </p>
-              <button className="w-full bg-white/5 hover:bg-white/10 border border-white/10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 transition-all active:scale-95">
-                Show Me How <ChevronRight size={14} />
+              <button
+                onClick={() => navigate('/dashboard?tab=profile')}
+                className="w-full bg-orange-500/15 hover:bg-orange-500/25 border border-orange-500/30 py-3 rounded-xl text-[10px] font-semibold uppercase tracking-wider text-orange-300 flex items-center justify-center gap-2 transition-all active:scale-95"
+              >
+                Show Me How <ChevronRight size={13} />
               </button>
             </div>
           </div>
         </div>
 
-        <div className="bg-neutral-100/50 rounded-[32px] p-8 flex items-center justify-between border border-neutral-200/50 mb-20">
-           <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">🎁</div>
-              <div>
-                <p className="text-sm font-black text-neutral-900">Keep growing!</p>
-                <p className="text-xs text-neutral-500 font-medium">Check back daily for new AI insights tailored for you.</p>
-              </div>
-           </div>
-           <button className="px-8 py-3 rounded-xl border border-neutral-200 text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all">
-             Remind Me Tomorrow
-           </button>
+        {/* ── Footer Banner ── */}
+        <div className="bg-gradient-to-r from-emerald-600/10 to-teal-600/10 border border-emerald-500/20 rounded-2xl p-6 flex items-center justify-between animate-slideUp glow-emerald" style={{ animationDelay: '500ms' }}>
+          <div className="flex items-center gap-4">
+            <div className="w-11 h-11 bg-emerald-500/15 border border-emerald-500/20 rounded-xl flex items-center justify-center text-xl">🎁</div>
+            <div>
+              <p className="text-sm font-semibold text-white">Keep growing!</p>
+              <p className="text-xs text-neutral-400 font-medium">Check back daily for new AI insights tailored just for you.</p>
+            </div>
+          </div>
+          <button className="px-6 py-2.5 rounded-xl border border-emerald-500/30 text-[10px] font-semibold uppercase tracking-wider text-emerald-300 hover:bg-emerald-500/10 transition-all shrink-0">
+            Remind Me
+          </button>
         </div>
 
       </main>
