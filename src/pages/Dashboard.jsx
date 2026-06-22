@@ -1802,16 +1802,54 @@ function Dashboard() {
 
   const [connections, setConnections] = useState([])
   
-  const refreshAnalytics = useCallback(async () => {
+  const refreshAnalytics = useCallback(async (force = false) => {
     if (!profile?.id) return;
     const rangeToUse = analyticsView === 'classic' ? selectedRange : 'all';
+    const cacheKey = `knowmi_vibe_${profile.id}_${rangeToUse}`;
+    const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+    // Show cached data instantly
+    if (!force) {
+      try {
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) {
+          const { ts, data } = JSON.parse(cached);
+          if (Date.now() - ts < CACHE_TTL) {
+            setVibeStats(data);
+            setVibeLoading(false);
+            // Refresh in background silently
+            getAnalyticsData(profile.id, rangeToUse).then(fresh => {
+              setVibeStats(fresh);
+              try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: fresh })); } catch(_) {}
+            });
+            return;
+          }
+        }
+      } catch(_) {}
+    }
+
     const data = await getAnalyticsData(profile.id, rangeToUse);
     setVibeStats(data);
     setVibeLoading(false);
+    try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data })); } catch(_) {}
   }, [profile?.id, analyticsView, selectedRange]);
 
   useEffect(() => {
     if (profile?.id) {
+      // Check cache first to decide whether to show loading spinner
+      const rangeToUse = analyticsView === 'classic' ? selectedRange : 'all';
+      const cacheKey = `knowmi_vibe_${profile.id}_${rangeToUse}`;
+      try {
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) {
+          const { ts } = JSON.parse(cached);
+          if (Date.now() - ts < 5 * 60 * 1000) {
+            // Has fresh cache — don't show spinner
+            refreshAnalytics();
+            return;
+          }
+        }
+      } catch(_) {}
       setVibeLoading(true);
       refreshAnalytics();
     }
@@ -2173,71 +2211,118 @@ function Dashboard() {
 
               {/* ── VIBE STATS VIEW ── */}
               {analyticsView === 'vibe' && (
-                <div className={`vibe-page ${vibeTheme === 'dark' ? 'dark' : ''}`} style={{ width: '100%', borderRadius: 24, padding: '16px 0', overflow: 'hidden' }}>
+                <div style={{ width: '100%', padding: '8px 0' }}>
                   {vibeLoading || !vibeStats ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-                      {[1,2,3,4,5,6].map(i => <div key={i} style={{ height: 120, background: 'var(--surface)', borderRadius: 16, animation: 'vibeSkeleton 1.5s ease-in-out infinite' }} />)}
+                    /* ── Colorful Skeleton Loader ── */
+                    <div className="space-y-5 animate-pulse">
+                      <div className="h-48 rounded-3xl bg-gradient-to-r from-violet-500/10 via-purple-500/15 to-indigo-500/10 border border-violet-500/15" />
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="h-28 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/15" />
+                        <div className="h-28 rounded-2xl bg-gradient-to-br from-orange-500/10 to-amber-500/10 border border-orange-500/15" />
+                        <div className="h-28 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-500/15" />
+                        <div className="h-28 rounded-2xl bg-gradient-to-br from-pink-500/10 to-rose-500/10 border border-pink-500/15" />
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="h-40 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/15" />
+                        <div className="h-40 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-500/15" />
+                        <div className="h-40 rounded-2xl bg-gradient-to-br from-rose-500/10 to-pink-500/10 border border-rose-500/15" />
+                      </div>
+                      <p className="text-center text-[11px] text-neutral-600 font-medium animate-pulse">Loading your vibe data...</p>
                     </div>
                   ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, padding: '0 16px' }}>
-                      <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
-                        <HeroCard
-                          todayScans={todayTotal}
-                          isLive={isLive}
-                          weekSparkline={vibeStats.weekSparkline}
-                        />
-                        <div style={{ marginTop: 24, width: '100%', maxWidth: '800px', margin: '0 auto', display: 'flex', justifyContent: 'center' }}>
+                    <div className="space-y-5">
+
+                      {/* ── Hero Card + AI Insights ── */}
+                      <div className="relative rounded-3xl overflow-hidden border border-violet-500/20 bg-gradient-to-br from-[#13101f] to-[#0d0d18]">
+                        <div className="absolute top-0 right-0 w-72 h-72 bg-violet-600/15 rounded-full blur-[100px] pointer-events-none" />
+                        <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-600/10 rounded-full blur-[80px] pointer-events-none" />
+                        <div className="relative z-10 p-6">
+                          <HeroCard
+                            todayScans={todayTotal}
+                            isLive={isLive}
+                            weekSparkline={vibeStats.weekSparkline}
+                          />
                           <button
                             type="button"
                             onClick={(e) => { e.preventDefault(); navigate('/insights'); }}
-                            className="w-full bg-[#1a1a1a] border border-white/20 text-neutral-200 font-black text-xs uppercase tracking-wider px-6 py-4 rounded-2xl hover:border-orange-500/50 hover:bg-orange-50/20 transition-all duration-300 shadow-[2px_2px_0px_#fff] flex items-center justify-between gap-3 active:scale-95 select-none"
+                            className="mt-5 w-full bg-white/5 border border-violet-500/25 text-white text-xs font-semibold px-5 py-3.5 rounded-2xl hover:bg-violet-500/10 hover:border-violet-500/40 transition-all duration-300 flex items-center justify-between gap-3 active:scale-95"
                           >
                             <div className="flex items-center gap-3">
-                              <span className="w-8 h-8 bg-orange-500/10 text-orange-600 rounded-xl flex items-center justify-center animate-pulse">✦</span>
-                              <span className="text-sm font-bold font-display text-white">AI Insights (Beta)</span>
+                              <span className="w-8 h-8 bg-orange-500/15 text-orange-400 rounded-xl flex items-center justify-center text-base">✦</span>
+                              <span className="text-sm font-semibold text-white">AI Insights <span className="text-[10px] text-violet-300 font-medium">(Beta)</span></span>
                             </div>
-                            <span className="text-[11px] font-black uppercase tracking-wider text-orange-600 bg-orange-50 px-3 py-1.5 rounded-xl">View Details →</span>
+                            <span className="text-[10px] font-semibold uppercase tracking-wider text-orange-300 bg-orange-500/10 border border-orange-500/20 px-3 py-1 rounded-lg">View Details →</span>
                           </button>
                         </div>
                       </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, height: '100%' }}>
-                          <p style={{ fontFamily: 'Syne,sans-serif', fontSize: 14, fontWeight: 700, letterSpacing: '0.1em', color: 'var(--muted)', textTransform: 'uppercase' }}>Your numbers</p>
-                          <StatGrid 
-                            totalViews={vibeStats.totalViews} 
-                            totalCities={vibeStats.totalCities} 
-                            profileQRScans={vibeStats.profileQRScans} 
-                            uniqueViews={vibeStats.uniqueViews} 
+
+                      {/* ── Key Stats Row ── */}
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                        {[
+                          { label: 'Total Views', value: vibeStats.totalViews?.toLocaleString() || '0', icon: '👁', accent: 'from-cyan-500/15 to-blue-600/10', border: 'border-cyan-500/20', text: 'text-cyan-300', dot: 'bg-cyan-400' },
+                          { label: 'Unique Visitors', value: vibeStats.uniqueViews?.toLocaleString() || '0', icon: '👤', accent: 'from-violet-500/15 to-purple-600/10', border: 'border-violet-500/20', text: 'text-violet-300', dot: 'bg-violet-400' },
+                          { label: 'QR Scans', value: vibeStats.tshirtScans?.toLocaleString() || '0', icon: '📲', accent: 'from-orange-500/15 to-amber-600/10', border: 'border-orange-500/20', text: 'text-orange-300', dot: 'bg-orange-400' },
+                          { label: 'Cities Reached', value: vibeStats.totalCities?.toLocaleString() || '0', icon: '🌏', accent: 'from-emerald-500/15 to-teal-600/10', border: 'border-emerald-500/20', text: 'text-emerald-300', dot: 'bg-emerald-400' },
+                        ].map((s, i) => (
+                          <div key={i} className={`p-5 rounded-2xl bg-gradient-to-br ${s.accent} border ${s.border} flex flex-col gap-2 hover:-translate-y-1 transition-all duration-300`}>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-1.5">
+                                <span className={`w-1.5 h-1.5 rounded-full ${s.dot} animate-pulse`} />
+                                <p className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">{s.label}</p>
+                              </div>
+                              <span className="text-lg">{s.icon}</span>
+                            </div>
+                            <p className={`text-3xl font-bold ${s.text}`}>{s.value}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* ── Bento Grid: Cards ── */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                        {/* Your Numbers */}
+                        <div className="rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-600/5 border border-blue-500/15 p-5">
+                          <p className="text-[10px] font-semibold text-blue-300 uppercase tracking-wider mb-4 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-blue-400" /> Your Numbers</p>
+                          <StatGrid
+                            totalViews={vibeStats.totalViews}
+                            totalCities={vibeStats.totalCities}
+                            profileQRScans={vibeStats.profileQRScans}
+                            uniqueViews={vibeStats.uniqueViews}
                           />
                         </div>
-                        
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, height: '100%' }}>
-                          <p style={{ fontFamily: 'Syne,sans-serif', fontSize: 14, fontWeight: 700, letterSpacing: '0.1em', color: 'var(--muted)', textTransform: 'uppercase' }}>Moments that matter</p>
+
+                        {/* Moments that matter */}
+                        <div className="rounded-2xl bg-gradient-to-br from-pink-500/10 to-rose-600/5 border border-pink-500/15 p-5">
+                          <p className="text-[10px] font-semibold text-pink-300 uppercase tracking-wider mb-4 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-pink-400" /> Moments That Matter</p>
                           <MomentsCard moments={moments} />
                         </div>
-                        
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, height: '100%' }}>
-                          <p style={{ fontFamily: 'Syne,sans-serif', fontSize: 14, fontWeight: 700, letterSpacing: '0.1em', color: 'var(--muted)', textTransform: 'uppercase' }}>Who's viewing</p>
+
+                        {/* Who's viewing */}
+                        <div className="rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-600/5 border border-emerald-500/15 p-5">
+                          <p className="text-[10px] font-semibold text-emerald-300 uppercase tracking-wider mb-4 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Who&apos;s Viewing</p>
                           <DeviceDonut {...vibeStats.deviceBreakdown} />
                         </div>
-                        
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, height: '100%' }}>
-                          <p style={{ fontFamily: 'Syne,sans-serif', fontSize: 14, fontWeight: 700, letterSpacing: '0.1em', color: 'var(--muted)', textTransform: 'uppercase' }}>Your streak</p>
+
+                        {/* Streak */}
+                        <div className="rounded-2xl bg-gradient-to-br from-orange-500/10 to-amber-600/5 border border-orange-500/15 p-5">
+                          <p className="text-[10px] font-semibold text-orange-300 uppercase tracking-wider mb-4 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" /> Your Streak 🔥</p>
                           <StreakCard {...vibeStats.streak} />
                         </div>
-                        
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, height: '100%' }}>
-                          <p style={{ fontFamily: 'Syne,sans-serif', fontSize: 14, fontWeight: 700, letterSpacing: '0.1em', color: 'var(--muted)', textTransform: 'uppercase' }}>Where in the world</p>
+
+                        {/* Where in the world */}
+                        <div className="rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-600/5 border border-violet-500/15 p-5">
+                          <p className="text-[10px] font-semibold text-violet-300 uppercase tracking-wider mb-4 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-violet-400" /> Where in the World 🌍</p>
                           <CityCard topCities={vibeStats.topCities} totalCities={vibeStats.totalCities} />
                         </div>
-                        
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, height: '100%' }}>
-                          <p style={{ fontFamily: 'Syne,sans-serif', fontSize: 14, fontWeight: 700, letterSpacing: '0.1em', color: 'var(--muted)', textTransform: 'uppercase' }}>Your best moment</p>
+
+                        {/* Best moment */}
+                        <div className="rounded-2xl bg-gradient-to-br from-yellow-500/10 to-amber-600/5 border border-yellow-500/15 p-5">
+                          <p className="text-[10px] font-semibold text-yellow-300 uppercase tracking-wider mb-4 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-yellow-400" /> Your Best Moment ✨</p>
                           <ViralCard bestMoment={vibeStats.bestMoment} />
                         </div>
+
                       </div>
-                      <div style={{ height: 32 }} />
+                      <div style={{ height: 16 }} />
                     </div>
                   )}
                 </div>
