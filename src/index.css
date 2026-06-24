@@ -677,15 +677,15 @@ img {
 .ghost-blur-socials a[href^="https://wa.me"],
 .ghost-blur-socials a[href^="tel:"],
 .ghost-blur-socials .privacy-target {
-  filter: blur(4px);
-  opacity: 0.5;
+  filter: blur(1.2px);
+  opacity: 0.7;
   pointer-events: none !important;
   user-select: none !important;
 }
 
 .ghost-blur-item {
-  filter: blur(4px) !important;
-  opacity: 0.5 !important;
+  filter: blur(1.2px) !important;
+  opacity: 0.7 !important;
 }
 
 .ghost-mode-active a[href*="private-blur"],
