@@ -27,7 +27,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
   const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as DeveloperData;
   const activeTheme = (profile.profile_theme || 'default').toLowerCase();
-  const { isGated, handleGatedClick, GateModal } = useGatedLink();
+  const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal } = useGatedLink();
 
   const aboutMeLanguages = (data.about?.languages && data.about.languages.length > 0)
     ? data.about.languages
@@ -141,7 +141,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                     rel="noopener noreferrer"
                     onClick={(e) => {
                       if (isBlurred) {
-                        e.preventDefault();
+                        handlePrivacyClick(e);
                         return;
                       }
                       handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
@@ -298,6 +298,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
         </main>
         <GateModal />
+        <PrivacyModal />
       </div>
     )
   }
@@ -531,7 +532,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                       rel="noopener noreferrer"
                       onClick={(e) => {
                         if (isBlurred) {
-                          e.preventDefault();
+                          handlePrivacyClick(e);
                           return;
                         }
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
@@ -610,6 +611,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
         </main>
         <GateModal />
+        <PrivacyModal />
       </div>
     )
   }
@@ -829,7 +831,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                       rel="noopener noreferrer"
                       onClick={(e) => {
                         if (isBlurred) {
-                          e.preventDefault();
+                          handlePrivacyClick(e);
                           return;
                         }
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
@@ -913,6 +915,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
         </main>
         <GateModal />
+        <PrivacyModal />
       </div>
     )
   }
@@ -1090,7 +1093,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                     rel="noopener noreferrer"
                     onClick={(e) => {
                       if (isBlurred) {
-                        e.preventDefault();
+                        handlePrivacyClick(e);
                         return;
                       }
                       handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
@@ -1177,6 +1180,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
       </main>
       <GateModal />
+      <PrivacyModal />
     </div>
   )
 }

@@ -33,7 +33,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as StudentData;
   const activeTheme = (profile.profile_theme || 'default').toLowerCase();
-  const { isGated, handleGatedClick, GateModal } = useGatedLink();
+  const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal } = useGatedLink();
   const liveViews = stats?.totalViews || 0;
   const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
   const [showFomoModal, setShowFomoModal] = React.useState(false);
@@ -340,7 +340,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                       className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-5 rounded-2xl sm:rounded-[2rem] bg-white border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] ${pData.hoverBorder} transition-all duration-300 group relative social-link-item cursor-pointer`}
                       onClick={(e) => {
                         if (isBlurred) {
-                          e.preventDefault();
+                          handlePrivacyClick(e);
                           return;
                         }
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
@@ -460,6 +460,8 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           .animate-float-medium { animation: float-medium 6s ease-in-out infinite; }
           .animate-float-fast { animation: float-fast 4s ease-in-out infinite; }
         `}</style>
+        <GateModal />
+        <PrivacyModal />
       </div>
     )
   }
@@ -791,7 +793,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                     const pData = getPlatformData(p.platform)
                     const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                     return (
-                      <a key={i} href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer" onClick={(e) => { if(isBlurred) { e.preventDefault(); return; }; handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url)); if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank'); }} className="w-10 h-10 bg-white/50 rounded flex items-center justify-center hover:bg-white hover:scale-110 transition-all cork-shadow relative">
+                      <a key={i} href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer" onClick={(e) => { if(isBlurred) { handlePrivacyClick(e); return; }; handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url)); if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank'); }} className="w-10 h-10 bg-white/50 rounded flex items-center justify-center hover:bg-white hover:scale-110 transition-all cork-shadow relative">
                         <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
                           {pData.icon}
                         </div>
@@ -888,6 +890,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         )}
 
         <GateModal />
+        <PrivacyModal />
       </div>
     )
   }
@@ -1328,7 +1331,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                         <a key={i} href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer"
                           onClick={(e) => {
                             if (isBlurred) {
-                              e.preventDefault();
+                              handlePrivacyClick(e);
                               return;
                             }
                             handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
@@ -1423,6 +1426,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
 
         <GateModal />
+        <PrivacyModal />
       </div>
     )
   }
@@ -1771,7 +1775,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                       <a key={i} href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer"
                         onClick={(e) => {
                           if (isBlurred) {
-                            e.preventDefault();
+                            handlePrivacyClick(e);
                             return;
                           }
                           handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
@@ -1866,6 +1870,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
 
       <GateModal />
+      <PrivacyModal />
     </div>
   )
 }

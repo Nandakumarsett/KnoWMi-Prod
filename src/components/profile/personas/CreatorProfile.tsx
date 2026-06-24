@@ -66,7 +66,7 @@ export function CreatorProfile({
   const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as CreatorData;
   const activeTheme = (profile.profile_theme || "default").toLowerCase();
-  const { isGated, handleGatedClick, GateModal } = useGatedLink();
+  const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal } = useGatedLink();
   const [selectedWork, setSelectedWork] = React.useState<any>(null);
   const [showFomoModal, setShowFomoModal] = React.useState(false);
 
@@ -623,7 +623,7 @@ export function CreatorProfile({
                         rel="noopener noreferrer"
                         onClick={(e) => {
                           if (isBlurred) {
-                            e.preventDefault();
+                            handlePrivacyClick(e);
                             return;
                           }
                           handleGatedClick(e, p.url, () =>
@@ -884,6 +884,7 @@ export function CreatorProfile({
         </section>
         {renderWorkModal()}
         <GateModal />
+        <PrivacyModal />
       </div>
     );
   }
@@ -1068,7 +1069,7 @@ export function CreatorProfile({
                       rel="noopener noreferrer"
                       onClick={(e) => {
                         if (isBlurred) {
-                          e.preventDefault();
+                          handlePrivacyClick(e);
                           return;
                         }
                         handleGatedClick(e, p.url, () =>
@@ -1336,6 +1337,7 @@ export function CreatorProfile({
         </div>
         {renderWorkModal()}
         <GateModal />
+        <PrivacyModal />
       </div>
     );
   }
@@ -1524,7 +1526,7 @@ export function CreatorProfile({
                       rel="noopener noreferrer"
                       onClick={(e) => {
                         if (isBlurred) {
-                          e.preventDefault();
+                          handlePrivacyClick(e);
                           return;
                         }
                         handleGatedClick(e, p.url, () =>
@@ -1775,6 +1777,7 @@ export function CreatorProfile({
         </div>
         {renderWorkModal()}
         <GateModal />
+        <PrivacyModal />
       </div>
     );
   }
@@ -2015,7 +2018,7 @@ export function CreatorProfile({
                     rel="noopener noreferrer"
                     onClick={(e) => {
                       if (isBlurred) {
-                        e.preventDefault();
+                        handlePrivacyClick(e);
                         return;
                       }
                       handleGatedClick(e, p.url, () =>
@@ -2564,6 +2567,7 @@ export function CreatorProfile({
       )}
 
       <GateModal />
+      <PrivacyModal />
     </div>
   );
 }

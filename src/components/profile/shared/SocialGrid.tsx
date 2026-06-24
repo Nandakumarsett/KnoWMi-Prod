@@ -3,6 +3,7 @@ import { Instagram, Github, Linkedin, Twitter, Youtube, Music, Globe, MessageCir
 import { SocialLink } from '../../../types/profile'
 import { useAuth } from '../../../context/AuthContext'
 import { supabase } from '../../../lib/supabase'
+import { useGatedLink } from '../../../hooks/useGatedLink'
 
 interface SocialGridProps {
   links: SocialLink[]
@@ -31,6 +32,7 @@ const PLATFORM_META: Record<string, any> = {
 
 export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: SocialGridProps) {
   const { user, loading: authLoading } = useAuth()
+  const { handlePrivacyClick, PrivacyModal } = useGatedLink()
   const [showGate, setShowGate] = useState(false)
   // Wait for auth to resolve before deciding. During loading, assume not gated to avoid flicker.
   // After loading completes, gate if no user is logged in.
@@ -128,7 +130,7 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
                 href={isBlurred ? undefined : link.url}
                 onClick={(e) => {
                   if (isBlurred) {
-                    e.preventDefault();
+                    handlePrivacyClick(e);
                     return;
                   }
                   handleLinkClick(e, link.platform, link.url);
@@ -159,6 +161,7 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
           })}
         </div>
         {renderGateModal()}
+        <PrivacyModal />
       </>
     )
   }
@@ -176,7 +179,7 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
               href={isBlurred ? undefined : link.url}
               onClick={(e) => {
                 if (isBlurred) {
-                  e.preventDefault();
+                  handlePrivacyClick(e);
                   return;
                 }
                 handleLinkClick(e, link.platform, link.url);
@@ -200,6 +203,7 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
         })}
       </div>
       {renderGateModal()}
+      <PrivacyModal />
     </>
   )
 }
