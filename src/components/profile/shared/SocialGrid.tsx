@@ -40,7 +40,7 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
 
   const visibleLinks = links.filter(link => {
     const isComm = isCommunicationApp(link.platform);
-    return !(isComm && (!user || isGhostMode));
+    return !(isComm && (!!user && isGhostMode));
   });
 
   if (!visibleLinks || visibleLinks.length === 0) {
@@ -139,14 +139,15 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
           {sortedLinks.map((link, idx) => {
             const meta = PLATFORM_META[link.platform] || { icon: Globe, color: '#444444' }
             const Icon = meta.icon
-            const isBlurred = isGhostMode && isCommunicationApp(link.platform);
+            const isBlurred = isCommunicationApp(link.platform) && !user;
             return (
               <a 
                 key={link.platform}
                 href={isBlurred ? undefined : link.url}
                 onClick={(e) => {
                   if (isBlurred) {
-                    handlePrivacyClick(e);
+                    e.preventDefault();
+                    setShowGate(true);
                     return;
                   }
                   handleLinkClick(e, link.platform, link.url);
@@ -176,6 +177,13 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
             )
           })}
         </div>
+        {user && isGhostMode && (
+          <div className="w-full text-center mt-4 mb-2 animate-fadeIn">
+            <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+              <Lock size={12} /> Privacy Mode enabled
+            </p>
+          </div>
+        )}
         {renderGateModal()}
         <PrivacyModal />
       </>
@@ -188,14 +196,15 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
         {sortedLinks.map((link) => {
           const meta = PLATFORM_META[link.platform] || { icon: Globe, color: '#444444' }
           const Icon = meta.icon
-          const isBlurred = isGhostMode && isCommunicationApp(link.platform);
+          const isBlurred = isCommunicationApp(link.platform) && !user;
           return (
             <a 
               key={link.platform}
               href={isBlurred ? undefined : link.url}
               onClick={(e) => {
                 if (isBlurred) {
-                  handlePrivacyClick(e);
+                  e.preventDefault();
+                  setShowGate(true);
                   return;
                 }
                 handleLinkClick(e, link.platform, link.url);

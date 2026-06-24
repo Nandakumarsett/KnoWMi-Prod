@@ -27,12 +27,12 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
   const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as DeveloperData;
   const activeTheme = (profile.profile_theme || 'default').toLowerCase();
-  const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal, user } = useGatedLink();
+  const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal, setShowGate, user } = useGatedLink();
 
   const visiblePlatforms = (data.platforms || []).filter((p: any) => {
     if (!p.url) return false;
     const isComm = isCommunicationApp(p.platform || '');
-    return !(isComm && (!user || profile.ghost_mode));
+    return !(isComm && (!!user && profile.ghost_mode));
   });
 
   const aboutMeLanguages = (data.about?.languages && data.about.languages.length > 0)
@@ -138,22 +138,32 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               {visiblePlatforms.map((p, i) => {
                 if (!p.url) return null
                 const { Icon } = getPlatformIcon(p.platform || '')
-                const isBlurred = false;
+                const isBlurred = isCommunicationApp(p.platform || '') && !user;
                 return (
                   <a
                     key={i}
-                    href={ensureAbsoluteUrl(p.url)}
+                    href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => {
+                      if (isBlurred) {
+                        e.preventDefault();
+                        setShowGate(true);
+                        return;
+                      }
                       handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                       if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                     }}
-                    className="relative hover:scale-110 transition-transform duration-300 text-neutral-500 hover:text-[#0A66C2] social-link-item cursor-pointer"
+                    className={`relative hover:scale-110 transition-transform duration-300 text-neutral-500 hover:text-[#0A66C2] social-link-item cursor-pointer ${isBlurred ? 'opacity-70' : ''}`}
                   >
-                    <div className="w-full h-full flex items-center justify-center">
+                    <div className={`w-full h-full flex items-center justify-center ${isBlurred ? 'ghost-blur-item' : ''}`}>
                       <Icon size={20} />
                     </div>
+                    {isBlurred && (
+                      <div className="absolute inset-0 flex items-center justify-center z-10">
+                        <Lock size={12} className="text-neutral-700" strokeWidth={2.5} />
+                      </div>
+                    )}
                   </a>
                 )
               })}
@@ -527,22 +537,33 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                 {visiblePlatforms.map((p, i) => {
                   if (!p.url) return null
                   const { Icon } = getPlatformIcon(p.platform || '')
+                  const isBlurred = isCommunicationApp(p.platform || '') && !user;
                   return (
                     <a
                       key={i}
-                      href={ensureAbsoluteUrl(p.url)}
+                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => {
+                        if (isBlurred) {
+                          e.preventDefault();
+                          setShowGate(true);
+                          return;
+                        }
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
-                      className="blueprint-border bg-[#0A192F] hover:bg-[#64FFDA]/10 px-5 py-3 text-xs flex items-center gap-3 transition-all duration-300 relative group"
+                      className="blueprint-border bg-[#0A192F] hover:bg-[#64FFDA]/10 px-5 py-3 text-xs flex items-center gap-3 transition-all duration-300 relative group cursor-pointer"
                     >
-                      <div className="flex items-center gap-3">
+                      <div className={`flex items-center gap-3 ${isBlurred ? 'ghost-blur-item' : ''}`}>
                         <Icon className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
                         <span className="text-[11px] uppercase text-[#8892B0] group-hover:text-[#64FFDA] transition-colors">{p.platform}</span>
                       </div>
+                      {isBlurred && (
+                        <div className="absolute inset-0 flex items-center justify-center z-10 bg-[#0A192F]/40">
+                          <Lock size={14} className="text-[#64FFDA]" strokeWidth={2.5} />
+                        </div>
+                      )}
                     </a>
                   )
                 })}
@@ -557,7 +578,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
           {/* Contact & Collab */}
-          {(data.contact_email || data.contact_whatsapp || data.quick_talk_url || data.collab_types) && (
+          {!(user && profile.ghost_mode) && (data.contact_email || data.contact_whatsapp || data.quick_talk_url || data.collab_types) && (
             <div className="w-full blueprint-border bg-[#001B2E]/90 backdrop-blur-md p-8 mb-8 text-left relative group hover:border-[#64FFDA]/60 transition-colors duration-500">
               <h3 className="text-xs font-medium uppercase text-white tracking-[0.2em] mb-6 flex items-center gap-3">
                 <span className="text-[#64FFDA]">05.</span> COMM_PROTOCOLS
@@ -573,18 +594,58 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
               <div className="flex flex-wrap gap-4">
                 {data.contact_email && (
-                  <a href={`mailto:${data.contact_email}`} className="text-xs uppercase text-[#64FFDA] border border-[#64FFDA]/30 px-4 py-2 flex items-center gap-2 hover:bg-[#64FFDA]/10 transition-colors">
-                    <Mail size={14} /> PING_MAIL
+                  <a 
+                    href={!user ? undefined : `mailto:${data.contact_email}`}
+                    onClick={(e) => {
+                      if (!user) {
+                        e.preventDefault();
+                        setShowGate(true);
+                      }
+                    }}
+                    className={`text-xs uppercase text-[#64FFDA] border border-[#64FFDA]/30 px-4 py-2 flex items-center gap-2 hover:bg-[#64FFDA]/10 transition-colors cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                  >
+                    <div className={`flex items-center gap-2 ${!user ? 'ghost-blur-item' : ''}`}>
+                      <Mail size={14} /> PING_MAIL
+                    </div>
+                    {!user && <Lock size={12} className="text-[#64FFDA]" />}
                   </a>
                 )}
                 {data.contact_whatsapp && (
-                  <a href={`https://wa.me/${data.contact_whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="text-xs uppercase text-[#25D366] border border-[#25D366]/30 px-4 py-2 flex items-center gap-2 hover:bg-[#25D366]/10 transition-colors">
-                    <Phone size={14} /> EXT_COMMS
+                  <a 
+                    href={!user ? undefined : `https://wa.me/${data.contact_whatsapp.replace(/[^0-9]/g, '')}`}
+                    target="_blank" 
+                    rel="noreferrer" 
+                    onClick={(e) => {
+                      if (!user) {
+                        e.preventDefault();
+                        setShowGate(true);
+                      }
+                    }}
+                    className={`text-xs uppercase text-[#25D366] border border-[#25D366]/30 px-4 py-2 flex items-center gap-2 hover:bg-[#25D366]/10 transition-colors cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                  >
+                    <div className={`flex items-center gap-2 ${!user ? 'ghost-blur-item' : ''}`}>
+                      <Phone size={14} /> EXT_COMMS
+                    </div>
+                    {!user && <Lock size={12} className="text-[#25D366]" />}
                   </a>
                 )}
                 {data.quick_talk_url && (
-                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="text-xs uppercase text-[#58A6FF] border border-[#58A6FF]/30 px-4 py-2 flex items-center gap-2 hover:bg-[#58A6FF]/10 transition-colors privacy-target">
-                    <Video size={14} /> SYNC_LINK
+                  <a 
+                    href={!user ? undefined : ensureAbsoluteUrl(data.quick_talk_url)}
+                    target="_blank" 
+                    rel="noreferrer" 
+                    onClick={(e) => {
+                      if (!user) {
+                        e.preventDefault();
+                        setShowGate(true);
+                      }
+                    }}
+                    className={`text-xs uppercase text-[#58A6FF] border border-[#58A6FF]/30 px-4 py-2 flex items-center gap-2 hover:bg-[#58A6FF]/10 transition-colors privacy-target cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                  >
+                    <div className={`flex items-center gap-2 ${!user ? 'ghost-blur-item' : ''}`}>
+                      <Video size={14} /> SYNC_LINK
+                    </div>
+                    {!user && <Lock size={12} className="text-[#58A6FF]" />}
                   </a>
                 )}
               </div>
@@ -823,19 +884,25 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                 {visiblePlatforms.map((p, i) => {
                   if (!p.url) return null
                   const { Icon } = getPlatformIcon(p.platform || '')
+                  const isBlurred = isCommunicationApp(p.platform || '') && !user;
                   return (
                     <a
                       key={i}
-                      href={ensureAbsoluteUrl(p.url)}
+                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => {
+                        if (isBlurred) {
+                          e.preventDefault();
+                          setShowGate(true);
+                          return;
+                        }
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
-                      className="hacker-border bg-black hover:bg-[#00FF41] hover:text-black px-4 py-2 text-xs flex items-center gap-2 transition-all relative"
+                      className="hacker-border bg-black hover:bg-[#00FF41] hover:text-black px-4 py-2 text-xs flex items-center gap-2 transition-all relative cursor-pointer"
                     >
-                      <div className="flex items-center gap-2">
+                      <div className={`flex items-center gap-2 ${isBlurred ? 'ghost-blur-item' : ''}`}>
                         {Icon ? (
                           <Icon size={12} />
                         ) : (
@@ -843,6 +910,11 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                         )}
                         <span className="uppercase font-bold">{p.platform}</span>
                       </div>
+                      {isBlurred && (
+                        <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/40">
+                          <Lock size={12} className="text-[#00FF41]" strokeWidth={2.5} />
+                        </div>
+                      )}
                     </a>
                   )
                 })}
@@ -857,8 +929,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
-          {/* Hacker Contact / Collab */}
-          {(data.contact_email || data.contact_whatsapp || data.quick_talk_url || data.collab_types) && (
+          {!(user && profile.ghost_mode) && (data.contact_email || data.contact_whatsapp || data.quick_talk_url || data.collab_types) && (
             <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left relative">
               <h3 className="text-sm font-bold uppercase text-[#00FF41] tracking-widest mb-4 flex items-center gap-2 border-b border-[#00FF41]/30 pb-2">
                 <Layers size={14} /> SYS_ADMIN_CONTACTS
@@ -875,18 +946,58 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
               <div className="flex flex-wrap gap-3 mt-4">
                 {data.contact_email && (
-                  <a href={`mailto:${data.contact_email}`} className="text-xs uppercase text-[#00FF41] border border-[#00FF41]/50 bg-black px-4 py-2 flex items-center gap-2 hover:bg-[#00FF41] hover:text-black transition-colors">
-                    <Mail size={14} /> /bin/mail
+                  <a 
+                    href={!user ? undefined : `mailto:${data.contact_email}`}
+                    onClick={(e) => {
+                      if (!user) {
+                        e.preventDefault();
+                        setShowGate(true);
+                      }
+                    }}
+                    className={`text-xs uppercase text-[#00FF41] border border-[#00FF41]/50 bg-black px-4 py-2 flex items-center gap-2 hover:bg-[#00FF41] hover:text-black transition-colors cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                  >
+                    <div className={`flex items-center gap-2 ${!user ? 'ghost-blur-item' : ''}`}>
+                      <Mail size={14} /> /bin/mail
+                    </div>
+                    {!user && <Lock size={12} className="text-[#00FF41]" />}
                   </a>
                 )}
                 {data.contact_whatsapp && (
-                  <a href={`https://wa.me/${data.contact_whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="text-xs uppercase text-[#00FF41] border border-[#00FF41]/50 bg-black px-4 py-2 flex items-center gap-2 hover:bg-[#00FF41] hover:text-black transition-colors">
-                    <Phone size={14} /> /dev/tty
+                  <a 
+                    href={!user ? undefined : `https://wa.me/${data.contact_whatsapp.replace(/[^0-9]/g, '')}`}
+                    target="_blank" 
+                    rel="noreferrer" 
+                    onClick={(e) => {
+                      if (!user) {
+                        e.preventDefault();
+                        setShowGate(true);
+                      }
+                    }}
+                    className={`text-xs uppercase text-[#00FF41] border border-[#00FF41]/50 bg-black px-4 py-2 flex items-center gap-2 hover:bg-[#00FF41] hover:text-black transition-colors cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                  >
+                    <div className={`flex items-center gap-2 ${!user ? 'ghost-blur-item' : ''}`}>
+                      <Phone size={14} /> /dev/tty
+                    </div>
+                    {!user && <Lock size={12} className="text-[#00FF41]" />}
                   </a>
                 )}
                 {data.quick_talk_url && (
-                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="text-xs uppercase text-[#00FF41] border border-[#00FF41]/50 bg-black px-4 py-2 flex items-center gap-2 hover:bg-[#00FF41] hover:text-black transition-colors privacy-target">
-                    <Video size={14} /> ./tcp_sync
+                  <a 
+                    href={!user ? undefined : ensureAbsoluteUrl(data.quick_talk_url)}
+                    target="_blank" 
+                    rel="noreferrer" 
+                    onClick={(e) => {
+                      if (!user) {
+                        e.preventDefault();
+                        setShowGate(true);
+                      }
+                    }}
+                    className={`text-xs uppercase text-[#00FF41] border border-[#00FF41]/50 bg-black px-4 py-2 flex items-center gap-2 hover:bg-[#00FF41] hover:text-black transition-colors privacy-target cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                  >
+                    <div className={`flex items-center gap-2 ${!user ? 'ghost-blur-item' : ''}`}>
+                      <Video size={14} /> ./tcp_sync
+                    </div>
+                    {!user && <Lock size={12} className="text-[#00FF41]" />}
                   </a>
                 )}
               </div>
@@ -1082,23 +1193,34 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             <div className="pl-4 flex flex-col gap-2">
               {visiblePlatforms.map((p, i) => {
                 if (!p.url) return null;
+                const isBlurred = isCommunicationApp(p.platform || '') && !user;
                 return (
                   <a
                     key={i}
-                    href={ensureAbsoluteUrl(p.url)}
+                    href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => {
+                      if (isBlurred) {
+                        e.preventDefault();
+                        setShowGate(true);
+                        return;
+                      }
                       handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                       if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                     }}
-                    className="text-[#E6EDF3] hover:text-[#58A6FF] flex items-center gap-3 group bg-[#161B22] border border-[#30363D] px-3 py-2 hover:bg-[#30363D]/50 transition-colors"
+                    className="text-[#E6EDF3] hover:text-[#58A6FF] flex items-center gap-3 group bg-[#161B22] border border-[#30363D] px-3 py-2 hover:bg-[#30363D]/50 transition-colors relative cursor-pointer"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className={`flex items-center gap-3 ${isBlurred ? 'ghost-blur-item' : ''}`}>
                       <span className="text-[#3FB950] font-bold text-xs">tcp</span>
                       <span className="text-[#8B949E] text-xs w-20 truncate">{p.platform?.toLowerCase()}:80</span>
                       <span className="text-[#8B949E] text-xs w-24">ESTABLISHED</span>
                     </div>
+                    {isBlurred && (
+                      <div className="absolute inset-0 flex items-center justify-center z-10 bg-[#161B22]/40">
+                        <Lock size={12} className="text-[#3FB950]" strokeWidth={2.5} />
+                      </div>
+                    )}
                   </a>
                 )
               })}
@@ -1113,7 +1235,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           </div>
         )}
 
-        {(data.contact_email || data.contact_whatsapp || data.quick_talk_url || data.collab_types) && (
+        {!(user && profile.ghost_mode) && (data.contact_email || data.contact_whatsapp || data.quick_talk_url || data.collab_types) && (
           <div className="w-full mb-8">
             <div className="flex gap-2 mb-4">
               <span className="text-[#3FB950] font-bold">~</span>
@@ -1128,18 +1250,58 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               )}
               <div className="flex flex-col sm:flex-row gap-4 mt-2">
                 {data.contact_email && (
-                  <a href={`mailto:${data.contact_email}`} className="text-[#58A6FF] hover:text-white transition-colors flex items-center gap-2 text-xs">
-                    <Mail size={14} /> {data.contact_email}
+                  <a 
+                    href={!user ? undefined : `mailto:${data.contact_email}`}
+                    onClick={(e) => {
+                      if (!user) {
+                        e.preventDefault();
+                        setShowGate(true);
+                      }
+                    }}
+                    className={`text-[#58A6FF] hover:text-white transition-colors flex items-center gap-2 text-xs cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                  >
+                    <div className={`flex items-center gap-2 ${!user ? 'ghost-blur-item' : ''}`}>
+                      <Mail size={14} /> {data.contact_email}
+                    </div>
+                    {!user && <Lock size={12} className="text-[#58A6FF]" />}
                   </a>
                 )}
                 {data.contact_whatsapp && (
-                  <a href={`https://wa.me/${data.contact_whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="text-[#3FB950] hover:text-white transition-colors flex items-center gap-2 text-xs">
-                    <Phone size={14} /> WhatsApp
+                  <a 
+                    href={!user ? undefined : `https://wa.me/${data.contact_whatsapp.replace(/[^0-9]/g, '')}`}
+                    target="_blank" 
+                    rel="noreferrer" 
+                    onClick={(e) => {
+                      if (!user) {
+                        e.preventDefault();
+                        setShowGate(true);
+                      }
+                    }}
+                    className={`text-[#3FB950] hover:text-white transition-colors flex items-center gap-2 text-xs cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                  >
+                    <div className={`flex items-center gap-2 ${!user ? 'ghost-blur-item' : ''}`}>
+                      <Phone size={14} /> WhatsApp
+                    </div>
+                    {!user && <Lock size={12} className="text-[#3FB950]" />}
                   </a>
                 )}
                 {data.quick_talk_url && (
-                  <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noreferrer" className="text-[#FFBD2E] hover:text-white transition-colors flex items-center gap-2 text-xs privacy-target">
-                    <Video size={14} /> Schedule Sync
+                  <a 
+                    href={!user ? undefined : ensureAbsoluteUrl(data.quick_talk_url)}
+                    target="_blank" 
+                    rel="noreferrer" 
+                    onClick={(e) => {
+                      if (!user) {
+                        e.preventDefault();
+                        setShowGate(true);
+                      }
+                    }}
+                    className={`text-[#FFBD2E] hover:text-white transition-colors flex items-center gap-2 text-xs privacy-target cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                  >
+                    <div className={`flex items-center gap-2 ${!user ? 'ghost-blur-item' : ''}`}>
+                      <Video size={14} /> Schedule Sync
+                    </div>
+                    {!user && <Lock size={12} className="text-[#FFBD2E]" />}
                   </a>
                 )}
               </div>

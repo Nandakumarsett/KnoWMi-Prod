@@ -66,12 +66,12 @@ export function CreatorProfile({
   const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as CreatorData;
   const activeTheme = (profile.profile_theme || "default").toLowerCase();
-  const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal, user } = useGatedLink();
+  const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal, setShowGate, user } = useGatedLink();
 
   const visiblePlatforms = (data.platforms || []).filter((p: any) => {
     if (!p.url) return false;
     const isComm = isCommunicationApp(p.platform || '');
-    return !(isComm && (!user || profile.ghost_mode));
+    return !(isComm && (!!user && profile.ghost_mode));
   });
   const [selectedWork, setSelectedWork] = React.useState<any>(null);
   const [showFomoModal, setShowFomoModal] = React.useState(false);
@@ -619,13 +619,19 @@ export function CreatorProfile({
                     const style =
                       brandStyles[platform] || "bg-neutral-900 text-white";
                     const logo = logoNames[platform];
+                    const isBlurred = isCommunicationApp(p.platform || '') && !user;
                     return (
                       <a
                         key={p.platform}
-                        href={ensureAbsoluteUrl(p.url)}
+                        href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => {
+                          if (isBlurred) {
+                            e.preventDefault();
+                            setShowGate(true);
+                            return;
+                          }
                           handleGatedClick(e, p.url, () =>
                             trackLinkClick(
                               profile.id,
@@ -636,12 +642,12 @@ export function CreatorProfile({
                           if (!isGated)
                             window.open(ensureAbsoluteUrl(p.url), "_blank");
                         }}
-                        className="group flex flex-col items-center gap-3 transition-transform hover:scale-105 shrink-0 social-link-item cursor-pointer"
+                        className="group flex flex-col items-center gap-3 transition-transform hover:scale-105 shrink-0 social-link-item cursor-pointer relative"
                       >
                         <div
                           className={`w-11 h-11 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shadow-lg ${style} transition-shadow group-hover:shadow-xl p-3 sm:p-3.5 relative overflow-hidden`}
                         >
-                          <div className="w-full h-full flex items-center justify-center">
+                          <div className={`w-full h-full flex items-center justify-center ${isBlurred ? 'ghost-blur-item' : ''}`}>
                             {logo ? (
                               <img
                                 src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
@@ -663,6 +669,11 @@ export function CreatorProfile({
                               className={logo ? "hidden" : "hidden sm:block"}
                             />
                           </div>
+                          {isBlurred && (
+                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10">
+                              <Lock size={16} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
+                            </div>
+                          )}
                         </div>
                         <div className="text-center hidden sm:block">
                           <p className="text-[10px] font-black uppercase text-neutral-900 tracking-tighter">
@@ -853,28 +864,48 @@ export function CreatorProfile({
                   )}
 
                   {/* CTAs */}
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-                    {data.contact_email && (
-                      <a
-                        href={`mailto:${data.contact_email}`}
-                        className="group relative flex items-center justify-center gap-2.5 px-8 py-4 bg-white border-2 border-neutral-200 rounded-[20px] hover:border-neutral-900 transition-all text-[11px] font-black uppercase tracking-widest text-neutral-900 w-full sm:w-auto min-w-[220px]"
-                      >
-                        <Mail size={16} className="text-neutral-500 group-hover:text-neutral-900 transition-colors" /> 
-                        Drop an Email
-                      </a>
-                    )}
-                    {data.contact_whatsapp && (
-                      <a
-                        href={`https://wa.me/${String(data.contact_whatsapp).replace(/\s+/g, "")}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-center justify-center gap-2.5 px-8 py-4 bg-[#1C1C1E] rounded-[20px] hover:bg-black transition-all text-[11px] font-black uppercase tracking-widest text-white shadow-[0_8px_20px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 w-full sm:w-auto min-w-[220px]"
-                      >
-                        <MessageCircle size={16} className="text-[#25D366] group-hover:scale-110 transition-transform" /> 
-                        WhatsApp Me
-                      </a>
-                    )}
-                  </div>
+                  {!(user && profile.ghost_mode) && (data.contact_email || data.contact_whatsapp) && (
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+                      {data.contact_email && (
+                        <a
+                          href={!user ? undefined : `mailto:${data.contact_email}`}
+                          onClick={(e) => {
+                            if (!user) {
+                              e.preventDefault();
+                              setShowGate(true);
+                            }
+                          }}
+                          className={`group relative flex items-center justify-center gap-2.5 px-8 py-4 bg-white border-2 border-neutral-200 rounded-[20px] hover:border-neutral-900 transition-all text-[11px] font-black uppercase tracking-widest text-neutral-900 w-full sm:w-auto min-w-[220px] cursor-pointer ${!user ? 'opacity-70' : ''}`}
+                        >
+                          <div className={`flex items-center justify-center gap-2.5 ${!user ? 'ghost-blur-item' : ''}`}>
+                            <Mail size={16} className="text-neutral-500 group-hover:text-neutral-900 transition-colors" /> 
+                            Drop an Email
+                          </div>
+                          {!user && <Lock size={12} className="text-neutral-900 absolute right-4" />}
+                        </a>
+                      )}
+                      {data.contact_whatsapp && (
+                        <a
+                          href={!user ? undefined : `https://wa.me/${String(data.contact_whatsapp).replace(/\s+/g, "")}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => {
+                            if (!user) {
+                              e.preventDefault();
+                              setShowGate(true);
+                            }
+                          }}
+                          className={`group flex items-center justify-center gap-2.5 px-8 py-4 bg-[#1C1C1E] rounded-[20px] hover:bg-black transition-all text-[11px] font-black uppercase tracking-widest text-white shadow-[0_8px_20px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 w-full sm:w-auto min-w-[220px] cursor-pointer ${!user ? 'opacity-70' : ''}`}
+                        >
+                          <div className={`flex items-center justify-center gap-2.5 ${!user ? 'ghost-blur-item' : ''}`}>
+                            <MessageCircle size={16} className="text-[#25D366] group-hover:scale-110 transition-transform" /> 
+                            WhatsApp Me
+                          </div>
+                          {!user && <Lock size={12} className="text-white absolute right-4" />}
+                        </a>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </section>
@@ -1058,13 +1089,19 @@ export function CreatorProfile({
                 {visiblePlatforms.map((p) => {
                   const platform = p.platform?.toLowerCase();
                   const Icon = PLATFORM_ICONS[platform] || Share2;
+                  const isBlurred = isCommunicationApp(p.platform || '') && !user;
                   return (
                     <a
                       key={p.platform}
-                      href={ensureAbsoluteUrl(p.url)}
+                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => {
+                        if (isBlurred) {
+                          e.preventDefault();
+                          setShowGate(true);
+                          return;
+                        }
                         handleGatedClick(e, p.url, () =>
                           trackLinkClick(
                             profile.id,
@@ -1077,9 +1114,14 @@ export function CreatorProfile({
                       }}
                       className="w-14 h-14 border-4 border-black flex items-center justify-center bg-white hover:bg-black hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] relative cursor-pointer"
                     >
-                      <div className="w-full h-full flex items-center justify-center">
+                      <div className={`w-full h-full flex items-center justify-center ${isBlurred ? 'ghost-blur-item' : ''}`}>
                         <Icon size={24} />
                       </div>
+                      {isBlurred && (
+                        <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10">
+                          <Lock size={16} className="text-black" strokeWidth={2.5} />
+                        </div>
+                      )}
                     </a>
                   );
                 })}
@@ -1309,26 +1351,46 @@ export function CreatorProfile({
               </span>
             </div>
           )}
-          <div className="w-full mt-2 flex flex-col sm:flex-row gap-4 mb-12">
-            {data.contact_email && (
-              <a
-                href={`mailto:${data.contact_email}`}
-                className="flex-1 block w-full py-5 bg-black text-white text-center font-black text-xl uppercase tracking-widest hover:bg-white hover:text-black hover:border-4 hover:border-black transition-all border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]"
-              >
-                LET'S CONNECT &rarr;
-              </a>
-            )}
-            {data.contact_whatsapp && (
-              <a
-                href={`https://wa.me/${String(data.contact_whatsapp).replace(/\s+/g, "")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 block w-full py-5 bg-[#25D366] text-black text-center font-black text-xl uppercase tracking-widest hover:bg-white hover:text-[#25D366] hover:border-4 hover:border-[#25D366] transition-all border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]"
-              >
-                WHATSAPP
-              </a>
-            )}
-          </div>
+          {!(user && profile.ghost_mode) && (data.contact_email || data.contact_whatsapp) && (
+            <div className="w-full mt-2 flex flex-col sm:flex-row gap-4 mb-12">
+              {data.contact_email && (
+                <a
+                  href={!user ? undefined : `mailto:${data.contact_email}`}
+                  onClick={(e) => {
+                    if (!user) {
+                      e.preventDefault();
+                      setShowGate(true);
+                    }
+                  }}
+                  className={`flex-1 block w-full py-5 bg-black text-white text-center font-black text-xl uppercase tracking-widest hover:bg-white hover:text-black hover:border-4 hover:border-black transition-all border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                >
+                  <div className={`flex items-center justify-center gap-2 ${!user ? 'ghost-blur-item' : ''}`}>
+                    LET'S CONNECT &rarr;
+                  </div>
+                  {!user && <Lock size={16} className="text-white absolute right-4" />}
+                </a>
+              )}
+              {data.contact_whatsapp && (
+                <a
+                  href={!user ? undefined : `https://wa.me/${String(data.contact_whatsapp).replace(/\s+/g, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    if (!user) {
+                      e.preventDefault();
+                      setShowGate(true);
+                    }
+                  }}
+                  className={`flex-1 block w-full py-5 bg-[#25D366] text-black text-center font-black text-xl uppercase tracking-widest hover:bg-white hover:text-[#25D366] hover:border-4 hover:border-[#25D366] transition-all border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                >
+                  <div className={`flex items-center justify-center gap-2 ${!user ? 'ghost-blur-item' : ''}`}>
+                    WHATSAPP
+                  </div>
+                  {!user && <Lock size={16} className="text-black absolute right-4" />}
+                </a>
+              )}
+            </div>
+          )}
         </div>
         {renderWorkModal()}
         <GateModal />
@@ -1512,13 +1574,19 @@ export function CreatorProfile({
                 {visiblePlatforms.map((p) => {
                   const platform = p.platform?.toLowerCase();
                   const Icon = PLATFORM_ICONS[platform] || Share2;
+                  const isBlurred = isCommunicationApp(p.platform || '') && !user;
                   return (
                     <a
                       key={p.platform}
-                      href={ensureAbsoluteUrl(p.url)}
+                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => {
+                        if (isBlurred) {
+                          e.preventDefault();
+                          setShowGate(true);
+                          return;
+                        }
                         handleGatedClick(e, p.url, () =>
                           trackLinkClick(
                             profile.id,
@@ -1531,9 +1599,14 @@ export function CreatorProfile({
                       }}
                       className="w-12 h-12 rounded-full border border-[#FF2D78]/50 flex items-center justify-center bg-black/50 text-[#FF2D78] hover:bg-[#FF2D78] hover:text-white hover:shadow-[0_0_20px_rgba(255,45,120,0.8)] transition-all cursor-pointer relative"
                     >
-                      <div className="w-full h-full flex items-center justify-center">
+                      <div className={`w-full h-full flex items-center justify-center ${isBlurred ? 'ghost-blur-item' : ''}`}>
                         <Icon size={20} />
                       </div>
+                      {isBlurred && (
+                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-10 rounded-full">
+                          <Lock size={14} className="text-[#FF2D78]" strokeWidth={2.5} />
+                        </div>
+                      )}
                     </a>
                   );
                 })}
@@ -1708,7 +1781,7 @@ export function CreatorProfile({
           )}
 
           {/* Contact Section */}
-          {(data.contact_email || data.contact_whatsapp) && (
+          {!(user && profile.ghost_mode) && (data.contact_email || data.contact_whatsapp) && (
             <div className="w-full max-w-3xl border-t border-white/20 pt-8 pb-4 flex flex-col items-center">
               <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-cyan-400 mb-6 text-center drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]">
                 LET'S WORK TOGETHER
@@ -1716,20 +1789,34 @@ export function CreatorProfile({
               <div className="w-full flex justify-center gap-2 flex-wrap">
               {data.contact_email && (
                 <a
-                  href={`mailto:${data.contact_email}`}
-                  className="px-10 py-4 bg-transparent border-2 border-cyan-400 text-cyan-400 font-bold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all"
+                  href={!user ? undefined : `mailto:${data.contact_email}`}
+                  onClick={(e) => {
+                    if (!user) {
+                      e.preventDefault();
+                      setShowGate(true);
+                    }
+                  }}
+                  className={`px-10 py-4 bg-transparent border-2 border-cyan-400 text-cyan-400 font-bold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
                 >
-                  EMAIL
+                  <span className={!user ? 'ghost-blur-item' : ''}>EMAIL</span>
+                  {!user && <Lock size={12} className="text-cyan-400 absolute right-3" />}
                 </a>
               )}
               {data.contact_whatsapp && (
                 <a
-                  href={`https://wa.me/${String(data.contact_whatsapp).replace(/\s+/g, "")}`}
+                  href={!user ? undefined : `https://wa.me/${String(data.contact_whatsapp).replace(/\s+/g, "")}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-10 py-4 bg-transparent border-2 border-[#25D366] text-[#25D366] font-bold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-[#25D366] hover:text-black hover:shadow-[0_0_25px_rgba(37,211,102,0.6)] transition-all"
+                  onClick={(e) => {
+                    if (!user) {
+                      e.preventDefault();
+                      setShowGate(true);
+                    }
+                  }}
+                  className={`px-10 py-4 bg-transparent border-2 border-[#25D366] text-[#25D366] font-bold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-[#25D366] hover:text-black hover:shadow-[0_0_25px_rgba(37,211,102,0.6)] transition-all cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
                 >
-                  WHATSAPP
+                  <span className={!user ? 'ghost-blur-item' : ''}>WHATSAPP</span>
+                  {!user && <Lock size={12} className="text-[#25D366] absolute right-3" />}
                 </a>
               )}
               </div>
@@ -2000,14 +2087,20 @@ export function CreatorProfile({
                 const styleClass = brandStyles[platform]
                   ? brandStyles[platform].replace(" text-white", "")
                   : "bg-gray-800";
+                const isBlurred = isCommunicationApp(p.platform || '') && !user;
 
                 return (
                   <a
                     key={p.platform}
-                    href={ensureAbsoluteUrl(p.url)}
+                    href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => {
+                      if (isBlurred) {
+                        e.preventDefault();
+                        setShowGate(true);
+                        return;
+                      }
                       handleGatedClick(e, p.url, () =>
                         trackLinkClick(
                           profile.id,
@@ -2018,19 +2111,26 @@ export function CreatorProfile({
                       if (!isGated)
                         window.open(ensureAbsoluteUrl(p.url), "_blank");
                     }}
-                    className="w-16 h-16 rounded-full flex items-center justify-center relative overflow-hidden group shadow-md bg-white border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5 font-sans"
-                    title={`${p.platform}${p.followers ? ` \u00b7 ${p.followers}` : ""}`}
+                    className="w-16 h-16 rounded-full flex items-center justify-center relative overflow-hidden group shadow-md bg-white border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5 font-sans cursor-pointer"
+                    title={isBlurred ? undefined : `${p.platform}${p.followers ? ` \u00b7 ${p.followers}` : ""}`}
                   >
-                    <div className="relative z-10 w-full h-full flex items-center justify-center">
+                    <div className={`relative z-10 w-full h-full flex items-center justify-center ${isBlurred ? 'ghost-blur-item' : ''}`}>
                       <Icon
                         size={36}
                         className="text-gray-700 group-hover:text-white transition-colors duration-300"
                       />
                     </div>
-                    <div
-                      className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${styleClass}`}
-                      style={{ zIndex: 0 }}
-                    />
+                    {!isBlurred && (
+                      <div
+                        className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${styleClass}`}
+                        style={{ zIndex: 0 }}
+                      />
+                    )}
+                    {isBlurred && (
+                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10 rounded-full">
+                        <Lock size={18} className="text-black" strokeWidth={2.5} />
+                      </div>
+                    )}
                   </a>
                 );
               })}
@@ -2483,26 +2583,42 @@ export function CreatorProfile({
               </span>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              {data.contact_email && (
-                <a
-                  href={`mailto:${data.contact_email}`}
-                  className="w-full sm:w-auto px-10 py-4 bg-gray-900 text-white text-sm font-bold rounded-full hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-purple-500/25 hover:-translate-y-1"
-                >
-                  Start a Conversation
-                </a>
-              )}
-              {data.contact_whatsapp && (
-                <a
-                  href={`https://wa.me/${String(data.contact_whatsapp).replace(/\s+/g, "")}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-10 py-4 bg-white text-gray-900 text-sm font-bold rounded-full border border-gray-200 hover:border-[#25D366] hover:text-[#25D366] transition-all hover:-translate-y-1"
-                >
-                  WhatsApp Message
-                </a>
-              )}
-            </div>
+            {!(user && profile.ghost_mode) && (data.contact_email || data.contact_whatsapp) && (
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                {data.contact_email && (
+                  <a
+                    href={!user ? undefined : `mailto:${data.contact_email}`}
+                    onClick={(e) => {
+                      if (!user) {
+                        e.preventDefault();
+                        setShowGate(true);
+                      }
+                    }}
+                    className={`w-full sm:w-auto px-10 py-4 bg-gray-900 text-white text-sm font-bold rounded-full hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-purple-500/25 hover:-translate-y-1 cursor-pointer relative inline-flex items-center justify-center gap-2 ${!user ? 'opacity-70' : ''}`}
+                  >
+                    <span className={!user ? 'ghost-blur-item' : ''}>Start a Conversation</span>
+                    {!user && <Lock size={12} className="text-white" />}
+                  </a>
+                )}
+                {data.contact_whatsapp && (
+                  <a
+                    href={!user ? undefined : `https://wa.me/${String(data.contact_whatsapp).replace(/\s+/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      if (!user) {
+                        e.preventDefault();
+                        setShowGate(true);
+                      }
+                    }}
+                    className={`w-full sm:w-auto px-10 py-4 bg-white text-gray-900 text-sm font-bold rounded-full border border-gray-200 hover:border-[#25D366] hover:text-[#25D366] transition-all hover:-translate-y-1 cursor-pointer relative inline-flex items-center justify-center gap-2 ${!user ? 'opacity-70' : ''}`}
+                  >
+                    <span className={!user ? 'ghost-blur-item' : ''}>WhatsApp Message</span>
+                    {!user && <Lock size={12} className="text-gray-900" />}
+                  </a>
+                )}
+              </div>
+            )}
 
             {data.preferred_contact_method && (
               <div className="mt-8 flex justify-center">

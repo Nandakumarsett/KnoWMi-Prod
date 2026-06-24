@@ -33,12 +33,12 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as StudentData;
   const activeTheme = (profile.profile_theme || 'default').toLowerCase();
-  const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal, user } = useGatedLink();
+  const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal, setShowGate, user } = useGatedLink();
 
   const visiblePlatforms = (data.platforms || []).filter((p: any) => {
     if (!p.url) return false;
     const isComm = isCommunicationApp(p.platform || '');
-    return !(isComm && (!user || profile.ghost_mode));
+    return !(isComm && (!!user && profile.ghost_mode));
   });
   const liveViews = stats?.totalViews || 0;
   const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
@@ -336,22 +336,33 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
                 {visiblePlatforms.map((p: any, i: number) => {
                   const pData = getPlatformData(p.platform);
+                  const isBlurred = isCommunicationApp(p.platform || '') && !user;
                   return (
                     <a 
                       key={i}
-                      href={ensureAbsoluteUrl(p.url)} 
+                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-5 rounded-2xl sm:rounded-[2rem] bg-white border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] ${pData.hoverBorder} transition-all duration-300 group relative social-link-item cursor-pointer`}
                       onClick={(e) => {
+                        if (isBlurred) {
+                          e.preventDefault();
+                          setShowGate(true);
+                          return;
+                        }
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
                     >
                       <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center ${pData.bg} ${pData.text} group-hover:scale-110 transition-transform duration-300 relative overflow-hidden`}>
-                        <div className="w-full h-full flex items-center justify-center">
+                        <div className={`w-full h-full flex items-center justify-center ${isBlurred ? 'ghost-blur-item' : ''}`}>
                           {pData.icon}
                         </div>
+                        {isBlurred && (
+                          <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10">
+                            <Lock size={16} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
+                          </div>
+                        )}
                       </div>
                       <span className="text-[10px] font-black uppercase tracking-widest text-neutral-500 group-hover:text-emerald-500 transition-colors">{p.platform}</span>
                     </a>
@@ -428,17 +439,43 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           )}
 
 
-          {(data.contact_email || data.quick_talk_url) && (
+          {!(user && profile.ghost_mode) && (data.contact_email || data.quick_talk_url) && (
             <div className="grid grid-cols-2 gap-3 sm:gap-5 w-full max-w-sm sm:max-w-md mx-auto mt-6 sm:mt-8">
               {data.contact_email ? (
-                <a href={`mailto:${data.contact_email}`} className="bg-neutral-900 text-white py-3.5 sm:py-4 rounded-xl sm:rounded-[1.5rem] font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] hover:bg-neutral-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-md">
-                  <Mail size={16} /> Email
+                <a 
+                  href={!user ? undefined : `mailto:${data.contact_email}`} 
+                  onClick={(e) => {
+                    if (!user) {
+                      e.preventDefault();
+                      setShowGate(true);
+                    }
+                  }}
+                  className={`bg-neutral-900 text-white py-3.5 sm:py-4 rounded-xl sm:rounded-[1.5rem] font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] hover:bg-neutral-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                >
+                  <div className={`flex items-center justify-center gap-2 ${!user ? 'ghost-blur-item' : ''}`}>
+                    <Mail size={16} /> Email
+                  </div>
+                  {!user && <Lock size={12} className="text-white" />}
                 </a>
               ) : <div />}
               
               {data.quick_talk_url ? (
-                <a href={ensureAbsoluteUrl(data.quick_talk_url)} target="_blank" rel="noopener noreferrer" className="bg-white text-neutral-900 py-3.5 sm:py-4 rounded-xl sm:rounded-[1.5rem] font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] border-2 border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 active:scale-[0.98] transition-all flex items-center justify-center gap-2 privacy-target">
-                  <Calendar size={16} /> Quick Talk
+                <a 
+                  href={!user ? undefined : ensureAbsoluteUrl(data.quick_talk_url)} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  onClick={(e) => {
+                    if (!user) {
+                      e.preventDefault();
+                      setShowGate(true);
+                    }
+                  }}
+                  className={`bg-white text-neutral-900 py-3.5 sm:py-4 rounded-xl sm:rounded-[1.5rem] font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] border-2 border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 active:scale-[0.98] transition-all flex items-center justify-center gap-2 privacy-target cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                >
+                  <div className={`flex items-center justify-center gap-2 ${!user ? 'ghost-blur-item' : ''}`}>
+                    <Calendar size={16} /> Quick Talk
+                  </div>
+                  {!user && <Lock size={12} className="text-neutral-900" />}
                 </a>
               ) : <div />}
             </div>
@@ -794,11 +831,32 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 <div className="flex flex-wrap gap-3 justify-center">
                   {visiblePlatforms.map((p: any, i: number) => {
                     const pData = getPlatformData(p.platform)
+                    const isBlurred = isCommunicationApp(p.platform || '') && !user;
                     return (
-                      <a key={i} href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer" onClick={(e) => { handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url)); if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank'); }} className="w-10 h-10 bg-white/50 rounded flex items-center justify-center hover:bg-white hover:scale-110 transition-all cork-shadow relative">
-                        <div className="w-full h-full flex items-center justify-center">
+                      <a 
+                        key={i} 
+                        href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        onClick={(e) => { 
+                          if (isBlurred) {
+                            e.preventDefault();
+                            setShowGate(true);
+                            return;
+                          }
+                          handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url)); 
+                          if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank'); 
+                        }} 
+                        className="w-10 h-10 bg-white/50 rounded flex items-center justify-center hover:bg-white hover:scale-110 transition-all cork-shadow relative cursor-pointer"
+                      >
+                        <div className={`w-full h-full flex items-center justify-center ${isBlurred ? 'ghost-blur-item' : ''}`}>
                           {pData.icon}
                         </div>
+                        {isBlurred && (
+                          <div className="absolute inset-0 bg-black/10 flex items-center justify-center z-10 rounded">
+                            <Lock size={12} className="text-neutral-800" strokeWidth={2.5} />
+                          </div>
+                        )}
                       </a>
                     )
                   })}
@@ -831,7 +889,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           </div>
 
           {/* Bottom Banner */}
-          {data.contact_email && (
+          {!(user && profile.ghost_mode) && data.contact_email && (
              <div className="w-full max-w-2xl bg-[#FDF9F1] p-4 sm:p-6 mt-8 cork-shadow-lg relative flex flex-col sm:flex-row items-center justify-center gap-6 solid-paper">
                 <div className="pushpin pin-green" />
                 <div className="w-14 h-14 bg-[#d1bfae] rounded-full flex items-center justify-center shrink-0">
@@ -840,7 +898,19 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 <div className="text-center sm:text-left">
                    <h4 className="text-2xl font-bold text-neutral-800 mb-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Get in Touch</h4>
                    <p className="text-lg text-neutral-700" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>I'm always open to new opportunities, ideas and collaborations.</p>
-                   <a href={`mailto:${data.contact_email}`} className="font-sans font-bold text-sm text-[#1e3a8a] hover:underline mt-2 inline-block">{data.contact_email}</a>
+                   <a 
+                     href={!user ? undefined : `mailto:${data.contact_email}`}
+                     onClick={(e) => {
+                       if (!user) {
+                         e.preventDefault();
+                         setShowGate(true);
+                       }
+                     }}
+                     className={`font-sans font-bold text-sm text-[#1e3a8a] hover:underline mt-2 inline-flex items-center gap-2 cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                   >
+                     <span className={!user ? 'ghost-blur-item' : ''}>{data.contact_email}</span>
+                     {!user && <Lock size={12} className="text-[#1e3a8a]" />}
+                   </a>
                 </div>
              </div>
           )}
@@ -1334,17 +1404,33 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                     {visiblePlatforms.map((p, i) => {
                       const pData = getPlatformData(p.platform?.toLowerCase())
+                      const isBlurred = isCommunicationApp(p.platform || '') && !user;
                       return (
-                        <a key={i} href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer"
+                        <a 
+                          key={i} 
+                          href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
                           onClick={(e) => {
+                            if (isBlurred) {
+                              e.preventDefault();
+                              setShowGate(true);
+                              return;
+                            }
                             handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                             if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                           }}
-                          className="flex flex-col items-center justify-center p-3 bg-[#050b14]/40 border border-cyan-500/10 rounded-xl hover:bg-cyan-900/15 hover:border-cyan-500/25 transition-all group relative">
-                          <div className="text-cyan-500/60 group-hover:text-cyan-300 transition-colors mb-1.5">
+                          className="flex flex-col items-center justify-center p-3 bg-[#050b14]/40 border border-cyan-500/10 rounded-xl hover:bg-cyan-900/15 hover:border-cyan-500/25 transition-all group relative cursor-pointer"
+                        >
+                          <div className={`text-cyan-500/60 group-hover:text-cyan-300 transition-colors mb-1.5 ${isBlurred ? 'ghost-blur-item' : ''}`}>
                             {pData.icon}
                           </div>
                           <span className="text-[9px] font-medium uppercase tracking-[0.12em] text-cyan-200/45 group-hover:text-cyan-100">{p.platform}</span>
+                          {isBlurred && (
+                            <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-10 rounded-xl">
+                              <Lock size={14} className="text-cyan-300" strokeWidth={2.5} />
+                            </div>
+                          )}
                         </a>
                       )
                     })}
@@ -1381,7 +1467,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           )}
 
           {/* ═══ THOUGHT BUBBLE & CONTACT ═══ */}
-          {(data.thought_bubble || data.contact_email) && (
+          {(!(user && profile.ghost_mode) ? (data.thought_bubble || data.contact_email) : data.thought_bubble) && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 animate-in" style={{ animationDelay: '0.65s' }}>
               {data.thought_bubble && (
                 <div className="glass-card p-6 flex flex-col justify-center text-center relative overflow-hidden">
@@ -1390,14 +1476,26 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                   <p className="text-lg font-light text-white italic leading-relaxed">"{data.thought_bubble}"</p>
                 </div>
               )}
-              {data.contact_email && (
-                <div className="glass-card p-6 flex items-center gap-4">
+              {!(user && profile.ghost_mode) && data.contact_email && (
+                <div className="glass-card p-6 flex items-center gap-4 relative overflow-hidden">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/15 to-blue-500/15 border border-cyan-500/20 flex items-center justify-center shrink-0">
                     <Mail size={20} className="text-cyan-300" />
                   </div>
                   <div>
                     <h4 className="text-[15px] font-semibold text-white mb-0.5">Let's Connect</h4>
-                    <a href={`mailto:${data.contact_email}`} className="text-[13px] text-cyan-400 hover:text-cyan-300 transition-colors">{data.contact_email}</a>
+                    <a 
+                      href={!user ? undefined : `mailto:${data.contact_email}`}
+                      onClick={(e) => {
+                        if (!user) {
+                          e.preventDefault();
+                          setShowGate(true);
+                        }
+                      }}
+                      className={`text-[13px] text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer relative inline-flex items-center gap-2 ${!user ? 'opacity-70' : ''}`}
+                    >
+                      <span className={!user ? 'ghost-blur-item' : ''}>{data.contact_email}</span>
+                      {!user && <Lock size={12} className="text-cyan-400" />}
+                    </a>
                   </div>
                 </div>
               )}
@@ -1779,17 +1877,33 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 <div className="flex flex-wrap gap-2">
                   {visiblePlatforms.map((p: any, i: number) => {
                     const pData = getPlatformData(p.platform?.toLowerCase());
+                    const isBlurred = isCommunicationApp(p.platform || '') && !user;
                     return (
-                      <a key={i} href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer"
+                      <a 
+                        key={i} 
+                        href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
                         onClick={(e) => {
+                          if (isBlurred) {
+                            e.preventDefault();
+                            setShowGate(true);
+                            return;
+                          }
                           handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                           if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                         }}
-                        className="nb-tag group relative">
-                        <div className="flex items-center gap-1.5">
+                        className="nb-tag group relative cursor-pointer"
+                      >
+                        <div className={`flex items-center gap-1.5 ${isBlurred ? 'ghost-blur-item' : ''}`}>
                           <div className="opacity-80 group-hover:opacity-100 transition-opacity">{pData.icon}</div>
                           {p.platform}
                         </div>
+                        {isBlurred && (
+                          <div className="absolute inset-0 bg-white/20 flex items-center justify-center z-10 rounded">
+                            <Lock size={12} className="text-neutral-800" strokeWidth={2.5} />
+                          </div>
+                        )}
                       </a>
                     )
                   })}
@@ -1834,14 +1948,26 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 <Heart size={14} className="mx-auto mt-2 nb-red-ink opacity-50" />
               </div>
             )}
-            {data.contact_email && (
-              <div className="nb-card p-4 flex items-center gap-3">
+            {!(user && profile.ghost_mode) && data.contact_email && (
+              <div className="nb-card p-4 flex items-center gap-3 relative overflow-hidden">
                 <div className="w-10 h-10 rounded-full border-2 border-[#1e3a5f] flex items-center justify-center shrink-0 bg-blue-50/30">
                   <Mail size={18} className="nb-ink" />
                 </div>
                 <div className="flex-grow min-w-0">
                   <h4 className="text-lg font-bold nb-ink nb-handwriting leading-[28px]">Let's Talk!</h4>
-                  <a href={`mailto:${data.contact_email}`} className="text-xs font-bold nb-ink hover:underline font-sans">{data.contact_email}</a>
+                  <a 
+                    href={!user ? undefined : `mailto:${data.contact_email}`}
+                    onClick={(e) => {
+                      if (!user) {
+                        e.preventDefault();
+                        setShowGate(true);
+                      }
+                    }}
+                    className={`text-xs font-bold nb-ink hover:underline font-sans cursor-pointer relative inline-flex items-center gap-2 ${!user ? 'opacity-70' : ''}`}
+                  >
+                    <span className={!user ? 'ghost-blur-item' : ''}>{data.contact_email}</span>
+                    {!user && <Lock size={12} className="text-neutral-800" />}
+                  </a>
                 </div>
               </div>
             )}
