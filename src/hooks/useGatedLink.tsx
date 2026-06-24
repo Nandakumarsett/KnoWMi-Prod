@@ -9,7 +9,7 @@ import { useAuth } from '../context/AuthContext'
 export function useGatedLink() {
   const { user } = useAuth()
   const [showGate, setShowGate] = useState(false)
-  const isGated = !user
+  const isGated = false; // Disable global signup gate so everyone can see all data when Privacy Mode is disabled
 
   const handleGatedClick = (e: React.MouseEvent, url: string, onAllowed?: () => void) => {
     if (isGated) {

@@ -12,6 +12,9 @@ import { ProfileCTAs } from '../shared/ProfileCTAs'
 import { trackLinkClick } from '../../../lib/analytics/track'
 import { useGatedLink } from '../../../hooks/useGatedLink'
 
+const COMMUNICATION_APPS = ['whatsapp', 'email', 'phone', 'instagram', 'snapchat', 'telegram', 'facebook', 'messenger', 'discord', 'x', 'twitter'];
+const isCommunicationApp = (platform: string) => COMMUNICATION_APPS.includes(platform.toLowerCase());
+
 const PLATFORM_ICONS: Record<string, any> = {
   instagram: Instagram,
   twitter: Twitter,
@@ -327,22 +330,29 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
                 {data.platforms.map((p: any, i: number) => {
                   const pData = getPlatformData(p.platform);
+                  const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                   return (
                     <a 
                       key={i}
-                      href={ensureAbsoluteUrl(p.url)} 
+                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-5 rounded-2xl sm:rounded-[2rem] bg-white border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] ${pData.hoverBorder} transition-all duration-300 group relative social-link-item cursor-pointer`}
                       onClick={(e) => {
+                        if (isBlurred) {
+                          e.preventDefault();
+                          return;
+                        }
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
                     >
                       <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center ${pData.bg} ${pData.text} group-hover:scale-110 transition-transform duration-300 relative overflow-hidden`}>
-                        {pData.icon}
-                        {isGated && (
-                          <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-black/20 flex items-center justify-center">
+                        <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
+                          {pData.icon}
+                        </div>
+                        {isBlurred && (
+                          <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-black/20 flex items-center justify-center z-10">
                             <Lock size={18} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
                           </div>
                         )}
@@ -779,9 +789,13 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 <div className="flex flex-wrap gap-3 justify-center">
                   {data.platforms.map((p: any, i: number) => {
                     const pData = getPlatformData(p.platform)
+                    const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                     return (
-                      <a key={i} href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer" onClick={(e) => { handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url)); if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank'); }} className="w-10 h-10 bg-white/50 rounded flex items-center justify-center hover:bg-white hover:scale-110 transition-all cork-shadow">
-                        {pData.icon}
+                      <a key={i} href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer" onClick={(e) => { if(isBlurred) { e.preventDefault(); return; }; handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url)); if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank'); }} className="w-10 h-10 bg-white/50 rounded flex items-center justify-center hover:bg-white hover:scale-110 transition-all cork-shadow relative">
+                        <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
+                          {pData.icon}
+                        </div>
+                        {isBlurred && (<div className="absolute inset-0 bg-white/30 flex items-center justify-center rounded z-10"><Lock size={12} className="text-neutral-800" /></div>)}
                       </a>
                     )
                   })}
@@ -1309,15 +1323,23 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                     {data.platforms.map((p, i) => {
                       const pData = getPlatformData(p.platform?.toLowerCase())
+                      const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                       return (
-                        <a key={i} href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer"
-                          onClick={(e) => { handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url)); if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank'); }}
+                        <a key={i} href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer"
+                          onClick={(e) => {
+                            if (isBlurred) {
+                              e.preventDefault();
+                              return;
+                            }
+                            handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                            if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                          }}
                           className="flex flex-col items-center justify-center p-3 bg-[#050b14]/40 border border-cyan-500/10 rounded-xl hover:bg-cyan-900/15 hover:border-cyan-500/25 transition-all group relative">
-                          <div className="text-cyan-500/60 group-hover:text-cyan-300 transition-colors mb-1.5">
+                          <div className={`text-cyan-500/60 group-hover:text-cyan-300 transition-colors mb-1.5 ${isBlurred ? 'ghost-blur-item' : ''}`}>
                             {pData.icon}
                           </div>
                           <span className="text-[9px] font-medium uppercase tracking-[0.12em] text-cyan-200/45 group-hover:text-cyan-100">{p.platform}</span>
-                          {isGated && (<div className="absolute inset-0 bg-[#050b14]/80 flex items-center justify-center rounded-xl backdrop-blur-[2px]"><Lock size={12} className="text-cyan-500" /></div>)}
+                          {isBlurred && (<div className="absolute inset-0 bg-[#050b14]/30 flex items-center justify-center rounded-xl backdrop-blur-[2px] z-10"><Lock size={12} className="text-cyan-500" /></div>)}
                         </a>
                       )
                     })}
@@ -1743,14 +1765,24 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {data.platforms.map((p: any, i: number) => {
-                    const pData = getPlatformData(p.platform?.toLowerCase())
+                    const pData = getPlatformData(p.platform?.toLowerCase());
+                    const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                     return (
-                      <a key={i} href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer"
-                        onClick={(e) => { handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url)); if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank'); }}
+                      <a key={i} href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer"
+                        onClick={(e) => {
+                          if (isBlurred) {
+                            e.preventDefault();
+                            return;
+                          }
+                          handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                          if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                        }}
                         className="nb-tag group relative">
-                        <div className="opacity-80 group-hover:opacity-100 transition-opacity">{pData.icon}</div>
-                        {p.platform}
-                        {isGated && (<div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-lg"><Lock size={12} className="nb-pencil" /></div>)}
+                        <div className={`flex items-center gap-1.5 ${isBlurred ? 'ghost-blur-item' : ''}`}>
+                          <div className="opacity-80 group-hover:opacity-100 transition-opacity">{pData.icon}</div>
+                          {p.platform}
+                        </div>
+                        {isBlurred && (<div className="absolute inset-0 bg-white/10 flex items-center justify-center rounded-lg z-10"><Lock size={12} className="nb-pencil" /></div>)}
                       </a>
                     )
                   })}

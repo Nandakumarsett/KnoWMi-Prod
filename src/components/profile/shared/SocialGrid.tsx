@@ -34,7 +34,7 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
   const [showGate, setShowGate] = useState(false)
   // Wait for auth to resolve before deciding. During loading, assume not gated to avoid flicker.
   // After loading completes, gate if no user is logged in.
-  const isGated = !authLoading && !user;
+  const isGated = false; // Disable global signup gate so everyone can see all data when Privacy Mode is disabled
 
   if (!links || links.length === 0) return null
   
@@ -135,15 +135,17 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
                 }}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`flex items-center gap-3 p-4 rounded-2xl bg-white/5 border transition-all hover:bg-white/10 active:scale-[0.98] social-link-item cursor-pointer ${isGated ? 'border-orange-500/30' : 'border-white/10'} ${isBlurred ? 'ghost-blur-item' : ''}`}
+                className={`flex items-center gap-3 p-4 rounded-2xl bg-white/5 border transition-all hover:bg-white/10 active:scale-[0.98] social-link-item cursor-pointer ${isGated ? 'border-orange-500/30' : 'border-white/10'}`}
               >
                 <div 
                   className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg relative overflow-hidden"
                   style={{ background: meta.color }}
                 >
-                  <Icon size={20} />
-                  {isGated && (
-                    <div className="absolute inset-0 rounded-xl bg-black/20 flex items-center justify-center">
+                  <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
+                    <Icon size={20} />
+                  </div>
+                  {isBlurred && (
+                    <div className="absolute inset-0 rounded-xl bg-black/20 flex items-center justify-center z-10">
                       <Lock size={16} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
                     </div>
                   )}
@@ -181,13 +183,15 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
               }}
               target="_blank"
               rel="noopener noreferrer"
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 shadow-xl social-link-item relative cursor-pointer ${isGated ? 'ring-2 ring-orange-500/30 ring-offset-2 ring-offset-transparent' : ''} ${isBlurred ? 'ghost-blur-item' : ''}`}
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 shadow-xl social-link-item relative cursor-pointer ${isGated ? 'ring-2 ring-orange-500/30 ring-offset-2 ring-offset-transparent' : ''}`}
               style={{ background: meta.color }}
               title={isBlurred ? undefined : link.platform}
             >
-              <Icon size={24} />
-              {isGated && (
-                <div className="absolute inset-0 rounded-2xl bg-black/20 flex items-center justify-center">
+              <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
+                <Icon size={24} />
+              </div>
+              {isBlurred && (
+                <div className="absolute inset-0 rounded-2xl bg-black/20 flex items-center justify-center z-10">
                   <Lock size={18} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
                 </div>
               )}

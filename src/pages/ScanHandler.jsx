@@ -67,12 +67,6 @@ export default function ScanHandler() {
         return
       }
 
-      // Ghost Mode check
-      if (resolvedProfile.ghost_mode) {
-        navigate(`/p/${finalSlug}?ghost=true`)
-        return
-      }
-
       // Immediately navigate for a seamless, fast user experience
       navigate(`/p/${finalSlug}?src=qr`)
 

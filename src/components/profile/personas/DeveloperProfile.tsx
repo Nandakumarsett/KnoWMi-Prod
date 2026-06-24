@@ -11,6 +11,9 @@ import { ProfileCTAs } from '../shared/ProfileCTAs'
 import { trackLinkClick } from '../../../lib/analytics/track'
 import { useGatedLink } from '../../../hooks/useGatedLink'
 
+const COMMUNICATION_APPS = ['whatsapp', 'email', 'phone', 'instagram', 'snapchat', 'telegram', 'facebook', 'messenger', 'discord', 'x', 'twitter'];
+const isCommunicationApp = (platform: string) => COMMUNICATION_APPS.includes(platform.toLowerCase());
+
 function getPlatformIcon(platform: string) {
   const p = platform.toLowerCase();
   if (p.includes('github')) return { Icon: Github, color: '#1A1A1A' };
@@ -129,21 +132,28 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               {data.platforms.map((p, i) => {
                 if (!p.url) return null
                 const { Icon } = getPlatformIcon(p.platform || '')
+                const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                 return (
                   <a
                     key={i}
-                    href={ensureAbsoluteUrl(p.url)}
+                    href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => {
+                      if (isBlurred) {
+                        e.preventDefault();
+                        return;
+                      }
                       handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                       if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                     }}
                     className="relative hover:scale-110 transition-transform duration-300 text-neutral-500 hover:text-[#0A66C2] social-link-item cursor-pointer"
                   >
-                    <Icon size={20} />
-                    {isGated && (
-                      <div className="absolute inset-0 rounded-full bg-black/20 flex items-center justify-center">
+                    <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
+                      <Icon size={20} />
+                    </div>
+                    {isBlurred && (
+                      <div className="absolute inset-0 rounded-full bg-black/20 flex items-center justify-center z-10">
                         <Lock size={16} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
                       </div>
                     )}
@@ -512,22 +522,29 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                 {data.platforms.map((p, i) => {
                   if (!p.url) return null
                   const { Icon } = getPlatformIcon(p.platform || '')
+                  const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                   return (
                     <a
                       key={i}
-                      href={ensureAbsoluteUrl(p.url)}
+                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => {
+                        if (isBlurred) {
+                          e.preventDefault();
+                          return;
+                        }
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
                       className="blueprint-border bg-[#0A192F] hover:bg-[#64FFDA]/10 px-5 py-3 text-xs flex items-center gap-3 transition-all duration-300 relative group"
                     >
-                      <Icon className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
-                      <span className="text-[11px] uppercase text-[#8892B0] group-hover:text-[#64FFDA] transition-colors">{p.platform}</span>
-                      {isGated && (
-                        <div className="absolute inset-0 bg-[#001B2E]/80 flex items-center justify-center">
+                      <div className={`flex items-center gap-3 ${isBlurred ? 'ghost-blur-item' : ''}`}>
+                        <Icon className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
+                        <span className="text-[11px] uppercase text-[#8892B0] group-hover:text-[#64FFDA] transition-colors">{p.platform}</span>
+                      </div>
+                      {isBlurred && (
+                        <div className="absolute inset-0 bg-[#001B2E]/30 flex items-center justify-center z-10">
                           <Lock size={14} className="text-[#64FFDA]" />
                         </div>
                       )}
@@ -803,26 +820,33 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                 {data.platforms.map((p, i) => {
                   if (!p.url) return null
                   const { Icon } = getPlatformIcon(p.platform || '')
+                  const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                   return (
                     <a
                       key={i}
-                      href={ensureAbsoluteUrl(p.url)}
+                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => {
+                        if (isBlurred) {
+                          e.preventDefault();
+                          return;
+                        }
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
                       className="hacker-border bg-black hover:bg-[#00FF41] hover:text-black px-4 py-2 text-xs flex items-center gap-2 transition-all relative"
                     >
-                      {Icon ? (
-                        <Icon size={12} />
-                      ) : (
-                        <Globe size={12} />
-                      )}
-                      <span className="uppercase font-bold">{p.platform}</span>
-                      {isGated && (
-                        <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
+                      <div className={`flex items-center gap-2 ${isBlurred ? 'ghost-blur-item' : ''}`}>
+                        {Icon ? (
+                          <Icon size={12} />
+                        ) : (
+                          <Globe size={12} />
+                        )}
+                        <span className="uppercase font-bold">{p.platform}</span>
+                      </div>
+                      {isBlurred && (
+                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-10">
                           <Lock size={12} className="text-[#00FF41]" />
                         </div>
                       )}
@@ -1056,7 +1080,8 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
             <div className="pl-4 flex flex-col gap-2">
               {data.platforms.map((p, i) => {
-                if (!p.url) return null
+                if (!p.url) return null;
+                const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                 return (
                   <a
                     key={i}
@@ -1064,15 +1089,21 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => {
+                      if (isBlurred) {
+                        e.preventDefault();
+                        return;
+                      }
                       handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                       if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                     }}
                     className="text-[#E6EDF3] hover:text-[#58A6FF] flex items-center gap-3 group bg-[#161B22] border border-[#30363D] px-3 py-2 hover:bg-[#30363D]/50 transition-colors"
                   >
-                    <span className="text-[#3FB950] font-bold text-xs">tcp</span>
-                    <span className="text-[#8B949E] text-xs w-20 truncate">{p.platform?.toLowerCase()}:80</span>
-                    <span className="text-[#8B949E] text-xs w-24">ESTABLISHED</span>
-                    {isGated && <Lock size={12} className="text-[#FF7B72] ml-auto" />}
+                    <div className={`flex items-center gap-3 ${isBlurred ? 'ghost-blur-item' : ''}`}>
+                      <span className="text-[#3FB950] font-bold text-xs">tcp</span>
+                      <span className="text-[#8B949E] text-xs w-20 truncate">{p.platform?.toLowerCase()}:80</span>
+                      <span className="text-[#8B949E] text-xs w-24">ESTABLISHED</span>
+                    </div>
+                    {isBlurred && <Lock size={12} className="text-[#FF7B72] ml-auto z-10" />}
                   </a>
                 )
               })}

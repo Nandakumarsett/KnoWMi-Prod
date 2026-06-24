@@ -36,6 +36,9 @@ import {
 import { trackLinkClick } from "../../../lib/analytics/track";
 import { useGatedLink } from "../../../hooks/useGatedLink";
 
+const COMMUNICATION_APPS = ['whatsapp', 'email', 'phone', 'instagram', 'snapchat', 'telegram', 'facebook', 'messenger', 'discord', 'x', 'twitter'];
+const isCommunicationApp = (platform: string) => COMMUNICATION_APPS.includes(platform.toLowerCase());
+
 const PLATFORM_ICONS: Record<string, any> = {
   instagram: Instagram,
   youtube: Youtube,
@@ -610,14 +613,19 @@ export function CreatorProfile({
                     const style =
                       brandStyles[platform] || "bg-neutral-900 text-white";
                     const logo = logoNames[platform];
+                    const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
 
                     return (
                       <a
                         key={p.platform}
-                        href={ensureAbsoluteUrl(p.url)}
+                        href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => {
+                          if (isBlurred) {
+                            e.preventDefault();
+                            return;
+                          }
                           handleGatedClick(e, p.url, () =>
                             trackLinkClick(
                               profile.id,
@@ -633,28 +641,30 @@ export function CreatorProfile({
                         <div
                           className={`w-11 h-11 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shadow-lg ${style} transition-shadow group-hover:shadow-xl p-3 sm:p-3.5 relative overflow-hidden`}
                         >
-                          {logo ? (
-                            <img
-                              src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
-                              className="w-full h-full object-contain filter invert"
-                              alt={p.platform}
-                              style={{ filter: "brightness(0) invert(1)" }}
+                          <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
+                            {logo ? (
+                              <img
+                                src={`https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/${logo}.svg`}
+                                className="w-full h-full object-contain filter invert"
+                                alt={p.platform}
+                                style={{ filter: "brightness(0) invert(1)" }}
+                              />
+                            ) : null}
+                            <Icon
+                              size={24}
+                              className={
+                                logo
+                                  ? "hidden"
+                                  : `sm:hidden ${logo ? "" : "sm:block"}`
+                              }
                             />
-                          ) : null}
-                          <Icon
-                            size={24}
-                            className={
-                              logo
-                                ? "hidden"
-                                : `sm:hidden ${logo ? "" : "sm:block"}`
-                            }
-                          />
-                          <Icon
-                            size={28}
-                            className={logo ? "hidden" : "hidden sm:block"}
-                          />
-                          {isGated && (
-                            <div className="absolute inset-0 rounded-2xl bg-black/20 flex items-center justify-center">
+                            <Icon
+                              size={28}
+                              className={logo ? "hidden" : "hidden sm:block"}
+                            />
+                          </div>
+                          {isBlurred && (
+                            <div className="absolute inset-0 rounded-2xl bg-black/20 flex items-center justify-center z-10">
                               <Lock
                                 size={18}
                                 className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]"
@@ -1049,13 +1059,18 @@ export function CreatorProfile({
                 {data.platforms.map((p) => {
                   const platform = p.platform?.toLowerCase();
                   const Icon = PLATFORM_ICONS[platform] || Share2;
+                  const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                   return (
                     <a
                       key={p.platform}
-                      href={ensureAbsoluteUrl(p.url)}
+                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => {
+                        if (isBlurred) {
+                          e.preventDefault();
+                          return;
+                        }
                         handleGatedClick(e, p.url, () =>
                           trackLinkClick(
                             profile.id,
@@ -1068,14 +1083,16 @@ export function CreatorProfile({
                       }}
                       className="w-14 h-14 border-4 border-black flex items-center justify-center bg-white hover:bg-black hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] relative cursor-pointer"
                     >
-                      <Icon size={24} />
-                      {isGated && (
-                        <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
+                      <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
+                        <Icon size={24} />
+                      </div>
+                      {isBlurred && (
+                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-10">
                           <Lock size={14} className="text-white" />
                         </div>
                       )}
                     </a>
-                  );
+                  )
                 })}
               </div>
             </div>
@@ -1400,8 +1417,6 @@ export function CreatorProfile({
             </h2>
           </div>
 
-          {/* Removed duplicate bio */}
-
           {/* Stats Bar */}
           <div className="w-full max-w-3xl border border-white/10 bg-black/40 backdrop-blur-md rounded-2xl p-6 mb-10 flex flex-wrap justify-between items-center gap-6 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
             <div
@@ -1500,13 +1515,18 @@ export function CreatorProfile({
                 {data.platforms.map((p) => {
                   const platform = p.platform?.toLowerCase();
                   const Icon = PLATFORM_ICONS[platform] || Share2;
+                  const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                   return (
                     <a
                       key={p.platform}
-                      href={ensureAbsoluteUrl(p.url)}
+                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => {
+                        if (isBlurred) {
+                          e.preventDefault();
+                          return;
+                        }
                         handleGatedClick(e, p.url, () =>
                           trackLinkClick(
                             profile.id,
@@ -1519,14 +1539,16 @@ export function CreatorProfile({
                       }}
                       className="w-12 h-12 rounded-full border border-[#FF2D78]/50 flex items-center justify-center bg-black/50 text-[#FF2D78] hover:bg-[#FF2D78] hover:text-white hover:shadow-[0_0_20px_rgba(255,45,120,0.8)] transition-all cursor-pointer relative"
                     >
-                      <Icon size={20} />
-                      {isGated && (
-                        <div className="absolute inset-0 bg-black/80 rounded-full flex items-center justify-center">
+                      <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
+                        <Icon size={20} />
+                      </div>
+                      {isBlurred && (
+                        <div className="absolute inset-0 bg-black/30 rounded-full flex items-center justify-center z-10">
                           <Lock size={12} className="text-white" />
                         </div>
                       )}
                     </a>
-                  );
+                  )
                 })}
               </div>
             </div>
@@ -1983,14 +2005,19 @@ export function CreatorProfile({
                 const styleClass = brandStyles[platform]
                   ? brandStyles[platform].replace(" text-white", "")
                   : "bg-gray-800";
+                const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
 
                 return (
                   <a
                     key={p.platform}
-                    href={ensureAbsoluteUrl(p.url)}
+                    href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => {
+                      if (isBlurred) {
+                        e.preventDefault();
+                        return;
+                      }
                       handleGatedClick(e, p.url, () =>
                         trackLinkClick(
                           profile.id,
@@ -2001,20 +2028,22 @@ export function CreatorProfile({
                       if (!isGated)
                         window.open(ensureAbsoluteUrl(p.url), "_blank");
                     }}
-                    className="w-16 h-16 rounded-full flex items-center justify-center relative overflow-hidden group shadow-md bg-white border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5"
-                    title={`${p.platform}${p.followers ? ` \u00b7 ${p.followers}` : ""}`}
+                    className="w-16 h-16 rounded-full flex items-center justify-center relative overflow-hidden group shadow-md bg-white border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5 font-sans"
+                    title={isBlurred ? undefined : `${p.platform}${p.followers ? ` \u00b7 ${p.followers}` : ""}`}
                   >
-                    <Icon
-                      size={36}
-                      className="relative z-10 text-gray-700 group-hover:text-white transition-colors duration-300"
-                    />
+                    <div className={isBlurred ? 'ghost-blur-item relative z-10 w-full h-full flex items-center justify-center' : 'relative z-10 w-full h-full flex items-center justify-center'}>
+                      <Icon
+                        size={36}
+                        className="text-gray-700 group-hover:text-white transition-colors duration-300"
+                      />
+                    </div>
                     <div
                       className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${styleClass}`}
                       style={{ zIndex: 0 }}
                     />
 
-                    {isGated && (
-                      <div className="absolute inset-0 bg-white/80 flex items-center justify-center backdrop-blur-sm z-20">
+                    {isBlurred && (
+                      <div className="absolute inset-0 bg-white/30 flex items-center justify-center backdrop-blur-[2px] z-20">
                         <Lock size={12} className="text-gray-700" />
                       </div>
                     )}

@@ -257,6 +257,7 @@ export default function PublicProfile() {
     avatar_url: profile.avatar_url,
     social_links: profile.social_links,
     persona_data: modifiedPersonaData,
+    ghost_mode: isGhostMode,
   };
 
   // In Ghost Mode, blur personal communication apps but allow public showcasing apps
