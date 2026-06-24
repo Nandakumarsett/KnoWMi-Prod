@@ -27,7 +27,13 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
   const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as DeveloperData;
   const activeTheme = (profile.profile_theme || 'default').toLowerCase();
-  const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal } = useGatedLink();
+  const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal, user } = useGatedLink();
+
+  const visiblePlatforms = (data.platforms || []).filter((p: any) => {
+    if (!p.url) return false;
+    const isComm = isCommunicationApp(p.platform || '');
+    return !(isComm && (!user || profile.ghost_mode));
+  });
 
   const aboutMeLanguages = (data.about?.languages && data.about.languages.length > 0)
     ? data.about.languages
@@ -127,39 +133,37 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </p>
           )}
 
-          {data.platforms && data.platforms.length > 0 && (
+          {visiblePlatforms && visiblePlatforms.length > 0 && (
             <div className="w-full flex flex-wrap justify-center gap-6 mt-2 mb-4 z-20">
-              {data.platforms.map((p, i) => {
+              {visiblePlatforms.map((p, i) => {
                 if (!p.url) return null
                 const { Icon } = getPlatformIcon(p.platform || '')
-                const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
+                const isBlurred = false;
                 return (
                   <a
                     key={i}
-                    href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
+                    href={ensureAbsoluteUrl(p.url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => {
-                      if (isBlurred) {
-                        handlePrivacyClick(e);
-                        return;
-                      }
                       handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                       if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                     }}
                     className="relative hover:scale-110 transition-transform duration-300 text-neutral-500 hover:text-[#0A66C2] social-link-item cursor-pointer"
                   >
-                    <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
+                    <div className="w-full h-full flex items-center justify-center">
                       <Icon size={20} />
                     </div>
-                    {isBlurred && (
-                      <div className="absolute inset-0 rounded-full bg-black/20 flex items-center justify-center z-10">
-                        <Lock size={16} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
-                      </div>
-                    )}
                   </a>
                 )
               })}
+            </div>
+          )}
+          {user && profile.ghost_mode && (
+            <div className="w-full text-center mt-2 mb-4 animate-fadeIn z-20">
+              <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+                <Lock size={12} /> Privacy Mode enabled
+              </p>
             </div>
           )}
 
@@ -520,38 +524,35 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             <div className="w-full text-left mb-8">
               <span className="block text-[10px] text-[#64FFDA]/60 uppercase tracking-[0.2em] mb-4">// 04. INTEGRATED CHANNELS</span>
               <div className="flex flex-wrap gap-3">
-                {data.platforms.map((p, i) => {
+                {visiblePlatforms.map((p, i) => {
                   if (!p.url) return null
                   const { Icon } = getPlatformIcon(p.platform || '')
-                  const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                   return (
                     <a
                       key={i}
-                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
+                      href={ensureAbsoluteUrl(p.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => {
-                        if (isBlurred) {
-                          handlePrivacyClick(e);
-                          return;
-                        }
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
                       className="blueprint-border bg-[#0A192F] hover:bg-[#64FFDA]/10 px-5 py-3 text-xs flex items-center gap-3 transition-all duration-300 relative group"
                     >
-                      <div className={`flex items-center gap-3 ${isBlurred ? 'ghost-blur-item' : ''}`}>
+                      <div className="flex items-center gap-3">
                         <Icon className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
                         <span className="text-[11px] uppercase text-[#8892B0] group-hover:text-[#64FFDA] transition-colors">{p.platform}</span>
                       </div>
-                      {isBlurred && (
-                        <div className="absolute inset-0 bg-[#001B2E]/30 flex items-center justify-center z-10">
-                          <Lock size={14} className="text-[#64FFDA]" />
-                        </div>
-                      )}
                     </a>
                   )
                 })}
+                {user && profile.ghost_mode && (
+                  <div className="w-full text-center py-2 animate-fadeIn">
+                    <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+                      <Lock size={12} /> Privacy Mode enabled
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -815,31 +816,26 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
             </div>
           )}
 
-          {data.platforms && data.platforms.length > 0 && (
+          {visiblePlatforms && visiblePlatforms.length > 0 && (
             <div className="w-full text-left mb-8">
               <span className="block text-[10px] text-[#00FF41]/60 uppercase tracking-widest mb-3"># NETWORK_NODES</span>
               <div className="flex flex-wrap gap-3">
-                {data.platforms.map((p, i) => {
+                {visiblePlatforms.map((p, i) => {
                   if (!p.url) return null
                   const { Icon } = getPlatformIcon(p.platform || '')
-                  const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                   return (
                     <a
                       key={i}
-                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
+                      href={ensureAbsoluteUrl(p.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => {
-                        if (isBlurred) {
-                          handlePrivacyClick(e);
-                          return;
-                        }
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
                       className="hacker-border bg-black hover:bg-[#00FF41] hover:text-black px-4 py-2 text-xs flex items-center gap-2 transition-all relative"
                     >
-                      <div className={`flex items-center gap-2 ${isBlurred ? 'ghost-blur-item' : ''}`}>
+                      <div className="flex items-center gap-2">
                         {Icon ? (
                           <Icon size={12} />
                         ) : (
@@ -847,14 +843,16 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                         )}
                         <span className="uppercase font-bold">{p.platform}</span>
                       </div>
-                      {isBlurred && (
-                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-10">
-                          <Lock size={12} className="text-[#00FF41]" />
-                        </div>
-                      )}
                     </a>
                   )
                 })}
+                {user && profile.ghost_mode && (
+                  <div className="w-full text-center py-2 animate-fadeIn">
+                    <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+                      <Lock size={12} /> Privacy Mode enabled
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -1074,7 +1072,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           </div>
         )}
 
-        {data.platforms && data.platforms.length > 0 && (
+        {visiblePlatforms && visiblePlatforms.length > 0 && (
           <div className="w-full mb-8">
             <div className="flex gap-2 mb-4">
               <span className="text-[#3FB950] font-bold">~</span>
@@ -1082,9 +1080,8 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
               <span className="text-white">netstat -a | grep CONNECTED</span>
             </div>
             <div className="pl-4 flex flex-col gap-2">
-              {data.platforms.map((p, i) => {
+              {visiblePlatforms.map((p, i) => {
                 if (!p.url) return null;
-                const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                 return (
                   <a
                     key={i}
@@ -1092,24 +1089,26 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => {
-                      if (isBlurred) {
-                        handlePrivacyClick(e);
-                        return;
-                      }
                       handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                       if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                     }}
                     className="text-[#E6EDF3] hover:text-[#58A6FF] flex items-center gap-3 group bg-[#161B22] border border-[#30363D] px-3 py-2 hover:bg-[#30363D]/50 transition-colors"
                   >
-                    <div className={`flex items-center gap-3 ${isBlurred ? 'ghost-blur-item' : ''}`}>
+                    <div className="flex items-center gap-3">
                       <span className="text-[#3FB950] font-bold text-xs">tcp</span>
                       <span className="text-[#8B949E] text-xs w-20 truncate">{p.platform?.toLowerCase()}:80</span>
                       <span className="text-[#8B949E] text-xs w-24">ESTABLISHED</span>
                     </div>
-                    {isBlurred && <Lock size={12} className="text-[#FF7B72] ml-auto z-10" />}
                   </a>
                 )
               })}
+              {user && profile.ghost_mode && (
+                <div className="w-full text-center py-2 animate-fadeIn">
+                  <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+                    <Lock size={12} /> Privacy Mode enabled
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         )}

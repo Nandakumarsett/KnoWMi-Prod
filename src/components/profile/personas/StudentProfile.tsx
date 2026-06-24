@@ -33,7 +33,13 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
   const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as StudentData;
   const activeTheme = (profile.profile_theme || 'default').toLowerCase();
-  const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal } = useGatedLink();
+  const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal, user } = useGatedLink();
+
+  const visiblePlatforms = (data.platforms || []).filter((p: any) => {
+    if (!p.url) return false;
+    const isComm = isCommunicationApp(p.platform || '');
+    return !(isComm && (!user || profile.ghost_mode));
+  });
   const liveViews = stats?.totalViews || 0;
   const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
   const [showFomoModal, setShowFomoModal] = React.useState(false);
@@ -328,40 +334,37 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
             <div className="w-full mb-10 text-left">
               <h4 className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-neutral-600 mb-4 sm:mb-6 px-2 text-center">Digital Footprint</h4>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
-                {data.platforms.map((p: any, i: number) => {
+                {visiblePlatforms.map((p: any, i: number) => {
                   const pData = getPlatformData(p.platform);
-                  const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                   return (
                     <a 
                       key={i}
-                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} 
+                      href={ensureAbsoluteUrl(p.url)} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-5 rounded-2xl sm:rounded-[2rem] bg-white border border-neutral-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] ${pData.hoverBorder} transition-all duration-300 group relative social-link-item cursor-pointer`}
                       onClick={(e) => {
-                        if (isBlurred) {
-                          handlePrivacyClick(e);
-                          return;
-                        }
                         handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                         if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                       }}
                     >
                       <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center ${pData.bg} ${pData.text} group-hover:scale-110 transition-transform duration-300 relative overflow-hidden`}>
-                        <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
+                        <div className="w-full h-full flex items-center justify-center">
                           {pData.icon}
                         </div>
-                        {isBlurred && (
-                          <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-black/20 flex items-center justify-center z-10">
-                            <Lock size={18} className="text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
-                          </div>
-                        )}
                       </div>
                       <span className="text-[10px] font-black uppercase tracking-widest text-neutral-500 group-hover:text-emerald-500 transition-colors">{p.platform}</span>
                     </a>
                   );
                 })}
               </div>
+              {user && profile.ghost_mode && (
+                <div className="w-full text-center mt-4 mb-2 animate-fadeIn">
+                  <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+                    <Lock size={12} /> Privacy Mode enabled
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
@@ -784,24 +787,29 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
               </div>
             )}
 
-            {data?.platforms && data?.platforms?.length > 0 && (
+            {visiblePlatforms && visiblePlatforms.length > 0 && (
               <div className="w-full flex-1 min-w-[280px] max-w-[440px] bg-[#FCEB9C] p-6 pb-8 cork-shadow -rotate-1 relative min-h-[220px]">
                 <div className="pushpin pin-yellow" />
                 <h4 className="text-xl font-bold text-neutral-800 mb-4 uppercase tracking-wide text-center mt-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Let's Connect</h4>
                 <div className="flex flex-wrap gap-3 justify-center">
-                  {data.platforms.map((p: any, i: number) => {
+                  {visiblePlatforms.map((p: any, i: number) => {
                     const pData = getPlatformData(p.platform)
-                    const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                     return (
-                      <a key={i} href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer" onClick={(e) => { if(isBlurred) { handlePrivacyClick(e); return; }; handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url)); if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank'); }} className="w-10 h-10 bg-white/50 rounded flex items-center justify-center hover:bg-white hover:scale-110 transition-all cork-shadow relative">
-                        <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
+                      <a key={i} href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer" onClick={(e) => { handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url)); if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank'); }} className="w-10 h-10 bg-white/50 rounded flex items-center justify-center hover:bg-white hover:scale-110 transition-all cork-shadow relative">
+                        <div className="w-full h-full flex items-center justify-center">
                           {pData.icon}
                         </div>
-                        {isBlurred && (<div className="absolute inset-0 bg-white/30 flex items-center justify-center rounded z-10"><Lock size={12} className="text-neutral-800" /></div>)}
                       </a>
                     )
                   })}
                 </div>
+                {user && profile.ghost_mode && (
+                  <div className="w-full text-center mt-4 mb-2 animate-fadeIn">
+                    <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+                      <Lock size={12} /> Privacy Mode enabled
+                    </p>
+                  </div>
+                )}
                 <div className="mt-4 text-center text-lg text-neutral-800 leading-tight" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   Open to collaborate and build amazing things together!
                 </div>
@@ -1320,33 +1328,34 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           {/* ═══ SOCIALS & EVENTS ═══ */}
           {((data?.platforms && data?.platforms?.length > 0) || (data.upcoming_events && data.upcoming_events.length > 0)) && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 animate-in" style={{ animationDelay: '0.55s' }}>
-              {data?.platforms && data?.platforms?.length > 0 && (
+              {visiblePlatforms && visiblePlatforms.length > 0 && (
                 <div className="glass-card p-6">
                   <div className="section-header"><Globe size={14} /> Network</div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                    {data.platforms.map((p, i) => {
+                    {visiblePlatforms.map((p, i) => {
                       const pData = getPlatformData(p.platform?.toLowerCase())
-                      const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                       return (
-                        <a key={i} href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer"
+                        <a key={i} href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer"
                           onClick={(e) => {
-                            if (isBlurred) {
-                              handlePrivacyClick(e);
-                              return;
-                            }
                             handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                             if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                           }}
                           className="flex flex-col items-center justify-center p-3 bg-[#050b14]/40 border border-cyan-500/10 rounded-xl hover:bg-cyan-900/15 hover:border-cyan-500/25 transition-all group relative">
-                          <div className={`text-cyan-500/60 group-hover:text-cyan-300 transition-colors mb-1.5 ${isBlurred ? 'ghost-blur-item' : ''}`}>
+                          <div className="text-cyan-500/60 group-hover:text-cyan-300 transition-colors mb-1.5">
                             {pData.icon}
                           </div>
                           <span className="text-[9px] font-medium uppercase tracking-[0.12em] text-cyan-200/45 group-hover:text-cyan-100">{p.platform}</span>
-                          {isBlurred && (<div className="absolute inset-0 bg-[#050b14]/30 flex items-center justify-center rounded-xl backdrop-blur-[2px] z-10"><Lock size={12} className="text-cyan-500" /></div>)}
                         </a>
                       )
                     })}
                   </div>
+                  {user && profile.ghost_mode && (
+                    <div className="w-full text-center mt-4 mb-2 animate-fadeIn">
+                      <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+                        <Lock size={12} /> Privacy Mode enabled
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
               
@@ -1762,35 +1771,36 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
           {/* ═══ SOCIALS + EVENTS — side by side ═══ */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-1">
             {/* Social Links */}
-            {data?.platforms && data?.platforms?.length > 0 && (
+            {visiblePlatforms && visiblePlatforms.length > 0 && (
               <div>
                 <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
                   <Globe size={16} className="nb-ink opacity-50" /> Find Me Here
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {data.platforms.map((p: any, i: number) => {
+                  {visiblePlatforms.map((p: any, i: number) => {
                     const pData = getPlatformData(p.platform?.toLowerCase());
-                    const isBlurred = profile.ghost_mode && isCommunicationApp(p.platform || '');
                     return (
-                      <a key={i} href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer"
+                      <a key={i} href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noopener noreferrer"
                         onClick={(e) => {
-                          if (isBlurred) {
-                            handlePrivacyClick(e);
-                            return;
-                          }
                           handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
                           if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
                         }}
                         className="nb-tag group relative">
-                        <div className={`flex items-center gap-1.5 ${isBlurred ? 'ghost-blur-item' : ''}`}>
+                        <div className="flex items-center gap-1.5">
                           <div className="opacity-80 group-hover:opacity-100 transition-opacity">{pData.icon}</div>
                           {p.platform}
                         </div>
-                        {isBlurred && (<div className="absolute inset-0 bg-white/10 flex items-center justify-center rounded-lg z-10"><Lock size={12} className="nb-pencil" /></div>)}
                       </a>
                     )
                   })}
                 </div>
+                {user && profile.ghost_mode && (
+                  <div className="w-full text-center mt-4 mb-2 animate-fadeIn">
+                    <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+                      <Lock size={12} /> Privacy Mode enabled
+                    </p>
+                  </div>
+                )}
               </div>
             )}
             {/* Events */}

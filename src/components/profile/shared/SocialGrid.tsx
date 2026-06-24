@@ -38,10 +38,26 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
   // After loading completes, gate if no user is logged in.
   const isGated = false; // Disable global signup gate so everyone can see all data when Privacy Mode is disabled
 
-  if (!links || links.length === 0) return null
+  const visibleLinks = links.filter(link => {
+    const isComm = isCommunicationApp(link.platform);
+    return !(isComm && (!user || isGhostMode));
+  });
+
+  if (!visibleLinks || visibleLinks.length === 0) {
+    if (user && isGhostMode) {
+      return (
+        <div className="w-full text-center mt-4 mb-2 animate-fadeIn">
+          <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+            <Lock size={12} /> Privacy Mode enabled
+          </p>
+        </div>
+      );
+    }
+    return null;
+  }
   
   // Custom sorting: move youtube immediately after instagram if both exist
-  let sortedLinks = [...links];
+  let sortedLinks = [...visibleLinks];
   const instaIdx = sortedLinks.findIndex(l => l.platform.toLowerCase() === 'instagram');
   const ytIdx = sortedLinks.findIndex(l => l.platform.toLowerCase() === 'youtube');
   if (instaIdx !== -1 && ytIdx !== -1 && ytIdx !== instaIdx + 1) {

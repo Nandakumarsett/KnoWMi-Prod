@@ -175,5 +175,5 @@ export function useGatedLink() {
     )
   }
 
-  return { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal, setShowGate }
+  return { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal, setShowGate, user }
 }
