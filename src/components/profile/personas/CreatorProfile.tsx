@@ -2120,12 +2120,10 @@ export function CreatorProfile({
                         className="text-gray-700 group-hover:text-white transition-colors duration-300"
                       />
                     </div>
-                    {!isBlurred && (
-                      <div
-                        className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${styleClass}`}
-                        style={{ zIndex: 0 }}
-                      />
-                    )}
+                    <div
+                      className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${styleClass}`}
+                      style={{ zIndex: 0 }}
+                    />
                     {isBlurred && (
                       <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10 rounded-full">
                         <Lock size={18} className="text-black" strokeWidth={2.5} />

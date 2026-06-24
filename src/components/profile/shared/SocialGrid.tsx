@@ -34,6 +34,7 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
   const { user, loading: authLoading } = useAuth()
   const { handlePrivacyClick, PrivacyModal } = useGatedLink()
   const [showGate, setShowGate] = useState(false)
+  const [hoveredLink, setHoveredLink] = useState<string | null>(null)
   // Wait for auth to resolve before deciding. During loading, assume not gated to avoid flicker.
   // After loading completes, gate if no user is logged in.
   const isGated = false; // Disable global signup gate so everyone can see all data when Privacy Mode is disabled
@@ -140,10 +141,13 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
             const meta = PLATFORM_META[link.platform] || { icon: Globe, color: '#444444' }
             const Icon = meta.icon
             const isBlurred = isCommunicationApp(link.platform) && !user;
+            const isHovered = hoveredLink === link.platform;
             return (
               <a 
                 key={link.platform}
                 href={isBlurred ? undefined : link.url}
+                onMouseEnter={() => setHoveredLink(link.platform)}
+                onMouseLeave={() => setHoveredLink(null)}
                 onClick={(e) => {
                   if (isBlurred) {
                     e.preventDefault();
@@ -157,8 +161,8 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
                 className={`flex items-center gap-3 p-4 rounded-2xl bg-white/5 border transition-all hover:bg-white/10 active:scale-[0.98] social-link-item cursor-pointer ${isGated ? 'border-orange-500/30' : 'border-white/10'}`}
               >
                 <div 
-                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg relative overflow-hidden"
-                  style={{ background: meta.color }}
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg relative overflow-hidden transition-all duration-300"
+                  style={{ background: isBlurred ? (isHovered ? meta.color : '#262626') : meta.color }}
                 >
                   <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
                     <Icon size={20} />
@@ -197,10 +201,13 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
           const meta = PLATFORM_META[link.platform] || { icon: Globe, color: '#444444' }
           const Icon = meta.icon
           const isBlurred = isCommunicationApp(link.platform) && !user;
+          const isHovered = hoveredLink === link.platform;
           return (
             <a 
               key={link.platform}
               href={isBlurred ? undefined : link.url}
+              onMouseEnter={() => setHoveredLink(link.platform)}
+              onMouseLeave={() => setHoveredLink(null)}
               onClick={(e) => {
                 if (isBlurred) {
                   e.preventDefault();
@@ -212,7 +219,7 @@ export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: Soc
               target="_blank"
               rel="noopener noreferrer"
               className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 shadow-xl social-link-item relative cursor-pointer ${isGated ? 'ring-2 ring-orange-500/30 ring-offset-2 ring-offset-transparent' : ''}`}
-              style={{ background: meta.color }}
+              style={{ background: isBlurred ? (isHovered ? meta.color : '#262626') : meta.color }}
               title={isBlurred ? undefined : link.platform}
             >
               <div className={isBlurred ? 'ghost-blur-item w-full h-full flex items-center justify-center' : 'w-full h-full flex items-center justify-center'}>
