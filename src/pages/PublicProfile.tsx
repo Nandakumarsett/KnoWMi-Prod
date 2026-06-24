@@ -260,15 +260,31 @@ export default function PublicProfile() {
   };
 
   // In Ghost Mode, hide personal communication apps but allow public showcasing apps
-  if (isGhostMode && displayProfile.social_links) {
+  if (isGhostMode) {
     const communicationApps = ['whatsapp', 'email', 'phone', 'instagram', 'snapchat', 'telegram', 'facebook', 'messenger', 'discord', 'x', 'twitter'];
-    displayProfile.social_links = displayProfile.social_links.filter(
-      (link: any) => !communicationApps.includes((link.platform || "").toLowerCase())
-    );
-    if (displayProfile.persona_data?.platforms) {
-      displayProfile.persona_data.platforms = displayProfile.persona_data.platforms.filter(
+    
+    if (displayProfile.social_links) {
+      displayProfile.social_links = displayProfile.social_links.filter(
         (link: any) => !communicationApps.includes((link.platform || "").toLowerCase())
       );
+    }
+    
+    if (displayProfile.persona_data) {
+      if (displayProfile.persona_data.platforms) {
+        displayProfile.persona_data.platforms = displayProfile.persona_data.platforms.filter(
+          (link: any) => !communicationApps.includes((link.platform || "").toLowerCase())
+        );
+      }
+      
+      // Completely wipe explicit contact fields so DM / WhatsApp buttons don't render
+      displayProfile.persona_data = {
+        ...displayProfile.persona_data,
+        contact_email: "",
+        contact_whatsapp: "",
+        contact_phone: "",
+        quick_talk_url: "",
+        preferred_contact_method: ""
+      };
     }
   }
 
