@@ -259,6 +259,19 @@ export default function PublicProfile() {
     persona_data: modifiedPersonaData,
   };
 
+  // In Ghost Mode, hide personal communication apps but allow public showcasing apps
+  if (isGhostMode && displayProfile.social_links) {
+    const communicationApps = ['whatsapp', 'email', 'phone', 'instagram', 'snapchat', 'telegram', 'facebook', 'messenger', 'discord', 'x', 'twitter'];
+    displayProfile.social_links = displayProfile.social_links.filter(
+      (link: any) => !communicationApps.includes((link.platform || "").toLowerCase())
+    );
+    if (displayProfile.persona_data?.platforms) {
+      displayProfile.persona_data.platforms = displayProfile.persona_data.platforms.filter(
+        (link: any) => !communicationApps.includes((link.platform || "").toLowerCase())
+      );
+    }
+  }
+
   if (isClaimFlow) {
     return (
       <div className="min-h-screen bg-neutral-900 flex flex-col items-center justify-center p-6 text-center text-white relative overflow-hidden">
@@ -494,7 +507,7 @@ export default function PublicProfile() {
         )}
 
         {/* Full Mobile Persona Router below */}
-        <div className={`px-2 ${isGhostMode ? "ghost-blur-socials" : ""}`}>
+        <div className="px-2">
           <PersonaRouter
             profile={displayProfile}
             recentVisitors={recentVisitors}
@@ -903,7 +916,7 @@ export default function PublicProfile() {
               </div>
 
               <div
-                className={`w-full mt-10 ${isGhostMode ? "ghost-blur-socials" : ""}`}
+                className="w-full mt-10"
               >
                 <SocialGrid
                   links={displayProfile.social_links}
@@ -960,7 +973,7 @@ export default function PublicProfile() {
           </div>
 
           <div
-            className={`flex-1 max-w-[680px] min-h-[600px] rounded-xl overflow-hidden shadow-[8px_8px_0px_#fff] p-6 border-[4px] border-white ${isGhostMode ? "ghost-blur-socials" : ""}`}
+            className="flex-1 max-w-[680px] min-h-[600px] rounded-xl overflow-hidden shadow-[8px_8px_0px_#fff] p-6 border-[4px] border-white"
             style={{ background: cardBg }}
           >
             <PersonaRouter
