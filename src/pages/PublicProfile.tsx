@@ -212,7 +212,9 @@ export default function PublicProfile() {
   const fromSrc = searchParams.get("src");
   const isClaimFlow = searchParams.get("claim") === "true" || !profile.user_id;
   // Apply ghost mode if the profile has it enabled, OR if forced via URL (for testing)
-  const isGhostMode = profile?.ghost_mode === true || searchParams.get("ghost") === "true";
+  const isGhostMode =
+    (profile?.ghost_mode === true || searchParams.get("ghost") === "true") &&
+    !isOwnerOfProfile;
   const fromTab = searchParams.get("from") || "analytics";
   const accentColor = activeConfig?.theme?.accent || "#C1440E";
   const isFreeProfile =
@@ -544,6 +546,13 @@ export default function PublicProfile() {
 
         {/* Full Mobile Persona Router below */}
         <div className="px-2">
+          {profile?.ghost_mode && isOwnerOfProfile && (
+            <div className="w-full text-center mt-2 mb-4 animate-fadeIn">
+              <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-orange-500/20 bg-orange-500/5 text-orange-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+                <Lock size={12} /> Privacy Mode is Active
+              </p>
+            </div>
+          )}
           <PersonaRouter
             profile={displayProfile}
             recentVisitors={recentVisitors}
@@ -964,8 +973,12 @@ export default function PublicProfile() {
 
               {profile.ghost_mode && (
                 <div className="w-full text-center mt-4 mb-2 animate-fadeIn">
-                  <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[9px] font-black uppercase tracking-widest shadow-sm">
-                    <Lock size={12} /> Private Mode activated by Owner
+                  <p className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-[9px] font-black uppercase tracking-widest shadow-sm ${
+                    isOwnerOfProfile 
+                      ? 'border-orange-500/20 bg-orange-500/5 text-orange-500' 
+                      : 'border-red-500/20 bg-red-500/5 text-red-500'
+                  }`}>
+                    <Lock size={12} /> {isOwnerOfProfile ? "Privacy Mode is Active" : "Private Mode activated by Owner"}
                   </p>
                 </div>
               )}
