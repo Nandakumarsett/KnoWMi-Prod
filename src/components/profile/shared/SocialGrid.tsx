@@ -8,7 +8,11 @@ interface SocialGridProps {
   links: SocialLink[]
   style?: 'row' | 'grid'
   profileId?: string
+  isGhostMode?: boolean
 }
+
+const COMMUNICATION_APPS = ['whatsapp', 'email', 'phone', 'instagram', 'snapchat', 'telegram', 'facebook', 'messenger', 'discord', 'x', 'twitter'];
+const isCommunicationApp = (platform: string) => COMMUNICATION_APPS.includes(platform.toLowerCase());
 
 const PLATFORM_META: Record<string, any> = {
   instagram: { icon: Instagram, color: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)' },
@@ -25,7 +29,7 @@ const PLATFORM_META: Record<string, any> = {
   website: { icon: Globe, color: '#444444' }
 }
 
-export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps) {
+export function SocialGrid({ links, style = 'row', profileId, isGhostMode }: SocialGridProps) {
   const { user, loading: authLoading } = useAuth()
   const [showGate, setShowGate] = useState(false)
   // Wait for auth to resolve before deciding. During loading, assume not gated to avoid flicker.
@@ -46,6 +50,9 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
 
   const handleLinkClick = async (e: React.MouseEvent<HTMLAnchorElement>, platform: string, url: string) => {
     e.preventDefault();
+    if (isGhostMode && isCommunicationApp(platform)) {
+      return;
+    }
     if (isGated) {
       setShowGate(true);
       return;
@@ -114,14 +121,21 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
           {sortedLinks.map((link, idx) => {
             const meta = PLATFORM_META[link.platform] || { icon: Globe, color: '#444444' }
             const Icon = meta.icon
+            const isBlurred = isGhostMode && isCommunicationApp(link.platform);
             return (
               <a 
                 key={link.platform}
-                href={link.url}
-                onClick={(e) => handleLinkClick(e, link.platform, link.url)}
+                href={isBlurred ? undefined : link.url}
+                onClick={(e) => {
+                  if (isBlurred) {
+                    e.preventDefault();
+                    return;
+                  }
+                  handleLinkClick(e, link.platform, link.url);
+                }}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`flex items-center gap-3 p-4 rounded-2xl bg-white/5 border transition-all hover:bg-white/10 active:scale-[0.98] social-link-item cursor-pointer ${isGated ? 'border-orange-500/30' : 'border-white/10'}`}
+                className={`flex items-center gap-3 p-4 rounded-2xl bg-white/5 border transition-all hover:bg-white/10 active:scale-[0.98] social-link-item cursor-pointer ${isGated ? 'border-orange-500/30' : 'border-white/10'} ${isBlurred ? 'ghost-blur-item' : ''}`}
               >
                 <div 
                   className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg relative overflow-hidden"
@@ -136,7 +150,7 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
                 </div>
                 <div className="flex flex-col min-w-0">
                   <span className="text-[10px] font-black uppercase opacity-40 truncate">{link.platform}</span>
-                  <span className="text-xs font-bold truncate">{link.url}</span>
+                  <span className="text-xs font-bold truncate">{isBlurred ? '••••••••' : link.url}</span>
                 </div>
               </a>
             )
@@ -153,16 +167,23 @@ export function SocialGrid({ links, style = 'row', profileId }: SocialGridProps)
         {sortedLinks.map((link) => {
           const meta = PLATFORM_META[link.platform] || { icon: Globe, color: '#444444' }
           const Icon = meta.icon
+          const isBlurred = isGhostMode && isCommunicationApp(link.platform);
           return (
             <a 
               key={link.platform}
-              href={link.url}
-              onClick={(e) => handleLinkClick(e, link.platform, link.url)}
+              href={isBlurred ? undefined : link.url}
+              onClick={(e) => {
+                if (isBlurred) {
+                  e.preventDefault();
+                  return;
+                }
+                handleLinkClick(e, link.platform, link.url);
+              }}
               target="_blank"
               rel="noopener noreferrer"
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 shadow-xl social-link-item relative cursor-pointer ${isGated ? 'ring-2 ring-orange-500/30 ring-offset-2 ring-offset-transparent' : ''}`}
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 shadow-xl social-link-item relative cursor-pointer ${isGated ? 'ring-2 ring-orange-500/30 ring-offset-2 ring-offset-transparent' : ''} ${isBlurred ? 'ghost-blur-item' : ''}`}
               style={{ background: meta.color }}
-              title={link.platform}
+              title={isBlurred ? undefined : link.platform}
             >
               <Icon size={24} />
               {isGated && (

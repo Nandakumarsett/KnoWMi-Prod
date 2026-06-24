@@ -259,32 +259,51 @@ export default function PublicProfile() {
     persona_data: modifiedPersonaData,
   };
 
-  // In Ghost Mode, hide personal communication apps but allow public showcasing apps
+  // In Ghost Mode, blur personal communication apps but allow public showcasing apps
   if (isGhostMode) {
     const communicationApps = ['whatsapp', 'email', 'phone', 'instagram', 'snapchat', 'telegram', 'facebook', 'messenger', 'discord', 'x', 'twitter'];
     
     if (displayProfile.social_links) {
-      displayProfile.social_links = displayProfile.social_links.filter(
-        (link: any) => !communicationApps.includes((link.platform || "").toLowerCase())
-      );
+      displayProfile.social_links = displayProfile.social_links.map((link: any) => {
+        if (communicationApps.includes((link.platform || "").toLowerCase())) {
+          return {
+            ...link,
+            url: "https://knowmi.co/private-blur",
+          };
+        }
+        return link;
+      });
     }
     
     if (displayProfile.persona_data) {
-      if (displayProfile.persona_data.platforms) {
-        displayProfile.persona_data.platforms = displayProfile.persona_data.platforms.filter(
-          (link: any) => !communicationApps.includes((link.platform || "").toLowerCase())
-        );
+      const pData = { ...displayProfile.persona_data };
+      if (pData.platforms) {
+        pData.platforms = pData.platforms.map((link: any) => {
+          if (communicationApps.includes((link.platform || "").toLowerCase())) {
+            return {
+              ...link,
+              url: "https://knowmi.co/private-blur",
+            };
+          }
+          return link;
+        });
       }
       
-      // Completely wipe explicit contact fields so DM / WhatsApp buttons don't render
-      displayProfile.persona_data = {
-        ...displayProfile.persona_data,
-        contact_email: "",
-        contact_whatsapp: "",
-        contact_phone: "",
-        quick_talk_url: "",
-        preferred_contact_method: ""
-      };
+      // Mask explicit contact fields
+      if (pData.contact_email) {
+        pData.contact_email = "private-blur@knowmi.co";
+      }
+      if (pData.contact_whatsapp) {
+        pData.contact_whatsapp = "private-blur";
+      }
+      if (pData.contact_phone) {
+        pData.contact_phone = "private-blur";
+      }
+      if (pData.quick_talk_url) {
+        pData.quick_talk_url = "https://knowmi.co/private-blur";
+      }
+      
+      displayProfile.persona_data = pData;
     }
   }
 
@@ -392,7 +411,7 @@ export default function PublicProfile() {
   if (!isDesktop) {
     return (
       <div
-        className={`min-h-screen text-[#1A1A1A] font-sans selection:bg-orange-500/30 pb-12 ${isScanner ? "ghost-protection" : ""}`}
+        className={`min-h-screen text-[#1A1A1A] font-sans selection:bg-orange-500/30 pb-12 ${isScanner ? "ghost-protection" : ""} ${isGhostMode ? "ghost-mode-active" : ""}`}
         style={{ background: pageBg, color: textPrimary }}
         onContextMenu={(e) => isScanner && e.preventDefault()}
       >
@@ -719,7 +738,7 @@ export default function PublicProfile() {
 
   return (
     <div
-      className={`min-h-screen font-sans selection:bg-orange-500/30 ${isScanner ? "ghost-protection" : ""}`}
+      className={`min-h-screen font-sans selection:bg-orange-500/30 ${isScanner ? "ghost-protection" : ""} ${isGhostMode ? "ghost-mode-active" : ""}`}
       style={{ background: pageBg, color: textPrimary }}
       onContextMenu={(e) => isScanner && e.preventDefault()}
     >
@@ -938,6 +957,7 @@ export default function PublicProfile() {
                   links={displayProfile.social_links}
                   style="row"
                   profileId={profile.id}
+                  isGhostMode={isGhostMode}
                 />
               </div>
 

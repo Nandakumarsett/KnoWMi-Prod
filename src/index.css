@@ -682,3 +682,16 @@ img {
   pointer-events: none !important;
   user-select: none !important;
 }
+
+.ghost-blur-item,
+.ghost-mode-active a[href*="private-blur"],
+.ghost-mode-active a[href^="https://wa.me"],
+.ghost-mode-active a[href^="mailto:"],
+.ghost-mode-active a[href^="tel:"],
+.ghost-mode-active .privacy-target {
+  filter: blur(5px) !important;
+  opacity: 0.3 !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  cursor: default !important;
+}
