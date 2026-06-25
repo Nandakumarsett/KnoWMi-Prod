@@ -1606,65 +1606,169 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
             background-image: linear-gradient(transparent 27px, #c8dce8 27px, #c8dce8 28px, transparent 28px);
             background-size: 100% 28px;
           }
+          .nb-spiral {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 8px;
+            width: 24px;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='48'><circle cx='12' cy='24' r='3.5' fill='%231e3a5f' fill-opacity='0.25'/><circle cx='12' cy='22' r='3' fill='%232d3748'/><path d='M 12 22 C -4 14, -4 30, 12 28' fill='none' stroke='%23a0aec0' stroke-width='2.5' stroke-linecap='round'/><path d='M 12 21 C -2 14, -2 29, 12 27' fill='none' stroke='%23edf2f7' stroke-width='0.8' stroke-linecap='round'/></svg>");
+            background-repeat: repeat-y;
+            background-size: 24px 48px;
+            z-index: 30;
+          }
+          @media (min-width: 640px) {
+            .nb-spiral {
+              left: 16px;
+              width: 32px;
+              background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='56'><circle cx='16' cy='28' r='4' fill='%231e3a5f' fill-opacity='0.25'/><circle cx='16' cy='26' r='3.5' fill='%232d3748'/><path d='M 16 26 C -6 16, -6 36, 16 34' fill='none' stroke='%23a0aec0' stroke-width='3' stroke-linecap='round'/><path d='M 16 25 C -4 16, -4 35, 16 33' fill='none' stroke='%23edf2f7' stroke-width='1' stroke-linecap='round'/></svg>");
+              background-size: 32px 56px;
+            }
+          }
           .nb-section-title {
             font-family: 'Permanent Marker', cursive, sans-serif;
-            color: #1a365d;
-            font-size: 1.15rem;
+            color: #1e3a5f;
+            font-size: 1.25rem;
             line-height: 28px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
           }
           .nb-handwriting { font-family: 'Caveat', cursive, sans-serif; }
           .nb-ink { color: #1e3a5f; }
-          .nb-red-ink { color: #c53030; }
-          .nb-pencil { color: #6B7280; }
-          .washi-tape {
-            background: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,0.3) 4px, rgba(255,255,255,0.3) 8px);
+          .nb-red-ink { color: #b91c1c; }
+          .nb-pencil { color: #4b5563; }
+          
+          /* Paper Card Materials */
+          .nb-paper-cream {
+            background: #FFFDF4;
+            border: 2px solid #1e3a5f;
+            border-radius: 12px;
+            box-shadow: 4px 4px 0px #1e3a5f;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
           }
+          .nb-paper-cream:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #1e3a5f;
+          }
+          
+          .nb-paper-white {
+            background: #FFFFFF;
+            border: 2px solid #1e3a5f;
+            border-radius: 12px;
+            box-shadow: 4px 4px 0px #1e3a5f;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+          }
+          .nb-paper-white:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #1e3a5f;
+          }
+
+          .nb-sticky-yellow {
+            background: #FFFCDB;
+            border: 2px solid #1e3a5f;
+            border-radius: 4px;
+            box-shadow: 4px 4px 0px #1e3a5f;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+          }
+          .nb-sticky-yellow:hover {
+            transform: translate(-2px, -2px) rotate(0.5deg);
+            box-shadow: 6px 6px 0px #1e3a5f;
+          }
+
+          .nb-sticky-pink {
+            background: #FFF0F4;
+            border: 2px solid #1e3a5f;
+            border-radius: 4px;
+            box-shadow: 4px 4px 0px #1e3a5f;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+          }
+          .nb-sticky-pink:hover {
+            transform: translate(-2px, -2px) rotate(-0.5deg);
+            box-shadow: 6px 6px 0px #1e3a5f;
+          }
+
+          .nb-sticky-blue {
+            background: #EDF7FF;
+            border: 2px solid #1e3a5f;
+            border-radius: 4px;
+            box-shadow: 4px 4px 0px #1e3a5f;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+          }
+          .nb-sticky-blue:hover {
+            transform: translate(-2px, -2px) rotate(0.5deg);
+            box-shadow: 6px 6px 0px #1e3a5f;
+          }
+
           .nb-card {
-            background: rgba(255,253,247,0.6);
-            border: 1.5px solid rgba(30,58,95,0.1);
-            border-radius: 3px;
+            background: #FFFFFF;
+            border: 2px solid #1e3a5f;
+            border-radius: 12px;
+            box-shadow: 4px 4px 0px #1e3a5f;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
           }
           .nb-card:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #1e3a5f;
           }
           .nb-divider {
-            border: none; height: 1px;
-            background: linear-gradient(90deg, transparent 0%, #B8D4E3 15%, #B8D4E3 85%, transparent 100%);
-            margin: 0.75rem 0;
+            border: none; height: 1.5px;
+            background: repeating-linear-gradient(90deg, #1e3a5f, #1e3a5f 4px, transparent 4px, transparent 8px);
+            margin: 1rem 0;
+            opacity: 0.25;
           }
           .nb-highlight {
-            background: linear-gradient(180deg, transparent 60%, #FEF08A 60%);
-            padding: 0 3px;
+            background: linear-gradient(180deg, transparent 50%, #FEF08A 50%);
+            padding: 0 4px;
+            font-weight: bold;
           }
           .nb-doodle-box {
             border: 2px solid #1e3a5f;
             border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-            padding: 0.4rem 0.8rem;
-            background: rgba(255,253,247,0.5);
+            padding: 0.5rem 1rem;
+            background: #FFFDF4;
+            box-shadow: 3px 3px 0px #1e3a5f;
           }
           .nb-tag {
             display: inline-flex; align-items: center; gap: 4px;
-            padding: 2px 10px;
-            border: 1.5px solid #1e3a5f;
+            padding: 4px 12px;
+            border: 2px solid #1e3a5f;
             border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-            font-family: 'Caveat', cursive; font-size: 1.05rem; font-weight: 600;
-            color: #1e3a5f; background: rgba(255,253,247,0.4);
+            font-family: 'Caveat', cursive; font-size: 1.15rem; font-weight: 600;
+            color: #1e3a5f; background: #FFFFFF;
+            box-shadow: 2px 2px 0px #1e3a5f;
             transition: all 0.2s ease;
           }
-          .nb-tag:hover { background: #EBF5FF; transform: rotate(-1deg) scale(1.04); }
-          .nb-tag-pink { border-color: #9B2C2C; color: #9B2C2C; }
-          .nb-tag-pink:hover { background: #FFF5F5; }
-          .nb-stat {
-            width: 68px; height: 68px; border-radius: 50%;
-            border: 2.5px solid #1e3a5f;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: rgba(255,253,247,0.4);
-            font-family: 'Permanent Marker', cursive;
-            transition: transform 0.2s ease;
+          .nb-tag:hover { 
+            background: #FFFDE8; 
+            transform: rotate(-1.5deg) scale(1.04); 
+            box-shadow: 3px 3px 0px #1e3a5f;
           }
-          .nb-stat:hover { transform: scale(1.06) rotate(2deg); }
+          .nb-tag-pink { border-color: #b91c1c; color: #b91c1c; }
+          .nb-tag-pink:hover { background: #FFF0F4; }
+          
+          .nb-stat {
+            width: 76px; height: 76px; border-radius: 50%;
+            border: 2px solid #1e3a5f;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: #FFFFFF;
+            font-family: 'Permanent Marker', cursive;
+            box-shadow: 3px 3px 0px #1e3a5f;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+          }
+          .nb-stat:hover { 
+            transform: scale(1.08) rotate(3deg); 
+            box-shadow: 4px 4px 0px #1e3a5f;
+          }
+          
+          .nb-tape {
+            background: rgba(254, 240, 138, 0.7);
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,0.4) 4px, rgba(255,255,255,0.4) 8px);
+            border: 1px dashed rgba(30,58,95,0.15);
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+          }
+          
           .nb-animate { animation: notebook-entry 0.4s ease forwards; }
           @keyframes notebook-entry {
             from { opacity: 0; transform: translateY(8px); }
@@ -1674,7 +1778,9 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
       }} />
       
       {/* Full-width ruled paper with red margin */}
-      <div className="relative w-full max-w-3xl mx-auto nb-lines min-h-screen">
+      <div className="relative w-full max-w-3xl mx-auto nb-lines min-h-screen shadow-[0_10px_40px_rgba(30,58,95,0.08)] border-x border-[#c8dce8]/45 bg-[#FFFDF7]">
+        {/* Left spiral binder rings */}
+        <div className="nb-spiral" />
         {/* ⭐ COVER BANNER (BACKGROUND) ⭐ */}
         {!hideHeader && data.featured_work_url && (
           <div className="absolute top-0 left-0 right-0 h-48 sm:h-64 z-0 pointer-events-none" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }}>
@@ -1801,33 +1907,36 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
           )}
 
           {/* ═══ ABOUT ME ═══ */}
+          {/* ═══ ABOUT ME ═══ */}
           {profile.bio && (
-            <>
-              <div className="w-full mb-1">
-                <h3 className="nb-section-title mb-1 flex items-center gap-1.5 text-xl font-black">
-                  <BookOpen size={20} className="nb-ink opacity-70" /> About Me
+            <div className="w-full mb-6">
+              <div className="nb-paper-cream p-5 sm:p-6 relative overflow-hidden">
+                {/* Top decorative tape */}
+                <div className="absolute -top-1.5 left-8 w-16 h-4 nb-tape rotate-[2deg] opacity-85" />
+                <h3 className="nb-section-title font-sans font-black">
+                  <BookOpen size={20} className="nb-ink opacity-80" /> About Me
                 </h3>
-                <p className="nb-ink text-2xl font-medium leading-[34px] nb-handwriting">{profile.bio}</p>
+                <p className="nb-ink text-2xl font-medium leading-[38px] nb-handwriting relative z-10 pl-1">{profile.bio}</p>
               </div>
-              <hr className="nb-divider" />
-            </>
+            </div>
           )}
 
           {/* ═══ SKILLS ═══ */}
           {data.core_skills && data.core_skills.length > 0 && (
-            <>
-              <div className="w-full mb-1">
-                <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
-                  <Zap size={16} className="nb-ink opacity-50" /> Skills & Powers
+            <div className="w-full mb-6">
+              <div className="nb-sticky-yellow p-5 relative overflow-hidden rotate-[0.5deg]">
+                {/* Washi tape on top-right */}
+                <div className="absolute -top-1.5 right-6 w-12 h-4 nb-tape rotate-[-4deg] opacity-85" />
+                <h3 className="nb-section-title font-sans font-black">
+                  <Zap size={16} className="nb-ink opacity-80" /> Skills & Powers
                 </h3>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 relative z-10">
                   {data.core_skills.map((skill: string, i: number) => (
-                    <span key={i} className="nb-tag">⚡ {skill}</span>
+                    <span key={i} className="nb-tag bg-white shadow-sm border-2">⚡ {skill}</span>
                   ))}
                 </div>
               </div>
-              <hr className="nb-divider" />
-            </>
+            </div>
           )}
 
           {/* ═══ PROJECTS + HACKATHONS — 2 col grid ═══ */}
@@ -1837,29 +1946,29 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                 {/* Projects */}
                 {data.projects && data.projects.length > 0 && (
                   <div>
-                    <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
-                      <Rocket size={16} className="nb-ink opacity-50" /> Projects
+                    <h3 className="nb-section-title">
+                      <Rocket size={16} className="nb-ink opacity-80" /> Projects
                     </h3>
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       {data.projects.map((proj: any, i: number) => (
-                        <div key={i} className="nb-card p-3 relative">
-                          <div className="flex items-start gap-2">
-                            <span className="text-lg">{proj.emoji || ''}</span>
+                        <div key={i} className="nb-card p-3.5 relative">
+                          <div className="flex items-start gap-2.5">
+                            <span className="text-lg mt-0.5">{proj.emoji || '📂'}</span>
                             <div className="flex-grow min-w-0">
-                              <h4 className="text-lg font-bold nb-ink nb-handwriting leading-[28px]">
+                              <h4 className="text-lg font-bold nb-ink nb-handwriting leading-[24px]">
                                 {proj.url || proj.github_url ? (
-                                  <a href={ensureAbsoluteUrl(proj.url || proj.github_url)} target="_blank" rel="noopener noreferrer" className="hover:text-[#c53030] hover:underline transition-colors">
+                                  <a href={ensureAbsoluteUrl(proj.url || proj.github_url)} target="_blank" rel="noopener noreferrer" className="hover:text-[#b91c1c] hover:underline transition-colors">
                                     {proj.name}
                                   </a>
                                 ) : (
                                   proj.name
                                 )}
                               </h4>
-                              {proj.description && <p className="nb-pencil text-base nb-handwriting leading-[28px]">{proj.description}</p>}
+                              {proj.description && <p className="nb-pencil text-base nb-handwriting leading-[24px] mt-1">{proj.description}</p>}
                               {proj.tech && proj.tech.length > 0 && (
-                                <div className="flex flex-wrap gap-1 mt-1">
+                                <div className="flex flex-wrap gap-1 mt-2">
                                   {proj.tech.map((t: string, j: number) => (
-                                    <span key={j} className="px-2 py-0.5 bg-blue-50/50 border border-blue-200 rounded-sm text-[10px] font-bold nb-ink uppercase tracking-wider font-sans">{t}</span>
+                                    <span key={j} className="px-2 py-0.5 bg-[#E6F0FA] border border-blue-200 rounded-sm text-[10px] font-bold nb-ink uppercase tracking-wider font-sans">{t}</span>
                                   ))}
                                 </div>
                               )}
@@ -1873,17 +1982,18 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                 {/* Hackathons */}
                 {data.hackathons && data.hackathons.length > 0 && (
                   <div>
-                    <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
-                      <Trophy size={16} className="nb-ink opacity-50" /> Hackathons
+                    <h3 className="nb-section-title">
+                      <Trophy size={16} className="nb-ink opacity-80" /> Hackathons
                     </h3>
-                    <div className="space-y-1">
+                    <div className="nb-paper-cream p-4 space-y-3 relative overflow-hidden">
+                      <div className="absolute top-0 left-0 right-0 h-1 bg-[#b91c1c]/80" />
                       {data.hackathons.map((h: any, i: number) => (
-                        <div key={i} className="flex items-start gap-2 py-1">
+                        <div key={i} className="flex items-start gap-2.5 pb-2 last:pb-0 border-b border-dashed border-gray-200 last:border-b-0">
                           <span className="text-base mt-0.5">🏆</span>
                           <div className="flex-grow min-w-0">
-                            <span className="nb-handwriting text-lg font-bold nb-ink leading-[28px]">{h.name}</span>
-                            {h.year && <span className="nb-pencil text-xs font-sans ml-1">({h.year})</span>}
-                            {h.achievement && <p className="nb-handwriting text-base nb-red-ink font-semibold leading-[28px]">↳ {h.achievement}</p>}
+                            <span className="nb-handwriting text-lg font-bold nb-ink leading-[24px] block">{h.name}</span>
+                            {h.year && <span className="nb-pencil text-xs font-sans block mt-0.5">({h.year})</span>}
+                            {h.achievement && <p className="nb-handwriting text-base nb-red-ink font-semibold leading-[22px] mt-1">↳ {h.achievement}</p>}
                           </div>
                         </div>
                       ))}
@@ -1901,24 +2011,24 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-1">
                 {data.clubs?.length > 0 && (
                   <div>
-                    <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
-                      <Users size={16} className="nb-ink opacity-50" /> Clubs & Orgs
+                    <h3 className="nb-section-title">
+                      <Users size={16} className="nb-ink opacity-80" /> Clubs & Orgs
                     </h3>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="nb-sticky-pink p-4 flex flex-wrap gap-2 rotate-[-0.5deg]">
                       {data.clubs.map((club: string, i: number) => (
-                        <span key={i} className="nb-tag">🎓 {club}</span>
+                        <span key={i} className="nb-tag bg-white shadow-sm border-2">🎓 {club}</span>
                       ))}
                     </div>
                   </div>
                 )}
                 {data.hobbies?.length > 0 && (
                   <div>
-                    <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
-                      <Heart size={16} className="nb-ink opacity-50" /> Hobbies
+                    <h3 className="nb-section-title">
+                      <Heart size={16} className="nb-ink opacity-80" /> Hobbies
                     </h3>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="nb-sticky-blue p-4 flex flex-wrap gap-2 rotate-[0.5deg]">
                       {data.hobbies.map((hobby: string, i: number) => (
-                        <span key={i} className="nb-tag nb-tag-pink">💛 {hobby}</span>
+                        <span key={i} className="nb-tag nb-tag-pink bg-white shadow-sm border-2">💛 {hobby}</span>
                       ))}
                     </div>
                   </div>
@@ -1933,10 +2043,10 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
             {/* Social Links */}
             {visiblePlatforms && visiblePlatforms.length > 0 && (
               <div>
-                <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
-                  <Globe size={16} className="nb-ink opacity-50" /> Find Me Here
+                <h3 className="nb-section-title">
+                  <Globe size={16} className="nb-ink opacity-80" /> Find Me Here
                 </h3>
-                <div className="flex flex-wrap gap-2">
+                <div className="nb-paper-cream p-4 flex flex-wrap gap-2 relative overflow-hidden">
                   {visiblePlatforms.map((p: any, i: number) => {
                     const pData = getPlatformData(p.platform?.toLowerCase());
                     const isBlurred = isCommunicationApp(p.platform || '') && !user;
@@ -1982,14 +2092,15 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
             {/* Events */}
             {data.upcoming_events && data.upcoming_events.length > 0 && (
               <div>
-                <h3 className="nb-section-title mb-2 flex items-center gap-1.5">
-                  <Calendar size={16} className="nb-ink opacity-50" /> Coming Up
+                <h3 className="nb-section-title">
+                  <Calendar size={16} className="nb-ink opacity-80" /> Coming Up
                 </h3>
-                <div className="space-y-1">
+                <div className="nb-paper-white p-4 space-y-2 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-[#1e3a5f]/80" />
                   {data.upcoming_events.map((ev: any, i: number) => (
-                    <div key={i} className="flex items-center gap-2 py-0.5">
-                      <Calendar size={13} className="nb-ink shrink-0 opacity-50" />
-                      <span className="nb-handwriting text-base font-bold nb-ink leading-[28px]">{ev.title}</span>
+                    <div key={i} className="flex items-center gap-2 py-1.5 last:pb-0 border-b border-dashed border-gray-100 last:border-b-0">
+                      <Calendar size={13} className="nb-ink shrink-0 opacity-60" />
+                      <span className="nb-handwriting text-base font-bold nb-ink leading-[22px]">{ev.title}</span>
                       <span className="nb-pencil text-xs font-sans ml-auto whitespace-nowrap">{ev.date}</span>
                     </div>
                   ))}
@@ -2012,7 +2123,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
             )}
             {!(user && profile.ghost_mode) && data.contact_email && (
               <div className="nb-card p-4 flex items-center gap-3 relative overflow-hidden">
-                <div className="w-10 h-10 rounded-full border-2 border-[#1e3a5f] flex items-center justify-center shrink-0 bg-blue-50/30">
+                <div className="w-10 h-10 rounded-full border-2 border-[#1e3a5f] flex items-center justify-center shrink-0 bg-[#E6F0FA]">
                   <Mail size={18} className="nb-ink" />
                 </div>
                 <div className="flex-grow min-w-0">
