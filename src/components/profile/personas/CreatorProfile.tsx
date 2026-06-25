@@ -491,19 +491,21 @@ export function CreatorProfile({
           )}
 
           <div className="px-8 pt-6 relative z-20">
-            <div className="flex flex-col items-center mb-10">
-              <div className="text-center">
-                <h1 className="text-4xl font-black tracking-tight text-neutral-900 mb-2 uppercase italic leading-tight">
-                  {profile.display_name}
-                </h1>
-                <p className="text-xs font-black text-orange-600 uppercase tracking-[0.4em] leading-none mt-2 mb-4">
-                  {data.tagline }
-                </p>
+            {!hideHeader && (
+              <div className="flex flex-col items-center mb-10">
+                <div className="text-center">
+                  <h1 className="text-4xl font-black tracking-tight text-neutral-900 mb-2 uppercase italic leading-tight">
+                    {profile.display_name}
+                  </h1>
+                  <p className="text-xs font-black text-orange-600 uppercase tracking-[0.4em] leading-none mt-2 mb-4">
+                    {data.tagline }
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
 
             <div
-              className={`mb-16 animate-fadeIn w-full -mt-6 ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
+              className={`mb-16 animate-fadeIn w-full ${!hideHeader ? "-mt-6" : ""} ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
               onClick={() => isFreeProfile && setShowFomoModal(true)}
             >
               <div className="flex justify-evenly flex-wrap gap-4 items-start w-full">
@@ -1533,19 +1535,7 @@ export function CreatorProfile({
                     {liveViews}
                   </span>
                 </div>
-                <div
-                  className={`text-center flex-1 min-w-[80px] ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
-                  onClick={() => isFreeProfile && setShowFomoModal(true)}
-                >
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
-                    SESSIONS
-                  </span>
-                  <span
-                    className={`text-2xl font-black text-white border-b-2 border-[#E100FF] pb-1 inline-block ${isFreeProfile ? "blur-[4px]" : ""}`}
-                  >
-                    {uniqueViews}
-                  </span>
-                </div>
+
                 <div
                   className={`text-center flex-1 min-w-[80px] ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
                   onClick={() => isFreeProfile && setShowFomoModal(true)}
