@@ -490,7 +490,7 @@ export function CreatorProfile({
             </div>
           )}
 
-          <div className="px-8 pt-6 relative z-20">
+          <div className={`px-8 relative z-20 ${hideHeader ? "pt-12 sm:pt-16" : "pt-6"}`}>
             {!hideHeader && (
               <div className="flex flex-col items-center mb-10">
                 <div className="text-center">
@@ -504,21 +504,18 @@ export function CreatorProfile({
               </div>
             )}
 
-            {(data.bio || profile.bio) && (
-              <div className={`mb-12 ${!hideHeader ? "-mt-6" : ""}`}>
-                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6 text-center sm:text-left">
-                  Professional Narrative
-                </p>
-                <p className="text-base text-neutral-900 font-semibold leading-relaxed bg-neutral-50/30 py-4 px-6 rounded-[24px] border border-neutral-100/50 max-w-2xl italic">
-                  "{data.bio || profile.bio}"
-                </p>
-              </div>
-            )}
-
+            {/* Analytics Section */}
             <div
-              className={`mb-16 animate-fadeIn w-full ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
+              className={`mb-12 animate-fadeIn w-full ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
               onClick={() => isFreeProfile && setShowFomoModal(true)}
             >
+              <div className="flex items-center gap-2 mb-6">
+                <span className="h-1.5 w-1.5 rounded-full bg-orange-600 animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-neutral-400">
+                  Account Telemetry & Impact
+                </span>
+                <div className="flex-grow h-[1px] bg-neutral-200/60 ml-2" />
+              </div>
               <div className="flex justify-evenly flex-wrap gap-4 items-start w-full">
                 <div className="flex flex-col items-center text-center">
                   <span
@@ -563,6 +560,17 @@ export function CreatorProfile({
                 )}
               </div>
             </div>
+
+            {(data.bio || profile.bio) && (
+              <div className="mb-12">
+                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6 text-center sm:text-left">
+                  Professional Narrative
+                </p>
+                <p className="text-base text-neutral-900 font-semibold leading-relaxed bg-neutral-50/30 py-4 px-6 rounded-[24px] border border-neutral-100/50 max-w-2xl italic">
+                  "{data.bio || profile.bio}"
+                </p>
+              </div>
+            )}
 
             {(data.audience_age_group || data.location || (Array.isArray(data.audience_interests) && data.audience_interests.length > 0)) && (
               <div className="mb-12">
@@ -969,7 +977,7 @@ export function CreatorProfile({
           </div>
         )}
 
-        <div className={`px-6 sm:px-12 max-w-4xl mx-auto flex flex-col items-center relative z-10 ${(!hideHeader && data.featured_work_url) ? 'pt-32' : 'pt-8'}`}>
+        <div className={`px-6 sm:px-12 max-w-4xl mx-auto flex flex-col items-center relative z-10 ${(!hideHeader && data.featured_work_url) ? 'pt-32' : (hideHeader ? 'pt-12 sm:pt-16' : 'pt-8')}`}>
           {!hideHeader && (
             <>
               {/* Profile Pic */}
@@ -1021,22 +1029,6 @@ export function CreatorProfile({
                     className={`text-3xl font-black ${isFreeProfile ? "blur-[4px]" : ""}`}
                   >
                     {liveViews}
-                  </span>
-                </div>
-                
-                <div className="w-1 h-12 bg-black mx-2 sm:mx-4 rounded-full hidden sm:block"></div>
-                
-                <div
-                  className={`flex-1 min-w-[120px] text-center ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
-                  onClick={() => isFreeProfile && setShowFomoModal(true)}
-                >
-                  <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
-                    SESSION COUNT
-                  </span>
-                  <span
-                    className={`text-3xl font-black ${isFreeProfile ? "blur-[4px]" : ""}`}
-                  >
-                    {uniqueViews}
                   </span>
                 </div>
                 
@@ -1479,7 +1471,7 @@ export function CreatorProfile({
           </div>
         )}
 
-        <div className={`px-6 sm:px-12 max-w-4xl mx-auto flex flex-col items-center relative z-20 ${(!hideHeader && data.featured_work_url) ? '-mt-16 sm:-mt-24' : 'pt-24'}`}>
+        <div className={`px-6 sm:px-12 max-w-4xl mx-auto flex flex-col items-center relative z-20 ${(!hideHeader && data.featured_work_url) ? '-mt-16 sm:-mt-24' : (hideHeader ? 'pt-12 sm:pt-16' : 'pt-24')}`}>
           {!hideHeader && (
             <>
               {/* Avatar with Neon Ring */}
@@ -2093,7 +2085,7 @@ export function CreatorProfile({
         />
       </div>
 
-      <main className="relative z-10 max-w-3xl mx-auto px-5 sm:px-10 pt-6 glow-theme">
+      <main className={`relative z-10 max-w-3xl mx-auto px-5 sm:px-10 glow-theme ${hideHeader ? "pt-12 sm:pt-16" : "pt-6"}`}>
         {/* ════════════════════════════════════════════════ */}
         {/* SECTION 1 — THE HERO                            */}
         {/* ════════════════════════════════════════════════ */}
@@ -2251,7 +2243,79 @@ export function CreatorProfile({
         )}
 
         {/* ════════════════════════════════════════════════ */}
-        {/* SECTION 2 — THE STORY & AESTHETIC               */}
+        {/* SECTION 2 — THE IMPACT STRIP                    */}
+        {/* ════════════════════════════════════════════════ */}
+        <section
+          className="mb-12 stagger-fade"
+          style={{ animationDelay: "0.05s" }}
+        >
+          <div className="bg-white/40 backdrop-blur-md border border-white/60 rounded-[32px] p-6 sm:p-8 shadow-sm">
+            <div className="flex items-center gap-2 mb-6 justify-center sm:justify-start">
+              <span className="h-2 w-2 rounded-full bg-purple-500 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-[0.25em] text-gray-500">
+                Telemetry & Audience Impact
+              </span>
+            </div>
+            <div className="flex flex-wrap justify-center sm:justify-around gap-8 text-center w-full">
+              {/* Impressions */}
+              <div
+                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
+                onClick={() => isFreeProfile && setShowFomoModal(true)}
+              >
+                <div
+                  className={`text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
+                >
+                  {liveViews}
+                </div>
+                <div className="text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] text-gray-500 mt-1">
+                  Impressions
+                </div>
+              </div>
+
+              {/* Most Reached Location */}
+              <div
+                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
+                onClick={() => isFreeProfile && setShowFomoModal(true)}
+              >
+                <div
+                  className={`text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1 tracking-tight truncate max-w-[150px] mx-auto ${isFreeProfile ? "blur-[5px]" : ""}`}
+                >
+                  {topCity || data.location || 'N/A'}
+                </div>
+                <div className="text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] text-gray-500 mt-1">
+                  Top City
+                </div>
+              </div>
+
+              {/* Audience Age */}
+              {data.audience_age_group && (
+                <div className="stat-item">
+                  <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1 tracking-tight whitespace-nowrap">
+                    {data.audience_age_group}
+                  </div>
+                  <div className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500 mt-1">
+                    Audience Age
+                  </div>
+                </div>
+              )}
+
+              {/* Posting Frequency — shown only if audience_age_group is absent */}
+              {data.posting_frequency && !data.audience_age_group && (
+                <div className="stat-item">
+                  <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1 tracking-tight whitespace-nowrap">
+                    {data.posting_frequency}
+                  </div>
+                  <div className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500 mt-1">
+                    Frequency
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════ */}
+        {/* SECTION 3 — THE STORY & AESTHETIC               */}
         {/* ════════════════════════════════════════════════ */}
         {(profile.bio ||
           data.bio ||
@@ -2260,7 +2324,7 @@ export function CreatorProfile({
           data.visual_style) && (
           <section
             className="mb-12 stagger-fade"
-            style={{ animationDelay: "0.1s" }}
+            style={{ animationDelay: "0.15s" }}
           >
             {/* Top row: The Bio Narrative */}
             {!hideHeader && (profile.bio || data.bio) && (
@@ -2300,43 +2364,36 @@ export function CreatorProfile({
                 data.audience_interests.length > 0 && (
                   <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col min-h-[120px] lg:col-span-2">
                     <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mb-3">
-                      Audience Interests
+                      Audience
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {data.audience_interests.map(
-                        (interest: string, i: number) => (
-                          <span
-                            key={i}
-                            className="px-4 py-2 bg-gradient-to-br from-fuchsia-50 to-purple-50 text-purple-700 rounded-2xl text-sm font-bold border border-purple-100/60 shadow-sm"
-                          >
-                            {interest}
-                          </span>
-                        ),
-                      )}
+                      {data.audience_interests.map((interest: string) => (
+                        <span
+                          key={interest}
+                          className="px-4 py-2 bg-purple-50 rounded-2xl text-sm font-bold text-purple-700 border border-purple-100 shadow-sm"
+                        >
+                          {interest}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 )}
 
-              {/* Visual Aesthetic Card */}
+              {/* Aesthetic Card */}
               {data.visual_style && (
-                <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px] lg:col-span-2">
+                <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col min-h-[120px] lg:col-span-2">
                   <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mb-1">
-                    Visual Aesthetic
+                    Aesthetic
                   </div>
                   <div className="text-xl font-extrabold text-gray-900">
                     {data.visual_style}
                   </div>
-                  {data.posting_frequency && (
-                    <div className="mt-1 text-[11px] text-gray-700 font-bold uppercase tracking-wider">
-                      Posts {data.posting_frequency}
-                    </div>
-                  )}
                 </div>
               )}
 
-              {/* Creator Base Card */}
+              {/* Base Location Card */}
               {data.location && (
-                <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col justify-center min-h-[120px] lg:col-span-2">
+                <div className="bg-white/70 backdrop-blur-md rounded-[24px] p-6 border border-white/80 shadow-sm flex flex-col min-h-[120px] lg:col-span-2">
                   <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mb-1">
                     Base
                   </div>
@@ -2348,85 +2405,6 @@ export function CreatorProfile({
             </div>
           </section>
         )}
-
-        {/* ════════════════════════════════════════════════ */}
-        {/* SECTION 3 — THE IMPACT STRIP                    */}
-        {/* ════════════════════════════════════════════════ */}
-          <section
-            className="mb-12 stagger-fade"
-            style={{ animationDelay: "0.2s" }}
-          >
-            <div className="flex flex-wrap justify-center sm:justify-around gap-6 sm:gap-4 md:gap-6 text-center w-full max-w-2xl mx-auto px-4">
-              {/* Impressions */}
-              <div
-                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
-                onClick={() => isFreeProfile && setShowFomoModal(true)}
-              >
-                <div
-                  className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
-                >
-                  {liveViews}
-                </div>
-                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                  Impressions
-                </div>
-              </div>
-
-              {/* Sessions */}
-              <div
-                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
-                onClick={() => isFreeProfile && setShowFomoModal(true)}
-              >
-                <div
-                  className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
-                >
-                  {uniqueViews}
-                </div>
-                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                  Sessions
-                </div>
-              </div>
-
-              {/* Most Reached Location */}
-              <div
-                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
-                onClick={() => isFreeProfile && setShowFomoModal(true)}
-              >
-                <div
-                  className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto ${isFreeProfile ? "blur-[5px]" : ""}`}
-                >
-                  {topCity || data.location || 'N/A'}
-                </div>
-                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                  Top City
-                </div>
-              </div>
-
-              {/* Audience Age */}
-              {data.audience_age_group && (
-                <div className="stat-item">
-                  <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
-                    {data.audience_age_group}
-                  </div>
-                  <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                    Audience Age
-                  </div>
-                </div>
-              )}
-
-              {/* Posting Frequency — shown only if audience_age_group is absent */}
-              {data.posting_frequency && !data.audience_age_group && (
-                <div className="stat-item">
-                  <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
-                    {data.posting_frequency}
-                  </div>
-                  <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                    Frequency
-                  </div>
-                </div>
-              )}
-            </div>
-          </section>
 
         {/* ════════════════════════════════════════════════ */}
         {/* SECTION 4 — THE BUSINESS (Collab Prefs)         */}

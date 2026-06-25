@@ -113,7 +113,7 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
           </div>
         )}
 
-        <main className={`w-full max-w-[550px] sm:max-w-[570px] mx-auto pb-20 px-4 flex flex-col items-center relative z-20 ${!hideHeader ? '' : 'pt-8'}`}>
+        <main className={`w-full max-w-[550px] sm:max-w-[570px] mx-auto pb-20 px-4 flex flex-col items-center relative z-20 ${!hideHeader ? '' : 'pt-12 sm:pt-16'}`}>
           {!hideHeader && (
             <>
               <div className="relative -mt-24 sm:-mt-[120px] flex flex-col items-center z-30">
@@ -207,7 +207,7 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
 
           {/* STATS GRID */}
           <div 
-            className={`w-full grid grid-cols-3 gap-2 mt-6 bg-white border-2 border-neutral-300 rounded-[20px] p-4 shadow-md font-mono text-center relative z-20 ${isFreeProfile ? 'cursor-pointer hover:border-green-500 transition-colors' : ''}`}
+            className={`w-full grid grid-cols-2 gap-2 mt-6 bg-white border-2 border-neutral-300 rounded-[20px] p-4 shadow-md font-mono text-center relative z-20 ${isFreeProfile ? 'cursor-pointer hover:border-green-500 transition-colors' : ''}`}
             onClick={() => isFreeProfile && setShowGate(true)}
           >
             <div className="flex flex-col items-center">
@@ -216,13 +216,7 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
                 {liveViews}
               </span>
             </div>
-            <div className="flex flex-col items-center border-x border-neutral-200">
-              <span className="text-[10px] font-black uppercase text-neutral-400 tracking-wider">Sessions</span>
-              <span className={`text-lg font-black text-neutral-900 mt-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
-                {uniqueViews}
-              </span>
-            </div>
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center border-l border-neutral-200">
               <span className="text-[10px] font-black uppercase text-neutral-400 tracking-wider">Top City</span>
               <span className={`text-xs font-black text-neutral-900 mt-1.5 truncate max-w-full px-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
                 {topCity || 'N/A'}
@@ -412,7 +406,7 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
           </div>
         </div>
 
-        <main className="w-full max-w-[620px] mx-auto pb-24 pt-8 px-4 flex flex-col items-center relative z-20">
+        <main className={`w-full max-w-[620px] mx-auto pb-24 px-4 flex flex-col items-center relative z-20 ${hideHeader ? "pt-12 sm:pt-16" : "pt-8"}`}>
           
           {/* Schematic Blueprint Title Card block */}
           {!hideHeader && (
@@ -478,20 +472,14 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
             <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-[#64FFDA]/50" />
             <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-[#64FFDA]/50" />
             
-            <div className="grid grid-cols-3 gap-2 font-mono">
+            <div className="grid grid-cols-2 gap-2 font-mono">
               <div className="flex flex-col items-center">
                 <span className="text-[9px] text-[#64FFDA]/50 uppercase tracking-widest font-bold">IMPRESSIONS</span>
                 <span className={`text-xl font-light text-white mt-1.5 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
                   {liveViews}
                 </span>
               </div>
-              <div className="flex flex-col items-center border-x border-[#64FFDA]/20">
-                <span className="text-[9px] text-[#64FFDA]/50 uppercase tracking-widest font-bold">SESSIONS</span>
-                <span className={`text-xl font-light text-white mt-1.5 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
-                  {uniqueViews}
-                </span>
-              </div>
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center border-l border-[#64FFDA]/20">
                 <span className="text-[9px] text-[#64FFDA]/50 uppercase tracking-widest font-bold">TOP_CITY</span>
                 <span className={`text-xs font-light text-white mt-2 truncate max-w-full px-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
                   {topCity.toUpperCase() || 'N/A'}
@@ -810,7 +798,7 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
           </div>
         )}
 
-        <main className="w-full max-w-[620px] mx-auto pb-24 pt-8 px-4 flex flex-col items-center relative z-20">
+        <main className={`w-full max-w-[620px] mx-auto pb-24 px-4 flex flex-col items-center relative z-20 ${hideHeader ? "pt-12 sm:pt-16" : "pt-8"}`}>
           
           {!hideHeader && (
             <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left relative overflow-hidden">
@@ -1165,7 +1153,7 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
         </div>
       )}
 
-      <main className="w-full max-w-3xl mx-auto pb-24 pt-8 px-4 sm:px-8 flex flex-col items-start relative z-20 text-sm sm:text-base">
+      <main className={`w-full max-w-3xl mx-auto pb-24 px-4 sm:px-8 flex flex-col items-start relative z-20 text-sm sm:text-base ${hideHeader ? "pt-12 sm:pt-16" : "pt-8"}`}>
         
         {!hideHeader && (
           <div className="w-full flex flex-col sm:flex-row gap-6 items-center sm:items-start mb-10">
@@ -1214,20 +1202,14 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
             className={`w-full border border-[#30363D] bg-[#161B22] p-4 font-mono text-center relative ${isFreeProfile ? 'cursor-pointer hover:border-[#8B949E] transition-colors' : ''}`}
             onClick={() => isFreeProfile && setShowGate(true)}
           >
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col items-center">
                 <span className="text-[10px] text-[#8B949E] uppercase tracking-wider">impressions</span>
                 <span className={`text-base font-bold text-white mt-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
                   {liveViews}
                 </span>
               </div>
-              <div className="flex flex-col items-center border-x border-[#30363D]">
-                <span className="text-[10px] text-[#8B949E] uppercase tracking-wider">sessions</span>
-                <span className={`text-base font-bold text-white mt-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
-                  {uniqueViews}
-                </span>
-              </div>
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center border-l border-[#30363D]">
                 <span className="text-[10px] text-[#8B949E] uppercase tracking-wider">top_city</span>
                 <span className={`text-xs font-bold text-[#58A6FF] mt-1.5 truncate max-w-full px-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
                   {topCity.toLowerCase().replace(/\s+/g, '_') || 'n_a'}

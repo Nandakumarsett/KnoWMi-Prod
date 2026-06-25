@@ -128,7 +128,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
           </div>
         )}
 
-        <main className={`relative z-10 max-w-2xl mx-auto px-5 sm:px-8 pb-24 flex flex-col items-center ${!hideHeader ? '-mt-20 sm:-mt-24' : 'pt-8'}`}>
+        <main className={`relative z-10 max-w-2xl mx-auto px-5 sm:px-8 pb-24 flex flex-col items-center ${!hideHeader ? '-mt-20 sm:-mt-24' : 'pt-12 sm:pt-16'}`}>
           {!hideHeader && (
             <div className="flex flex-col items-center w-full mb-4">
               <div className="relative mb-5 group flex items-center justify-center">
@@ -202,7 +202,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
 
           {/* PREMIUM STATS ROW */}
           <div 
-            className={`w-full grid grid-cols-3 gap-3 mb-10 bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-sm text-center relative ${isFreeProfile ? 'cursor-pointer hover:border-emerald-500 transition-colors' : ''}`}
+            className={`w-full grid grid-cols-2 gap-3 mb-10 bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-sm text-center relative ${isFreeProfile ? 'cursor-pointer hover:border-emerald-500 transition-colors' : ''}`}
             onClick={() => isFreeProfile && setShowFomoModal(true)}
           >
             <div className="flex flex-col items-center">
@@ -211,13 +211,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                 {liveViews}
               </span>
             </div>
-            <div className="flex flex-col items-center border-x border-neutral-100">
-              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Sessions</span>
-              <span className={`text-xl font-black text-neutral-900 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
-                {uniqueViews}
-              </span>
-            </div>
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center border-l border-neutral-100">
               <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Top City</span>
               <span className={`text-xs sm:text-sm font-black text-neutral-900 mt-1 truncate max-w-full px-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
                 {topCity || 'N/A'}
@@ -620,7 +614,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
           </div>
         )}
 
-        <main className={`relative z-10 w-full max-w-6xl mx-auto px-4 flex flex-col items-center gap-6 ${!hideHeader ? 'pt-12' : 'pt-8'}`}>
+        <main className={`relative z-10 w-full max-w-6xl mx-auto px-4 flex flex-col items-center gap-6 ${!hideHeader ? 'pt-12' : 'pt-12 sm:pt-16'}`}>
           
           {/* Row 1: Main ID Card + Polaroids */}
           {!hideHeader && (
@@ -712,16 +706,6 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                   {liveViews}
                 </span>
                 <Activity size={16} className="absolute bottom-3 right-3 text-[#1e3a8a]" strokeWidth={1.5} />
-             </div>
-             
-             {/* Sessions */}
-             <div className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#BCE2EE] p-4 text-center cork-shadow rotate-1 relative flex flex-col items-center justify-center cursor-pointer" onClick={() => isFreeProfile && setShowFomoModal(true)}>
-                <div className="pushpin pin-blue" />
-                <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Sessions</span>
-                <span className={`text-3xl font-bold text-[#1e3a8a] mt-1 block ${isFreeProfile ? 'blur-[4px]' : ''}`} style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  {uniqueViews}
-                </span>
-                <span className="text-xs text-neutral-600 block mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Unique</span>
              </div>
              
              {/* Top City */}
@@ -1231,7 +1215,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
           </div>
         )}
 
-        <main className={`relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-8 ${(!hideHeader && data.featured_work_url) ? '-mt-20' : (hideHeader ? 'pt-2' : 'pt-10')}`}>
+        <main className={`relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-8 ${(!hideHeader && data.featured_work_url) ? '-mt-20' : (hideHeader ? 'pt-12 sm:pt-16' : 'pt-10')}`}>
           
           {/* ═══ HEADER: Avatar + Name + Bio ═══ */}
           {!hideHeader && (
@@ -1304,17 +1288,11 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
 
           {/* ═══ STATS ROW ═══ */}
           {(data.campus_rank_pct || data.study_buddies || data.courses_completed || stats) && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-6 animate-in" style={{ animationDelay: '0.15s' }}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6 animate-in" style={{ animationDelay: '0.15s' }}>
               <div className={`stat-card ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
                 <Activity size={18} className="text-cyan-400 mx-auto mb-1.5" />
                 <div className={`text-xl font-bold text-white ${isFreeProfile ? 'blur-[4px]' : ''}`}>{liveViews}</div>
                 <div className="text-[9px] uppercase tracking-[0.15em] text-cyan-200/50 mt-1">Live Views</div>
-              </div>
-              
-              <div className={`stat-card ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
-                <Users size={18} className="text-purple-400 mx-auto mb-1.5" />
-                <div className={`text-xl font-bold text-white ${isFreeProfile ? 'blur-[4px]' : ''}`}>{uniqueViews}</div>
-                <div className="text-[9px] uppercase tracking-[0.15em] text-cyan-200/50 mt-1">Sessions</div>
               </div>
               
               <div className={`stat-card ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
@@ -1708,7 +1686,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
         <div className="absolute top-0 bottom-0 left-[2.5rem] sm:left-[3.5rem] w-[2px] bg-[#c53030]/40 pointer-events-none z-0" />
         <div className="absolute top-0 bottom-0 left-[2.7rem] sm:left-[3.7rem] w-[1px] bg-[#c53030]/25 pointer-events-none z-0" />
 
-        <main className={`relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pb-12 flex flex-col gap-0 nb-animate ${(!hideHeader && data.featured_work_url) ? 'pt-32 sm:pt-48' : 'pt-6'}`}>
+        <main className={`relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pb-12 flex flex-col gap-0 nb-animate ${(!hideHeader && data.featured_work_url) ? 'pt-32 sm:pt-48' : (hideHeader ? 'pt-12 sm:pt-16' : 'pt-6')}`}>
           
 
 
@@ -1787,11 +1765,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                   <span className={`text-lg nb-ink ${isFreeProfile ? 'blur-[3px]' : ''}`}>{liveViews}</span>
                   <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">views</span>
                 </div>
-                
-                <div className={`nb-stat ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)} style={{ borderColor: '#4A5568' }}>
-                  <span className={`text-lg nb-ink ${isFreeProfile ? 'blur-[3px]' : ''}`}>{uniqueViews}</span>
-                  <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">sessions</span>
-                </div>
+
                 
                 <div className={`nb-stat ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)} style={{ borderColor: '#2B6CB0' }}>
                   <span className={`text-sm font-black nb-ink truncate max-w-[80px] ${isFreeProfile ? 'blur-[3px]' : ''}`}>{topCity || 'N/A'}</span>
