@@ -50,6 +50,9 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
 
   const ensureAbsoluteUrl = (url: string) => {
     if (!url) return ''
+    if (url.startsWith('/content/') || url.startsWith('content/') || url.includes('avatars/')) {
+      return getAssetUrl(url);
+    }
     let cleaned = url.trim();
     cleaned = cleaned.replace(/^https?:\/+/i, 'https://');
     while (cleaned.startsWith('/')) {
