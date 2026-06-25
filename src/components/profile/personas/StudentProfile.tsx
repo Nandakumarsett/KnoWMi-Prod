@@ -1184,7 +1184,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
           </div>
         )}
 
-        <main className={`relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-8 ${data.featured_work_url ? '-mt-20' : 'pt-10'}`}>
+        <main className={`relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-8 ${(!hideHeader && data.featured_work_url) ? '-mt-20' : (hideHeader ? 'pt-2' : 'pt-10')}`}>
           
           {/* ═══ HEADER: Avatar + Name + Bio ═══ */}
           {!hideHeader && (
