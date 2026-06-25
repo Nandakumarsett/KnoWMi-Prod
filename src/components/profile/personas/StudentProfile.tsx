@@ -1636,9 +1636,9 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
             gap: 8px;
           }
           .nb-handwriting { font-family: 'Caveat', cursive, sans-serif; }
-          .nb-ink { color: #1e3a5f; }
-          .nb-red-ink { color: #b91c1c; }
-          .nb-pencil { color: #4b5563; }
+          .nb-ink { color: #0f172a; }
+          .nb-red-ink { color: #991b1b; }
+          .nb-pencil { color: #334155; }
           
           /* Paper Card Materials */
           .nb-paper-cream {
@@ -1821,11 +1821,11 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                 {data.mood && (
                   <div className="text-2xl font-bold nb-ink mt-1 mb-1" style={{ fontFamily: "'Permanent Marker', cursive" }}>{data.mood}</div>
                 )}
-                <p className="text-[#b91c1c] font-bold text-xl nb-handwriting flex items-center justify-center gap-1.5 mt-1 leading-[30px]">
-                  <GraduationCap size={20} /> {data.course } {data.university ? `@ ${data.university}` : ''}
+                <p className="text-red-700 font-sans font-extrabold text-sm uppercase tracking-wider flex items-center justify-center gap-1.5 mt-1">
+                  <GraduationCap size={16} /> {data.course } {data.university ? `@ ${data.university}` : ''}
                 </p>
                 {(data.year || data.batch_year) && (
-                  <p className="text-gray-700 text-xl nb-handwriting font-semibold leading-[30px] flex items-center justify-center">
+                  <p className="text-neutral-600 font-sans font-bold text-xs uppercase tracking-widest mt-1 flex items-center justify-center">
                     {data.year ? `Year ${data.year}` : ''}{data.year && data.batch_year ? ' · ' : ''}{data.batch_year ? `Batch of ${data.batch_year}` : ''}
                   </p>
                 )}
@@ -1839,13 +1839,13 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
               {(data.resume_url || data.website) && (
                 <div className="flex flex-wrap gap-4 items-center">
                   {data.resume_url && (
-                    <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 nb-handwriting text-[#991b1b] hover:text-[#7f1d1d] transition-colors text-xl font-black rotate-[-2deg]">
-                      <FileText size={20} /> My Resume <ExternalLink size={16} className="ml-0.5" />
+                    <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 font-sans text-red-700 hover:text-red-800 transition-colors text-sm font-extrabold uppercase tracking-wider">
+                      <FileText size={16} /> My Resume <ExternalLink size={14} className="ml-0.5" />
                     </a>
                   )}
                   {data.website && (
-                    <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 nb-handwriting text-[#1e3a8a] hover:text-[#172554] transition-colors text-xl font-black rotate-[1deg]">
-                      <Globe size={20} /> Personal Site <ExternalLink size={16} className="ml-0.5" />
+                    <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 font-sans text-blue-800 hover:text-blue-900 transition-colors text-sm font-extrabold uppercase tracking-wider">
+                      <Globe size={16} /> Personal Site <ExternalLink size={14} className="ml-0.5" />
                     </a>
                   )}
                 </div>
@@ -1853,8 +1853,8 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
               {data.availability && (
                 <div className="nb-doodle-box inline-flex items-center gap-2 rotate-[-1deg]" style={{ borderColor: '#2B6CB0' }}>
                   <Briefcase size={14} className="nb-ink" />
-                  <span className="nb-handwriting text-base font-bold nb-ink">
-                    Open to: <span className="nb-highlight">{data.availability}</span>
+                  <span className="font-sans text-xs font-black uppercase tracking-wider nb-ink">
+                    Open to: <span className="nb-highlight font-sans text-xs">{data.availability}</span>
                   </span>
                 </div>
               )}
@@ -1898,7 +1898,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                 {data.favorite_subject && (
                   <div className="nb-doodle-box inline-flex items-center gap-2" style={{ borderColor: '#c53030' }}>
                     <Star size={16} className="nb-red-ink" />
-                    <span className="nb-handwriting text-lg font-black nb-red-ink">Fav: <span className="nb-highlight">{data.favorite_subject}</span></span>
+                    <span className="font-sans text-xs font-black uppercase tracking-wider nb-red-ink">Fav: <span className="nb-highlight font-sans text-xs">{data.favorite_subject}</span></span>
                   </div>
                 )}
               </div>
@@ -1916,7 +1916,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                 <h3 className="nb-section-title font-sans font-black">
                   <BookOpen size={20} className="nb-ink opacity-80" /> About Me
                 </h3>
-                <p className="nb-ink text-2xl font-medium leading-[38px] nb-handwriting relative z-10 pl-1">{profile.bio}</p>
+                <p className="text-[#0f172a] text-2xl font-bold leading-[38px] nb-handwriting relative z-10 pl-1">{profile.bio}</p>
               </div>
             </div>
           )}
@@ -1955,7 +1955,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                           <div className="flex items-start gap-2.5">
                             <span className="text-lg mt-0.5">{proj.emoji || '📂'}</span>
                             <div className="flex-grow min-w-0">
-                              <h4 className="text-lg font-bold nb-ink nb-handwriting leading-[24px]">
+                              <h4 className="text-base font-black uppercase tracking-wider nb-ink font-sans">
                                 {proj.url || proj.github_url ? (
                                   <a href={ensureAbsoluteUrl(proj.url || proj.github_url)} target="_blank" rel="noopener noreferrer" className="hover:text-[#b91c1c] hover:underline transition-colors">
                                     {proj.name}
@@ -1964,7 +1964,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                                   proj.name
                                 )}
                               </h4>
-                              {proj.description && <p className="nb-pencil text-base nb-handwriting leading-[24px] mt-1">{proj.description}</p>}
+                              {proj.description && <p className="text-neutral-600 text-xs font-semibold font-sans leading-relaxed mt-1.5">{proj.description}</p>}
                               {proj.tech && proj.tech.length > 0 && (
                                 <div className="flex flex-wrap gap-1 mt-2">
                                   {proj.tech.map((t: string, j: number) => (
@@ -1991,9 +1991,9 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                         <div key={i} className="flex items-start gap-2.5 pb-2 last:pb-0 border-b border-dashed border-gray-200 last:border-b-0">
                           <span className="text-base mt-0.5">🏆</span>
                           <div className="flex-grow min-w-0">
-                            <span className="nb-handwriting text-lg font-bold nb-ink leading-[24px] block">{h.name}</span>
+                            <span className="font-sans text-sm font-black uppercase tracking-wider nb-ink block">{h.name}</span>
                             {h.year && <span className="nb-pencil text-xs font-sans block mt-0.5">({h.year})</span>}
-                            {h.achievement && <p className="nb-handwriting text-base nb-red-ink font-semibold leading-[22px] mt-1">↳ {h.achievement}</p>}
+                            {h.achievement && <p className="font-sans text-xs font-semibold text-red-700 leading-relaxed mt-1">↳ {h.achievement}</p>}
                           </div>
                         </div>
                       ))}
@@ -2100,7 +2100,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                   {data.upcoming_events.map((ev: any, i: number) => (
                     <div key={i} className="flex items-center gap-2 py-1.5 last:pb-0 border-b border-dashed border-gray-100 last:border-b-0">
                       <Calendar size={13} className="nb-ink shrink-0 opacity-60" />
-                      <span className="nb-handwriting text-base font-bold nb-ink leading-[22px]">{ev.title}</span>
+                      <span className="font-sans text-xs font-black uppercase tracking-wider nb-ink leading-normal">{ev.title}</span>
                       <span className="nb-pencil text-xs font-sans ml-auto whitespace-nowrap">{ev.date}</span>
                     </div>
                   ))}
@@ -2116,8 +2116,8 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
             {data.thought_bubble && (
               <div className="nb-card p-4 text-center relative">
                 <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-4 bg-[#B8D4E3]/40 washi-tape rounded-sm z-20" />
-                <h3 className="nb-section-title mb-1 text-center">✨ Advice I Live By</h3>
-                <p className="nb-handwriting text-xl nb-ink italic leading-[28px]">"{data.thought_bubble}"</p>
+                <h3 className="nb-section-title mb-1 text-center font-sans font-black justify-center">✨ Advice I Live By</h3>
+                <p className="text-[#0f172a] text-2xl font-bold leading-[34px] nb-handwriting pl-1 italic">"{data.thought_bubble}"</p>
                 <Heart size={14} className="mx-auto mt-2 nb-red-ink opacity-50" />
               </div>
             )}
@@ -2127,7 +2127,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                   <Mail size={18} className="nb-ink" />
                 </div>
                 <div className="flex-grow min-w-0">
-                  <h4 className="text-lg font-bold nb-ink nb-handwriting leading-[28px]">Let's Talk!</h4>
+                  <h4 className="text-base font-black uppercase tracking-wider nb-ink font-sans">Let's Talk!</h4>
                   <a 
                     href={!user ? undefined : `mailto:${data.contact_email}`}
                     onClick={(e) => {
