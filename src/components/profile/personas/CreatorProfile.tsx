@@ -519,16 +519,6 @@ export function CreatorProfile({
                 </div>
                 <div className="flex flex-col items-center text-center">
                   <span
-                    className={`text-4xl font-black text-neutral-900 leading-none mb-3 ${isFreeProfile ? "blur-[6px] select-none opacity-50 inline-block px-2" : ""}`}
-                  >
-                    {uniqueViews}
-                  </span>
-                  <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest">
-                    Session Count
-                  </p>
-                </div>
-                <div className="flex flex-col items-center text-center">
-                  <span
                     className={`text-4xl font-black leading-none mb-3 ${isFreeProfile ? "blur-[6px] select-none opacity-50 inline-block px-2" : ""}`}
                     style={{ color: isFreeProfile ? undefined : cityColor }}
                   >
@@ -1013,10 +1003,10 @@ export function CreatorProfile({
                   </p>
                 )}
               </div>
+            </>
+          )}
 
-              {/* Tagline */}
-
-              {/* Stats Bar */}
+          {/* Stats Bar */}
               <div className="w-full border-4 border-black p-4 sm:p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-wrap items-center justify-center gap-y-4 mb-10 bg-white">
                 <div
                   className={`flex-1 min-w-[120px] text-center ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
@@ -1091,8 +1081,6 @@ export function CreatorProfile({
                   </>
                 )}
               </div>
-            </>
-          )}
 
           <div className={`grid grid-cols-1 ${!hideHeader ? 'sm:grid-cols-2' : ''} gap-10 w-full text-left mb-12`}>
             {/* Work List */}
@@ -1527,8 +1515,10 @@ export function CreatorProfile({
                   {data.tagline }
                 </h2>
               </div>
+            </>
+          )}
 
-              {/* Stats Bar */}
+          {/* Stats Bar */}
               <div className="w-full max-w-3xl border border-white/10 bg-black/40 backdrop-blur-md rounded-2xl p-6 mb-10 flex flex-wrap justify-between items-center gap-6 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div
                   className={`text-center flex-1 min-w-[80px] ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
@@ -1594,8 +1584,6 @@ export function CreatorProfile({
                   </div>
                 )}
               </div>
-            </>
-          )}
 
           <div className="flex flex-col gap-8 w-full max-w-3xl mb-12">
             {/* Narrative */}
@@ -1630,6 +1618,56 @@ export function CreatorProfile({
                     </li>
                   ))}
                 </ul>
+              </div>
+            )}
+
+            {/* Audience Snap */}
+            {((Array.isArray(data.audience_interests) && data.audience_interests.length > 0) || data.audience_age_group) && (
+              <div className="bg-black/30 border border-purple-500/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(153,51,255,0.05)] w-full max-w-md mx-auto">
+                <h3 className="font-bold text-sm text-center uppercase tracking-[0.2em] text-purple-400 mb-5">
+                  AUDIENCE SNAP
+                </h3>
+                {data.audience_age_group && (
+                  <div className="text-center mb-4">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-1">AGE GROUP</span>
+                    <span className="text-sm font-black text-white">{data.audience_age_group}</span>
+                  </div>
+                )}
+                {Array.isArray(data.audience_interests) && data.audience_interests.length > 0 && (
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block text-center mb-3">INTERESTS</span>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      {data.audience_interests.map((interest: string) => (
+                        <span key={interest} className="px-3 py-1 bg-purple-900/30 border border-purple-500/50 text-[10px] font-bold uppercase tracking-widest rounded-sm text-purple-200">
+                          {interest}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Aesthetic */}
+            {(data.visual_style || data.posting_frequency) && (
+              <div className="bg-black/30 border border-cyan-500/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(6,182,212,0.05)] w-full max-w-md mx-auto">
+                <h3 className="font-bold text-sm text-center uppercase tracking-[0.2em] text-cyan-400 mb-5">
+                  AESTHETIC
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {data.visual_style && (
+                    <div className="text-center border-r border-white/10">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-1">VISUAL STYLE</span>
+                      <span className="text-sm font-black text-white">{data.visual_style}</span>
+                    </div>
+                  )}
+                  {data.posting_frequency && (
+                    <div className="text-center">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-1">FREQUENCY</span>
+                      <span className="text-sm font-black text-white">{data.posting_frequency}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -2218,7 +2256,6 @@ export function CreatorProfile({
         {/* ════════════════════════════════════════════════ */}
         {/* SECTION 2 — THE IMPACT STRIP                    */}
         {/* ════════════════════════════════════════════════ */}
-        {!hideHeader && (
           <section
             className="mb-12 stagger-fade"
             style={{ animationDelay: "0.1s" }}
@@ -2294,7 +2331,6 @@ export function CreatorProfile({
               )}
             </div>
           </section>
-        )}
 
         {/* ════════════════════════════════════════════════ */}
         {/* SECTION 3 — THE STORY & AESTHETIC               */}
