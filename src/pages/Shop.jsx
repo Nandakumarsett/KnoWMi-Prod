@@ -128,6 +128,7 @@ export default function Shop() {
         image: "https://knowmi.co/favicon.ico", // This will show the KnoWMi logo in the checkout modal
         order_id: orderData.order_id,
         handler: async function (response) {
+          sessionStorage.setItem('knowmi_payment_success', 'true')
           setOrderSuccess({ paymentId: response.razorpay_payment_id, orderId: orderData.order_id })
         },
         prefill: {

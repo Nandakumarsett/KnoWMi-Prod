@@ -6,6 +6,34 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+interface RateLimitEntry {
+  timestamps: number[]
+}
+
+const rateLimitMap = new Map<string, RateLimitEntry>()
+
+const RATE_LIMIT_WINDOW_MS = 60 * 1000 // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 5 // max 5 requests per minute
+
+function isRateLimited(userId: string): boolean {
+  const now = Date.now()
+  let entry = rateLimitMap.get(userId)
+  if (!entry) {
+    entry = { timestamps: [] }
+    rateLimitMap.set(userId, entry)
+  }
+
+  // Filter timestamps within the sliding window
+  entry.timestamps = entry.timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
+
+  if (entry.timestamps.length >= RATE_LIMIT_MAX_REQUESTS) {
+    return true
+  }
+
+  entry.timestamps.push(now)
+  return false
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -31,6 +59,13 @@ serve(async (req) => {
     if (userError || !user) {
       return new Response(JSON.stringify({ error: 'Unauthorized: Invalid token' }), {
         status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+    // Rate limiting check
+    if (isRateLimited(user.id)) {
+      return new Response(JSON.stringify({ error: 'Too many requests. Please try again in a minute.' }), {
+        status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
 

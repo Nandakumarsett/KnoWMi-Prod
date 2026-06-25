@@ -848,7 +848,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
     theme.fields.forEach(f => {
       // Basic check: if it's purely digits and it's a social handle field, it might be a mistake
       if (data[f] && /^\d+$/.test(data[f]) && !['email', 'whatsapp'].includes(f)) {
-        fieldErrors[f] = true;
+          fieldErrors[f] = true;
       }
     });
     theme.stats.forEach(s => {
@@ -863,6 +863,43 @@ const PersonaEditor = ({ profile, onUpdate }) => {
       setStatErrors(sErrors);
       toast.error("Please fix the errors highlighted in red before saving. (Check that social handles are correct and stats are numbers)");
       return;
+    }
+
+    // Content quality validation
+    const hasQualityIssues = (text) => {
+      if (!text || typeof text !== 'string') return false;
+      const lowercase = text.toLowerCase().trim();
+      const testKeywords = ['test', 'placeholder', 'wjsljwndsi', 'lorem', 'ipsum', 'dummy', 'asdf'];
+      if (testKeywords.some(keyword => lowercase.includes(keyword))) {
+        return true;
+      }
+      if (/(.)\1{4,}/.test(lowercase)) {
+        return true;
+      }
+      const words = lowercase.replace(/[^a-z\s]/g, '').split(/\s+/);
+      for (const word of words) {
+        if (word.length >= 5 && !/[aeiouy]/.test(word)) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    if (hasQualityIssues(data.bio)) {
+      toast.error("Please enter a valid bio (avoid test keywords, placeholders, or gibberish).");
+      return;
+    }
+    if (hasQualityIssues(data.tagline)) {
+      toast.error("Please enter a valid tagline (avoid test keywords, placeholders, or gibberish).");
+      return;
+    }
+    if (Array.isArray(data.projects)) {
+      for (const proj of data.projects) {
+        if (hasQualityIssues(proj.name) || hasQualityIssues(proj.description)) {
+          toast.error("Please enter valid project names and descriptions (avoid test keywords, placeholders, or gibberish).");
+          return;
+        }
+      }
     }
 
     setSaving(true)

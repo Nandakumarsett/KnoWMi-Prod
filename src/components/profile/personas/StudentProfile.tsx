@@ -29,7 +29,7 @@ const PLATFORM_ICONS: Record<string, any> = {
   facebook: LinkIcon
 }
 
-export function StudentProfile({ profile, stats }: { profile: ProfileData, stats?: any }) {
+export function StudentProfile({ profile, stats, visitors = [], hideHeader = false }: { profile: ProfileData, stats?: any, visitors?: any[], hideHeader?: boolean }) {
   const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as StudentData;
   const activeTheme = (profile.profile_theme || 'default').toLowerCase();
@@ -64,8 +64,19 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
 
   const ensureAbsoluteUrl = (url: string) => {
     if (!url) return ''
-    if (url.startsWith('http://') || url.startsWith('https://')) return url
-    return `https://${url}`
+    let cleaned = url.trim();
+    cleaned = cleaned.replace(/^https?:\/+/i, 'https://');
+    if (cleaned.startsWith('///')) {
+      cleaned = cleaned.substring(3);
+    } else if (cleaned.startsWith('//')) {
+      cleaned = cleaned.substring(2);
+    } else if (cleaned.startsWith('/')) {
+      cleaned = cleaned.substring(1);
+    }
+    if (cleaned.startsWith('http://') || cleaned.startsWith('https://')) {
+      return cleaned;
+    }
+    return `https://${cleaned}`;
   }
 
   // ----------------------------------------------------
@@ -102,86 +113,90 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         <BackgroundPattern />
         <BackgroundAnimation />
 
-        <div className="relative h-48 sm:h-64 w-full bg-neutral-200 overflow-hidden rounded-t-[40px] shadow-sm">
-          {data.featured_work_url ? (
-            <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover" alt="Profile Banner" />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-emerald-400 via-teal-300 to-blue-400 flex items-center justify-center">
-              <Sparkles size={48} className="text-white/30" />
-            </div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#FAFAFA] via-transparent to-transparent opacity-90" />
-        </div>
-
-        <main className="relative z-10 max-w-2xl mx-auto px-5 sm:px-8 -mt-20 sm:-mt-24 pb-24 flex flex-col items-center">
-          <div className="flex flex-col items-center w-full mb-4">
-            <div className="relative mb-5 group flex items-center justify-center">
-              {data.mood && (
-                <div className="absolute -right-8 -top-2 sm:-right-12 sm:-top-2 z-30 animate-bounce" style={{ animationDuration: '3s' }}>
-                  <div className="relative bg-white border-2 border-emerald-100 rounded-2xl px-3 py-2 shadow-xl shadow-emerald-500/10 flex items-center gap-1.5">
-                    <span className="text-xs sm:text-sm font-black text-emerald-600 uppercase tracking-widest whitespace-nowrap">{data.mood}</span>
-                    <div className="absolute -left-1.5 bottom-3 w-3 h-3 bg-white border-l-2 border-b-2 border-emerald-100 rotate-45 rounded-sm" />
-                  </div>
-                </div>
-              )}
-
-              <div 
-                className="w-40 h-40 sm:w-48 sm:h-48 p-1.5 rounded-full shadow-[0_20px_50px_rgba(16,185,129,0.2)] relative z-10 mx-auto flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #059669, #34D399)' }}
-              >
-                <div className="w-full h-full bg-white p-1 rounded-full overflow-hidden shadow-inner flex items-center justify-center relative">
-                  {!avatarError && profile.avatar_url ? (
-                    <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" onError={() => setAvatarError(true)} />
-                  ) : (
-                    <div className="w-full h-full object-cover rounded-full flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl rounded-full" style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || ''}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div 
-                className={`absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 z-40 ${isFreeProfile ? 'cursor-pointer hover:opacity-85 transition-opacity' : ''}`}
-                onClick={() => isFreeProfile && setShowFomoModal(true)}
-              >
-                <div className="bg-neutral-900 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full shadow-lg shadow-emerald-900/10 border-2 border-white flex items-center gap-1.5 whitespace-nowrap">
-                  <Activity size={14} className="text-emerald-400 sm:w-4 sm:h-4 animate-pulse" />
-                  <span className={`text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] ${isFreeProfile ? 'blur-[3px] select-none opacity-60 inline-block px-1' : ''}`}>{liveViews} Pulse</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="text-center w-full">
-              <h1 className="text-2xl sm:text-4xl leading-tight font-black text-neutral-900 tracking-tight mb-1.5 flex items-center justify-center gap-3">
-                {profile.display_name} {data.mood && <span className="text-2xl sm:text-3xl">{data.mood}</span>}
-              </h1>
-              <p className="text-emerald-500 font-bold text-sm sm:text-base tracking-wide flex items-center justify-center gap-1.5">
-                <GraduationCap size={18} /> {data.course || ''} {data.university ? `@ ${data.university}` : ''}
-              </p>
-            </div>
-          </div>
-
-
-
-          <div className="w-full max-w-md mb-8 z-20 flex flex-col items-center gap-4">
-            <div className="w-full max-w-sm">
-              <ProfileCTAs profile={profile} accentColor="#10B981" />
-            </div>
-            {(data.resume_url || data.website) && (
-              <div className="flex gap-3 mt-2">
-                {data.resume_url && (
-                  <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-2xl font-bold text-[14px] hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-500/20">
-                    <FileText size={18} /> View Resume
-                  </a>
-                )}
-                {data.website && (
-                  <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-neutral-800 text-white px-5 py-2.5 rounded-2xl font-bold text-[14px] hover:bg-neutral-900 transition-colors shadow-lg shadow-neutral-900/20">
-                    <Globe size={18} /> Portfolio
-                  </a>
-                )}
+        {!hideHeader && (
+          <div className="relative h-48 sm:h-64 w-full bg-neutral-200 overflow-hidden rounded-t-[40px] shadow-sm">
+            {data.featured_work_url ? (
+              <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover" alt="Profile Banner" />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-emerald-400 via-teal-300 to-blue-400 flex items-center justify-center">
+                <Sparkles size={48} className="text-white/30" />
               </div>
             )}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#FAFAFA] via-transparent to-transparent opacity-90" />
           </div>
+        )}
+
+        <main className={`relative z-10 max-w-2xl mx-auto px-5 sm:px-8 pb-24 flex flex-col items-center ${!hideHeader ? '-mt-20 sm:-mt-24' : 'pt-8'}`}>
+          {!hideHeader && (
+            <div className="flex flex-col items-center w-full mb-4">
+              <div className="relative mb-5 group flex items-center justify-center">
+                {data.mood && (
+                  <div className="absolute -right-8 -top-2 sm:-right-12 sm:-top-2 z-30 animate-bounce" style={{ animationDuration: '3s' }}>
+                    <div className="relative bg-white border-2 border-emerald-100 rounded-2xl px-3 py-2 shadow-xl shadow-emerald-500/10 flex items-center gap-1.5">
+                      <span className="text-xs sm:text-sm font-black text-emerald-600 uppercase tracking-widest whitespace-nowrap">{data.mood}</span>
+                      <div className="absolute -left-1.5 bottom-3 w-3 h-3 bg-white border-l-2 border-b-2 border-emerald-100 rotate-45 rounded-sm" />
+                    </div>
+                  </div>
+                )}
+
+                <div 
+                  className="w-40 h-40 sm:w-48 sm:h-48 p-1.5 rounded-full shadow-[0_20px_50px_rgba(16,185,129,0.2)] relative z-10 mx-auto flex items-center justify-center"
+                  style={{ background: 'linear-gradient(135deg, #059669, #34D399)' }}
+                >
+                  <div className="w-full h-full bg-white p-1 rounded-full overflow-hidden shadow-inner flex items-center justify-center relative">
+                    {!avatarError && profile.avatar_url ? (
+                      <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" onError={() => setAvatarError(true)} />
+                    ) : (
+                      <div className="w-full h-full object-cover rounded-full flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl rounded-full" style={{ fontFamily: 'sans-serif' }}>
+                        {profile.display_name?.charAt(0).toUpperCase() || ''}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div 
+                  className={`absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 z-40 ${isFreeProfile ? 'cursor-pointer hover:opacity-85 transition-opacity' : ''}`}
+                  onClick={() => isFreeProfile && setShowFomoModal(true)}
+                >
+                  <div className="bg-neutral-900 text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full shadow-lg shadow-emerald-900/10 border-2 border-white flex items-center gap-1.5 whitespace-nowrap">
+                    <Activity size={14} className="text-emerald-400 sm:w-4 sm:h-4 animate-pulse" />
+                    <span className={`text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] ${isFreeProfile ? 'blur-[3px] select-none opacity-60 inline-block px-1' : ''}`}>{liveViews} Pulse</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-center w-full">
+                <h1 className="text-2xl sm:text-4xl leading-tight font-black text-neutral-900 tracking-tight mb-1.5 flex items-center justify-center gap-3">
+                  {profile.display_name} {data.mood && <span className="text-2xl sm:text-3xl">{data.mood}</span>}
+                </h1>
+                <p className="text-emerald-500 font-bold text-sm sm:text-base tracking-wide flex items-center justify-center gap-1.5">
+                  <GraduationCap size={18} /> {data.course || ''} {data.university ? `@ ${data.university}` : ''}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {!hideHeader && (
+            <div className="w-full max-w-md mb-8 z-20 flex flex-col items-center gap-4">
+              <div className="w-full max-w-sm">
+                <ProfileCTAs profile={profile} accentColor="#10B981" />
+              </div>
+              {(data.resume_url || data.website) && (
+                <div className="flex gap-3 mt-2">
+                  {data.resume_url && (
+                    <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-2xl font-bold text-[14px] hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-500/20">
+                      <FileText size={18} /> View Resume
+                    </a>
+                  )}
+                  {data.website && (
+                    <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-neutral-800 text-white px-5 py-2.5 rounded-2xl font-bold text-[14px] hover:bg-neutral-900 transition-colors shadow-lg shadow-neutral-900/20">
+                      <Globe size={18} /> Portfolio
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           {data.availability && (
             <div className="w-full max-w-md mx-auto mb-10">
@@ -572,58 +587,57 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         `}} />
 
         {/* Banner (Background) */}
-        {data.featured_work_url && (
-          <div 
-            className="absolute top-0 left-0 w-full h-72 sm:h-96 z-0 pointer-events-none opacity-90"
-            style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)' }}
-          >
+        {!hideHeader && data.featured_work_url && (
+          <div className="relative h-48 sm:h-64 w-full bg-neutral-200 overflow-hidden shadow-inner">
              <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover" alt="Banner" />
           </div>
         )}
 
-        <main className="relative z-10 w-full max-w-6xl mx-auto px-4 pt-12 flex flex-col items-center gap-6">
+        <main className={`relative z-10 w-full max-w-6xl mx-auto px-4 flex flex-col items-center gap-6 ${!hideHeader ? 'pt-12' : 'pt-8'}`}>
           
           {/* Row 1: Main ID Card + Polaroids */}
-          <div className="w-full flex flex-wrap md:flex-nowrap justify-center items-start gap-8 relative">
-             
-             {/* Polaroid Photo */}
-             <div className="w-40 h-48 sm:w-48 sm:h-56 shrink-0 bg-white p-3 pb-12 cork-shadow-lg -rotate-[4deg] z-20 transition-transform duration-300 hover:rotate-0 hover:scale-105 mt-2 md:-mr-12">
-                <div className="pushpin pin-blue" />
-                <div className="w-full h-full bg-neutral-200 overflow-hidden">
-                  {!avatarError && profile.avatar_url ? (
-                    <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover grayscale sepia-[0.2]" onError={() => setAvatarError(true)} />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-neutral-300 text-neutral-600 font-bold text-4xl font-sans">
-                      {profile.display_name?.charAt(0).toUpperCase() || ''}
-                    </div>
-                  )}
-                </div>
-             </div>
-             
-             {/* Main Lined Paper */}
-             <div className="w-full max-w-2xl bg-[#FDF9F1] lined-paper pt-8 pb-10 pr-6 pl-12 sm:pl-16 cork-shadow-lg relative rotate-1 z-10 min-h-[220px]">
-                <div className="pushpin pin-red absolute top-3 left-[50%]" />
-                <div className="paper-holes" />
-                <div className="margin-line" />
-                
-                <h1 className="text-4xl sm:text-5xl font-bold text-[#1e3a8a] mb-2 mt-2 leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  {profile.display_name}
-                </h1>
-                
-                <div className="text-2xl font-bold text-[#B91C1C] mt-4 leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  {data.university || ''}
-                </div>
-                <div className="text-xl text-[#4a5568] leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
-                  {data.course || ''}
-                  {(data.year || data.batch_year) ? ' | ' : ''}
-                  {data.year ? `Year ${data.year}` : ''}
-                  {(data.year && data.batch_year) ? ' - ' : ''}
-                  {data.batch_year ? `Batch of ${data.batch_year}` : ''}
-                </div>
-                
+          {!hideHeader && (
+            <div className="w-full flex flex-wrap md:flex-nowrap justify-center items-start gap-8 relative">
+               
+               {/* Polaroid Photo */}
+               <div className="w-40 h-48 sm:w-48 sm:h-56 shrink-0 bg-white p-3 pb-12 cork-shadow-lg -rotate-[4deg] z-20 transition-transform duration-300 hover:rotate-0 hover:scale-105 mt-2 md:-mr-12">
+                  <div className="pushpin pin-blue" />
+                  <div className="w-full h-full bg-neutral-200 overflow-hidden">
+                    {!avatarError && profile.avatar_url ? (
+                      <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover grayscale sepia-[0.2]" onError={() => setAvatarError(true)} />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-neutral-300 text-neutral-600 font-bold text-4xl font-sans">
+                        {profile.display_name?.charAt(0).toUpperCase() || ''}
+                      </div>
+                    )}
+                  </div>
+               </div>
+               
+               {/* Main Lined Paper */}
+               <div className="w-full max-w-2xl bg-[#FDF9F1] lined-paper pt-8 pb-10 pr-6 pl-12 sm:pl-16 cork-shadow-lg relative rotate-1 z-10 min-h-[220px]">
+                  <div className="pushpin pin-red absolute top-3 left-[50%]" />
+                  <div className="paper-holes" />
+                  <div className="margin-line" />
+                  
+                  <h1 className="text-4xl sm:text-5xl font-bold text-[#1e3a8a] mb-2 mt-2 leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                    {profile.display_name}
+                  </h1>
+                  
+                  <div className="text-2xl font-bold text-[#B91C1C] mt-4 leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                    {data.university || ''}
+                  </div>
+                  <div className="text-xl text-[#4a5568] leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                    {data.course || ''}
+                    {(data.year || data.batch_year) ? ' | ' : ''}
+                    {data.year ? `Year ${data.year}` : ''}
+                    {(data.year && data.batch_year) ? ' - ' : ''}
+                    {data.batch_year ? `Batch of ${data.batch_year}` : ''}
+                  </div>
+                  
 
-             </div>
-          </div>
+               </div>
+            </div>
+          )}
 
           {/* Row 2: Stats Sticky Notes */}
           <div className="w-full flex flex-wrap justify-center gap-4 sm:gap-6 mt-2">
@@ -1158,7 +1172,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         </div>
 
         {/* ⭐ COVER BANNER ⭐ */}
-        {data.featured_work_url && (
+        {!hideHeader && data.featured_work_url && (
           <div className="relative w-full h-44 sm:h-60 overflow-hidden z-0">
             <img 
               src={getAssetUrl(data.featured_work_url)} 
@@ -1173,71 +1187,73 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         <main className={`relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-8 ${data.featured_work_url ? '-mt-20' : 'pt-10'}`}>
           
           {/* ═══ HEADER: Avatar + Name + Bio ═══ */}
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6 animate-in" style={{ animationDelay: '0.1s' }}>
-            {/* Avatar with glowing aura */}
-            <div className="shrink-0 avatar-aura">
-              <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-2 border-cyan-400/80 p-[3px] bg-[#050b14] relative z-10 shadow-[0_0_24px_rgba(6,182,212,0.25)]">
-                {!avatarError && profile.avatar_url ? (
-                  <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" onError={() => setAvatarError(true)} />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-cyan-900/30 text-cyan-300 font-bold text-3xl rounded-full">
-                    {profile.display_name?.charAt(0).toUpperCase() || ''}
-                  </div>
-                )}
+          {!hideHeader && (
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6 animate-in" style={{ animationDelay: '0.1s' }}>
+              {/* Avatar with glowing aura */}
+              <div className="shrink-0 avatar-aura">
+                <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-2 border-cyan-400/80 p-[3px] bg-[#050b14] relative z-10 shadow-[0_0_24px_rgba(6,182,212,0.25)]">
+                  {!avatarError && profile.avatar_url ? (
+                    <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover rounded-full" onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-cyan-900/30 text-cyan-300 font-bold text-3xl rounded-full">
+                      {profile.display_name?.charAt(0).toUpperCase() || ''}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-            
-            {/* Profile Info */}
-            <div className="flex-grow text-center sm:text-left">
-              <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-1.5 text-glow" style={{ lineHeight: 1.2 }}>
-                {profile.display_name} {data.mood && <span className="text-xl ml-1">{data.mood}</span>}
-              </h1>
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
-                <span className="inline-flex items-center gap-1.5 bg-cyan-900/25 px-3 py-1 rounded-full border border-cyan-500/15 text-[13px] text-cyan-300 font-medium">
-                  <GraduationCap size={14} /> {data.course } {data.university ? `@ ${data.university}` : ''}
-                </span>
-                {(data.year || data.batch_year) && (
-                  <span className="inline-flex items-center gap-1.5 bg-cyan-900/25 px-3 py-1 rounded-full border border-cyan-500/15 text-[13px] text-cyan-300/80">
-                    {data.year ? `Year ${data.year}` : ''}{data.year && data.batch_year ? ' · ' : ''}{data.batch_year ? `Batch of ${data.batch_year}` : ''}
-                  </span>
-                )}
-              </div>
-
               
-              <div className="flex flex-col sm:flex-row flex-wrap items-center sm:items-start justify-center sm:justify-start gap-4 mt-6 z-20 sm:ml-6">
-                {(data.resume_url || data.website) && (
-                  <div className="w-full sm:w-auto p-4 rounded-xl border border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 shadow-[0_0_15px_rgba(6,182,212,0.15)] flex flex-col items-center sm:items-start gap-3">
-                    <p className="text-cyan-300 font-bold text-xs uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_5px_rgba(6,182,212,1)]" /> Explore My Work
-                    </p>
-                    <div className="flex flex-wrap justify-center sm:justify-start gap-3 w-full sm:w-auto">
-                      {data.resume_url && (
-                        <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 bg-[#050b14] border border-cyan-500/50 text-cyan-200 px-5 py-2.5 rounded-lg font-bold text-[13px] hover:bg-cyan-900/60 hover:border-cyan-400 hover:text-white transition-all shadow-[0_0_10px_rgba(6,182,212,0.2)]">
-                          <FileText size={16} /> Access CV
-                        </a>
-                      )}
-                      {data.website && (
-                        <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 bg-[#050b14] border border-fuchsia-500/50 text-fuchsia-200 px-5 py-2.5 rounded-lg font-bold text-[13px] hover:bg-fuchsia-900/60 hover:border-fuchsia-400 hover:text-white transition-all shadow-[0_0_10px_rgba(217,70,239,0.2)]">
-                          <Globe size={16} /> System Link
-                        </a>
-                      )}
+              {/* Profile Info */}
+              <div className="flex-grow text-center sm:text-left">
+                <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-1.5 text-glow" style={{ lineHeight: 1.2 }}>
+                  {profile.display_name} {data.mood && <span className="text-xl ml-1">{data.mood}</span>}
+                </h1>
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
+                  <span className="inline-flex items-center gap-1.5 bg-cyan-900/25 px-3 py-1 rounded-full border border-cyan-500/15 text-[13px] text-cyan-300 font-medium">
+                    <GraduationCap size={14} /> {data.course } {data.university ? `@ ${data.university}` : ''}
+                  </span>
+                  {(data.year || data.batch_year) && (
+                    <span className="inline-flex items-center gap-1.5 bg-cyan-900/25 px-3 py-1 rounded-full border border-cyan-500/15 text-[13px] text-cyan-300/80">
+                      {data.year ? `Year ${data.year}` : ''}{data.year && data.batch_year ? ' · ' : ''}{data.batch_year ? `Batch of ${data.batch_year}` : ''}
+                    </span>
+                  )}
+                </div>
+
+                
+                <div className="flex flex-col sm:flex-row flex-wrap items-center sm:items-start justify-center sm:justify-start gap-4 mt-6 z-20 sm:ml-6">
+                  {(data.resume_url || data.website) && (
+                    <div className="w-full sm:w-auto p-4 rounded-xl border border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 shadow-[0_0_15px_rgba(6,182,212,0.15)] flex flex-col items-center sm:items-start gap-3">
+                      <p className="text-cyan-300 font-bold text-xs uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_5px_rgba(6,182,212,1)]" /> Explore My Work
+                      </p>
+                      <div className="flex flex-wrap justify-center sm:justify-start gap-3 w-full sm:w-auto">
+                        {data.resume_url && (
+                          <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 bg-[#050b14] border border-cyan-500/50 text-cyan-200 px-5 py-2.5 rounded-lg font-bold text-[13px] hover:bg-cyan-900/60 hover:border-cyan-400 hover:text-white transition-all shadow-[0_0_10px_rgba(6,182,212,0.2)]">
+                            <FileText size={16} /> Access CV
+                          </a>
+                        )}
+                        {data.website && (
+                          <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 bg-[#050b14] border border-fuchsia-500/50 text-fuchsia-200 px-5 py-2.5 rounded-lg font-bold text-[13px] hover:bg-fuchsia-900/60 hover:border-fuchsia-400 hover:text-white transition-all shadow-[0_0_10px_rgba(217,70,239,0.2)]">
+                            <Globe size={16} /> Visit Website
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                {data.availability && (
+                  <div className="flex justify-center sm:justify-start mt-4 z-20">
+                    <div className="glass-card px-3.5 py-1.5 inline-flex items-center gap-2 no-lift">
+                      <Briefcase size={14} className="text-cyan-400" />
+                      <span className="text-[13px] font-medium text-cyan-100">
+                        Open to: <span className="text-cyan-300">{data.availability}</span>
+                      </span>
                     </div>
                   </div>
                 )}
               </div>
-              
-              {data.availability && (
-                <div className="flex justify-center sm:justify-start mt-4 z-20">
-                  <div className="glass-card px-3.5 py-1.5 inline-flex items-center gap-2 no-lift">
-                    <Briefcase size={14} className="text-cyan-400" />
-                    <span className="text-[13px] font-medium text-cyan-100">
-                      Open to: <span className="text-cyan-300">{data.availability}</span>
-                    </span>
-                  </div>
-                </div>
-              )}
             </div>
-          </div>
+          )}
 
           {/* ═══ STATS ROW ═══ */}
           {(data.campus_rank_pct || data.study_buddies || data.courses_completed || stats) && (
@@ -1623,7 +1639,7 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
       {/* Full-width ruled paper with red margin */}
       <div className="relative w-full max-w-3xl mx-auto nb-lines min-h-screen">
         {/* ⭐ COVER BANNER (BACKGROUND) ⭐ */}
-        {data.featured_work_url && (
+        {!hideHeader && data.featured_work_url && (
           <div className="absolute top-0 left-0 right-0 h-48 sm:h-64 z-0 pointer-events-none" style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }}>
             <img src={getAssetUrl(data.featured_work_url)} className="w-full h-full object-cover opacity-100" alt="Cover Banner" />
           </div>
@@ -1633,71 +1649,74 @@ export function StudentProfile({ profile, stats }: { profile: ProfileData, stats
         <div className="absolute top-0 bottom-0 left-[2.5rem] sm:left-[3.5rem] w-[2px] bg-[#c53030]/40 pointer-events-none z-0" />
         <div className="absolute top-0 bottom-0 left-[2.7rem] sm:left-[3.7rem] w-[1px] bg-[#c53030]/25 pointer-events-none z-0" />
 
-        <main className={`relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pb-12 flex flex-col gap-0 nb-animate ${data.featured_work_url ? 'pt-32 sm:pt-48' : 'pt-6'}`}>
+        <main className={`relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pb-12 flex flex-col gap-0 nb-animate ${(!hideHeader && data.featured_work_url) ? 'pt-32 sm:pt-48' : 'pt-6'}`}>
           
 
 
           {/* ═══ HEADER: Avatar + Name + Bio + Stats — Centered ═══ */}
-          <div className="flex flex-col items-center text-center gap-5 mb-2 z-10 relative">
-            {/* Taped polaroid */}
-            <div className={`relative shrink-0 rotate-[-2deg] group ${data.featured_work_url ? 'mt-[-80px] sm:mt-[-120px]' : ''}`}>
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-[#FEF08A]/60 washi-tape border border-yellow-300/20 shadow-sm rotate-[3deg] z-20 rounded-sm" />
-              <div className="w-28 h-36 sm:w-32 sm:h-44 bg-white p-2 pb-8 shadow-[1px_2px_8px_rgba(0,0,0,0.12)] transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">
-                {!avatarError && profile.avatar_url ? (
-                  <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover" onError={() => setAvatarError(true)} />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-blue-50 text-blue-900 font-bold text-3xl" style={{ fontFamily: "'Permanent Marker', cursive" }}>
-                    {profile.display_name?.charAt(0).toUpperCase() || ''}
-                  </div>
+          {!hideHeader && (
+            <div className="flex flex-col items-center text-center gap-5 mb-2 z-10 relative">
+              {/* Taped polaroid */}
+              <div className={`relative shrink-0 rotate-[-2deg] group ${data.featured_work_url ? 'mt-[-80px] sm:mt-[-120px]' : ''}`}>
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-[#FEF08A]/60 washi-tape border border-yellow-300/20 shadow-sm rotate-[3deg] z-20 rounded-sm" />
+                <div className="w-28 h-36 sm:w-32 sm:h-44 bg-white p-2 pb-8 shadow-[1px_2px_8px_rgba(0,0,0,0.12)] transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">
+                  {!avatarError && profile.avatar_url ? (
+                    <img src={getAssetUrl(profile.avatar_url)} alt={profile.display_name} className="w-full h-full object-cover" onError={() => setAvatarError(true)} />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-blue-50 text-blue-900 font-bold text-3xl" style={{ fontFamily: "'Permanent Marker', cursive" }}>
+                      {profile.display_name?.charAt(0).toUpperCase() || ''}
+                    </div>
+                  )}
+                  <div className="absolute bottom-1.5 left-0 right-0 text-center nb-pencil text-[13px] nb-handwriting font-medium">📸 me!</div>
+                </div>
+              </div>
+              {/* Name + Title + Year + Mood */}
+              <div className={`flex flex-col items-center min-w-0 ${data.featured_work_url ? 'mt-1' : 'pt-1 sm:pt-3'}`}>
+                <h1 className="text-4xl sm:text-5xl font-black nb-ink tracking-tight leading-tight nb-section-title" style={{ fontSize: 'clamp(2.2rem, 6vw, 3.2rem)' }}>
+                  {profile.display_name}
+                </h1>
+                {data.mood && (
+                  <div className="text-2xl font-bold nb-ink mt-1 mb-1" style={{ fontFamily: "'Permanent Marker', cursive" }}>{data.mood}</div>
                 )}
-                <div className="absolute bottom-1.5 left-0 right-0 text-center nb-pencil text-[13px] nb-handwriting font-medium">📸 me!</div>
+                <p className="text-[#b91c1c] font-bold text-xl nb-handwriting flex items-center justify-center gap-1.5 mt-1 leading-[30px]">
+                  <GraduationCap size={20} /> {data.course } {data.university ? `@ ${data.university}` : ''}
+                </p>
+                {(data.year || data.batch_year) && (
+                  <p className="text-gray-700 text-xl nb-handwriting font-semibold leading-[30px] flex items-center justify-center">
+                    {data.year ? `Year ${data.year}` : ''}{data.year && data.batch_year ? ' · ' : ''}{data.batch_year ? `Batch of ${data.batch_year}` : ''}
+                  </p>
+                )}
               </div>
             </div>
-            {/* Name + Title + Year + Mood */}
-            <div className={`flex flex-col items-center min-w-0 ${data.featured_work_url ? 'mt-1' : 'pt-1 sm:pt-3'}`}>
-              <h1 className="text-4xl sm:text-5xl font-black nb-ink tracking-tight leading-tight nb-section-title" style={{ fontSize: 'clamp(2.2rem, 6vw, 3.2rem)' }}>
-                {profile.display_name}
-              </h1>
-              {data.mood && (
-                <div className="text-2xl font-bold nb-ink mt-1 mb-1" style={{ fontFamily: "'Permanent Marker', cursive" }}>{data.mood}</div>
-              )}
-              <p className="text-[#b91c1c] font-bold text-xl nb-handwriting flex items-center justify-center gap-1.5 mt-1 leading-[30px]">
-                <GraduationCap size={20} /> {data.course } {data.university ? `@ ${data.university}` : ''}
-              </p>
-              {(data.year || data.batch_year) && (
-                <p className="text-gray-700 text-xl nb-handwriting font-semibold leading-[30px] flex items-center justify-center">
-                  {data.year ? `Year ${data.year}` : ''}{data.year && data.batch_year ? ' · ' : ''}{data.batch_year ? `Batch of ${data.batch_year}` : ''}
-                </p>
-              )}
-
-            </div>
-          </div>
+          )}
 
           {/* CTA + Availability — centered */}
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-4 w-full mt-2">
-            {(data.resume_url || data.website) && (
-              <div className="flex flex-wrap gap-4 items-center">
-                {data.resume_url && (
-                  <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 nb-handwriting text-[#991b1b] hover:text-[#7f1d1d] transition-colors text-xl font-black rotate-[-2deg]">
-                    <FileText size={20} /> My Resume <ExternalLink size={16} className="ml-0.5" />
-                  </a>
-                )}
-                {data.website && (
-                  <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 nb-handwriting text-[#1e3a8a] hover:text-[#172554] transition-colors text-xl font-black rotate-[1deg]">
-                    <Globe size={20} /> Personal Site <ExternalLink size={16} className="ml-0.5" />
-                  </a>
-                )}
-              </div>
-            )}
-            {data.availability && (
-              <div className="nb-doodle-box inline-flex items-center gap-2 rotate-[-1deg]" style={{ borderColor: '#2B6CB0' }}>
-                <Briefcase size={14} className="nb-ink" />
-                <span className="nb-handwriting text-base font-bold nb-ink">
-                  Open to: <span className="nb-highlight">{data.availability}</span>
-                </span>
-              </div>
-            )}
-          </div>
+          {!hideHeader && (
+            <div className="flex flex-wrap items-center justify-center gap-4 mb-4 w-full mt-2">
+              {(data.resume_url || data.website) && (
+                <div className="flex flex-wrap gap-4 items-center">
+                  {data.resume_url && (
+                    <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 nb-handwriting text-[#991b1b] hover:text-[#7f1d1d] transition-colors text-xl font-black rotate-[-2deg]">
+                      <FileText size={20} /> My Resume <ExternalLink size={16} className="ml-0.5" />
+                    </a>
+                  )}
+                  {data.website && (
+                    <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 nb-handwriting text-[#1e3a8a] hover:text-[#172554] transition-colors text-xl font-black rotate-[1deg]">
+                      <Globe size={20} /> Personal Site <ExternalLink size={16} className="ml-0.5" />
+                    </a>
+                  )}
+                </div>
+              )}
+              {data.availability && (
+                <div className="nb-doodle-box inline-flex items-center gap-2 rotate-[-1deg]" style={{ borderColor: '#2B6CB0' }}>
+                  <Briefcase size={14} className="nb-ink" />
+                  <span className="nb-handwriting text-base font-bold nb-ink">
+                    Open to: <span className="nb-highlight">{data.availability}</span>
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
 
           <hr className="nb-divider" />
 

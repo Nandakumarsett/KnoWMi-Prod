@@ -184,7 +184,7 @@ const PhoneMockup = () => {
                 </div>
 
                 <div className="flex flex-col items-center">
-                  <h1 className="text-lg font-black tracking-tight text-neutral-900 mb-0.5 uppercase italic">Arjun Rao</h1>
+                  <h3 className="text-lg font-black tracking-tight text-neutral-900 mb-0.5 uppercase italic">Arjun Rao</h3>
                   <p className="text-[7px] font-black text-orange-600 uppercase tracking-[0.4em] mb-3">CREATIVE PROFESSIONAL</p>
                   
                   <p className="text-center text-[9px] font-bold text-neutral-800 leading-tight italic mb-6 px-4">
@@ -301,7 +301,7 @@ const PhoneMockup = () => {
                 </div>
 
                 <div className="flex flex-col items-center">
-                  <h1 className="text-lg font-black tracking-tight text-neutral-900 mb-0.5 uppercase italic">Riya Sharma</h1>
+                  <h3 className="text-lg font-black tracking-tight text-neutral-900 mb-0.5 uppercase italic">Riya Sharma</h3>
                   <p className="text-[7px] font-black text-purple-600 uppercase tracking-[0.4em] mb-1">CS STUDENT & TEDx LEAD</p>
                   <p className="text-[#059669] font-bold text-[9px] tracking-wide flex items-center justify-center gap-1 mb-4">
                     <GraduationCap size={12} /> Student @ BITS Pilani
@@ -417,7 +417,7 @@ const PhoneMockup = () => {
                 </div>
 
                 <div className="flex flex-col items-center">
-                  <h1 className="text-lg font-black tracking-tight text-white mb-0.5 uppercase italic">Vikram Aditya</h1>
+                  <h3 className="text-lg font-black tracking-tight text-white mb-0.5 uppercase italic">Vikram Aditya</h3>
                   <p className="text-[7px] font-black text-teal-400 uppercase tracking-[0.4em] mb-1">SOFTWARE ENGINEER</p>
                   
                   {/* Status Badge */}

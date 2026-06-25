@@ -131,13 +131,10 @@ export default function PublicProfile() {
           document.querySelector(`meta[name="${property}"]`);
         if (!metaTag) {
           metaTag = document.createElement("meta");
-          if (property.startsWith("og:")) {
-            metaTag.setAttribute("property", property);
-          } else {
-            metaTag.setAttribute("name", property);
-          }
           document.head.appendChild(metaTag);
         }
+        metaTag.setAttribute("property", property);
+        metaTag.setAttribute("name", property);
         metaTag.setAttribute("content", value);
       });
     }
@@ -557,6 +554,7 @@ export default function PublicProfile() {
             profile={displayProfile}
             recentVisitors={recentVisitors}
             stats={stats}
+            hideHeader={isDesktop}
           />
         </div>
 
@@ -1030,6 +1028,7 @@ export default function PublicProfile() {
               profile={displayProfile}
               recentVisitors={recentVisitors}
               stats={stats}
+              hideHeader={isDesktop}
             />
           </div>
         </div>

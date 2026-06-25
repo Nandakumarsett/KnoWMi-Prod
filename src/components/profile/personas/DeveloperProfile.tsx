@@ -23,7 +23,7 @@ function getPlatformIcon(platform: string) {
   return { Icon: Globe, color: '#71B5F5' };
 }
 
-export function DeveloperProfile({ profile }: { profile: ProfileData }) {
+export function DeveloperProfile({ profile, hideHeader = false }: { profile: ProfileData, hideHeader?: boolean }) {
   const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as DeveloperData;
   const activeTheme = (profile.profile_theme || 'default').toLowerCase();
@@ -45,8 +45,15 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
   const ensureAbsoluteUrl = (url: string) => {
     if (!url) return ''
-    if (url.startsWith('http://') || url.startsWith('https://')) return url
-    return `https://${url}`
+    let cleaned = url.trim();
+    cleaned = cleaned.replace(/^https?:\/+/i, 'https://');
+    while (cleaned.startsWith('/')) {
+      cleaned = cleaned.substring(1);
+    }
+    if (cleaned.startsWith('http://') || cleaned.startsWith('https://')) {
+      return cleaned;
+    }
+    return `https://${cleaned}`;
   }
 
   // ----------------------------------------------------
@@ -90,91 +97,97 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
           <div className="absolute top-[52%] right-[8%] text-neutral-300 animate-float-slow"><Code2 size={32} strokeWidth={1.5} /></div>
         </div>
 
-        <div className="w-full h-48 sm:h-64 relative bg-[#f0f2f5] overflow-hidden rounded-t-[32px] sm:rounded-t-[40px] rounded-b-none z-10 border-b border-neutral-200">
-          {data.featured_work_url ? (
-            <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover" alt="Banner" />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-neutral-200 to-neutral-300" />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#f8f9fa] via-[#f8f9fa]/20 to-transparent" />
-        </div>
+        {!hideHeader && (
+          <div className="w-full h-48 sm:h-64 relative bg-[#f0f2f5] overflow-hidden rounded-t-[32px] sm:rounded-t-[40px] rounded-b-none z-10 border-b border-neutral-200">
+            {data.featured_work_url ? (
+              <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover" alt="Banner" />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-neutral-200 to-neutral-300" />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#f8f9fa] via-[#f8f9fa]/20 to-transparent" />
+          </div>
+        )}
 
-        <main className="w-full max-w-[550px] sm:max-w-[570px] mx-auto pb-20 px-4 flex flex-col items-center relative z-20">
-          <div className="relative -mt-24 sm:-mt-[120px] flex flex-col items-center z-30">
-            <div className="relative p-[4px] rounded-full bg-white shadow-xl shadow-neutral-300/60">
-              <div className="w-36 h-36 sm:w-48 sm:h-48 rounded-full overflow-hidden bg-neutral-100 border-4 border-white">
-                {!avatarError && profile.avatar_url ? (
-                    <img
-                  src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=f0f0f0&color=22c55e`}
-                  className="w-full h-full object-cover"
-                  alt={profile.display_name}
-                onError={() => setAvatarError(true)} />
-                  ) : (
-                    <div className="w-full h-full object-cover flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
-                    </div>
-                  )}
+        <main className={`w-full max-w-[550px] sm:max-w-[570px] mx-auto pb-20 px-4 flex flex-col items-center relative z-20 ${!hideHeader ? '' : 'pt-8'}`}>
+          {!hideHeader && (
+            <>
+              <div className="relative -mt-24 sm:-mt-[120px] flex flex-col items-center z-30">
+                <div className="relative p-[4px] rounded-full bg-white shadow-xl shadow-neutral-300/60">
+                  <div className="w-36 h-36 sm:w-48 sm:h-48 rounded-full overflow-hidden bg-neutral-100 border-4 border-white">
+                    {!avatarError && profile.avatar_url ? (
+                        <img
+                      src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=f0f0f0&color=22c55e`}
+                      className="w-full h-full object-cover"
+                      alt={profile.display_name}
+                    onError={() => setAvatarError(true)} />
+                      ) : (
+                        <div className="w-full h-full object-cover flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
+                          {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                        </div>
+                      )}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div className="mt-3 mb-2 text-center">
-            <h1 className="text-[28px] font-mono font-black text-neutral-950 tracking-widest leading-tight">
-              {(profile.display_name || 'NEW USER').toUpperCase()}
-            </h1>
-            <p className="text-neutral-800 font-black text-base sm:text-lg tracking-widest mt-1.5 uppercase">
-              {data.about?.role || data.tagline || 'SYSTEM ENGINEER'}
-            </p>
-          </div>
+              <div className="mt-3 mb-2 text-center">
+                <h1 className="text-[28px] font-mono font-black text-neutral-950 tracking-widest leading-tight">
+                  {(profile.display_name || 'NEW USER').toUpperCase()}
+                </h1>
+                <p className="text-neutral-800 font-black text-base sm:text-lg tracking-widest mt-1.5 uppercase">
+                  {data.about?.role || data.tagline || 'SYSTEM ENGINEER'}
+                </p>
+              </div>
 
-          {profile.bio && (
-            <p className="text-neutral-800 font-sans text-[15px] sm:text-[16px] text-center mt-1.5 mb-2.5 max-w-[92%] leading-relaxed font-extrabold">
-              {profile.bio}
-            </p>
-          )}
+              {profile.bio && (
+                <p className="text-neutral-800 font-sans text-[15px] sm:text-[16px] text-center mt-1.5 mb-2.5 max-w-[92%] leading-relaxed font-extrabold">
+                  {profile.bio}
+                </p>
+              )}
 
-          {visiblePlatforms && visiblePlatforms.length > 0 && (
-            <div className="w-full flex flex-wrap justify-center gap-6 mt-2 mb-4 z-20">
-              {visiblePlatforms.map((p, i) => {
-                if (!p.url) return null
-                const { Icon } = getPlatformIcon(p.platform || '')
-                const isBlurred = isCommunicationApp(p.platform || '') && !user;
-                return (
-                  <a
-                    key={i}
-                    href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => {
-                      if (isBlurred) {
-                        e.preventDefault();
-                        setShowGate(true);
-                        return;
-                      }
-                      handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
-                      if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
-                    }}
-                    className={`relative hover:scale-110 transition-transform duration-300 text-neutral-500 hover:text-[#0A66C2] social-link-item cursor-pointer ${isBlurred ? 'opacity-70' : ''}`}
-                  >
-                    <div className={`w-full h-full flex items-center justify-center ${isBlurred ? 'ghost-blur-item' : ''}`}>
-                      <Icon size={20} />
-                    </div>
-                    {isBlurred && (
-                      <div className="absolute inset-0 flex items-center justify-center z-10">
-                        <Lock size={12} className="text-neutral-700" strokeWidth={2.5} />
-                      </div>
-                    )}
-                  </a>
-                )
-              })}
-            </div>
-          )}
-          {user && profile.ghost_mode && (
-            <div className="w-full text-center mt-2 mb-4 animate-fadeIn z-20">
-              <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
-                <Lock size={12} /> Privacy Mode enabled
-              </p>
-            </div>
+              {visiblePlatforms && visiblePlatforms.length > 0 && (
+                <div className="w-full flex flex-wrap justify-center gap-6 mt-2 mb-4 z-20">
+                  {visiblePlatforms.map((p, i) => {
+                    if (!p.url) return null
+                    const { Icon } = getPlatformIcon(p.platform || '')
+                    const isBlurred = isCommunicationApp(p.platform || '') && !user;
+                    return (
+                      <a
+                        key={i}
+                        href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => {
+                          if (isBlurred) {
+                            e.preventDefault();
+                            setShowGate(true);
+                            return;
+                          }
+                          handleGatedClick(e, p.url, () => trackLinkClick(profile.id, p.platform || 'unknown', p.url));
+                          if (!isGated) window.open(ensureAbsoluteUrl(p.url), '_blank');
+                        }}
+                        className={`relative hover:scale-110 transition-transform duration-300 text-neutral-500 hover:text-[#0A66C2] social-link-item cursor-pointer ${isBlurred ? 'opacity-70' : ''}`}
+                      >
+                        <div className={`w-full h-full flex items-center justify-center ${isBlurred ? 'ghost-blur-item' : ''}`}>
+                          <Icon size={20} />
+                        </div>
+                        {isBlurred && (
+                          <div className="absolute inset-0 flex items-center justify-center z-10">
+                            <Lock size={12} className="text-neutral-700" strokeWidth={2.5} />
+                          </div>
+                        )}
+                      </a>
+                    )
+                  })}
+                </div>
+              )}
+              {user && profile.ghost_mode && (
+                <div className="w-full text-center mt-2 mb-4 animate-fadeIn z-20">
+                  <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+                    <Lock size={12} /> Privacy Mode enabled
+                  </p>
+                </div>
+              )}
+            </>
           )}
 
           {data.about?.status && (
@@ -343,7 +356,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         }} />
 
         {/* Blueprint Banner (Background) */}
-        {data.featured_work_url && (
+        {!hideHeader && data.featured_work_url && (
           <div 
             className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-30 mix-blend-screen"
             style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
@@ -372,55 +385,57 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         <main className="w-full max-w-[620px] mx-auto pb-24 pt-8 px-4 flex flex-col items-center relative z-20">
           
           {/* Schematic Blueprint Title Card block */}
-          <div className="w-full blueprint-border bg-[#001B2E]/90 backdrop-blur-md p-8 mb-8 text-left relative overflow-hidden group hover:border-[#64FFDA]/60 transition-colors duration-500">
-            {/* Corner Crosshairs */}
-            <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#64FFDA]" />
-            <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#64FFDA]" />
-            <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#64FFDA]" />
-            <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#64FFDA]" />
+          {!hideHeader && (
+            <div className="w-full blueprint-border bg-[#001B2E]/90 backdrop-blur-md p-8 mb-8 text-left relative overflow-hidden group hover:border-[#64FFDA]/60 transition-colors duration-500">
+              {/* Corner Crosshairs */}
+              <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#64FFDA]" />
+              <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#64FFDA]" />
+              <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#64FFDA]" />
+              <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#64FFDA]" />
 
-            <div className="absolute top-3 right-4 text-[9px] text-[#64FFDA]/60 font-mono tracking-widest">// VIEW_01</div>
-            
-            <div className="flex flex-col sm:flex-row items-center gap-8 pb-6 border-b border-[#64FFDA]/20">
-              {/* Technical square photo frame */}
-              <div className="relative shrink-0">
-                <div className="w-36 h-36 blueprint-border p-1.5 bg-[#001B2E] relative group-hover:shadow-[0_0_20px_rgba(100,255,218,0.2)] transition-shadow duration-500">
-                  <div className="w-full h-full border border-dashed border-[#64FFDA]/50 overflow-hidden bg-[#0A192F]">
-                    {!avatarError && profile.avatar_url ? (
-                    <img
-                      src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=0A192F&color=64FFDA`}
-                      className="w-full h-full object-cover filter contrast-125 saturate-50 brightness-90 mix-blend-screen opacity-90"
-                      alt={profile.display_name}
-                    onError={() => setAvatarError(true)} />
-                  ) : (
-                    <div className="w-full h-full object-cover filter contrast-125 saturate-50 brightness-90 mix-blend-screen opacity-90 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+              <div className="absolute top-3 right-4 text-[9px] text-[#64FFDA]/60 font-mono tracking-widest">// VIEW_01</div>
+              
+              <div className="flex flex-col sm:flex-row items-center gap-8 pb-6 border-b border-[#64FFDA]/20">
+                {/* Technical square photo frame */}
+                <div className="relative shrink-0">
+                  <div className="w-36 h-36 blueprint-border p-1.5 bg-[#001B2E] relative group-hover:shadow-[0_0_20px_rgba(100,255,218,0.2)] transition-shadow duration-500">
+                    <div className="w-full h-full border border-dashed border-[#64FFDA]/50 overflow-hidden bg-[#0A192F]">
+                      {!avatarError && profile.avatar_url ? (
+                      <img
+                        src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=0A192F&color=64FFDA`}
+                        className="w-full h-full object-cover filter contrast-125 saturate-50 brightness-90 mix-blend-screen opacity-90"
+                        alt={profile.display_name}
+                      onError={() => setAvatarError(true)} />
+                    ) : (
+                      <div className="w-full h-full object-cover filter contrast-125 saturate-50 brightness-90 mix-blend-screen opacity-90 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
+                        {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                      </div>
+                    )}
                     </div>
-                  )}
                   </div>
+                </div>
+
+                <div className="text-center sm:text-left flex-grow mt-4 sm:mt-0">
+                  <div className="text-[10px] text-[#64FFDA]/70 font-bold uppercase tracking-[0.2em] mb-2">// ENTITY_IDENTIFIER</div>
+                  <h1 className="text-3xl sm:text-4xl font-light text-white tracking-widest uppercase mb-3">
+                    {profile.display_name}
+                  </h1>
+                  <p className="text-sm font-medium text-[#64FFDA] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
+                    <Monitor size={16} className="opacity-70" /> {data.about?.role || 'SYSTEM ARCHITECT'}
+                  </p>
                 </div>
               </div>
 
-              <div className="text-center sm:text-left flex-grow mt-4 sm:mt-0">
-                <div className="text-[10px] text-[#64FFDA]/70 font-bold uppercase tracking-[0.2em] mb-2">// ENTITY_IDENTIFIER</div>
-                <h1 className="text-3xl sm:text-4xl font-light text-white tracking-widest uppercase mb-3">
-                  {profile.display_name}
-                </h1>
-                <p className="text-sm font-medium text-[#64FFDA] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
-                  <Monitor size={16} className="opacity-70" /> {data.about?.role || 'SYSTEM ARCHITECT'}
-                </p>
-              </div>
+              {profile.bio && (
+                <div className="mt-6">
+                  <span className="text-[10px] text-[#64FFDA]/50 block uppercase font-bold mb-2">// INIT_PARAMS</span>
+                  <p className="text-sm leading-relaxed text-[#8892B0] pl-4 border-l border-[#64FFDA]/40">
+                    {profile.bio}
+                  </p>
+                </div>
+              )}
             </div>
-
-            {profile.bio && (
-              <div className="mt-6">
-                <span className="text-[10px] text-[#64FFDA]/50 block uppercase font-bold mb-2">// INIT_PARAMS</span>
-                <p className="text-sm leading-relaxed text-[#8892B0] pl-4 border-l border-[#64FFDA]/40">
-                  {profile.bio}
-                </p>
-              </div>
-            )}
-          </div>
+          )}
 
           {/* Infrastructure Specs */}
           {(data.about?.status || data.about?.company || data.about?.mission) && (
@@ -722,7 +737,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
         <div className="absolute inset-0 pointer-events-none z-40 bg-gradient-to-b from-transparent via-[#00FF41]/10 to-transparent h-32 animate-[scanline_8s_linear_infinite] opacity-50" />
 
         {/* Hacker Banner (Background) */}
-        {data.featured_work_url && (
+        {!hideHeader && data.featured_work_url && (
           <div 
             className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-30 mix-blend-screen"
             style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
@@ -734,47 +749,49 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
         <main className="w-full max-w-[620px] mx-auto pb-24 pt-8 px-4 flex flex-col items-center relative z-20">
           
-          <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left relative overflow-hidden">
-            <div className="text-[10px] text-[#00FF41]/70 mb-4 font-bold uppercase tracking-widest flex items-center justify-between">
-              <span>root@system:~# whoami</span>
-              <span className="animate-pulse">_</span>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-              <div className="relative group">
-                <div className="w-32 h-32 hacker-border p-1 bg-black relative">
-                  <div className="w-full h-full overflow-hidden relative">
-                    {!avatarError && profile.avatar_url ? (
-                    <img
-                      src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=000&color=00FF41`}
-                      className="w-full h-full object-cover filter contrast-150 saturate-0"
-                      alt={profile.display_name}
-                    onError={() => setAvatarError(true)} />
-                  ) : (
-                    <div className="w-full h-full object-cover filter contrast-150 saturate-0 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+          {!hideHeader && (
+            <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left relative overflow-hidden">
+              <div className="text-[10px] text-[#00FF41]/70 mb-4 font-bold uppercase tracking-widest flex items-center justify-between">
+                <span>root@system:~# whoami</span>
+                <span className="animate-pulse">_</span>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                <div className="relative group">
+                  <div className="w-32 h-32 hacker-border p-1 bg-black relative">
+                    <div className="w-full h-full overflow-hidden relative">
+                      {!avatarError && profile.avatar_url ? (
+                      <img
+                        src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=000&color=00FF41`}
+                        className="w-full h-full object-cover filter contrast-150 saturate-0"
+                        alt={profile.display_name}
+                      onError={() => setAvatarError(true)} />
+                    ) : (
+                      <div className="w-full h-full object-cover filter contrast-150 saturate-0 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
+                        {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                      </div>
+                    )}
+                      <div className="absolute inset-0 bg-[#00FF41]/20 mix-blend-color pointer-events-none" />
                     </div>
-                  )}
-                    <div className="absolute inset-0 bg-[#00FF41]/20 mix-blend-color pointer-events-none" />
                   </div>
                 </div>
-              </div>
 
-              <div className="text-center sm:text-left flex-grow">
-                <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-widest uppercase mb-2 hacker-glow">
-                  {profile.display_name || 'UNKNOWN_USER'}
-                </h1>
-                <p className="text-sm text-[#00FF41] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
-                  <Terminal size={14} /> {data.about?.role || 'ROOT_ACCESS'}
-                </p>
-                {profile.bio && (
-                  <p className="text-xs leading-relaxed text-[#00FF41]/80 mt-4 border-l-2 border-[#00FF41]/50 pl-3">
-                    <span className="text-[#00FF41] opacity-50 mr-2">&gt;</span>{profile.bio}
+                <div className="text-center sm:text-left flex-grow">
+                  <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-widest uppercase mb-2 hacker-glow">
+                    {profile.display_name || 'UNKNOWN_USER'}
+                  </h1>
+                  <p className="text-sm text-[#00FF41] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
+                    <Terminal size={14} /> {data.about?.role || 'ROOT_ACCESS'}
                   </p>
-                )}
+                  {profile.bio && (
+                    <p className="text-xs leading-relaxed text-[#00FF41]/80 mt-4 border-l-2 border-[#00FF41]/50 pl-3">
+                      <span className="text-[#00FF41] opacity-50 mr-2">&gt;</span>{profile.bio}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {(data.about?.status || data.about?.company || data.about?.mission) && (
             <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left relative">
@@ -1048,7 +1065,7 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
       </div>
 
       {/* Terminal Banner (Background) */}
-      {data.featured_work_url && (
+      {!hideHeader && data.featured_work_url && (
         <div 
           className="absolute top-[41px] left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-20 mix-blend-screen"
           style={{ WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)' }}
@@ -1059,39 +1076,41 @@ export function DeveloperProfile({ profile }: { profile: ProfileData }) {
 
       <main className="w-full max-w-3xl mx-auto pb-24 pt-8 px-4 sm:px-8 flex flex-col items-start relative z-20 text-sm sm:text-base">
         
-        <div className="w-full flex flex-col sm:flex-row gap-6 items-center sm:items-start mb-10">
-          <div className="relative shrink-0">
-            <div className="w-24 h-24 sm:w-32 sm:h-32 border-2 border-[#30363D] p-1">
-              {!avatarError && profile.avatar_url ? (
-                    <img
-                src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=0D1117&color=E6EDF3`}
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
-                alt={profile.display_name}
-              onError={() => setAvatarError(true)} />
-                  ) : (
-                    <div className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
-                      {profile.display_name?.charAt(0).toUpperCase() || 'U'}
-                    </div>
-                  )}
+        {!hideHeader && (
+          <div className="w-full flex flex-col sm:flex-row gap-6 items-center sm:items-start mb-10">
+            <div className="relative shrink-0">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 border-2 border-[#30363D] p-1">
+                {!avatarError && profile.avatar_url ? (
+                      <img
+                  src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=0D1117&color=E6EDF3`}
+                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                  alt={profile.display_name}
+                onError={() => setAvatarError(true)} />
+                    ) : (
+                      <div className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl " style={{ fontFamily: 'sans-serif' }}>
+                        {profile.display_name?.charAt(0).toUpperCase() || 'U'}
+                      </div>
+                    )}
+              </div>
             </div>
-          </div>
 
-          <div className="flex flex-col text-center sm:text-left mt-2 sm:mt-0">
-            <div className="flex items-center gap-2 mb-2 justify-center sm:justify-start flex-wrap">
-              <span className="text-[#3FB950] font-bold">~</span>
-              <span className="text-[#8B949E]">$</span>
-              <span className="text-white font-bold text-xl">{profile.display_name}</span>
+            <div className="flex flex-col text-center sm:text-left mt-2 sm:mt-0">
+              <div className="flex items-center gap-2 mb-2 justify-center sm:justify-start flex-wrap">
+                <span className="text-[#3FB950] font-bold">~</span>
+                <span className="text-[#8B949E]">$</span>
+                <span className="text-white font-bold text-xl">{profile.display_name}</span>
+              </div>
+              <div className="text-[#8B949E] mb-3">
+                Role: <span className="text-[#58A6FF]">{data.about?.role || 'Software Engineer'}</span>
+              </div>
+              {profile.bio && (
+                <p className="text-[#8B949E] text-sm leading-relaxed max-w-lg">
+                  {profile.bio}
+                </p>
+              )}
             </div>
-            <div className="text-[#8B949E] mb-3">
-              Role: <span className="text-[#58A6FF]">{data.about?.role || 'Software Engineer'}</span>
-            </div>
-            {profile.bio && (
-              <p className="text-[#8B949E] text-sm leading-relaxed max-w-lg">
-                {profile.bio}
-              </p>
-            )}
           </div>
-        </div>
+        )}
 
         {(data.about?.status || data.about?.company || data.about?.mission) && (
           <div className="w-full mb-8">

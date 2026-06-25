@@ -122,6 +122,7 @@ export default function TeamCheckout({ onClose, user, onAuth, selectedDesign }) 
         image: 'https://knowmi.co/favicon.ico',
         order_id: orderData.order_id,
         handler: function (response) {
+          sessionStorage.setItem('knowmi_payment_success', 'true')
           alert(`🎉 Team order placed for ${members.length} members! ID: ${response.razorpay_payment_id}`)
           onClose()
         },

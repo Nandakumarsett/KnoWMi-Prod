@@ -10,25 +10,26 @@ interface PersonaRouterProps {
   profile: ProfileData
   recentVisitors?: any[]
   stats?: any
+  hideHeader?: boolean
 }
 
-export function PersonaRouter({ profile, recentVisitors = [], stats }: PersonaRouterProps) {
+export function PersonaRouter({ profile, recentVisitors = [], stats, hideHeader = false }: PersonaRouterProps) {
   const persona = (profile.persona || 'developer').toLowerCase()
   switch (persona) {
     case 'dev':
     case 'developer':
     case 'coder':
     case 'tech':
-      return <DeveloperProfile profile={profile} />
+      return <DeveloperProfile profile={profile} hideHeader={hideHeader} />
     case 'student':
     case 'education':
     case 'university':
-      return <StudentProfile profile={profile} visitors={recentVisitors} stats={stats} />
+      return <StudentProfile profile={profile} visitors={recentVisitors} stats={stats} hideHeader={hideHeader} />
     case 'creator':
     default:
       return (
         <ErrorBoundary>
-          <CreatorProfile profile={profile} stats={stats} />
+          <CreatorProfile profile={profile} stats={stats} hideHeader={hideHeader} />
         </ErrorBoundary>
       )
   }

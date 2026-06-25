@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
 import ScrollyHome from '../components/ScrollyHome'
@@ -27,6 +28,43 @@ export default function Home() {
   const [pendingRedirect, setPendingRedirect] = useState(null)
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentParam = urlParams.get('payment') || urlParams.get('success');
+    const hasSessionSuccess = sessionStorage.getItem('knowmi_payment_success') === 'true';
+
+    if (paymentParam === 'success' || paymentParam === 'true' || hasSessionSuccess) {
+      sessionStorage.removeItem('knowmi_payment_success');
+      if (urlParams.get('payment') || urlParams.get('success')) {
+        urlParams.delete('payment');
+        urlParams.delete('success');
+        const newSearch = urlParams.toString();
+        const newPath = window.location.pathname + (newSearch ? `?${newSearch}` : '');
+        window.history.replaceState({}, document.title, newPath);
+      }
+
+      toast.success(
+        (t) => (
+          <div className="flex flex-col gap-1.5 p-1 text-left">
+            <p className="font-black text-sm uppercase tracking-wide text-neutral-900">Payment Successful! 🎉</p>
+            <p className="text-xs text-neutral-600 font-medium">Your phygital order is confirmed. Go to your dashboard to claim your profile.</p>
+          </div>
+        ),
+        {
+          duration: 6000,
+          style: {
+            border: '3px solid #000',
+            padding: '16px',
+            color: '#000',
+            background: '#fff',
+            borderRadius: '16px',
+            boxShadow: '6px 6px 0px #000',
+          },
+        }
+      );
+    }
+  }, []);
 
   const openAuth = (tab = 'signup') => {
     setAuthTab(tab)

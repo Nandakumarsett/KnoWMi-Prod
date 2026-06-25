@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Tshirt3DModel from './Tshirt3DModel';
@@ -125,7 +126,10 @@ export default function ScrollyHome() {
           <h1 className="text-6xl md:text-9xl font-black tracking-tighter uppercase mb-4 leading-[0.9]">
             The Phygital<br/>Era <span className="bg-orange-500 text-black px-4 py-1 rounded-xl inline-block mt-2 border-[3px] border-black shadow-[5px_5px_0px_#000] rotate-2">Begins</span>
           </h1>
-          <p className="text-sm text-neutral-400 font-medium tracking-widest uppercase mt-12 animate-pulse">Scroll to unlock</p>
+          <div className="flex flex-col items-center gap-2 mt-12 animate-bounce">
+            <p className="text-xs text-neutral-400 font-medium tracking-widest uppercase">Explore Our Features Below</p>
+            <ChevronDown className="w-6 h-6 text-orange-500" />
+          </div>
         </div>
       </section>
 

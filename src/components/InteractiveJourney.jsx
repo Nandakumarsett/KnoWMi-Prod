@@ -323,7 +323,7 @@ export default function InteractiveJourney() {
                       transition={{ delay: 0.8 }}
                       className="text-white text-xl font-bold mb-2 text-center"
                     >
-                      Payment Successful
+                      Demo Order Successful
                     </motion.h3>
                     <motion.p 
                       initial={{ opacity: 0 }}

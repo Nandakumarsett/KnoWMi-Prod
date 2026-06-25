@@ -59,9 +59,11 @@ const PLATFORM_ICONS: Record<string, any> = {
 export function CreatorProfile({
   profile,
   stats,
+  hideHeader = false,
 }: {
   profile: ProfileData;
   stats?: any;
+  hideHeader?: boolean;
 }) {
   const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as CreatorData;
@@ -214,8 +216,13 @@ export function CreatorProfile({
 
   const ensureAbsoluteUrl = (url: string) => {
     if (!url) return "";
-    if (url.startsWith("http://") || url.startsWith("https://")) return url;
-    return `https://${url}`;
+    let cleaned = url.trim();
+    cleaned = cleaned.replace(/^https?:\/+/i, 'https://');
+    while (cleaned.startsWith('/')) {
+      cleaned = cleaned.substring(1);
+    }
+    if (cleaned.startsWith("http://") || cleaned.startsWith("https://")) return cleaned;
+    return `https://${cleaned}`;
   };
 
   // PLATFORM BRAND STYLES MAP
@@ -424,59 +431,63 @@ export function CreatorProfile({
         </div>
 
         <section className="relative z-10 text-left">
-          <div className="w-full h-48 sm:h-64 relative bg-[#1A1A1A] overflow-hidden rounded-t-[40px]">
-            {data.featured_work_url ? (
-              <img
-                src={getAssetUrl(data.featured_work_url)}
-                className="absolute inset-0 w-full h-full object-cover animate-fadeIn"
-                alt="Profile Banner"
-              />
-            ) : (
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-rose-600" />
-            )}
-            <div className="absolute inset-0 bg-black/10" />
-            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/0 to-transparent via-[25%]" />
-            <div className="absolute top-6 right-8 text-white/40 z-20">
-              <Sparkles size={28} className="animate-pulse" />
-            </div>
-          </div>
-
-          <div className="relative h-12 px-8 z-30">
-            <div className="absolute -top-24 sm:-top-32 left-1/2 -translate-x-1/2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
-              <div
-                className="w-40 h-40 sm:w-48 sm:h-48 p-1.5 rounded-full"
-                style={{
-                  background: "linear-gradient(135deg, #C1440E, #F97316)",
-                }}
-              >
-                <div className="w-full h-full bg-white p-1 rounded-full overflow-hidden shadow-inner">
-                  {!avatarError && profile.avatar_url ? (
-                    <img
-                      src={getAssetUrl(profile.avatar_url)}
-                      alt={profile.display_name}
-                      className="w-full h-full object-cover rounded-full"
-                      onError={() => setAvatarError(true)}
-                    />
-                  ) : (
-                    <div
-                      className="w-full h-full object-cover rounded-full flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl rounded-full"
-                      style={{ fontFamily: "sans-serif" }}
-                    >
-                      {profile.display_name?.charAt(0).toUpperCase() || "U"}
-                    </div>
-                  )}
-                </div>
-              </div>
-              {profile.is_verified && (
-                <div className="absolute bottom-2 right-2 w-10 h-10 bg-white rounded-full shadow-xl flex items-center justify-center border border-neutral-100">
-                  <VerifiedBadge
-                    isVerified={profile.is_verified}
-                    accentColor="#C1440E"
-                  />
-                </div>
+          {!hideHeader && (
+            <div className="w-full h-48 sm:h-64 relative bg-[#1A1A1A] overflow-hidden rounded-t-[40px]">
+              {data.featured_work_url ? (
+                <img
+                  src={getAssetUrl(data.featured_work_url)}
+                  className="absolute inset-0 w-full h-full object-cover animate-fadeIn"
+                  alt="Profile Banner"
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-rose-600" />
               )}
+              <div className="absolute inset-0 bg-black/10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-white via-white/0 to-transparent via-[25%]" />
+              <div className="absolute top-6 right-8 text-white/40 z-20">
+                <Sparkles size={28} className="animate-pulse" />
+              </div>
             </div>
-          </div>
+          )}
+
+          {!hideHeader && (
+            <div className="relative h-12 px-8 z-30">
+              <div className="absolute -top-24 sm:-top-32 left-1/2 -translate-x-1/2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+                <div
+                  className="w-40 h-40 sm:w-48 sm:h-48 p-1.5 rounded-full"
+                  style={{
+                    background: "linear-gradient(135deg, #C1440E, #F97316)",
+                  }}
+                >
+                  <div className="w-full h-full bg-white p-1 rounded-full overflow-hidden shadow-inner">
+                    {!avatarError && profile.avatar_url ? (
+                      <img
+                        src={getAssetUrl(profile.avatar_url)}
+                        alt={profile.display_name}
+                        className="w-full h-full object-cover rounded-full"
+                        onError={() => setAvatarError(true)}
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full object-cover rounded-full flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl rounded-full"
+                        style={{ fontFamily: "sans-serif" }}
+                      >
+                        {profile.display_name?.charAt(0).toUpperCase() || "U"}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {profile.is_verified && (
+                  <div className="absolute bottom-2 right-2 w-10 h-10 bg-white rounded-full shadow-xl flex items-center justify-center border border-neutral-100">
+                    <VerifiedBadge
+                      isVerified={profile.is_verified}
+                      accentColor="#C1440E"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="px-8 pt-6 relative z-20">
             <div className="flex flex-col items-center mb-10">
@@ -607,7 +618,7 @@ export function CreatorProfile({
               </div>
             )}
 
-            {Array.isArray(visiblePlatforms) && visiblePlatforms.length > 0 && (
+            {!hideHeader && Array.isArray(visiblePlatforms) && visiblePlatforms.length > 0 && (
               <div className="mb-12">
                 <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6">
                   Where you can find me
@@ -937,7 +948,7 @@ export function CreatorProfile({
         </div>
 
         {/* Banner (Background) */}
-        {data.featured_work_url && (
+        {!hideHeader && data.featured_work_url && (
           <div
             className="absolute top-0 left-0 w-full h-64 sm:h-80 z-0 pointer-events-none opacity-40 mix-blend-multiply"
             style={{
@@ -955,98 +966,102 @@ export function CreatorProfile({
           </div>
         )}
 
-        <div className="px-6 sm:px-12 pt-32 max-w-4xl mx-auto flex flex-col items-center relative z-10">
-          {/* Profile Pic */}
-          <div className="w-full mb-6 flex justify-center">
-            <div className="w-32 h-32 sm:w-40 sm:h-40 border-4 border-black overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white">
-              {!avatarError && profile.avatar_url ? (
-                <img
-                  src={getAssetUrl(profile.avatar_url)}
-                  alt={profile.display_name}
-                  className="w-full h-full object-cover grayscale"
-                  onError={() => setAvatarError(true)}
-                />
-              ) : (
+        <div className={`px-6 sm:px-12 max-w-4xl mx-auto flex flex-col items-center relative z-10 ${(!hideHeader && data.featured_work_url) ? 'pt-32' : 'pt-8'}`}>
+          {!hideHeader && (
+            <>
+              {/* Profile Pic */}
+              <div className="w-full mb-6 flex justify-center">
+                <div className="w-32 h-32 sm:w-40 sm:h-40 border-4 border-black overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white">
+                  {!avatarError && profile.avatar_url ? (
+                    <img
+                      src={getAssetUrl(profile.avatar_url)}
+                      alt={profile.display_name}
+                      className="w-full h-full object-cover grayscale"
+                      onError={() => setAvatarError(true)}
+                    />
+                  ) : (
+                    <div
+                      className="w-full h-full object-cover grayscale flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl "
+                      style={{ fontFamily: "sans-serif" }}
+                    >
+                      {profile.display_name?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Typographic Header */}
+              <div className="text-center w-full mb-6">
+                <h1 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase leading-none mb-4">
+                  {profile.display_name}
+                </h1>
+
+                {data.tagline && (
+                  <p className="text-xs sm:text-sm font-bold tracking-widest uppercase mt-4 block max-w-2xl mx-auto">
+                    {data.tagline}
+                  </p>
+                )}
+              </div>
+
+              {/* Tagline */}
+
+              {/* Stats Bar */}
+              <div className="w-full border-4 border-black p-4 sm:p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-wrap items-center justify-center gap-y-4 mb-10 bg-white">
                 <div
-                  className="w-full h-full object-cover grayscale flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl "
-                  style={{ fontFamily: "sans-serif" }}
+                  className={`flex-1 min-w-[120px] text-center ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
+                  onClick={() => isFreeProfile && setShowFomoModal(true)}
                 >
-                  {profile.display_name?.charAt(0).toUpperCase() || "U"}
+                  <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
+                    PROFILE VIEWS
+                  </span>
+                  <span
+                    className={`text-3xl font-black ${isFreeProfile ? "blur-[4px]" : ""}`}
+                  >
+                    {liveViews}
+                  </span>
                 </div>
-              )}
-            </div>
-          </div>
-
-          {/* Typographic Header */}
-          <div className="text-center w-full mb-6">
-            <h1 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase leading-none mb-4">
-              {profile.display_name}
-            </h1>
-
-            {data.tagline && (
-              <p className="text-xs sm:text-sm font-bold tracking-widest uppercase mt-4 block max-w-2xl mx-auto">
-                {data.tagline}
-              </p>
-            )}
-          </div>
-
-          {/* Tagline */}
-
-          {/* Stats Bar */}
-          <div className="w-full border-4 border-black p-4 sm:p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-wrap items-center justify-center gap-y-4 mb-10 bg-white">
-            <div
-              className={`flex-1 min-w-[120px] text-center ${isFreeProfile ? "cursor-pointer hover:opacity-80" : ""}`}
-              onClick={() => isFreeProfile && setShowFomoModal(true)}
-            >
-              <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
-                PROFILE VIEWS
-              </span>
-              <span
-                className={`text-3xl font-black ${isFreeProfile ? "blur-[4px]" : ""}`}
-              >
-                {liveViews}
-              </span>
-            </div>
-            
-            <div className="w-1 h-12 bg-black mx-2 sm:mx-4 rounded-full hidden sm:block"></div>
-            
-            <div className="flex-1 min-w-[120px] text-center">
-              <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
-                LOCATION
-              </span>
-              <span className="text-2xl font-black uppercase" style={{ color: cityColor }}>
-                {topCity}
-              </span>
-            </div>
-            {data.total_reach && (
-              <>
+                
                 <div className="w-1 h-12 bg-black mx-2 sm:mx-4 rounded-full hidden sm:block"></div>
+                
                 <div className="flex-1 min-w-[120px] text-center">
                   <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
-                    TOTAL REACH
+                    LOCATION
                   </span>
-                  <span className="text-3xl font-black">
-                    {data.total_reach}
-                  </span>
-                </div>
-              </>
-            )}
-            {data.engagement_rate && (
-              <>
-                <div className="w-1 h-12 bg-black mx-2 sm:mx-4 rounded-full hidden sm:block"></div>
-                <div className="flex-1 min-w-[120px] text-center">
-                  <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
-                    ENGAGEMENT
-                  </span>
-                  <span className="text-3xl font-black">
-                    {data.engagement_rate}
+                  <span className="text-2xl font-black uppercase" style={{ color: cityColor }}>
+                    {topCity}
                   </span>
                 </div>
-              </>
-            )}
-          </div>
+                {data.total_reach && (
+                  <>
+                    <div className="w-1 h-12 bg-black mx-2 sm:mx-4 rounded-full hidden sm:block"></div>
+                    <div className="flex-1 min-w-[120px] text-center">
+                      <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
+                        TOTAL REACH
+                      </span>
+                      <span className="text-3xl font-black">
+                        {data.total_reach}
+                      </span>
+                    </div>
+                  </>
+                )}
+                {data.engagement_rate && (
+                  <>
+                    <div className="w-1 h-12 bg-black mx-2 sm:mx-4 rounded-full hidden sm:block"></div>
+                    <div className="flex-1 min-w-[120px] text-center">
+                      <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
+                        ENGAGEMENT
+                      </span>
+                      <span className="text-3xl font-black">
+                        {data.engagement_rate}
+                      </span>
+                    </div>
+                  </>
+                )}
+              </div>
+            </>
+          )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 w-full text-left mb-12">
+          <div className={`grid grid-cols-1 ${!hideHeader ? 'sm:grid-cols-2' : ''} gap-10 w-full text-left mb-12`}>
             {/* Work List */}
             {((Array.isArray(data.content_formats) && data.content_formats.length > 0) || (Array.isArray(data.deliverable_formats) && data.deliverable_formats.length > 0)) && (
               <div>
@@ -1067,7 +1082,7 @@ export function CreatorProfile({
             )}
 
             {/* About / Narrative */}
-            {(profile.bio || data.bio) && (
+            {!hideHeader && (profile.bio || data.bio) && (
               <div>
                 <h3 className="font-black text-2xl uppercase tracking-tighter mb-4 border-b-4 border-black pb-2">
                   NARRATIVE
@@ -1080,7 +1095,7 @@ export function CreatorProfile({
           </div>
 
           {/* Social */}
-          {Array.isArray(visiblePlatforms) && (visiblePlatforms.length > 0 || (user && profile.ghost_mode)) && (
+          {!hideHeader && Array.isArray(visiblePlatforms) && (visiblePlatforms.length > 0 || (user && profile.ghost_mode)) && (
             <div className="w-full text-center mb-10">
               <h3 className="font-black text-2xl uppercase tracking-tighter mb-6 border-b-4 border-black pb-2 text-left">
                 SOCIALS
@@ -1112,10 +1127,10 @@ export function CreatorProfile({
                         if (!isGated)
                           window.open(ensureAbsoluteUrl(p.url), "_blank");
                       }}
-                      className="w-14 h-14 border-4 border-black flex items-center justify-center bg-white hover:bg-black hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] relative cursor-pointer"
+                      className="px-6 py-3 border-4 border-black text-black font-black uppercase tracking-widest text-xs shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center gap-2 cursor-pointer relative"
                     >
-                      <div className={`w-full h-full flex items-center justify-center ${isBlurred ? 'ghost-blur-item' : ''}`}>
-                        <Icon size={24} />
+                      <div className={`flex items-center gap-2 ${isBlurred ? 'ghost-blur-item' : ''}`}>
+                        <Icon size={16} /> {p.platform}
                       </div>
                       {isBlurred && (
                         <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10">
@@ -1406,7 +1421,7 @@ export function CreatorProfile({
     return (
       <div className="w-full pb-8 relative bg-[#0D0B1A] text-white font-sans overflow-x-hidden">
         {/* Neon Background Accents & Banner */}
-        {data.featured_work_url && (
+        {!hideHeader && data.featured_work_url && (
           <div 
             className="relative w-full h-48 sm:h-72 overflow-hidden shadow-[0_0_30px_rgba(255,45,120,0.2)] z-10"
             style={{ WebkitMaskImage: "linear-gradient(to bottom, black 0%, transparent 100%)", maskImage: "linear-gradient(to bottom, black 0%, transparent 100%)" }}
@@ -1425,111 +1440,117 @@ export function CreatorProfile({
         </div>
 
         {/* Top Right Actions */}
-        <div className="absolute top-6 right-6 z-40 flex flex-col items-end gap-2">
-          <div className="flex items-center gap-3 bg-black/40 border border-[#FF2D78]/50 px-3 py-1.5 rounded-md backdrop-blur-md shadow-[0_0_10px_rgba(255,45,120,0.3)]">
-            <span className="text-[9px] font-bold uppercase tracking-widest text-[#FF2D78]">
-              Scan to Connect
-            </span>
-            <QrCode size={16} className="text-[#FF2D78]" />
+        {!hideHeader && (
+          <div className="absolute top-6 right-6 z-40 flex flex-col items-end gap-2">
+            <div className="flex items-center gap-3 bg-black/40 border border-[#FF2D78]/50 px-3 py-1.5 rounded-md backdrop-blur-md shadow-[0_0_10px_rgba(255,45,120,0.3)]">
+              <span className="text-[9px] font-bold uppercase tracking-widest text-[#FF2D78]">
+                Scan to Connect
+              </span>
+              <QrCode size={16} className="text-[#FF2D78]" />
+            </div>
+            <div className="w-8 h-8 flex flex-col justify-center gap-1.5 items-end cursor-pointer group mt-2">
+              <div className="w-6 h-0.5 bg-[#FF2D78] shadow-[0_0_5px_rgba(255,45,120,0.8)] group-hover:w-8 transition-all"></div>
+              <div className="w-8 h-0.5 bg-[#FF2D78] shadow-[0_0_5px_rgba(255,45,120,0.8)]"></div>
+              <div className="w-4 h-0.5 bg-[#FF2D78] shadow-[0_0_5px_rgba(255,45,120,0.8)] group-hover:w-8 transition-all"></div>
+            </div>
           </div>
-          <div className="w-8 h-8 flex flex-col justify-center gap-1.5 items-end cursor-pointer group mt-2">
-            <div className="w-6 h-0.5 bg-[#FF2D78] shadow-[0_0_5px_rgba(255,45,120,0.8)] group-hover:w-8 transition-all"></div>
-            <div className="w-8 h-0.5 bg-[#FF2D78] shadow-[0_0_5px_rgba(255,45,120,0.8)]"></div>
-            <div className="w-4 h-0.5 bg-[#FF2D78] shadow-[0_0_5px_rgba(255,45,120,0.8)] group-hover:w-8 transition-all"></div>
-          </div>
-        </div>
+        )}
 
-        <div className={`px-6 sm:px-12 max-w-4xl mx-auto flex flex-col items-center relative z-20 ${data.featured_work_url ? '-mt-16 sm:-mt-24' : 'pt-24'}`}>
-          {/* Avatar with Neon Ring */}
-          <div className="relative mb-8">
-            <div
-              className="w-36 h-36 sm:w-44 sm:h-44 rounded-full p-1 bg-gradient-to-br from-[#FF2D78] to-purple-600 shadow-[0_0_30px_rgba(255,45,120,0.6)] animate-pulse"
-              style={{ animationDuration: "3s" }}
-            >
-              <div className="w-full h-full rounded-full bg-[#0D0B1A] overflow-hidden p-1">
-                {!avatarError && profile.avatar_url ? (
-                  <img
-                    src={getAssetUrl(profile.avatar_url)}
-                    alt={profile.display_name}
-                    className="w-full h-full object-cover rounded-full filter contrast-125 saturate-50"
-                    onError={() => setAvatarError(true)}
-                  />
-                ) : (
-                  <div
-                    className="w-full h-full object-cover rounded-full filter contrast-125 saturate-50 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl rounded-full"
-                    style={{ fontFamily: "sans-serif" }}
+        <div className={`px-6 sm:px-12 max-w-4xl mx-auto flex flex-col items-center relative z-20 ${(!hideHeader && data.featured_work_url) ? '-mt-16 sm:-mt-24' : 'pt-24'}`}>
+          {!hideHeader && (
+            <>
+              {/* Avatar with Neon Ring */}
+              <div className="relative mb-8">
+                <div
+                  className="w-36 h-36 sm:w-44 sm:h-44 rounded-full p-1 bg-gradient-to-br from-[#FF2D78] to-purple-600 shadow-[0_0_30px_rgba(255,45,120,0.6)] animate-pulse"
+                  style={{ animationDuration: "3s" }}
+                >
+                  <div className="w-full h-full rounded-full bg-[#0D0B1A] overflow-hidden p-1">
+                    {!avatarError && profile.avatar_url ? (
+                      <img
+                        src={getAssetUrl(profile.avatar_url)}
+                        alt={profile.display_name}
+                        className="w-full h-full object-cover rounded-full filter contrast-125 saturate-50"
+                        onError={() => setAvatarError(true)}
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full object-cover rounded-full filter contrast-125 saturate-50 flex items-center justify-center bg-neutral-200 text-neutral-600 font-bold text-4xl rounded-full"
+                        style={{ fontFamily: "sans-serif" }}
+                      >
+                        {profile.display_name?.charAt(0).toUpperCase() || "U"}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Headers */}
+              <div className="text-center w-full mb-6">
+                <h1 className="text-4xl sm:text-6xl font-black tracking-tight uppercase text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] mb-2">
+                  {profile.display_name}
+                </h1>
+                <h2 className="text-sm sm:text-base font-black tracking-[0.3em] uppercase text-[#FF2D78] drop-shadow-[0_0_8px_rgba(255,45,120,0.8)]">
+                  {data.tagline }
+                </h2>
+              </div>
+
+              {/* Stats Bar */}
+              <div className="w-full max-w-3xl border border-white/10 bg-black/40 backdrop-blur-md rounded-2xl p-6 mb-10 flex flex-wrap justify-between items-center gap-6 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                <div
+                  className={`text-center flex-1 min-w-[80px] ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
+                  onClick={() => isFreeProfile && setShowFomoModal(true)}
+                >
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
+                    VIEWS
+                  </span>
+                  <span
+                    className={`text-2xl font-black text-white border-b-2 border-[#FF2D78] pb-1 inline-block ${isFreeProfile ? "blur-[4px]" : ""}`}
                   >
-                    {profile.display_name?.charAt(0).toUpperCase() || "U"}
+                    {liveViews}
+                  </span>
+                </div>
+                <div className="text-center flex-1 min-w-[80px]">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
+                    LOCATION
+                  </span>
+                  <span 
+                    className="text-xl font-black border-b-2 pb-1 inline-block truncate max-w-full uppercase"
+                    style={{ 
+                      color: cityColor === '#1A1A1A' ? 'white' : cityColor, 
+                      borderColor: cityColor === '#1A1A1A' ? '#FF2D78' : cityColor 
+                    }}
+                  >
+                    {topCity}
+                  </span>
+                </div>
+                {data.total_reach && (
+                  <div className="text-center flex-1 min-w-[80px]">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
+                      REACH
+                    </span>
+                    <span className="text-2xl font-black text-white border-b-2 border-[#FF2D78] pb-1 inline-block">
+                      {data.total_reach}
+                    </span>
+                  </div>
+                )}
+                {data.engagement_rate && (
+                  <div className="text-center flex-1 min-w-[80px]">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
+                      ENGAGEMENT
+                    </span>
+                    <span className="text-2xl font-black text-white border-b-2 border-cyan-400 pb-1 inline-block">
+                      {data.engagement_rate}
+                    </span>
                   </div>
                 )}
               </div>
-            </div>
-          </div>
-
-          {/* Headers */}
-          <div className="text-center w-full mb-6">
-            <h1 className="text-4xl sm:text-6xl font-black tracking-tight uppercase text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] mb-2">
-              {profile.display_name}
-            </h1>
-            <h2 className="text-sm sm:text-base font-black tracking-[0.3em] uppercase text-[#FF2D78] drop-shadow-[0_0_8px_rgba(255,45,120,0.8)]">
-              {data.tagline }
-            </h2>
-          </div>
-
-          {/* Stats Bar */}
-          <div className="w-full max-w-3xl border border-white/10 bg-black/40 backdrop-blur-md rounded-2xl p-6 mb-10 flex flex-wrap justify-between items-center gap-6 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-            <div
-              className={`text-center flex-1 min-w-[80px] ${isFreeProfile ? "cursor-pointer hover:opacity-80" : ""}`}
-              onClick={() => isFreeProfile && setShowFomoModal(true)}
-            >
-              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
-                VIEWS
-              </span>
-              <span
-                className={`text-2xl font-black text-white border-b-2 border-[#FF2D78] pb-1 inline-block ${isFreeProfile ? "blur-[4px]" : ""}`}
-              >
-                {liveViews}
-              </span>
-            </div>
-            <div className="text-center flex-1 min-w-[80px]">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
-                LOCATION
-              </span>
-              <span 
-                className="text-xl font-black border-b-2 pb-1 inline-block truncate max-w-full uppercase"
-                style={{ 
-                  color: cityColor === '#1A1A1A' ? 'white' : cityColor, 
-                  borderColor: cityColor === '#1A1A1A' ? '#FF2D78' : cityColor 
-                }}
-              >
-                {topCity}
-              </span>
-            </div>
-            {data.total_reach && (
-              <div className="text-center flex-1 min-w-[80px]">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
-                  REACH
-                </span>
-                <span className="text-2xl font-black text-white border-b-2 border-[#FF2D78] pb-1 inline-block">
-                  {data.total_reach}
-                </span>
-              </div>
-            )}
-            {data.engagement_rate && (
-              <div className="text-center flex-1 min-w-[80px]">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
-                  ENGAGEMENT
-                </span>
-                <span className="text-2xl font-black text-white border-b-2 border-cyan-400 pb-1 inline-block">
-                  {data.engagement_rate}
-                </span>
-              </div>
-            )}
-          </div>
+            </>
+          )}
 
           <div className="flex flex-col gap-8 w-full max-w-3xl mb-12">
             {/* Narrative */}
-            {(data.bio || profile.bio) && (
+            {!hideHeader && (data.bio || profile.bio) && (
               <div className="bg-black/30 border border-cyan-500/30 rounded-3xl p-8 sm:p-10 shadow-[inset_0_0_30px_rgba(6,182,212,0.1)] text-center relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
                 <h3 className="font-black text-lg sm:text-xl uppercase tracking-[0.2em] text-cyan-400 mb-6 drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]">
@@ -1565,7 +1586,7 @@ export function CreatorProfile({
           </div>
 
           {/* Social Links */}
-          {Array.isArray(visiblePlatforms) && (visiblePlatforms.length > 0 || (user && profile.ghost_mode)) && (
+          {!hideHeader && Array.isArray(visiblePlatforms) && (visiblePlatforms.length > 0 || (user && profile.ghost_mode)) && (
             <div className="w-full text-center mb-10 mt-6">
               <h3 className="font-bold text-sm uppercase tracking-[0.2em] text-white mb-6 border-b border-white/20 pb-2 inline-block">
                 CONNECT WITH ME
@@ -1992,217 +2013,219 @@ export function CreatorProfile({
         {/* ════════════════════════════════════════════════ */}
         {/* SECTION 1 — THE HERO                            */}
         {/* ════════════════════════════════════════════════ */}
-        <section
-          className="relative w-full mb-12 stagger-fade"
-          style={{ animationDelay: "0s" }}
-        >
-          {/* Banner */}
-          {data.featured_work_url ? (
-            <div className="w-full h-48 sm:h-64 rounded-t-[32px] rounded-b-[12px] sm:rounded-b-[24px] overflow-hidden relative shadow-sm">
-              <img
-                src={getAssetUrl(data.featured_work_url)}
-                alt="Banner"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ) : (
-            <div className="w-full h-40 sm:h-56 rounded-[32px] bg-gradient-to-br from-fuchsia-50 via-violet-50 to-cyan-50" />
-          )}
-
-          {/* Avatar + Identity */}
-          <div className="relative px-4 sm:px-8 flex flex-col items-center sm:items-start">
-            {/* Avatar */}
-            <div className="relative shrink-0 group -mt-16 sm:-mt-24 z-10 mb-4 sm:mb-5">
-              <div className="w-32 h-32 sm:w-40 sm:h-40 bg-white p-2 rounded-[32px] sm:rounded-[36px] shadow-[0_8px_40px_rgba(0,0,0,0.12)] rotate-[-2deg] group-hover:rotate-0 transition-transform duration-500">
-                <div className="w-full h-full rounded-[26px] sm:rounded-[30px] overflow-hidden">
-                  {!avatarError && profile.avatar_url ? (
-                    <img
-                      src={getAssetUrl(profile.avatar_url)}
-                      alt={profile.display_name}
-                      className="w-full h-full object-cover"
-                      onError={() => setAvatarError(true)}
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-fuchsia-500 to-purple-600 text-white font-bold text-4xl">
-                      {profile.display_name?.charAt(0).toUpperCase() || "U"}
-                    </div>
-                  )}
-                </div>
+        {!hideHeader && (
+          <section
+            className="relative w-full mb-12 stagger-fade"
+            style={{ animationDelay: "0s" }}
+          >
+            {/* Banner */}
+            {data.featured_work_url ? (
+              <div className="w-full h-48 sm:h-64 rounded-t-[32px] rounded-b-[12px] sm:rounded-b-[24px] overflow-hidden relative shadow-sm">
+                <img
+                  src={getAssetUrl(data.featured_work_url)}
+                  alt="Banner"
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <div className="absolute bottom-0 right-0 sm:bottom-2 sm:right-2 w-7 h-7 rounded-full bg-gradient-to-br from-[#00C3FF] to-[#9933FF] border-[3px] border-[#FAFAFC] shadow-md" />
-            </div>
+            ) : (
+              <div className="w-full h-40 sm:h-56 rounded-[32px] bg-gradient-to-br from-fuchsia-50 via-violet-50 to-cyan-50" />
+            )}
 
-            {/* Name, Tagline, Availability */}
-            <div className="text-center sm:text-left w-full">
-              <h1
-                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-gradient-glow leading-tight mb-2"
-                style={{ paddingBottom: "0.05em" }}
-              >
-                {profile.display_name}
-              </h1>
-              {profile.is_verified && (
-                <div className="inline-flex mb-2">
-                  <VerifiedBadge
-                    isVerified={profile.is_verified}
-                    accentColor="#9933FF"
-                  />
-                </div>
-              )}
-              {data.tagline && (
-                <p className="text-sm sm:text-base font-bold text-gray-700 tracking-wide mb-4">
-                  {data.tagline}
-                </p>
-              )}
-
-              {/* Availability Signal */}
-              {data.availability_status && (
-                <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white/70 backdrop-blur-sm rounded-full shadow-sm border border-white/60 mb-2">
-                  <div className="relative flex h-2.5 w-2.5">
-                    <span
-                      className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${data.availability_status === "Open" ? "bg-emerald-400" : data.availability_status === "Selective" ? "bg-amber-400" : "bg-rose-400"}`}
-                    ></span>
-                    <span
-                      className={`relative inline-flex rounded-full h-2.5 w-2.5 ${data.availability_status === "Open" ? "bg-emerald-500" : data.availability_status === "Selective" ? "bg-amber-500" : "bg-rose-500"}`}
-                    ></span>
-                  </div>
-                  <span className="text-xs font-bold text-gray-700">
-                    {data.availability_status}
-                  </span>
-                  {data.response_time && (
-                    <span className="text-xs text-gray-600 font-bold hidden sm:inline">
-                      {"\u00b7"} Responds {data.response_time.toLowerCase()}
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Social Links Row */}
-          {Array.isArray(visiblePlatforms) && (visiblePlatforms.length > 0 || (user && profile.ghost_mode)) && (
-            <div className="mt-6 flex flex-wrap justify-center sm:justify-start gap-4 px-4 sm:px-8">
-              {visiblePlatforms.map((p) => {
-                const platform = p.platform?.toLowerCase();
-                const Icon = PLATFORM_ICONS[platform] || Share2;
-                const styleClass = brandStyles[platform]
-                  ? brandStyles[platform].replace(" text-white", "")
-                  : "bg-gray-800";
-                const isBlurred = isCommunicationApp(p.platform || '') && !user;
-
-                return (
-                  <a
-                    key={p.platform}
-                    href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => {
-                      if (isBlurred) {
-                        e.preventDefault();
-                        setShowGate(true);
-                        return;
-                      }
-                      handleGatedClick(e, p.url, () =>
-                        trackLinkClick(
-                          profile.id,
-                          p.platform || "unknown",
-                          p.url,
-                        ),
-                      );
-                      if (!isGated)
-                        window.open(ensureAbsoluteUrl(p.url), "_blank");
-                    }}
-                    className="w-16 h-16 rounded-full flex items-center justify-center relative overflow-hidden group shadow-md bg-white border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5 font-sans cursor-pointer"
-                    title={isBlurred ? undefined : `${p.platform}${p.followers ? ` \u00b7 ${p.followers}` : ""}`}
-                  >
-                    <div className={`relative z-10 w-full h-full flex items-center justify-center ${isBlurred ? 'ghost-blur-item' : ''}`}>
-                      <Icon
-                        size={36}
-                        className="text-gray-700 group-hover:text-white transition-colors duration-300"
+            {/* Avatar + Identity */}
+            <div className="relative px-4 sm:px-8 flex flex-col items-center sm:items-start">
+              {/* Avatar */}
+              <div className="relative shrink-0 group -mt-16 sm:-mt-24 z-10 mb-4 sm:mb-5">
+                <div className="w-32 h-32 sm:w-40 sm:h-40 bg-white p-2 rounded-[32px] sm:rounded-[36px] shadow-[0_8px_40px_rgba(0,0,0,0.12)] rotate-[-2deg] group-hover:rotate-0 transition-transform duration-500">
+                  <div className="w-full h-full rounded-[26px] sm:rounded-[30px] overflow-hidden">
+                    {!avatarError && profile.avatar_url ? (
+                      <img
+                        src={getAssetUrl(profile.avatar_url)}
+                        alt={profile.display_name}
+                        className="w-full h-full object-cover"
+                        onError={() => setAvatarError(true)}
                       />
-                    </div>
-                    <div
-                      className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${styleClass}`}
-                      style={{ zIndex: 0 }}
-                    />
-                    {isBlurred && (
-                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10 rounded-full">
-                        <Lock size={18} className="text-black" strokeWidth={2.5} />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-fuchsia-500 to-purple-600 text-white font-bold text-4xl">
+                        {profile.display_name?.charAt(0).toUpperCase() || "U"}
                       </div>
                     )}
-                  </a>
-                );
-              })}
-              {user && profile.ghost_mode && (
-                <div className="w-full text-center py-4 animate-fadeIn">
-                  <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
-                    <Lock size={12} /> Privacy Mode enabled
-                  </p>
+                  </div>
                 </div>
-              )}
+                <div className="absolute bottom-0 right-0 sm:bottom-2 sm:right-2 w-7 h-7 rounded-full bg-gradient-to-br from-[#00C3FF] to-[#9933FF] border-[3px] border-[#FAFAFC] shadow-md" />
+              </div>
+
+              {/* Name, Tagline, Availability */}
+              <div className="text-center sm:text-left w-full">
+                <h1
+                  className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-gradient-glow leading-tight mb-2"
+                  style={{ paddingBottom: "0.05em" }}
+                >
+                  {profile.display_name}
+                </h1>
+                {profile.is_verified && (
+                  <div className="inline-flex mb-2">
+                    <VerifiedBadge
+                      isVerified={profile.is_verified}
+                      accentColor="#9933FF"
+                    />
+                  </div>
+                )}
+                {data.tagline && (
+                  <p className="text-sm sm:text-base font-bold text-gray-700 tracking-wide mb-4">
+                    {data.tagline}
+                  </p>
+                )}
+
+                {/* Availability Signal */}
+                {data.availability_status && (
+                  <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white/70 backdrop-blur-sm rounded-full shadow-sm border border-white/60 mb-2">
+                    <div className="relative flex h-2.5 w-2.5">
+                      <span
+                        className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${data.availability_status === "Open" ? "bg-emerald-400" : data.availability_status === "Selective" ? "bg-amber-400" : "bg-rose-400"}`}
+                      ></span>
+                      <span
+                        className={`relative inline-flex rounded-full h-2.5 w-2.5 ${data.availability_status === "Open" ? "bg-emerald-500" : data.availability_status === "Selective" ? "bg-amber-500" : "bg-rose-500"}`}
+                      ></span>
+                    </div>
+                    <span className="text-xs font-bold text-gray-700">
+                      {data.availability_status}
+                    </span>
+                    {data.response_time && (
+                      <span className="text-xs text-gray-600 font-bold hidden sm:inline">
+                        {"\u00b7"} Responds {data.response_time.toLowerCase()}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-          )}
-        </section>
+
+            {/* Social Links Row */}
+            {Array.isArray(visiblePlatforms) && (visiblePlatforms.length > 0 || (user && profile.ghost_mode)) && (
+              <div className="mt-6 flex flex-wrap justify-center sm:justify-start gap-4 px-4 sm:px-8">
+                {visiblePlatforms.map((p) => {
+                  const platform = p.platform?.toLowerCase();
+                  const Icon = PLATFORM_ICONS[platform] || Share2;
+                  const styleClass = brandStyles[platform]
+                    ? brandStyles[platform].replace(" text-white", "")
+                    : "bg-gray-800";
+                  const isBlurred = isCommunicationApp(p.platform || '') && !user;
+
+                  return (
+                    <a
+                      key={p.platform}
+                      href={isBlurred ? undefined : ensureAbsoluteUrl(p.url)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        if (isBlurred) {
+                          e.preventDefault();
+                          setShowGate(true);
+                          return;
+                        }
+                        handleGatedClick(e, p.url, () =>
+                          trackLinkClick(
+                            profile.id,
+                            p.platform || "unknown",
+                            p.url,
+                          ),
+                        );
+                        if (!isGated)
+                          window.open(ensureAbsoluteUrl(p.url), "_blank");
+                      }}
+                      className="w-16 h-16 rounded-full flex items-center justify-center relative overflow-hidden group shadow-md bg-white border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5 font-sans cursor-pointer"
+                      title={isBlurred ? undefined : `${p.platform}${p.followers ? ` \u00b7 ${p.followers}` : ""}`}
+                    >
+                      <div className={`relative z-10 w-full h-full flex items-center justify-center ${isBlurred ? 'ghost-blur-item' : ''}`}>
+                        <Icon
+                          size={36}
+                          className="text-gray-700 group-hover:text-white transition-colors duration-300"
+                        />
+                      </div>
+                      <div
+                        className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${styleClass}`}
+                        style={{ zIndex: 0 }}
+                      />
+                      {isBlurred && (
+                        <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-10 rounded-full">
+                          <Lock size={18} className="text-black" strokeWidth={2.5} />
+                        </div>
+                      )}
+                    </a>
+                  );
+                })}
+                {user && profile.ghost_mode && (
+                  <div className="w-full text-center py-4 animate-fadeIn">
+                    <p className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-500/20 bg-red-500/5 text-red-500 text-[10px] font-black uppercase tracking-widest shadow-sm">
+                      <Lock size={12} /> Privacy Mode enabled
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+          </section>
+        )}
 
         {/* ════════════════════════════════════════════════ */}
         {/* SECTION 2 — THE IMPACT STRIP                    */}
         {/* ════════════════════════════════════════════════ */}
-        <section
-          className="mb-12 stagger-fade"
-          style={{ animationDelay: "0.1s" }}
-        >
-          <div className="flex flex-wrap justify-center sm:justify-around gap-6 sm:gap-4 md:gap-6 text-center w-full max-w-2xl mx-auto px-4">
-            {/* Impressions */}
-            <div
-              className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
-              onClick={() => isFreeProfile && setShowFomoModal(true)}
-            >
+        {!hideHeader && (
+          <section
+            className="mb-12 stagger-fade"
+            style={{ animationDelay: "0.1s" }}
+          >
+            <div className="flex flex-wrap justify-center sm:justify-around gap-6 sm:gap-4 md:gap-6 text-center w-full max-w-2xl mx-auto px-4">
+              {/* Impressions */}
               <div
-                className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
+                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
+                onClick={() => isFreeProfile && setShowFomoModal(true)}
               >
-                {liveViews}
-              </div>
-              <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                Impressions
-              </div>
-            </div>
-
-            {/* Most Reached Location */}
-            <div className="stat-item">
-              <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
-                {data.location }
-              </div>
-              <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                Most Reached
-              </div>
-            </div>
-
-            {/* Audience Age */}
-            {data.audience_age_group && (
-              <div className="stat-item">
-                <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
-                  {data.audience_age_group}
+                <div
+                  className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
+                >
+                  {liveViews}
                 </div>
                 <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                  Audience Age
+                  Impressions
                 </div>
               </div>
-            )}
 
-
-
-            {/* Posting Frequency — shown only if audience_age_group is absent */}
-            {data.posting_frequency && !data.audience_age_group && (
+              {/* Most Reached Location */}
               <div className="stat-item">
-                <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
-                  {data.posting_frequency}
+                <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
+                  {data.location }
                 </div>
                 <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                  Frequency
+                  Most Reached
                 </div>
               </div>
-            )}
-          </div>
-        </section>
+
+              {/* Audience Age */}
+              {data.audience_age_group && (
+                <div className="stat-item">
+                  <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
+                    {data.audience_age_group}
+                  </div>
+                  <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+                    Audience Age
+                  </div>
+                </div>
+              )}
+
+              {/* Posting Frequency — shown only if audience_age_group is absent */}
+              {data.posting_frequency && !data.audience_age_group && (
+                <div className="stat-item">
+                  <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
+                    {data.posting_frequency}
+                  </div>
+                  <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+                    Frequency
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
 
         {/* ════════════════════════════════════════════════ */}
         {/* SECTION 3 — THE STORY & AESTHETIC               */}
@@ -2217,7 +2240,7 @@ export function CreatorProfile({
             style={{ animationDelay: "0.2s" }}
           >
             {/* Top row: The Bio Narrative */}
-            {(profile.bio || data.bio) && (
+            {!hideHeader && (profile.bio || data.bio) && (
               <div className="mb-10 text-center max-w-3xl mx-auto">
                 <h3 className="text-sm font-extrabold uppercase tracking-[0.15em] text-purple-500 mb-4 flex items-center justify-center gap-2">
                   <Sparkles size={18} /> Inside the Mind

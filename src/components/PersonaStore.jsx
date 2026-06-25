@@ -114,6 +114,7 @@ export default function PersonaStore({ onClose, onAuth, user }) {
         image: 'https://knowmi.co/favicon.ico',
         order_id: orderData.order_id,
         handler: function (response) {
+          sessionStorage.setItem('knowmi_payment_success', 'true')
           alert(`Payment successful! Your ${selectedDesign.name} tee is on its way. 🎉 (ID: ${response.razorpay_payment_id})`)
           onClose()
         },

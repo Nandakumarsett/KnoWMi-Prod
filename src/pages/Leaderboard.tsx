@@ -208,9 +208,18 @@ export default function Leaderboard() {
             <p className="text-[10px] font-semibold text-orange-500  tracking-widest leading-none mt-1">Scan Me. Know Me.</p>
           </div>
           <div className="flex items-center gap-3">
-            <a href="/dashboard" className="px-4 py-2 bg-white/10 text-white hover:bg-white/20 border border-white/10 rounded-lg text-[10px] font-semibold  tracking-wide shadow-lg hover:-translate-y-1 hover:shadow-orange-500/20 transition-all flex items-center gap-2">
+            <button 
+              onClick={() => {
+                if (window.history.length > 2) {
+                  navigate(-1);
+                } else {
+                  navigate('/');
+                }
+              }}
+              className="px-4 py-2 bg-white/10 text-white hover:bg-white/20 border border-white/10 rounded-lg text-[10px] font-semibold tracking-wide shadow-lg hover:-translate-y-1 hover:shadow-orange-500/20 transition-all flex items-center gap-2 cursor-pointer"
+            >
               <ArrowLeft size={14} /> Back
-            </a>
+            </button>
           </div>
         </div>
       </header>
@@ -404,7 +413,7 @@ export default function Leaderboard() {
                   <div className="absolute inset-0 border border-white/10 rounded-xl pointer-events-none" />
                   <div className="relative z-10 flex justify-between items-start">
                     <div>
-                      <h1 className="font-semibold text-3xl tracking-tight ">Kno<span className="text-orange-500">WM</span>i</h1>
+                      <div className="font-semibold text-3xl tracking-tight ">Kno<span className="text-orange-500">WM</span>i</div>
                       <p className="text-[10px] font-semibold text-white bg-orange-500 px-2 py-0.5 border border-white/10 shadow-lg  tracking-widest inline-block mt-1">Verified Identity</p>
                     </div>
                     <div className="bg-white/10 text-white hover:bg-white/20 px-4 py-2 rounded-lg border border-white/10 flex items-center gap-2 shadow-lg">
