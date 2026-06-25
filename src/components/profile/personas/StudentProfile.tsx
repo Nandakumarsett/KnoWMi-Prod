@@ -321,24 +321,26 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                     <div className="flex items-center gap-3">
                       <span className="text-3xl">{proj.emoji || ''}</span>
                       <h3 className="text-xl font-black text-neutral-900">
-                        {proj.url || proj.github_url ? (
-                          <a href={ensureAbsoluteUrl(proj.url || proj.github_url)} target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-emerald-600 transition-colors">
+                        {proj.github_url || proj.url ? (
+                          <a href={ensureAbsoluteUrl(proj.github_url || proj.url)} target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-emerald-600 transition-colors">
                             {proj.name}
                           </a>
                         ) : (
                           proj.name
                         )}
                       </h3>
-                      {proj.url && (
-                        <a href={ensureAbsoluteUrl(proj.url)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-emerald-500 transition-colors ml-auto">
-                          <ExternalLink size={18} />
-                        </a>
-                      )}
-                      {proj.github_url && !proj.url && (
-                        <a href={ensureAbsoluteUrl(proj.github_url)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-neutral-900 transition-colors ml-auto">
-                          <Github size={18} />
-                        </a>
-                      )}
+                      <div className="flex items-center gap-2 ml-auto shrink-0">
+                        {proj.github_url && (
+                          <a href={ensureAbsoluteUrl(proj.github_url)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-neutral-900 transition-colors">
+                            <Github size={18} />
+                          </a>
+                        )}
+                        {proj.url && (
+                          <a href={ensureAbsoluteUrl(proj.url)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-emerald-500 transition-colors">
+                            <ExternalLink size={18} />
+                          </a>
+                        )}
+                      </div>
                     </div>
                     {proj.description && <p className="text-neutral-600 text-sm">{proj.description}</p>}
                     <div className="flex flex-wrap gap-2 mt-1">
@@ -814,7 +816,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                 <ul className="text-xl text-neutral-800 space-y-1 ml-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   {data.projects.map((p: any, i: number) => (
                     <li key={i} className="leading-[32px]">
-                      • {p.emoji} {p.url || p.github_url ? <a href={ensureAbsoluteUrl(p.url || p.github_url)} target="_blank" rel="noopener noreferrer" className="hover:text-[#B91C1C] hover:underline transition-colors">{p.name}</a> : p.name}
+                      • {p.emoji} {p.github_url || p.url ? <a href={ensureAbsoluteUrl(p.github_url || p.url)} target="_blank" rel="noopener noreferrer" className="hover:text-[#B91C1C] hover:underline transition-colors">{p.name}</a> : p.name}
                     </li>
                   ))}
                 </ul>
@@ -1376,8 +1378,8 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                           <span className="text-xl shrink-0">{proj.emoji || ''}</span>
                           <div className="min-w-0">
                             <h4 className="text-[15px] font-semibold text-white mb-0.5 leading-snug">
-                              {proj.url || proj.github_url ? (
-                                <a href={ensureAbsoluteUrl(proj.url || proj.github_url)} target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 hover:underline transition-colors">
+                              {proj.github_url || proj.url ? (
+                                <a href={ensureAbsoluteUrl(proj.github_url || proj.url)} target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 hover:underline transition-colors">
                                   {proj.name}
                                 </a>
                               ) : (
@@ -1959,8 +1961,8 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                             <span className="text-lg mt-0.5">{proj.emoji || '📂'}</span>
                             <div className="flex-grow min-w-0">
                               <h4 className="text-base font-black uppercase tracking-wider nb-ink font-sans">
-                                {proj.url || proj.github_url ? (
-                                  <a href={ensureAbsoluteUrl(proj.url || proj.github_url)} target="_blank" rel="noopener noreferrer" className="hover:text-[#b91c1c] hover:underline transition-colors">
+                                {proj.github_url || proj.url ? (
+                                  <a href={ensureAbsoluteUrl(proj.github_url || proj.url)} target="_blank" rel="noopener noreferrer" className="hover:text-[#b91c1c] hover:underline transition-colors">
                                     {proj.name}
                                   </a>
                                 ) : (
