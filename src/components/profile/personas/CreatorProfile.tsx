@@ -504,8 +504,19 @@ export function CreatorProfile({
               </div>
             )}
 
+            {(data.bio || profile.bio) && (
+              <div className={`mb-12 ${!hideHeader ? "-mt-6" : ""}`}>
+                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6 text-center sm:text-left">
+                  Professional Narrative
+                </p>
+                <p className="text-base text-neutral-900 font-semibold leading-relaxed bg-neutral-50/30 py-4 px-6 rounded-[24px] border border-neutral-100/50 max-w-2xl italic">
+                  "{data.bio || profile.bio}"
+                </p>
+              </div>
+            )}
+
             <div
-              className={`mb-16 animate-fadeIn w-full ${!hideHeader ? "-mt-6" : ""} ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
+              className={`mb-16 animate-fadeIn w-full ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
               onClick={() => isFreeProfile && setShowFomoModal(true)}
             >
               <div className="flex justify-evenly flex-wrap gap-4 items-start w-full">
@@ -552,17 +563,6 @@ export function CreatorProfile({
                 )}
               </div>
             </div>
-
-            {(data.bio || profile.bio) && (
-              <div className="mb-12">
-                <p className="text-[13px] font-black uppercase tracking-[0.2em] text-neutral-900 mb-6 text-center sm:text-left">
-                  Professional Narrative
-                </p>
-                <p className="text-base text-neutral-900 font-semibold leading-relaxed bg-neutral-50/30 py-4 px-6 rounded-[24px] border border-neutral-100/50 max-w-2xl italic">
-                  "{data.bio || profile.bio}"
-                </p>
-              </div>
-            )}
 
             {(data.audience_age_group || data.location || (Array.isArray(data.audience_interests) && data.audience_interests.length > 0)) && (
               <div className="mb-12">
@@ -2251,86 +2251,7 @@ export function CreatorProfile({
         )}
 
         {/* ════════════════════════════════════════════════ */}
-        {/* SECTION 2 — THE IMPACT STRIP                    */}
-        {/* ════════════════════════════════════════════════ */}
-          <section
-            className="mb-12 stagger-fade"
-            style={{ animationDelay: "0.1s" }}
-          >
-            <div className="flex flex-wrap justify-center sm:justify-around gap-6 sm:gap-4 md:gap-6 text-center w-full max-w-2xl mx-auto px-4">
-              {/* Impressions */}
-              <div
-                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
-                onClick={() => isFreeProfile && setShowFomoModal(true)}
-              >
-                <div
-                  className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
-                >
-                  {liveViews}
-                </div>
-                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                  Impressions
-                </div>
-              </div>
-
-              {/* Sessions */}
-              <div
-                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
-                onClick={() => isFreeProfile && setShowFomoModal(true)}
-              >
-                <div
-                  className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
-                >
-                  {uniqueViews}
-                </div>
-                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                  Sessions
-                </div>
-              </div>
-
-              {/* Most Reached Location */}
-              <div
-                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
-                onClick={() => isFreeProfile && setShowFomoModal(true)}
-              >
-                <div
-                  className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto ${isFreeProfile ? "blur-[5px]" : ""}`}
-                >
-                  {topCity || data.location || 'N/A'}
-                </div>
-                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                  Top City
-                </div>
-              </div>
-
-              {/* Audience Age */}
-              {data.audience_age_group && (
-                <div className="stat-item">
-                  <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
-                    {data.audience_age_group}
-                  </div>
-                  <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                    Audience Age
-                  </div>
-                </div>
-              )}
-
-              {/* Posting Frequency — shown only if audience_age_group is absent */}
-              {data.posting_frequency && !data.audience_age_group && (
-                <div className="stat-item">
-                  <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
-                    {data.posting_frequency}
-                  </div>
-                  <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                    Frequency
-                  </div>
-                </div>
-              )}
-            </div>
-          </section>
-
-        {/* ════════════════════════════════════════════════ */}
-        {/* SECTION 3 — THE STORY & AESTHETIC               */}
+        {/* SECTION 2 — THE STORY & AESTHETIC               */}
         {/* ════════════════════════════════════════════════ */}
         {(profile.bio ||
           data.bio ||
@@ -2339,7 +2260,7 @@ export function CreatorProfile({
           data.visual_style) && (
           <section
             className="mb-12 stagger-fade"
-            style={{ animationDelay: "0.2s" }}
+            style={{ animationDelay: "0.1s" }}
           >
             {/* Top row: The Bio Narrative */}
             {!hideHeader && (profile.bio || data.bio) && (
@@ -2427,6 +2348,85 @@ export function CreatorProfile({
             </div>
           </section>
         )}
+
+        {/* ════════════════════════════════════════════════ */}
+        {/* SECTION 3 — THE IMPACT STRIP                    */}
+        {/* ════════════════════════════════════════════════ */}
+          <section
+            className="mb-12 stagger-fade"
+            style={{ animationDelay: "0.2s" }}
+          >
+            <div className="flex flex-wrap justify-center sm:justify-around gap-6 sm:gap-4 md:gap-6 text-center w-full max-w-2xl mx-auto px-4">
+              {/* Impressions */}
+              <div
+                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
+                onClick={() => isFreeProfile && setShowFomoModal(true)}
+              >
+                <div
+                  className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
+                >
+                  {liveViews}
+                </div>
+                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+                  Impressions
+                </div>
+              </div>
+
+              {/* Sessions */}
+              <div
+                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
+                onClick={() => isFreeProfile && setShowFomoModal(true)}
+              >
+                <div
+                  className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
+                >
+                  {uniqueViews}
+                </div>
+                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+                  Sessions
+                </div>
+              </div>
+
+              {/* Most Reached Location */}
+              <div
+                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
+                onClick={() => isFreeProfile && setShowFomoModal(true)}
+              >
+                <div
+                  className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto ${isFreeProfile ? "blur-[5px]" : ""}`}
+                >
+                  {topCity || data.location || 'N/A'}
+                </div>
+                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+                  Top City
+                </div>
+              </div>
+
+              {/* Audience Age */}
+              {data.audience_age_group && (
+                <div className="stat-item">
+                  <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
+                    {data.audience_age_group}
+                  </div>
+                  <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+                    Audience Age
+                  </div>
+                </div>
+              )}
+
+              {/* Posting Frequency — shown only if audience_age_group is absent */}
+              {data.posting_frequency && !data.audience_age_group && (
+                <div className="stat-item">
+                  <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight whitespace-nowrap">
+                    {data.posting_frequency}
+                  </div>
+                  <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+                    Frequency
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
 
         {/* ════════════════════════════════════════════════ */}
         {/* SECTION 4 — THE BUSINESS (Collab Prefs)         */}
