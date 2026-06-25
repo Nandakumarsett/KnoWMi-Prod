@@ -1523,7 +1523,7 @@ export function CreatorProfile({
           {/* Stats Bar */}
               <div className="w-full max-w-3xl border border-white/10 bg-black/40 backdrop-blur-md rounded-2xl p-6 mb-10 flex flex-wrap justify-between items-center gap-6 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                 <div
-                  className={`text-center flex-1 min-w-[80px] ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
+                  className={`text-center flex-1 min-w-[130px] ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
                   onClick={() => isFreeProfile && setShowFomoModal(true)}
                 >
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
@@ -1537,7 +1537,7 @@ export function CreatorProfile({
                 </div>
 
                 <div
-                  className={`text-center flex-1 min-w-[80px] ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
+                  className={`text-center flex-1 min-w-[130px] ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
                   onClick={() => isFreeProfile && setShowFomoModal(true)}
                 >
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
@@ -1554,7 +1554,7 @@ export function CreatorProfile({
                   </span>
                 </div>
                 {data.total_reach && (
-                  <div className="text-center flex-1 min-w-[80px]">
+                  <div className="text-center flex-1 min-w-[130px]">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
                       REACH
                     </span>
@@ -1564,7 +1564,7 @@ export function CreatorProfile({
                   </div>
                 )}
                 {data.engagement_rate && (
-                  <div className="text-center flex-1 min-w-[80px]">
+                  <div className="text-center flex-1 min-w-[130px]">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
                       ENGAGEMENT
                     </span>
@@ -1575,92 +1575,99 @@ export function CreatorProfile({
                 )}
               </div>
 
-          <div className="flex flex-col gap-8 w-full max-w-3xl mb-12">
-            {/* Narrative */}
-            {!hideHeader && (data.bio || profile.bio) && (
-              <div className="bg-black/30 border border-cyan-500/30 rounded-3xl p-8 sm:p-10 shadow-[inset_0_0_30px_rgba(6,182,212,0.1)] text-center relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
-                <h3 className="font-black text-lg sm:text-xl uppercase tracking-[0.2em] text-cyan-400 mb-6 drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]">
-                  NARRATIVE
-                </h3>
-                <p className="text-sm sm:text-base text-gray-300 leading-loose font-medium whitespace-pre-wrap">
-                  {data.bio || profile.bio}
-                </p>
-              </div>
-            )}
+          {/* Narrative */}
+          {!hideHeader && (data.bio || profile.bio) && (
+            <div className="bg-black/30 border border-cyan-500/30 rounded-3xl p-8 sm:p-10 shadow-[inset_0_0_30px_rgba(6,182,212,0.1)] text-center relative overflow-hidden w-full max-w-3xl mb-8">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
+              <h3 className="font-black text-lg sm:text-xl uppercase tracking-[0.2em] text-cyan-400 mb-6 drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]">
+                NARRATIVE
+              </h3>
+              <p className="text-sm sm:text-base text-gray-300 leading-loose font-medium whitespace-pre-wrap">
+                {data.bio || profile.bio}
+              </p>
+            </div>
+          )}
 
-            {/* What I Do */}
-            {Array.isArray(data.content_formats) && data.content_formats.length > 0 && (
-              <div className="bg-black/30 border border-[#FF2D78]/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(255,45,120,0.05)] w-full max-w-md mx-auto">
-                <h3 className="font-bold text-sm text-center uppercase tracking-[0.2em] text-[#FF2D78] mb-5">
-                  WHAT I DO
-                </h3>
-                <ul className="space-y-4 max-w-xs mx-auto">
-                  {data.content_formats.map((format) => (
-                    <li
-                      key={format}
-                      className="text-sm text-gray-200 flex items-center gap-3"
-                    >
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#FF2D78] shadow-[0_0_8px_rgba(255,45,120,1)]"></div>
-                      <span className="font-medium tracking-wide">
-                        {format}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Audience Snap */}
-            {((Array.isArray(data.audience_interests) && data.audience_interests.length > 0) || data.audience_age_group) && (
-              <div className="bg-black/30 border border-purple-500/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(153,51,255,0.05)] w-full max-w-md mx-auto">
-                <h3 className="font-bold text-sm text-center uppercase tracking-[0.2em] text-purple-400 mb-5">
-                  AUDIENCE SNAP
-                </h3>
-                {data.audience_age_group && (
-                  <div className="text-center mb-4">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-1">AGE GROUP</span>
-                    <span className="text-sm font-black text-white">{data.audience_age_group}</span>
-                  </div>
-                )}
-                {Array.isArray(data.audience_interests) && data.audience_interests.length > 0 && (
-                  <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block text-center mb-3">INTERESTS</span>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {data.audience_interests.map((interest: string) => (
-                        <span key={interest} className="px-3 py-1 bg-purple-900/30 border border-purple-500/50 text-[10px] font-bold uppercase tracking-widest rounded-sm text-purple-200">
-                          {interest}
+          {/* Bento Grid */}
+          {((Array.isArray(data.content_formats) && data.content_formats.length > 0) ||
+            (data.visual_style || data.posting_frequency) ||
+            ((Array.isArray(data.audience_interests) && data.audience_interests.length > 0) || data.audience_age_group)) && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl mb-12">
+              {/* What I Do */}
+              {Array.isArray(data.content_formats) && data.content_formats.length > 0 && (
+                <div className="bg-black/30 border border-[#FF2D78]/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(255,45,120,0.05)] w-full flex flex-col justify-center">
+                  <h3 className="font-bold text-sm text-center uppercase tracking-[0.2em] text-[#FF2D78] mb-5 drop-shadow-[0_0_5px_rgba(255,45,120,0.8)]">
+                    WHAT I DO
+                  </h3>
+                  <ul className="space-y-4 max-w-xs mx-auto">
+                    {data.content_formats.map((format) => (
+                      <li
+                        key={format}
+                        className="text-sm text-gray-200 flex items-center gap-3"
+                      >
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#FF2D78] shadow-[0_0_8px_rgba(255,45,120,1)]"></div>
+                        <span className="font-medium tracking-wide">
+                          {format}
                         </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Aesthetic */}
-            {(data.visual_style || data.posting_frequency) && (
-              <div className="bg-black/30 border border-cyan-500/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(6,182,212,0.05)] w-full max-w-md mx-auto">
-                <h3 className="font-bold text-sm text-center uppercase tracking-[0.2em] text-cyan-400 mb-5">
-                  AESTHETIC
-                </h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {data.visual_style && (
-                    <div className="text-center border-r border-white/10">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-1">VISUAL STYLE</span>
-                      <span className="text-sm font-black text-white">{data.visual_style}</span>
-                    </div>
-                  )}
-                  {data.posting_frequency && (
-                    <div className="text-center">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-1">FREQUENCY</span>
-                      <span className="text-sm font-black text-white">{data.posting_frequency}</span>
-                    </div>
-                  )}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+
+              {/* Aesthetic */}
+              {(data.visual_style || data.posting_frequency) && (
+                <div className="bg-black/30 border border-cyan-500/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(6,182,212,0.05)] w-full flex flex-col justify-center">
+                  <h3 className="font-bold text-sm text-center uppercase tracking-[0.2em] text-cyan-400 mb-5 drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]">
+                    AESTHETIC
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4 h-full items-center">
+                    {data.visual_style && (
+                      <div className="text-center border-r border-white/10 h-full flex flex-col justify-center px-2">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-1">VISUAL STYLE</span>
+                        <span className="text-sm font-black text-white">{data.visual_style}</span>
+                      </div>
+                    )}
+                    {data.posting_frequency && (
+                      <div className="text-center h-full flex flex-col justify-center px-2">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-1">FREQUENCY</span>
+                        <span className="text-sm font-black text-white">{data.posting_frequency}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Audience Snap */}
+              {((Array.isArray(data.audience_interests) && data.audience_interests.length > 0) || data.audience_age_group) && (
+                <div className="bg-black/30 border border-purple-500/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(153,51,255,0.05)] w-full sm:col-span-2 flex flex-col justify-center">
+                  <h3 className="font-bold text-sm text-center uppercase tracking-[0.2em] text-purple-400 mb-5 drop-shadow-[0_0_5px_rgba(153,51,255,0.8)]">
+                    AUDIENCE SNAP
+                  </h3>
+                  <div className="flex flex-col sm:flex-row gap-6 justify-around items-start sm:items-center">
+                    {data.audience_age_group && (
+                      <div className="text-center w-full sm:w-auto">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-1">AGE GROUP</span>
+                        <span className="text-sm font-black text-white">{data.audience_age_group}</span>
+                      </div>
+                    )}
+                    {Array.isArray(data.audience_interests) && data.audience_interests.length > 0 && (
+                      <div className="w-full sm:w-auto">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block text-center mb-3">INTERESTS</span>
+                        <div className="flex flex-wrap justify-center gap-2">
+                          {data.audience_interests.map((interest: string) => (
+                            <span key={interest} className="px-3 py-1 bg-purple-900/30 border border-purple-500/50 text-[10px] font-bold uppercase tracking-widest rounded-sm text-purple-200">
+                              {interest}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Social Links */}
           {!hideHeader && Array.isArray(visiblePlatforms) && (visiblePlatforms.length > 0 || (user && profile.ghost_mode)) && (
