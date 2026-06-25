@@ -41,6 +41,8 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
     return !(isComm && (!!user && profile.ghost_mode));
   });
   const liveViews = stats?.totalViews || 0;
+  const uniqueViews = stats?.uniqueViews || 0;
+  const topCity = stats?.topCities?.[0]?.city || '';
   const isFreeProfile = profile.tier === 'Starter' || profile.tier === 'Free' || profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter'));
   const [showFomoModal, setShowFomoModal] = React.useState(false);
   const [showSpotifyQR, setShowSpotifyQR] = React.useState(false);
@@ -197,6 +199,31 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
               )}
             </div>
           )}
+
+          {/* PREMIUM STATS ROW */}
+          <div 
+            className={`w-full grid grid-cols-3 gap-3 mb-10 bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-sm text-center relative ${isFreeProfile ? 'cursor-pointer hover:border-emerald-500 transition-colors' : ''}`}
+            onClick={() => isFreeProfile && setShowFomoModal(true)}
+          >
+            <div className="flex flex-col items-center">
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Impressions</span>
+              <span className={`text-xl font-black text-neutral-900 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                {liveViews}
+              </span>
+            </div>
+            <div className="flex flex-col items-center border-x border-neutral-100">
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Sessions</span>
+              <span className={`text-xl font-black text-neutral-900 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                {uniqueViews}
+              </span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-1">Top City</span>
+              <span className={`text-xs sm:text-sm font-black text-neutral-900 mt-1 truncate max-w-full px-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                {topCity || 'N/A'}
+              </span>
+            </div>
+          </div>
 
           {data.availability && (
             <div className="w-full max-w-md mx-auto mb-10">
@@ -685,6 +712,26 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                   {liveViews}
                 </span>
                 <Activity size={16} className="absolute bottom-3 right-3 text-[#1e3a8a]" strokeWidth={1.5} />
+             </div>
+             
+             {/* Sessions */}
+             <div className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#BCE2EE] p-4 text-center cork-shadow rotate-1 relative flex flex-col items-center justify-center cursor-pointer" onClick={() => isFreeProfile && setShowFomoModal(true)}>
+                <div className="pushpin pin-blue" />
+                <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Sessions</span>
+                <span className={`text-3xl font-bold text-[#1e3a8a] mt-1 block ${isFreeProfile ? 'blur-[4px]' : ''}`} style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {uniqueViews}
+                </span>
+                <span className="text-xs text-neutral-600 block mt-1" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Unique</span>
+             </div>
+             
+             {/* Top City */}
+             <div className="flex-1 min-w-[90px] max-w-[125px] aspect-square bg-[#FCEB9C] p-4 text-center cork-shadow -rotate-1 relative flex flex-col items-center justify-center cursor-pointer" onClick={() => isFreeProfile && setShowFomoModal(true)}>
+                <div className="pushpin pin-green" />
+                <span className="text-lg font-medium block mt-2 text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>Top City</span>
+                <span className={`text-2xl font-bold text-[#1e3a8a] mt-1 block truncate max-w-full px-0.5 ${isFreeProfile ? 'blur-[4px]' : ''}`} style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {topCity || 'N/A'}
+                </span>
+                <Globe size={14} className="absolute bottom-3 right-3 text-[#1e3a8a]" strokeWidth={1.5} />
              </div>
           </div>
 
@@ -1257,11 +1304,23 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
 
           {/* ═══ STATS ROW ═══ */}
           {(data.campus_rank_pct || data.study_buddies || data.courses_completed || stats) && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6 animate-in" style={{ animationDelay: '0.15s' }}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-6 animate-in" style={{ animationDelay: '0.15s' }}>
               <div className={`stat-card ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
                 <Activity size={18} className="text-cyan-400 mx-auto mb-1.5" />
                 <div className={`text-xl font-bold text-white ${isFreeProfile ? 'blur-[4px]' : ''}`}>{liveViews}</div>
                 <div className="text-[9px] uppercase tracking-[0.15em] text-cyan-200/50 mt-1">Live Views</div>
+              </div>
+              
+              <div className={`stat-card ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
+                <Users size={18} className="text-purple-400 mx-auto mb-1.5" />
+                <div className={`text-xl font-bold text-white ${isFreeProfile ? 'blur-[4px]' : ''}`}>{uniqueViews}</div>
+                <div className="text-[9px] uppercase tracking-[0.15em] text-cyan-200/50 mt-1">Sessions</div>
+              </div>
+              
+              <div className={`stat-card ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
+                <Globe size={18} className="text-emerald-400 mx-auto mb-1.5" />
+                <div className={`text-base font-bold text-white mt-1 truncate max-w-full px-1 ${isFreeProfile ? 'blur-[4px]' : ''}`}>{topCity || 'N/A'}</div>
+                <div className="text-[9px] uppercase tracking-[0.15em] text-cyan-200/50 mt-1.5">Top City</div>
               </div>
               
               {data.campus_rank_pct && (
@@ -1727,6 +1786,16 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                 <div className={`nb-stat ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
                   <span className={`text-lg nb-ink ${isFreeProfile ? 'blur-[3px]' : ''}`}>{liveViews}</span>
                   <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">views</span>
+                </div>
+                
+                <div className={`nb-stat ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)} style={{ borderColor: '#4A5568' }}>
+                  <span className={`text-lg nb-ink ${isFreeProfile ? 'blur-[3px]' : ''}`}>{uniqueViews}</span>
+                  <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">sessions</span>
+                </div>
+                
+                <div className={`nb-stat ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)} style={{ borderColor: '#2B6CB0' }}>
+                  <span className={`text-sm font-black nb-ink truncate max-w-[80px] ${isFreeProfile ? 'blur-[3px]' : ''}`}>{topCity || 'N/A'}</span>
+                  <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">top city</span>
                 </div>
                 {data.campus_rank_pct && (
                   <div className="nb-stat" style={{ borderColor: '#c53030' }}>

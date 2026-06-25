@@ -79,7 +79,8 @@ export function CreatorProfile({
   const [showFomoModal, setShowFomoModal] = React.useState(false);
 
   const liveViews = stats?.totalViews || 0;
-  const topCity = stats?.topCities?.[0]?.city ;
+  const uniqueViews = stats?.uniqueViews || 0;
+  const topCity = stats?.topCities?.[0]?.city || "";
   const isFreeProfile =
     profile.tier === "Starter" ||
     profile.tier === "Free" ||
@@ -518,10 +519,20 @@ export function CreatorProfile({
                 </div>
                 <div className="flex flex-col items-center text-center">
                   <span
-                    className={`text-4xl font-black leading-none mb-3 ${isFreeProfile ? "blur-[6px] select-none opacity-50 inline-block px-2" : ""}`}
-                    style={{ color: cityColor }}
+                    className={`text-4xl font-black text-neutral-900 leading-none mb-3 ${isFreeProfile ? "blur-[6px] select-none opacity-50 inline-block px-2" : ""}`}
                   >
-                    {topCity}
+                    {uniqueViews}
+                  </span>
+                  <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest">
+                    Session Count
+                  </p>
+                </div>
+                <div className="flex flex-col items-center text-center">
+                  <span
+                    className={`text-4xl font-black leading-none mb-3 ${isFreeProfile ? "blur-[6px] select-none opacity-50 inline-block px-2" : ""}`}
+                    style={{ color: isFreeProfile ? undefined : cityColor }}
+                  >
+                    {topCity || 'N/A'}
                   </span>
                   <p className="text-[10px] font-black uppercase text-neutral-400 tracking-widest">
                     Most Scanned Place
@@ -1023,12 +1034,34 @@ export function CreatorProfile({
                 
                 <div className="w-1 h-12 bg-black mx-2 sm:mx-4 rounded-full hidden sm:block"></div>
                 
-                <div className="flex-1 min-w-[120px] text-center">
+                <div
+                  className={`flex-1 min-w-[120px] text-center ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
+                  onClick={() => isFreeProfile && setShowFomoModal(true)}
+                >
+                  <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
+                    SESSION COUNT
+                  </span>
+                  <span
+                    className={`text-3xl font-black ${isFreeProfile ? "blur-[4px]" : ""}`}
+                  >
+                    {uniqueViews}
+                  </span>
+                </div>
+                
+                <div className="w-1 h-12 bg-black mx-2 sm:mx-4 rounded-full hidden sm:block"></div>
+                
+                <div
+                  className={`flex-1 min-w-[120px] text-center ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
+                  onClick={() => isFreeProfile && setShowFomoModal(true)}
+                >
                   <span className="text-xs sm:text-sm font-black uppercase tracking-widest block mb-2">
                     LOCATION
                   </span>
-                  <span className="text-2xl font-black uppercase" style={{ color: cityColor }}>
-                    {topCity}
+                  <span
+                    className={`text-2xl font-black uppercase ${isFreeProfile ? "blur-[4px]" : ""}`}
+                    style={{ color: isFreeProfile ? undefined : cityColor }}
+                  >
+                    {topCity || 'N/A'}
                   </span>
                 </div>
                 {data.total_reach && (
@@ -1510,18 +1543,34 @@ export function CreatorProfile({
                     {liveViews}
                   </span>
                 </div>
-                <div className="text-center flex-1 min-w-[80px]">
+                <div
+                  className={`text-center flex-1 min-w-[80px] ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
+                  onClick={() => isFreeProfile && setShowFomoModal(true)}
+                >
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
+                    SESSIONS
+                  </span>
+                  <span
+                    className={`text-2xl font-black text-white border-b-2 border-[#E100FF] pb-1 inline-block ${isFreeProfile ? "blur-[4px]" : ""}`}
+                  >
+                    {uniqueViews}
+                  </span>
+                </div>
+                <div
+                  className={`text-center flex-1 min-w-[80px] ${isFreeProfile ? "cursor-pointer hover:opacity-85 transition-opacity" : ""}`}
+                  onClick={() => isFreeProfile && setShowFomoModal(true)}
+                >
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
                     LOCATION
                   </span>
                   <span 
-                    className="text-xl font-black border-b-2 pb-1 inline-block truncate max-w-full uppercase"
+                    className={`text-xl font-black border-b-2 pb-1 inline-block truncate max-w-full uppercase ${isFreeProfile ? "blur-[4px]" : ""}`}
                     style={{ 
-                      color: cityColor === '#1A1A1A' ? 'white' : cityColor, 
-                      borderColor: cityColor === '#1A1A1A' ? '#FF2D78' : cityColor 
+                      color: isFreeProfile ? 'white' : (cityColor === '#1A1A1A' ? 'white' : cityColor), 
+                      borderColor: isFreeProfile ? '#FF2D78' : (cityColor === '#1A1A1A' ? '#FF2D78' : cityColor) 
                     }}
                   >
-                    {topCity}
+                    {topCity || 'N/A'}
                   </span>
                 </div>
                 {data.total_reach && (
@@ -2190,13 +2239,33 @@ export function CreatorProfile({
                 </div>
               </div>
 
-              {/* Most Reached Location */}
-              <div className="stat-item">
-                <div className="text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto">
-                  {data.location }
+              {/* Sessions */}
+              <div
+                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
+                onClick={() => isFreeProfile && setShowFomoModal(true)}
+              >
+                <div
+                  className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1 tracking-tight ${isFreeProfile ? "blur-[5px]" : ""}`}
+                >
+                  {uniqueViews}
                 </div>
                 <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
-                  Most Reached
+                  Sessions
+                </div>
+              </div>
+
+              {/* Most Reached Location */}
+              <div
+                className={`stat-item ${isFreeProfile ? "cursor-pointer" : ""}`}
+                onClick={() => isFreeProfile && setShowFomoModal(true)}
+              >
+                <div
+                  className={`text-lg sm:text-xl lg:text-2xl font-extrabold text-gray-900 mb-1.5 tracking-tight truncate max-w-[140px] mx-auto ${isFreeProfile ? "blur-[5px]" : ""}`}
+                >
+                  {topCity || data.location || 'N/A'}
+                </div>
+                <div className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700 mt-1">
+                  Top City
                 </div>
               </div>
 

@@ -23,11 +23,16 @@ function getPlatformIcon(platform: string) {
   return { Icon: Globe, color: '#71B5F5' };
 }
 
-export function DeveloperProfile({ profile, hideHeader = false }: { profile: ProfileData, hideHeader?: boolean }) {
+export function DeveloperProfile({ profile, stats, hideHeader = false }: { profile: ProfileData, stats?: any, hideHeader?: boolean }) {
   const [avatarError, setAvatarError] = React.useState(false);
   const data = (profile.persona_data || {}) as DeveloperData;
   const activeTheme = (profile.profile_theme || 'default').toLowerCase();
   const { isGated, handleGatedClick, GateModal, handlePrivacyClick, PrivacyModal, setShowGate, user } = useGatedLink();
+
+  const liveViews = stats?.totalViews || 0;
+  const uniqueViews = stats?.uniqueViews || 0;
+  const topCity = stats?.topCities?.[0]?.city || '';
+  const isFreeProfile = profile.status !== 'paid' && profile.role !== 'owner' && profile.role !== 'staff';
 
   const visiblePlatforms = (data.platforms || []).filter((p: any) => {
     if (!p.url) return false;
@@ -199,6 +204,31 @@ export function DeveloperProfile({ profile, hideHeader = false }: { profile: Pro
               {data.about.status === 'Working at Company' && data.about.company ? `Currently at ${data.about.company}` : data.about.status}
             </div>
           )}
+
+          {/* STATS GRID */}
+          <div 
+            className={`w-full grid grid-cols-3 gap-2 mt-6 bg-white border-2 border-neutral-300 rounded-[20px] p-4 shadow-md font-mono text-center relative z-20 ${isFreeProfile ? 'cursor-pointer hover:border-green-500 transition-colors' : ''}`}
+            onClick={() => isFreeProfile && setShowGate(true)}
+          >
+            <div className="flex flex-col items-center">
+              <span className="text-[10px] font-black uppercase text-neutral-400 tracking-wider">Impressions</span>
+              <span className={`text-lg font-black text-neutral-900 mt-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                {liveViews}
+              </span>
+            </div>
+            <div className="flex flex-col items-center border-x border-neutral-200">
+              <span className="text-[10px] font-black uppercase text-neutral-400 tracking-wider">Sessions</span>
+              <span className={`text-lg font-black text-neutral-900 mt-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                {uniqueViews}
+              </span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-[10px] font-black uppercase text-neutral-400 tracking-wider">Top City</span>
+              <span className={`text-xs font-black text-neutral-900 mt-1.5 truncate max-w-full px-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                {topCity || 'N/A'}
+              </span>
+            </div>
+          </div>
 
           <div className="w-full max-w-sm mt-4 z-20">
             <ProfileCTAs profile={profile} accentColor="#16a34a" />
@@ -436,6 +466,39 @@ export function DeveloperProfile({ profile, hideHeader = false }: { profile: Pro
               )}
             </div>
           )}
+
+          {/* STATS GRID */}
+          <div 
+            className={`w-full blueprint-border bg-[#001B2E]/90 backdrop-blur-md p-6 mb-8 text-center relative group hover:border-[#64FFDA]/60 transition-colors duration-500 ${isFreeProfile ? 'cursor-pointer' : ''}`}
+            onClick={() => isFreeProfile && setShowGate(true)}
+          >
+            {/* Corner Crosshairs */}
+            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-[#64FFDA]/50" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-[#64FFDA]/50" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-[#64FFDA]/50" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-[#64FFDA]/50" />
+            
+            <div className="grid grid-cols-3 gap-2 font-mono">
+              <div className="flex flex-col items-center">
+                <span className="text-[9px] text-[#64FFDA]/50 uppercase tracking-widest font-bold">IMPRESSIONS</span>
+                <span className={`text-xl font-light text-white mt-1.5 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                  {liveViews}
+                </span>
+              </div>
+              <div className="flex flex-col items-center border-x border-[#64FFDA]/20">
+                <span className="text-[9px] text-[#64FFDA]/50 uppercase tracking-widest font-bold">SESSIONS</span>
+                <span className={`text-xl font-light text-white mt-1.5 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                  {uniqueViews}
+                </span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-[9px] text-[#64FFDA]/50 uppercase tracking-widest font-bold">TOP_CITY</span>
+                <span className={`text-xs font-light text-white mt-2 truncate max-w-full px-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                  {topCity.toUpperCase() || 'N/A'}
+                </span>
+              </div>
+            </div>
+          </div>
 
           {/* Infrastructure Specs */}
           {(data.about?.status || data.about?.company || data.about?.mission) && (
@@ -793,6 +856,34 @@ export function DeveloperProfile({ profile, hideHeader = false }: { profile: Pro
             </div>
           )}
 
+          {/* STATS GRID */}
+          <div 
+            className={`w-full hacker-border bg-black/80 p-5 mb-8 text-center relative ${isFreeProfile ? 'cursor-pointer' : ''}`}
+            onClick={() => isFreeProfile && setShowGate(true)}
+          >
+            <div className="absolute top-2 right-4 text-[8px] text-[#00FF41]/40 font-mono tracking-widest">SYS_METRICS</div>
+            <div className="grid grid-cols-3 gap-2 font-mono">
+              <div className="flex flex-col items-center">
+                <span className="text-[9px] text-[#00FF41]/60 uppercase tracking-widest">IMPR_CNT</span>
+                <span className={`text-lg font-bold text-[#00FF41] hacker-glow mt-1.5 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                  {liveViews}
+                </span>
+              </div>
+              <div className="flex flex-col items-center border-x border-[#00FF41]/30">
+                <span className="text-[9px] text-[#00FF41]/60 uppercase tracking-widest">SESS_CNT</span>
+                <span className={`text-lg font-bold text-[#00FF41] hacker-glow mt-1.5 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                  {uniqueViews}
+                </span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-[9px] text-[#00FF41]/60 uppercase tracking-widest">LOC_REF</span>
+                <span className={`text-xs font-bold text-[#00FF41] hacker-glow mt-2 truncate max-w-full px-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                  {topCity.toUpperCase() || 'NULL'}
+                </span>
+              </div>
+            </div>
+          </div>
+
           {(data.about?.status || data.about?.company || data.about?.mission) && (
             <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left relative">
               <h3 className="text-sm font-bold uppercase text-[#00FF41] tracking-widest mb-4 flex items-center gap-2 border-b border-[#00FF41]/30 pb-2">
@@ -1111,6 +1202,40 @@ export function DeveloperProfile({ profile, hideHeader = false }: { profile: Pro
             </div>
           </div>
         )}
+
+        {/* STATS GRID */}
+        <div className="w-full mb-8">
+          <div className="flex gap-2 mb-3">
+            <span className="text-[#3FB950] font-bold">~</span>
+            <span className="text-[#8B949E]">$</span>
+            <span className="text-white">sys_stats --verbose</span>
+          </div>
+          <div 
+            className={`w-full border border-[#30363D] bg-[#161B22] p-4 font-mono text-center relative ${isFreeProfile ? 'cursor-pointer hover:border-[#8B949E] transition-colors' : ''}`}
+            onClick={() => isFreeProfile && setShowGate(true)}
+          >
+            <div className="grid grid-cols-3 gap-2">
+              <div className="flex flex-col items-center">
+                <span className="text-[10px] text-[#8B949E] uppercase tracking-wider">impressions</span>
+                <span className={`text-base font-bold text-white mt-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                  {liveViews}
+                </span>
+              </div>
+              <div className="flex flex-col items-center border-x border-[#30363D]">
+                <span className="text-[10px] text-[#8B949E] uppercase tracking-wider">sessions</span>
+                <span className={`text-base font-bold text-white mt-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                  {uniqueViews}
+                </span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-[10px] text-[#8B949E] uppercase tracking-wider">top_city</span>
+                <span className={`text-xs font-bold text-[#58A6FF] mt-1.5 truncate max-w-full px-1 ${isFreeProfile ? 'blur-[4px] select-none opacity-50' : ''}`}>
+                  {topCity.toLowerCase().replace(/\s+/g, '_') || 'n_a'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {(data.about?.status || data.about?.company || data.about?.mission) && (
           <div className="w-full mb-8">

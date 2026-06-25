@@ -20,7 +20,7 @@ export function PersonaRouter({ profile, recentVisitors = [], stats, hideHeader 
     case 'developer':
     case 'coder':
     case 'tech':
-      return <DeveloperProfile profile={profile} hideHeader={hideHeader} />
+      return <DeveloperProfile profile={profile} stats={stats} hideHeader={hideHeader} />
     case 'student':
     case 'education':
     case 'university':
