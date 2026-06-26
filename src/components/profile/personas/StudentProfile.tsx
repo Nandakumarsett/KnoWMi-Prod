@@ -1919,47 +1919,61 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
 
         <main className={`relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pb-12 flex flex-col gap-0 nb-animate ${(!hideHeader && data.featured_work_url) ? 'pt-32 sm:pt-48' : (hideHeader ? 'pt-12 sm:pt-16' : 'pt-6')}`}>
           
-          {/* ⭐ Notebook Desktop Registry Header (displays Course, Campus Mood, Batch, Current Year, University) ⭐ */}
+          {/* ⭐ Notebook Desktop Registry Card (displays Course, Campus Mood, Batch, Current Year, University) ⭐ */}
           {hideHeader && (
-            <div className="w-full mb-8 border-b-2 border-dashed border-[#1e3a5f]/20 pb-4 flex flex-col gap-3 z-10 relative">
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-sans font-black tracking-wider uppercase text-neutral-400">Registry:</span>
-                  <span className="text-xl font-bold nb-ink font-sans uppercase tracking-wide">Student Profile Sheet</span>
-                </div>
-                {data.mood && (
-                  <div className="nb-doodle-box inline-flex items-center gap-1.5 px-3 py-1 bg-[#FEF08A]/40 border border-yellow-300/30 rotate-[-1deg]" style={{ borderRadius: '4px' }}>
-                    <span className="text-[9px] font-sans font-black uppercase text-yellow-800 tracking-wider">Mood:</span>
-                    <span className="text-sm font-black nb-ink uppercase tracking-widest leading-none" style={{ fontFamily: "'Permanent Marker', cursive" }}>{data.mood}</span>
-                  </div>
-                )}
-              </div>
+            <div className="w-full mb-8 mt-2 relative z-10 rotate-[0.5deg]">
+              {/* Decorative washi tape on top left */}
+              <div className="absolute -top-3 left-8 w-20 h-5 nb-tape rotate-[-2deg] opacity-90 z-20" />
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-2 gap-x-4 text-sm font-sans">
-                {data.course && (
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 shrink-0">Major:</span>
-                    <span className="font-bold text-neutral-800 border-b border-dashed border-neutral-300 pb-0.5 grow">{data.course}</span>
-                  </div>
-                )}
-                {data.university && (
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 shrink-0">Uni:</span>
-                    <span className="font-bold text-neutral-800 border-b border-dashed border-neutral-300 pb-0.5 grow">{data.university}</span>
-                  </div>
-                )}
-                {data.year && (
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 shrink-0">Current Yr:</span>
-                    <span className="font-bold text-neutral-800 border-b border-dashed border-neutral-300 pb-0.5 grow">Year {data.year}</span>
-                  </div>
-                )}
-                {data.batch_year && (
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 shrink-0">Batch:</span>
-                    <span className="font-bold text-neutral-800 border-b border-dashed border-neutral-300 pb-0.5 grow">Class of {data.batch_year}</span>
-                  </div>
-                )}
+              <div className="nb-paper-cream p-5 sm:p-6 flex flex-col gap-4 relative overflow-hidden bg-[#FFFDF4]">
+                {/* Title */}
+                <div className="flex flex-wrap items-center justify-between gap-4 border-b-2 border-dashed border-[#1e3a5f]/25 pb-3">
+                  <h3 className="nb-section-title font-sans font-black flex items-center gap-2 m-0 text-lg tracking-wider">
+                    📋 Student Registry
+                  </h3>
+                  {data.mood && (
+                    <div className="nb-doodle-box inline-flex items-center gap-1.5 px-3 py-1 bg-[#FEF08A]/80 border-2 border-[#1e3a5f] rotate-[1deg] shadow-[2px_2px_0px_#1e3a5f] rounded-lg">
+                      <span className="text-[10px] font-sans font-black uppercase text-neutral-500 tracking-wider">Mood:</span>
+                      <span className="text-base font-black nb-ink uppercase tracking-widest leading-none" style={{ fontFamily: "'Permanent Marker', cursive" }}>{data.mood}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Info Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-6 text-[#1e3a5f]">
+                  {data.course && (
+                    <div className="flex flex-col gap-1.5">
+                      <span className="text-[10px] font-sans font-black uppercase tracking-wider text-neutral-400">Course / Major</span>
+                      <span className="nb-handwriting text-2xl sm:text-3xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/20 pb-1 select-text">
+                        {data.course}
+                      </span>
+                    </div>
+                  )}
+                  {data.university && (
+                    <div className="flex flex-col gap-1.5">
+                      <span className="text-[10px] font-sans font-black uppercase tracking-wider text-neutral-400">University Name</span>
+                      <span className="nb-handwriting text-2xl sm:text-3xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/20 pb-1 select-text">
+                        {data.university}
+                      </span>
+                    </div>
+                  )}
+                  {data.year && (
+                    <div className="flex flex-col gap-1.5">
+                      <span className="text-[10px] font-sans font-black uppercase tracking-wider text-neutral-400">Current Year</span>
+                      <span className="nb-handwriting text-2xl sm:text-3xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/20 pb-1 select-text">
+                        Year {data.year}
+                      </span>
+                    </div>
+                  )}
+                  {data.batch_year && (
+                    <div className="flex flex-col gap-1.5">
+                      <span className="text-[10px] font-sans font-black uppercase tracking-wider text-neutral-400">Batch Year</span>
+                      <span className="nb-handwriting text-2xl sm:text-3xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/20 pb-1 select-text">
+                        Class of {data.batch_year}
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
