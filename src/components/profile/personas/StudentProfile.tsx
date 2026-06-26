@@ -1942,33 +1942,33 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                 {/* Info Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-6 text-[#1e3a5f]">
                   {data.course && (
-                    <div className="flex flex-col gap-1.5">
-                      <span className="text-[10px] font-sans font-black uppercase tracking-wider text-neutral-400">Course / Major</span>
-                      <span className="nb-handwriting text-2xl sm:text-3xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/20 pb-1 select-text">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-[#1e3a5f]/80">Course / Major</span>
+                      <span className="nb-handwriting text-xl sm:text-2xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/25 pb-1 select-text">
                         {data.course}
                       </span>
                     </div>
                   )}
                   {data.university && (
-                    <div className="flex flex-col gap-1.5">
-                      <span className="text-[10px] font-sans font-black uppercase tracking-wider text-neutral-400">University Name</span>
-                      <span className="nb-handwriting text-2xl sm:text-3xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/20 pb-1 select-text">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-[#1e3a5f]/80">University Name</span>
+                      <span className="nb-handwriting text-xl sm:text-2xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/25 pb-1 select-text">
                         {data.university}
                       </span>
                     </div>
                   )}
                   {data.year && (
-                    <div className="flex flex-col gap-1.5">
-                      <span className="text-[10px] font-sans font-black uppercase tracking-wider text-neutral-400">Current Year</span>
-                      <span className="nb-handwriting text-2xl sm:text-3xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/20 pb-1 select-text">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-[#1e3a5f]/80">Current Year</span>
+                      <span className="nb-handwriting text-xl sm:text-2xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/25 pb-1 select-text">
                         Year {data.year}
                       </span>
                     </div>
                   )}
                   {data.batch_year && (
-                    <div className="flex flex-col gap-1.5">
-                      <span className="text-[10px] font-sans font-black uppercase tracking-wider text-neutral-400">Batch Year</span>
-                      <span className="nb-handwriting text-2xl sm:text-3xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/20 pb-1 select-text">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-[#1e3a5f]/80">Batch Year</span>
+                      <span className="nb-handwriting text-xl sm:text-2xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/25 pb-1 select-text">
                         Class of {data.batch_year}
                       </span>
                     </div>
