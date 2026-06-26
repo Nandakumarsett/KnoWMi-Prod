@@ -2049,7 +2049,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
           {/* ═══ STATS ROW — compact circles ═══ */}
           {(data.campus_rank_pct || data.study_buddies || data.courses_completed || stats) && (
             <>
-              <div className="flex flex-wrap gap-3 items-center mb-1">
+              <div className="flex flex-wrap justify-between items-center gap-3 mb-1">
                 <div className={`nb-stat ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
                   <span className={`text-lg nb-ink ${isFreeProfile ? 'blur-[3px]' : ''}`}>{liveViews}</span>
                   <span className="text-[10px] nb-pencil font-sans uppercase font-extrabold tracking-wider mt-0.5">views</span>
