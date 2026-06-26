@@ -64,9 +64,14 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
     return { icon: <LinkIcon size={18} />, color: '#10B981', bg: 'bg-emerald-50', text: 'text-emerald-500', hoverBorder: 'hover:border-emerald-500/30', logo: '' };
   };
 
+  const isStorageUrl = (url: string) => {
+    if (!url) return false;
+    return url.startsWith('/content/') || url.startsWith('content/') || url.includes('avatars/') || url.includes('student_project_media');
+  };
+
   const ensureAbsoluteUrl = (url: string) => {
     if (!url) return ''
-    if (url.startsWith('/content/') || url.startsWith('content/') || url.includes('avatars/')) {
+    if (isStorageUrl(url)) {
       return getAssetUrl(url);
     }
     let cleaned = url.trim();
@@ -321,8 +326,8 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                     <div className="flex items-center gap-3">
                       <span className="text-3xl">{proj.emoji || ''}</span>
                       <h3 className="text-xl font-black text-neutral-900">
-                        {proj.github_url || proj.url ? (
-                          <a href={ensureAbsoluteUrl(proj.github_url || proj.url)} target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-emerald-600 transition-colors">
+                        {proj.github_url ? (
+                          <a href={ensureAbsoluteUrl(proj.github_url)} target="_blank" rel="noopener noreferrer" className="hover:underline hover:text-emerald-600 transition-colors">
                             {proj.name}
                           </a>
                         ) : (
@@ -335,14 +340,24 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                             <Github size={18} />
                           </a>
                         )}
-                        {proj.url && (
+                        {proj.url && !isStorageUrl(proj.url) && (
                           <a href={ensureAbsoluteUrl(proj.url)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-emerald-500 transition-colors">
+                            <ExternalLink size={18} />
+                          </a>
+                        )}
+                        {proj.url && isStorageUrl(proj.url) && (
+                          <a href={getAssetUrl(proj.url)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-emerald-500 transition-colors" title="View project media">
                             <ExternalLink size={18} />
                           </a>
                         )}
                       </div>
                     </div>
                     {proj.description && <p className="text-neutral-600 text-sm">{proj.description}</p>}
+                    {proj.url && isStorageUrl(proj.url) && (
+                      <a href={getAssetUrl(proj.url)} target="_blank" rel="noopener noreferrer" className="block mt-1 rounded-xl overflow-hidden border border-neutral-100 hover:opacity-90 transition-opacity">
+                        <img src={getAssetUrl(proj.url)} alt={proj.name} className="w-full max-h-40 object-cover" />
+                      </a>
+                    )}
                     <div className="flex flex-wrap gap-2 mt-1">
                       {proj.tech?.map((t: string, j: number) => (
                         <span key={j} className="px-3 py-1 bg-neutral-100 rounded-full text-xs font-bold text-neutral-600">{t}</span>
@@ -519,6 +534,20 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                   {!user && <Lock size={12} className="text-neutral-900" />}
                 </a>
               ) : <div />}
+            </div>
+          )}
+
+          {data.playlist_url && (
+            <div className="w-full mb-10 text-center mt-4">
+              <h4 className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-neutral-600 mb-4 sm:mb-5 px-2">🎵 Now Playing</h4>
+              <a
+                href={ensureAbsoluteUrl(data.playlist_url)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-[#1DB954] text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-[#1ed760] transition-colors shadow-lg shadow-emerald-500/30"
+              >
+                <Music size={20} /> {data.playlist_name || 'My Playlist'} <ExternalLink size={16} />
+              </a>
             </div>
           )}
 
@@ -816,7 +845,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                 <ul className="text-xl text-neutral-800 space-y-1 ml-2" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
                   {data.projects.map((p: any, i: number) => (
                     <li key={i} className="leading-[32px]">
-                      • {p.emoji} {p.github_url || p.url ? <a href={ensureAbsoluteUrl(p.github_url || p.url)} target="_blank" rel="noopener noreferrer" className="hover:text-[#B91C1C] hover:underline transition-colors">{p.name}</a> : p.name}
+                      • {p.emoji} {p.github_url ? <a href={ensureAbsoluteUrl(p.github_url)} target="_blank" rel="noopener noreferrer" className="hover:text-[#B91C1C] hover:underline transition-colors">{p.name}</a> : p.name}
                     </li>
                   ))}
                 </ul>
@@ -963,6 +992,37 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                    </a>
                 </div>
              </div>
+          )}
+
+          {data.availability && (
+            <div className="w-full max-w-2xl mx-auto mt-4 mb-2 flex justify-center">
+              <div className="bg-[#C3E7AD] px-6 py-3 cork-shadow rotate-[-1deg] inline-flex items-center gap-3 relative">
+                <div className="pushpin pin-green" />
+                <Briefcase size={18} className="text-neutral-800 mt-1" />
+                <span className="text-xl text-neutral-800" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  Open to: <strong>{data.availability}</strong>
+                </span>
+              </div>
+            </div>
+          )}
+
+          {!(user && profile.ghost_mode) && data.quick_talk_url && (
+            <div className="w-full max-w-2xl mx-auto mt-3 mb-2 flex justify-center">
+              <a
+                href={!user ? undefined : ensureAbsoluteUrl(data.quick_talk_url)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => {
+                  if (!user) { e.preventDefault(); setShowGate(true); }
+                }}
+                className={`bg-[#1e3a8a] text-white px-8 py-3 cork-shadow inline-flex items-center gap-3 text-xl cursor-pointer hover:bg-[#1e47b0] transition-colors relative ${!user ? 'opacity-70' : ''}`}
+                style={{ fontFamily: "'Caveat', cursive, sans-serif" }}
+              >
+                <Calendar size={20} />
+                <span className={!user ? 'ghost-blur-item' : ''}>Quick Talk →</span>
+                {!user && <Lock size={14} className="text-white" />}
+              </a>
+            </div>
           )}
 
           <div className="w-full max-w-sm mt-8 z-20 flex flex-col items-center gap-4">
@@ -1376,17 +1436,23 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                         <div className="absolute top-0 right-0 p-3 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity"><Rocket size={50} /></div>
                         <div className="flex items-start gap-3 relative z-10">
                           <span className="text-xl shrink-0">{proj.emoji || ''}</span>
-                          <div className="min-w-0">
-                            <h4 className="text-[15px] font-semibold text-white mb-0.5 leading-snug">
-                              {proj.github_url || proj.url ? (
-                                <a href={ensureAbsoluteUrl(proj.github_url || proj.url)} target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 hover:underline transition-colors">
+                          <div className="min-w-0 w-full">
+                            <h4 className="text-[15px] font-semibold text-white mb-0.5 leading-snug flex items-center gap-2">
+                              {proj.github_url ? (
+                                <a href={ensureAbsoluteUrl(proj.github_url)} target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 hover:underline transition-colors">
                                   {proj.name}
                                 </a>
                               ) : (
                                 proj.name
                               )}
+                              {proj.github_url && <Github size={13} className="text-cyan-500/50 shrink-0" />}
                             </h4>
                             {proj.description && <p className="text-[13px] text-indigo-200/60 font-light mb-2 leading-relaxed">{proj.description}</p>}
+                            {proj.url && isStorageUrl(proj.url) && (
+                              <a href={getAssetUrl(proj.url)} target="_blank" rel="noopener noreferrer" className="block mb-2 rounded-lg overflow-hidden border border-cyan-500/10 hover:opacity-80 transition-opacity">
+                                <img src={getAssetUrl(proj.url)} alt={proj.name} className="w-full max-h-32 object-cover" />
+                              </a>
+                            )}
                             {proj.tech && proj.tech.length > 0 && (
                               <div className="flex flex-wrap gap-1.5">
                                 {proj.tech.map((t, j) => (
@@ -1561,6 +1627,46 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
           )}
 
           {/* CTAs at the bottom */}
+          {(data.playlist_url || (!(user && profile.ghost_mode) && data.quick_talk_url)) && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 animate-in" style={{ animationDelay: '0.75s' }}>
+              {data.playlist_url && (
+                <a
+                  href={ensureAbsoluteUrl(data.playlist_url)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-card p-5 flex items-center gap-4 hover:border-[#1DB954]/40 transition-colors group"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-[#1DB954]/15 border border-[#1DB954]/25 flex items-center justify-center shrink-0">
+                    <Music size={18} className="text-[#1DB954]" />
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-400/60 mb-0.5">Now Playing</div>
+                    <div className="text-[14px] font-semibold text-white group-hover:text-[#1DB954] transition-colors">{data.playlist_name || 'My Playlist'}</div>
+                  </div>
+                  <ExternalLink size={14} className="text-cyan-400/30 ml-auto" />
+                </a>
+              )}
+              {!(user && profile.ghost_mode) && data.quick_talk_url && (
+                <a
+                  href={!user ? undefined : ensureAbsoluteUrl(data.quick_talk_url)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => { if (!user) { e.preventDefault(); setShowGate(true); } }}
+                  className={`glass-card p-5 flex items-center gap-4 hover:border-cyan-400/40 transition-colors group cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                >
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0">
+                    <Calendar size={18} className="text-cyan-400" />
+                  </div>
+                  <div className="flex-grow min-w-0">
+                    <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-400/60 mb-0.5">Schedule a call</div>
+                    <div className={`text-[14px] font-semibold text-white group-hover:text-cyan-300 transition-colors ${!user ? 'ghost-blur-item' : ''}`}>Quick Talk</div>
+                  </div>
+                  {!user ? <Lock size={14} className="text-cyan-400 shrink-0" /> : <ExternalLink size={14} className="text-cyan-400/30 ml-auto" />}
+                </a>
+              )}
+            </div>
+          )}
+
           <div className="w-full mt-12 mb-8 flex flex-col items-center justify-center z-20">
             <div className="w-full max-w-sm glass-card p-3 rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.15)]">
               <ProfileCTAs profile={profile} accentColor="#06b6d4" />
@@ -1960,16 +2066,22 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                           <div className="flex items-start gap-2.5">
                             <span className="text-lg mt-0.5">{proj.emoji || '📂'}</span>
                             <div className="flex-grow min-w-0">
-                              <h4 className="text-base font-black uppercase tracking-wider nb-ink font-sans">
-                                {proj.github_url || proj.url ? (
-                                  <a href={ensureAbsoluteUrl(proj.github_url || proj.url)} target="_blank" rel="noopener noreferrer" className="hover:text-[#b91c1c] hover:underline transition-colors">
+                              <h4 className="text-base font-black uppercase tracking-wider nb-ink font-sans flex items-center gap-2">
+                                {proj.github_url ? (
+                                  <a href={ensureAbsoluteUrl(proj.github_url)} target="_blank" rel="noopener noreferrer" className="hover:text-[#b91c1c] hover:underline transition-colors">
                                     {proj.name}
                                   </a>
                                 ) : (
                                   proj.name
                                 )}
+                                {proj.github_url && <Github size={12} className="nb-ink opacity-40 shrink-0" />}
                               </h4>
                               {proj.description && <p className="text-neutral-600 text-xs font-semibold font-sans leading-relaxed mt-1.5">{proj.description}</p>}
+                              {proj.url && isStorageUrl(proj.url) && (
+                                <a href={getAssetUrl(proj.url)} target="_blank" rel="noopener noreferrer" className="block mt-2 rounded-lg overflow-hidden border-2 border-[#1e3a5f]/10 hover:opacity-80 transition-opacity">
+                                  <img src={getAssetUrl(proj.url)} alt={proj.name} className="w-full max-h-32 object-cover" />
+                                </a>
+                              )}
                               {proj.tech && proj.tech.length > 0 && (
                                 <div className="flex flex-wrap gap-1 mt-2">
                                   {proj.tech.map((t: string, j: number) => (
@@ -2150,6 +2262,52 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
               </div>
             )}
           </div>
+
+          {(data.playlist_url || (!(user && profile.ghost_mode) && data.quick_talk_url)) && (
+            <>
+              <hr className="nb-divider" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-1">
+                {data.playlist_url && (
+                  <div>
+                    <h3 className="nb-section-title">
+                      <Music size={16} className="nb-ink opacity-80" /> Now Playing
+                    </h3>
+                    <a
+                      href={ensureAbsoluteUrl(data.playlist_url)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="nb-sticky-blue p-4 flex items-center gap-3 group hover:opacity-90 transition-opacity"
+                    >
+                      <div className="w-10 h-10 rounded-full border-2 border-[#1e3a5f] flex items-center justify-center shrink-0 bg-[#1DB954]/10">
+                        <Music size={18} className="text-[#1DB954]" />
+                      </div>
+                      <span className="nb-handwriting text-xl font-bold nb-ink group-hover:text-[#1DB954] transition-colors">{data.playlist_name || 'My Playlist'} →</span>
+                    </a>
+                  </div>
+                )}
+                {!(user && profile.ghost_mode) && data.quick_talk_url && (
+                  <div>
+                    <h3 className="nb-section-title">
+                      <Calendar size={16} className="nb-ink opacity-80" /> Book a Chat
+                    </h3>
+                    <a
+                      href={!user ? undefined : ensureAbsoluteUrl(data.quick_talk_url)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => { if (!user) { e.preventDefault(); setShowGate(true); } }}
+                      className={`nb-sticky-pink p-4 flex items-center gap-3 group cursor-pointer relative ${!user ? 'opacity-70' : ''}`}
+                    >
+                      <div className="w-10 h-10 rounded-full border-2 border-[#1e3a5f] flex items-center justify-center shrink-0 bg-[#E6F0FA]">
+                        <Calendar size={18} className="nb-ink" />
+                      </div>
+                      <span className={`nb-handwriting text-xl font-bold nb-ink group-hover:nb-red-ink transition-colors ${!user ? 'ghost-blur-item' : ''}`}>Quick Talk →</span>
+                      {!user && <Lock size={14} className="text-neutral-800 ml-auto" />}
+                    </a>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
 
           {/* Save Contact / Share CTAs */}
           <div className="w-full mt-12 mb-2 flex flex-col items-center justify-center z-20">
