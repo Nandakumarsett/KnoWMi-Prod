@@ -354,8 +354,15 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                     </div>
                     {proj.description && <p className="text-neutral-600 text-sm">{proj.description}</p>}
                     {proj.url && isStorageUrl(proj.url) && (
-                      <a href={getAssetUrl(proj.url)} target="_blank" rel="noopener noreferrer" className="block mt-1 rounded-xl overflow-hidden border border-neutral-100 hover:opacity-90 transition-opacity">
-                        <img src={getAssetUrl(proj.url)} alt={proj.name} className="w-full max-h-40 object-cover" />
+                      <a 
+                        href={getAssetUrl(proj.url)} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="block mt-2 rounded-2xl overflow-hidden border border-neutral-200/60 bg-neutral-50/50 p-2 hover:shadow-md transition-all duration-300"
+                      >
+                        <div className="w-full h-[220px] flex items-center justify-center bg-neutral-100/50 rounded-xl overflow-hidden">
+                          <img src={getAssetUrl(proj.url)} alt={proj.name} className="max-w-full max-h-full object-contain" />
+                        </div>
                       </a>
                     )}
                     <div className="flex flex-wrap gap-2 mt-1">
@@ -1449,8 +1456,15 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                             </h4>
                             {proj.description && <p className="text-[13px] text-indigo-200/60 font-light mb-2 leading-relaxed">{proj.description}</p>}
                             {proj.url && isStorageUrl(proj.url) && (
-                              <a href={getAssetUrl(proj.url)} target="_blank" rel="noopener noreferrer" className="block mb-2 rounded-lg overflow-hidden border border-cyan-500/10 hover:opacity-80 transition-opacity">
-                                <img src={getAssetUrl(proj.url)} alt={proj.name} className="w-full max-h-32 object-cover" />
+                              <a 
+                                href={getAssetUrl(proj.url)} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="block mb-3 rounded-xl overflow-hidden border border-cyan-500/20 bg-[#070e1c]/80 p-1.5 hover:border-cyan-500/45 hover:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all duration-300"
+                              >
+                                <div className="w-full h-[180px] flex items-center justify-center bg-[#030712]/50 rounded-lg overflow-hidden">
+                                  <img src={getAssetUrl(proj.url)} alt={proj.name} className="max-w-full max-h-full object-contain" />
+                                </div>
                               </a>
                             )}
                             {proj.tech && proj.tech.length > 0 && (
@@ -1905,6 +1919,50 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
 
         <main className={`relative z-10 w-full pl-[3.2rem] sm:pl-[4.5rem] pr-4 sm:pr-8 pb-12 flex flex-col gap-0 nb-animate ${(!hideHeader && data.featured_work_url) ? 'pt-32 sm:pt-48' : (hideHeader ? 'pt-12 sm:pt-16' : 'pt-6')}`}>
           
+          {/* ⭐ Notebook Desktop Registry Header (displays Course, Campus Mood, Batch, Current Year, University) ⭐ */}
+          {hideHeader && (
+            <div className="w-full mb-8 border-b-2 border-dashed border-[#1e3a5f]/20 pb-4 flex flex-col gap-3 z-10 relative">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] font-sans font-black tracking-wider uppercase text-neutral-400">Registry:</span>
+                  <span className="text-xl font-bold nb-ink font-sans uppercase tracking-wide">Student Profile Sheet</span>
+                </div>
+                {data.mood && (
+                  <div className="nb-doodle-box inline-flex items-center gap-1.5 px-3 py-1 bg-[#FEF08A]/40 border border-yellow-300/30 rotate-[-1deg]" style={{ borderRadius: '4px' }}>
+                    <span className="text-[9px] font-sans font-black uppercase text-yellow-800 tracking-wider">Mood:</span>
+                    <span className="text-sm font-black nb-ink uppercase tracking-widest leading-none" style={{ fontFamily: "'Permanent Marker', cursive" }}>{data.mood}</span>
+                  </div>
+                )}
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-2 gap-x-4 text-sm font-sans">
+                {data.course && (
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 shrink-0">Major:</span>
+                    <span className="font-bold text-neutral-800 border-b border-dashed border-neutral-300 pb-0.5 grow">{data.course}</span>
+                  </div>
+                )}
+                {data.university && (
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 shrink-0">Uni:</span>
+                    <span className="font-bold text-neutral-800 border-b border-dashed border-neutral-300 pb-0.5 grow">{data.university}</span>
+                  </div>
+                )}
+                {data.year && (
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 shrink-0">Current Yr:</span>
+                    <span className="font-bold text-neutral-800 border-b border-dashed border-neutral-300 pb-0.5 grow">Year {data.year}</span>
+                  </div>
+                )}
+                {data.batch_year && (
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400 shrink-0">Batch:</span>
+                    <span className="font-bold text-neutral-800 border-b border-dashed border-neutral-300 pb-0.5 grow">Class of {data.batch_year}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
 
           {/* ═══ HEADER: Avatar + Name + Bio + Stats — Centered ═══ */}
@@ -2078,8 +2136,15 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                               </h4>
                               {proj.description && <p className="text-neutral-600 text-xs font-semibold font-sans leading-relaxed mt-1.5">{proj.description}</p>}
                               {proj.url && isStorageUrl(proj.url) && (
-                                <a href={getAssetUrl(proj.url)} target="_blank" rel="noopener noreferrer" className="block mt-2 rounded-lg overflow-hidden border-2 border-[#1e3a5f]/10 hover:opacity-80 transition-opacity">
-                                  <img src={getAssetUrl(proj.url)} alt={proj.name} className="w-full max-h-32 object-cover" />
+                                <a 
+                                  href={getAssetUrl(proj.url)} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer" 
+                                  className="block mt-2 rounded-lg overflow-hidden border-2 border-[#1e3a5f]/15 bg-[#FFFDF7] p-1.5 hover:opacity-90 hover:shadow-sm transition-all duration-300"
+                                >
+                                  <div className="w-full h-[180px] flex items-center justify-center bg-[#FAF6EB]/40 rounded overflow-hidden">
+                                    <img src={getAssetUrl(proj.url)} alt={proj.name} className="max-w-full max-h-full object-contain" />
+                                  </div>
                                 </a>
                               )}
                               {proj.tech && proj.tech.length > 0 && (
