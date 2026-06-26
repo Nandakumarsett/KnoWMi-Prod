@@ -859,7 +859,7 @@ export function CreatorProfile({
                   )}
 
                   {/* Status & Rates pill - Bento Style */}
-                  {(data.rate_range_min || data.turnaround_time || data.availability_status) && (
+                  {(data.rate_range_min || data.rate_range_max || data.turnaround_time || data.availability_status || data.response_time || data.preferred_contact_method || data.visual_style || data.posting_frequency) && (
                     <div className="flex flex-wrap justify-center gap-3 w-full max-w-2xl mb-10">
                       {data.availability_status && (
                         <div className="flex-1 min-w-[140px] bg-white/80 backdrop-blur-sm border border-neutral-100 rounded-2xl p-5 flex flex-col items-center text-center shadow-sm">
@@ -879,10 +879,42 @@ export function CreatorProfile({
                           <span className="text-sm font-black text-neutral-900 uppercase tracking-wider">{data.turnaround_time}</span>
                         </div>
                       )}
-                      {data.rate_range_min && (
+                      {data.response_time && (
                         <div className="flex-1 min-w-[140px] bg-white/80 backdrop-blur-sm border border-neutral-100 rounded-2xl p-5 flex flex-col items-center text-center shadow-sm">
-                          <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-2">Starting Rate</span>
-                          <span className="text-sm font-black text-neutral-900 uppercase tracking-wider">₹{data.rate_range_min}</span>
+                          <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-2">Response</span>
+                          <span className="text-sm font-black text-neutral-900 uppercase tracking-wider">{data.response_time}</span>
+                        </div>
+                      )}
+                      {data.preferred_contact_method && (
+                        <div className="flex-1 min-w-[140px] bg-white/80 backdrop-blur-sm border border-neutral-100 rounded-2xl p-5 flex flex-col items-center text-center shadow-sm">
+                          <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-2">Prefers</span>
+                          <span className="text-sm font-black text-neutral-900 uppercase tracking-wider">{data.preferred_contact_method}</span>
+                        </div>
+                      )}
+                      {(data.rate_range_min || data.rate_range_max) && (
+                        <div className="flex-1 min-w-[140px] bg-white/80 backdrop-blur-sm border border-neutral-100 rounded-2xl p-5 flex flex-col items-center text-center shadow-sm">
+                          <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-2">Rates</span>
+                          <span className="text-sm font-black text-neutral-900 uppercase tracking-wider">
+                            {data.rate_range_min && data.rate_range_max ? (
+                              `₹${data.rate_range_min.toLocaleString()} - ₹${data.rate_range_max.toLocaleString()}`
+                            ) : data.rate_range_min ? (
+                              `₹${data.rate_range_min.toLocaleString()}+`
+                            ) : (
+                              `Up to ₹${data.rate_range_max?.toLocaleString()}`
+                            )}
+                          </span>
+                        </div>
+                      )}
+                      {data.visual_style && (
+                        <div className="flex-1 min-w-[140px] bg-white/80 backdrop-blur-sm border border-neutral-100 rounded-2xl p-5 flex flex-col items-center text-center shadow-sm">
+                          <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-2">Aesthetic</span>
+                          <span className="text-sm font-black text-neutral-900 uppercase tracking-wider">{data.visual_style}</span>
+                        </div>
+                      )}
+                      {data.posting_frequency && (
+                        <div className="flex-1 min-w-[140px] bg-white/80 backdrop-blur-sm border border-neutral-100 rounded-2xl p-5 flex flex-col items-center text-center shadow-sm">
+                          <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-2">Frequency</span>
+                          <span className="text-sm font-black text-neutral-900 uppercase tracking-wider">{data.posting_frequency}</span>
                         </div>
                       )}
                     </div>
@@ -1170,12 +1202,18 @@ export function CreatorProfile({
           )}
 
           {/* Demographics & Aesthetic */}
-          {(data.audience_age_group || data.visual_style || data.posting_frequency || (Array.isArray(data.audience_interests) && data.audience_interests.length > 0)) && (
+          {(data.location || data.audience_age_group || data.visual_style || data.posting_frequency || (Array.isArray(data.audience_interests) && data.audience_interests.length > 0)) && (
             <div className="w-full mb-12">
               <h3 className="font-black text-2xl uppercase tracking-tighter mb-6 border-b-4 border-black pb-2 text-left">
                 DEMOGRAPHICS & AESTHETIC
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                {data.location && (
+                  <div className="border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
+                    <span className="text-[10px] font-black uppercase tracking-widest block mb-1">LOCATION</span>
+                    <span className="text-xl font-black">{data.location}</span>
+                  </div>
+                )}
                 {data.audience_age_group && (
                   <div className="border-4 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
                     <span className="text-[10px] font-black uppercase tracking-widest block mb-1">AGE GROUP</span>
@@ -1586,7 +1624,7 @@ export function CreatorProfile({
           {/* Bento Grid */}
           {((Array.isArray(data.content_formats) && data.content_formats.length > 0) ||
             (data.visual_style || data.posting_frequency) ||
-            ((Array.isArray(data.audience_interests) && data.audience_interests.length > 0) || data.audience_age_group)) && (
+            ((Array.isArray(data.audience_interests) && data.audience_interests.length > 0) || data.audience_age_group || data.location)) && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl mb-12">
               {/* What I Do */}
               {Array.isArray(data.content_formats) && data.content_formats.length > 0 && (
@@ -1634,12 +1672,18 @@ export function CreatorProfile({
               )}
 
               {/* Audience Snap */}
-              {((Array.isArray(data.audience_interests) && data.audience_interests.length > 0) || data.audience_age_group) && (
+              {((Array.isArray(data.audience_interests) && data.audience_interests.length > 0) || data.audience_age_group || data.location) && (
                 <div className="bg-black/30 border border-purple-500/30 rounded-2xl p-6 shadow-[inset_0_0_20px_rgba(153,51,255,0.05)] w-full sm:col-span-2 flex flex-col justify-center">
                   <h3 className="font-bold text-sm text-center uppercase tracking-[0.2em] text-purple-400 mb-5 drop-shadow-[0_0_5px_rgba(153,51,255,0.8)]">
                     AUDIENCE SNAP
                   </h3>
-                  <div className="flex flex-col sm:flex-row gap-6 justify-around items-start sm:items-center">
+                  <div className="flex flex-wrap gap-6 justify-around items-center">
+                    {data.location && (
+                      <div className="text-center w-full sm:w-auto">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-1">LOCATION</span>
+                        <span className="text-sm font-black text-white">{data.location}</span>
+                      </div>
+                    )}
                     {data.audience_age_group && (
                       <div className="text-center w-full sm:w-auto">
                         <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-1">AGE GROUP</span>
@@ -1722,7 +1766,7 @@ export function CreatorProfile({
           )}
 
           {/* System Status / Collaboration */}
-          {(data.collab_types || data.availability_status || data.rate_range_min || data.turnaround_time || (Array.isArray(data.collab_types_tags) && data.collab_types_tags.length > 0)) && (
+          {(data.collab_types || data.availability_status || data.rate_range_min || data.rate_range_max || data.turnaround_time || data.response_time || data.preferred_contact_method || (Array.isArray(data.collab_types_tags) && data.collab_types_tags.length > 0)) && (
             <div className="w-full max-w-3xl mb-12 bg-black/40 border border-purple-500/30 rounded-2xl p-6 sm:p-8 shadow-[0_0_30px_rgba(153,51,255,0.1)]">
               <h3 className="font-bold text-base uppercase tracking-[0.2em] text-purple-400 mb-6 text-center">
                 OPEN FOR COLLABORATION
@@ -1757,10 +1801,30 @@ export function CreatorProfile({
                     <span className="text-sm sm:text-base font-black text-white uppercase break-words">{data.turnaround_time}</span>
                   </div>
                 )}
-                {data.rate_range_min && (
+                {data.response_time && (
+                  <div className="bg-black/60 border border-white/10 rounded-lg p-4 sm:px-6 flex-1 min-w-[140px] text-center shadow-lg">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-2">RESPONSE</span>
+                    <span className="text-sm sm:text-base font-black text-white uppercase break-words">{data.response_time}</span>
+                  </div>
+                )}
+                {data.preferred_contact_method && (
+                  <div className="bg-black/60 border border-white/10 rounded-lg p-4 sm:px-6 flex-1 min-w-[140px] text-center shadow-lg">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-2">PREFERRED CONTACT</span>
+                    <span className="text-sm sm:text-base font-black text-white uppercase break-words">{data.preferred_contact_method}</span>
+                  </div>
+                )}
+                {(data.rate_range_min || data.rate_range_max) && (
                   <div className="bg-black/60 border border-white/10 rounded-lg p-4 sm:px-6 flex-1 min-w-[140px] text-center shadow-lg">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-2">BASE RATE</span>
-                    <span className="text-sm sm:text-base font-black text-[#FF2D78] uppercase drop-shadow-[0_0_8px_rgba(255,45,120,0.8)]">₹{data.rate_range_min}</span>
+                    <span className="text-sm sm:text-base font-black text-[#FF2D78] uppercase drop-shadow-[0_0_8px_rgba(255,45,120,0.8)]">
+                      {data.rate_range_min && data.rate_range_max ? (
+                        `₹${data.rate_range_min.toLocaleString()} - ₹${data.rate_range_max.toLocaleString()}`
+                      ) : data.rate_range_min ? (
+                        `₹${data.rate_range_min.toLocaleString()}+`
+                      ) : (
+                        `Up to ₹${data.rate_range_max?.toLocaleString()}`
+                      )}
+                    </span>
                   </div>
                 )}
               </div>

@@ -249,10 +249,22 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
                     <span className="text-neutral-900 font-black text-[15px]">{data.about.role}</span>
                   </div>
                 )}
+                {data.about?.company && (
+                  <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
+                    <span className="text-neutral-500 font-bold text-[12px] uppercase tracking-wider">COMPANY</span>
+                    <span className="text-neutral-900 font-black text-[15px]">{data.about.company}</span>
+                  </div>
+                )}
                 {data.about?.status && (
                   <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
                     <span className="text-neutral-500 font-bold text-[12px] uppercase tracking-wider">STATUS</span>
                     <span className="text-green-700 font-black text-[15px]">{data.about.status}</span>
+                  </div>
+                )}
+                {data.about?.mission && (
+                  <div className="pt-3">
+                    <span className="text-neutral-500 font-bold text-[12px] uppercase tracking-wider block mb-2">MISSION</span>
+                    <p className="text-neutral-800 bg-neutral-50 p-4 border border-neutral-200 rounded-xl leading-relaxed">{data.about.mission}</p>
                   </div>
                 )}
               </div>
@@ -267,6 +279,16 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
                   <div className="flex flex-wrap gap-2.5">
                     {aboutMeLanguages.map((l, i) => (
                       <span key={i} className="text-[12px] bg-neutral-50 text-neutral-500 px-4 py-2 rounded-xl border border-neutral-300 font-black uppercase shadow-sm">{l}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {techStack && techStack.length > 0 && (
+                <div>
+                  <span className="block text-[13px] font-black text-neutral-500 uppercase tracking-[0.2em] mb-4">Full Tech Stack</span>
+                  <div className="flex flex-wrap gap-2">
+                    {techStack.map((tech, i) => (
+                      <span key={i} className="text-[11px] bg-neutral-50 text-neutral-800 px-3 py-1.5 rounded-lg border border-neutral-200 uppercase font-bold">{tech}</span>
                     ))}
                   </div>
                 </div>
@@ -289,6 +311,11 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
                     <h4 className="text-lg font-black text-neutral-900 mb-2">{project.name}</h4>
                     {project.description && (
                       <p className="text-sm text-neutral-600 mb-4 pr-16">{project.description}</p>
+                    )}
+                    {project.url && (
+                      <div className="mb-4 rounded-2xl overflow-hidden border border-neutral-200">
+                        <img src={getAssetUrl(project.url)} alt={project.name} className="w-full max-h-48 object-cover" />
+                      </div>
                     )}
                     {(project.live_url || project.github_url) && (
                       <a
@@ -582,9 +609,14 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
                         {project.description}
                       </p>
                     )}
-                    {project.live_url && (
+                    {project.url && (
+                      <div className="mb-4 rounded overflow-hidden border border-[#64FFDA]/30">
+                        <img src={getAssetUrl(project.url)} alt={project.name} className="w-full max-h-48 object-cover filter contrast-125 sepia-[0.3] hue-rotate-[200deg]" />
+                      </div>
+                    )}
+                    {(project.live_url || project.github_url) && (
                       <a
-                        href={ensureAbsoluteUrl(project.live_url)}
+                        href={ensureAbsoluteUrl(project.live_url || project.github_url)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-[11px] uppercase text-[#64FFDA] hover:text-white transition-colors"
@@ -960,9 +992,14 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
                         {project.description}
                       </p>
                     )}
-                    {project.live_url && (
+                    {project.url && (
+                      <div className="mb-4 rounded border border-[#00FF41]/40 hover:border-[#00FF41] transition-colors overflow-hidden">
+                        <img src={getAssetUrl(project.url)} alt={project.name} className="w-full max-h-48 object-cover filter brightness-90 contrast-125 saturate-50 hue-rotate-[80deg]" />
+                      </div>
+                    )}
+                    {(project.live_url || project.github_url) && (
                       <a
-                        href={ensureAbsoluteUrl(project.live_url)}
+                        href={ensureAbsoluteUrl(project.live_url || project.github_url)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-[10px] uppercase text-[#00FF41] hover:text-white border-b border-[#00FF41] pb-0.5 inline-flex items-center gap-1"
@@ -1280,28 +1317,35 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
             </div>
             <div className="pl-4 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
               {data.projects.map((project: any, i: number) => (
-                <div key={i} className="border border-[#30363D] p-4 bg-[#161B22] hover:border-[#8B949E] transition-colors relative group">
-                  <div className="absolute top-4 right-4 text-[10px] text-[#8B949E] font-mono flex items-center gap-2">
-                    {project.stars !== undefined && project.stars > 0 && (
-                      <span className="flex items-center gap-1 text-[#FFBD2E]">
-                        ★ {project.stars}
-                      </span>
+                <div key={i} className="border border-[#30363D] p-4 bg-[#161B22] hover:border-[#8B949E] transition-colors relative group flex flex-col justify-between">
+                  <div>
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="text-[#58A6FF] font-medium flex items-center gap-2 pr-10">
+                        {project.name}
+                      </h4>
+                      {project.stars !== undefined && project.stars > 0 && (
+                        <span className="text-[10px] text-[#FFBD2E] font-mono shrink-0">
+                          ★ {project.stars}
+                        </span>
+                      )}
+                    </div>
+                    {project.description && (
+                      <p className="text-[#8B949E] text-xs mb-4 line-clamp-2">
+                        {project.description}
+                      </p>
+                    )}
+                    {project.url && (
+                      <div className="mb-4 rounded border border-[#30363D] hover:border-[#8B949E] transition-colors overflow-hidden">
+                        <img src={getAssetUrl(project.url)} alt={project.name} className="w-full max-h-44 object-cover" />
+                      </div>
                     )}
                   </div>
-                  <h4 className="text-[#58A6FF] font-medium mb-2 flex items-center gap-2">
-                    {project.name}
-                  </h4>
-                  {project.description && (
-                    <p className="text-[#8B949E] text-xs mb-4 line-clamp-2">
-                      {project.description}
-                    </p>
-                  )}
-                  {project.live_url && (
+                  {(project.live_url || project.github_url) && (
                     <a
-                      href={ensureAbsoluteUrl(project.live_url)}
+                      href={ensureAbsoluteUrl(project.live_url || project.github_url)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[#3FB950] hover:text-white text-xs transition-colors inline-flex items-center gap-1 mt-auto"
+                      className="text-[#3FB950] hover:text-white text-xs transition-colors inline-flex items-center gap-1 mt-auto self-start"
                     >
                       Execute &gt;_
                     </a>
