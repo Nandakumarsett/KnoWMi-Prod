@@ -2548,6 +2548,26 @@ export function CreatorProfile({
                         </div>
                       </div>
                     )}
+                    {hideHeader && data.response_time && (
+                      <div className="space-y-1">
+                        <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700">
+                          Response Time
+                        </div>
+                        <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+                          {data.response_time}
+                        </div>
+                      </div>
+                    )}
+                    {hideHeader && data.preferred_contact_method && (
+                      <div className="space-y-1">
+                        <div className="text-xs font-extrabold uppercase tracking-[0.15em] text-gray-700">
+                          Prefers Contact
+                        </div>
+                        <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+                          {data.preferred_contact_method}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Deliverables */}

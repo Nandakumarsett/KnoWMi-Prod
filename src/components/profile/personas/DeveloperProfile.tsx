@@ -519,13 +519,19 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
           </div>
 
           {/* Infrastructure Specs */}
-          {(data.about?.status || data.about?.company || data.about?.mission) && (
+          {(data.about?.status || data.about?.company || data.about?.mission || (hideHeader && data.about?.role)) && (
             <div className="w-full blueprint-border bg-[#001B2E]/90 backdrop-blur-md p-8 mb-8 text-left relative group hover:border-[#64FFDA]/60 transition-colors duration-500">
               <h3 className="text-xs font-medium uppercase text-white tracking-[0.2em] mb-6 flex items-center gap-3">
                 <span className="text-[#64FFDA]">01.</span> NODE CONFIGURATION
                 <div className="flex-grow h-px bg-gradient-to-r from-[#64FFDA]/20 to-transparent ml-2" />
               </h3>
               <div className="space-y-4 text-sm text-[#8892B0]">
+                {hideHeader && data.about?.role && (
+                  <div className="flex justify-between items-center py-2 border-b border-[#64FFDA]/10">
+                    <span className="text-[#64FFDA]/60">ROLE:</span>
+                    <span className="text-white">{data.about.role}</span>
+                  </div>
+                )}
                 {data.about.status && (
                   <div className="flex justify-between items-center py-2 border-b border-[#64FFDA]/10">
                     <span className="text-[#64FFDA]/60">STATUS:</span>
@@ -907,12 +913,18 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
             </div>
           </div>
 
-          {(data.about?.status || data.about?.company || data.about?.mission) && (
+          {(data.about?.status || data.about?.company || data.about?.mission || (hideHeader && data.about?.role)) && (
             <div className="w-full hacker-border bg-black/80 p-6 mb-8 text-left relative">
               <h3 className="text-sm font-bold uppercase text-[#00FF41] tracking-widest mb-4 flex items-center gap-2 border-b border-[#00FF41]/30 pb-2">
                 <Layers size={14} /> SYS_VARS
               </h3>
               <div className="space-y-3 text-xs">
+                {hideHeader && data.about?.role && (
+                  <p className="flex items-center gap-3">
+                    <span className="text-[#00FF41]/60 w-24">ROLE:</span> 
+                    <span className="text-white">{data.about.role}</span>
+                  </p>
+                )}
                 {data.about.status && (
                   <p className="flex items-center gap-3">
                     <span className="text-[#00FF41]/60 w-24">STATUS:</span> 
@@ -1259,7 +1271,7 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
           </div>
         </div>
 
-        {(data.about?.status || data.about?.company || data.about?.mission) && (
+        {(data.about?.status || data.about?.company || data.about?.mission || (hideHeader && data.about?.role)) && (
           <div className="w-full mb-8">
             <div className="flex gap-2 mb-3">
               <span className="text-[#3FB950] font-bold">~</span>
@@ -1267,6 +1279,7 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
               <span className="text-white">cat status.txt</span>
             </div>
             <div className="pl-4 py-2 border-l-2 border-[#30363D] space-y-2 text-[#8B949E]">
+              {hideHeader && data.about?.role && <p>Role: <span className="text-[#E6EDF3]">{data.about.role}</span></p>}
               {data.about.status && <p>State: <span className="text-[#E6EDF3]">{data.about.status}</span></p>}
               {data.about.company && <p>Host: <span className="text-[#E6EDF3]">{data.about.company}</span></p>}
               {data.about.mission && <p>Goal: <span className="text-[#E6EDF3]">{data.about.mission}</span></p>}

@@ -208,6 +208,34 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
             </div>
           )}
 
+          {/* Desktop Fallback Header Card for Classic Theme */}
+          {hideHeader && (
+            <div className="w-full bg-white p-6 sm:p-8 rounded-3xl border border-neutral-100 shadow-md mb-8 text-center flex flex-col items-center">
+              <h1 className="text-xl sm:text-2xl font-black text-neutral-900 mb-2 flex items-center justify-center gap-2">
+                {profile.display_name} {data.mood && <span className="text-xl sm:text-2xl">{data.mood}</span>}
+              </h1>
+              {(data.course || data.university) && (
+                <p className="text-emerald-500 font-bold text-sm sm:text-base tracking-wide flex items-center justify-center gap-1.5 mb-4">
+                  <GraduationCap size={18} /> {data.course || ''} {data.university ? `@ ${data.university}` : ''}
+                </p>
+              )}
+              {(data.resume_url || data.website) && (
+                <div className="flex gap-3 mt-2">
+                  {data.resume_url && (
+                    <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-xl font-bold text-[13px] hover:bg-emerald-700 transition-colors shadow-md">
+                      <FileText size={16} /> View Resume
+                    </a>
+                  )}
+                  {data.website && (
+                    <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-neutral-800 text-white px-4 py-2 rounded-xl font-bold text-[13px] hover:bg-neutral-900 transition-colors shadow-md">
+                      <Globe size={16} /> Portfolio
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* PREMIUM STATS ROW */}
           <div 
             className={`w-full grid grid-cols-2 gap-3 mb-10 bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2rem] border border-neutral-100 shadow-sm text-center relative ${isFreeProfile ? 'cursor-pointer hover:border-emerald-500 transition-colors' : ''}`}
@@ -698,6 +726,32 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                   
 
                </div>
+            </div>
+          )}
+
+          {/* Desktop Fallback Header Card for Campus Theme */}
+          {hideHeader && (
+            <div className="w-full flex justify-center items-start gap-8 relative mb-6">
+              <div className="w-full max-w-2xl bg-[#FDF9F1] lined-paper pt-8 pb-10 pr-6 pl-12 sm:pl-16 cork-shadow-lg relative rotate-1 z-10 min-h-[160px]">
+                <div className="pushpin pin-red absolute top-3 left-[50%]" />
+                <div className="paper-holes" />
+                <div className="margin-line" />
+                
+                <h1 className="text-3xl sm:text-4xl font-bold text-[#1e3a8a] mb-2 mt-2 leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {profile.display_name} {data.mood && <span className="text-2xl">{data.mood}</span>}
+                </h1>
+                
+                <div className="text-2xl font-bold text-[#B91C1C] mt-2 leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {data.university || ''}
+                </div>
+                <div className="text-xl text-[#4a5568] leading-[32px]" style={{ fontFamily: "'Caveat', cursive, sans-serif" }}>
+                  {data.course || ''}
+                  {(data.year || data.batch_year) ? ' | ' : ''}
+                  {data.year ? `Year ${data.year}` : ''}
+                  {(data.year && data.batch_year) ? ' - ' : ''}
+                  {data.batch_year ? `Batch of ${data.batch_year}` : ''}
+                </div>
+              </div>
             </div>
           )}
 
@@ -1358,6 +1412,61 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
             </div>
           )}
 
+          {/* Desktop Fallback Header Card for Night Owl Theme */}
+          {hideHeader && (
+            <div className="w-full glass-card p-6 sm:p-8 mb-6 text-center sm:text-left flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6">
+              <div className="flex-grow">
+                <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-2 text-glow">
+                  {profile.display_name} {data.mood && <span className="text-lg ml-1">{data.mood}</span>}
+                </h1>
+                
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
+                  {(data.course || data.university) && (
+                    <span className="inline-flex items-center gap-1.5 bg-cyan-900/25 px-3 py-1 rounded-full border border-cyan-500/15 text-[13px] text-cyan-300 font-medium">
+                      <GraduationCap size={14} /> {data.course} {data.university ? `@ ${data.university}` : ''}
+                    </span>
+                  )}
+                  {(data.year || data.batch_year) && (
+                    <span className="inline-flex items-center gap-1.5 bg-cyan-900/25 px-3 py-1 rounded-full border border-cyan-500/15 text-[13px] text-cyan-300/80">
+                      {data.year ? `Year ${data.year}` : ''}{data.year && data.batch_year ? ' · ' : ''}{data.batch_year ? `Batch of ${data.batch_year}` : ''}
+                    </span>
+                  )}
+                </div>
+
+                {data.availability && (
+                  <div className="flex justify-center sm:justify-start mt-4 z-20">
+                    <div className="glass-panel px-3.5 py-1.5 inline-flex items-center gap-2 no-lift">
+                      <Briefcase size={14} className="text-cyan-400" />
+                      <span className="text-[13px] font-medium text-cyan-100">
+                        Open to: <span className="text-cyan-300">{data.availability}</span>
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {(data.resume_url || data.website) && (
+                <div className="shrink-0 p-4 rounded-xl border border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 shadow-[0_0_15px_rgba(6,182,212,0.15)] flex flex-col items-center sm:items-start gap-3 w-full sm:w-auto">
+                  <p className="text-cyan-300 font-bold text-xs uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_5px_rgba(6,182,212,1)]" /> Explore My Work
+                  </p>
+                  <div className="flex flex-wrap justify-center sm:justify-start gap-3 w-full sm:w-auto">
+                    {data.resume_url && (
+                      <a href={data.resume_url} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 bg-[#050b14] border border-cyan-500/50 text-cyan-200 px-4 py-2 rounded-lg font-bold text-[12px] hover:bg-cyan-900/60 hover:border-cyan-400 hover:text-white transition-all shadow-[0_0_10px_rgba(6,182,212,0.2)]">
+                        <FileText size={14} /> Access CV
+                      </a>
+                    )}
+                    {data.website && (
+                      <a href={ensureAbsoluteUrl(data.website)} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 bg-[#050b14] border border-fuchsia-500/50 text-fuchsia-200 px-4 py-2 rounded-lg font-bold text-[12px] hover:bg-fuchsia-900/60 hover:border-fuchsia-400 hover:text-white transition-all shadow-[0_0_10px_rgba(217,70,239,0.2)]">
+                        <Globe size={14} /> Visit Website
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* ═══ STATS ROW ═══ */}
           {(data.campus_rank_pct || data.study_buddies || data.courses_completed || stats) && (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6 animate-in" style={{ animationDelay: '0.15s' }}>
@@ -1973,7 +2082,41 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                       </span>
                     </div>
                   )}
+                  {data.availability && (
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-slate-700">Availability</span>
+                      <span className="nb-handwriting text-lg sm:text-xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/25 pb-1 select-text">
+                        Open to {data.availability}
+                      </span>
+                    </div>
+                  )}
                 </div>
+
+                {/* CV & Website Links (if present) */}
+                {(data.resume_url || data.website) && (
+                  <div className="flex flex-wrap gap-4 mt-2 pt-3 border-t-2 border-dashed border-[#1e3a5f]/25">
+                    {data.resume_url && (
+                      <a 
+                        href={data.resume_url} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="inline-flex items-center gap-1.5 font-sans text-red-700 hover:text-red-800 transition-colors text-xs font-extrabold uppercase tracking-wider bg-red-50 hover:bg-red-100/50 px-3 py-1.5 border border-red-200 rounded-lg shadow-sm"
+                      >
+                        <FileText size={14} /> Resume / CV
+                      </a>
+                    )}
+                    {data.website && (
+                      <a 
+                        href={ensureAbsoluteUrl(data.website)} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="inline-flex items-center gap-1.5 font-sans text-blue-700 hover:text-blue-800 transition-colors text-xs font-extrabold uppercase tracking-wider bg-blue-50 hover:bg-blue-100/50 px-3 py-1.5 border border-blue-200 rounded-lg shadow-sm"
+                      >
+                        <Globe size={14} /> Portfolio
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}
