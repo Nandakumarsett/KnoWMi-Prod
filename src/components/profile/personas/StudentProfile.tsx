@@ -1921,7 +1921,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
           
           {/* ⭐ Notebook Desktop Registry Card (displays Course, Campus Mood, Batch, Current Year, University) ⭐ */}
           {hideHeader && (
-            <div className="w-full mb-8 mt-2 relative z-10 rotate-[0.5deg]">
+            <div className="w-full mb-8 mt-2 relative z-10">
               {/* Decorative washi tape on top left */}
               <div className="absolute -top-3 left-8 w-20 h-5 nb-tape rotate-[-2deg] opacity-90 z-20" />
               
@@ -1939,36 +1939,36 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                   )}
                 </div>
 
-                {/* Info Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-6 text-[#1e3a5f]">
+                {/* Info Grid (2 columns on sm+ screens for optimal width alignment) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 text-[#1e3a5f]">
                   {data.course && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-[#1e3a5f]/80">Course / Major</span>
-                      <span className="nb-handwriting text-xl sm:text-2xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/25 pb-1 select-text">
+                      <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-slate-700">Course / Major</span>
+                      <span className="nb-handwriting text-lg sm:text-xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/25 pb-1 select-text">
                         {data.course}
                       </span>
                     </div>
                   )}
                   {data.university && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-[#1e3a5f]/80">University Name</span>
-                      <span className="nb-handwriting text-xl sm:text-2xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/25 pb-1 select-text">
+                      <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-slate-700">University Name</span>
+                      <span className="nb-handwriting text-lg sm:text-xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/25 pb-1 select-text">
                         {data.university}
                       </span>
                     </div>
                   )}
                   {data.year && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-[#1e3a5f]/80">Current Year</span>
-                      <span className="nb-handwriting text-xl sm:text-2xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/25 pb-1 select-text">
+                      <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-slate-700">Current Year</span>
+                      <span className="nb-handwriting text-lg sm:text-xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/25 pb-1 select-text">
                         Year {data.year}
                       </span>
                     </div>
                   )}
                   {data.batch_year && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-[#1e3a5f]/80">Batch Year</span>
-                      <span className="nb-handwriting text-xl sm:text-2xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/25 pb-1 select-text">
+                      <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-slate-700">Batch Year</span>
+                      <span className="nb-handwriting text-lg sm:text-xl font-bold nb-ink leading-none border-b-2 border-dotted border-[#1e3a5f]/25 pb-1 select-text">
                         Class of {data.batch_year}
                       </span>
                     </div>
