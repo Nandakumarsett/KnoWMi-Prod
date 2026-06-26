@@ -1874,7 +1874,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
           .nb-tag-pink:hover { background: #FFF0F4; }
           
           .nb-stat {
-            width: 76px; height: 76px; border-radius: 50%;
+            width: 82px; height: 82px; border-radius: 50%;
             border: 2px solid #1e3a5f;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             background: #FFFFFF;
@@ -2052,30 +2052,30 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
               <div className="flex flex-wrap gap-3 items-center mb-1">
                 <div className={`nb-stat ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)}>
                   <span className={`text-lg nb-ink ${isFreeProfile ? 'blur-[3px]' : ''}`}>{liveViews}</span>
-                  <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">views</span>
+                  <span className="text-[10px] nb-pencil font-sans uppercase font-extrabold tracking-wider mt-0.5">views</span>
                 </div>
 
                 
                 <div className={`nb-stat ${isFreeProfile ? 'cursor-pointer' : ''}`} onClick={() => isFreeProfile && setShowFomoModal(true)} style={{ borderColor: '#2B6CB0' }}>
                   <span className={`text-sm font-black nb-ink truncate max-w-[80px] ${isFreeProfile ? 'blur-[3px]' : ''}`}>{topCity || 'N/A'}</span>
-                  <span className="text-[8px] nb-pencil font-sans uppercase tracking-wider">top city</span>
+                  <span className="text-[10px] nb-pencil font-sans uppercase font-extrabold tracking-wider mt-0.5">top city</span>
                 </div>
                 {data.campus_rank_pct && (
                   <div className="nb-stat" style={{ borderColor: '#c53030' }}>
                     <span className="text-base font-black nb-red-ink">Top {data.campus_rank_pct}%</span>
-                    <span className="text-[9px] text-gray-600 font-sans uppercase tracking-wider font-bold">rank</span>
+                    <span className="text-[10px] text-gray-600 font-sans uppercase font-extrabold tracking-wider mt-0.5">rank</span>
                   </div>
                 )}
                 {data.courses_completed && (
                   <div className="nb-stat">
                     <span className="text-xl font-black nb-ink">{data.courses_completed}</span>
-                    <span className="text-[9px] text-gray-600 font-sans uppercase tracking-wider font-bold">courses</span>
+                    <span className="text-[10px] text-gray-600 font-sans uppercase font-extrabold tracking-wider mt-0.5">courses</span>
                   </div>
                 )}
                 {data.study_buddies && (
                   <div className="nb-stat" style={{ borderColor: '#2B6CB0' }}>
                     <span className="text-xl font-black nb-ink">{data.study_buddies}</span>
-                    <span className="text-[9px] text-gray-600 font-sans uppercase tracking-wider font-bold">buddies</span>
+                    <span className="text-[10px] text-gray-600 font-sans uppercase font-extrabold tracking-wider mt-0.5">buddies</span>
                   </div>
                 )}
                 {data.favorite_subject && (
