@@ -114,7 +114,7 @@ export default function Collection({ onSelectDesign }) {
         {designs.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" ref={gridRef}>
             {designs.map((d) => (
-              <div key={d.id} className="group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-[3px] border-white transition-all duration-300 shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316]">
+              <div key={d.id} className="group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316]">
                 <div className="aspect-[4/5] overflow-hidden relative bg-black">
                   <LazyImage 
                     src={getAssetUrl(d.front_image_url || d.model_image_url) || '/assets/tees/front.png'} 
@@ -153,7 +153,7 @@ export default function Collection({ onSelectDesign }) {
               { id: 'f2', name: 'Arctic White', category: 'Minimal', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&q=80&w=800' },
               { id: 'f3', name: 'Street Saffron', category: 'Elite', img: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&q=80&w=800' }
             ].map((d) => (
-              <div key={d.id} className="group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-[3px] border-white transition-all duration-300 shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316]">
+              <div key={d.id} className="group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316]">
                 <div className="aspect-[4/5] overflow-hidden relative bg-black">
                   <LazyImage src={d.img} alt={d.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" skeletonClassName="absolute inset-0" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">

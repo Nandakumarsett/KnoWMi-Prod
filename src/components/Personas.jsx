@@ -563,9 +563,9 @@ export default function Personas() {
               return (
                 <div 
                   key={p.id} 
-                  className="persona-panel w-full lg:w-[100vw] px-6 py-12 lg:py-0 flex items-center justify-center shrink-0"
+                  className="persona-panel w-full lg:w-[100vw] px-4 sm:px-6 py-8 sm:py-12 lg:py-0 flex items-center justify-center shrink-0"
                 >
-                  <div className="max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+                  <div className="max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-16 items-center">
                     
                     {/* Left: Text Content */}
                     <div className="text-center lg:text-left order-2 lg:order-1 flex flex-col justify-center">
@@ -586,9 +586,9 @@ export default function Personas() {
                     {/* Right: Mock Phone */}
                     <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
                       <div 
-                        className={`w-full max-w-[360px] h-[55vh] lg:h-[65vh] max-h-[700px] overflow-x-hidden overflow-hidden lg:overflow-y-auto rounded-xl custom-scrollbar relative border-[3px] border-white shadow-[8px_8px_0px_#F97316] ${isDark ? 'bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fff9f0]' : 'bg-white'}`}
+                        className={`w-full max-w-[300px] sm:max-w-[360px] h-[60vh] sm:h-[55vh] lg:h-[65vh] max-h-[700px] overflow-y-auto overflow-x-hidden rounded-xl custom-scrollbar relative border-2 sm:border-[3px] border-white shadow-[4px_4px_0px_#F97316] sm:shadow-[8px_8px_0px_#F97316] ${isDark ? 'bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fff9f0]' : 'bg-white'}`}
                       >
-                         <div className="w-[133.33%] origin-top-left scale-[0.75] min-h-[133.33%] pointer-events-none select-none">
+                         <div className="w-[142.86%] origin-top-left scale-[0.70] min-h-[142.86%] sm:w-[133.33%] sm:scale-[0.75] sm:min-h-[133.33%] pointer-events-none select-none">
                             <PreviewContent persona={p} />
                          </div>
                       </div>

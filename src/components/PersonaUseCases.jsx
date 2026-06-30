@@ -177,7 +177,7 @@ export default function PersonaUseCases() {
             <div
               key={uc.id}
               ref={el => (cardsRef.current[i] = el)}
-              className="puc-card group relative rounded-xl overflow-hidden border-[3px] border-white flex flex-col cursor-pointer bg-[#1a1a1a] h-[500px] shadow-[6px_6px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[9px_9px_0px_#F97316] transition-all duration-300"
+              className="puc-card group relative rounded-xl overflow-hidden border-2 sm:border-[3px] border-white flex flex-col cursor-pointer bg-[#1a1a1a] h-[420px] md:h-[500px] shadow-[4px_4px_0px_#F97316] sm:shadow-[6px_6px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[9px_9px_0px_#F97316] transition-all duration-300"
             >
               {/* 60% Background Image Area */}
               <div className="relative h-[60%] w-full overflow-hidden">
@@ -200,7 +200,7 @@ export default function PersonaUseCases() {
               </div>
 
               {/* 30% Content Area */}
-              <div className="relative z-10 px-8 pt-2 flex flex-col justify-end h-[30%]">
+              <div className="relative z-10 px-5 md:px-8 pt-2 flex flex-col justify-end h-[30%]">
                 <span className="bg-orange-500 text-black px-3 py-1 rounded-md border-2 border-black font-black text-[11px] uppercase tracking-[0.15em] inline-block mb-2">
                   {uc.title}
                 </span>
@@ -213,7 +213,7 @@ export default function PersonaUseCases() {
               </div>
 
               {/* 10% Highlight / CTA Area */}
-              <div className="relative z-10 px-8 flex items-center h-[10%] pb-6">
+              <div className="relative z-10 px-5 md:px-8 flex items-center h-[10%] pb-6">
                 <a
                   href="#pricing"
                   className="inline-flex items-center gap-2 bg-orange-500 text-black px-5 py-2 rounded-lg border-[3px] border-black shadow-[3px_3px_0px_#000] font-black text-[11px] uppercase tracking-widest hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"

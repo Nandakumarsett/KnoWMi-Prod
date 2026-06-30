@@ -56,7 +56,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="bg-[#1a1a1a] rounded-xl p-10 md:p-14 border-[3px] border-white shadow-[8px_8px_0px_#F97316]">
+          <div className="bg-[#1a1a1a] rounded-xl p-6 sm:p-10 md:p-14 border-2 sm:border-[3px] border-white shadow-[4px_4px_0px_#F97316] sm:shadow-[8px_8px_0px_#F97316]">
             {status === 'success' ? (
               <div className="text-center py-12">
                 <div className="w-20 h-20 bg-orange-500 border-[3px] border-black shadow-[4px_4px_0px_#000] rounded-xl flex items-center justify-center mx-auto mb-8 text-black">

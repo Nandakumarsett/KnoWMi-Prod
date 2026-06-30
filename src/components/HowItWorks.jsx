@@ -57,10 +57,10 @@ export function SocialProofStrip() {
           {stats.map((s, i) => (
             <div
               key={i}
-              className="flex flex-col items-center text-center gap-2 px-6 py-5 bg-[#1a1a1a] border-[3px] border-orange-500 rounded-xl shadow-[4px_4px_0px_#fff]"
+              className="flex flex-col items-center text-center gap-2 px-3 py-4 sm:px-6 sm:py-5 bg-[#1a1a1a] border-2 sm:border-[3px] border-orange-500 rounded-xl shadow-[3px_3px_0px_#fff] sm:shadow-[4px_4px_0px_#fff]"
             >
-              <span className="text-3xl mb-1">{s.icon}</span>
-              <span className="text-3xl md:text-5xl font-black text-orange-500">
+              <span className="text-2xl sm:text-3xl mb-1">{s.icon}</span>
+              <span className="text-2xl sm:text-3xl md:text-5xl font-black text-orange-500">
                 {s.value}
               </span>
               <span className="text-[11px] font-black uppercase tracking-[0.2em] text-neutral-300">
@@ -362,7 +362,7 @@ export function HowItWorks() {
         </div>
 
         {/* Steps grid */}
-        <div className="grid md:grid-cols-3 gap-12 lg:gap-16 relative">
+        <div className="grid md:grid-cols-3 gap-6 sm:gap-12 lg:gap-16 relative">
           {/* Connection Line — solid brutal style */}
           <div
             className="hidden lg:block absolute top-[248px] left-[15%] right-[15%] h-[3px] bg-orange-500"
@@ -374,7 +374,7 @@ export function HowItWorks() {
             return (
               <div
                 key={i}
-                className="relative z-10 flex flex-col items-center text-center bg-[#1a1a1a] border-[3px] border-white rounded-xl p-6 shadow-[5px_5px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150"
+                className="relative z-10 flex flex-col items-center text-center bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl p-4 sm:p-6 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150"
                 ref={el => (stepsRef.current[i] = el)}
               >
                 {/* HUGE step number badge */}

@@ -116,9 +116,9 @@ export default function Testimonials() {
           {testimonials.map((t, i) => (
             <div
               key={i}
-              className={`testi-card-brutal reveal reveal-delay-${(i % 3) + 1} bg-[#1a1a1a] border-[3px] border-white rounded-xl overflow-hidden relative`}
+              className={`testi-card-brutal reveal reveal-delay-${(i % 3) + 1} bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl overflow-hidden relative`}
               style={{
-                boxShadow: '5px 5px 0px #F97316',
+                boxShadow: '4px 4px 0px #F97316',
               }}
             >
               {/* Top accent bar — solid, no gradient */}
@@ -136,33 +136,33 @@ export default function Testimonials() {
                 </div>
               )}
 
-              <div className="p-6 sm:p-7 relative z-10 flex flex-col h-full">
+              <div className="p-5 sm:p-6 md:p-7 relative z-10 flex flex-col h-full">
                 <Stars count={t.rating} />
 
                 <blockquote className="mt-4 mb-5 text-sm leading-relaxed text-neutral-200 font-bold flex-1">
                   &ldquo;{t.text}&rdquo;
                 </blockquote>
 
-                <div className="flex items-center justify-between mt-auto pt-4 border-t-[3px] border-white/20">
-                  <div className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mt-auto pt-4 border-t-[3px] border-white/20">
+                  <div className="flex items-center gap-3 min-w-0">
                     <img
                       src={`https://i.pravatar.cc/100?u=knowmi_${t.name.toLowerCase().replace(' ', '_')}`}
                       alt={t.name}
-                      className="w-11 h-11 rounded-lg object-cover border-[3px] border-orange-500 flex-shrink-0"
+                      className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg object-cover border-2 sm:border-[3px] border-orange-500 flex-shrink-0"
                       loading="lazy"
                     />
-                    <div>
-                      <div className="flex items-center gap-2 mb-0.5">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                         <div className="text-sm font-black text-white">{t.name}</div>
                         <div className="flex items-center gap-1 px-2 py-0.5 bg-green-500 text-black border-[2px] border-black rounded-md">
                           <CheckCircle size={10} className="text-black" strokeWidth={3} />
                           <span className="text-[8px] font-black uppercase tracking-widest">Verified</span>
                         </div>
                       </div>
-                      <div className="text-xs text-neutral-400 font-bold">{t.role}</div>
+                      <div className="text-xs text-neutral-400 font-bold truncate">{t.role}</div>
                     </div>
                   </div>
-                  <div className="text-right flex-shrink-0">
+                  <div className="text-right flex-shrink-0 self-end sm:self-auto">
                     <div className="text-xs font-black text-orange-500 bg-orange-500/10 border-[2px] border-orange-500 rounded-md px-2 py-1" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
                       {t.scans}
                     </div>

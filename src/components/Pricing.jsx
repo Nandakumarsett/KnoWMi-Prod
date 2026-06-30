@@ -305,7 +305,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                   </div>
                 </div>
 
-                <div className="bg-[#1a1a1a] border-[3px] border-white rounded-xl p-5 md:p-6 flex items-center gap-5 shadow-[5px_5px_0px_#fff] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-300 group">
+                <div className="bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl p-4 sm:p-5 md:p-6 flex items-center gap-4 sm:gap-5 shadow-[3px_3px_0px_#fff] sm:shadow-[5px_5px_0px_#fff] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-300 group">
                   <div className="flex -space-x-3">
                     {[1, 2, 3].map(i => (
                       <div key={i} className="w-10 h-10 rounded-lg border-[3px] border-black bg-[#2a2a2a] flex items-center justify-center overflow-hidden">
