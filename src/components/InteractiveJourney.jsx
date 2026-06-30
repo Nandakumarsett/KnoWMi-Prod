@@ -97,14 +97,12 @@ export default function InteractiveJourney() {
                   {/* Mock QR Target */}
                   <div className="relative w-56 h-56 border-[4px] border-orange-500 rounded-xl overflow-hidden mt-8 flex items-center justify-center bg-black shadow-[8px_8px_0px_#F97316]">
                     {/* Brutalist typographic logo */}
-                    <div className="absolute z-0 flex flex-col items-center justify-center w-full h-full gap-1">
-                      <span className="text-5xl font-black tracking-tighter text-white leading-none">
+                    <div className="absolute z-0 flex items-center justify-center w-full h-full">
+                      <span className="text-3xl font-black tracking-tighter text-white flex items-center leading-none">
                         Kno
-                      </span>
-                      <span className="text-5xl font-black tracking-tighter bg-orange-500 text-black px-2 leading-none border-[3px] border-white -rotate-2">
-                        WM
-                      </span>
-                      <span className="text-5xl font-black tracking-tighter text-white leading-none">
+                        <span className="bg-orange-500 text-black px-1.5 py-0.5 border-2 border-white -rotate-2 mx-0.5 inline-block">
+                          WM
+                        </span>
                         i
                       </span>
                     </div>
