@@ -320,7 +320,7 @@ export default function Leaderboard() {
                     }}
                     className={`relative group flex flex-col items-center pt-16 pb-10 px-8 rounded-xl border border-white/10 transition-all duration-300 cursor-pointer shadow-lg hover:-translate-y-1 hover:shadow-orange-500/20 w-full md:w-72 bg-[#18181b] z-10 ${isFirst ? 'border-orange-500/30 shadow-lg h-auto md:min-h-[540px]' : 'h-auto md:min-h-[460px]'}`}
                   >
-                  <div className={`relative p-2 rounded-xl mb-8 shadow-lg border border-white/10 ${isFirst ? 'bg-orange-500' : isSecond ? 'bg-teal-400' : 'bg-white'}`}>
+                  <div className={`relative p-2 rounded-xl mb-8 shadow-lg border border-white/10 ${isFirst ? 'bg-orange-500' : isSecond ? 'bg-teal-400' : 'bg-violet-500'}`}>
                     <div className="rounded-lg border border-[#0a0a0a] overflow-hidden bg-[#09090b]">
                       <Avatar src={p.avatar_url} name={p.display_name} username={p.username} size={isFirst ? "xl" : "lg"} />
                     </div>
@@ -333,7 +333,7 @@ export default function Leaderboard() {
                   <div className="text-center mb-8 flex-1 relative z-10">
                     <h3 className="text-2xl font-semibold text-white line-clamp-1 mb-1 tracking-tight ">{p.display_name}</h3>
                     <p className="text-sm font-medium text-neutral-400 mb-3">@{p.username}</p>
-                    <div className={`inline-block px-4 py-1.5 rounded-md font-semibold text-[10px]  tracking-wide text-white border border-white/10 shadow-lg mb-3 ${isFirst ? 'bg-orange-500' : isSecond ? 'bg-teal-400' : 'bg-white'}`}>
+                    <div className={`inline-block px-4 py-1.5 rounded-md font-semibold text-[10px] tracking-wide text-white border border-white/10 shadow-lg mb-3 ${isFirst ? 'bg-orange-500' : isSecond ? 'bg-teal-400' : 'bg-violet-500'}`}>
                       Global Rank #{p.rank}
                     </div>
                     <div className="flex justify-center mt-2">
@@ -393,7 +393,7 @@ export default function Leaderboard() {
               </div>
 
               <div className="flex flex-col items-center text-center">
-                <div className="relative p-1.5 rounded-lg bg-white border border-white/10 shadow-lg mb-4 group-hover:bg-orange-500 transition-colors">
+                <div className="relative p-1.5 rounded-lg bg-white/10 border border-white/10 shadow-lg mb-4 group-hover:bg-orange-500 transition-colors">
                   <Avatar src={p.avatar_url} name={p.display_name} username={p.username} size="md" />
                 </div>
                 <h4 className="text-xl font-semibold text-white  tracking-tight mb-1">{p.display_name}</h4>
