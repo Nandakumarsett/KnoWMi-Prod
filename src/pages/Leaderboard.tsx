@@ -77,39 +77,65 @@ export default function Leaderboard() {
 
   useEffect(() => {
     async function fetchData() {
-      // Fetch up to 1000 profiles so that Search and Category filters can find users outside the top 10
-      const { data: profilesData } = await supabase.from('public_leaderboard').select('*').limit(1000);
-      const { count } = await supabase.from('profile_scores').select('*', { count: 'exact', head: true });
-      const { data: scoreData } = await supabase.from('profile_scores').select('knowmi_score');
+      try {
+        // Fetch up to 1000 profiles so that Search and Category filters can find users outside the top 10
+        const [profilesRes, countRes, scoreRes] = await Promise.all([
+          supabase.from('public_leaderboard').select('*').limit(1000),
+          supabase.from('profile_scores').select('*', { count: 'exact', head: true }),
+          supabase.from('profile_scores').select('knowmi_score')
+        ]);
 
-      const avg = scoreData?.length ? scoreData.reduce((acc, curr) => acc + Number(curr.knowmi_score), 0) / scoreData.length : 0;
+        if (profilesRes.error) {
+          console.error('Error fetching leaderboard profiles:', profilesRes.error.message);
+        }
+        if (countRes.error) {
+          console.error('Error counting profiles:', countRes.error.message);
+        }
+        if (scoreRes.error) {
+          console.error('Error fetching score data:', scoreRes.error.message);
+        }
 
-      if (profilesData) {
-        const usernames = profilesData.map(p => p.username).filter(Boolean);
-        // Fix: query by secure_slug not first_name
-        const { data: slugData } = await supabase
-          .from('public_profiles')
-          .select('id, secure_slug')
-          .in('secure_slug', usernames);
+        const profilesData = profilesRes.data;
+        const count = countRes.count;
+        const scoreData = scoreRes.data;
 
-        const mapped = profilesData.map(p => {
-          const extra = slugData?.find(s => s.secure_slug === p.username);
-          return {
-            ...p,
-            id: extra?.id || p.id,
-            secure_slug: extra?.secure_slug || p.secure_slug
-          };
+        const avg = scoreData?.length 
+          ? scoreData.reduce((acc, curr) => acc + (Number(curr.knowmi_score) || 0), 0) / scoreData.length 
+          : 0;
+
+        if (profilesData) {
+          const usernames = profilesData.map(p => p.username).filter(Boolean);
+          const { data: slugData, error: slugError } = await supabase
+            .from('public_profiles')
+            .select('id, secure_slug')
+            .in('secure_slug', usernames);
+
+          if (slugError) {
+            console.error('Error mapping secure slugs:', slugError.message);
+          }
+
+          const mapped = profilesData.map(p => {
+            const extra = slugData?.find(s => s.secure_slug === p.username);
+            return {
+              ...p,
+              id: extra?.id || p.id,
+              secure_slug: extra?.secure_slug || p.secure_slug
+            };
+          });
+
+          setProfiles(mapped);
+        }
+
+        setStats({
+          totalProfiles: count || 0,
+          avgScore: Math.round(avg * 10) / 10,
+          lastUpdated: 'Live'
         });
-
-        setProfiles(mapped);
+      } catch (err) {
+        console.error('Error loading leaderboard data:', err);
+      } finally {
+        setLoading(false);
       }
-
-      setStats({
-        totalProfiles: count || 0,
-        avgScore: Math.round(avg * 10) / 10,
-        lastUpdated: 'Live' // Since the view counts from raw events, it is real-time
-      });
-      setLoading(false);
     }
     fetchData();
   }, []);
