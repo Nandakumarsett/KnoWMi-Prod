@@ -170,15 +170,20 @@ export default function Home() {
         <SocialProofStrip />
 
         <Personas />
-        <PersonaUseCases />
+        
+        <div className="hidden md:block">
+          <PersonaUseCases />
+        </div>
+
         <Collection onSelectDesign={(d) => navigate(`/shop?design=${d.id}`)} />
         <Pricing onPlanSelect={handleSelectPlan} />
 
-        <Testimonials />
-        <SecurityPrivacy />
-        <FAQ />
-
-        <Contact />
+        <div className="hidden md:block">
+          <Testimonials />
+          <SecurityPrivacy />
+          <FAQ />
+          <Contact />
+        </div>
 
         <div className="snap-section-footer">
           <Footer />
