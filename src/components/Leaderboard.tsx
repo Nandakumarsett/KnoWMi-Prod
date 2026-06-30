@@ -35,11 +35,63 @@ interface Stats {
 
 const CATEGORIES = ['All', 'Professional', 'Creator', 'Business'];
 
-const RANK_MEDALS = [
-  { rank: 1, icon: Crown, color: '#FFD700', glow: 'shadow-[0_0_40px_#FFD70066]', bg: 'from-amber-400 to-yellow-600', label: 'Champion' },
-  { rank: 2, icon: Medal, color: '#C0C0C0', glow: 'shadow-[0_0_30px_#C0C0C044]', bg: 'from-slate-300 to-slate-500', label: 'Runner Up' },
-  { rank: 3, icon: Medal, color: '#CD7F32', glow: 'shadow-[0_0_30px_#CD7F3244]', bg: 'from-orange-400 to-orange-700', label: '3rd Place' },
-];
+const RANK_CONFIG: Record<number, {
+  icon: React.ElementType;
+  label: string;
+  pillBg: string;
+  pillText: string;
+  pillBorder: string;
+  scoreColor: string;
+  avatarGradient: string;
+  badgeCircleBg: string;
+  badgeCircleText: string;
+  glowStyle: React.CSSProperties;
+  cardGradient: string;
+  cardBorder: string;
+}> = {
+  1: {
+    icon: Crown,
+    label: 'Champion',
+    pillBg: 'bg-amber-500/20',
+    pillText: 'text-amber-300',
+    pillBorder: 'border-amber-500/40',
+    scoreColor: 'text-amber-300',
+    avatarGradient: 'from-amber-400 to-yellow-600',
+    badgeCircleBg: 'bg-amber-400',
+    badgeCircleText: 'text-black',
+    glowStyle: { boxShadow: '0 0 60px rgba(255,215,0,0.18)' },
+    cardGradient: 'from-amber-950/60 to-[#0D1117]',
+    cardBorder: 'border-amber-500/40',
+  },
+  2: {
+    icon: Medal,
+    label: 'Runner Up',
+    pillBg: 'bg-slate-500/20',
+    pillText: 'text-slate-200',
+    pillBorder: 'border-slate-400/40',
+    scoreColor: 'text-slate-200',
+    avatarGradient: 'from-slate-300 to-slate-600',
+    badgeCircleBg: 'bg-slate-300',
+    badgeCircleText: 'text-black',
+    glowStyle: { boxShadow: '0 0 40px rgba(192,192,192,0.12)' },
+    cardGradient: 'from-slate-800/50 to-[#0D1117]',
+    cardBorder: 'border-slate-500/30',
+  },
+  3: {
+    icon: Medal,
+    label: '3rd Place',
+    pillBg: 'bg-orange-800/40',
+    pillText: 'text-orange-300',
+    pillBorder: 'border-orange-600/50',
+    scoreColor: 'text-orange-300',
+    avatarGradient: 'from-orange-500 to-orange-800',
+    badgeCircleBg: 'bg-orange-600',
+    badgeCircleText: 'text-white',
+    glowStyle: { boxShadow: '0 0 40px rgba(205,127,50,0.12)' },
+    cardGradient: 'from-orange-950/50 to-[#0D1117]',
+    cardBorder: 'border-orange-700/40',
+  },
+};
 
 const BadgePill = ({ badge }: { badge: string | null }) => {
   if (!badge) return null;
@@ -278,59 +330,38 @@ export default function Leaderboard() {
             </div>
             <div className="flex flex-col md:flex-row items-end justify-center gap-4">
               {podiumOrder.map((p) => {
-                const medalData = RANK_MEDALS.find(m => m.rank === p.rank);
+                const cfg = RANK_CONFIG[p.rank] ?? RANK_CONFIG[3];
                 const isFirst = p.rank === 1;
-                const MedalIcon = medalData?.icon || Medal;
-
-                const podiumHeight = p.rank === 1 ? 'md:h-[480px]' : p.rank === 2 ? 'md:h-[400px]' : 'md:h-[360px]';
-                const cardBg = p.rank === 1
-                  ? 'bg-gradient-to-b from-amber-950/60 to-[#0D1117] border-amber-500/40'
-                  : p.rank === 2
-                  ? 'bg-gradient-to-b from-slate-800/60 to-[#0D1117] border-slate-500/30'
-                  : 'bg-gradient-to-b from-orange-950/60 to-[#0D1117] border-orange-700/30';
-
-                const rankColor = p.rank === 1 ? '#FFD700' : p.rank === 2 ? '#C0C0C0' : '#CD7F32';
-                const rankLabel = p.rank === 1 ? 'Champion' : p.rank === 2 ? 'Runner Up' : '3rd Place';
+                const MedalIcon = cfg.icon;
+                const podiumHeight = isFirst ? 'md:h-[480px]' : p.rank === 2 ? 'md:h-[400px]' : 'md:h-[360px]';
 
                 return (
                   <div
                     key={p.username}
                     onClick={() => navigate(`/p/${p.secure_slug || p.id}?src=leaderboard`)}
-                    className={`relative group flex flex-col items-center rounded-3xl border ${cardBg} ${podiumHeight} w-full md:w-64 p-8 pt-14 cursor-pointer transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl backdrop-blur-sm overflow-hidden`}
-                    style={isFirst ? { boxShadow: '0 0 60px rgba(255,215,0,0.15)' } : {}}
+                    className={`relative group flex flex-col items-center rounded-3xl border bg-gradient-to-b ${cfg.cardGradient} ${cfg.cardBorder} ${podiumHeight} w-full md:w-64 p-8 pt-14 cursor-pointer transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl backdrop-blur-sm overflow-hidden`}
+                    style={cfg.glowStyle}
                   >
-                    {/* Background glow */}
-                    <div
-                      className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full blur-3xl opacity-30 pointer-events-none"
-                      style={{ backgroundColor: rankColor }}
-                    />
+                    {/* Background glow orb */}
+                    <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full blur-3xl opacity-20 pointer-events-none bg-gradient-to-br ${cfg.avatarGradient}`} />
 
-                    {/* Rank label top */}
-                    <div
-                      className="absolute top-4 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider"
-                      style={{ backgroundColor: rankColor + '22', color: rankColor, border: `1px solid ${rankColor}44` }}
-                    >
+                    {/* Rank label pill — uses explicit Tailwind classes per rank */}
+                    <div className={`absolute top-4 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${cfg.pillBg} ${cfg.pillText} ${cfg.pillBorder}`}>
                       <span className="flex items-center gap-1.5">
                         <MedalIcon size={10} />
-                        {rankLabel}
+                        {cfg.label}
                       </span>
                     </div>
 
                     {/* Avatar */}
                     <div className="relative mb-5">
-                      <div
-                        className="w-20 h-20 rounded-full p-0.5"
-                        style={{ background: `linear-gradient(135deg, ${rankColor}, transparent)` }}
-                      >
+                      <div className={`w-20 h-20 rounded-full p-0.5 bg-gradient-to-br ${cfg.avatarGradient}`}>
                         <div className="w-full h-full rounded-full overflow-hidden border-2 border-[#0D1117]">
                           <Avatar src={p.avatar_url} name={p.display_name} username={p.username} size={isFirst ? 'xl' : 'lg'} />
                         </div>
                       </div>
-                      {/* Rank badge */}
-                      <div
-                        className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center font-black text-xs border-2 border-[#0D1117]"
-                        style={{ backgroundColor: rankColor, color: '#000' }}
-                      >
+                      {/* Rank badge circle */}
+                      <div className={`absolute -bottom-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center font-black text-xs border-2 border-[#0D1117] ${cfg.badgeCircleBg} ${cfg.badgeCircleText}`}>
                         #{p.rank}
                       </div>
                     </div>
@@ -338,17 +369,17 @@ export default function Leaderboard() {
                     {/* Identity */}
                     <div className="text-center mb-4 flex-1 flex flex-col items-center">
                       <h3 className="text-lg font-black text-white line-clamp-1 tracking-tight mb-0.5">{p.display_name}</h3>
-                      <p className="text-xs font-bold text-white/40">@{p.username}</p>
+                      <p className="text-xs font-bold text-white/50">@{p.username}</p>
                       <div className="mt-2">
                         <BadgePill badge={p.badge} />
                       </div>
                     </div>
 
-                    {/* Score */}
+                    {/* Score card */}
                     <div className="w-full rounded-2xl p-4 border border-white/10 bg-white/5 backdrop-blur-sm flex items-center justify-between mt-auto">
                       <div>
                         <p className="text-[9px] font-black uppercase tracking-widest text-white/40 mb-1">Score</p>
-                        <p className="text-2xl font-black" style={{ color: rankColor }}>{p.knowmi_score}</p>
+                        <p className={`text-2xl font-black ${cfg.scoreColor}`}>{p.knowmi_score}</p>
                       </div>
                       <div className="text-right">
                         <p className="text-[9px] font-black uppercase tracking-widest text-white/40 mb-1">Percentile</p>
