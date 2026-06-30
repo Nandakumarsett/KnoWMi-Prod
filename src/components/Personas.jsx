@@ -119,7 +119,7 @@ function PreviewContent({ persona }) {
       persona: 'student',
       tier: 'Creator',
       pulse: 820,
-      profile_theme: 'campus',
+      profile_theme: 'classic',
       persona_data: {
         university: 'IIT DELHI',
         major: 'Computer Science & Engineering',
@@ -586,7 +586,7 @@ export default function Personas() {
                     {/* Right: Mock Phone */}
                     <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
                       <div 
-                        className={`w-full max-w-[300px] sm:max-w-[360px] h-[60vh] sm:h-[55vh] lg:h-[65vh] max-h-[700px] overflow-y-auto overflow-x-hidden rounded-xl custom-scrollbar relative border-2 sm:border-[3px] border-white shadow-[4px_4px_0px_#F97316] sm:shadow-[8px_8px_0px_#F97316] ${isDark ? 'bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fff9f0]' : 'bg-white'}`}
+                        className={`w-full max-w-[300px] sm:max-w-[360px] h-[60vh] sm:h-[55vh] lg:h-[65vh] max-h-[700px] overflow-y-auto overflow-x-hidden rounded-xl custom-scrollbar relative border-2 sm:border-[3px] border-white shadow-[4px_4px_0px_#F97316] sm:shadow-[8px_8px_0px_#F97316] ${isDark ? 'bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fafafa]' : 'bg-white'}`}
                       >
                          <div className="w-[142.86%] origin-top-left scale-[0.70] min-h-[142.86%] sm:w-[133.33%] sm:scale-[0.75] sm:min-h-[133.33%] pointer-events-none select-none">
                             <PreviewContent persona={p} />
