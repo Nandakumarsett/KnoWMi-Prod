@@ -365,10 +365,14 @@ export function HowItWorks() {
           <p className="text-lg text-neutral-300 font-black max-w-xl mx-auto">
             No complicated setup. No downloaded apps. Just a tee that works as hard as you do.
           </p>
+          <div className="sm:hidden flex items-center justify-center gap-1.5 text-neutral-500 text-[10px] font-black uppercase tracking-[0.2em] mt-4 animate-pulse">
+            <span>Swipe steps</span>
+            <span>↔</span>
+          </div>
         </div>
 
         {/* Steps grid — scrollable flex on mobile, grid on sm+ */}
-        <div className="flex overflow-x-auto sm:grid sm:grid-cols-3 gap-6 sm:gap-12 lg:gap-16 relative pb-6 snap-x snap-mandatory no-scrollbar">
+        <div className="flex overflow-x-auto sm:grid sm:grid-cols-3 gap-6 sm:gap-12 lg:gap-16 relative pb-6 snap-x snap-mandatory no-scrollbar px-4 sm:px-0">
           {/* Connection Line — solid brutal style */}
           <div
             className="hidden lg:block absolute top-[248px] left-[15%] right-[15%] h-[3px] bg-orange-500"
@@ -380,7 +384,7 @@ export function HowItWorks() {
             return (
               <div
                 key={i}
-                className="relative z-10 flex-shrink-0 w-[290px] sm:w-auto snap-center flex flex-col items-center text-center bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl p-6 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150"
+                className="relative z-10 flex-shrink-0 w-[82vw] sm:w-auto snap-center flex flex-col items-center text-center bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl p-6 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150 mx-2 sm:mx-0"
                 ref={el => (stepsRef.current[i] = el)}
               >
                 {/* Step number badge */}

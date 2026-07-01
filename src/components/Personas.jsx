@@ -541,6 +541,10 @@ export default function Personas() {
             <p className="text-base lg:text-lg text-neutral-400 font-medium max-w-xl mx-auto">
               Each tee unlocks a different profile built for your world.
             </p>
+            <div className="lg:hidden flex items-center justify-center gap-1.5 text-neutral-500 text-[10px] font-black uppercase tracking-[0.2em] mt-4 animate-pulse">
+              <span>Swipe to explore profiles</span>
+              <span>↔</span>
+            </div>
           </div>
         </div>
 
@@ -552,7 +556,7 @@ export default function Personas() {
               return (
                 <div 
                   key={p.id} 
-                  className="persona-panel w-[100vw] lg:w-[100vw] px-4 sm:px-6 py-8 sm:py-12 lg:py-0 flex items-center justify-center shrink-0 snap-center"
+                  className="persona-panel w-[88vw] lg:w-[100vw] px-4 sm:px-6 py-8 sm:py-12 lg:py-0 flex items-center justify-center shrink-0 snap-center mx-2 lg:mx-0"
                 >
                   <div className="max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-16 items-center">
                     

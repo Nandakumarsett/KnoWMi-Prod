@@ -76,7 +76,7 @@ export default function Collection({ onSelectDesign }) {
   }, [loading, designs])
 
   const SeeMoreCard = () => (
-    <a href="/shop" className="flex-shrink-0 w-[280px] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-[3px] border-dashed border-white transition-all duration-300 hover:border-orange-500 hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[6px_6px_0px_#F97316] flex flex-col items-center justify-center p-8 text-center min-h-[350px] shadow-[4px_4px_0px_#fff]">
+    <a href="/shop" className="flex-shrink-0 w-[82vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-[3px] border-dashed border-white transition-all duration-300 hover:border-orange-500 hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[6px_6px_0px_#F97316] flex flex-col items-center justify-center p-8 text-center min-h-[350px] shadow-[4px_4px_0px_#fff] mx-2 sm:mx-0">
       <div className="w-16 h-16 rounded-xl bg-orange-500 border-[3px] border-black flex items-center justify-center text-black shadow-[3px_3px_0px_#000] mb-6 group-hover:rotate-12 transition-transform duration-300">
         <ArrowRight size={28} strokeWidth={3} />
       </div>
@@ -106,15 +106,21 @@ export default function Collection({ onSelectDesign }) {
                 <span className="bg-orange-500 text-black px-3 py-1 rounded-lg inline-block mt-1">Yours might be next.</span>
               </h2>
             </div>
-            <p className="text-sm text-neutral-500 max-w-[320px] leading-relaxed font-medium mx-auto md:mx-0">
-              Pick your canvas. Every design is a portal to your digital world.
-            </p>
+            <div className="flex flex-col items-center md:items-end">
+              <p className="text-sm text-neutral-500 max-w-[320px] leading-relaxed font-medium mx-auto md:mx-0">
+                Pick your canvas. Every design is a portal to your digital world.
+              </p>
+              <div className="sm:hidden flex items-center justify-center gap-1.5 text-neutral-500 text-[10px] font-black uppercase tracking-[0.2em] mt-4 animate-pulse">
+                <span>Swipe designs</span>
+                <span>↔</span>
+              </div>
+            </div>
           </div>
 
         {designs.length > 0 ? (
-          <div className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar" ref={gridRef}>
+          <div className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar px-4 sm:px-0" ref={gridRef}>
             {designs.map((d) => (
-              <div key={d.id} className="flex-shrink-0 w-[280px] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316]">
+              <div key={d.id} className="flex-shrink-0 w-[82vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316] mx-2 sm:mx-0">
                 <div className="aspect-[4/5] overflow-hidden relative bg-black">
                   <LazyImage 
                     src={getAssetUrl(d.front_image_url || d.model_image_url) || '/assets/tees/front.png'} 
@@ -147,13 +153,13 @@ export default function Collection({ onSelectDesign }) {
             <SeeMoreCard />
           </div>
         ) : (
-          <div className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar" ref={gridRef}>
+          <div className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar px-4 sm:px-0" ref={gridRef}>
             {[
               { id: 'f1', name: 'Original Black', category: 'Classic', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80&w=800' },
               { id: 'f2', name: 'Arctic White', category: 'Minimal', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&q=80&w=800' },
               { id: 'f3', name: 'Street Saffron', category: 'Elite', img: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&q=80&w=800' }
             ].map((d) => (
-              <div key={d.id} className="flex-shrink-0 w-[280px] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316]">
+              <div key={d.id} className="flex-shrink-0 w-[82vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316] mx-2 sm:mx-0">
                 <div className="aspect-[4/5] overflow-hidden relative bg-black">
                   <LazyImage src={d.img} alt={d.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" skeletonClassName="absolute inset-0" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">

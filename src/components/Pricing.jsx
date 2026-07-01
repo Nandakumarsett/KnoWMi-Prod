@@ -183,10 +183,14 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
               A premium physical garment with a lifetime digital soul. <br />
               <span className="text-white">Every purchase unlocks your full digital profile.</span>
             </p>
+            <div className="md:hidden flex items-center justify-center gap-1.5 text-neutral-500 text-[10px] font-black uppercase tracking-[0.2em] mt-4 animate-pulse">
+              <span>Swipe pricing plans</span>
+              <span>↔</span>
+            </div>
           </div>
 
           {/* Cards */}
-          <div className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-[1200px] mx-auto pricing-grid items-stretch pb-6 snap-x snap-mandatory no-scrollbar">
+          <div className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-[1200px] mx-auto pricing-grid items-stretch pb-6 snap-x snap-mandatory no-scrollbar px-4 md:px-0">
             {products.map((product, i) => {
               const cardInner = (
                 <div
@@ -262,7 +266,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                 <div
                   key={product.id}
                   ref={el => (cardsRef.current[i] = el)}
-                  className={`flex-shrink-0 w-[290px] md:w-auto snap-center ${product.featured ? 'md:-translate-y-4 z-20' : ''}`}
+                  className={`flex-shrink-0 w-[82vw] md:w-auto snap-center mx-2 md:mx-0 ${product.featured ? 'md:-translate-y-4 z-20' : ''}`}
                 >
                   {cardInner}
                 </div>
