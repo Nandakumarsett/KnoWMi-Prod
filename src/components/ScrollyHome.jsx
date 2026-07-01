@@ -14,96 +14,105 @@ export default function ScrollyHome() {
     ScrollTrigger.config({ ignoreMobileResize: true });
     
     let ctx = gsap.context(() => {
-      
-      // 1. Hero Reveal
-      const heroTimeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.hero-section',
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-          pin: true,
-        }
-      });
-      
-      heroTimeline.to('.hero-shirt', {
-        scale: 1.15,
-        opacity: 0.2,
-        ease: 'none'
-      }, 0);
-      
-      heroTimeline.to('.hero-text', {
-        y: -150,
-        opacity: 0,
-        ease: 'none'
-      }, 0);
+      let mm = gsap.matchMedia();
 
-      // 2. Fabric Section
-      const fabricTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '.fabric-section',
-          start: 'top 60%',
-          end: 'center center',
-          scrub: 1,
-        }
-      });
-
-      fabricTl.to('.fabric-title', {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        stagger: 0.2,
-        ease: 'power3.out'
-      })
-      .to('.fabric-badge', {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: 'back.out(1.5)'
-      }, "-=0.5")
-      .to('.fabric-desc', {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        ease: 'power2.out'
-      }, "-=0.5")
-      .to('.fabric-image', {
-        x: 0,
-        opacity: 1,
-        duration: 1.5,
-        ease: 'power3.out'
-      }, 0);
-
-      // 3. QR Section
-      gsap.fromTo('.qr-glow', 
-        { scale: 0.8, opacity: 0, y: 50 },
-        {
-          scale: 1, 
-          opacity: 1,
-          y: 0,
+      mm.add("(min-width: 768px)", () => {
+        // 1. Hero Reveal
+        const heroTimeline = gsap.timeline({
           scrollTrigger: {
-            trigger: '.qr-section',
-            start: 'top 80%',
+            trigger: '.hero-section',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1,
+            pin: true,
+          }
+        });
+        
+        heroTimeline.to('.hero-shirt', {
+          scale: 1.15,
+          opacity: 0.2,
+          ease: 'none'
+        }, 0);
+        
+        heroTimeline.to('.hero-text', {
+          y: -150,
+          opacity: 0,
+          ease: 'none'
+        }, 0);
+
+        // 2. Fabric Section
+        const fabricTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: '.fabric-section',
+            start: 'top 60%',
             end: 'center center',
             scrub: 1,
           }
-        }
-      );
+        });
 
-      // 4. Digital Profile
-      gsap.fromTo('.phone-mockup',
-        { y: '50vh', opacity: 0 },
-        {
+        fabricTl.to('.fabric-title', {
           y: 0,
           opacity: 1,
-          scrollTrigger: {
-            trigger: '.profile-section',
-            start: 'top 70%',
-            end: 'center center',
-            scrub: 1,
+          duration: 1,
+          stagger: 0.2,
+          ease: 'power3.out'
+        })
+        .to('.fabric-badge', {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: 'back.out(1.5)'
+        }, "-=0.5")
+        .to('.fabric-desc', {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: 'power2.out'
+        }, "-=0.5")
+        .to('.fabric-image', {
+          x: 0,
+          opacity: 1,
+          duration: 1.5,
+          ease: 'power3.out'
+        }, 0);
+
+        // 3. QR Section
+        gsap.fromTo('.qr-glow', 
+          { scale: 0.8, opacity: 0, y: 50 },
+          {
+            scale: 1, 
+            opacity: 1,
+            y: 0,
+            scrollTrigger: {
+              trigger: '.qr-section',
+              start: 'top 80%',
+              end: 'center center',
+              scrub: 1,
+            }
           }
-        }
-      );
+        );
+
+        // 4. Digital Profile
+        gsap.fromTo('.phone-mockup',
+          { y: '50vh', opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            scrollTrigger: {
+              trigger: '.profile-section',
+              start: 'top 70%',
+              end: 'center center',
+              scrub: 1,
+            }
+          }
+        );
+      });
+
+      mm.add("(max-width: 767px)", () => {
+        gsap.set('.phone-mockup', { y: 0, opacity: 1 });
+        gsap.set('.qr-glow', { scale: 1, opacity: 1, y: 0 });
+        gsap.set('.fabric-title, .fabric-badge, .fabric-desc, .fabric-image', { x: 0, y: 0, opacity: 1 });
+      });
 
     }, containerRef);
 

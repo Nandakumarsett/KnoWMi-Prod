@@ -393,7 +393,7 @@ export function HowItWorks() {
                 <h3 className="text-[10px] sm:text-base md:text-2xl font-black mb-1 sm:mb-3 text-white uppercase tracking-wide leading-tight">
                   {step.title}
                 </h3>
-                <p className="hidden sm:block text-sm text-neutral-400 font-bold leading-relaxed max-w-[260px]">
+                <p className="text-[10px] sm:text-sm text-neutral-400 font-bold leading-relaxed max-w-[260px]">
                   {step.desc}
                 </p>
               </div>
