@@ -442,6 +442,26 @@ export default function Personas() {
   const headerRef = useRef(null)
   const scrollContainerRef = useRef(null)
   const trackRef = useRef(null)
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  const handleScroll = (e) => {
+    if (window.innerWidth >= 1024) return
+    const container = e.currentTarget
+    const cardWidth = container.offsetWidth
+    const scrollLeft = container.scrollLeft
+    const idx = Math.round(scrollLeft / cardWidth)
+    setActiveIndex(idx)
+  }
+
+  const navigateTo = (idx) => {
+    const container = scrollContainerRef.current
+    if (!container) return
+    const cardWidth = container.offsetWidth
+    container.scrollTo({
+      left: idx * cardWidth,
+      behavior: 'smooth'
+    })
+  }
 
   useEffect(() => {
     const loadDynamicData = () => {
@@ -515,6 +535,20 @@ export default function Personas() {
       mm.add("(max-width: 1023px)", () => {
         let panels = gsap.utils.toArray(".persona-panel");
         gsap.set(panels, { opacity: 1, y: 0 });
+        
+        // Bounce scroll on mount to hint scrollability on mobile
+        setTimeout(() => {
+          const container = scrollContainerRef.current;
+          if (!container) return;
+          gsap.to(container, {
+            scrollLeft: 60,
+            duration: 0.5,
+            ease: 'power2.out',
+            yoyo: true,
+            repeat: 1,
+            repeatDelay: 0.2
+          });
+        }, 1500);
       })
 
     }, sectionRef)
@@ -549,7 +583,11 @@ export default function Personas() {
         </div>
 
         {/* Horizontal track wrapper */}
-        <div className="w-full overflow-x-auto lg:overflow-hidden no-scrollbar snap-x snap-mandatory" ref={scrollContainerRef}>
+        <div 
+          className="w-full overflow-x-auto lg:overflow-hidden no-scrollbar snap-x snap-mandatory" 
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+        >
           <div className="flex flex-row w-max lg:w-[300vw]" ref={trackRef}>
             {dynamicPersonas.map((p, idx) => {
               const isDark = p.id === 'developer'
@@ -590,6 +628,39 @@ export default function Personas() {
                 </div>
               )
             })}
+          </div>
+        </div>
+
+        {/* Mobile indicators */}
+        <div className="lg:hidden flex flex-col items-center gap-4 mt-6">
+          <div className="flex items-center gap-2">
+            {dynamicPersonas.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => navigateTo(idx)}
+                className={`w-3.5 h-3.5 rounded-full border-2 border-black transition-all duration-300 ${
+                  activeIndex === idx ? 'bg-orange-500 scale-125' : 'bg-neutral-800'
+                }`}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigateTo(Math.max(0, activeIndex - 1))}
+              disabled={activeIndex === 0}
+              className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
+            >
+              ←
+            </button>
+            <button
+              onClick={() => navigateTo(Math.min(dynamicPersonas.length - 1, activeIndex + 1))}
+              disabled={activeIndex === dynamicPersonas.length - 1}
+              className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
+            >
+              →
+            </button>
           </div>
         </div>
       </div>

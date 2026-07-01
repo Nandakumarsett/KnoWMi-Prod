@@ -10,6 +10,27 @@ import LazyImage from './ui/LazyImage'
 export default function Collection({ onSelectDesign }) {
   const [designs, setDesigns] = useState([])
   const [loading, setLoading] = useState(true)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const scrollContainerRef = useRef(null)
+
+  const handleScroll = (e) => {
+    if (window.innerWidth >= 640) return
+    const container = e.currentTarget
+    const cardWidth = container.offsetWidth
+    const scrollLeft = container.scrollLeft
+    const idx = Math.round(scrollLeft / cardWidth)
+    setActiveIndex(idx)
+  }
+
+  const navigateTo = (idx) => {
+    const container = scrollContainerRef.current
+    if (!container) return
+    const cardWidth = container.offsetWidth
+    container.scrollTo({
+      left: idx * cardWidth,
+      behavior: 'smooth'
+    })
+  }
 
   useEffect(() => {
     fetchDesigns()
@@ -69,6 +90,22 @@ export default function Collection({ onSelectDesign }) {
             }
           }
         )
+
+        // Bounce scroll on mount to hint scrollability on mobile
+        if (window.innerWidth < 640) {
+          setTimeout(() => {
+            const container = scrollContainerRef.current;
+            if (!container) return;
+            gsap.to(container, {
+              scrollLeft: 60,
+              duration: 0.5,
+              ease: 'power2.out',
+              yoyo: true,
+              repeat: 1,
+              repeatDelay: 0.2
+            });
+          }, 1500);
+        }
       }
     }, sectionRef)
 
@@ -118,7 +155,11 @@ export default function Collection({ onSelectDesign }) {
           </div>
 
         {designs.length > 0 ? (
-          <div className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar px-4 sm:px-0" ref={gridRef}>
+          <div 
+            className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar px-4 sm:px-0" 
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+          >
             {designs.map((d) => (
               <div key={d.id} className="flex-shrink-0 w-[82vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316] mx-2 sm:mx-0">
                 <div className="aspect-[4/5] overflow-hidden relative bg-black">
@@ -153,7 +194,11 @@ export default function Collection({ onSelectDesign }) {
             <SeeMoreCard />
           </div>
         ) : (
-          <div className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar px-4 sm:px-0" ref={gridRef}>
+          <div 
+            className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar px-4 sm:px-0" 
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+          >
             {[
               { id: 'f1', name: 'Original Black', category: 'Classic', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80&w=800' },
               { id: 'f2', name: 'Arctic White', category: 'Minimal', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&q=80&w=800' },
@@ -177,6 +222,40 @@ export default function Collection({ onSelectDesign }) {
             <SeeMoreCard />
           </div>
         )}
+
+        {/* Mobile indicators */}
+        <div className="sm:hidden flex flex-col items-center gap-4 mt-6">
+          <div className="flex items-center gap-2">
+            {[...(designs.length > 0 ? designs : [1, 2, 3]), { id: 'seemore' }].map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => navigateTo(idx)}
+                className={`w-3.5 h-3.5 rounded-full border-2 border-black transition-all duration-300 ${
+                  activeIndex === idx ? 'bg-orange-500 scale-125' : 'bg-neutral-800'
+                }`}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigateTo(Math.max(0, activeIndex - 1))}
+              disabled={activeIndex === 0}
+              className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
+            >
+              ←
+            </button>
+            <button
+              onClick={() => navigateTo(Math.min((designs.length > 0 ? designs.length : 3), activeIndex + 1))}
+              disabled={activeIndex === (designs.length > 0 ? designs.length : 3)}
+              className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
+            >
+              →
+            </button>
+          </div>
+        </div>
+
         <div className="mt-16 text-center">
           <a href="https://wa.me/917981325397" target="_blank" rel="noopener noreferrer" title="Opens in a new tab" className="inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 hover:text-orange-500 transition-colors">
             Custom Group Orders <ArrowRight size={16} />

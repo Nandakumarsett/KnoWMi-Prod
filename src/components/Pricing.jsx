@@ -81,6 +81,27 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
   const cardsRef = useRef([])
   const { user, profile } = useAuth()
   const [remainingSpots, setRemainingSpots] = useState(100)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const scrollContainerRef = useRef(null)
+
+  const handleScroll = (e) => {
+    if (window.innerWidth >= 768) return
+    const container = e.currentTarget
+    const cardWidth = container.offsetWidth
+    const scrollLeft = container.scrollLeft
+    const idx = Math.round(scrollLeft / cardWidth)
+    setActiveIndex(idx)
+  }
+
+  const navigateTo = (idx) => {
+    const container = scrollContainerRef.current
+    if (!container) return
+    const cardWidth = container.offsetWidth
+    container.scrollTo({
+      left: idx * cardWidth,
+      behavior: 'smooth'
+    })
+  }
 
   const handleProductClick = (productId, disabled) => {
     if (disabled) return
@@ -136,6 +157,22 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
           },
         }
       )
+
+      // Bounce scroll on mount to hint scrollability on mobile
+      if (window.innerWidth < 768) {
+        setTimeout(() => {
+          const container = scrollContainerRef.current;
+          if (!container) return;
+          gsap.to(container, {
+            scrollLeft: 60,
+            duration: 0.5,
+            ease: 'power2.out',
+            yoyo: true,
+            repeat: 1,
+            repeatDelay: 0.2
+          });
+        }, 1500);
+      }
     }, sectionRef)
     return () => ctx.revert()
   }, [])
@@ -190,7 +227,11 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
           </div>
 
           {/* Cards */}
-          <div className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-[1200px] mx-auto pricing-grid items-stretch pb-6 snap-x snap-mandatory no-scrollbar px-4 md:px-0">
+          <div 
+            className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-[1200px] mx-auto pricing-grid items-stretch pb-6 snap-x snap-mandatory no-scrollbar px-4 md:px-0"
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+          >
             {products.map((product, i) => {
               const cardInner = (
                 <div
@@ -272,6 +313,39 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                 </div>
               )
             })}
+          </div>
+
+          {/* Mobile indicators */}
+          <div className="md:hidden flex flex-col items-center gap-4 mt-6">
+            <div className="flex items-center gap-2">
+              {products.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => navigateTo(idx)}
+                  className={`w-3.5 h-3.5 rounded-full border-2 border-black transition-all duration-300 ${
+                    activeIndex === idx ? 'bg-orange-500 scale-125' : 'bg-neutral-800'
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => navigateTo(Math.max(0, activeIndex - 1))}
+                disabled={activeIndex === 0}
+                className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
+              >
+                ←
+              </button>
+              <button
+                onClick={() => navigateTo(Math.min(products.length - 1, activeIndex + 1))}
+                disabled={activeIndex === products.length - 1}
+                className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
+              >
+                →
+              </button>
+            </div>
           </div>
 
           {/* Analytics Pro Upsell */}
