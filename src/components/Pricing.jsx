@@ -153,6 +153,8 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
         .pricing-tee-neutral {
           animation: floatTee 4s ease-in-out infinite;
         }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       <section
@@ -184,7 +186,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
           </div>
 
           {/* Cards */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-[1200px] mx-auto pricing-grid items-end">
+          <div className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-[1200px] mx-auto pricing-grid items-stretch pb-6 snap-x snap-mandatory no-scrollbar">
             {products.map((product, i) => {
               const cardInner = (
                 <div
@@ -260,7 +262,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                 <div
                   key={product.id}
                   ref={el => (cardsRef.current[i] = el)}
-                  className={product.featured ? '-translate-y-4 z-20' : ''}
+                  className={`flex-shrink-0 w-[290px] md:w-auto snap-center ${product.featured ? 'md:-translate-y-4 z-20' : ''}`}
                 >
                   {cardInner}
                 </div>
