@@ -91,20 +91,28 @@ export default function Collection({ onSelectDesign }) {
           }
         )
 
-        // Bounce scroll on mount to hint scrollability on mobile
+        // Bounce scroll on ScrollTrigger entry to hint scrollability on mobile
         if (window.innerWidth < 640) {
-          setTimeout(() => {
-            const container = scrollContainerRef.current;
-            if (!container) return;
-            gsap.to(container, {
-              scrollLeft: 60,
-              duration: 0.5,
-              ease: 'power2.out',
-              yoyo: true,
-              repeat: 1,
-              repeatDelay: 0.2
-            });
-          }, 1500);
+          ScrollTrigger.create({
+            trigger: sectionRef.current,
+            start: "top 60%",
+            once: true,
+            onEnter: () => {
+              const container = scrollContainerRef.current;
+              if (!container) return;
+              gsap.fromTo(container,
+                { scrollLeft: 0 },
+                {
+                  scrollLeft: 80,
+                  duration: 0.6,
+                  ease: "power2.out",
+                  yoyo: true,
+                  repeat: 1,
+                  repeatDelay: 0.3
+                }
+              );
+            }
+          });
         }
       }
     }, sectionRef)
@@ -113,7 +121,7 @@ export default function Collection({ onSelectDesign }) {
   }, [loading, designs])
 
   const SeeMoreCard = () => (
-    <a href="/shop" className="flex-shrink-0 w-[82vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-[3px] border-dashed border-white transition-all duration-300 hover:border-orange-500 hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[6px_6px_0px_#F97316] flex flex-col items-center justify-center p-8 text-center min-h-[350px] shadow-[4px_4px_0px_#fff] mx-2 sm:mx-0">
+    <a href="/shop" className="flex-shrink-0 w-[85vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-[3px] border-dashed border-white transition-all duration-300 hover:border-orange-500 hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[6px_6px_0px_#F97316] flex flex-col items-center justify-center p-8 text-center min-h-[350px] shadow-[4px_4px_0px_#fff]">
       <div className="w-16 h-16 rounded-xl bg-orange-500 border-[3px] border-black flex items-center justify-center text-black shadow-[3px_3px_0px_#000] mb-6 group-hover:rotate-12 transition-transform duration-300">
         <ArrowRight size={28} strokeWidth={3} />
       </div>
@@ -156,12 +164,12 @@ export default function Collection({ onSelectDesign }) {
 
         {designs.length > 0 ? (
           <div 
-            className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar px-4 sm:px-0" 
+            className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar px-[7.5vw] sm:px-0" 
             ref={scrollContainerRef}
             onScroll={handleScroll}
           >
             {designs.map((d) => (
-              <div key={d.id} className="flex-shrink-0 w-[82vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316] mx-2 sm:mx-0">
+              <div key={d.id} className="flex-shrink-0 w-[85vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316]">
                 <div className="aspect-[4/5] overflow-hidden relative bg-black">
                   <LazyImage 
                     src={getAssetUrl(d.front_image_url || d.model_image_url) || '/assets/tees/front.png'} 
@@ -195,7 +203,7 @@ export default function Collection({ onSelectDesign }) {
           </div>
         ) : (
           <div 
-            className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar px-4 sm:px-0" 
+            className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar px-[7.5vw] sm:px-0" 
             ref={scrollContainerRef}
             onScroll={handleScroll}
           >
@@ -204,7 +212,7 @@ export default function Collection({ onSelectDesign }) {
               { id: 'f2', name: 'Arctic White', category: 'Minimal', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&q=80&w=800' },
               { id: 'f3', name: 'Street Saffron', category: 'Elite', img: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&q=80&w=800' }
             ].map((d) => (
-              <div key={d.id} className="flex-shrink-0 w-[82vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316] mx-2 sm:mx-0">
+              <div key={d.id} className="flex-shrink-0 w-[85vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316]">
                 <div className="aspect-[4/5] overflow-hidden relative bg-black">
                   <LazyImage src={d.img} alt={d.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" skeletonClassName="absolute inset-0" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
@@ -223,38 +231,7 @@ export default function Collection({ onSelectDesign }) {
           </div>
         )}
 
-        {/* Mobile indicators */}
-        <div className="sm:hidden flex flex-col items-center gap-4 mt-6">
-          <div className="flex items-center gap-2">
-            {[...(designs.length > 0 ? designs : [1, 2, 3]), { id: 'seemore' }].map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => navigateTo(idx)}
-                className={`w-3.5 h-3.5 rounded-full border-2 border-black transition-all duration-300 ${
-                  activeIndex === idx ? 'bg-orange-500 scale-125' : 'bg-neutral-800'
-                }`}
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            ))}
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigateTo(Math.max(0, activeIndex - 1))}
-              disabled={activeIndex === 0}
-              className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
-            >
-              ←
-            </button>
-            <button
-              onClick={() => navigateTo(Math.min((designs.length > 0 ? designs.length : 3), activeIndex + 1))}
-              disabled={activeIndex === (designs.length > 0 ? designs.length : 3)}
-              className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
-            >
-              →
-            </button>
-          </div>
-        </div>
+
 
         <div className="mt-16 text-center">
           <a href="https://wa.me/917981325397" target="_blank" rel="noopener noreferrer" title="Opens in a new tab" className="inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 hover:text-orange-500 transition-colors">

@@ -158,20 +158,28 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
         }
       )
 
-      // Bounce scroll on mount to hint scrollability on mobile
+      // Bounce scroll on ScrollTrigger entry to hint scrollability on mobile
       if (window.innerWidth < 768) {
-        setTimeout(() => {
-          const container = scrollContainerRef.current;
-          if (!container) return;
-          gsap.to(container, {
-            scrollLeft: 60,
-            duration: 0.5,
-            ease: 'power2.out',
-            yoyo: true,
-            repeat: 1,
-            repeatDelay: 0.2
-          });
-        }, 1500);
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: "top 60%",
+          once: true,
+          onEnter: () => {
+            const container = scrollContainerRef.current;
+            if (!container) return;
+            gsap.fromTo(container,
+              { scrollLeft: 0 },
+              {
+                scrollLeft: 80,
+                duration: 0.6,
+                ease: "power2.out",
+                yoyo: true,
+                repeat: 1,
+                repeatDelay: 0.3
+              }
+            );
+          }
+        });
       }
     }, sectionRef)
     return () => ctx.revert()
@@ -228,7 +236,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
 
           {/* Cards */}
           <div 
-            className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-[1200px] mx-auto pricing-grid items-stretch pb-6 snap-x snap-mandatory no-scrollbar px-4 md:px-0"
+            className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-[1200px] mx-auto pricing-grid items-stretch pb-6 snap-x snap-mandatory no-scrollbar px-[7.5vw] md:px-0"
             ref={scrollContainerRef}
             onScroll={handleScroll}
           >
@@ -307,7 +315,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                 <div
                   key={product.id}
                   ref={el => (cardsRef.current[i] = el)}
-                  className={`flex-shrink-0 w-[82vw] md:w-auto snap-center mx-2 md:mx-0 ${product.featured ? 'md:-translate-y-4 z-20' : ''}`}
+                  className={`flex-shrink-0 w-[85vw] md:w-auto snap-center ${product.featured ? 'md:-translate-y-4 z-20' : ''}`}
                 >
                   {cardInner}
                 </div>
@@ -315,38 +323,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
             })}
           </div>
 
-          {/* Mobile indicators */}
-          <div className="md:hidden flex flex-col items-center gap-4 mt-6">
-            <div className="flex items-center gap-2">
-              {products.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => navigateTo(idx)}
-                  className={`w-3.5 h-3.5 rounded-full border-2 border-black transition-all duration-300 ${
-                    activeIndex === idx ? 'bg-orange-500 scale-125' : 'bg-neutral-800'
-                  }`}
-                  aria-label={`Go to slide ${idx + 1}`}
-                />
-              ))}
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => navigateTo(Math.max(0, activeIndex - 1))}
-                disabled={activeIndex === 0}
-                className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
-              >
-                ←
-              </button>
-              <button
-                onClick={() => navigateTo(Math.min(products.length - 1, activeIndex + 1))}
-                disabled={activeIndex === products.length - 1}
-                className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
-              >
-                →
-              </button>
-            </div>
-          </div>
+
 
           {/* Analytics Pro Upsell */}
           <div className="max-w-3xl mx-auto mb-12 mt-8 md:mb-24 md:mt-16 reveal reveal-delay-4">

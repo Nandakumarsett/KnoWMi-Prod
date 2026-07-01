@@ -361,19 +361,26 @@ export function HowItWorks() {
           )
         })
 
-        // Bounce scroll on mount to hint scrollability on mobile
-        setTimeout(() => {
-          const container = scrollContainerRef.current;
-          if (!container) return;
-          gsap.to(container, {
-            scrollLeft: 60,
-            duration: 0.5,
-            ease: 'power2.out',
-            yoyo: true,
-            repeat: 1,
-            repeatDelay: 0.2
-          });
-        }, 1500);
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: "top 60%",
+          once: true,
+          onEnter: () => {
+            const container = scrollContainerRef.current;
+            if (!container) return;
+            gsap.fromTo(container,
+              { scrollLeft: 0 },
+              {
+                scrollLeft: 80,
+                duration: 0.6,
+                ease: "power2.out",
+                yoyo: true,
+                repeat: 1,
+                repeatDelay: 0.3
+              }
+            );
+          }
+        });
       })
     }, sectionRef)
 
@@ -408,7 +415,7 @@ export function HowItWorks() {
 
         {/* Steps grid — scrollable flex on mobile, grid on sm+ */}
         <div 
-          className="flex overflow-x-auto sm:grid sm:grid-cols-3 gap-6 sm:gap-12 lg:gap-16 relative pb-6 snap-x snap-mandatory no-scrollbar px-4 sm:px-0" 
+          className="flex overflow-x-auto sm:grid sm:grid-cols-3 gap-6 sm:gap-12 lg:gap-16 relative pb-6 snap-x snap-mandatory no-scrollbar px-[7.5vw] sm:px-0" 
           ref={scrollContainerRef}
           onScroll={handleScroll}
         >
@@ -423,7 +430,7 @@ export function HowItWorks() {
             return (
               <div
                 key={i}
-                className="relative z-10 flex-shrink-0 w-[82vw] sm:w-auto snap-center flex flex-col items-center text-center bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl p-6 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150 mx-2 sm:mx-0"
+                className="relative z-10 flex-shrink-0 w-[85vw] sm:w-auto snap-center flex flex-col items-center text-center bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl p-6 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150"
                 ref={el => (stepsRef.current[i] = el)}
               >
                 {/* Step number badge */}
@@ -450,38 +457,7 @@ export function HowItWorks() {
           })}
         </div>
 
-        {/* Mobile indicators */}
-        <div className="sm:hidden flex flex-col items-center gap-4 mt-6">
-          <div className="flex items-center gap-2">
-            {steps.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => navigateTo(idx)}
-                className={`w-3.5 h-3.5 rounded-full border-2 border-black transition-all duration-300 ${
-                  activeIndex === idx ? 'bg-orange-500 scale-125' : 'bg-neutral-800'
-                }`}
-                aria-label={`Go to step ${idx + 1}`}
-              />
-            ))}
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigateTo(Math.max(0, activeIndex - 1))}
-              disabled={activeIndex === 0}
-              className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
-            >
-              ←
-            </button>
-            <button
-              onClick={() => navigateTo(Math.min(steps.length - 1, activeIndex + 1))}
-              disabled={activeIndex === steps.length - 1}
-              className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
-            >
-              →
-            </button>
-          </div>
-        </div>
+
       </div>
     </section>
   )

@@ -535,20 +535,27 @@ export default function Personas() {
       mm.add("(max-width: 1023px)", () => {
         let panels = gsap.utils.toArray(".persona-panel");
         gsap.set(panels, { opacity: 1, y: 0 });
-        
-        // Bounce scroll on mount to hint scrollability on mobile
-        setTimeout(() => {
-          const container = scrollContainerRef.current;
-          if (!container) return;
-          gsap.to(container, {
-            scrollLeft: 60,
-            duration: 0.5,
-            ease: 'power2.out',
-            yoyo: true,
-            repeat: 1,
-            repeatDelay: 0.2
-          });
-        }, 1500);
+
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: "top 60%",
+          once: true,
+          onEnter: () => {
+            const container = scrollContainerRef.current;
+            if (!container) return;
+            gsap.fromTo(container,
+              { scrollLeft: 0 },
+              {
+                scrollLeft: 80,
+                duration: 0.6,
+                ease: "power2.out",
+                yoyo: true,
+                repeat: 1,
+                repeatDelay: 0.3
+              }
+            );
+          }
+        });
       })
 
     }, sectionRef)
@@ -584,17 +591,17 @@ export default function Personas() {
 
         {/* Horizontal track wrapper */}
         <div 
-          className="w-full overflow-x-auto lg:overflow-hidden no-scrollbar snap-x snap-mandatory" 
+          className="w-full overflow-x-auto lg:overflow-hidden no-scrollbar snap-x snap-mandatory px-[7.5vw] lg:px-0" 
           ref={scrollContainerRef}
           onScroll={handleScroll}
         >
-          <div className="flex flex-row w-max lg:w-[300vw]" ref={trackRef}>
+          <div className="flex flex-row w-max lg:w-[300vw] gap-4 lg:gap-0" ref={trackRef}>
             {dynamicPersonas.map((p, idx) => {
               const isDark = p.id === 'developer'
               return (
                 <div 
                   key={p.id} 
-                  className="persona-panel w-[88vw] lg:w-[100vw] px-4 sm:px-6 py-8 sm:py-12 lg:py-0 flex items-center justify-center shrink-0 snap-center mx-2 lg:mx-0"
+                  className="persona-panel w-[85vw] lg:w-[100vw] px-4 sm:px-6 py-8 sm:py-12 lg:py-0 flex items-center justify-center shrink-0 snap-center"
                 >
                   <div className="max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-16 items-center">
                     
@@ -630,38 +637,7 @@ export default function Personas() {
           </div>
         </div>
 
-        {/* Mobile indicators */}
-        <div className="lg:hidden flex flex-col items-center gap-4 mt-6">
-          <div className="flex items-center gap-2">
-            {dynamicPersonas.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => navigateTo(idx)}
-                className={`w-3.5 h-3.5 rounded-full border-2 border-black transition-all duration-300 ${
-                  activeIndex === idx ? 'bg-orange-500 scale-125' : 'bg-neutral-800'
-                }`}
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            ))}
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigateTo(Math.max(0, activeIndex - 1))}
-              disabled={activeIndex === 0}
-              className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
-            >
-              ←
-            </button>
-            <button
-              onClick={() => navigateTo(Math.min(dynamicPersonas.length - 1, activeIndex + 1))}
-              disabled={activeIndex === dynamicPersonas.length - 1}
-              className="w-10 h-10 rounded-lg bg-orange-500 border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] disabled:opacity-40"
-            >
-              →
-            </button>
-          </div>
-        </div>
+
       </div>
 
       <style>{`
