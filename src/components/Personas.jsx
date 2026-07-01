@@ -514,18 +514,7 @@ export default function Personas() {
 
       mm.add("(max-width: 1023px)", () => {
         let panels = gsap.utils.toArray(".persona-panel");
-        panels.forEach((panel) => {
-          gsap.fromTo(panel,
-            { opacity: 0, y: 50 },
-            {
-              opacity: 1, y: 0, duration: 1, ease: 'power3.out',
-              scrollTrigger: {
-                trigger: panel,
-                start: 'top 85%'
-              }
-            }
-          )
-        })
+        gsap.set(panels, { opacity: 1, y: 0 });
       })
 
     }, sectionRef)
@@ -556,14 +545,14 @@ export default function Personas() {
         </div>
 
         {/* Horizontal track wrapper */}
-        <div className="w-full overflow-hidden" ref={scrollContainerRef}>
-          <div className="flex flex-col lg:flex-row w-full lg:w-[300vw]" ref={trackRef}>
+        <div className="w-full overflow-x-auto lg:overflow-hidden no-scrollbar snap-x snap-mandatory" ref={scrollContainerRef}>
+          <div className="flex flex-row w-max lg:w-[300vw]" ref={trackRef}>
             {dynamicPersonas.map((p, idx) => {
               const isDark = p.id === 'developer'
               return (
                 <div 
                   key={p.id} 
-                  className="persona-panel w-full lg:w-[100vw] px-4 sm:px-6 py-8 sm:py-12 lg:py-0 flex items-center justify-center shrink-0"
+                  className="persona-panel w-[100vw] lg:w-[100vw] px-4 sm:px-6 py-8 sm:py-12 lg:py-0 flex items-center justify-center shrink-0 snap-center"
                 >
                   <div className="max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-16 items-center">
                     
@@ -612,6 +601,8 @@ export default function Personas() {
           background: rgba(0,0,0,0.1);
           border-radius: 10px;
         }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </section>
   )

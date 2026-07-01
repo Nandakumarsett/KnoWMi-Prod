@@ -85,9 +85,31 @@ export default function Testimonials() {
           transform: translate(-3px, -3px);
           box-shadow: 8px 8px 0px #F97316 !important;
         }
+        @keyframes marqueeLeft {
+          0% { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
+        }
+        @keyframes marqueeRight {
+          0% { transform: translate3d(-50%, 0, 0); }
+          100% { transform: translate3d(0, 0, 0); }
+        }
+        .marquee-left-track {
+          display: flex;
+          width: max-content;
+          animation: marqueeLeft 35s linear infinite;
+        }
+        .marquee-right-track {
+          display: flex;
+          width: max-content;
+          animation: marqueeRight 35s linear infinite;
+        }
+        .marquee-left-track:hover,
+        .marquee-right-track:hover {
+          animation-play-state: paused;
+        }
       `}</style>
 
-      <div className="max-w-[1200px] mx-auto px-6 relative z-10 w-full">
+      <div className="max-w-[1400px] mx-auto px-6 relative z-10 w-full overflow-hidden">
         {/* Header */}
         <div className="text-center mb-16 reveal">
           <span className="inline-block mb-4 px-5 py-2 bg-orange-500 text-black text-xs font-black uppercase tracking-widest border-[3px] border-black rounded-lg shadow-[3px_3px_0px_#000]">
@@ -111,66 +133,135 @@ export default function Testimonials() {
           </h2>
         </div>
 
-        {/* Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {testimonials.map((t, i) => (
-            <div
-              key={i}
-              className={`testi-card-brutal reveal reveal-delay-${(i % 3) + 1} bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl overflow-hidden relative`}
-              style={{
-                boxShadow: '4px 4px 0px #F97316',
-              }}
-            >
-              {/* Top accent bar — solid, no gradient */}
-              <div
-                className="h-2 w-full"
-                style={{ backgroundColor: t.color }}
-              />
+        {/* Dual Marquees */}
+        <div className="space-y-8 overflow-hidden">
+          {/* Row 1: Left to Right */}
+          <div className="flex overflow-hidden w-full relative">
+            <div className="marquee-left-track">
+              {[...testimonials.slice(0, 3), ...testimonials.slice(0, 3), ...testimonials.slice(0, 3), ...testimonials.slice(0, 3)].map((t, idx) => (
+                <div
+                  key={idx}
+                  className="testi-card-brutal flex-shrink-0 w-[290px] sm:w-[380px] bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl overflow-hidden relative mx-3"
+                  style={{
+                    boxShadow: '4px 4px 0px #F97316',
+                  }}
+                >
+                  {/* Top accent bar */}
+                  <div
+                    className="h-2 w-full"
+                    style={{ backgroundColor: t.color }}
+                  />
 
-              {/* Viral badge on featured */}
-              {t.featured && (
-                <div className="viral-badge absolute top-5 right-4 z-20">
-                  <span className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 text-black text-[10px] font-black uppercase tracking-widest border-[3px] border-black rounded-lg shadow-[3px_3px_0px_#000]">
-                    🔥 GOING VIRAL
-                  </span>
-                </div>
-              )}
+                  {/* Viral badge on featured */}
+                  {t.featured && (
+                    <div className="viral-badge absolute top-5 right-4 z-20">
+                      <span className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 text-black text-[10px] font-black uppercase tracking-widest border-[3px] border-black rounded-lg shadow-[3px_3px_0px_#000]">
+                        🔥 GOING VIRAL
+                      </span>
+                    </div>
+                  )}
 
-              <div className="p-5 sm:p-6 md:p-7 relative z-10 flex flex-col h-full">
-                <Stars count={t.rating} />
+                  <div className="p-5 sm:p-6 md:p-7 relative z-10 flex flex-col h-full">
+                    <Stars count={t.rating} />
 
-                <blockquote className="mt-4 mb-5 text-sm leading-relaxed text-neutral-200 font-bold flex-1">
-                  &ldquo;{t.text}&rdquo;
-                </blockquote>
+                    <blockquote className="mt-4 mb-5 text-sm leading-relaxed text-neutral-200 font-bold flex-1">
+                      &ldquo;{t.text}&rdquo;
+                    </blockquote>
 
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mt-auto pt-4 border-t-[3px] border-white/20">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <img
-                      src={`https://i.pravatar.cc/100?u=knowmi_${t.name.toLowerCase().replace(' ', '_')}`}
-                      alt={t.name}
-                      className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg object-cover border-2 sm:border-[3px] border-orange-500 flex-shrink-0"
-                      loading="lazy"
-                    />
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                        <div className="text-sm font-black text-white">{t.name}</div>
-                        <div className="flex items-center gap-1 px-2 py-0.5 bg-green-500 text-black border-[2px] border-black rounded-md">
-                          <CheckCircle size={10} className="text-black" strokeWidth={3} />
-                          <span className="text-[8px] font-black uppercase tracking-widest">Verified</span>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mt-auto pt-4 border-t-[3px] border-white/20">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <img
+                          src={`https://i.pravatar.cc/100?u=knowmi_${t.name.toLowerCase().replace(' ', '_')}`}
+                          alt={t.name}
+                          className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg object-cover border-2 sm:border-[3px] border-orange-500 flex-shrink-0"
+                          loading="lazy"
+                        />
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                            <div className="text-sm font-black text-white">{t.name}</div>
+                            <div className="flex items-center gap-1 px-2 py-0.5 bg-green-500 text-black border-[2px] border-black rounded-md">
+                              <CheckCircle size={10} className="text-black" strokeWidth={3} />
+                              <span className="text-[8px] font-black uppercase tracking-widest">Verified</span>
+                            </div>
+                          </div>
+                          <div className="text-xs text-neutral-400 font-bold truncate">{t.role}</div>
                         </div>
                       </div>
-                      <div className="text-xs text-neutral-400 font-bold truncate">{t.role}</div>
-                    </div>
-                  </div>
-                  <div className="text-right flex-shrink-0 self-end sm:self-auto">
-                    <div className="text-xs font-black text-orange-500 bg-orange-500/10 border-[2px] border-orange-500 rounded-md px-2 py-1" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
-                      {t.scans}
+                      <div className="text-right flex-shrink-0 self-end sm:self-auto">
+                        <div className="text-xs font-black text-orange-500 bg-orange-500/10 border-[2px] border-orange-500 rounded-md px-2 py-1" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                          {t.scans}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Row 2: Right to Left */}
+          <div className="flex overflow-hidden w-full relative">
+            <div className="marquee-right-track">
+              {[...testimonials.slice(3, 6), ...testimonials.slice(3, 6), ...testimonials.slice(3, 6), ...testimonials.slice(3, 6)].map((t, idx) => (
+                <div
+                  key={idx}
+                  className="testi-card-brutal flex-shrink-0 w-[290px] sm:w-[380px] bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl overflow-hidden relative mx-3"
+                  style={{
+                    boxShadow: '4px 4px 0px #F97316',
+                  }}
+                >
+                  {/* Top accent bar */}
+                  <div
+                    className="h-2 w-full"
+                    style={{ backgroundColor: t.color }}
+                  />
+
+                  {/* Viral badge on featured */}
+                  {t.featured && (
+                    <div className="viral-badge absolute top-5 right-4 z-20">
+                      <span className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 text-black text-[10px] font-black uppercase tracking-widest border-[3px] border-black rounded-lg shadow-[3px_3px_0px_#000]">
+                        🔥 GOING VIRAL
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="p-5 sm:p-6 md:p-7 relative z-10 flex flex-col h-full">
+                    <Stars count={t.rating} />
+
+                    <blockquote className="mt-4 mb-5 text-sm leading-relaxed text-neutral-200 font-bold flex-1">
+                      &ldquo;{t.text}&rdquo;
+                    </blockquote>
+
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mt-auto pt-4 border-t-[3px] border-white/20">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <img
+                          src={`https://i.pravatar.cc/100?u=knowmi_${t.name.toLowerCase().replace(' ', '_')}`}
+                          alt={t.name}
+                          className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg object-cover border-2 sm:border-[3px] border-orange-500 flex-shrink-0"
+                          loading="lazy"
+                        />
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                            <div className="text-sm font-black text-white">{t.name}</div>
+                            <div className="flex items-center gap-1 px-2 py-0.5 bg-green-500 text-black border-[2px] border-black rounded-md">
+                              <CheckCircle size={10} className="text-black" strokeWidth={3} />
+                              <span className="text-[8px] font-black uppercase tracking-widest">Verified</span>
+                            </div>
+                          </div>
+                          <div className="text-xs text-neutral-400 font-bold truncate">{t.role}</div>
+                        </div>
+                      </div>
+                      <div className="text-right flex-shrink-0 self-end sm:self-auto">
+                        <div className="text-xs font-black text-orange-500 bg-orange-500/10 border-[2px] border-orange-500 rounded-md px-2 py-1" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                          {t.scans}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Worn at */}

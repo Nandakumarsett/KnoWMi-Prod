@@ -51,26 +51,32 @@ const stats = [
 
 export function SocialProofStrip() {
   return (
-    <section className="py-12 bg-[#0a0a0a] border-y-[3px] border-white relative overflow-hidden">
-      <div className="max-w-[1200px] mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {stats.map((s, i) => (
-            <div
+    <div
+      className="overflow-hidden py-6"
+      style={{
+        background: '#0a0a0a',
+        borderTop: '3px solid #fff',
+        borderBottom: '3px solid #fff',
+      }}
+      aria-label="Social proof stats"
+      aria-hidden="true"
+    >
+      <div className="flex">
+        <div className="marquee-track flex items-center">
+          {[...stats, ...stats, ...stats, ...stats, ...stats, ...stats].map((s, i) => (
+            <span
               key={i}
-              className="flex flex-col items-center text-center gap-2 px-3 py-4 sm:px-6 sm:py-5 bg-[#1a1a1a] border-2 sm:border-[3px] border-orange-500 rounded-xl shadow-[3px_3px_0px_#fff] sm:shadow-[4px_4px_0px_#fff]"
+              className="text-base sm:text-lg md:text-2xl font-black uppercase tracking-[0.1em] px-10 flex items-center gap-3 whitespace-nowrap text-white"
             >
-              <span className="text-2xl sm:text-3xl mb-1">{s.icon}</span>
-              <span className="text-2xl sm:text-3xl md:text-5xl font-black text-orange-500">
-                {s.value}
-              </span>
-              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-neutral-300">
-                {s.label}
-              </span>
-            </div>
+              <span className="text-xl sm:text-2xl">{s.icon}</span>
+              <span className="text-orange-500">{s.value}</span>
+              <span className="text-neutral-400">{s.label}</span>
+              <span className="w-2.5 h-2.5 rounded-sm bg-orange-500 border border-black ml-4" />
+            </span>
           ))}
         </div>
       </div>
-    </section>
+    </div>
   )
 }
 
@@ -361,8 +367,8 @@ export function HowItWorks() {
           </p>
         </div>
 
-        {/* Steps grid — 3 cols on all screen sizes */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-12 lg:gap-16 relative">
+        {/* Steps grid — scrollable flex on mobile, grid on sm+ */}
+        <div className="flex overflow-x-auto sm:grid sm:grid-cols-3 gap-6 sm:gap-12 lg:gap-16 relative pb-6 snap-x snap-mandatory no-scrollbar">
           {/* Connection Line — solid brutal style */}
           <div
             className="hidden lg:block absolute top-[248px] left-[15%] right-[15%] h-[3px] bg-orange-500"
@@ -374,26 +380,26 @@ export function HowItWorks() {
             return (
               <div
                 key={i}
-                className="relative z-10 flex flex-col items-center text-center bg-[#1a1a1a] border-[2px] border-white rounded-xl p-2 sm:p-6 shadow-[2px_2px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150"
+                className="relative z-10 flex-shrink-0 w-[290px] sm:w-auto snap-center flex flex-col items-center text-center bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl p-6 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150"
                 ref={el => (stepsRef.current[i] = el)}
               >
                 {/* Step number badge */}
                 <div
-                  className="w-8 h-8 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl font-black text-base sm:text-2xl flex items-center justify-center border-[2px] sm:border-[3px] border-black shadow-[2px_2px_0px_#000] sm:shadow-[3px_3px_0px_#000] mb-2 sm:mb-4 text-black flex-shrink-0"
+                  className="w-14 h-14 rounded-xl font-black text-2xl flex items-center justify-center border-[3px] border-black shadow-[3px_3px_0px_#000] mb-4 text-black flex-shrink-0"
                   style={{ backgroundColor: step.accent }}
                 >
                   {step.num}
                 </div>
 
-                {/* Visual demo — hidden on small mobile, shown md+ */}
-                <div className="hidden md:block relative z-10 w-full border-[2px] border-white/20 rounded-xl p-2 mb-4 bg-[#111]">
+                {/* Visual demo */}
+                <div className="block w-full max-w-[240px] mx-auto relative z-10 border-[2px] border-white/20 rounded-xl p-2 mb-4 bg-[#111]">
                   <Visual />
                 </div>
 
-                <h3 className="text-[10px] sm:text-base md:text-2xl font-black mb-1 sm:mb-3 text-white uppercase tracking-wide leading-tight">
+                <h3 className="text-xl sm:text-base md:text-2xl font-black mb-3 text-white uppercase tracking-wide leading-tight">
                   {step.title}
                 </h3>
-                <p className="text-[10px] sm:text-sm text-neutral-400 font-bold leading-relaxed max-w-[260px]">
+                <p className="text-sm text-neutral-400 font-bold leading-relaxed max-w-[260px]">
                   {step.desc}
                 </p>
               </div>

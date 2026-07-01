@@ -237,8 +237,8 @@ export default function ScrollyHome() {
             </p>
           </div>
           {/* Phone mockup — fixed height on mobile, full height on desktop */}
-          <div className="flex-1 flex justify-center items-center w-full h-[480px] sm:h-[560px] md:h-[80vh] mt-2 md:mt-0">
-            <div className="phone-mockup w-full h-full max-w-[280px] sm:max-w-sm md:max-w-md drop-shadow-[6px_6px_0px_#F97316] md:drop-shadow-[8px_8px_0px_#F97316]">
+          <div className="w-full max-w-[280px] sm:max-w-sm md:max-w-md h-[520px] sm:h-[560px] md:h-[80vh] mt-2 md:mt-0 relative flex justify-center mx-auto">
+            <div className="phone-mockup w-full h-full drop-shadow-[6px_6px_0px_#F97316] md:drop-shadow-[8px_8px_0px_#F97316]">
               <InteractiveJourney />
             </div>
           </div>
