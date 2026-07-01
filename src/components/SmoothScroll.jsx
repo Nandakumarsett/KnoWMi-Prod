@@ -23,6 +23,7 @@ export default function SmoothScroll({ children }) {
     })
 
     lenisRef.current = lenis
+    window.lenis = lenis
 
     // Sync ScrollTrigger with Lenis
     lenis.on('scroll', ScrollTrigger.update)
@@ -35,6 +36,7 @@ export default function SmoothScroll({ children }) {
 
     return () => {
       lenis.destroy()
+      window.lenis = null
       gsap.ticker.remove((time) => lenis.raf(time * 1000))
     }
   }, [])

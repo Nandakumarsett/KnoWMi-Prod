@@ -19,6 +19,24 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('')
 
+  const handleNavClick = (e, href) => {
+    if (href.startsWith('/#') && window.location.pathname === '/') {
+      const id = href.split('#')[1]
+      const el = document.getElementById(id)
+      if (el) {
+        e.preventDefault()
+        if (mobileOpen) setMobileOpen(false)
+        
+        if (window.lenis) {
+          window.lenis.scrollTo(el, { duration: 1.2, offset: -80 })
+        } else {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+        window.history.pushState(null, '', href)
+      }
+    }
+  }
+
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20)
@@ -111,6 +129,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
               <a
                 key={l.label}
                 href={l.href}
+                onClick={(e) => handleNavClick(e, l.href)}
                 className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-all duration-300 ${
                   isActive 
                     ? (useDarkTheme ? 'bg-white/20 shadow-lg scale-105' : 'bg-white shadow-lg shadow-neutral-200/50 scale-105')
@@ -175,26 +194,26 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
                   style={{ background: 'var(--paper)', border: '1px solid var(--border)', zIndex: 100 }}
                 >
                   {isStaff && (
-                    <a href="/admin" className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--sf)', borderBottom: '1px solid var(--border)' }}>
+                    <Link to="/admin" className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--sf)', borderBottom: '1px solid var(--border)' }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                       Admin Panel
-                    </a>
+                    </Link>
                   )}
                   {isVerified || role === 'owner' || status === 'paid' ? (
                     <>
-                      <a href="/dashboard" className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
+                      <Link to="/dashboard" className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h7" /><path d="M16 5l-4 4-4-4" /><path d="M22 17l-3 3-3-3" /><path d="M19 14v6" /></svg>
                         Analytics Dashboard
-                      </a>
+                      </Link>
                     </>
                   ) : (
-                    <a href="/dashboard" className="flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
+                    <Link to="/dashboard" className="flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
                       <div className="flex items-center gap-2">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h7" /><path d="M16 5l-4 4-4-4" /><path d="M22 17l-3 3-3-3" /><path d="M19 14v6" /></svg>
                         Analytics
                       </div>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-orange-500"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                    </a>
+                    </Link>
                   )}
                   <button
                     onClick={signOut}
@@ -261,7 +280,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
               role="menuitem"
               className="px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-[var(--off)]"
               style={{ color: 'var(--ink2)' }}
-              onClick={() => setMobileOpen(false)}
+              onClick={(e) => handleNavClick(e, l.href)}
             >
               {l.label}
             </a>
@@ -290,13 +309,13 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
                   </div>
                 </div>
                 {isStaff && (
-                  <a href="/admin" onClick={() => setMobileOpen(false)} className="btn-outline btn-base py-3 text-sm rounded-xl w-full text-center" style={{ color: 'var(--sf)', borderColor: 'var(--sf)' }}>
+                  <Link to="/admin" onClick={() => setMobileOpen(false)} className="btn-outline btn-base py-3 text-sm rounded-xl w-full text-center" style={{ color: 'var(--sf)', borderColor: 'var(--sf)' }}>
                     Admin Panel
-                  </a>
+                  </Link>
                 )}
-                <a href="/dashboard" onClick={() => setMobileOpen(false)} className="btn-outline btn-base py-3 text-sm rounded-xl w-full text-center" style={{ color: 'var(--ink)', borderColor: 'var(--border)' }}>
+                <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="btn-outline btn-base py-3 text-sm rounded-xl w-full text-center" style={{ color: 'var(--ink)', borderColor: 'var(--border)' }}>
                   Analytics Dashboard
-                </a>
+                </Link>
                 <button onClick={() => { signOut(); setMobileOpen(false) }} className="btn-outline btn-base py-3 text-sm rounded-xl w-full text-center" style={{ color: '#dc2626', borderColor: '#fca5a5' }}>
                   Sign Out
                 </button>

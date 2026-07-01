@@ -146,16 +146,23 @@ export default function Home() {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
 
-    // New: Redirect old #leaderboard hash to the new page
-    if (window.location.hash === '#leaderboard') {
-      navigate('/leaderboard');
-    } else if (window.location.hash === '#pricing' || window.location.href.includes('#pricing')) {
-      setTimeout(() => {
-        const el = document.getElementById('pricing');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 350);
+    // Generic Cross-Page Hash Anchor Scrolling support
+    if (window.location.hash) {
+      const hashId = window.location.hash.substring(1);
+      if (hashId === 'leaderboard') {
+        navigate('/leaderboard');
+      } else {
+        setTimeout(() => {
+          const el = document.getElementById(hashId);
+          if (el) {
+            if (window.lenis) {
+              window.lenis.scrollTo(el, { duration: 1.2, offset: -80 });
+            } else {
+              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
+        }, 350);
+      }
     }
   }, [navigate]);
 
