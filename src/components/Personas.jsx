@@ -543,9 +543,10 @@ export default function Personas() {
           onEnter: () => {
             const container = scrollContainerRef.current;
             if (!container) return;
+            container.style.scrollSnapType = 'none';
             const obj = { x: 0 };
             gsap.to(obj, {
-              x: 80,
+              x: 100,
               duration: 0.6,
               ease: "power2.out",
               yoyo: true,
@@ -553,6 +554,9 @@ export default function Personas() {
               repeatDelay: 0.3,
               onUpdate: () => {
                 if (container) container.scrollLeft = obj.x;
+              },
+              onComplete: () => {
+                if (container) container.style.scrollSnapType = '';
               }
             });
           }
