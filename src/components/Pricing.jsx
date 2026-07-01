@@ -167,17 +167,18 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
           onEnter: () => {
             const container = scrollContainerRef.current;
             if (!container) return;
-            gsap.fromTo(container,
-              { scrollLeft: 0 },
-              {
-                scrollLeft: 80,
-                duration: 0.6,
-                ease: "power2.out",
-                yoyo: true,
-                repeat: 1,
-                repeatDelay: 0.3
+            const obj = { x: 0 };
+            gsap.to(obj, {
+              x: 80,
+              duration: 0.6,
+              ease: "power2.out",
+              yoyo: true,
+              repeat: 1,
+              repeatDelay: 0.3,
+              onUpdate: () => {
+                if (container) container.scrollLeft = obj.x;
               }
-            );
+            });
           }
         });
       }
