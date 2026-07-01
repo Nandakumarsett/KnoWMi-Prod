@@ -5,7 +5,7 @@ import LazyImage from './ui/LazyImage'
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
 
 function ProductCard({ design, onClick }) {
-  const imageUrl = design.front_image_url || design.model_image_url || design.back_image_url || '/assets/tees/front.png'
+  const imageUrl = design.front_image_url || design.model_image_url || design.back_image_url || '/assets/tees/front.webp'
   
   return (
     <button onClick={onClick}
@@ -192,7 +192,7 @@ export default function PersonaStore({ onClose, onAuth, user }) {
               {categories.map(c => {
                 const catDesigns = designs.filter(d => d.category === c)
                 const featured = catDesigns[0]
-                const bgImg = featured?.front_image_url || featured?.model_image_url || '/assets/tees/front.png'
+                const bgImg = featured?.front_image_url || featured?.model_image_url || '/assets/tees/front.webp'
                 
                 return (
                   <button key={c} onClick={() => setSelectedCategory(c)}

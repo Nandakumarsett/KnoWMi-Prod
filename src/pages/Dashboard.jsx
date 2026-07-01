@@ -1502,7 +1502,7 @@ const IdentityPass = ({ profile }) => {
             </div>
 
             <div className="flex flex-col items-center -mt-4 mb-3">
-              <img src="/logo-square.png" fetchpriority="high" loading="eager" className="w-36 h-36 object-contain -mb-10 bg-transparent border-none shadow-none" alt="KnoWMi Logo" />
+              <img src="/logo-square.webp" fetchpriority="high" loading="eager" className="w-36 h-36 object-contain -mb-10 bg-transparent border-none shadow-none" alt="KnoWMi Logo" />
               <h4 className="text-[32px] font-display font-black leading-[0.8] mb-1 tracking-[0.05em]">KnoWMi</h4>
               <p className="text-[10.5px] font-black uppercase tracking-[0.2em] text-neutral-400">Official Identity Pass</p>
             </div>
@@ -2841,12 +2841,12 @@ function Dashboard() {
                         <div className="flex items-center gap-4 py-4 border-b border-white/20">
                           <div className="relative w-20 h-24 bg-[#1a1a1a] rounded-2xl border border-white/20 overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
                             <img 
-                              src={getAssetUrl(latestOrder.model_image_url) || '/assets/tees/front.png'} 
+                              src={getAssetUrl(latestOrder.model_image_url) || '/assets/tees/front.webp'} 
                               className="w-full h-full object-cover" 
                               alt={latestOrder.item_name || 'Tee preview'} 
                               onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = '/assets/tees/front.png';
+                                e.target.src = '/assets/tees/front.webp';
                               }}
                             />
                             <div className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-neutral-900 text-white rounded-full flex items-center justify-center text-[10px] font-black border-2 border-white select-none">

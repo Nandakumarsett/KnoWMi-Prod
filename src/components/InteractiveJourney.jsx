@@ -144,7 +144,7 @@ export default function InteractiveJourney() {
                   {/* Avatar */}
                   <div className="relative -mt-10 mb-2 w-full flex justify-center">
                     <div className="w-20 h-20 rounded-xl bg-neutral-800 border-[3px] border-black overflow-hidden shadow-[4px_4px_0px_#000] relative">
-                      <img src="/mock-profile.jpg" alt="Nikhil Kumar" className="w-full h-full object-cover" />
+                      <img src="/mock-profile.webp" alt="Nikhil Kumar" className="w-full h-full object-cover" />
                       <div className="absolute bottom-0 right-0 w-4 h-4 bg-orange-500 border-2 border-black rounded-full"></div>
                     </div>
                   </div>

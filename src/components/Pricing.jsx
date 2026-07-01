@@ -31,7 +31,7 @@ const products = [
     price: 999,
     tagline: '220 GSM Heavyweight',
     desc: 'Our signature drop-shoulder fit. Premium streetwear look.',
-    image: '/assets/scrolly/tshirt_front.png',
+    image: '/assets/scrolly/tshirt_front.webp',
     featured: true,
     productFeatures: [
       'Full Digital Profile',

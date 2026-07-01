@@ -4,8 +4,8 @@ import { Download, Image as ImageIcon, FileText, Share2, Mail } from 'lucide-rea
 
 export default function PressKit() {
   const assets = [
-    { title: 'Official Logo', type: 'PNG', size: '1.2 MB', icon: <ImageIcon size={20}/>, file: '/downloads/KnoWMi-Logo.png' },
-    { title: 'Founder Portrait', type: 'JPG', size: '2.4 MB', icon: <ImageIcon size={20}/>, file: '/downloads/Founder-Portrait.jpg' },
+    { title: 'Official Logo', type: 'PNG', size: '1.2 MB', icon: <ImageIcon size={20}/>, file: '/downloads/KnoWMi-Logo.webp' },
+    { title: 'Founder Portrait', type: 'JPG', size: '2.4 MB', icon: <ImageIcon size={20}/>, file: '/downloads/Founder-Portrait.webp' },
     { title: 'Website Shortcut', type: 'HTML', size: '1.5 KB', icon: <FileText size={20}/>, file: '/downloads/KnoWMi-Official-Website.html' },
     { title: 'Digital Brand Card', type: 'HTML', size: '2.8 KB', icon: <Share2 size={20}/>, file: '/downloads/KnoWMi-Digital-Brand-Card.html' }
   ]

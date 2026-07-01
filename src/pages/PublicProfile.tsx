@@ -111,7 +111,7 @@ export default function PublicProfile() {
       const ogDesc = descContent;
       const ogUrl = window.location.href;
       const ogImage =
-        profile.avatar_url || `${window.location.origin}/logo-square.png`;
+        profile.avatar_url || `${window.location.origin}/logo-square.webp`;
 
       const tags = {
         "og:title": ogTitle,
@@ -424,7 +424,7 @@ export default function PublicProfile() {
         >
           <div className="flex items-center gap-2">
             <img
-              src="/logo-square.png"
+              src="/logo-square.webp"
               alt="Logo"
               fetchpriority="high"
               loading="eager"
@@ -571,7 +571,7 @@ export default function PublicProfile() {
 
               <div className="flex items-center gap-2 mb-6 mt-2">
                 <img
-                  src="/logo-square.png"
+                  src="/logo-square.webp"
                   fetchpriority="high"
                   loading="eager"
                   className="w-6 h-6 object-cover rounded"
@@ -759,7 +759,7 @@ export default function PublicProfile() {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
             <img
-              src="/logo-square.png"
+              src="/logo-square.webp"
               alt="Logo"
               className="w-8 h-8 rounded-lg object-cover"
             />

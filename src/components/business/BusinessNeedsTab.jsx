@@ -203,7 +203,7 @@ export default function BusinessNeedsTab({ profile }) {
     toast.success('Member profile updated.');
   };
 
-  const logoUrl = '/logo-square.png';
+  const logoUrl = '/logo-square.webp';
   const themeClasses = {
     dark: 'bg-neutral-900 text-white',
     light: 'bg-white text-neutral-900',

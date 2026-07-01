@@ -361,12 +361,12 @@ export default function TrackOrder() {
                   <div className="flex items-center gap-4 py-4 border-b-[3px] border-white/20">
                     <div className="relative w-20 h-25 bg-[#2a2a2a] rounded-lg border-[2px] border-black overflow-hidden shrink-0 flex items-center justify-center shadow-[2px_2px_0px_#000]">
                       <img 
-                        src={getAssetUrl(order.model_image_url) || '/assets/tees/front.png'} 
+                        src={getAssetUrl(order.model_image_url) || '/assets/tees/front.webp'} 
                         className="w-full h-full object-cover grayscale brightness-90" 
                         alt="Tee preview" 
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = '/assets/tees/front.png';
+                          e.target.src = '/assets/tees/front.webp';
                         }}
                       />
                       <div className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-orange-500 text-black rounded-full flex items-center justify-center text-[10px] font-black border-[2px] border-black select-none">

@@ -177,7 +177,7 @@ export default function Collection({ onSelectDesign }) {
               <div key={d.id} className="flex-shrink-0 w-[85vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316]">
                 <div className="aspect-[4/5] overflow-hidden relative bg-black">
                   <LazyImage 
-                    src={getAssetUrl(d.front_image_url || d.model_image_url) || '/assets/tees/front.png'} 
+                    src={getAssetUrl(d.front_image_url || d.model_image_url) || '/assets/tees/front.webp'} 
                     alt={d.name} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     skeletonClassName="absolute inset-0"

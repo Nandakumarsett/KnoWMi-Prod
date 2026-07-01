@@ -95,7 +95,7 @@ function WearItVisual() {
       `}</style>
       <div className="float-person relative w-44 h-48 overflow-hidden rounded-xl border-[3px] border-white shadow-[4px_4px_0px_#F97316]">
         <img
-          src="/assets/scrolly/knowmi_wear_it.png"
+          src="/assets/scrolly/knowmi_wear_it.webp"
           alt="Person wearing KnoWMi tee with QR code"
           className="w-full h-full object-cover object-center"
           loading="lazy"

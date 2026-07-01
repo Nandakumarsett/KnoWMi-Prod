@@ -241,7 +241,7 @@ export default function Shop() {
                 >
                   <div className="aspect-[3/4] w-full bg-[#1a1a1a] overflow-hidden relative mb-4 border-[3px] border-white shadow-[6px_6px_0px_#fff] group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-none transition-all">
                     <img 
-                      src={getAssetUrl(d.front_image_url || d.model_image_url) || '/assets/tees/front.png'} 
+                      src={getAssetUrl(d.front_image_url || d.model_image_url) || '/assets/tees/front.webp'} 
                       alt={d.name} 
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     />

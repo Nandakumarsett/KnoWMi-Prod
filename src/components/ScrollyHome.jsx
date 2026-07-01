@@ -125,7 +125,7 @@ export default function ScrollyHome() {
       {/* 1. Hero Section */}
       <section className="hero-section h-[100svh] w-full relative flex items-center justify-center overflow-hidden bg-black">
         <img 
-          src="/assets/scrolly/shirt_hero.png" 
+          src="/assets/scrolly/shirt_hero.webp" 
           alt="KnoWMi T-Shirt" 
           className="hero-shirt absolute inset-0 w-full h-full object-cover opacity-90"
         />
@@ -147,7 +147,7 @@ export default function ScrollyHome() {
         {/* Premium HD Background */}
         <div className="absolute inset-0 z-0">
            <img 
-              src="/assets/scrolly/premium_heavyweight_fabric.png" 
+              src="/assets/scrolly/premium_heavyweight_fabric.webp" 
               alt="Premium Fabric Background" 
               className="w-full h-full object-cover opacity-50 mix-blend-screen scale-105"
             />
@@ -210,7 +210,7 @@ export default function ScrollyHome() {
           
           <div className="qr-glow relative w-full aspect-square md:aspect-video rounded-xl overflow-hidden border-[3px] border-white shadow-[8px_8px_0px_#F97316] group">
             <img 
-              src="/assets/scrolly/invisible_tech_new.jpg" 
+              src="/assets/scrolly/invisible_tech_new.webp" 
               alt="QR Code Grid" 
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.02]"
             />

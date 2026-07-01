@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { getOptimizedImageUrl } from '../../lib/imageOptimizer';
 
 /**
  * LazyImage — drop-in <img> replacement that:
@@ -40,7 +41,8 @@ export default function LazyImage({
     setLoaded(true); // hide skeleton even on error
   };
 
-  const resolvedSrc = error && fallback ? fallback : src;
+  const optimizedSrc = getOptimizedImageUrl(src);
+  const resolvedSrc = error && fallback ? fallback : optimizedSrc;
 
   return (
     <div
