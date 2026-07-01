@@ -238,8 +238,24 @@ export default function InteractiveJourney() {
                   exit={{ opacity: 0, y: -20 }}
                   className="absolute inset-0 bg-neutral-950 p-6 flex flex-col items-center justify-center z-20"
                 >
-                  <img src="/logo-square.png" alt="KnoWMi" className="w-12 h-12 mb-6" />
-                  <h3 className="text-white text-xl font-bold mb-8">Sign in to KnoWMi</h3>
+                  <div className="flex flex-col items-center leading-none mb-6">
+                    <span
+                      style={{
+                        fontFamily: "'Montserrat', sans-serif",
+                        fontSize: '32px',
+                      }}
+                      className="font-black tracking-tight text-white block leading-[0.9]"
+                    >
+                      Kno<span className="text-orange-500">WM</span>i
+                    </span>
+                    <span
+                      className="text-[8px] font-black tracking-[0.15em] mt-1 uppercase text-neutral-500"
+                      style={{ fontFamily: "'Inter', sans-serif" }}
+                    >
+                      Scan Me. Know Me.
+                    </span>
+                  </div>
+                  <h3 className="text-white text-lg font-bold mb-8">Sign in to KnoWMi</h3>
                   
                   <div className="w-full space-y-4">
                     <div className="w-full bg-neutral-900 rounded-xl p-4 border border-neutral-800">
