@@ -342,16 +342,16 @@ export function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="py-32 bg-[#0a0a0a] min-h-screen flex items-center"
+      className="py-12 md:py-32 bg-[#0a0a0a] min-h-0 md:min-h-screen flex items-center"
       ref={sectionRef}
     >
       <div className="max-w-[1200px] mx-auto px-6 w-full">
         {/* Header */}
-        <div className="text-center mb-20" ref={headerRef}>
+        <div className="text-center mb-6 md:mb-20" ref={headerRef}>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-orange-500 text-black border-[3px] border-black shadow-[3px_3px_0px_#000] mb-6 text-[11px] font-black uppercase tracking-widest">
             How It Works
           </div>
-          <h2 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-[1.05]">
+          <h2 className="text-2xl md:text-5xl lg:text-7xl font-black text-white mb-3 md:mb-6 tracking-tight leading-[1.05]">
             IT&apos;S STUPIDLY SIMPLE.
             <br />
             <span className="text-orange-500" style={{ WebkitTextStroke: '2px #F97316' }}>THAT&apos;S THE POINT.</span>
@@ -361,8 +361,8 @@ export function HowItWorks() {
           </p>
         </div>
 
-        {/* Steps grid */}
-        <div className="grid md:grid-cols-3 gap-6 sm:gap-12 lg:gap-16 relative">
+        {/* Steps grid — 3 cols on all screen sizes */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-12 lg:gap-16 relative">
           {/* Connection Line — solid brutal style */}
           <div
             className="hidden lg:block absolute top-[248px] left-[15%] right-[15%] h-[3px] bg-orange-500"
@@ -374,26 +374,26 @@ export function HowItWorks() {
             return (
               <div
                 key={i}
-                className="relative z-10 flex flex-col items-center text-center bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl p-4 sm:p-6 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150"
+                className="relative z-10 flex flex-col items-center text-center bg-[#1a1a1a] border-[2px] border-white rounded-xl p-2 sm:p-6 shadow-[2px_2px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150"
                 ref={el => (stepsRef.current[i] = el)}
               >
-                {/* HUGE step number badge */}
+                {/* Step number badge */}
                 <div
-                  className="w-14 h-14 rounded-xl font-black text-2xl flex items-center justify-center border-[3px] border-black shadow-[3px_3px_0px_#000] mb-4 text-black"
+                  className="w-8 h-8 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl font-black text-base sm:text-2xl flex items-center justify-center border-[2px] sm:border-[3px] border-black shadow-[2px_2px_0px_#000] sm:shadow-[3px_3px_0px_#000] mb-2 sm:mb-4 text-black flex-shrink-0"
                   style={{ backgroundColor: step.accent }}
                 >
                   {step.num}
                 </div>
 
-                {/* Visual demo */}
-                <div className="relative z-10 w-full border-[2px] border-white/20 rounded-xl p-2 mb-4 bg-[#111]">
+                {/* Visual demo — hidden on small mobile, shown md+ */}
+                <div className="hidden md:block relative z-10 w-full border-[2px] border-white/20 rounded-xl p-2 mb-4 bg-[#111]">
                   <Visual />
                 </div>
 
-                <h3 className="text-2xl font-black mb-3 text-white uppercase tracking-wide">
+                <h3 className="text-[10px] sm:text-base md:text-2xl font-black mb-1 sm:mb-3 text-white uppercase tracking-wide leading-tight">
                   {step.title}
                 </h3>
-                <p className="text-sm text-neutral-400 font-bold leading-relaxed max-w-[260px]">
+                <p className="hidden sm:block text-sm text-neutral-400 font-bold leading-relaxed max-w-[260px]">
                   {step.desc}
                 </p>
               </div>
