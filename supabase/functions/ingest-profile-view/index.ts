@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { handleRateLimit } from '../shared/rateLimiter.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -8,6 +9,10 @@ const corsHeaders = {
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
+
+  // Apply rate limiter — restrict views ingestion per client IP / fingerprint
+  const rateLimitResponse = await handleRateLimit(req, { limit: 15, endpoint: 'ingest-profile-view' })
+  if (rateLimitResponse) return rateLimitResponse
 
   try {
     const { profileId, referrer, fp, source, utm_medium, utm_campaign, viewerId, city, country, isRepeat } = await req.json()

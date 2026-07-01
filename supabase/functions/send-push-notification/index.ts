@@ -1,6 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import webpush from 'npm:web-push'
+import { handleRateLimit } from '../shared/rateLimiter.ts'
 
 // CORS Headers
 const corsHeaders = {
@@ -13,6 +14,10 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
+
+  // Rate limit push notifications to 20 per minute per IP / fingerprint
+  const rateLimitResponse = await handleRateLimit(req, { limit: 20, endpoint: 'send-push-notification' })
+  if (rateLimitResponse) return rateLimitResponse
 
   try {
     const supabaseClient = createClient(
@@ -37,7 +42,7 @@ serve(async (req) => {
     if (!isScanAlert) {
       const authHeader = req.headers.get('Authorization')
       if (!authHeader) {
-        return new Response(JSON.stringify({ error: 'Unauthorized: Custom notification text requires admin authorization' }), {
+        return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
           status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         })
       }
@@ -50,7 +55,7 @@ serve(async (req) => {
       
       const { data: { user }, error: userErr } = await client.auth.getUser()
       if (userErr || !user) {
-        return new Response(JSON.stringify({ error: 'Unauthorized: Invalid token' }), {
+        return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
           status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         })
       }
@@ -64,7 +69,7 @@ serve(async (req) => {
       
       const isStaff = profile && ['owner', 'ambassador', 'collaborator'].includes(profile.role)
       if (!isStaff) {
-        return new Response(JSON.stringify({ error: 'Unauthorized: Only staff/owners can send arbitrary push notifications' }), {
+        return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
           status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         })
       }

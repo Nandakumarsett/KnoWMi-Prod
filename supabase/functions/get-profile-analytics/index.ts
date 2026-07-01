@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { handleRateLimit } from '../shared/rateLimiter.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -11,11 +12,15 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders })
   }
 
+  // Rate limit analytics queries to 30 per minute
+  const rateLimitResponse = await handleRateLimit(req, { limit: 30, endpoint: 'get-profile-analytics' })
+  if (rateLimitResponse) return rateLimitResponse
+
   try {
     const { profileId } = await req.json()
 
     if (!profileId) {
-      return new Response(JSON.stringify({ error: 'profileId required' }), {
+      return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
@@ -23,7 +28,7 @@ serve(async (req) => {
     // 1. Verify the requester owns this profile using their JWT
     const authHeader = req.headers.get('Authorization')
     if (!authHeader) {
-      return new Response(JSON.stringify({ error: 'Authorization required' }), {
+      return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
         status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
@@ -36,7 +41,7 @@ serve(async (req) => {
     )
     const { data: { user }, error: authError } = await anonClient.auth.getUser()
     if (authError || !user) {
-      return new Response(JSON.stringify({ error: 'Invalid token' }), {
+      return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
         status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
@@ -56,7 +61,7 @@ serve(async (req) => {
       .single()
 
     if (!ownerCheck) {
-      return new Response(JSON.stringify({ error: 'Forbidden: you do not own this profile' }), {
+      return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
         status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }

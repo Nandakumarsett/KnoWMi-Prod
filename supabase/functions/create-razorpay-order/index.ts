@@ -1,43 +1,22 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.44.0"
+import { handleRateLimit } from '../shared/rateLimiter.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-interface RateLimitEntry {
-  timestamps: number[]
-}
-
-const rateLimitMap = new Map<string, RateLimitEntry>()
-
-const RATE_LIMIT_WINDOW_MS = 60 * 1000 // 1 minute
-const RATE_LIMIT_MAX_REQUESTS = 5 // max 5 requests per minute
-
-function isRateLimited(userId: string): boolean {
-  const now = Date.now()
-  let entry = rateLimitMap.get(userId)
-  if (!entry) {
-    entry = { timestamps: [] }
-    rateLimitMap.set(userId, entry)
-  }
-
-  // Filter timestamps within the sliding window
-  entry.timestamps = entry.timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS)
-
-  if (entry.timestamps.length >= RATE_LIMIT_MAX_REQUESTS) {
-    return true
-  }
-
-  entry.timestamps.push(now)
-  return false
-}
+// (Sliding-window user-level local rate limiting can be bypassed or supplemented by handleRateLimit)
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
+
+  // Rate limit order creation to 5 per minute per IP / fingerprint
+  const rateLimitResponse = await handleRateLimit(req, { limit: 5, endpoint: 'create-razorpay-order' })
+  if (rateLimitResponse) return rateLimitResponse
 
   try {
     const { product_type, amount_override, user_id, customer_details } = await req.json()
@@ -45,7 +24,7 @@ serve(async (req) => {
     // ─── Cryptographic JWT and User ID Verification ───
     const authHeader = req.headers.get('Authorization')
     if (!authHeader) {
-      return new Response(JSON.stringify({ error: 'Authorization required' }), {
+      return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
         status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
@@ -57,21 +36,14 @@ serve(async (req) => {
     )
     const { data: { user }, error: userError } = await client.auth.getUser()
     if (userError || !user) {
-      return new Response(JSON.stringify({ error: 'Unauthorized: Invalid token' }), {
+      return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
         status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
-    }
-
-    // Rate limiting check
-    if (isRateLimited(user.id)) {
-      return new Response(JSON.stringify({ error: 'Too many requests. Please try again in a minute.' }), {
-        status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
 
     // Verify that the requested user_id matches the authenticated user
     if (user_id && user_id !== user.id) {
-      return new Response(JSON.stringify({ error: 'Forbidden: Cannot create order for another user' }), {
+      return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
         status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }

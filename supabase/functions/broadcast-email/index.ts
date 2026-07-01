@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.44.0"
+import { handleRateLimit } from '../shared/rateLimiter.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -10,6 +11,10 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
+
+  // Rate limit broadcast dispatches to 5 per minute per IP / fingerprint
+  const rateLimitResponse = await handleRateLimit(req, { limit: 5, endpoint: 'broadcast-email' })
+  if (rateLimitResponse) return rateLimitResponse
 
   try {
     const body = await req.json()
@@ -24,7 +29,7 @@ serve(async (req) => {
     // ─── Cryptographic JWT and Owner Authorization ───
     const authHeader = req.headers.get('Authorization')
     if (!authHeader) {
-      return new Response(JSON.stringify({ error: 'Authorization required' }), {
+      return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
         status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
@@ -36,7 +41,7 @@ serve(async (req) => {
     )
     const { data: { user }, error: userError } = await client.auth.getUser()
     if (userError || !user) {
-      return new Response(JSON.stringify({ error: 'Unauthorized: Invalid token' }), {
+      return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
         status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
@@ -48,7 +53,7 @@ serve(async (req) => {
       .single()
 
     if (!callerProfile || callerProfile.role !== 'owner') {
-      return new Response(JSON.stringify({ error: 'Unauthorized: Only owners can send broadcast emails' }), {
+      return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
         status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }

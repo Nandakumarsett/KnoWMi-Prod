@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.44.0"
+import { handleRateLimit } from '../shared/rateLimiter.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -486,6 +487,10 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders })
   }
 
+  // Rate limit emails to 10 per minute per IP / fingerprint
+  const rateLimitResponse = await handleRateLimit(req, { limit: 10, endpoint: 'send-email' })
+  if (rateLimitResponse) return rateLimitResponse
+
   try {
     const body = await req.json()
     const { type, to, toName, data } = body
@@ -499,7 +504,7 @@ serve(async (req) => {
     // ─── Cryptographic JWT and Role/Recipient Authorization ───
     const authHeader = req.headers.get('Authorization')
     if (!authHeader) {
-      return new Response(JSON.stringify({ error: 'Missing authorization header' }), {
+      return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
         status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
@@ -517,7 +522,7 @@ serve(async (req) => {
       const isServiceRole = serviceRoleKey && authHeader.includes(serviceRoleKey)
       
       if (!isServiceRole) {
-        return new Response(JSON.stringify({ error: 'Unauthorized: Invalid token' }), {
+        return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
           status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         })
       }
@@ -525,7 +530,7 @@ serve(async (req) => {
       // Authenticated User Flow
       if (['welcome', 'deletion_request', 'return_request'].includes(type)) {
         if (to.toLowerCase().trim() !== user.email?.toLowerCase().trim()) {
-          return new Response(JSON.stringify({ error: 'Unauthorized: Can only send transaction emails to your own registered email address' }), {
+          return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
             status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
           })
         }
@@ -539,7 +544,7 @@ serve(async (req) => {
         
         const isStaff = callerProfile && ['owner', 'ambassador', 'collaborator'].includes(callerProfile.role)
         if (!isStaff) {
-          return new Response(JSON.stringify({ error: 'Unauthorized: Insufficient permissions for this email type' }), {
+          return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
             status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
           })
         }
