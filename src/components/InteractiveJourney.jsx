@@ -31,10 +31,10 @@ export default function InteractiveJourney() {
   }, []);
 
   return (
-    <div className="relative w-full h-[60vh] md:h-[80vh] flex items-end justify-center" style={{ perspective: '1000px' }}>
+    <div className="relative w-full h-full flex items-end justify-center" style={{ perspective: '1000px' }}>
       
       {/* Container holding the mock smartphone and finale image */}
-      <div className="relative w-full max-w-[300px] sm:max-w-[320px] h-[550px] sm:h-[650px] transition-all duration-1000 ease-in-out">
+      <div className="relative w-full h-full transition-all duration-1000 ease-in-out">
         
         {/* The Finale Image - expands when phase 6 is active */}
         <AnimatePresence>

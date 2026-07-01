@@ -212,18 +212,24 @@ export default function ScrollyHome() {
       </section>
 
       {/* 4. Digital Profile Section */}
-      <section className="profile-section min-h-[100svh] w-full relative bg-black flex items-center pt-24 px-6 overflow-hidden">
-        <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-12">
+      <section className="profile-section min-h-0 md:min-h-[100svh] w-full relative bg-black flex items-center py-12 md:pt-24 px-6 overflow-hidden">
+        <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-6 md:gap-12">
+          {/* Text — compact on mobile */}
           <div className="flex-1 z-10 md:pr-12 text-center md:text-left">
-            <h2 className="text-5xl md:text-8xl font-black uppercase mb-8 leading-[0.9] tracking-tighter">
-              Your Life,<br/><span className="text-orange-500 underline decoration-[6px] underline-offset-8">Embedded.</span>
+            <span className="inline-block mb-3 px-3 py-1 bg-orange-500 text-black text-[10px] font-black uppercase tracking-widest border-[2px] border-black shadow-[2px_2px_0px_#000] rounded-md">Digital Identity</span>
+            <h2 className="text-3xl md:text-8xl font-black uppercase mb-3 md:mb-8 leading-[0.9] tracking-tighter">
+              Your Life,<br/><span className="text-orange-500 underline decoration-[3px] md:decoration-[6px] underline-offset-4 md:underline-offset-8">Embedded.</span>
             </h2>
-            <p className="text-xl md:text-2xl text-neutral-400 mb-8 max-w-lg mx-auto md:mx-0 font-medium">
+            <p className="hidden md:block text-xl md:text-2xl text-neutral-400 mb-8 max-w-lg mx-auto md:mx-0 font-medium">
               A dynamic digital profile bound to your physical garment forever. Manage your identity, track scans, and connect instantly.
             </p>
+            <p className="md:hidden text-sm text-neutral-400 mb-4 max-w-xs mx-auto font-medium leading-relaxed">
+              One scan. Your entire digital world — live, real-time, always updated.
+            </p>
           </div>
-          <div className="flex-1 flex justify-center items-end w-full min-h-[500px] md:h-[80vh] mt-8 md:mt-0">
-            <div className="phone-mockup w-full h-full max-w-md drop-shadow-[8px_8px_0px_#F97316]">
+          {/* Phone mockup — fixed height on mobile, full height on desktop */}
+          <div className="flex-1 flex justify-center items-center w-full h-[480px] sm:h-[560px] md:h-[80vh] mt-2 md:mt-0">
+            <div className="phone-mockup w-full h-full max-w-[280px] sm:max-w-sm md:max-w-md drop-shadow-[6px_6px_0px_#F97316] md:drop-shadow-[8px_8px_0px_#F97316]">
               <InteractiveJourney />
             </div>
           </div>
