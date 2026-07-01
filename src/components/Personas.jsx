@@ -600,7 +600,6 @@ export default function Personas() {
                     
                     {/* Left: Text Content */}
                     <div className="text-center lg:text-left order-2 lg:order-1 flex flex-col justify-center">
-                      <span className="text-6xl lg:text-7xl mb-6 block" role="img" aria-label={p.name}>{p.emoji}</span>
                       <h3 className="text-4xl md:text-5xl lg:text-6xl font-display font-black mb-4" style={{ color: p.color }}>
                         {p.name}
                       </h3>
