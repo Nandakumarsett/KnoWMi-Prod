@@ -159,13 +159,13 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
 
       <section
         id="pricing"
-        className="py-32 bg-[#0a0a0a] relative overflow-hidden min-h-screen flex flex-col justify-center"
+        className="py-12 md:py-32 bg-[#0a0a0a] relative overflow-hidden min-h-0 md:min-h-screen flex flex-col justify-center"
         ref={sectionRef}
       >
         <div className="max-w-[1400px] mx-auto px-6 relative z-10 w-full">
           {/* Header */}
-          <div className="mb-20 text-center" ref={headerRef}>
-            <div className="inline-flex flex-col md:flex-row items-center gap-4 p-1 pr-6 bg-[#1a1a1a] border-[3px] border-white rounded-xl shadow-[4px_4px_0px_#fff] mx-auto mb-12">
+          <div className="mb-10 md:mb-20 text-center" ref={headerRef}>
+            <div className="inline-flex flex-col md:flex-row items-center gap-4 p-1 pr-6 bg-[#1a1a1a] border-[3px] border-white rounded-xl shadow-[4px_4px_0px_#fff] mx-auto mb-6 md:mb-12">
               <div className="px-4 py-2 bg-lime-400 text-black rounded-lg border-[3px] border-black text-[10px] font-black uppercase tracking-widest shadow-[3px_3px_0px_#000] flex items-center gap-2">
                 <Zap size={12} className="fill-black" /> Only {remainingSpots} Spots Left
               </div>
@@ -271,7 +271,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
           </div>
 
           {/* Analytics Pro Upsell */}
-          <div className="max-w-3xl mx-auto mb-24 mt-16 reveal reveal-delay-4">
+          <div className="max-w-3xl mx-auto mb-12 mt-8 md:mb-24 md:mt-16 reveal reveal-delay-4">
             <div className="bg-[#1a1a1a] rounded-xl border-[3px] border-orange-500 shadow-[6px_6px_0px_#F97316] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex items-center gap-5">
                 <div className="w-12 h-12 rounded-lg bg-orange-500 flex items-center justify-center border-[3px] border-black flex-shrink-0">
@@ -293,7 +293,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
           </div>
 
           {/* Trust Footer */}
-          <div className="max-w-4xl mx-auto border-t-[3px] border-white pt-12">
+          <div className="max-w-4xl mx-auto border-t-[3px] border-white pt-6 md:pt-12">
             <div className="grid grid-cols-1 gap-12 items-center reveal">
               <div className="flex flex-col md:flex-row justify-between items-center gap-8">
                 <div className="flex items-center gap-6 text-neutral-300">

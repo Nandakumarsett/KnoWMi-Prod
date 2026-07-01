@@ -134,6 +134,8 @@ export default function PersonaUseCases() {
         .puc-card:hover .puc-card-img {
           transform: scale(1.05);
         }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       {/* Decorative blocks */}
@@ -172,12 +174,12 @@ export default function PersonaUseCases() {
         </div>
 
         {/* Bento Grid */}
-        <div className="grid lg:grid-cols-3 gap-6 xl:gap-8">
+        <div className="flex overflow-x-auto lg:grid lg:grid-cols-3 gap-6 xl:gap-8 pb-6 snap-x snap-mandatory no-scrollbar">
           {useCases.map((uc, i) => (
             <div
               key={uc.id}
               ref={el => (cardsRef.current[i] = el)}
-              className="puc-card group relative rounded-xl overflow-hidden border-2 sm:border-[3px] border-white flex flex-col cursor-pointer bg-[#1a1a1a] h-[420px] md:h-[500px] shadow-[4px_4px_0px_#F97316] sm:shadow-[6px_6px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[9px_9px_0px_#F97316] transition-all duration-300"
+              className="puc-card flex-shrink-0 w-[290px] lg:w-auto snap-center group relative rounded-xl overflow-hidden border-2 sm:border-[3px] border-white flex flex-col cursor-pointer bg-[#1a1a1a] h-[420px] md:h-[500px] shadow-[4px_4px_0px_#F97316] sm:shadow-[6px_6px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-300"
             >
               {/* 60% Background Image Area */}
               <div className="relative h-[60%] w-full overflow-hidden">
