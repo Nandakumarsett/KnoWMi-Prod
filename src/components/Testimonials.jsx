@@ -69,7 +69,7 @@ export default function Testimonials() {
   const ref = useReveal()
 
   return (
-    <section id="reviews" className="section-pad min-h-screen flex items-center bg-[#0a0a0a] relative overflow-hidden" ref={ref}>
+    <section id="reviews" className="py-12 md:py-16 bg-[#0a0a0a] relative overflow-hidden" ref={ref}>
       <style>{`
         @keyframes viralBadgePulse {
           0%, 100% { transform: scale(1); }

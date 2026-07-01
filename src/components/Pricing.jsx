@@ -209,7 +209,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
 
       <section
         id="pricing"
-        className="py-12 md:py-32 bg-[#0a0a0a] relative overflow-hidden min-h-0 md:min-h-screen flex flex-col justify-center"
+        className="pt-12 pb-6 md:pt-32 md:pb-16 bg-[#0a0a0a] relative overflow-hidden min-h-0 md:min-h-screen flex flex-col justify-center"
         ref={sectionRef}
       >
         <div className="max-w-[1400px] mx-auto px-6 relative z-10 w-full">
