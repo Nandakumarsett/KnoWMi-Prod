@@ -308,10 +308,26 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                       {!product.disabled && <ArrowRight size={14} strokeWidth={3} />}
                     </button>
                     <div className="text-center">
-                      <span className="text-[10px] font-black text-neutral-300 uppercase tracking-widest">
+                      <span className="text-[10px] font-black text-neutral-300 uppercase tracking-widest block mb-1">
                         One-time investment
                       </span>
                     </div>
+                    {!product.disabled && (
+                      <div className="pt-3 border-t border-white/10 space-y-2 text-[10px] font-bold text-neutral-400">
+                        <div className="flex items-center gap-2">
+                          <span className="text-neutral-300">🔒</span>
+                          <span>Secure 256-Bit SSL Checkout</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-neutral-300">💳</span>
+                          <span>UPI, Cards & NetBanking via Razorpay</span>
+                        </div>
+                        <div className="flex items-center gap-2 leading-tight">
+                          <span className="text-neutral-300">🔄</span>
+                          <span>7-Day Quality & Size Replacement (<a href="/legal#refund" className="text-orange-500 hover:underline font-extrabold">Terms</a>)</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )

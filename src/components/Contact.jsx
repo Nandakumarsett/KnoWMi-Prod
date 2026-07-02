@@ -102,6 +102,9 @@ export default function Contact() {
                     {status === 'loading' ? 'Sending...' : 'Submit Interest'}
                     {!status === 'loading' && <Send size={14} strokeWidth={3} />}
                   </button>
+                  <p className="text-[10px] text-neutral-500 text-center font-bold leading-normal mt-3">
+                    🔒 Your details are secure. We process and protect all data in accordance with the Digital Personal Data Protection (DPDP) Act.
+                  </p>
                 </form>
               )}
             </div>

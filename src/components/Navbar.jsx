@@ -86,17 +86,25 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
   const useDarkTheme = isDark;
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
-        scrolled
-          ? useDarkTheme 
-            ? 'bg-[#0a0a0a]' 
-            : 'bg-white'
-          : 'bg-transparent'
-      }`}
-      role="navigation"
-      aria-label="Main navigation"
-    >
+    <div className="fixed top-0 left-0 right-0 z-[9999] flex flex-col w-full">
+      {/* Alert Strip */}
+      <div className="bg-orange-500 text-black py-1.5 px-4 text-center text-[10px] sm:text-xs font-black uppercase tracking-widest border-b-[2px] border-black shadow-md flex items-center justify-center gap-2">
+        <span>🚚 Free Shipping across India</span>
+        <span className="hidden sm:inline-block">•</span>
+        <span className="text-black/80">⚡ Claim Pro Free for Life (Founding 100)</span>
+      </div>
+
+      <nav
+        className={`w-full transition-all duration-300 ${
+          scrolled
+            ? useDarkTheme 
+              ? 'bg-[#0a0a0a]' 
+              : 'bg-white'
+            : 'bg-transparent'
+        }`}
+        role="navigation"
+        aria-label="Main navigation"
+      >
       <div className="max-w-[1200px] mx-auto pl-2 pr-4 md:px-6 flex items-center justify-between lg:justify-start h-20 lg:h-[110px] gap-0 w-full relative">
         {/* Logo */}
         <a href="/" className="flex items-center flex-shrink-0" aria-label="KnoWMi home">
@@ -334,5 +342,6 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
         </div>
       </div>
     </nav>
+    </div>
   )
 }
