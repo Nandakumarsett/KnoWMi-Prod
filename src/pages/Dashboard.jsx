@@ -1429,6 +1429,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
 
 
 const IdentityPass = ({ profile }) => {
+  const navigate = useNavigate();
   const isOwner = profile?.role === 'owner';
   const isFree = profile?.status === 'free' || (!profile?.status && (!profile?.tier || profile?.tier === 'Starter' || profile?.tier === 'Free')) || profile?.tier === 'Free' || profile?.tier === 'Starter';
   const isPaid = !isFree || isOwner;

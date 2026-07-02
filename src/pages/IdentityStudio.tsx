@@ -92,6 +92,7 @@ const STYLES = `
   
   .input-field:focus {
     border-color: #F97316;
+    background: #0a0a0a;
     box-shadow: 4px 4px 0px #F97316;
   }
 
@@ -1145,7 +1146,7 @@ export default function IdentityStudio() {
 
       {/* ⚡ ACTION-DRIVEN FOOTER */}
       {activePersona ? (
-        <footer className="fixed bottom-0 left-0 right-0 z-[60] bg-[#0a0a0a] border-t-[4px] border-white p-6 pb-8 flex flex-col items-center justify-center gap-3">
+        <footer className="relative md:fixed bottom-0 left-0 right-0 z-[60] bg-[#0a0a0a] border-t-[4px] border-white p-6 pb-8 flex flex-col items-center justify-center gap-3">
           <button
             onClick={handleSave}
             disabled={saving}

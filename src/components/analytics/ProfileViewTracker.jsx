@@ -18,6 +18,12 @@ export default function ProfileViewTracker({ profileId }) {
       const urlUsername = pathParts[pathParts.length - 1] || '';
       const isUUIDSlug = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(urlUsername);
       const isTshirtScan = searchParams.get('src') === 'tshirt' || searchParams.get('src') === 'qr' || isUUIDSlug;
+      const srcParam = searchParams.get('src');
+      if (srcParam === 'leaderboard' || srcParam === 'leaderboard_share') {
+        console.log('Leaderboard origin view detected, skipping analytics tracking.');
+        setTracked(true);
+        return;
+      }
       
       const { data: { user } } = await supabase.auth.getUser();
       let viewerProfile = null;

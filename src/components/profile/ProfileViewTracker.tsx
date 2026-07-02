@@ -17,6 +17,9 @@ export function ProfileViewTracker({ profileId }: ProfileViewTrackerProps) {
       try {
         const searchParams = new URLSearchParams(window.location.search)
         const source = searchParams.get('src') || 'direct'
+        if (source === 'leaderboard' || source === 'leaderboard_share') {
+          return
+        }
         const fp = await buildFingerprint()
         const referrer = categoriseReferrer(document.referrer)
 
