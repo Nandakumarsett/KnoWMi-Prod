@@ -436,6 +436,39 @@ function PreviewContent({ persona }) {
   return null;
 }
 
+function MockPhone({ persona, isDark, p }) {
+  const contentRef = useRef(null)
+  const [height, setHeight] = useState('auto')
+
+  useEffect(() => {
+    if (!contentRef.current) return
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const scale = window.innerWidth >= 640 ? 0.75 : 0.70
+        setHeight(`${entry.contentRect.height * scale}px`)
+      }
+    })
+    resizeObserver.observe(contentRef.current)
+    return () => resizeObserver.disconnect()
+  }, [persona])
+
+  return (
+    <div 
+      className={`w-full max-w-[300px] sm:max-w-[360px] h-[60vh] sm:h-[55vh] lg:h-[65vh] max-h-[700px] overflow-y-auto overflow-x-hidden rounded-xl custom-scrollbar relative border-2 sm:border-[3px] border-white shadow-[4px_4px_0px_#F97316] sm:shadow-[8px_8px_0px_#F97316] ${isDark ? 'bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fafafa]' : 'bg-white'}`}
+    >
+      <div style={{ height: height, overflow: 'hidden', position: 'relative', width: '100%' }}>
+        <div 
+          ref={contentRef}
+          className="w-[142.86%] sm:w-[133.33%] origin-top-left scale-[0.70] sm:scale-[0.75] absolute top-0 left-0 pointer-events-none select-none"
+        >
+          <PreviewContent persona={persona} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+
 export default function Personas() {
   const [dynamicPersonas, setDynamicPersonas] = useState(initialPersonas)
   const sectionRef = useRef(null)
@@ -627,13 +660,7 @@ export default function Personas() {
 
                     {/* Right: Mock Phone */}
                     <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
-                      <div 
-                        className={`w-full max-w-[300px] sm:max-w-[360px] h-[60vh] sm:h-[55vh] lg:h-[65vh] max-h-[700px] overflow-y-auto overflow-x-hidden rounded-xl custom-scrollbar relative border-2 sm:border-[3px] border-white shadow-[4px_4px_0px_#F97316] sm:shadow-[8px_8px_0px_#F97316] ${isDark ? 'bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fafafa]' : 'bg-white'}`}
-                      >
-                         <div className="mock-phone-content pointer-events-none select-none">
-                            <PreviewContent persona={p} />
-                         </div>
-                      </div>
+                      <MockPhone persona={p} isDark={isDark} p={p} />
                     </div>
                   </div>
                 </div>
@@ -646,15 +673,9 @@ export default function Personas() {
       </div>
 
       <style>{`
-        .mock-phone-content {
-          width: 142.86%;
-          zoom: 0.70;
-        }
-        @media (min-width: 640px) {
-          .mock-phone-content {
-            width: 133.33%;
-            zoom: 0.75;
-          }
+        .scale-\\[0\\.70\\] .min-h-screen,
+        .scale-\\[0\\.75\\] .min-h-screen {
+          min-height: 100% !important;
         }
         .custom-scrollbar::-webkit-scrollbar {
           width: 4px;
