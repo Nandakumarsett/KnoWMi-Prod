@@ -1,13 +1,11 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { handleRateLimit } from '../shared/rateLimiter.ts'
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { getCorsHeaders } from '../shared/cors.ts'
+import { sanitizeString, sanitizeUuid } from '../shared/sanitize.ts'
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   // Apply rate limiter — restrict views ingestion per client IP / fingerprint
@@ -15,13 +13,23 @@ serve(async (req) => {
   if (rateLimitResponse) return rateLimitResponse
 
   try {
-    const { profileId, referrer, fp, source, utm_medium, utm_campaign, viewerId, city, country, isRepeat } = await req.json()
+    const { profileId, referrer, fp, source, viewerId, city, country, isRepeat } = await req.json()
 
-    if (!profileId) {
-      return new Response(JSON.stringify({ error: 'profileId required' }), {
+    // Validate UUID format of profileId
+    const cleanProfileId = sanitizeUuid(profileId);
+    if (!cleanProfileId) {
+      return new Response(JSON.stringify({ error: 'Invalid profileId format' }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
+
+    // Sanitize other string inputs
+    const cleanReferrer = sanitizeString(referrer, 200);
+    const cleanFp = sanitizeString(fp, 100);
+    const cleanSource = sanitizeString(source, 50);
+    const cleanViewerId = sanitizeUuid(viewerId);
+    const cleanCity = sanitizeString(city, 100) || 'Unknown';
+    const cleanCountry = sanitizeString(country, 100) || 'Unknown';
 
     // Use SERVICE ROLE so this insert bypasses RLS entirely.
     // Any user scanning a T-shirt QR can record a view on any profile.
@@ -37,20 +45,20 @@ serve(async (req) => {
 
     // Determine final referrer to store
     // If source is 'tshirt', always store 'tshirt' so analytics can find it
-    const storedReferrer = (source === 'tshirt') ? 'tshirt' : (source && source !== 'direct' ? source : referrer || 'direct')
+    const storedReferrer = (cleanSource === 'tshirt') ? 'tshirt' : (cleanSource && cleanSource !== 'direct' ? cleanSource : cleanReferrer || 'direct')
 
     const { error: insertError } = await adminClient
       .from('profile_view_events')
       .insert({
-        profile_id: profileId,
-        visitor_fp: fp || 'unknown',
+        profile_id: cleanProfileId,
+        visitor_fp: cleanFp || 'unknown',
         referrer: storedReferrer,
         device_type: deviceType,
-        browser: userAgent.slice(0, 200),
+        browser: sanitizeString(userAgent, 200),
         is_repeat: isRepeat || false,
-        viewer_id: viewerId || null,
-        city: city || 'Unknown',
-        country: country || 'Unknown',
+        viewer_id: cleanViewerId || null,
+        city: cleanCity,
+        country: cleanCountry,
       })
 
     if (insertError) {
@@ -60,13 +68,13 @@ serve(async (req) => {
       })
     }
 
-    console.log(`View recorded: profile=${profileId}, source=${source}, referrer=${storedReferrer}, viewer=${viewerId}`)
+    console.log(`View recorded: profile=${cleanProfileId}, source=${cleanSource}, referrer=${storedReferrer}, viewer=${cleanViewerId}`)
 
     return new Response(JSON.stringify({ success: true, referrer: storedReferrer }), {
       status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     })
 
-  } catch (err) {
+  } catch (err: any) {
     console.error('ingest-profile-view error:', err)
     return new Response(JSON.stringify({ error: err.message }), {
       status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' }

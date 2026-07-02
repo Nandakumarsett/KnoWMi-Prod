@@ -3,13 +3,11 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import webpush from 'npm:web-push'
 import { handleRateLimit } from '../shared/rateLimiter.ts'
 
-// CORS Headers
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { getCorsHeaders } from '../shared/cors.ts'
+import { sanitizeString, sanitizeUuid } from '../shared/sanitize.ts'
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req)
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -28,15 +26,20 @@ serve(async (req) => {
     const payload = await req.json()
     const { userId, title, body, url } = payload
 
-    if (!userId) {
-      throw new Error('Missing userId in payload')
+    const cleanUserId = sanitizeUuid(userId)
+    const cleanTitle = sanitizeString(title, 100)
+    const cleanBody = sanitizeString(body, 250)
+    const cleanUrl = sanitizeString(url, 200)
+
+    if (!cleanUserId) {
+      throw new Error('Missing or invalid userId in payload')
     }
 
     // ─── Validate payload to prevent malicious notification spamming ───
     const isScanAlert = 
-      (title && (title.includes('Scan Alert') || title.includes('scan alert'))) &&
-      (body && (body.includes('scanned') && (body.includes('KnoWMi') || body.includes('profile')))) &&
-      url === '/dashboard';
+      (cleanTitle && (cleanTitle.includes('Scan Alert') || cleanTitle.includes('scan alert'))) &&
+      (cleanBody && (cleanBody.includes('scanned') && (cleanBody.includes('KnoWMi') || cleanBody.includes('profile')))) &&
+      cleanUrl === '/dashboard';
 
     // If it's not a standard scan alert, check if the caller is an authenticated owner/staff
     if (!isScanAlert) {
@@ -80,25 +83,25 @@ serve(async (req) => {
     const { data: subscriptions, error } = await supabaseClient
       .from('user_push_subscriptions')
       .select('*')
-      .eq('user_id', userId)
+      .eq('user_id', cleanUserId)
 
     if (error) throw error
     if (!subscriptions || subscriptions.length === 0) {
       console.log('No active push subscriptions. Invoking Email Scan Alert Fallback...')
       try {
         const metadata = payload.metadata || {}
-        const device = metadata.device || 'Unknown Device'
-        const city = metadata.city || 'Unknown Location'
+        const device = sanitizeString(metadata.device, 100) || 'Unknown Device'
+        const city = sanitizeString(metadata.city, 100) || 'Unknown Location'
 
         // 1. Fetch user's first_name
         const { data: profile } = await supabaseClient
           .from('profiles')
           .select('first_name')
-          .eq('user_id', userId)
+          .eq('user_id', cleanUserId)
           .single()
 
         // 2. Fetch user's email address
-        const { data: authUser } = await supabaseClient.auth.admin.getUserById(userId)
+        const { data: authUser } = await supabaseClient.auth.admin.getUserById(cleanUserId)
         const email = authUser?.user?.email
 
         if (email) {
@@ -135,9 +138,9 @@ serve(async (req) => {
 
     // 3. Send notifications to all user devices
     const notificationPayload = JSON.stringify({
-      title: title || 'KnoWMi Notification',
-      body: body || '',
-      url: url || '/'
+      title: cleanTitle || 'KnoWMi Notification',
+      body: cleanBody || '',
+      url: cleanUrl || '/'
     })
 
     const sendPromises = subscriptions.map(async (sub) => {

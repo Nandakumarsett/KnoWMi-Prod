@@ -2,14 +2,13 @@ import { serve } from "https://deno.land/std@0.177.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.44.0"
 import { handleRateLimit } from '../shared/rateLimiter.ts'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { getCorsHeaders } from '../shared/cors.ts'
+import { sanitizeString, sanitizeUuid } from '../shared/sanitize.ts'
 
 // (Sliding-window user-level local rate limiting can be bypassed or supplemented by handleRateLimit)
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req)
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -20,6 +19,19 @@ serve(async (req) => {
 
   try {
     const { product_type, amount_override, user_id, customer_details } = await req.json()
+    const cleanUserId = sanitizeUuid(user_id)
+    const cleanProductType = sanitizeString(product_type, 50)
+    
+    const cleanCustomerDetails: any = {}
+    if (customer_details && typeof customer_details === 'object') {
+      for (const [key, value] of Object.entries(customer_details)) {
+        if (typeof value === 'string') {
+          cleanCustomerDetails[key] = sanitizeString(value, 200)
+        } else if (typeof value === 'number' || typeof value === 'boolean') {
+          cleanCustomerDetails[key] = value
+        }
+      }
+    }
 
     // ─── Cryptographic JWT and User ID Verification ───
     const authHeader = req.headers.get('Authorization')
@@ -42,7 +54,7 @@ serve(async (req) => {
     }
 
     // Verify that the requested user_id matches the authenticated user
-    if (user_id && user_id !== user.id) {
+    if (cleanUserId && cleanUserId !== user.id) {
       return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
         status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
@@ -56,11 +68,11 @@ serve(async (req) => {
     if (amount_override && typeof amount_override === 'number' && amount_override > 0) {
       // Store item: use the amount passed (already in paise)
       pricePaise = amount_override
-    } else if (product_type === 'regular') {
+    } else if (cleanProductType === 'regular') {
       pricePaise = 79900
-    } else if (product_type === 'oversized') {
+    } else if (cleanProductType === 'oversized') {
       pricePaise = 99900
-    } else if (product_type === 'hoodie') {
+    } else if (cleanProductType === 'hoodie') {
       pricePaise = 149900
     } else {
       throw new Error("Invalid product type or missing amount")
@@ -104,11 +116,11 @@ serve(async (req) => {
     const { error: dbError } = await supabaseClient
       .from('payment_orders')
       .insert({
-        user_id: user_id || null,
+        user_id: cleanUserId || null,
         razorpay_order_id: rzpData.id,
         amount_paise: pricePaise,
-        items: [{ product_type, quantity: 1 }],
-        customer_details
+        items: [{ product_type: cleanProductType, quantity: 1 }],
+        customer_details: cleanCustomerDetails
       })
 
     if (dbError) throw dbError

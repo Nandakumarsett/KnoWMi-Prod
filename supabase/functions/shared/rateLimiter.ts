@@ -1,19 +1,14 @@
-/**
- * Deno KV Rate Limiter Middleware for Supabase Edge Functions
- * Rate limits requests by IP, Subnet range (/24), and Visitor Fingerprint
- */
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Content-Type': 'application/json'
-}
+import { getCorsHeaders } from './cors.ts'
 
 export async function handleRateLimit(req: Request, options: {
   limit?: number;      // max requests per window
   windowMs?: number;   // time window in milliseconds (default: 60000 / 1 min)
   endpoint: string;    // endpoint name for namespace partitioning
 }): Promise<Response | null> {
+  const corsHeaders = {
+    ...getCorsHeaders(req),
+    'Content-Type': 'application/json'
+  }
   // Only apply rate limiting to actual requests, skip OPTIONS pre-flight
   if (req.method === 'OPTIONS') return null;
 

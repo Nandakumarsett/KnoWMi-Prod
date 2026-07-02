@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
+import { useDocumentMetadata } from '../hooks/useDocumentMetadata'
 import Navbar from '../components/Navbar'
 import ScrollyHome from '../components/ScrollyHome'
 import { Marquee, HowItWorks, SocialProofStrip } from '../components/HowItWorks'
@@ -21,6 +22,13 @@ import { ArrowRight } from 'lucide-react'
 
 export default function Home() {
   const { user } = useAuth()
+  
+  useDocumentMetadata({
+    title: 'Scan Me. Know Me. | Custom QR Identity Tees',
+    description: 'India\'s first QR-enabled smart identity T-shirts. Share your social accounts, portfolio, contact card, and personal style instantly with a single scan.',
+    ogImage: 'https://knowmi.in/og-image.png'
+  })
+
   const [authOpen, setAuthOpen] = useState(false)
   const [authTab, setAuthTab] = useState('signup')
   const [showSticky, setShowSticky] = useState(false)

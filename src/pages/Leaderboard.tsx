@@ -10,6 +10,7 @@ import {
 import { supabase } from '../lib/supabase';
 import { Trie } from '../lib/leaderboard/trie';
 import { getAnalyticsData } from '../lib/analytics/data-source';
+import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
 
 interface Profile {
   id: string;
@@ -67,8 +68,12 @@ export default function Leaderboard() {
   const [category, setCategory] = useState('All');
   const [shareProfile, setShareProfile] = useState<Profile | null>(null);
 
+  useDocumentMetadata({
+    title: 'KnoWMi Elite | Global Rankings',
+    description: 'Track the top-performing creators, builders, and professionals on the KnoWMi global leaderboard. See who is trending and building the most active networks.'
+  });
+
   useEffect(() => {
-    document.title = 'KnoWMi Elite | Global Rankings';
     const timer = setTimeout(() => {
       document.body.classList.add('page-loaded');
     }, 100);

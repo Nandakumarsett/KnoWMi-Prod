@@ -8,6 +8,7 @@ import { ShoppingBag, ChevronRight, Check, X, Ruler, Lock, Shield, Truck, Zap } 
 import { useAuth } from '../context/AuthContext'
 import AuthModal from '../components/AuthModal'
 import LiveSalesPopup from '../components/LiveSalesPopup'
+import { useDocumentMetadata } from '../hooks/useDocumentMetadata'
 
 const PRODUCTS = [
   { id: 'regular', name: 'Regular Tee', price: 799, gsm: '200 GSM', disabled: false },
@@ -19,6 +20,12 @@ const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
 
 export default function Shop() {
   const { user } = useAuth()
+  
+  useDocumentMetadata({
+    title: 'Shop QR T-Shirts | Custom Identities Collection',
+    description: 'Browse our collection of premium 220 GSM heavyweight combed cotton identity Tees. Choose your style, size, and lock in your Founding 100 lifetime perks.'
+  })
+
   const [searchParams, setSearchParams] = useSearchParams()
   const [designs, setDesigns] = useState([])
   const [loading, setLoading] = useState(true)

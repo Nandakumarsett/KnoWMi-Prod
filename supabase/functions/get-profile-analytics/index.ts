@@ -1,13 +1,11 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { handleRateLimit } from '../shared/rateLimiter.ts'
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { getCorsHeaders } from '../shared/cors.ts'
+import { sanitizeUuid } from '../shared/sanitize.ts'
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -18,8 +16,9 @@ serve(async (req) => {
 
   try {
     const { profileId } = await req.json()
+    const cleanProfileId = sanitizeUuid(profileId);
 
-    if (!profileId) {
+    if (!cleanProfileId) {
       return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
@@ -56,7 +55,7 @@ serve(async (req) => {
     const { data: ownerCheck } = await adminClient
       .from('profiles')
       .select('id')
-      .eq('id', profileId)
+      .eq('id', cleanProfileId)
       .eq('user_id', user.id)
       .single()
 
@@ -68,9 +67,9 @@ serve(async (req) => {
 
     // 3. Fetch ALL analytics data with service role (no RLS restrictions)
     const [viewsRes, scansRes, linksRes] = await Promise.all([
-      adminClient.from('profile_view_events').select('*').eq('profile_id', profileId),
-      adminClient.from('qr_scan_events').select('*').eq('profile_id', profileId),
-      adminClient.from('link_click_events').select('*').eq('profile_id', profileId),
+      adminClient.from('profile_view_events').select('*').eq('profile_id', cleanProfileId),
+      adminClient.from('qr_scan_events').select('*').eq('profile_id', cleanProfileId),
+      adminClient.from('link_click_events').select('*').eq('profile_id', cleanProfileId),
     ])
 
     return new Response(JSON.stringify({
@@ -82,7 +81,7 @@ serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     })
 
-  } catch (err) {
+  } catch (err: any) {
     console.error('get-profile-analytics error:', err)
     return new Response(JSON.stringify({ error: err.message }), {
       status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' }

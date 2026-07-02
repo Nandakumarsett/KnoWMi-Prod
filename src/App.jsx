@@ -1,24 +1,34 @@
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import toast from 'react-hot-toast'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { supabase } from './lib/supabase'
 import Home from './pages/Home'
-import Dashboard from './pages/Dashboard'
-import PublicProfile from './pages/PublicProfile'
-import Admin from './pages/Admin'
-import ScanHandler from './pages/ScanHandler'
-import About from './pages/About'
-import Blog from './pages/Blog'
-import PressKit from './pages/PressKit'
-import Legal from './pages/Legal'
-import TrackOrder from './pages/TrackOrder'
-import Shop from './pages/Shop'
-import Leaderboard from './pages/Leaderboard'
-import QRIntercept from './pages/QRIntercept'
-import IdentityStudio from './pages/IdentityStudio'
-import VibePage from './pages/VibePage'
-import InsightsPage from './pages/InsightsPage'
 import SmoothScroll from './components/SmoothScroll'
+import { ErrorBoundary } from './components/ErrorBoundary'
+
+// Lazy loaded routes for bundle size optimization
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const PublicProfile = lazy(() => import('./pages/PublicProfile'))
+const Admin = lazy(() => import('./pages/Admin'))
+const ScanHandler = lazy(() => import('./pages/ScanHandler'))
+const About = lazy(() => import('./pages/About'))
+const Blog = lazy(() => import('./pages/Blog'))
+const PressKit = lazy(() => import('./pages/PressKit'))
+const Legal = lazy(() => import('./pages/Legal'))
+const TrackOrder = lazy(() => import('./pages/TrackOrder'))
+const Shop = lazy(() => import('./pages/Shop'))
+const Leaderboard = lazy(() => import('./pages/Leaderboard'))
+const QRIntercept = lazy(() => import('./pages/QRIntercept'))
+const IdentityStudio = lazy(() => import('./pages/IdentityStudio'))
+const VibePage = lazy(() => import('./pages/VibePage'))
+const InsightsPage = lazy(() => import('./pages/InsightsPage'))
+
+const PageLoader = () => (
+  <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center">
+    <div className="w-16 h-16 border-[4px] border-orange-500 border-t-transparent rounded-full animate-spin mb-4 shadow-[0_0_15px_rgba(249,115,22,0.4)]"></div>
+    <div className="text-orange-500 font-bold uppercase tracking-widest text-xs animate-pulse">Loading KnoWMi...</div>
+  </div>
+)
 
 
 export default function App() {
@@ -81,29 +91,33 @@ export default function App() {
   }, [])
 
   return (
-    <SmoothScroll>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/studio" element={<IdentityStudio />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/s/:code" element={<ScanHandler />} />
-          <Route path="/p/:username" element={<PublicProfile />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/press" element={<PressKit />} />
-          <Route path="/legal" element={<Legal />} />
-          <Route path="/track" element={<TrackOrder />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/q/:token" element={<QRIntercept />} />
-          <Route path="/dashboard/vibe" element={<VibePage />} />
-          <Route path="/insights" element={<InsightsPage />} />
-          {/* Catch-all route to prevent blank pages on invalid URLs */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Router>
-    </SmoothScroll>
+    <ErrorBoundary>
+      <SmoothScroll>
+        <Router>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/studio" element={<IdentityStudio />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/s/:code" element={<ScanHandler />} />
+              <Route path="/p/:username" element={<PublicProfile />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/press" element={<PressKit />} />
+              <Route path="/legal" element={<Legal />} />
+              <Route path="/track" element={<TrackOrder />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/q/:token" element={<QRIntercept />} />
+              <Route path="/dashboard/vibe" element={<VibePage />} />
+              <Route path="/insights" element={<InsightsPage />} />
+              {/* Catch-all route to prevent blank pages on invalid URLs */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Suspense>
+        </Router>
+      </SmoothScroll>
+    </ErrorBoundary>
   )
 }

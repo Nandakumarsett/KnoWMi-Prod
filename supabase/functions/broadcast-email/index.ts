@@ -2,12 +2,11 @@ import { serve } from "https://deno.land/std@0.177.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.44.0"
 import { handleRateLimit } from '../shared/rateLimiter.ts'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { getCorsHeaders } from '../shared/cors.ts'
+import { sanitizeString, sanitizeUuid } from '../shared/sanitize.ts'
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req)
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -20,7 +19,13 @@ serve(async (req) => {
     const body = await req.json()
     const { policy_name, summary, effective_date, policy_url, caller_user_id } = body
 
-    if (!policy_name || !summary || !effective_date) {
+    const cleanPolicyName = sanitizeString(policy_name, 150)
+    const cleanSummary = sanitizeString(summary, 2000)
+    const cleanEffectiveDate = sanitizeString(effective_date, 50)
+    const cleanPolicyUrl = sanitizeString(policy_url, 300)
+    const cleanCallerUserId = sanitizeUuid(caller_user_id)
+
+    if (!cleanPolicyName || !cleanSummary || !cleanEffectiveDate) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
@@ -90,10 +95,10 @@ serve(async (req) => {
               to: user.email,
               toName: user.user_metadata?.first_name || '',
               data: {
-                policyName: policy_name,
-                effectiveDate: effective_date,
-                summary,
-                policyUrl: policy_url || `https://knowmi.in/legal`,
+                policyName: cleanPolicyName,
+                effectiveDate: cleanEffectiveDate,
+                summary: cleanSummary,
+                policyUrl: cleanPolicyUrl || `https://knowmi.in/legal`,
               }
             }
           })
@@ -114,11 +119,11 @@ serve(async (req) => {
     // Log broadcast in DB
     await supabase.from('email_broadcasts').insert({
       type: 'policy_change',
-      subject: `${policy_name} Updated`,
+      subject: `${cleanPolicyName} Updated`,
       sent_count: sent,
       failed_count: failed,
       sent_by: user.id,
-      metadata: { policy_name, effective_date, summary },
+      metadata: { policy_name: cleanPolicyName, effective_date: cleanEffectiveDate, summary: cleanSummary },
     }).select()
 
     return new Response(

@@ -2,10 +2,8 @@ import { serve } from "https://deno.land/std@0.177.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.44.0"
 import { handleRateLimit } from '../shared/rateLimiter.ts'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { getCorsHeaders } from '../shared/cors.ts'
+import { sanitizeString, sanitizeUuid } from '../shared/sanitize.ts'
 
 // ─── Email Templates ──────────────────────────────────────
 
@@ -483,6 +481,7 @@ function scanAlertTemplate(data: { firstName: string; device: string; city: stri
 // ─── Main Handler ─────────────────────────────────────────
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req)
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -499,6 +498,21 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: 'Missing type or to' }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
+    }
+
+    const cleanTo = sanitizeString(to, 100)
+    const cleanToName = sanitizeString(toName, 100)
+    const cleanType = sanitizeString(type, 50)
+
+    const cleanData: any = {}
+    if (data && typeof data === 'object') {
+      for (const [key, value] of Object.entries(data)) {
+        if (typeof value === 'string') {
+          cleanData[key] = sanitizeString(value, 500)
+        } else if (typeof value === 'number' || typeof value === 'boolean') {
+          cleanData[key] = value
+        }
+      }
     }
 
     // ─── Cryptographic JWT and Role/Recipient Authorization ───
@@ -529,7 +543,7 @@ serve(async (req) => {
     } else {
       // Authenticated User Flow
       if (['welcome', 'deletion_request', 'return_request'].includes(type)) {
-        if (to.toLowerCase().trim() !== user.email?.toLowerCase().trim()) {
+        if (cleanTo.toLowerCase().trim() !== user.email?.toLowerCase().trim()) {
           return new Response(JSON.stringify({ error: "Unauthorized access. Please don't try again." }), {
             status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
           })
@@ -560,35 +574,35 @@ serve(async (req) => {
     let subject = ''
     let html = ''
 
-    switch (type) {
+    switch (cleanType) {
       case 'order_confirmation':
-        subject = `✓ Order Confirmed — Receipt ${data.receiptNumber} | KnoWMi`
-        html = orderConfirmationTemplate(data)
+        subject = `✓ Order Confirmed — Receipt ${cleanData.receiptNumber || ''} | KnoWMi`
+        html = orderConfirmationTemplate(cleanData)
         break
       case 'welcome':
-        subject = `Welcome to KnoWMi, ${toName || 'there'}! 👋`
-        html = welcomeEmailTemplate(data)
+        subject = `Welcome to KnoWMi, ${cleanToName || 'there'}! 👋`
+        html = welcomeEmailTemplate(cleanData)
         break
       case 'dispatch':
-        subject = `🚚 Your KnoWMi is shipped! Tracking: ${data.trackingNumber}`
-        html = dispatchEmailTemplate(data)
+        subject = `🚚 Your KnoWMi is shipped! Tracking: ${cleanData.trackingNumber || ''}`
+        html = dispatchEmailTemplate(cleanData)
         break
       case 'policy_change':
-        subject = `KnoWMi ${data.policyName} — Updated`
-        html = policyChangeTemplate(data)
+        subject = `KnoWMi ${cleanData.policyName || ''} — Updated`
+        html = policyChangeTemplate(cleanData)
         break
       case 'return_request':
-        subject = `Return request received — ${data.requestId} | KnoWMi`
-        html = returnRequestTemplate(data)
+        subject = `Return request received — ${cleanData.requestId || ''} | KnoWMi`
+        html = returnRequestTemplate(cleanData)
         break
       case 'deletion_request': {
         subject = `Account deletion request received — KnoWMi`
-        html = deletionRequestTemplate(data)
+        html = deletionRequestTemplate(cleanData)
         // Also fire an admin alert email immediately
         const adminHtml = adminDeletionAlertTemplate({
-          email: data.email,
-          requestId: data.requestId,
-          reason: data.reason || null,
+          email: cleanData.email,
+          requestId: cleanData.requestId,
+          reason: cleanData.reason || null,
           submittedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' })
         })
         await fetch('https://api.resend.com/emails', {
@@ -599,24 +613,24 @@ serve(async (req) => {
           },
           body: JSON.stringify({
             from: 'KnoWMi Alerts <alerts@knowmi.in>',
-            reply_to: data.email,
+            reply_to: cleanData.email,
             to: ['bussiness@knowmi.in'],
-            subject: `🚨 [ACTION REQUIRED] Account deletion request ${data.requestId} — ${data.email}`,
+            subject: `🚨 [ACTION REQUIRED] Account deletion request ${cleanData.requestId} — ${cleanData.email}`,
             html: adminHtml,
           }),
         })
         break
       }
       case 'scan_alert':
-        subject = `🔥 New KnoWMi Scan Alert from ${data.city || 'someone'}!`
-        html = scanAlertTemplate(data)
+        subject = `🔥 New KnoWMi Scan Alert from ${cleanData.city || 'someone'}!`
+        html = scanAlertTemplate(cleanData)
         break
       case 'deletion_completed':
         subject = `Account permanently deleted — KnoWMi`
-        html = deletionCompletedTemplate(data)
+        html = deletionCompletedTemplate(cleanData)
         break
       default:
-        return new Response(JSON.stringify({ error: `Unknown email type: ${type}` }), {
+        return new Response(JSON.stringify({ error: `Unknown email type: ${cleanType}` }), {
           status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         })
     }
@@ -624,7 +638,7 @@ serve(async (req) => {
     // Send via Resend — using verified knowmi.in domain
     // FROM addresses are virtual (no inbox needed), replies route to bussiness@knowmi.in
     const fromAddress = (() => {
-      switch (type) {
+      switch (cleanType) {
         case 'order_confirmation': return 'KnoWMi Orders <orders@knowmi.in>'
         case 'dispatch':           return 'KnoWMi Orders <orders@knowmi.in>'
         case 'welcome':            return 'KnoWMi <hello@knowmi.in>'
@@ -640,7 +654,7 @@ serve(async (req) => {
     const resendPayload = {
       from: fromAddress,
       reply_to: 'bussiness@knowmi.in',
-      to: [to],
+      to: [cleanTo],
       subject,
       html,
     }
