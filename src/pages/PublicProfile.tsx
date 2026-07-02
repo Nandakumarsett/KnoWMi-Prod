@@ -429,6 +429,7 @@ export default function PublicProfile() {
               fetchpriority="high"
               loading="eager"
               className="w-6 h-6 rounded-lg object-cover"
+              style={{ filter: 'invert(1) hue-rotate(180deg)' }}
             />
             <span
               className="text-[10px] font-black uppercase tracking-[0.2em]"
@@ -763,6 +764,7 @@ export default function PublicProfile() {
               src="/logo-square.webp"
               alt="Logo"
               className="w-8 h-8 rounded-lg object-cover"
+              style={{ filter: 'invert(1) hue-rotate(180deg)' }}
             />
             <span
               className="text-xs font-black uppercase tracking-[0.3em] opacity-40"
