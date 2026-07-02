@@ -1521,8 +1521,8 @@ const IdentityPass = ({ profile }) => {
               />
               <div className="absolute inset-0 z-10" />
               {isPaid && (
-                <div className="absolute inset-0 m-auto w-10 h-10 bg-[#1a1a1a] rounded-full flex items-center justify-center shadow-[6px_6px_0px_#fff] border border-white/20 p-0.5 z-20 select-none overflow-hidden">
-                  <img src="/favicon.png" fetchpriority="high" loading="eager" className="w-full h-full object-contain rounded-full" style={{ filter: 'invert(1) hue-rotate(180deg)' }} alt="KnoWMi Logo" />
+                <div className="absolute inset-0 m-auto w-10 h-10 bg-[#0a0a0a] border-[3px] border-orange-500 rounded-xl flex items-center justify-center z-20 select-none overflow-hidden">
+                  <img src="/favicon.png" fetchpriority="high" loading="eager" className="w-full h-full object-contain p-1" style={{ filter: 'invert(1) hue-rotate(180deg)' }} alt="KnoWMi Logo" />
                 </div>
               )}
               
