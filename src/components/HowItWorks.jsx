@@ -404,10 +404,10 @@ export function HowItWorks() {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-orange-500 text-black border-[3px] border-black shadow-[3px_3px_0px_#000] mb-6 text-[11px] font-black uppercase tracking-widest">
             How It Works
           </div>
-          <h2 className="text-2xl md:text-5xl lg:text-7xl font-black text-white mb-3 md:mb-6 tracking-tight leading-[1.05]">
+          <h2 className="text-2xl md:text-5xl lg:text-7xl font-black text-white mb-3 md:mb-6 tracking-normal leading-[1.05]">
             IT&apos;S STUPIDLY SIMPLE.
             <br />
-            <span className="text-orange-500" style={{ WebkitTextStroke: '2px #F97316' }}>THAT&apos;S THE POINT.</span>
+            <span className="text-orange-500 tracking-wide" style={{ WebkitTextStroke: '1px #F97316' }}>THAT&apos;S THE POINT.</span>
           </h2>
           <p className="text-lg text-neutral-300 font-black max-w-xl mx-auto">
             No complicated setup. No downloaded apps. Just a tee that works as hard as you do.
