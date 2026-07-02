@@ -136,6 +136,35 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
           </div>
         </a>
 
+        {/* Mobile inline links directly next to Logo */}
+        <div className="lg:hidden flex items-center gap-1.5 sm:gap-2 ml-2 sm:ml-4 flex-grow justify-start">
+          {navLinks
+            .filter(l => ['How It Works', 'Collection', 'FAQs'].includes(l.label))
+            .map(l => {
+              const isActive = activeSection === l.href || 
+                (l.href.includes('#') && activeSection.replace(/^\//, '') === l.href.replace(/^\//, ''))
+              
+              let labelText = l.label
+              if (l.label === 'How It Works') labelText = 'Works'
+              if (l.label === 'FAQs') labelText = 'FAQ'
+
+              return (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  onClick={(e) => handleNavClick(e, l.href)}
+                  className={`px-1.5 py-0.5 rounded-md text-[8px] sm:text-[10px] font-black uppercase tracking-wider transition-all duration-200 shrink-0 ${
+                    isActive 
+                      ? 'bg-orange-500 text-black border border-black shadow-[1.5px_1.5px_0px_#000]' 
+                      : (useDarkTheme ? 'text-white/60 hover:text-white' : 'text-neutral-500 hover:text-neutral-900')
+                  }`}
+                >
+                  {labelText}
+                </a>
+              )
+            })}
+        </div>
+
         {/* Desktop links */}
         <div className="hidden lg:flex items-center gap-1.5 flex-1 justify-center">
           {navLinks.map(l => {
@@ -280,30 +309,6 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
         </button>
       </div>
 
-      {/* Mobile inline tabs bar */}
-      <div className="lg:hidden flex items-center justify-center gap-6 py-2.5 px-4 border-t border-neutral-100 dark:border-white/10 bg-transparent">
-        {navLinks
-          .filter(l => ['How It Works', 'Collection', 'Leaderboard'].includes(l.label))
-          .map(l => {
-            const isActive = activeSection === l.href || 
-              (l.href.includes('#') && activeSection.replace(/^\//, '') === l.href.replace(/^\//, ''))
-            
-            return (
-              <a
-                key={l.label}
-                href={l.href}
-                onClick={(e) => handleNavClick(e, l.href)}
-                className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
-                  isActive 
-                    ? 'bg-orange-500 text-black border border-black shadow-[2px_2px_0px_#000] scale-105' 
-                    : (useDarkTheme ? 'text-white/60 hover:text-white' : 'text-neutral-500 hover:text-neutral-900')
-                }`}
-              >
-                {l.label === 'How It Works' ? 'Works' : l.label}
-              </a>
-            )
-          })}
-      </div>
 
       {/* Mobile drawer */}
       <div
