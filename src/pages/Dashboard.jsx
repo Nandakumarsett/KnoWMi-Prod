@@ -1503,7 +1503,7 @@ const IdentityPass = ({ profile }) => {
             </div>
 
             <div className="flex flex-col items-center -mt-4 mb-3">
-              <img src="/logo-square.webp" fetchpriority="high" loading="eager" className="w-36 h-36 object-contain -mb-10 bg-transparent border-none shadow-none" alt="KnoWMi Logo" />
+              <img src="/logo-square.webp" fetchpriority="high" loading="eager" className="w-36 h-36 object-contain -mb-10 bg-transparent border-none shadow-none" style={{ filter: 'invert(1) hue-rotate(180deg)' }} alt="KnoWMi Logo" />
               <h4 className="text-[32px] font-display font-black leading-[0.8] mb-1 tracking-[0.05em]">KnoWMi</h4>
               <p className="text-[10.5px] font-black uppercase tracking-[0.2em] text-neutral-400">Official Identity Pass</p>
             </div>
@@ -1522,7 +1522,7 @@ const IdentityPass = ({ profile }) => {
               <div className="absolute inset-0 z-10" />
               {isPaid && (
                 <div className="absolute inset-0 m-auto w-10 h-10 bg-[#1a1a1a] rounded-full flex items-center justify-center shadow-[6px_6px_0px_#fff] border border-white/20 p-0.5 z-20 select-none overflow-hidden">
-                  <img src="/favicon.png" fetchpriority="high" loading="eager" className="w-full h-full object-contain rounded-full" alt="KnoWMi Logo" />
+                  <img src="/favicon.png" fetchpriority="high" loading="eager" className="w-full h-full object-contain rounded-full" style={{ filter: 'invert(1) hue-rotate(180deg)' }} alt="KnoWMi Logo" />
                 </div>
               )}
               

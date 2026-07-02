@@ -575,6 +575,7 @@ export default function PublicProfile() {
                   fetchpriority="high"
                   loading="eager"
                   className="w-6 h-6 object-cover rounded"
+                  style={{ filter: 'invert(1) hue-rotate(180deg)' }}
                   alt="KW"
                 />
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
