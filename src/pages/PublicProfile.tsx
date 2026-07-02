@@ -625,7 +625,7 @@ export default function PublicProfile() {
                         fetchpriority="high"
                         loading="eager"
                         className="w-full h-full object-contain p-1"
-                        style={{ filter: 'invert(1) hue-rotate(216deg)' }}
+                        style={{ filter: 'hue-rotate(36deg)' }}
                         alt="KnoWMi Logo"
                       />
                     </div>
@@ -887,7 +887,7 @@ export default function PublicProfile() {
                               fetchpriority="high"
                               loading="eager"
                               className="w-full h-full object-contain p-1"
-                              style={{ filter: 'invert(1) hue-rotate(216deg)' }}
+                              style={{ filter: 'hue-rotate(36deg)' }}
                               alt="KnoWMi Logo"
                             />
                           </div>
