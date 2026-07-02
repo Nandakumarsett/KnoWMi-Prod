@@ -136,32 +136,34 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
           </div>
         </a>
 
-        {/* Mobile inline links directly next to Logo */}
-        {navLinks
-          .filter(l => ['How It Works', 'Collection', 'FAQs'].includes(l.label))
-          .map(l => {
-            const isActive = activeSection === l.href || 
-              (l.href.includes('#') && activeSection.replace(/^\//, '') === l.href.replace(/^\//, ''))
-            
-            let labelText = l.label
-            if (l.label === 'How It Works') labelText = 'Works'
-            if (l.label === 'FAQs') labelText = 'FAQ'
+        {/* Mobile inline links container next to Logo */}
+        <div className="lg:hidden flex items-center justify-center gap-2.5 sm:gap-4 flex-1 mx-2 sm:mx-4">
+          {navLinks
+            .filter(l => ['How It Works', 'Collection', 'FAQs'].includes(l.label))
+            .map(l => {
+              const isActive = activeSection === l.href || 
+                (l.href.includes('#') && activeSection.replace(/^\//, '') === l.href.replace(/^\//, ''))
+              
+              let labelText = l.label
+              if (l.label === 'How It Works') labelText = 'Works'
+              if (l.label === 'FAQs') labelText = 'FAQ'
 
-            return (
-              <a
-                key={l.label}
-                href={l.href}
-                onClick={(e) => handleNavClick(e, l.href)}
-                className={`lg:hidden px-2 py-0.5 sm:px-3 sm:py-1 rounded-md text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all duration-200 shrink-0 ${
-                  isActive 
-                    ? 'bg-orange-500 text-black border border-black shadow-[1.5px_1.5px_0px_#000]' 
-                    : (useDarkTheme ? 'text-white/60 hover:text-white' : 'text-neutral-500 hover:text-neutral-900')
-                }`}
-              >
-                {labelText}
-              </a>
-            )
-          })}
+              return (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  onClick={(e) => handleNavClick(e, l.href)}
+                  className={`px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all duration-200 shrink-0 ${
+                    isActive 
+                      ? 'bg-orange-500 text-black border border-black shadow-[1.5px_1.5px_0px_#000]' 
+                      : (useDarkTheme ? 'text-white/60 hover:text-white' : 'text-neutral-500 hover:text-neutral-900')
+                  }`}
+                >
+                  {labelText}
+                </a>
+              )
+            })}
+        </div>
 
         {/* Desktop links */}
         <div className="hidden lg:flex items-center gap-1.5 flex-1 justify-center">
