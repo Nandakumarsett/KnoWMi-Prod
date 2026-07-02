@@ -49,12 +49,9 @@ export default function PWABanner() {
 
   return (
     <div
-      className="fixed bottom-6 left-1/2 z-[150] flex items-center gap-4 px-5 py-4 rounded-2xl shadow-2xl border-[3px] border-black animate-slideUp"
+      className="fixed bottom-6 left-4 right-4 md:left-auto md:right-6 z-[150] flex items-center gap-4 px-5 py-4 rounded-2xl shadow-2xl border-[3px] border-black animate-slideUp md:w-[420px]"
       style={{
-        transform: 'translateX(-50%)',
         background: '#1a1a1a',
-        maxWidth: '420px',
-        width: 'calc(100% - 32px)',
         boxShadow: '6px 6px 0px #000',
       }}
       role="banner"

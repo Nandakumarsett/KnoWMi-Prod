@@ -241,7 +241,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
 
           {/* Cards */}
           <div 
-            className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-[1200px] mx-auto pricing-grid items-stretch pb-6 snap-x snap-mandatory no-scrollbar px-[7.5vw] md:px-0"
+            className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-[1200px] mx-auto pricing-grid items-stretch pt-6 pb-6 snap-x snap-mandatory no-scrollbar px-[7.5vw] md:px-0"
             ref={scrollContainerRef}
             onScroll={handleScroll}
           >
