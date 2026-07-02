@@ -59,9 +59,16 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
         const top = section.offsetTop
         const height = section.offsetHeight
         if (scrollPos >= top && scrollPos < top + height) {
-          setActiveSection(`#${section.id}`)
+          setActiveSection(`/#${section.id}`)
         }
       })
+    }
+
+    // Set initial active section on load
+    if (window.location.pathname === '/leaderboard') {
+      setActiveSection('/leaderboard')
+    } else {
+      setActiveSection(window.location.hash ? `/#${window.location.hash.substring(1)}` : '')
     }
 
     window.addEventListener('scroll', handleScrollSpy)
@@ -271,6 +278,31 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
             <span className={`w-full h-1 bg-black rounded-full transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
           </div>
         </button>
+      </div>
+
+      {/* Mobile inline tabs bar */}
+      <div className="lg:hidden flex items-center justify-center gap-6 py-2.5 px-4 border-t border-neutral-100 dark:border-white/10 bg-transparent">
+        {navLinks
+          .filter(l => ['How It Works', 'Collection', 'Leaderboard'].includes(l.label))
+          .map(l => {
+            const isActive = activeSection === l.href || 
+              (l.href.includes('#') && activeSection.replace(/^\//, '') === l.href.replace(/^\//, ''))
+            
+            return (
+              <a
+                key={l.label}
+                href={l.href}
+                onClick={(e) => handleNavClick(e, l.href)}
+                className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
+                  isActive 
+                    ? 'bg-orange-500 text-black border border-black shadow-[2px_2px_0px_#000] scale-105' 
+                    : (useDarkTheme ? 'text-white/60 hover:text-white' : 'text-neutral-500 hover:text-neutral-900')
+                }`}
+              >
+                {l.label === 'How It Works' ? 'Works' : l.label}
+              </a>
+            )
+          })}
       </div>
 
       {/* Mobile drawer */}
