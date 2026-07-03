@@ -14,8 +14,7 @@ export default function InteractiveJourney() {
       { p: 3, delay: 3000 }, // Phase 3: Action Click (3s)
       { p: 4, delay: 3500 }, // Phase 4: Fake Login (3.5s)
       { p: 5, delay: 6000 }, // Phase 5: Explore Analytics (6s)
-      { p: 6, delay: 3000 }, // Phase 6: Checkout Success (3s)
-      { p: 7, delay: 5000 }, // Phase 7: Finale Image (5s)
+      { p: 6, delay: 5000 }, // Phase 6: Finale Image (5s)
     ];
 
     let currentPhaseIdx = 0;
@@ -37,9 +36,9 @@ export default function InteractiveJourney() {
       {/* Container holding the mock smartphone and finale image */}
       <div className="relative w-full h-full transition-all duration-1000 ease-in-out">
         
-        {/* The Finale Image - expands when phase 7 is active */}
+        {/* The Finale Image - expands when phase 6 is active */}
         <AnimatePresence>
-          {phase === 7 && (
+          {phase === 6 && (
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 50 }}
               animate={{ opacity: 1, scale: 1.2, y: -20 }}
@@ -71,8 +70,8 @@ export default function InteractiveJourney() {
         {/* The Mock Smartphone Frame */}
         <motion.div 
           animate={{
-            scale: phase === 7 ? 0.8 : 1,
-            opacity: phase === 7 ? 0 : 1,
+            scale: phase === 6 ? 0.8 : 1,
+            opacity: phase === 6 ? 0 : 1,
             rotateY: phase === 1 ? 5 : 0,
             rotateX: phase === 1 ? 5 : 0
           }}
@@ -385,56 +384,7 @@ export default function InteractiveJourney() {
               )}
             </AnimatePresence>
 
-            {/* Phase 6: Razorpay Checkout */}
-            <AnimatePresence>
-              {phase === 6 && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  className="absolute inset-0 bg-[#0e1116] p-6 flex flex-col w-full z-30"
-                >
-                  <div className="flex items-center justify-between mt-4 mb-8">
-                    <div className="text-white font-bold flex items-center gap-2">
-                       <Zap size={18} className="text-blue-500" /> Pay
-                    </div>
-                    <X size={20} className="text-neutral-500" />
-                  </div>
-                  
-                  <div className="bg-neutral-900 rounded-2xl p-6 mb-4 w-full text-left">
-                    <div className="text-neutral-400 text-sm mb-1">Paying KnoWMi Studios</div>
-                    <div className="text-white text-4xl font-bold font-mono">₹999.00</div>
-                  </div>
 
-                  <div className="flex-1 flex flex-col items-center justify-center pb-20 w-full">
-                    <motion.div
-                      initial={{ scale: 0.5, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 0.5, type: "spring" }}
-                      className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(34,197,94,0.3)]"
-                    >
-                      <CheckCircle size={40} className="text-white" />
-                    </motion.div>
-                    <motion.h3 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.8 }}
-                      className="text-white text-xl font-bold mb-2 text-center"
-                    >
-                      Demo Order Successful
-                    </motion.h3>
-                    <motion.p 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 1 }}
-                      className="text-neutral-400 text-center text-sm px-4"
-                    >
-                      Your physical tee is being embedded and prepared for shipment.
-                    </motion.p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
 
           </div>
           
