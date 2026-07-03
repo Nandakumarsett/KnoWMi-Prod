@@ -36,42 +36,11 @@ export default function InteractiveJourney() {
       {/* Container holding the mock smartphone and finale image */}
       <div className="relative w-full h-full transition-all duration-1000 ease-in-out">
         
-        {/* The Finale Image - expands when phase 6 is active */}
-        <AnimatePresence>
-          {phase === 6 && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 50 }}
-              animate={{ opacity: 1, scale: 1.2, y: -20 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-              className="absolute inset-0 z-50 rounded-[40px] overflow-hidden shadow-[0_0_100px_rgba(249,115,22,0.5)] border border-white/10 bg-black"
-            >
-              <img 
-                src={tshirtBackImg} 
-                alt="User wearing KnoWMi Tee (Back)"
-                className="w-full h-full object-cover opacity-90"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 flex flex-col justify-end p-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1 }}
-                >
-                  <h3 className="text-white text-3xl font-black uppercase tracking-tighter mb-2">
-                    KnoWMi <span className="text-orange-500">Live</span>
-                  </h3>
-                  <p className="text-neutral-300 text-sm font-medium">Bound forever to the physical realm.</p>
-                </motion.div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+
 
         {/* The Mock Smartphone Frame */}
         <motion.div 
           animate={{
-            scale: phase === 6 ? 0.8 : 1,
-            opacity: phase === 6 ? 0 : 1,
             rotateY: phase === 1 ? 5 : 0,
             rotateX: phase === 1 ? 5 : 0
           }}
@@ -382,10 +351,35 @@ export default function InteractiveJourney() {
                   </div>
                 </motion.div>
               )}
+            </AnimatePresence>            {/* Phase 6: Finale Image */}
+            <AnimatePresence>
+              {phase === 6 && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="absolute inset-0 bg-black z-30 overflow-hidden rounded-[2.5rem]"
+                >
+                  <img 
+                    src={tshirtBackImg} 
+                    alt="User wearing KnoWMi Tee (Back)"
+                    className="w-full h-full object-cover opacity-90"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 flex flex-col justify-end p-6">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.8 }}
+                    >
+                      <h3 className="text-white text-2xl font-black uppercase tracking-tighter mb-1.5">
+                        KnoWMi <span className="text-orange-500">Live</span>
+                      </h3>
+                      <p className="text-neutral-300 text-xs font-medium">Bound forever to the physical realm.</p>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              )}
             </AnimatePresence>
-
-
-
           </div>
           
           {/* Mock Phone Notch */}
