@@ -1461,9 +1461,12 @@ const IdentityPass = ({ profile }) => {
 
   return (
     <div className="animate-slideUp space-y-8">
-      <div className="flex items-end justify-between">
-        <div><p className="text-[11px] font-black uppercase text-orange-500 tracking-[0.2em] mb-2">My Official Identity</p><h2 className="text-5xl font-display font-black tracking-tight">Identity <span className="gradient-text">Pass</span></h2></div>
-        <div className="flex gap-2">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <p className="text-[11px] font-black uppercase text-orange-500 tracking-[0.2em] mb-2">My Official Identity</p>
+          <h2 className="text-5xl font-display font-black tracking-tight">Identity <span className="gradient-text">Pass</span></h2>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
           <button 
             onClick={() => {
               const slug = profile?.secure_slug || profile?.first_name || profile?.id;
@@ -1471,7 +1474,7 @@ const IdentityPass = ({ profile }) => {
               navigator.clipboard.writeText(profileLink);
               toast.success("Profile link copied to clipboard! 🔗");
             }} 
-            className="h-12 px-8 text-sm font-black bg-neutral-900 text-white rounded-2xl hover:bg-neutral-800 flex items-center gap-2 transition-all active:scale-95 shadow-[4px_4px_0px_#fff] shrink-0"
+            className="h-12 px-6 text-sm font-black bg-neutral-900 text-white rounded-2xl hover:bg-neutral-800 flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[4px_4px_0px_#fff] w-full sm:w-auto shrink-0"
           >
             <Share2 size={18}/> Share My Profile
           </button>
@@ -1484,7 +1487,7 @@ const IdentityPass = ({ profile }) => {
                 navigate('/shop')
               }
             }} 
-            className="btn-primary h-12 px-8 text-sm flex items-center gap-2 shrink-0"
+            className="btn-primary h-12 px-6 text-sm flex items-center justify-center gap-2 w-full sm:w-auto shrink-0"
           >
             <Download size={18}/> Print / Download Pass
           </button>
@@ -2078,21 +2081,28 @@ function Dashboard() {
               </span>
             </button>
             <div className={`h-8 w-px hidden sm:block ${isVibeDark ? 'bg-[#1a1a1a]/10' : 'bg-neutral-100'}`} />
-            <div className="flex flex-col">
-              <h1 className={`font-display text-2xl tracking-tight-premium transition-colors duration-300 ${isVibeDark ? 'text-white' : 'text-white'}`}>
-                {profile?.first_name ? `${profile.first_name}'s` : 'KnoWMi'} <span className={`font-light text-xl ${isVibeDark ? 'text-neutral-400 font-bold' : 'text-neutral-300'}`}>| Analytics</span>
+            <div className="flex flex-col min-w-0">
+              <h1 className={`font-display text-base sm:text-xl md:text-2xl tracking-tight-premium transition-colors duration-300 ${isVibeDark ? 'text-white' : 'text-white'} flex items-center gap-1.5 min-w-0`}>
+                <span className="truncate max-w-[100px] xs:max-w-[140px] sm:max-w-none">
+                  {profile?.first_name ? `${profile.first_name}'s` : 'KnoWMi'}
+                </span>
+                <span className={`font-light text-xs sm:text-lg md:text-xl shrink-0 ${isVibeDark ? 'text-neutral-400 font-bold' : 'text-neutral-300'}`}>
+                  | Analytics
+                </span>
               </h1>
-              <p className="text-[10px] font-black text-orange-500 uppercase tracking-luxury leading-none mt-2">Scan Me. Know Me.</p>
+              <p className="text-[10px] font-black text-orange-500 uppercase tracking-luxury leading-none mt-1">Scan Me. Know Me.</p>
             </div>
           </div>
           
           <div className="flex items-center gap-3">
-            <button 
-              onClick={() => setShowOnboardingModal(true)}
-              className="px-3.5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all select-none border border-orange-500/30 bg-orange-500/10 text-orange-500 hover:bg-orange-500 hover:text-white mr-2"
-            >
-              Onboarding Guide
-            </button>
+            {activeTab === 'profile' && (
+              <button 
+                onClick={() => setShowOnboardingModal(true)}
+                className="px-3.5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all select-none border border-orange-500/30 bg-orange-500/10 text-orange-500 hover:bg-orange-500 hover:text-white mr-2 shrink-0"
+              >
+                Onboarding Guide
+              </button>
+            )}
             {(() => {
               const pData = profile?.persona_data || {};
               const activeIdentity = (pData.identities && Array.isArray(pData.identities)) 
