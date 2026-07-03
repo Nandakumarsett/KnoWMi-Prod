@@ -619,13 +619,12 @@ export default function PublicProfile() {
                       alt="QR Code"
                     />
                     <div className="absolute inset-0 z-10" />
-                    <div className="absolute inset-0 m-auto w-10 h-10 bg-black border-[3px] border-yellow-500 rounded-xl flex items-center justify-center z-20 select-none overflow-hidden">
+                    <div className="absolute inset-0 m-auto w-12 h-12 bg-black border-[3px] border-orange-500 rounded-xl flex items-center justify-center z-20 select-none overflow-hidden">
                       <img
                         src="/favicon.png"
                         fetchpriority="high"
                         loading="eager"
                         className="w-full h-full object-contain p-1"
-                        style={{ filter: 'hue-rotate(36deg)' }}
                         alt="KnoWMi Logo"
                       />
                     </div>
@@ -881,13 +880,12 @@ export default function PublicProfile() {
                             alt="QR Code"
                           />
                           <div className="absolute inset-0 z-10" />
-                          <div className="absolute inset-0 m-auto w-10 h-10 bg-black border-[3px] border-yellow-500 rounded-xl flex items-center justify-center z-20 select-none overflow-hidden">
+                          <div className="absolute inset-0 m-auto w-12 h-12 bg-black border-[3px] border-orange-500 rounded-xl flex items-center justify-center z-20 select-none overflow-hidden">
                             <img
                               src="/favicon.png"
                               fetchpriority="high"
                               loading="eager"
                               className="w-full h-full object-contain p-1"
-                              style={{ filter: 'hue-rotate(36deg)' }}
                               alt="KnoWMi Logo"
                             />
                           </div>
