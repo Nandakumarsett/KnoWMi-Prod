@@ -300,6 +300,7 @@ export default function InteractiveJourney() {
                   </div>
                 </motion.div>
               )}
+            </AnimatePresence>
             {/* Phase 5: Explore Analytics Panel */}
             <AnimatePresence>
               {phase === 5 && (
