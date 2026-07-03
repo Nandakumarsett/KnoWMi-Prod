@@ -13,8 +13,9 @@ export default function InteractiveJourney() {
       { p: 2, delay: 3000 }, // Phase 2: Default Profile View (3s)
       { p: 3, delay: 3000 }, // Phase 3: Action Click (3s)
       { p: 4, delay: 3500 }, // Phase 4: Fake Login (3.5s)
-      { p: 5, delay: 3000 }, // Phase 5: Checkout Success (3s)
-      { p: 6, delay: 5000 }, // Phase 6: Finale Image (5s)
+      { p: 5, delay: 6000 }, // Phase 5: Explore Analytics (6s)
+      { p: 6, delay: 3000 }, // Phase 6: Checkout Success (3s)
+      { p: 7, delay: 5000 }, // Phase 7: Finale Image (5s)
     ];
 
     let currentPhaseIdx = 0;
@@ -36,9 +37,9 @@ export default function InteractiveJourney() {
       {/* Container holding the mock smartphone and finale image */}
       <div className="relative w-full h-full transition-all duration-1000 ease-in-out">
         
-        {/* The Finale Image - expands when phase 6 is active */}
+        {/* The Finale Image - expands when phase 7 is active */}
         <AnimatePresence>
-          {phase === 6 && (
+          {phase === 7 && (
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 50 }}
               animate={{ opacity: 1, scale: 1.2, y: -20 }}
@@ -70,8 +71,8 @@ export default function InteractiveJourney() {
         {/* The Mock Smartphone Frame */}
         <motion.div 
           animate={{
-            scale: phase === 6 ? 0.8 : 1,
-            opacity: phase === 6 ? 0 : 1,
+            scale: phase === 7 ? 0.8 : 1,
+            opacity: phase === 7 ? 0 : 1,
             rotateY: phase === 1 ? 5 : 0,
             rotateX: phase === 1 ? 5 : 0
           }}
@@ -299,11 +300,93 @@ export default function InteractiveJourney() {
                   </div>
                 </motion.div>
               )}
-            </AnimatePresence>
-
-            {/* Phase 5: Razorpay Checkout */}
+            {/* Phase 5: Explore Analytics Panel */}
             <AnimatePresence>
               {phase === 5 && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="absolute inset-0 bg-[#0c0c0f] p-4 flex flex-col w-full z-25 overflow-y-auto no-scrollbar font-sans"
+                >
+                  {/* Dashboard Header inside phone mockup */}
+                  <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-4 mt-2 shrink-0">
+                    <div className="flex flex-col text-left">
+                      <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest leading-none">Nikhil's</span>
+                      <h4 className="text-sm font-black text-white uppercase tracking-tight mt-1 leading-none">| Pulse Panel</h4>
+                    </div>
+                    <span className="text-[8px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">● Live</span>
+                  </div>
+
+                  {/* Highlights Grid Mockup */}
+                  <div className="grid grid-cols-2 gap-2 mb-4 shrink-0">
+                    <div className="bg-[#141419] border border-white/5 p-3 rounded-xl text-left">
+                      <span className="text-[8px] font-bold text-neutral-500 uppercase tracking-wider block mb-0.5">Total Views</span>
+                      <span className="text-base font-black text-cyan-300">2,471</span>
+                      <span className="text-[7px] text-neutral-500 uppercase block mt-0.5">Scans & Direct</span>
+                    </div>
+                    <div className="bg-[#141419] border border-white/5 p-3 rounded-xl text-left">
+                      <span className="text-[8px] font-bold text-neutral-500 uppercase tracking-wider block mb-0.5">Unique Views</span>
+                      <span className="text-base font-black text-blue-300">1,980</span>
+                      <span className="text-[7px] text-neutral-500 uppercase block mt-0.5">Real Individuals</span>
+                    </div>
+                    <div className="bg-[#141419] border border-white/5 p-3 rounded-xl text-left">
+                      <span className="text-[8px] font-bold text-neutral-500 uppercase tracking-wider block mb-0.5">QR Scan Rate</span>
+                      <span className="text-base font-black text-orange-300">82.4%</span>
+                      <span className="text-[7px] text-neutral-500 uppercase block mt-0.5">Physical to Digital</span>
+                    </div>
+                    <div className="bg-[#141419] border border-white/5 p-3 rounded-xl text-left">
+                      <span className="text-[8px] font-bold text-neutral-500 uppercase tracking-wider block mb-0.5">Repeat Score</span>
+                      <span className="text-base font-black text-emerald-300">34.6%</span>
+                      <span className="text-[7px] text-neutral-500 uppercase block mt-0.5">Loyal Followers</span>
+                    </div>
+                  </div>
+
+                  {/* Activity Map / Sparkline Container */}
+                  <div className="bg-[#141419] border border-white/5 rounded-xl p-4 mb-4 text-left flex-1 min-h-[140px] flex flex-col justify-between">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-[8px] font-bold text-neutral-400 uppercase tracking-wider">Weekly Activity</span>
+                      <span className="text-[7px] text-cyan-400 font-mono">Last 7 Days</span>
+                    </div>
+                    
+                    {/* Simulated Sparkline Bars */}
+                    <div className="h-16 flex items-end justify-between gap-1 px-1 my-2">
+                      {[30, 45, 20, 60, 80, 50, 95].map((val, i) => (
+                        <div key={i} className="flex-1 bg-neutral-900 rounded-t-sm relative overflow-hidden h-full flex items-end">
+                          <motion.div 
+                            initial={{ height: 0 }}
+                            animate={{ height: `${val}%` }}
+                            transition={{ duration: 1.2, delay: i * 0.1 }}
+                            className={`w-full rounded-t-sm ${i === 6 ? 'bg-orange-500' : 'bg-blue-500/60'}`}
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="border-t border-white/5 pt-2 flex items-center justify-between text-[7px] text-neutral-500 uppercase tracking-wider font-bold">
+                      <span>Mon</span>
+                      <span>Wed</span>
+                      <span>Sun</span>
+                    </div>
+                  </div>
+
+                  {/* Mock Live scan alert feed */}
+                  <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-3 text-left flex items-center justify-between mb-2 shrink-0">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-orange-500 animate-ping" />
+                      <p className="text-[9px] font-black text-white leading-tight">
+                        Scan Detected: Bengaluru, India
+                      </p>
+                    </div>
+                    <span className="text-[7px] text-orange-400 font-mono">Just Now</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Phase 6: Razorpay Checkout */}
+            <AnimatePresence>
+              {phase === 6 && (
                 <motion.div 
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
