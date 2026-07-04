@@ -719,51 +719,139 @@ img {
   cursor: default !important;
 }
 
-/* Optimize font sizing and layout dimensions on standard desktop/laptop viewports to prevent layout crowding at 100% zoom */
-@media (min-width: 1024px) and (max-width: 1599px) {
-  .text-9xl, .md\:text-9xl, .lg\:text-9xl {
-    font-size: 5.5rem !important;
-  }
-  .text-8xl, .md\:text-8xl, .lg\:text-8xl {
-    font-size: 4.5rem !important;
-  }
-  .text-7xl, .md\:text-7xl, .lg\:text-7xl {
-    font-size: 3.75rem !important;
-  }
-  .text-6xl, .md\:text-6xl, .lg\:text-6xl {
-    font-size: 3.25rem !important;
-  }
-  .text-5xl, .md\:text-5xl, .lg\:text-5xl {
-    font-size: 2.75rem !important;
-  }
-  .text-2xl, .md\:text-2xl, .lg\:text-2xl {
-    font-size: 1.35rem !important;
-  }
-  .text-xl, .md\:text-xl, .lg\:text-xl {
-    font-size: 1.15rem !important;
+/* ==========================================================================
+   Zoom & Viewport Height Adaptations (Prevents vertical page overflows on desktop zoom levels)
+   ========================================================================== */
+@media (min-width: 1024px) {
+  /* Dynamic adaptations for standard display height / medium zoom levels (e.g. 100% on small screens, or 125% zoom) */
+  @media (max-height: 880px) {
+    .text-9xl, .md\:text-9xl, .lg\:text-9xl { font-size: 5.5rem !important; }
+    .text-8xl, .md\:text-8xl, .lg\:text-8xl { font-size: 4.5rem !important; }
+    .text-7xl, .md\:text-7xl, .lg\:text-7xl { font-size: 3.5rem !important; }
+    .text-6xl, .md\:text-6xl, .lg\:text-6xl { font-size: 3.0rem !important; }
+    .text-5xl, .md\:text-5xl, .lg\:text-5xl { font-size: 2.25rem !important; }
+    .text-4xl, .md\:text-4xl, .lg\:text-4xl { font-size: 1.75rem !important; }
+    .text-3xl, .md\:text-3xl, .lg\:text-3xl { font-size: 1.5rem !important; }
+
+    /* Section padding compression */
+    .py-24, .py-32, .section-pad, #pricing, #personas, #how-it-works, #collection {
+      padding-top: 3.5rem !important;
+      padding-bottom: 3.5rem !important;
+    }
+    .mb-20, .mb-16, .mb-14, .mb-12 {
+      margin-bottom: 1.5rem !important;
+    }
+    .mt-16, .mt-14, .mt-12 {
+      margin-top: 1.5rem !important;
+    }
+    .gap-16, .gap-12, .gap-8 {
+      gap: 1.5rem !important;
+    }
+
+    /* Model/Mockup size constraints */
+    .fabric-image { height: 480px !important; }
+    .phone-mockup { height: 65vh !important; }
+    .qr-glow { max-height: 52vh !important; }
+    #how-it-works .h-52 { height: 9.5rem !important; }
+    #how-it-works .w-44.h-48 { width: 8.5rem !important; height: 9.5rem !important; }
+    #how-it-works .w-56 { width: 12.5rem !important; padding: 1rem !important; }
+    #how-it-works .w-14.h-14 { width: 3rem !important; height: 3rem !important; font-size: 1.25rem !important; }
   }
 
-  /* Compress excessive section padding slightly */
-  .py-24, .py-32, .section-pad {
-    padding-top: 5rem !important;
-    padding-bottom: 5rem !important;
-  }
-  .pt-32, .pt-24 {
-    padding-top: 6rem !important;
-  }
-  .pb-32, .pb-24 {
-    padding-bottom: 6rem !important;
-  }
-  .mb-14, .mb-12, .mb-16 {
-    margin-bottom: 3rem !important;
+  /* Dynamic adaptations for shorter viewports / high zoom levels (e.g. 125% - 150% zoom) */
+  @media (max-height: 740px) {
+    .text-9xl, .md\:text-9xl, .lg\:text-9xl { font-size: 4.25rem !important; }
+    .text-8xl, .md\:text-8xl, .lg\:text-8xl { font-size: 3.5rem !important; }
+    .text-7xl, .md\:text-7xl, .lg\:text-7xl { font-size: 2.75rem !important; }
+    .text-6xl, .md\:text-6xl, .lg\:text-6xl { font-size: 2.25rem !important; }
+    .text-5xl, .md\:text-5xl, .lg\:text-5xl { font-size: 1.85rem !important; }
+    .text-4xl, .md\:text-4xl, .lg\:text-4xl { font-size: 1.5rem !important; }
+    .text-3xl, .md\:text-3xl, .lg\:text-3xl { font-size: 1.25rem !important; }
+
+    .py-24, .py-32, .section-pad, #pricing, #personas, #how-it-works, #collection {
+      padding-top: 2rem !important;
+      padding-bottom: 2rem !important;
+    }
+    .mb-20, .mb-16, .mb-14, .mb-12, .mb-8, .mb-6 {
+      margin-bottom: 1rem !important;
+    }
+    .mt-16, .mt-14, .mt-12 {
+      margin-top: 1rem !important;
+    }
+    .gap-16, .gap-12, .gap-8, .gap-6 {
+      gap: 1rem !important;
+    }
+
+    .fabric-image { height: 380px !important; }
+    .phone-mockup { height: 58vh !important; }
+    .qr-glow { max-height: 44vh !important; }
+    
+    #how-it-works .h-52 { height: 7.5rem !important; }
+    #how-it-works .w-44.h-48 { width: 6.5rem !important; height: 7.5rem !important; }
+    #how-it-works .w-56 { width: 10.5rem !important; padding: 0.75rem !important; }
+    #how-it-works .w-14.h-14 { width: 2.5rem !important; height: 2.5rem !important; font-size: 1.1rem !important; }
+    #how-it-works p.text-lg { font-size: 0.95rem !important; }
+
+    /* Collection card size limits */
+    #collection .min-h-\[350px\] { min-height: 260px !important; padding: 1.5rem !important; }
+    #collection .w-16.h-16 { width: 2.75rem !important; height: 2.75rem !important; margin-bottom: 1rem !important; }
+    #collection .mt-8 { margin-top: 1.25rem !important; }
+    #collection .p-6 { padding: 1rem !important; }
+
+    /* Pricing card scale limits */
+    #pricing .p-8 { padding: 1.25rem !important; }
+    #pricing .mb-8 { margin-bottom: 1rem !important; }
+    #pricing .mb-10 { margin-bottom: 1rem !important; }
+    #pricing .py-4 { padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; }
+    #pricing .space-y-4 > * + * { margin-top: 0.5rem !important; }
+    #pricing .pt-3 { padding-top: 0.5rem !important; }
   }
 
-  /* Reduce mockup model/mockup sizes on short viewports */
-  .fabric-image {
-    height: 520px !important;
-  }
-  .phone-mockup {
-    height: 72vh !important;
+  /* Dynamic adaptations for extremely short viewports / very high zoom levels (e.g. 150% - 175% zoom) */
+  @media (max-height: 610px) {
+    .text-9xl, .md\:text-9xl, .lg\:text-9xl { font-size: 3.25rem !important; }
+    .text-8xl, .md\:text-8xl, .lg\:text-8xl { font-size: 2.75rem !important; }
+    .text-7xl, .md\:text-7xl, .lg\:text-7xl { font-size: 2.25rem !important; }
+    .text-6xl, .md\:text-6xl, .lg\:text-6xl { font-size: 1.85rem !important; }
+    .text-5xl, .md\:text-5xl, .lg\:text-5xl { font-size: 1.5rem !important; }
+    .text-4xl, .md\:text-4xl, .lg\:text-4xl { font-size: 1.25rem !important; }
+    .text-3xl, .md\:text-3xl, .lg\:text-3xl { font-size: 1.1rem !important; }
+
+    .py-24, .py-32, .section-pad, #pricing, #personas, #how-it-works, #collection {
+      padding-top: 0.75rem !important;
+      padding-bottom: 0.75rem !important;
+    }
+    .mb-20, .mb-16, .mb-14, .mb-12, .mb-8, .mb-6, .mb-4 {
+      margin-bottom: 0.5rem !important;
+    }
+    .mt-16, .mt-14, .mt-12, .mt-8, .mt-6 {
+      margin-top: 0.5rem !important;
+    }
+    .gap-16, .gap-12, .gap-8, .gap-6 {
+      gap: 0.5rem !important;
+    }
+
+    .fabric-image { height: 280px !important; }
+    .phone-mockup { height: 48vh !important; }
+    .qr-glow { max-height: 38vh !important; }
+    
+    #how-it-works .h-52 { height: 6rem !important; }
+    #how-it-works .w-44.h-48 { width: 5.25rem !important; height: 6rem !important; }
+    #how-it-works .w-56 { width: 9rem !important; padding: 0.5rem !important; }
+    #how-it-works .w-14.h-14 { width: 2rem !important; height: 2rem !important; font-size: 0.95rem !important; }
+    #how-it-works p.text-lg { font-size: 0.85rem !important; }
+
+    #collection .min-h-\[350px\] { min-height: 200px !important; padding: 1rem !important; }
+    #collection .w-16.h-16 { width: 2.25rem !important; height: 2.25rem !important; margin-bottom: 0.5rem !important; }
+    #collection .mt-8 { margin-top: 0.75rem !important; }
+    #collection .p-6 { padding: 0.75rem !important; }
+
+    #pricing .p-8 { padding: 0.75rem !important; }
+    #pricing .mb-8 { margin-bottom: 0.5rem !important; }
+    #pricing .mb-10 { margin-bottom: 0.5rem !important; }
+    #pricing .py-4 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+    #pricing .space-y-4 > * + * { margin-top: 0.35rem !important; }
+    #pricing .pt-3 { padding-top: 0.35rem !important; }
   }
 }
 
