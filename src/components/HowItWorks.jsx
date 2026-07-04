@@ -85,15 +85,15 @@ export function SocialProofStrip() {
 /** Step 1: Person wearing a KnoWMi tshirt with QR on back (HD generated) */
 function WearItVisual() {
   return (
-    <div className="relative flex items-center justify-center h-52">
+    <div className="relative flex items-center justify-center h-48">
       <style>{`
         @keyframes floatPerson {
           0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+          50% { transform: translateY(-8px); }
         }
         .float-person { animation: floatPerson 3.5s ease-in-out infinite; }
       `}</style>
-      <div className="float-person relative w-44 h-48 overflow-hidden rounded-xl border-[3px] border-white shadow-[4px_4px_0px_#F97316]">
+      <div className="float-person relative w-36 h-40 overflow-hidden rounded-xl border-[2.5px] border-white shadow-[3px_3px_0px_#F97316]">
         <img
           src="/assets/scrolly/knowmi_wear_it.webp"
           alt="Person wearing KnoWMi tee with QR code"
@@ -108,7 +108,7 @@ function WearItVisual() {
 /** Step 2: Real QR code + scanner overlay (scan line contained inside QR box) */
 function ScanItVisual() {
   return (
-    <div className="relative flex items-center justify-center h-52">
+    <div className="relative flex items-center justify-center h-48">
       <style>{`
         @keyframes scanLineQR {
           0%   { top: 6px;  opacity: 0; }
@@ -141,7 +141,7 @@ function ScanItVisual() {
       <div className="scanner-float relative">
         {/* QR code image */}
         <div
-          className="relative w-32 h-32 rounded-xl overflow-hidden bg-white p-2 border-[3px] border-black shadow-[4px_4px_0px_#F97316]"
+          className="relative w-28 h-28 rounded-xl overflow-hidden bg-white p-1.5 border-[2.5px] border-black shadow-[3px_3px_0px_#F97316]"
           style={{ isolation: 'isolate' }}
         >
           {/* Real QR pattern using SVG */}
@@ -196,12 +196,12 @@ function ScanItVisual() {
         </div>
 
         {/* "Scanning..." label */}
-        <div className="mt-3 flex items-center justify-center gap-2">
-          <span className="relative flex h-2.5 w-2.5">
+        <div className="mt-2 flex items-center justify-center gap-1.5">
+          <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-sm bg-orange-500 opacity-75" />
-            <span className="relative inline-flex rounded-sm h-2.5 w-2.5 bg-orange-500" />
+            <span className="relative inline-flex rounded-sm h-2 w-2 bg-orange-500" />
           </span>
-          <span className="text-[11px] font-black uppercase tracking-widest text-orange-500">Scanning…</span>
+          <span className="text-[9px] font-black uppercase tracking-widest text-orange-500">Scanning…</span>
         </div>
       </div>
     </div>
@@ -211,30 +211,32 @@ function ScanItVisual() {
 /** Step 3: Mini profile card */
 function RememberedVisual() {
   return (
-    <div className="relative flex items-center justify-center h-52">
-      <div className="w-48 bg-white border-[3px] border-black rounded-xl p-4 text-center shadow-[4px_4px_0px_#F97316]">
+    <div className="relative flex items-center justify-center h-48">
+      <div className="w-full max-w-[170px] bg-white border-[2.5px] border-black rounded-xl p-3 text-center shadow-[3px_3px_0px_#F97316]">
         <img
           src="https://i.pravatar.cc/100?u=knowmi_demo"
           alt="Profile avatar"
-          className="w-12 h-12 rounded-xl mx-auto mb-2 border-[2.5px] border-orange-500 object-cover"
+          className="w-10 h-10 rounded-lg mx-auto mb-1.5 border-[2px] border-orange-500 object-cover"
         />
-        <p className="text-xs font-black text-neutral-900 mb-0.5">Arjun Mehta</p>
-        <p className="text-[9px] text-neutral-500 font-black uppercase mb-2">Full-Stack Dev · Mumbai</p>
-        <div className="flex justify-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
-            <Twitter size={11} />
+        <p className="text-[11px] font-black text-neutral-900 mb-0.5 leading-tight">Arjun Mehta</p>
+        <p className="text-[8px] text-neutral-500 font-bold uppercase mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
+          Dev · Mumbai
+        </p>
+        <div className="flex justify-center gap-1.5">
+          <div className="w-6 h-6 rounded-md bg-[#1a1a1a] border-[1.5px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Twitter size={9} />
           </div>
-          <div className="w-7 h-7 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
-            <Linkedin size={11} />
+          <div className="w-6 h-6 rounded-md bg-[#1a1a1a] border-[1.5px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Linkedin size={9} />
           </div>
-          <div className="w-7 h-7 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
-            <Github size={11} />
+          <div className="w-6 h-6 rounded-md bg-[#1a1a1a] border-[1.5px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Github size={9} />
           </div>
-          <div className="w-7 h-7 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
-            <Instagram size={11} />
+          <div className="w-6 h-6 rounded-md bg-[#1a1a1a] border-[1.5px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Instagram size={9} />
           </div>
         </div>
-        <div className="mt-2 text-[9px] font-black uppercase tracking-widest text-orange-500 bg-orange-500/10 border-[2px] border-orange-500 rounded-lg py-0.5 px-2 inline-block">
+        <div className="mt-2 text-[8px] font-black uppercase tracking-widest text-orange-500 bg-orange-500/10 border-[1.5px] border-orange-500 rounded-md py-0.5 px-1.5 inline-block">
           ● Live Profile
         </div>
       </div>
@@ -447,7 +449,7 @@ export function HowItWorks() {
                 </div>
 
                 {/* Visual demo */}
-                <div className="block w-full max-w-[240px] mx-auto relative z-10 border-[2px] border-white/20 rounded-xl p-2 mb-4 bg-[#111]">
+                <div className="block w-full max-w-[240px] mx-auto relative z-10 border-[2px] border-white/20 rounded-xl p-2 mb-4 bg-[#111] overflow-hidden">
                   <Visual />
                 </div>
 
