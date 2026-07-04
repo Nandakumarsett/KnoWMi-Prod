@@ -112,7 +112,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
         role="navigation"
         aria-label="Main navigation"
       >
-      <div className="max-w-[1200px] mx-auto pl-2 pr-4 md:px-6 flex items-center justify-between lg:justify-start h-20 lg:h-[110px] gap-0 w-full relative">
+      <div className="max-w-[1200px] mx-auto pl-2 pr-4 md:px-6 flex items-center justify-between lg:justify-start h-16 lg:h-[76px] gap-0 w-full relative">
         {/* Logo */}
         <a href="/" className="flex items-center flex-shrink-0" aria-label="KnoWMi home">
           <div className="flex flex-col leading-none relative z-20">

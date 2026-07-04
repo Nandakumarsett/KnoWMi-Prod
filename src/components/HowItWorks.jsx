@@ -141,7 +141,7 @@ function ScanItVisual() {
       <div className="scanner-float relative">
         {/* QR code image */}
         <div
-          className="relative w-40 h-40 rounded-xl overflow-hidden bg-white p-2 border-[3px] border-black shadow-[4px_4px_0px_#F97316]"
+          className="relative w-32 h-32 rounded-xl overflow-hidden bg-white p-2 border-[3px] border-black shadow-[4px_4px_0px_#F97316]"
           style={{ isolation: 'isolate' }}
         >
           {/* Real QR pattern using SVG */}
@@ -212,29 +212,29 @@ function ScanItVisual() {
 function RememberedVisual() {
   return (
     <div className="relative flex items-center justify-center h-52">
-      <div className="w-56 bg-white border-[3px] border-black rounded-xl p-5 text-center shadow-[5px_5px_0px_#F97316]">
+      <div className="w-48 bg-white border-[3px] border-black rounded-xl p-4 text-center shadow-[4px_4px_0px_#F97316]">
         <img
           src="https://i.pravatar.cc/100?u=knowmi_demo"
           alt="Profile avatar"
-          className="w-14 h-14 rounded-xl mx-auto mb-3 border-[3px] border-orange-500 object-cover"
+          className="w-12 h-12 rounded-xl mx-auto mb-2 border-[2.5px] border-orange-500 object-cover"
         />
-        <p className="text-sm font-black text-neutral-900 mb-0.5">Arjun Mehta</p>
-        <p className="text-[10px] text-neutral-500 font-black uppercase mb-3">Full-Stack Dev · Mumbai</p>
-        <div className="flex justify-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
-            <Twitter size={13} />
+        <p className="text-xs font-black text-neutral-900 mb-0.5">Arjun Mehta</p>
+        <p className="text-[9px] text-neutral-500 font-black uppercase mb-2">Full-Stack Dev · Mumbai</p>
+        <div className="flex justify-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Twitter size={11} />
           </div>
-          <div className="w-8 h-8 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
-            <Linkedin size={13} />
+          <div className="w-7 h-7 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Linkedin size={11} />
           </div>
-          <div className="w-8 h-8 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
-            <Github size={13} />
+          <div className="w-7 h-7 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Github size={11} />
           </div>
-          <div className="w-8 h-8 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
-            <Instagram size={13} />
+          <div className="w-7 h-7 rounded-lg bg-[#1a1a1a] border-[2px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Instagram size={11} />
           </div>
         </div>
-        <div className="mt-3 text-[10px] font-black uppercase tracking-widest text-orange-500 bg-orange-500/10 border-[2px] border-orange-500 rounded-lg py-1 px-2 inline-block">
+        <div className="mt-2 text-[9px] font-black uppercase tracking-widest text-orange-500 bg-orange-500/10 border-[2px] border-orange-500 rounded-lg py-0.5 px-2 inline-block">
           ● Live Profile
         </div>
       </div>

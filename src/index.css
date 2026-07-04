@@ -751,7 +751,8 @@ img {
     /* Model/Mockup size constraints */
     .fabric-image { height: 480px !important; }
     .phone-mockup { height: 65vh !important; }
-    .qr-glow { max-height: 52vh !important; }
+    .qr-glow { max-width: 860px !important; margin-left: auto !important; margin-right: auto !important; }
+    
     #how-it-works .h-52 { height: 9.5rem !important; }
     #how-it-works .w-44.h-48 { width: 8.5rem !important; height: 9.5rem !important; }
     #how-it-works .w-56 { width: 12.5rem !important; padding: 1rem !important; }
@@ -784,7 +785,7 @@ img {
 
     .fabric-image { height: 380px !important; }
     .phone-mockup { height: 58vh !important; }
-    .qr-glow { max-height: 44vh !important; }
+    .qr-glow { max-width: 680px !important; margin-left: auto !important; margin-right: auto !important; }
     
     #how-it-works .h-52 { height: 7.5rem !important; }
     #how-it-works .w-44.h-48 { width: 6.5rem !important; height: 7.5rem !important; }
@@ -833,7 +834,7 @@ img {
 
     .fabric-image { height: 280px !important; }
     .phone-mockup { height: 48vh !important; }
-    .qr-glow { max-height: 38vh !important; }
+    .qr-glow { max-width: 520px !important; margin-left: auto !important; margin-right: auto !important; }
     
     #how-it-works .h-52 { height: 6rem !important; }
     #how-it-works .w-44.h-48 { width: 5.25rem !important; height: 6rem !important; }
