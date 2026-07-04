@@ -718,3 +718,52 @@ img {
   user-select: none !important;
   cursor: default !important;
 }
+
+/* Optimize font sizing and layout dimensions on standard desktop/laptop viewports to prevent layout crowding at 100% zoom */
+@media (min-width: 1024px) and (max-width: 1599px) {
+  .text-9xl, .md\:text-9xl, .lg\:text-9xl {
+    font-size: 5.5rem !important;
+  }
+  .text-8xl, .md\:text-8xl, .lg\:text-8xl {
+    font-size: 4.5rem !important;
+  }
+  .text-7xl, .md\:text-7xl, .lg\:text-7xl {
+    font-size: 3.75rem !important;
+  }
+  .text-6xl, .md\:text-6xl, .lg\:text-6xl {
+    font-size: 3.25rem !important;
+  }
+  .text-5xl, .md\:text-5xl, .lg\:text-5xl {
+    font-size: 2.75rem !important;
+  }
+  .text-2xl, .md\:text-2xl, .lg\:text-2xl {
+    font-size: 1.35rem !important;
+  }
+  .text-xl, .md\:text-xl, .lg\:text-xl {
+    font-size: 1.15rem !important;
+  }
+
+  /* Compress excessive section padding slightly */
+  .py-24, .py-32, .section-pad {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+  }
+  .pt-32, .pt-24 {
+    padding-top: 6rem !important;
+  }
+  .pb-32, .pb-24 {
+    padding-bottom: 6rem !important;
+  }
+  .mb-14, .mb-12, .mb-16 {
+    margin-bottom: 3rem !important;
+  }
+
+  /* Reduce mockup model/mockup sizes on short viewports */
+  .fabric-image {
+    height: 520px !important;
+  }
+  .phone-mockup {
+    height: 72vh !important;
+  }
+}
+

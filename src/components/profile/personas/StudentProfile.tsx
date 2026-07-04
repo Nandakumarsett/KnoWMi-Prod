@@ -150,7 +150,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                 )}
 
                 <div 
-                  className="w-40 h-40 sm:w-48 sm:h-48 p-1.5 rounded-full shadow-[0_20px_50px_rgba(16,185,129,0.2)] relative z-10 mx-auto flex items-center justify-center"
+                  className="w-40 h-40 sm:w-48 sm:h-48 shrink-0 p-1.5 rounded-full shadow-[0_20px_50px_rgba(16,185,129,0.2)] relative z-10 mx-auto flex items-center justify-center"
                   style={{ background: 'linear-gradient(135deg, #059669, #34D399)' }}
                 >
                   <div className="w-full h-full bg-white p-1 rounded-full overflow-hidden shadow-inner flex items-center justify-center relative">

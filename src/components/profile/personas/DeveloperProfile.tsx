@@ -119,9 +119,9 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
         <main className={`w-full max-w-[550px] sm:max-w-[570px] mx-auto pb-20 px-4 flex flex-col items-center relative z-20 ${!hideHeader ? '' : 'pt-12 sm:pt-16'}`}>
           {!hideHeader && (
             <>
-              <div className="relative -mt-24 sm:-mt-[120px] flex flex-col items-center z-30">
-                <div className="relative p-[4px] rounded-full bg-white shadow-xl shadow-neutral-300/60">
-                  <div className="w-36 h-36 sm:w-48 sm:h-48 rounded-full overflow-hidden bg-neutral-100 border-4 border-white">
+              <div className="relative -mt-24 sm:-mt-[120px] flex flex-col items-center z-30 shrink-0">
+                <div className="relative p-[4px] rounded-full bg-white shadow-xl shadow-neutral-300/60 shrink-0">
+                  <div className="w-36 h-36 sm:w-48 sm:h-48 shrink-0 rounded-full overflow-hidden bg-neutral-100 border-4 border-white">
                     {!avatarError && profile.avatar_url ? (
                         <img
                       src={getAssetUrl(profile.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.display_name)}&background=f0f0f0&color=22c55e`}

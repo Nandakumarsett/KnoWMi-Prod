@@ -31,7 +31,6 @@ export default function Home() {
 
   const [authOpen, setAuthOpen] = useState(false)
   const [authTab, setAuthTab] = useState('signup')
-  const [showSticky, setShowSticky] = useState(false)
   const [showSalesPopup, setShowSalesPopup] = useState(false)
   const [pendingRedirect, setPendingRedirect] = useState(null)
 
@@ -79,18 +78,7 @@ export default function Home() {
     setAuthOpen(true)
   }
 
-  useEffect(() => {
-    const handleScroll = () => {
-      // Show sticky CTA if scrolled past 800px AND we haven't reached the collection section
-      const collectionSection = document.getElementById('collection')
-      const isPastCollection = collectionSection ? window.scrollY >= (collectionSection.offsetTop - window.innerHeight + 100) : false
-      
-      setShowSticky(window.scrollY > 800 && !isPastCollection)
-    }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   useEffect(() => {
     // Observe pricing section to only show sales popup there
@@ -200,16 +188,7 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Sticky CTA */}
-      <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] transition-all duration-300 transform ${showSticky ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
-        <button
-          onClick={() => handleSelectPlan('creator')}
-          className="flex items-center gap-3 px-8 py-4 bg-orange-500 text-black rounded-xl font-black text-xs uppercase tracking-[0.2em] border-[3px] border-black shadow-[5px_5px_0px_#000] hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none transition-all group"
-        >
-          Explore Tees
-          <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
-        </button>
-      </div>
+
 
       <PWABanner />
       <AuthModal

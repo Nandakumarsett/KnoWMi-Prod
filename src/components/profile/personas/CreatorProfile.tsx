@@ -456,9 +456,9 @@ export function CreatorProfile({
 
           {!hideHeader && (
             <div className="relative h-12 px-8 z-30">
-              <div className="absolute -top-24 sm:-top-32 left-1/2 -translate-x-1/2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+              <div className="absolute -top-24 sm:-top-32 left-1/2 -translate-x-1/2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.3)] shrink-0">
                 <div
-                  className="w-40 h-40 sm:w-48 sm:h-48 p-1.5 rounded-full"
+                  className="w-40 h-40 sm:w-48 sm:h-48 shrink-0 p-1.5 rounded-full"
                   style={{
                     background: "linear-gradient(135deg, #C1440E, #F97316)",
                   }}
