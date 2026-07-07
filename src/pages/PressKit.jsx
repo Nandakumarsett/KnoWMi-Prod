@@ -12,7 +12,7 @@ export default function PressKit() {
 
   return (
     <div className="min-h-screen bg-white text-black">
-      <Navbar />
+      <Navbar isDark={false} />
       
       <main className="pt-32 pb-20 px-6">
         <div className="max-w-[1000px] mx-auto">
