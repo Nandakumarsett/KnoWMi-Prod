@@ -12,7 +12,7 @@ const navLinks = [
   { label: 'FAQs', href: '/#faq' },
 ]
 
-export default function Navbar({ onOrderClick, onAuthClick, isDark = false }) {
+export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
   const { user, profile, signOut, isStaff, isVerified, role } = useAuth()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
