@@ -302,6 +302,21 @@ export function HowItWorks() {
 
       // Desktop Animation (pinned scroll)
       mm.add('(min-width: 1024px)', () => {
+        // Animate header earlier as section enters viewport
+        gsap.fromTo(headerRef.current,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 80%',
+            }
+          }
+        )
+
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -312,12 +327,10 @@ export function HowItWorks() {
           },
         })
 
-        gsap.set(headerRef.current, { opacity: 0, y: 50 })
         gsap.set(stepsRef.current, { opacity: 0, y: 50, scale: 0.9, filter: 'brightness(1)' })
         gsap.set(lineRef.current, { scaleX: 0, transformOrigin: 'left center' })
 
-        tl.to(headerRef.current, { opacity: 1, y: 0, duration: 1 })
-          .to(stepsRef.current[0], { opacity: 1, y: 0, scale: 1, duration: 1 })
+        tl.to(stepsRef.current[0], { opacity: 1, y: 0, scale: 1, duration: 1 })
           .to(lineRef.current, { scaleX: 0.5, duration: 1 }, '+=0.5')
           .to(stepsRef.current[0], { filter: 'brightness(0.4)', scale: 0.95, duration: 1 }, '<')
           .to(stepsRef.current[1], { opacity: 1, y: 0, scale: 1, duration: 1 }, '<')

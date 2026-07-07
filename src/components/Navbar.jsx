@@ -56,8 +56,14 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
       const scrollPos = window.scrollY + 200 // offset for navbar height + buffer
 
       sections.forEach(section => {
-        const top = section.offsetTop
-        const height = section.offsetHeight
+        const isPinned = section.parentElement && section.parentElement.classList.contains('pin-spacer')
+        const targetEl = isPinned ? section.parentElement : section
+        
+        const rect = targetEl.getBoundingClientRect()
+        const scrollTop = window.scrollY || document.documentElement.scrollTop
+        const top = rect.top + scrollTop
+        const height = rect.height
+
         if (scrollPos >= top && scrollPos < top + height) {
           setActiveSection(`/#${section.id}`)
         }
