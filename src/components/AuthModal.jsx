@@ -7,6 +7,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [referralCode, setReferralCode] = useState('')
+  const [agreeTerms, setAgreeTerms] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [successMsg, setSuccessMsg] = useState('')
@@ -22,6 +23,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
       setError(''); 
       setSuccessMsg('');
       setPassword(''); 
+      setAgreeTerms(false);
       const isClaiming = localStorage.getItem('knowmi_pending_claim');
       setTab(isClaiming ? 'signin' : defaultTab) 
     }
@@ -36,6 +38,10 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
   if (!open) return null
 
   const handleGoogleLogin = async () => {
+    if (tab === 'signup' && !agreeTerms) {
+      setError('You must agree to the Terms of Service and Privacy Policy to register.');
+      return;
+    }
     setLoading(true)
     // Save intent so we can show the "Welcome Back" message if they try to sign up with an existing email
     localStorage.setItem('pending_auth_type', tab)
@@ -58,6 +64,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
     if (!firstName.trim()) { setError('Please enter your User Name'); return }
     if (!email.trim().includes('@')) { setError('Please enter a valid email'); return }
     if (password.length < 6) { setError('Password must be at least 6 characters'); return }
+    if (!agreeTerms) { setError('You must agree to the Terms of Service and Privacy Policy to register.'); return }
 
     setLoading(true)
     setError('')
@@ -93,7 +100,8 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
       options: { 
         data: { 
           first_name: firstName.trim(),
-          invited_by: invitedById
+          invited_by: invitedById,
+          terms_accepted: true
         } 
       }
     })
@@ -313,6 +321,25 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
                 className="w-full px-4 py-3 bg-white text-black font-black uppercase tracking-widest text-xs border-[3px] border-black rounded-lg outline-none focus:shadow-[4px_4px_0px_#F97316] transition-shadow"
               />
             )}
+
+             {/* Terms Checkbox */}
+             {tab === 'signup' && (
+               <label className="flex items-start gap-3 cursor-pointer select-none text-[10px] font-black uppercase tracking-widest text-neutral-400 mt-2 leading-relaxed text-left">
+                 <input
+                   type="checkbox"
+                   required
+                   checked={agreeTerms}
+                   onChange={e => setAgreeTerms(e.target.checked)}
+                   className="mt-0.5 w-4 h-4 accent-orange-500 rounded border-2 border-white bg-black checked:bg-orange-500 checked:border-orange-500 focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                 />
+                 <span className="flex-1">
+                   I agree to KnoWMi's{' '}
+                   <a href="/legal#terms" target="_blank" rel="noopener noreferrer" className="text-white hover:text-orange-500 underline decoration-2">Terms</a>
+                   {' '}and{' '}
+                   <a href="/legal#privacy" target="_blank" rel="noopener noreferrer" className="text-white hover:text-orange-500 underline decoration-2">Privacy Policy</a>
+                 </span>
+               </label>
+             )}
 
             {/* Submit */}
             <button

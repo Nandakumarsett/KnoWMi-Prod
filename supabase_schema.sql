@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   website_url TEXT DEFAULT '',
   avatar_url TEXT DEFAULT '',
   secure_slug TEXT UNIQUE, -- Random string for obfuscated URLs (e.g. knowme.in/p/djsfhdnke)
+  terms_accepted BOOLEAN DEFAULT false,
+  terms_accepted_at TIMESTAMPTZ DEFAULT null,
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
@@ -88,13 +90,23 @@ BEGIN
     chosen_prefix := email_username;
   END IF;
 
-  INSERT INTO public.profiles (user_id, first_name, wm_code, secure_slug, invited_by)
+  INSERT INTO public.profiles (
+    user_id, 
+    first_name, 
+    wm_code, 
+    secure_slug, 
+    invited_by,
+    terms_accepted,
+    terms_accepted_at
+  )
   VALUES (
     NEW.id, 
     COALESCE(NEW.raw_user_meta_data->>'first_name', 'User'),
     public.generate_wm_code(chosen_prefix),
     public.generate_secure_slug(),
-    (NEW.raw_user_meta_data->>'invited_by')::UUID
+    (NEW.raw_user_meta_data->>'invited_by')::UUID,
+    COALESCE((NEW.raw_user_meta_data->>'terms_accepted')::BOOLEAN, false),
+    CASE WHEN (NEW.raw_user_meta_data->>'terms_accepted')::BOOLEAN = true THEN now() ELSE null END
   );
   RETURN NEW;
 END;
