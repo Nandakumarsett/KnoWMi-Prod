@@ -221,7 +221,7 @@ export default function ScrollyHome() {
       </section>
 
       {/* 4. Digital Profile Section */}
-      <section className="profile-section w-full relative bg-black flex items-start py-16 md:py-20 px-6 overflow-hidden min-h-screen">
+      <section className="profile-section w-full relative bg-black flex items-start py-16 md:py-20 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row md:items-start justify-between gap-8 md:gap-16">
           {/* Text — compact on mobile */}
           <div className="flex-1 z-10 md:pr-12 text-center md:text-left md:pt-4">
