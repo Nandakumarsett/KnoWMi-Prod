@@ -126,13 +126,13 @@ export default function Collection({ onSelectDesign }) {
   }, [loading, designs])
 
   const SeeMoreCard = () => (
-    <a href="/shop" className="flex-shrink-0 w-[85vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-[3px] border-dashed border-white transition-all duration-300 hover:border-orange-500 hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[6px_6px_0px_#F97316] flex flex-col items-center justify-center p-8 text-center min-h-[350px] shadow-[4px_4px_0px_#fff]">
-      <div className="w-16 h-16 rounded-xl bg-orange-500 border-[3px] border-black flex items-center justify-center text-black shadow-[3px_3px_0px_#000] mb-6 group-hover:rotate-12 transition-transform duration-300">
-        <ArrowRight size={28} strokeWidth={3} />
+    <a href="/shop" className="flex-shrink-0 w-[85vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-[2.5px] border-dashed border-white transition-all duration-300 hover:border-orange-500 hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[5px_5px_0px_#F97316] flex flex-col items-center justify-center p-5 text-center min-h-[260px] shadow-[3px_3px_0px_#fff]">
+      <div className="w-12 h-12 rounded-lg bg-orange-500 border-[2px] border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] mb-4 group-hover:rotate-12 transition-transform duration-300">
+        <ArrowRight size={20} strokeWidth={3} />
       </div>
-      <h3 className="text-xl font-black text-white mb-2 uppercase">Explore Full <br/> Collection</h3>
-      <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Find your perfect match</p>
-      <div className="mt-8 px-6 py-2.5 rounded-lg bg-orange-500 text-black border-[3px] border-black font-black text-[9px] uppercase tracking-widest shadow-[3px_3px_0px_#000] group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-none transition-all">
+      <h3 className="text-lg font-black text-white mb-1.5 uppercase">Explore Full <br/> Collection</h3>
+      <p className="text-[9px] font-black text-neutral-400 uppercase tracking-widest">Find your perfect match</p>
+      <div className="mt-6 px-4 py-2 rounded-lg bg-orange-500 text-black border-[2.5px] border-black font-black text-[9px] uppercase tracking-widest shadow-[2.5px_2.5px_0px_#000] group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-none transition-all">
         View All Designs
       </div>
     </a>
@@ -142,16 +142,16 @@ export default function Collection({ onSelectDesign }) {
 
   return (
     <>
-    <section id="collection" className="py-24 bg-[#0a0a0a] min-h-screen flex items-center relative overflow-hidden" ref={sectionRef}>
+    <section id="collection" className="py-16 md:py-20 bg-[#0a0a0a] relative overflow-hidden" ref={sectionRef}>
       
       <div className="max-w-[1400px] mx-auto px-6 w-full relative z-10">
         <div className="w-full">
-          <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-12 gap-8 text-center md:text-left" ref={headerRef}>
+          <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-8 gap-8 text-center md:text-left" ref={headerRef}>
             <div className="flex flex-col items-center md:items-start">
-              <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center gap-3 mb-2">
                 <div className="inline-block px-4 py-1.5 rounded-lg bg-lime-400 border-[3px] border-black text-black text-[9px] font-black uppercase tracking-widest shadow-[3px_3px_0px_#000]">Live Designs</div>
               </div>
-              <h2 className="text-3xl md:text-5xl font-black text-white leading-tight uppercase">
+              <h2 className="text-3xl md:text-4xl font-black text-white leading-tight uppercase">
                 These tees are live. <br className="hidden md:block"/>
                 <span className="bg-orange-500 text-black px-3 py-1 rounded-lg inline-block mt-1">Yours might be next.</span>
               </h2>
@@ -169,37 +169,37 @@ export default function Collection({ onSelectDesign }) {
 
         {designs.length > 0 ? (
           <div 
-            className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar px-[7.5vw] sm:px-0" 
+            className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 pb-6 snap-x snap-mandatory no-scrollbar px-[7.5vw] sm:px-0" 
             ref={scrollContainerRef}
             onScroll={handleScroll}
           >
             {designs.map((d) => (
               <div key={d.id} className="flex-shrink-0 w-[85vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316]">
-                <div className="aspect-[4/5] overflow-hidden relative bg-black">
+                <div className="aspect-[3/4] overflow-hidden relative bg-black">
                   <LazyImage 
                     src={getAssetUrl(d.front_image_url || d.model_image_url) || '/assets/tees/front.webp'} 
                     alt={d.name} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     skeletonClassName="absolute inset-0"
                   />
-                  <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                  <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                     <button 
                       onClick={() => onSelectDesign(d)}
-                      className="w-full bg-orange-500 text-black py-4 rounded-lg border-[3px] border-black font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                      className="w-full bg-orange-500 text-black py-2.5 rounded-lg border-[3px] border-black font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                     >
                       <ShoppingBag size={14} strokeWidth={3} /> Select Design
                     </button>
                   </div>
                 </div>
-                <div className="p-6 flex justify-between items-center bg-[#111]">
+                <div className="p-4 flex justify-between items-center bg-[#111]">
                   <div>
-                    <h3 className="text-lg font-display font-black text-white mb-1">{d.name}</h3>
+                    <h3 className="text-base font-display font-black text-white mb-1">{d.name}</h3>
                     <div className="flex items-center gap-0.5 text-orange-500">
                       {[...Array(5)].map((_, i) => <Star key={i} size={10} className="fill-orange-500" />)}
                     </div>
                   </div>
-                  <div className="w-10 h-10 rounded-lg bg-orange-500 border-[2px] border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-none transition-all">
-                    <ArrowRight size={18} strokeWidth={3} />
+                  <div className="w-8 h-8 rounded-lg bg-orange-500 border-[2px] border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-none transition-all">
+                    <ArrowRight size={14} strokeWidth={3} />
                   </div>
                 </div>
               </div>
@@ -208,7 +208,7 @@ export default function Collection({ onSelectDesign }) {
           </div>
         ) : (
           <div 
-            className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 pb-6 snap-x snap-mandatory no-scrollbar px-[7.5vw] sm:px-0" 
+            className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 pb-6 snap-x snap-mandatory no-scrollbar px-[7.5vw] sm:px-0" 
             ref={scrollContainerRef}
             onScroll={handleScroll}
           >
@@ -218,16 +218,16 @@ export default function Collection({ onSelectDesign }) {
               { id: 'f3', name: 'Street Saffron', category: 'Elite', img: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&q=80&w=800' }
             ].map((d) => (
               <div key={d.id} className="flex-shrink-0 w-[85vw] sm:w-auto snap-center group relative bg-[#1a1a1a] rounded-xl overflow-hidden border-2 sm:border-[3px] border-white transition-all duration-300 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[-3px] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_#F97316]">
-                <div className="aspect-[4/5] overflow-hidden relative bg-black">
+                <div className="aspect-[3/4] overflow-hidden relative bg-black">
                   <LazyImage src={d.img} alt={d.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" skeletonClassName="absolute inset-0" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-                    <button onClick={() => onSelectDesign(d)} className="w-full bg-orange-500 text-black py-4 rounded-lg border-[3px] border-black font-black text-xs uppercase tracking-widest shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">Select Design</button>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                    <button onClick={() => onSelectDesign(d)} className="w-full bg-orange-500 text-black py-2.5 rounded-lg border-[3px] border-black font-black text-xs uppercase tracking-widest shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">Select Design</button>
                   </div>
                 </div>
-                <div className="p-6 flex justify-between items-center bg-[#111]">
-                  <h3 className="text-lg font-display font-black text-white">{d.name}</h3>
-                  <div className="w-10 h-10 rounded-lg bg-orange-500 border-[2px] border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-none transition-all">
-                    <ArrowRight size={18} strokeWidth={3} />
+                <div className="p-4 flex justify-between items-center bg-[#111]">
+                  <h3 className="text-base font-display font-black text-white">{d.name}</h3>
+                  <div className="w-8 h-8 rounded-lg bg-orange-500 border-[2px] border-black flex items-center justify-center text-black shadow-[2px_2px_0px_#000] group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-none transition-all">
+                    <ArrowRight size={14} strokeWidth={3} />
                   </div>
                 </div>
               </div>

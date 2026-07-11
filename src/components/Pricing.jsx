@@ -248,7 +248,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
             {products.map((product, i) => {
               const cardInner = (
                 <div
-                  className={`group relative rounded-xl flex flex-col p-5 md:p-6 transition-all duration-300 h-full bg-[#1a1a1a] ${
+                  className={`group relative rounded-xl flex flex-col p-4 md:p-5 transition-all duration-300 h-full bg-[#1a1a1a] ${
                     product.featured
                       ? 'border-[3px] border-orange-500 shadow-[6px_6px_0px_#F97316]'
                       : 'border-[3px] border-white shadow-[4px_4px_0px_#fff]'
@@ -262,43 +262,43 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                     </div>
                   )}
 
-                  <div className="mb-6">
-                    <div className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-2">
+                  <div className="mb-4">
+                    <div className="text-[9px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-1">
                       {product.tagline}
                     </div>
-                    <h3 className="text-2xl font-display font-black mb-2 text-white">{product.name}</h3>
+                    <h3 className="text-xl font-display font-black mb-1 text-white">{product.name}</h3>
 
                     {product.id !== 'hoodie' ? (
-                      <div className="flex items-baseline gap-1.5 mb-2">
-                        <span className="text-5xl font-display font-black text-white">₹{product.price}</span>
+                      <div className="flex items-baseline gap-1 mb-1">
+                        <span className="text-4xl font-display font-black text-white">₹{product.price}</span>
                       </div>
                     ) : (
-                      <div className="flex items-baseline gap-1.5 mb-2">
-                        <span className="text-3xl font-display font-black text-neutral-400 italic">Coming Soon</span>
+                      <div className="flex items-baseline gap-1 mb-1">
+                        <span className="text-2xl font-display font-black text-neutral-400 italic">Coming Soon</span>
                       </div>
                     )}
-                    <p className="text-[13px] text-neutral-400 font-black leading-relaxed">{product.desc}</p>
+                    <p className="text-[12px] text-neutral-400 font-black leading-relaxed">{product.desc}</p>
                   </div>
 
-                  <div className="flex-1 mb-6">
-                    <div className="h-[3px] w-10 bg-orange-500 mb-4" />
-                    <ul className="space-y-3">
+                  <div className="flex-1 mb-4">
+                    <div className="h-[2.5px] w-8 bg-orange-500 mb-3" />
+                    <ul className="space-y-2">
                       {product.productFeatures.map((feat, j) => (
-                        <li key={j} className="flex items-start gap-3">
-                          <span className="mt-0.5 w-5 h-5 rounded-full bg-orange-500 flex items-center justify-center flex-shrink-0">
-                            <Check size={12} className="text-black" strokeWidth={4} />
+                        <li key={j} className="flex items-start gap-2.5">
+                          <span className="mt-0.5 w-4.5 h-4.5 rounded-full bg-orange-500 flex items-center justify-center flex-shrink-0">
+                            <Check size={10} className="text-black" strokeWidth={4} />
                           </span>
-                          <span className="text-[13px] font-black text-neutral-300 leading-tight">{feat}</span>
+                          <span className="text-[12px] font-black text-neutral-300 leading-tight">{feat}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="space-y-4 mt-auto">
+                  <div className="space-y-2 mt-auto">
                     <button
                       onClick={() => handleProductClick(product.id, product.disabled)}
                       disabled={product.disabled}
-                      className={`w-full py-3 rounded-lg font-black text-[11px] uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${
+                      className={`w-full py-2.5 rounded-lg font-black text-[11px] uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${
                         product.disabled
                           ? 'bg-[#2a2a2a] text-neutral-500 cursor-not-allowed border-[3px] border-neutral-700'
                           : 'bg-orange-500 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none'
@@ -308,26 +308,10 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                       {!product.disabled && <ArrowRight size={14} strokeWidth={3} />}
                     </button>
                     <div className="text-center">
-                      <span className="text-[10px] font-black text-neutral-300 uppercase tracking-widest block mb-1">
+                      <span className="text-[9px] font-black text-neutral-300 uppercase tracking-widest block">
                         One-time investment
                       </span>
                     </div>
-                    {!product.disabled && (
-                      <div className="pt-3 border-t border-white/10 space-y-2 text-[10px] font-bold text-neutral-400">
-                        <div className="flex items-center gap-2">
-                          <span className="text-neutral-300">🔒</span>
-                          <span>Secure 256-Bit SSL Checkout</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-neutral-300">💳</span>
-                          <span>UPI, Cards & NetBanking via Razorpay</span>
-                        </div>
-                        <div className="flex items-center gap-2 leading-tight">
-                          <span className="text-neutral-300">🔄</span>
-                          <span>7-Day Quality & Size Replacement (<a href="/legal#refund" className="text-orange-500 hover:underline font-extrabold">Terms</a>)</span>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
               )

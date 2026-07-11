@@ -116,7 +116,7 @@ export default function PersonaUseCases() {
   return (
     <section
       id="use-cases"
-      className="py-32 bg-[#0a0a0a] relative overflow-hidden"
+      className="py-16 md:py-20 bg-[#0a0a0a] relative overflow-hidden"
       ref={sectionRef}
     >
       <style>{`
@@ -144,15 +144,15 @@ export default function PersonaUseCases() {
 
       <div className="max-w-[1400px] mx-auto px-6 relative z-10 w-full">
         {/* Section Header */}
-        <div className="text-center mb-20" ref={headerRef}>
+        <div className="text-center mb-12" ref={headerRef}>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-md bg-orange-500 border-[3px] border-black mb-6 text-black text-[10px] font-black uppercase tracking-widest shadow-[3px_3px_0px_#000]">
             Built For You
           </div>
-          <h2 className="text-6xl md:text-7xl lg:text-8xl font-display font-black text-white mb-6 tracking-tight leading-[1.0]">
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-black text-white mb-6 tracking-tight leading-[1.0]">
             Who wears <br />
             <span className="bg-orange-500 text-black px-4 py-1 rounded-md inline-block mt-2 -rotate-1">KnoWMi?</span>
           </h2>
-          <p className="text-lg text-neutral-400 font-medium max-w-xl mx-auto mb-10">
+          <p className="text-base text-neutral-400 font-medium max-w-xl mx-auto mb-6">
             Anyone who&apos;s tired of being forgotten. Creators, students, founders, techies — your tee tells your story.
           </p>
 
@@ -179,7 +179,7 @@ export default function PersonaUseCases() {
             <div
               key={uc.id}
               ref={el => (cardsRef.current[i] = el)}
-              className="puc-card flex-shrink-0 w-[290px] lg:w-auto snap-center group relative rounded-xl overflow-hidden border-2 sm:border-[3px] border-white flex flex-col cursor-pointer bg-[#1a1a1a] h-[420px] md:h-[500px] shadow-[4px_4px_0px_#F97316] sm:shadow-[6px_6px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-300"
+              className="puc-card flex-shrink-0 w-[290px] lg:w-auto snap-center group relative rounded-xl overflow-hidden border-2 sm:border-[3px] border-white flex flex-col cursor-pointer bg-[#1a1a1a] h-[340px] md:h-[400px] shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-300"
             >
               {/* 60% Background Image Area */}
               <div className="relative h-[60%] w-full overflow-hidden">
@@ -196,32 +196,32 @@ export default function PersonaUseCases() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                 
                 {/* Large emoji badge at top */}
-                <div className="absolute top-5 left-5 text-4xl bg-[#1a1a1a] border-[3px] border-black rounded-lg w-14 h-14 flex items-center justify-center shadow-[3px_3px_0px_#000] z-10 select-none">
+                <div className="absolute top-4 left-4 text-2xl bg-[#1a1a1a] border-[2.5px] border-black rounded-lg w-11 h-11 flex items-center justify-center shadow-[2px_2px_0px_#000] z-10 select-none">
                   {uc.emoji}
                 </div>
               </div>
 
               {/* 30% Content Area */}
-              <div className="relative z-10 px-5 md:px-8 pt-2 flex flex-col justify-end h-[30%]">
-                <span className="bg-orange-500 text-black px-3 py-1 rounded-md border-2 border-black font-black text-[11px] uppercase tracking-[0.15em] inline-block mb-2">
+              <div className="relative z-10 px-4 md:px-5 pt-1.5 flex flex-col justify-end h-[30%]">
+                <span className="bg-orange-500 text-black px-3 py-1 rounded-md border-2 border-black font-black text-[10px] uppercase tracking-[0.15em] inline-block mb-1.5">
                   {uc.title}
                 </span>
-                <h3 className="text-2xl font-display font-black text-white leading-tight mb-2">
+                <h3 className="text-lg font-display font-black text-white leading-tight mb-1.5">
                   {uc.benefit}
                 </h3>
-                <p className="text-sm text-neutral-400 font-medium leading-relaxed line-clamp-2">
+                <p className="text-xs text-neutral-400 font-medium leading-relaxed line-clamp-2">
                   {uc.desc}
                 </p>
               </div>
 
               {/* 10% Highlight / CTA Area */}
-              <div className="relative z-10 px-5 md:px-8 flex items-center h-[10%] pb-6">
+              <div className="relative z-10 px-4 md:px-5 flex items-center h-[10%] pb-4 mt-2">
                 <a
                   href="#pricing"
-                  className="inline-flex items-center gap-2 bg-orange-500 text-black px-5 py-2 rounded-lg border-[3px] border-black shadow-[3px_3px_0px_#000] font-black text-[11px] uppercase tracking-widest hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                  className="inline-flex items-center gap-2 bg-orange-500 text-black px-4 py-1.5 rounded-lg border-[3px] border-black shadow-[3px_3px_0px_#000] font-black text-[10px] uppercase tracking-widest hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
                   Get Yours{' '}
-                  <span className="puc-arrow-cta text-lg">→</span>
+                  <span className="puc-arrow-cta text-base">→</span>
                 </a>
               </div>
             </div>
