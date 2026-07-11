@@ -189,7 +189,7 @@ export default function ScrollyHome() {
           </div>
           
           <div className="lg:w-1/2 w-full flex justify-center lg:justify-end">
-            <div className="fabric-image relative w-full h-[500px] lg:h-[700px] max-w-md lg:max-w-xl group opacity-0 translate-x-12 lg:-mt-36">
+            <div className="fabric-image relative w-full h-[500px] lg:h-[700px] max-w-md lg:max-w-xl group opacity-0 translate-x-12 lg:-mt-16">
               <Tshirt3DModel />
             </div>
           </div>
