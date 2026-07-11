@@ -120,7 +120,7 @@ export default function ScrollyHome() {
   }, []);
 
   return (
-    <div ref={containerRef} className="bg-black text-white overflow-hidden relative z-0 pb-32 font-display">
+    <div ref={containerRef} className="bg-black text-white overflow-hidden relative z-0 pb-0 font-display">
       
       {/* 1. Hero Section */}
       <section className="hero-section h-[100svh] w-full relative flex items-center justify-center overflow-hidden bg-black">
