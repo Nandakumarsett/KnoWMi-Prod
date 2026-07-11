@@ -410,7 +410,7 @@ export function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="pt-16 pb-12 md:pt-24 md:pb-24 bg-[#0a0a0a] min-h-0 md:min-h-screen flex items-start"
+      className="pt-8 pb-12 md:pt-12 md:pb-24 bg-[#0a0a0a] min-h-0 md:min-h-screen flex items-start md:-mt-24"
       ref={sectionRef}
     >
       <div className="max-w-[1200px] mx-auto px-6 w-full">
