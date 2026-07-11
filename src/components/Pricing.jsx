@@ -209,7 +209,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
 
       <section
         id="pricing"
-        className="pt-12 pb-6 md:pt-32 md:pb-16 bg-[#0a0a0a] relative overflow-hidden min-h-0 md:min-h-screen flex flex-col justify-center"
+        className="pt-16 pb-12 md:pt-24 md:pb-20 bg-[#0a0a0a] relative overflow-hidden"
         ref={sectionRef}
       >
         <div className="max-w-[1400px] mx-auto px-6 relative z-10 w-full">
@@ -241,17 +241,17 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
 
           {/* Cards */}
           <div 
-            className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-8 max-w-[1200px] mx-auto pricing-grid items-stretch pt-6 pb-6 snap-x snap-mandatory no-scrollbar px-[7.5vw] md:px-0"
+            className="flex overflow-x-auto md:grid md:grid-cols-3 gap-6 md:gap-6 max-w-[1200px] mx-auto pricing-grid items-stretch pt-6 pb-6 snap-x snap-mandatory no-scrollbar px-[7.5vw] md:px-0"
             ref={scrollContainerRef}
             onScroll={handleScroll}
           >
             {products.map((product, i) => {
               const cardInner = (
                 <div
-                  className={`group relative rounded-xl flex flex-col p-8 transition-all duration-300 h-full bg-[#1a1a1a] ${
+                  className={`group relative rounded-xl flex flex-col p-5 md:p-6 transition-all duration-300 h-full bg-[#1a1a1a] ${
                     product.featured
-                      ? 'border-[3px] border-orange-500 shadow-[8px_8px_0px_#F97316]'
-                      : 'border-[3px] border-white shadow-[5px_5px_0px_#fff]'
+                      ? 'border-[3px] border-orange-500 shadow-[6px_6px_0px_#F97316]'
+                      : 'border-[3px] border-white shadow-[4px_4px_0px_#fff]'
                   } ${product.disabled ? 'opacity-80 grayscale-[20%]' : 'hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none'}`}
                 >
                   {product.featured && (
@@ -262,27 +262,27 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                     </div>
                   )}
 
-                  <div className="mb-8">
+                  <div className="mb-6">
                     <div className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-2">
                       {product.tagline}
                     </div>
-                    <h3 className="text-2xl font-display font-black mb-4 text-white">{product.name}</h3>
+                    <h3 className="text-2xl font-display font-black mb-2 text-white">{product.name}</h3>
 
                     {product.id !== 'hoodie' ? (
-                      <div className="flex items-baseline gap-1.5 mb-4">
-                        <span className="text-6xl font-display font-black text-white">₹{product.price}</span>
+                      <div className="flex items-baseline gap-1.5 mb-2">
+                        <span className="text-5xl font-display font-black text-white">₹{product.price}</span>
                       </div>
                     ) : (
-                      <div className="flex items-baseline gap-1.5 mb-4">
+                      <div className="flex items-baseline gap-1.5 mb-2">
                         <span className="text-3xl font-display font-black text-neutral-400 italic">Coming Soon</span>
                       </div>
                     )}
                     <p className="text-[13px] text-neutral-400 font-black leading-relaxed">{product.desc}</p>
                   </div>
 
-                  <div className="flex-1 mb-10">
-                    <div className="h-[3px] w-10 bg-orange-500 mb-6" />
-                    <ul className="space-y-4">
+                  <div className="flex-1 mb-6">
+                    <div className="h-[3px] w-10 bg-orange-500 mb-4" />
+                    <ul className="space-y-3">
                       {product.productFeatures.map((feat, j) => (
                         <li key={j} className="flex items-start gap-3">
                           <span className="mt-0.5 w-5 h-5 rounded-full bg-orange-500 flex items-center justify-center flex-shrink-0">
@@ -298,7 +298,7 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
                     <button
                       onClick={() => handleProductClick(product.id, product.disabled)}
                       disabled={product.disabled}
-                      className={`w-full py-4 rounded-lg font-black text-[11px] uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${
+                      className={`w-full py-3 rounded-lg font-black text-[11px] uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 ${
                         product.disabled
                           ? 'bg-[#2a2a2a] text-neutral-500 cursor-not-allowed border-[3px] border-neutral-700'
                           : 'bg-orange-500 text-black border-[3px] border-black shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none'
