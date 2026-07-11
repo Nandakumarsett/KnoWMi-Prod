@@ -85,15 +85,15 @@ export function SocialProofStrip() {
 /** Step 1: Person wearing a KnoWMi tshirt with QR on back (HD generated) */
 function WearItVisual() {
   return (
-    <div className="relative flex items-center justify-center h-48">
+    <div className="relative flex items-center justify-center h-36">
       <style>{`
         @keyframes floatPerson {
           0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-8px); }
+          50% { transform: translateY(-6px); }
         }
         .float-person { animation: floatPerson 3.5s ease-in-out infinite; }
       `}</style>
-      <div className="float-person relative w-36 h-40 overflow-hidden rounded-xl border-[2.5px] border-white shadow-[3px_3px_0px_#F97316]">
+      <div className="float-person relative w-28 h-32 overflow-hidden rounded-xl border-[2px] border-white shadow-[2px_2px_0px_#F97316]">
         <img
           src="/assets/scrolly/knowmi_wear_it.webp"
           alt="Person wearing KnoWMi tee with QR code"
@@ -108,7 +108,7 @@ function WearItVisual() {
 /** Step 2: Real QR code + scanner overlay (scan line contained inside QR box) */
 function ScanItVisual() {
   return (
-    <div className="relative flex items-center justify-center h-48">
+    <div className="relative flex items-center justify-center h-36">
       <style>{`
         @keyframes scanLineQR {
           0%   { top: 6px;  opacity: 0; }
@@ -122,7 +122,7 @@ function ScanItVisual() {
         }
         @keyframes scannerFloat {
           0%, 100% { transform: translateY(0px); }
-          50%       { transform: translateY(-6px); }
+          50%       { transform: translateY(-4px); }
         }
         .scan-line-qr {
           animation: scanLineQR 2.2s ease-in-out infinite;
@@ -141,7 +141,7 @@ function ScanItVisual() {
       <div className="scanner-float relative">
         {/* QR code image */}
         <div
-          className="relative w-28 h-28 rounded-xl overflow-hidden bg-white p-1.5 border-[2.5px] border-black shadow-[3px_3px_0px_#F97316]"
+          className="relative w-24 h-24 rounded-lg overflow-hidden bg-white p-1 border-[2px] border-black shadow-[2px_2px_0px_#F97316]"
           style={{ isolation: 'isolate' }}
         >
           {/* Real QR pattern using SVG */}
@@ -211,32 +211,32 @@ function ScanItVisual() {
 /** Step 3: Mini profile card */
 function RememberedVisual() {
   return (
-    <div className="relative flex items-center justify-center h-48">
-      <div className="w-full max-w-[170px] bg-white border-[2.5px] border-black rounded-xl p-3 text-center shadow-[3px_3px_0px_#F97316]">
+    <div className="relative flex items-center justify-center h-36">
+      <div className="w-full max-w-[150px] bg-white border-[2px] border-black rounded-xl p-2.5 text-center shadow-[2px_2px_0px_#F97316]">
         <img
           src="https://i.pravatar.cc/100?u=knowmi_demo"
           alt="Profile avatar"
-          className="w-10 h-10 rounded-lg mx-auto mb-1.5 border-[2px] border-orange-500 object-cover"
+          className="w-9 h-9 rounded-lg mx-auto mb-1 border-[1.5px] border-orange-500 object-cover"
         />
-        <p className="text-[11px] font-black text-neutral-900 mb-0.5 leading-tight">Arjun Mehta</p>
-        <p className="text-[8px] text-neutral-500 font-bold uppercase mb-2 whitespace-nowrap overflow-hidden text-ellipsis">
+        <p className="text-[10px] font-black text-neutral-900 mb-0.5 leading-tight">Arjun Mehta</p>
+        <p className="text-[7.5px] text-neutral-500 font-bold uppercase mb-1.5 whitespace-nowrap overflow-hidden text-ellipsis">
           Dev · Mumbai
         </p>
-        <div className="flex justify-center gap-1.5">
-          <div className="w-6 h-6 rounded-md bg-[#1a1a1a] border-[1.5px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
-            <Twitter size={9} />
+        <div className="flex justify-center gap-1">
+          <div className="w-5.5 h-5.5 rounded-md bg-[#1a1a1a] border-[1.5px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Twitter size={8} />
           </div>
-          <div className="w-6 h-6 rounded-md bg-[#1a1a1a] border-[1.5px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
-            <Linkedin size={9} />
+          <div className="w-5.5 h-5.5 rounded-md bg-[#1a1a1a] border-[1.5px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Linkedin size={8} />
           </div>
-          <div className="w-6 h-6 rounded-md bg-[#1a1a1a] border-[1.5px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
-            <Github size={9} />
+          <div className="w-5.5 h-5.5 rounded-md bg-[#1a1a1a] border-[1.5px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Github size={8} />
           </div>
-          <div className="w-6 h-6 rounded-md bg-[#1a1a1a] border-[1.5px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
-            <Instagram size={9} />
+          <div className="w-5.5 h-5.5 rounded-md bg-[#1a1a1a] border-[1.5px] border-black flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-colors">
+            <Instagram size={8} />
           </div>
         </div>
-        <div className="mt-2 text-[8px] font-black uppercase tracking-widest text-orange-500 bg-orange-500/10 border-[1.5px] border-orange-500 rounded-md py-0.5 px-1.5 inline-block">
+        <div className="mt-1.5 text-[7px] font-black uppercase tracking-widest text-orange-500 bg-orange-500/10 border-[1.2px] border-orange-500 rounded-md py-0 px-1 inline-block">
           ● Live Profile
         </div>
       </div>
@@ -441,7 +441,7 @@ export function HowItWorks() {
         >
           {/* Connection Line — solid brutal style */}
           <div
-            className="hidden lg:block absolute top-[248px] left-[15%] right-[15%] h-[3px] bg-orange-500"
+            className="hidden lg:block absolute top-[180px] left-[15%] right-[15%] h-[3px] bg-orange-500"
             ref={lineRef}
           />
 
@@ -450,26 +450,26 @@ export function HowItWorks() {
             return (
               <div
                 key={i}
-                className="relative z-10 flex-shrink-0 w-[85vw] sm:w-auto snap-center flex flex-col items-center text-center bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl p-6 shadow-[3px_3px_0px_#F97316] sm:shadow-[5px_5px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150"
+                className="relative z-10 flex-shrink-0 w-[85vw] sm:w-auto snap-center flex flex-col items-center text-center bg-[#1a1a1a] border-2 sm:border-[3px] border-white rounded-xl p-4 sm:p-5 shadow-[3px_3px_0px_#F97316] sm:shadow-[4px_4px_0px_#F97316] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150"
                 ref={el => (stepsRef.current[i] = el)}
               >
                 {/* Step number badge */}
                 <div
-                  className="w-14 h-14 rounded-xl font-black text-2xl flex items-center justify-center border-[3px] border-black shadow-[3px_3px_0px_#000] mb-4 text-black flex-shrink-0"
+                  className="w-11 h-11 rounded-lg font-black text-lg flex items-center justify-center border-[2.5px] border-black shadow-[2.5px_2.5px_0px_#000] mb-3 text-black flex-shrink-0"
                   style={{ backgroundColor: step.accent }}
                 >
                   {step.num}
                 </div>
 
                 {/* Visual demo */}
-                <div className="block w-full max-w-[240px] mx-auto relative z-10 border-[2px] border-white/20 rounded-xl p-2 mb-4 bg-[#111] overflow-hidden">
+                <div className="block w-full max-w-[200px] mx-auto relative z-10 border-[1.5px] border-white/20 rounded-lg p-1.5 mb-3 bg-[#111] overflow-hidden">
                   <Visual />
                 </div>
 
-                <h3 className="text-xl sm:text-base md:text-2xl font-black mb-3 text-white uppercase tracking-wide leading-tight">
+                <h3 className="text-lg sm:text-sm md:text-xl font-black mb-2 text-white uppercase tracking-wide leading-tight">
                   {step.title}
                 </h3>
-                <p className="text-sm text-neutral-400 font-bold leading-relaxed max-w-[260px]">
+                <p className="text-[13px] sm:text-xs md:text-sm text-neutral-400 font-bold leading-relaxed max-w-[260px]">
                   {step.desc}
                 </p>
               </div>
