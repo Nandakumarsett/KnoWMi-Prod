@@ -454,7 +454,7 @@ function MockPhone({ persona, isDark, p }) {
 
   return (
     <div 
-      className={`w-full max-w-[300px] sm:max-w-[360px] h-[60vh] sm:h-[55vh] lg:h-[65vh] max-h-[700px] overflow-y-auto overflow-x-hidden rounded-xl custom-scrollbar relative border-2 sm:border-[3px] border-white shadow-[4px_4px_0px_#F97316] sm:shadow-[8px_8px_0px_#F97316] ${isDark ? 'bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fafafa]' : 'bg-white'}`}
+      className={`w-full max-w-[260px] sm:max-w-[300px] lg:max-w-[330px] h-[50vh] sm:h-[48vh] lg:h-[52vh] max-h-[500px] overflow-y-auto overflow-x-hidden rounded-xl custom-scrollbar relative border-2 sm:border-[3px] border-white shadow-[4px_4px_0px_#F97316] sm:shadow-[6px_6px_0px_#F97316] ${isDark ? 'bg-[#0d1117]' : p.id === 'student' ? 'bg-[#fafafa]' : 'bg-white'}`}
     >
       <div style={{ height: height, overflow: 'hidden', position: 'relative', width: '100%' }}>
         <div 
@@ -605,7 +605,7 @@ export default function Personas() {
       {/* Ambient glow */}
       <div className="absolute bottom-1/4 right-0 w-1/3 h-[500px] bg-orange-500/5 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="relative z-10 lg:min-h-screen flex flex-col justify-center pt-20 lg:pt-24 pb-8">
+      <div className="relative z-10 lg:min-h-screen flex flex-col justify-center pt-12 lg:pt-16 pb-8">
         <div className="max-w-[1400px] mx-auto px-6 w-full shrink-0" ref={headerRef}>
           <div className="text-center mb-6 lg:mb-8">
             <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-lg bg-orange-500 border-[3px] border-black shadow-[3px_3px_0px_#000]">
