@@ -70,7 +70,7 @@ export default function Tshirt3DModel() {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full min-h-[400px] md:min-h-[500px] lg:min-h-[600px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
+      className="w-full h-full min-h-[400px] md:min-h-[500px] lg:min-h-[600px] flex items-center lg:items-start justify-center cursor-grab active:cursor-grabbing select-none"
       onMouseDown={handlePointerDown}
       onMouseMove={handlePointerMove}
       onMouseUp={handlePointerUp}
