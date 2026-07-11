@@ -70,7 +70,7 @@ export default function Tshirt3DModel() {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full min-h-[500px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
+      className="w-full h-full min-h-[400px] md:min-h-[500px] lg:min-h-[600px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
       onMouseDown={handlePointerDown}
       onMouseMove={handlePointerMove}
       onMouseUp={handlePointerUp}
@@ -82,7 +82,7 @@ export default function Tshirt3DModel() {
     >
       {/* 3D card wrapper */}
       <div
-        className="relative w-[90vw] h-[90vw] max-w-[850px] max-h-[850px] md:w-[700px] md:h-[800px] lg:w-[850px] lg:h-[950px]"
+        className="relative w-[80vw] h-[80vw] max-w-[420px] max-h-[420px] md:w-[480px] md:h-[550px] lg:w-[550px] lg:h-[650px]"
         style={{
           transformStyle: 'preserve-3d',
           transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
