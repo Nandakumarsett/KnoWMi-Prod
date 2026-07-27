@@ -45,6 +45,9 @@ export default function PublicProfile() {
     message: "",
   });
   const [connectStatus, setConnectStatus] = useState("");
+  const [showScannerNudge, setShowScannerNudge] = useState(() =>
+    !sessionStorage.getItem('knowmi_nudge_dismissed')
+  );
 
   // Sanitize display_name — strip accidental username/persona prefix concatenation
   // e.g. "tester_personaTester Persona" → "Tester Persona"
@@ -1191,6 +1194,69 @@ export default function PublicProfile() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+      {/* ✨ Scanner Nudge Banner — shown to logged-in users who are NOT the profile owner */}
+      {user && isScanner && showScannerNudge && (
+        <div
+          className="fixed bottom-0 left-0 right-0 z-[150] px-4 pb-4 pt-0 flex justify-center"
+          style={{ animation: 'nudgeSlideUp 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}
+        >
+          <div className="w-full max-w-sm bg-[#111] border-[3px] border-orange-500 rounded-2xl shadow-[0_0_40px_rgba(249,115,22,0.35)] overflow-hidden">
+            {/* Orange top line */}
+            <div className="h-1 w-full bg-gradient-to-r from-orange-600 via-orange-400 to-orange-600" />
+            <div className="p-4 flex items-center gap-3">
+              {/* Icon */}
+              <div className="w-10 h-10 shrink-0 rounded-xl bg-orange-500 text-black flex items-center justify-center shadow-[3px_3px_0px_#000] border-2 border-black">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/>
+                  <rect x="14" y="3" width="7" height="7" rx="1"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1"/>
+                  <path d="M14 14h3v3M17 14v7M14 17h7"/>
+                </svg>
+              </div>
+              {/* Text */}
+              <div className="flex-1 min-w-0">
+                <p className="text-white font-black text-[13px] leading-tight">
+                  Want your own card like this?
+                </p>
+                <p className="text-neutral-400 text-[11px] font-medium mt-0.5 leading-tight">
+                  Set up your KnoWMi profile in seconds
+                </p>
+              </div>
+              {/* Dismiss */}
+              <button
+                onClick={() => {
+                  sessionStorage.setItem('knowmi_nudge_dismissed', '1');
+                  setShowScannerNudge(false);
+                }}
+                className="w-6 h-6 shrink-0 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-neutral-400 hover:text-white transition-colors"
+                aria-label="Dismiss"
+              >
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M1 1L9 9M9 1L1 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </button>
+            </div>
+            {/* CTA row */}
+            <button
+              onClick={() => navigate('/dashboard?tab=profile')}
+              className="w-full flex items-center justify-between px-4 py-3 bg-orange-500 text-black font-black text-xs uppercase tracking-widest hover:bg-orange-400 transition-colors border-t-2 border-black"
+            >
+              <span>Create my Profile Card</span>
+              <span className="flex items-center gap-1">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+          <style>{`
+            @keyframes nudgeSlideUp {
+              from { transform: translateY(100%); opacity: 0; }
+              to { transform: translateY(0); opacity: 1; }
+            }
+          `}</style>
         </div>
       )}
     </div>
