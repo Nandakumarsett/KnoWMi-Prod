@@ -1054,7 +1054,14 @@ export default function IdentityStudio() {
                     </div>
 
                     <div>
-                      <label className="section-label">Public Bio</label>
+                      <label className="section-label">
+                        Public Bio
+                        {!data.bio && (
+                          <span className="ml-auto text-orange-400 font-bold text-[9px] uppercase tracking-widest animate-pulse">
+                            ← Tap a vibe to fill instantly
+                          </span>
+                        )}
+                      </label>
                       <textarea
                         placeholder="Tell the world who you are..."
                         className="input-field min-h-[100px] py-4"
@@ -1062,7 +1069,53 @@ export default function IdentityStudio() {
                         maxLength={500}
                         onChange={(e) => updateField("bio", e.target.value)}
                       />
+                      {/* ⚡ One-tap Vibe Presets */}
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {(
+                          isCreatorPersona(activePersona)
+                            ? [
+                                { emoji: "🎬", label: "Creator", bio: "Creating content that connects and inspires. Building community one story at a time." },
+                                { emoji: "✨", label: "Visionary", bio: "Turning ideas into viral moments. Here to make noise and leave a mark." },
+                                { emoji: "🌍", label: "Storyteller", bio: "Authentic storyteller. Brand collaborator. Helping people discover what they love." },
+                                { emoji: "🚀", label: "Ambitious", bio: "Growing every day. Content is my craft, community is my purpose." },
+                              ]
+                            : activePersona?.toLowerCase().includes("student")
+                            ? [
+                                { emoji: "🎓", label: "Learner", bio: "Forever a student. Building skills, chasing goals, and making the most of every opportunity." },
+                                { emoji: "💡", label: "Builder", bio: "Student by day, builder by night. Learning, experimenting, and sharing the journey." },
+                                { emoji: "🌱", label: "Growing", bio: "Early in the journey but full of drive. Open to learning, networking, and growing." },
+                                { emoji: "🔥", label: "Hustler", bio: "Studying hard, building harder. Future-focused and ready to create real impact." },
+                              ]
+                            : [
+                                { emoji: "💻", label: "Tech", bio: "Building things that matter. Passionate about technology, clean code, and solving real problems." },
+                                { emoji: "🚀", label: "Ambitious", bio: "Shipping products, solving problems, and levelling up every day. Open to collabs." },
+                                { emoji: "⚡", label: "Minimal", bio: "Code. Create. Repeat. Focused on building with purpose." },
+                                { emoji: "🌐", label: "Open", bio: "Developer, maker, and community contributor. Let's build something great together." },
+                              ]
+                        ).map((preset) => (
+                          <button
+                            key={preset.label}
+                            type="button"
+                            onClick={() => updateField("bio", preset.bio)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-white/20 bg-white/5 hover:bg-orange-500/20 hover:border-orange-500 text-[11px] font-bold text-neutral-300 hover:text-white transition-all"
+                            title={preset.bio}
+                          >
+                            <span>{preset.emoji}</span>
+                            <span>{preset.label}</span>
+                          </button>
+                        ))}
+                        {data.bio && (
+                          <button
+                            type="button"
+                            onClick={() => updateField("bio", "")}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-red-500/30 bg-red-500/10 hover:bg-red-500/20 text-[11px] font-bold text-red-400 hover:text-red-300 transition-all"
+                          >
+                            Clear
+                          </button>
+                        )}
+                      </div>
                     </div>
+
                   </div>
                 </section>
 

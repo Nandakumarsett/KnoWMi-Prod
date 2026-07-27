@@ -19,6 +19,45 @@ export const AuthProvider = ({ children }) => {
     return data
   }
 
+  // Auto-populate name + avatar from Google metadata on first sign-in
+  const maybeAutopopulateFromGoogle = async (authUser) => {
+    try {
+      const meta = authUser.user_metadata || {}
+      // Only applies to Google OAuth users who have full_name in metadata
+      if (!meta.full_name && !meta.name) return
+
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('id, first_name, last_name, avatar_url')
+        .eq('user_id', authUser.id)
+        .single()
+
+      if (!profileData) return
+
+      const updates = {}
+
+      // Only fill name if the profile has no name yet (don't overwrite user-set names)
+      if (!profileData.first_name) {
+        const fullName = (meta.full_name || meta.name || '').trim()
+        const parts = fullName.split(' ')
+        updates.first_name = parts[0] || ''
+        if (parts.length > 1) updates.last_name = parts.slice(1).join(' ')
+      }
+
+      // Only fill avatar if none set yet (Google provides a profile photo URL)
+      if (!profileData.avatar_url && meta.avatar_url) {
+        updates.avatar_url = meta.avatar_url
+      }
+
+      if (Object.keys(updates).length > 0) {
+        await supabase.from('profiles').update(updates).eq('user_id', authUser.id)
+      }
+    } catch (err) {
+      // Non-critical — never block auth flow
+      console.warn('Google autopopulate failed:', err?.message)
+    }
+  }
+
   // Send welcome email — only on first signup (created_at ≈ last_sign_in_at)
   const maybeSendWelcomeEmail = async (authUser) => {
     try {
@@ -87,6 +126,7 @@ export const AuthProvider = ({ children }) => {
         fetchProfile(currentUser.id)
         // Send welcome email on SIGNED_IN (covers both email+password and OAuth)
         if (event === 'SIGNED_IN') {
+          maybeAutopopulateFromGoogle(currentUser)
           maybeSendWelcomeEmail(currentUser)
           posthog.identify(currentUser.id, {
             email: currentUser.email,
