@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { X, Plus, Trash2, Users, ShoppingBag, AlertCircle, Loader } from 'lucide-react'
 import { supabase } from '../lib/supabase'
+import { posthog } from '../lib/posthog'
 
 const SIZES = ['S', 'M', 'L', 'XL', 'XXL']
 const PRICE_PER_MEMBER = 699
@@ -73,6 +74,12 @@ export default function TeamCheckout({ onClose, user, onAuth, selectedDesign }) 
       alert(`Please fill in all ${members.length} member names before proceeding.`)
       return
     }
+    posthog.capture('team_checkout_started', {
+      member_count: members.length,
+      total_amount: totalAmount,
+      design_id: selectedDesign?.id,
+      design_name: selectedDesign?.name,
+    })
     setCheckoutLoading(true)
 
     const sdkLoaded = await new Promise((resolve) => {
@@ -123,6 +130,13 @@ export default function TeamCheckout({ onClose, user, onAuth, selectedDesign }) 
         order_id: orderData.order_id,
         handler: function (response) {
           sessionStorage.setItem('knowmi_payment_success', 'true')
+          posthog.capture('team_order_placed', {
+            member_count: members.length,
+            total_amount: totalAmount,
+            design_id: selectedDesign?.id,
+            design_name: selectedDesign?.name,
+            payment_id: response.razorpay_payment_id,
+          })
           alert(`🎉 Team order placed for ${members.length} members! ID: ${response.razorpay_payment_id}`)
           onClose()
         },

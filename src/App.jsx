@@ -1,10 +1,11 @@
 import { useEffect, lazy, Suspense } from 'react'
 import toast from 'react-hot-toast'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { supabase } from './lib/supabase'
 import Home from './pages/Home'
 import SmoothScroll from './components/SmoothScroll'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { posthog } from './lib/posthog'
 
 // Lazy loaded routes for bundle size optimization
 const Dashboard = lazy(() => import('./pages/Dashboard'))
@@ -22,6 +23,14 @@ const QRIntercept = lazy(() => import('./pages/QRIntercept'))
 const IdentityStudio = lazy(() => import('./pages/IdentityStudio'))
 const VibePage = lazy(() => import('./pages/VibePage'))
 const InsightsPage = lazy(() => import('./pages/InsightsPage'))
+
+function PageViewTracker() {
+  const location = useLocation()
+  useEffect(() => {
+    posthog.capture('$pageview', { $current_url: window.location.href })
+  }, [location])
+  return null
+}
 
 const PageLoader = () => (
   <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center">
@@ -94,6 +103,7 @@ export default function App() {
     <ErrorBoundary>
       <SmoothScroll>
         <Router>
+          <PageViewTracker />
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Home />} />

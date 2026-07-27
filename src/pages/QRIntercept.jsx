@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { getAccurateLocation } from '../lib/analytics/geolocation';
+import { posthog } from '../lib/posthog';
 import { buildFingerprint } from '../lib/analytics/fingerprint';
 import { Loader2, QrCode, Sparkles, ArrowRight, ShieldCheck, Heart, MapPin, X } from 'lucide-react';
 import AuthModal from '../components/AuthModal';
@@ -117,6 +118,7 @@ export default function QRIntercept() {
         }).catch(() => {});
       }
 
+      posthog.capture('tshirt_qr_scanned', { profile_id: qrData.profile_id, source: 'tshirt', city: resolvedCity, country: resolvedCountry })
       const finalSlug = ownerProfile?.secure_slug || qrData.profile_slug || qrData.profile_id;
       navigate(`/p/${finalSlug}?src=tshirt`);
     } catch (err) {
@@ -194,6 +196,7 @@ export default function QRIntercept() {
         if (insertError) throw insertError;
       }
 
+      posthog.capture('identity_claimed', { token, profile_id: userProfile.id })
       toast.success('🎉 Congratulations! Your physical KnoWMi is now bound and activated.');
       navigate('/studio');
 

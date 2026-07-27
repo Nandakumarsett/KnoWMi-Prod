@@ -8,6 +8,7 @@ import { ShoppingBag, ChevronRight, Check, X, Ruler, Lock, Shield, Truck, Zap } 
 import { useAuth } from '../context/AuthContext'
 import AuthModal from '../components/AuthModal'
 import LiveSalesPopup from '../components/LiveSalesPopup'
+import { posthog } from '../lib/posthog'
 import { useDocumentMetadata } from '../hooks/useDocumentMetadata'
 
 const PRODUCTS = [
@@ -70,6 +71,7 @@ export default function Shop() {
   }
 
   const handleSelect = (d) => {
+    posthog.capture('design_selected', { design_id: d.id, design_name: d.name })
     setSelectedDesign(d)
     setModalOpen(true)
     searchParams.set('design', d.id)
@@ -82,6 +84,14 @@ export default function Shop() {
       setAuthOpen(true)
       return
     }
+
+    posthog.capture('checkout_started', {
+      product_type: selectedProductType,
+      design_id: selectedDesign?.id,
+      design_name: selectedDesign?.name,
+      size: selectedSize,
+      price: PRODUCTS.find(p => p.id === selectedProductType)?.price,
+    })
 
     setCheckoutLoading(true)
     const product = PRODUCTS.find(p => p.id === selectedProductType)
@@ -136,6 +146,15 @@ export default function Shop() {
         order_id: orderData.order_id,
         handler: async function (response) {
           sessionStorage.setItem('knowmi_payment_success', 'true')
+          posthog.capture('order_placed', {
+            product_type: selectedProductType,
+            design_id: selectedDesign?.id,
+            design_name: selectedDesign?.name,
+            size: selectedSize,
+            price: product?.price,
+            order_id: orderData.order_id,
+            payment_id: response.razorpay_payment_id,
+          })
           setOrderSuccess({ paymentId: response.razorpay_payment_id, orderId: orderData.order_id })
         },
         prefill: {
@@ -148,6 +167,12 @@ export default function Shop() {
 
       const paymentObject = new window.Razorpay(options)
       paymentObject.on('payment.failed', function (response) {
+        posthog.capture('payment_failed', {
+          product_type: selectedProductType,
+          design_id: selectedDesign?.id,
+          reason: response.error.description,
+          error_code: response.error.code,
+        })
         toast.error("Payment Failed. Reason: " + response.error.description)
       })
       paymentObject.open()
