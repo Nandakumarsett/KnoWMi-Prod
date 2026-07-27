@@ -4,6 +4,7 @@ import { computeCompletionScore } from '../identity/completion-score'
 
 export async function fetchProfile(slug: string): Promise<ProfileData | null> {
   const cleanSlug = (slug || '').replace(/["\\]/g, '').trim()
+  if (!cleanSlug) return null;
   const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cleanSlug)
 
   let profile: any = null
