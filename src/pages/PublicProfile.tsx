@@ -958,12 +958,14 @@ export default function PublicProfile() {
                 {personaLabel} Persona
               </div>
 
-              <p
-                className="text-sm text-center leading-relaxed mb-10 italic"
-                style={{ color: textPrimary, opacity: 0.8 }}
-              >
-                "{profile.bio || "Creating digital value."}"
-              </p>
+              {profile.bio && (
+                <p
+                  className="text-sm text-center leading-relaxed mb-10 italic"
+                  style={{ color: textPrimary, opacity: 0.8 }}
+                >
+                  "{profile.bio}"
+                </p>
+              )}
 
               <ProfileCTAs profile={displayProfile} accentColor={accentColor} />
 
