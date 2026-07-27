@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { getAccurateLocation } from '../lib/analytics/geolocation'
 import { buildFingerprint } from '../lib/analytics/fingerprint'
+import { posthog } from '../lib/posthog'
 import { MapPin, ShieldCheck, X } from 'lucide-react'
 
 export default function ScanHandler() {
@@ -68,6 +69,7 @@ export default function ScanHandler() {
       }
 
       // Immediately navigate for a seamless, fast user experience
+      posthog.capture('qr_code_scanned', { profile_id: resolvedProfile.id, source: 'wearable' })
       navigate(`/p/${finalSlug}?src=qr`)
 
       // FIRE AND FORGET ANALYTICS IN BACKGROUND

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import { posthog } from '../lib/posthog'
 
 export default function AuthModal({ open, onClose, onSuccess, redirectAfter, defaultTab = 'signup' }) {
   const [tab, setTab] = useState(defaultTab) // signup, signin, forgot
@@ -43,6 +44,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
       return;
     }
     setLoading(true)
+    posthog.capture('google_auth_started', { intent: tab })
     // Save intent so we can show the "Welcome Back" message if they try to sign up with an existing email
     localStorage.setItem('pending_auth_type', tab)
     
@@ -116,6 +118,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
       return
     }
 
+    posthog.capture('account_created', { has_referral: !!referralCode.trim() })
     setLoading(false)
     handleClose()
     onSuccess?.(redirectAfter)
@@ -149,6 +152,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
       return
     }
 
+    posthog.capture('signed_in', { method: 'email' })
     setLoading(false)
     handleClose()
     onSuccess?.(redirectAfter)

@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import { Check, Shield, Truck, Lock, Star, ArrowRight, MessageSquare, Zap, BarChart2 } from 'lucide-react'
+import { posthog } from '../lib/posthog'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -105,6 +106,8 @@ export default function Pricing({ onPlanSelect, selectedDesign }) {
 
   const handleProductClick = (productId, disabled) => {
     if (disabled) return
+    const product = products.find(p => p.id === productId)
+    posthog.capture('product_selected', { product_id: productId, product_name: product?.name, price: product?.price })
     onPlanSelect?.(productId)
   }
 

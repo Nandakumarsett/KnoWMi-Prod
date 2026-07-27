@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { posthog } from '../lib/posthog'
 
 const AuthContext = createContext({})
 
@@ -68,7 +69,13 @@ export const AuthProvider = ({ children }) => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       const currentUser = session?.user ?? null
       setUser(currentUser)
-      if (currentUser) fetchProfile(currentUser.id)
+      if (currentUser) {
+        fetchProfile(currentUser.id)
+        posthog.identify(currentUser.id, {
+          email: currentUser.email,
+          name: currentUser.user_metadata?.first_name || currentUser.user_metadata?.full_name,
+        })
+      }
       setLoading(false)
     })
 
@@ -81,8 +88,15 @@ export const AuthProvider = ({ children }) => {
         // Send welcome email on SIGNED_IN (covers both email+password and OAuth)
         if (event === 'SIGNED_IN') {
           maybeSendWelcomeEmail(currentUser)
+          posthog.identify(currentUser.id, {
+            email: currentUser.email,
+            name: currentUser.user_metadata?.first_name || currentUser.user_metadata?.full_name,
+          })
         }
       } else {
+        if (event === 'SIGNED_OUT') {
+          posthog.reset()
+        }
         setProfile(null)
       }
       setLoading(false)
