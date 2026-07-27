@@ -261,6 +261,8 @@ export default function IdentityStudio() {
       : p.toLowerCase();
   });
   const [data, setData] = useState<any>({ ...INITIAL_STATE });
+  const [showDetailed, setShowDetailed] = useState(false);
+  const [showAchievements, setShowAchievements] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -315,6 +317,18 @@ export default function IdentityStudio() {
           };
 
           if (personaIden) {
+            const hasDetailed = 
+              (personaIden.data?.skills && personaIden.data.skills.length > 0) || 
+              (personaIden.data?.projects && personaIden.data.projects.length > 0) ||
+              (personaIden.data?.experience && personaIden.data.experience.length > 0) ||
+              (personaIden.data?.education && personaIden.data.education.length > 0) ||
+              (personaIden.data?.custom_links && personaIden.data.custom_links.length > 0);
+            
+            const hasAchievements = personaIden.data?.achievements && personaIden.data.achievements.length > 0;
+            
+            setShowDetailed(!!hasDetailed);
+            setShowAchievements(!!hasAchievements);
+
             setData((prev: any) => {
               const baseData = {
                 ...prev,
@@ -1058,47 +1072,67 @@ export default function IdentityStudio() {
                   className="glass-card p-10 animate-slideUp"
                   style={{ animationDelay: "0.2s" }}
                 >
-                  <div className="flex items-center gap-5 mb-10">
-                    <div className="w-14 h-14 rounded-xl bg-orange-500 text-black border-[3px] border-black flex items-center justify-center shadow-[4px_4px_0px_#000]">
-                      <Target size={28} />
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
+                    <div className="flex items-center gap-5">
+                      <div className="w-14 h-14 rounded-xl bg-orange-500 text-black border-[3px] border-black flex items-center justify-center shadow-[4px_4px_0px_#000]">
+                        <Target size={28} />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-black font-display tracking-tight text-white">
+                          Detailed Persona Attributes
+                        </h3>
+                        <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mt-1">
+                          Specific details for your {activePersona} identity
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-black font-display tracking-tight text-white">
-                        Detailed Persona Attributes
-                      </h3>
-                      <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest mt-1">
-                        Specific details for your {activePersona} identity
-                      </p>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowDetailed(!showDetailed);
+                        try {
+                          posthog.capture("Toggle Detailed Form", { expanded: !showDetailed, persona: activePersona });
+                        } catch (_) {}
+                      }}
+                      className={`px-6 py-2.5 border-[3px] border-black text-[11px] font-black uppercase tracking-widest rounded-xl transition-all ${
+                        showDetailed
+                          ? "bg-white text-black shadow-[3px_3px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+                          : "bg-orange-500 text-black shadow-[5px_5px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+                      }`}
+                    >
+                      {showDetailed ? "Collapse Details" : "Configure Details +25%"}
+                    </button>
                   </div>
 
-                  <div className="p-0 sm:p-2">
-                    {["developer", "dev"].includes(activePersona) && (
-                      <DeveloperForm
-                        data={data}
-                        onChange={setData}
-                        isOwner
-                        onUpload={handleFileUpload}
-                        uploading={uploading}
-                      />
-                    )}
-                    {activePersona === "student" && (
-                      <StudentForm
-                        data={data}
-                        onChange={setData}
-                        onUpload={handleFileUpload}
-                        uploading={uploading}
-                      />
-                    )}
-                    {isCreatorPersona(activePersona) && (
-                      <CreatorForm
-                        data={data}
-                        onChange={setData}
-                        onUpload={handleFileUpload}
-                        uploading={uploading}
-                      />
-                    )}
-                  </div>
+                  {showDetailed && (
+                    <div className="p-0 sm:p-2 animate-fadeIn">
+                      {["developer", "dev"].includes(activePersona) && (
+                        <DeveloperForm
+                          data={data}
+                          onChange={setData}
+                          isOwner
+                          onUpload={handleFileUpload}
+                          uploading={uploading}
+                        />
+                      )}
+                      {activePersona === "student" && (
+                        <StudentForm
+                          data={data}
+                          onChange={setData}
+                          onUpload={handleFileUpload}
+                          uploading={uploading}
+                        />
+                      )}
+                      {isCreatorPersona(activePersona) && (
+                        <CreatorForm
+                          data={data}
+                          onChange={setData}
+                          onUpload={handleFileUpload}
+                          uploading={uploading}
+                        />
+                      )}
+                    </div>
+                  )}
                 </section>
 
                 {/* Section: Achievements */}
@@ -1107,7 +1141,7 @@ export default function IdentityStudio() {
                   className="glass-card p-10 animate-slideUp"
                   style={{ animationDelay: "0.5s" }}
                 >
-                  <div className="flex items-center justify-between mb-10">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
                     <div className="flex items-center gap-5">
                       <div className="w-14 h-14 rounded-xl bg-orange-500 text-black border-[3px] border-black flex items-center justify-center shadow-[4px_4px_0px_#000]">
                         <Trophy size={28} />
@@ -1121,28 +1155,48 @@ export default function IdentityStudio() {
                         </p>
                       </div>
                     </div>
-                    {data.achievements.length > 0 ? (
-                      <span className="status-badge completed">
-                        Completed ✅
-                      </span>
-                    ) : (
-                      <span className="status-badge missing">
-                        Missing +10% ⚠️
-                      </span>
-                    )}
+                    <div className="flex items-center gap-4">
+                      {data.achievements?.length > 0 ? (
+                        <span className="status-badge completed">
+                          Completed ✅
+                        </span>
+                      ) : (
+                        <span className="status-badge missing">
+                          Missing +10% ⚠️
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowAchievements(!showAchievements);
+                          try {
+                            posthog.capture("Toggle Achievements Form", { expanded: !showAchievements });
+                          } catch (_) {}
+                        }}
+                        className={`px-6 py-2.5 border-[3px] border-black text-[11px] font-black uppercase tracking-widest rounded-xl transition-all ${
+                          showAchievements
+                            ? "bg-white text-black shadow-[3px_3px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+                            : "bg-orange-500 text-black shadow-[5px_5px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+                        }`}
+                      >
+                        {showAchievements ? "Collapse" : "Add Achievements"}
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="space-y-6">
-                    <p className="text-[11px] text-neutral-400 font-medium leading-relaxed">
-                      Boost trust with achievements (awards, milestones, or
-                      high-value certifications).
-                    </p>
-                    <TagInput
-                      value={data.achievements || []}
-                      onChange={(tags) => updateField("achievements", tags)}
-                      placeholder="Add achievement (e.g., Verified on Instagram, Best Actor 2023)"
-                    />
-                  </div>
+                  {showAchievements && (
+                    <div className="space-y-6 animate-fadeIn">
+                      <p className="text-[11px] text-neutral-400 font-medium leading-relaxed">
+                        Boost trust with achievements (awards, milestones, or
+                        high-value certifications).
+                      </p>
+                      <TagInput
+                        value={data.achievements || []}
+                        onChange={(tags) => updateField("achievements", tags)}
+                        placeholder="Add achievement (e.g., Verified on Instagram, Best Actor 2023)"
+                      />
+                    </div>
+                  )}
                 </section>
               </>
             )}
