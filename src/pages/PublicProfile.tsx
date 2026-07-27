@@ -623,8 +623,8 @@ export default function PublicProfile() {
                 >
                   <div className="w-full h-full bg-white overflow-hidden relative flex items-center justify-center">
                     <img
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.username || profile?.id}`)}`}
-                      className="w-full h-full object-contain pointer-events-none select-none mix-blend-multiply"
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&ecc=H&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.username || profile?.id}`)}`}
+                      className="w-full h-full object-contain select-none mix-blend-multiply"
                       draggable="false"
                       onDragStart={(e) => e.preventDefault()}
                       onContextMenu={(e) => e.preventDefault()}
@@ -632,8 +632,7 @@ export default function PublicProfile() {
                       loading="eager"
                       alt="QR Code"
                     />
-                    <div className="absolute inset-0 z-10" />
-                    <div className="absolute inset-0 m-auto w-12 h-12 bg-black border-[3px] border-orange-500 rounded-xl flex items-center justify-center z-20 select-none overflow-hidden">
+                    <div className="absolute inset-0 m-auto w-8 h-8 bg-black border-2 border-orange-500 rounded-lg flex items-center justify-center z-20 select-none overflow-hidden pointer-events-none">
                       <img
                         src="/favicon.png"
                         fetchpriority="high"
@@ -885,8 +884,8 @@ export default function PublicProfile() {
                       ) : (
                         <div className="w-full h-full bg-white flex items-center justify-center relative p-2 select-none animate-fadeIn rounded-none">
                           <img
-                            src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.username || profile?.id}`)}`}
-                            className="w-full h-full object-contain pointer-events-none mix-blend-multiply"
+                            src={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&ecc=H&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.username || profile?.id}`)}`}
+                            className="w-full h-full object-contain mix-blend-multiply"
                             draggable="false"
                             onDragStart={(e) => e.preventDefault()}
                             onContextMenu={(e) => e.preventDefault()}
@@ -894,8 +893,7 @@ export default function PublicProfile() {
                             loading="eager"
                             alt="QR Code"
                           />
-                          <div className="absolute inset-0 z-10" />
-                          <div className="absolute inset-0 m-auto w-12 h-12 bg-black border-[3px] border-orange-500 rounded-xl flex items-center justify-center z-20 select-none overflow-hidden">
+                          <div className="absolute inset-0 m-auto w-8 h-8 bg-black border-2 border-orange-500 rounded-lg flex items-center justify-center z-20 select-none overflow-hidden pointer-events-none">
                             <img
                               src="/favicon.png"
                               fetchpriority="high"
