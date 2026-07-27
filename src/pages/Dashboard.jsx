@@ -1,6 +1,7 @@
 import { DashboardErrorBoundary } from './DashboardErrorBoundary';
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import toast from 'react-hot-toast'
+import { posthog } from '../lib/posthog'
 import Avatar from '../components/Avatar'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { 
@@ -961,7 +962,8 @@ const PersonaEditor = ({ profile, onUpdate }) => {
 
       setIdentities(updatedIdentities)
       setShowToast(true)
-      
+      posthog.capture('profile_saved', { persona_type: persona || 'creator', identity_count: updatedIdentities.length })
+
       if (onUpdate) await onUpdate()
       
       // Delay slightly so the user sees the "Saving" state finish before the transition

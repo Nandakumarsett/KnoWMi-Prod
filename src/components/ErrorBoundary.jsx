@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertTriangle, RefreshCcw } from 'lucide-react';
+import { posthog } from '../lib/posthog';
 
 export class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -13,6 +14,11 @@ export class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, info) {
     console.error("ErrorBoundary caught an error:", error, info);
+    posthog.capture('application_error', {
+      error_message: error?.message,
+      error_name: error?.name,
+      component_stack: info?.componentStack?.slice(0, 500),
+    });
   }
 
   render() {

@@ -23,6 +23,7 @@ import { useAuth } from "../context/AuthContext";
 import { supabase } from "../lib/supabase";
 import { getAnalyticsData } from "../lib/analytics/data-source";
 import AuthModal from "../components/AuthModal";
+import { posthog } from "../lib/posthog";
 
 export default function PublicProfile() {
   const { username } = useParams();
@@ -89,6 +90,19 @@ export default function PublicProfile() {
     }
     loadProfile();
   }, [username]);
+
+  useEffect(() => {
+    if (profile && !authLoading) {
+      const isOwner = user && user.id === profile.user_id;
+      if (!isOwner) {
+        posthog.capture('profile_viewed', {
+          profile_id: profile.id,
+          persona: profile.persona,
+          source: new URLSearchParams(window.location.search).get('src') || 'direct',
+        });
+      }
+    }
+  }, [profile, authLoading]);
 
   useEffect(() => {
     if (profile) {
@@ -728,6 +742,7 @@ export default function PublicProfile() {
                       });
                     if (error) setConnectStatus("error");
                     else {
+                      posthog.capture('connect_sent', { profile_id: profile.id });
                       setConnectStatus("success");
                       setTimeout(() => setShowConnectModal(false), 2000);
                     }
@@ -1165,6 +1180,7 @@ export default function PublicProfile() {
                     });
                   if (error) setConnectStatus("error");
                   else {
+                    posthog.capture('connect_sent', { profile_id: profile.id });
                     setConnectStatus("success");
                     setTimeout(() => setShowConnectModal(false), 2000);
                   }
