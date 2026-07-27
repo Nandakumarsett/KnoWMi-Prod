@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { posthog } from "../lib/posthog";
 import {
   ArrowLeft,
   Sparkles,
@@ -597,6 +598,13 @@ export default function IdentityStudio() {
       });
       sessionStorage.removeItem(`draft_persona_${activePersona}`);
       toast.success("Changes saved successfully! 🎉");
+      try {
+        posthog.capture("Save Persona Theme", {
+          persona_type: activePersona,
+          profile_theme: data.profile_theme || "default",
+          completion_score: score
+        });
+      } catch (_) {}
       // Refresh global profile state instead of hard reload
       if (refreshProfile) refreshProfile();
     } catch (err: any) {

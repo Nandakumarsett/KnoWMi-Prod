@@ -1004,6 +1004,11 @@ const PersonaEditor = ({ profile, onUpdate }) => {
                   toast.error(`Failed to update privacy mode: ${error.message}`);
                 } else {
                   toast.success(newStatus ? "Privacy Mode activated!" : "Privacy Mode deactivated!");
+                  try {
+                    posthog.capture("Toggle Ghost Mode", {
+                      enabled: newStatus
+                    });
+                  } catch (_) {}
                   if (onUpdate) await onUpdate();
                 }
               } catch (e) { 
@@ -1771,6 +1776,15 @@ function Dashboard() {
   }, [activeTab])
 
   const [analyticsView, setAnalyticsView] = useState('vibe')
+
+  useEffect(() => {
+    if (analyticsView) {
+      posthog.capture('Change Analytics Tab', {
+        tab: analyticsView
+      });
+    }
+  }, [analyticsView]);
+
   const [vibeTheme, setVibeTheme] = useState('dark')
   const [vibeStats, setVibeStats] = useState(null)
   const [selectedRange, setSelectedRange] = useState('today')
@@ -2296,7 +2310,13 @@ function Dashboard() {
                           />
                           <button
                             type="button"
-                            onClick={(e) => { e.preventDefault(); navigate('/insights'); }}
+                            onClick={(e) => { 
+                              e.preventDefault(); 
+                              try {
+                                posthog.capture('Click AI Insights Details');
+                              } catch (_) {}
+                              navigate('/insights'); 
+                            }}
                             className="mt-5 w-full bg-white/5 border border-violet-500/25 text-white text-xs font-semibold px-5 py-3.5 rounded-2xl hover:bg-violet-500/10 hover:border-violet-500/40 transition-all duration-300 flex items-center justify-between gap-3 active:scale-95"
                           >
                             <div className="flex items-center gap-3">
