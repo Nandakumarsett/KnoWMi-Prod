@@ -623,7 +623,7 @@ export default function PublicProfile() {
                 >
                   <div className="w-full h-full bg-white overflow-hidden relative flex items-center justify-center">
                     <img
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.secure_slug || profile?.id}`)}`}
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.username || profile?.id}`)}`}
                       className="w-full h-full object-contain pointer-events-none select-none mix-blend-multiply"
                       draggable="false"
                       onDragStart={(e) => e.preventDefault()}
@@ -885,7 +885,7 @@ export default function PublicProfile() {
                       ) : (
                         <div className="w-full h-full bg-white flex items-center justify-center relative p-2 select-none animate-fadeIn rounded-none">
                           <img
-                            src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.secure_slug || profile?.id}`)}`}
+                            src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`${window.location.origin}/p/${profile?.username || profile?.id}`)}`}
                             className="w-full h-full object-contain pointer-events-none mix-blend-multiply"
                             draggable="false"
                             onDragStart={(e) => e.preventDefault()}

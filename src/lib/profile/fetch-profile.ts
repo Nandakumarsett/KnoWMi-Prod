@@ -11,9 +11,9 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
   // 1. Fetch full record (safe because we filter before returning)
   let query = supabase.from('profiles').select('*')
   if (isUUID) {
-    query = query.or(`id.eq."${cleanSlug}",secure_slug.eq."${cleanSlug}"`)
+    query = query.or(`id.eq.${cleanSlug},secure_slug.eq.${cleanSlug}`)
   } else {
-    query = query.or(`secure_slug.eq."${cleanSlug}",first_name.eq."${cleanSlug}"`)
+    query = query.or(`secure_slug.eq.${cleanSlug},first_name.eq.${cleanSlug}`)
   }
 
   const { data: pData, error: pError } = await query.maybeSingle()
@@ -23,9 +23,9 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     // 2. Fallback to public_profiles
     let fallbackQuery = supabase.from('public_profiles').select('*')
     if (isUUID) {
-      fallbackQuery = fallbackQuery.or(`id.eq."${cleanSlug}",secure_slug.eq."${cleanSlug}"`)
+      fallbackQuery = fallbackQuery.or(`id.eq.${cleanSlug},secure_slug.eq.${cleanSlug}`)
     } else {
-      fallbackQuery = fallbackQuery.or(`secure_slug.eq."${cleanSlug}",first_name.eq."${cleanSlug}"`)
+      fallbackQuery = fallbackQuery.or(`secure_slug.eq.${cleanSlug},first_name.eq.${cleanSlug}`)
     }
     const { data: fallbackData } = await fallbackQuery.maybeSingle()
     if (fallbackData) {
