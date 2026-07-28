@@ -609,19 +609,30 @@ const PersonaEditor = ({ profile, onUpdate }) => {
   const [errors, setErrors] = useState({})
   const [statErrors, setStatErrors] = useState({})
 
-  // Sync state to search params
+  const hasLoadedInitialParams = useRef(false)
+
+  // Sync state TO search params safely
   useEffect(() => {
-    const newParams = new URLSearchParams(window.location.search) // Read from window to be safe
+    const currentMode = searchParams.get('mode')
+    const currentEdit = searchParams.get('edit')
+
     if (isEditing && editingId) {
-      newParams.set('mode', 'edit')
-      newParams.set('edit', editingId)
-      newParams.set('tab', 'profile') // Force tab to profile while editing
-    } else {
-      newParams.delete('mode')
-      newParams.delete('edit')
+      if (currentMode !== 'edit' || currentEdit !== editingId) {
+        const newParams = new URLSearchParams(searchParams)
+        newParams.set('mode', 'edit')
+        newParams.set('edit', editingId)
+        newParams.set('tab', 'profile')
+        setSearchParams(newParams, { replace: true })
+      }
+    } else if (!isEditing) {
+      if (currentMode || currentEdit) {
+        const newParams = new URLSearchParams(searchParams)
+        newParams.delete('mode')
+        newParams.delete('edit')
+        setSearchParams(newParams, { replace: true })
+      }
     }
-    setSearchParams(newParams, { replace: true })
-  }, [isEditing, editingId])
+  }, [isEditing, editingId, searchParams, setSearchParams])
 
   // Load identity into editor
   const startEditing = (id) => {
@@ -636,45 +647,27 @@ const PersonaEditor = ({ profile, onUpdate }) => {
       }
       setData(identityDataObj)
       setFirstName(identity.first_name)
-
       setLastName(identity.last_name)
       setBio(identity.bio)
       setIsEditing(true)
     }
   }
 
-  // Effect to load data if initial search params exist
+  // Load data from URL params on initial mount only
   useEffect(() => {
-    if (searchParams.get('edit')) {
-      const id = searchParams.get('edit')
-      const identity = identities.find(i => i.id === id)
-      if (identity) {
-        setEditingId(id)
-        setPersona(identity.persona_type)
-        setAvatarUrl(identity.avatar_url || '')
-        const identityDataObj = { ...(identity.data || {}) };
-        if (identity.bio && !identityDataObj.bio) {
-          identityDataObj.bio = identity.bio;
-        }
-        setData(identityDataObj)
-        setFirstName(identity.first_name)
-
-        setLastName(identity.last_name)
-        setBio(identity.bio)
-        setIsEditing(true)
+    if (!hasLoadedInitialParams.current && identities.length > 0) {
+      hasLoadedInitialParams.current = true
+      const editId = searchParams.get('edit')
+      if (editId) {
+        startEditing(editId)
       }
     }
-  }, [identities]) 
-  
-  // Sync state FROM search params (e.g. when clicking global back button)
-  useEffect(() => {
-    const isEditMode = searchParams.get('mode') === 'edit' || searchParams.get('mode') === 'new' || !!searchParams.get('edit')
-    if (!isEditMode && isEditing) {
-      setIsEditing(false)
-    } else if (isEditMode && !isEditing) {
-      setIsEditing(true)
-    }
-  }, [searchParams, isEditing])
+  }, [identities, searchParams])
+
+  const stopEditing = () => {
+    setEditingId(null)
+    setIsEditing(false)
+  }
 
   const addNewIdentity = () => {
     const limit = isPaid ? 3 : 1;
@@ -968,7 +961,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
       
       // Delay slightly so the user sees the "Saving" state finish before the transition
       setTimeout(() => {
-        setIsEditing(false)
+        stopEditing()
         setShowToast(false)
       }, 1000)
     } catch (err) {
@@ -1125,7 +1118,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
               <div className="flex items-center justify-between gap-6 mb-6">
                 <div className="flex items-center gap-4">
                   <button 
-                    onClick={() => setIsEditing(false)}
+                    onClick={stopEditing}
                     className="w-10 h-10 flex items-center justify-center bg-[#1a1a1a] border border-white/20 text-neutral-400 rounded-xl hover:text-white hover:border-neutral-900 transition-all active:scale-90"
                   >
                     <ArrowLeft size={20} />
@@ -1407,7 +1400,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
               {/* Bottom Action Bar for better UX */}
               <div className="pt-10 flex items-center justify-center gap-6">
                 <button 
-                  onClick={() => setIsEditing(false)}
+                  onClick={stopEditing}
                   className="group flex items-center gap-2 px-10 py-4 bg-[#1a1a1a] border-2 border-white/20 text-neutral-400 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-[#1a1a1a] hover:border-white/20 hover:text-white transition-all"
                 >
                   <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />

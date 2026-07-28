@@ -28,17 +28,25 @@ export class DashboardErrorBoundary extends React.Component {
             </div>
             
             <h2 className="text-2xl font-black text-neutral-900 mb-3">Oops! Something went wrong</h2>
-            <p className="text-neutral-500 mb-8 leading-relaxed">
+            <p className="text-neutral-500 mb-6 text-sm leading-relaxed">
               We encountered an unexpected glitch while loading this page. Don't worry, your data is safe.
             </p>
             
-            <button 
-              onClick={() => window.location.reload()}
-              className="w-full flex items-center justify-center gap-2 bg-neutral-900 text-white font-bold py-4 px-6 rounded-2xl hover:bg-neutral-800 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-neutral-900/20 mb-6"
-            >
-              <RefreshCcw className="w-5 h-5" />
-              Reload Dashboard
-            </button>
+            <div className="flex flex-col gap-3 mb-6">
+              <button 
+                onClick={() => { window.location.href = '/dashboard?tab=profile' }}
+                className="w-full flex items-center justify-center gap-2 bg-orange-500 text-black font-black uppercase tracking-wider py-3.5 px-6 rounded-2xl hover:bg-orange-400 active:scale-[0.98] transition-all shadow-md shadow-orange-500/20"
+              >
+                <RefreshCcw className="w-4 h-4" />
+                Reset & Return to Identity Studio
+              </button>
+              <button 
+                onClick={() => { window.location.href = '/' }}
+                className="w-full flex items-center justify-center gap-2 bg-neutral-900 text-white font-bold text-xs uppercase tracking-wider py-3 px-6 rounded-2xl hover:bg-neutral-800 transition-all"
+              >
+                Return to Homepage →
+              </button>
+            </div>
             
             <details className="text-left bg-neutral-50 rounded-2xl p-4 border border-neutral-100 group cursor-pointer">
               <summary className="text-xs font-bold text-neutral-500 uppercase tracking-wider flex items-center justify-between outline-none">
