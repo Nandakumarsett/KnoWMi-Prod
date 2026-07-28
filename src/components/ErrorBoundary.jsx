@@ -35,13 +35,21 @@ export class ErrorBoundary extends React.Component {
               We encountered a glitch while loading this section. Tap reload to try again.
             </p>
             
-            <button 
-              onClick={() => window.location.reload()}
-              className="w-full flex items-center justify-center gap-2 bg-orange-500 text-black font-black py-4 px-6 rounded-2xl border-[3px] border-black shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
-            >
-              <RefreshCcw className="w-5 h-5" strokeWidth={3} />
-              Reload Page
-            </button>
+            <div className="flex flex-col gap-3">
+              <button 
+                onClick={() => window.location.reload()}
+                className="w-full flex items-center justify-center gap-2 bg-orange-500 text-black font-black py-4 px-6 rounded-2xl border-[3px] border-black shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+              >
+                <RefreshCcw className="w-5 h-5" strokeWidth={3} />
+                Reload Page
+              </button>
+              <button 
+                onClick={() => window.location.href = '/'}
+                className="w-full py-3 bg-neutral-800 text-white font-bold text-xs uppercase tracking-wider rounded-2xl hover:bg-neutral-700 transition-all border-2 border-white/10"
+              >
+                Return to Homepage →
+              </button>
+            </div>
           </div>
         </div>
       );
