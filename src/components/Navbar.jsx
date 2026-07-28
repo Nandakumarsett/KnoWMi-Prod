@@ -121,13 +121,13 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
       >
         <div className="max-w-[1200px] mx-auto px-3 sm:px-6 flex items-center justify-between h-16 lg:h-[76px] w-full relative">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 group select-none" aria-label="KnoWMi home">
+        <a href="/" className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0 group select-none" aria-label="KnoWMi home">
           {/* Official Brand Logo Mark — Stylized KW (Uncontained, no background box) */}
           <img 
             src="/logo-square.png" 
             alt="KnoWMi Logo" 
-            className="w-8 h-8 sm:w-10 sm:h-10 lg:w-11 lg:h-11 object-contain shrink-0 group-hover:scale-105 transition-transform"
-            style={useDarkTheme ? { filter: 'brightness(0) invert(1) drop-shadow(0 0 1px rgba(255,255,255,0.3))' } : {}}
+            className="w-10 h-10 sm:w-12 sm:h-12 lg:w-[52px] lg:h-[52px] object-contain shrink-0 group-hover:scale-105 transition-transform"
+            style={useDarkTheme ? { filter: 'invert(1) hue-rotate(180deg)' } : {}}
           />
 
           <div className="flex flex-col leading-none relative z-20">
@@ -136,13 +136,13 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
                 style={{
                   fontFamily: "'Montserrat', sans-serif",
                 }}
-                className={`text-[18px] sm:text-[22px] lg:text-[26px] font-black tracking-tight block leading-[0.9] transition-colors ${useDarkTheme ? 'text-white' : 'text-[var(--ink)]'}`}
+                className={`text-[22px] sm:text-[28px] lg:text-[34px] font-black tracking-tight block leading-[0.9] transition-colors ${useDarkTheme ? 'text-white' : 'text-[var(--ink)]'}`}
               >
                 Kno<span className="text-orange-500">WM</span>i
               </span>
             </div>
             <span
-              className={`hidden sm:block text-[8px] sm:text-[9px] lg:text-[10px] font-black tracking-[0.18em] mt-0.5 uppercase ${useDarkTheme ? 'text-white/60' : 'text-neutral-400'}`}
+              className={`hidden sm:block text-[9px] sm:text-[10px] lg:text-[11px] font-black tracking-[0.18em] mt-0.5 uppercase ${useDarkTheme ? 'text-white/60' : 'text-neutral-400'}`}
               style={{ fontFamily: "'Inter', sans-serif" }}
             >
               Scan Me. Know Me.
