@@ -119,7 +119,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
         role="navigation"
         aria-label="Main navigation"
       >
-      <div className="max-w-[1200px] mx-auto pl-2 pr-4 md:px-6 flex items-center justify-between lg:justify-start h-16 lg:h-[76px] gap-0 w-full relative">
+        <div className="max-w-[1200px] mx-auto px-3 sm:px-6 flex items-center justify-between h-16 lg:h-[76px] w-full relative">
         {/* Logo */}
         <a href="/" className="flex items-center flex-shrink-0" aria-label="KnoWMi home">
           <div className="flex flex-col leading-none relative z-20">
@@ -127,50 +127,20 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
               <span
                 style={{
                   fontFamily: "'Montserrat', sans-serif",
-                  fontSize: '32px',
                 }}
-                className={`lg:text-[36px] font-black tracking-tight block leading-[0.9] ${useDarkTheme ? 'text-white' : 'text-[var(--ink)]'}`}
+                className={`text-[22px] sm:text-[28px] lg:text-[36px] font-black tracking-tight block leading-[0.9] ${useDarkTheme ? 'text-white' : 'text-[var(--ink)]'}`}
               >
                 Kno<span className="text-orange-500">WM</span>i
               </span>
             </div>
             <span
-              className={`text-[9px] lg:text-[11px] font-black tracking-[0.15em] mt-1 uppercase ${useDarkTheme ? 'text-white/60' : 'text-neutral-400'}`}
+              className={`hidden sm:block text-[9px] lg:text-[11px] font-black tracking-[0.15em] mt-1 uppercase ${useDarkTheme ? 'text-white/60' : 'text-neutral-400'}`}
               style={{ fontFamily: "'Inter', sans-serif" }}
             >
               Scan Me. Know Me.
             </span>
           </div>
         </a>
-
-        {/* Mobile inline links container next to Logo */}
-        <div className="lg:hidden flex items-center justify-center gap-2.5 sm:gap-4 flex-1 mx-2 sm:mx-4">
-          {navLinks
-            .filter(l => ['How It Works', 'Collection', 'FAQs'].includes(l.label))
-            .map(l => {
-              const isActive = activeSection === l.href || 
-                (l.href.includes('#') && activeSection.replace(/^\//, '') === l.href.replace(/^\//, ''))
-              
-              let labelText = l.label
-              if (l.label === 'How It Works') labelText = 'Works'
-              if (l.label === 'FAQs') labelText = 'FAQ'
-
-              return (
-                <a
-                  key={l.label}
-                  href={l.href}
-                  onClick={(e) => handleNavClick(e, l.href)}
-                  className={`px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all duration-200 shrink-0 ${
-                    isActive 
-                      ? 'bg-orange-500 text-black border border-black shadow-[1.5px_1.5px_0px_#000]' 
-                      : (useDarkTheme ? 'text-white/60 hover:text-white' : 'text-neutral-500 hover:text-neutral-900')
-                  }`}
-                >
-                  {labelText}
-                </a>
-              )
-            })}
-        </div>
 
         {/* Desktop links */}
         <div className="hidden lg:flex items-center gap-1.5 flex-1 justify-center">
@@ -197,12 +167,26 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
           })}
         </div>
 
-        {/* Desktop CTA / User Area */}
-        <div className="hidden lg:flex items-center gap-2.5 flex-shrink-0 justify-end">
+        {/* User Area & Actions (Visible on Mobile & Desktop) */}
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 justify-end">
           {user ? (
-            /* Logged in: show name + badge */
-            <div className="flex items-center gap-3 relative">
-              <div className="relative">
+            /* Logged in */
+            <div className="flex items-center gap-2 sm:gap-3 relative">
+              {/* Analytics Shortcut Button (Mobile & Desktop) */}
+              <Link 
+                to="/dashboard"
+                className={`px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1 shrink-0 ${
+                  useDarkTheme 
+                    ? 'bg-orange-500/10 border border-orange-500/30 text-orange-400 hover:bg-orange-500 hover:text-black' 
+                    : 'bg-orange-50 border border-orange-200 text-orange-600 hover:bg-orange-500 hover:text-white'
+                }`}
+                title="Analytics Dashboard"
+              >
+                <span>Analytics</span>
+              </Link>
+
+              {/* Desktop Name & Status Dropdown Button */}
+              <div className="hidden lg:block relative">
                 <button
                   onClick={e => { e.stopPropagation(); setDropdownOpen(!dropdownOpen) }}
                   className={`flex items-center gap-2.5 px-4 h-10 rounded-xl transition-all duration-200 ${useDarkTheme ? 'hover:bg-white/10' : 'hover:bg-[var(--off)]'}`}
@@ -238,85 +222,82 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
                   </svg>
                 </button>
 
-              {/* Dropdown menu */}
-              {dropdownOpen && (
-                <div
-                  className="absolute right-0 top-[calc(100%+8px)] w-52 rounded-xl overflow-hidden shadow-xl"
-                  style={{ background: 'var(--paper)', border: '1px solid var(--border)', zIndex: 100 }}
-                >
-                  {isStaff && (
-                    <Link to="/admin" className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--sf)', borderBottom: '1px solid var(--border)' }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                      Admin Panel
-                    </Link>
-                  )}
-                  {!hasIdentities ? (
-                    <Link to="/dashboard?tab=profile" className="flex items-center gap-2 px-4 py-3 text-sm font-black text-orange-500 bg-orange-500/10 hover:bg-orange-500/20 transition-colors border-b border-orange-500/20">
-                      <span className="text-base">✦</span>
-                      Create Identity Card
-                    </Link>
-                  ) : null}
-                  <Link to="/dashboard?tab=profile" className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    Identity Studio
-                  </Link>
-                  <Link to="/dashboard" className="flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
-                    <div className="flex items-center gap-2">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h7" /><path d="M16 5l-4 4-4-4" /><path d="M22 17l-3 3-3-3" /><path d="M19 14v6" /></svg>
-                      Analytics
-                    </div>
-                    {!(isVerified || role === 'owner' || status === 'paid') && (
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-orange-500"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                    )}
-                  </Link>
-                  <button
-                    onClick={signOut}
-                    className="w-full flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-red-50 text-left"
-                    style={{ color: '#dc2626' }}
+                {/* Desktop Dropdown menu */}
+                {dropdownOpen && (
+                  <div
+                    className="absolute right-0 top-[calc(100%+8px)] w-52 rounded-xl overflow-hidden shadow-xl"
+                    style={{ background: 'var(--paper)', border: '1px solid var(--border)', zIndex: 100 }}
                   >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4m7 14l5-5-5-5m5 5H9" /></svg>
-                    Sign Out
-                  </button>
-                </div>
-              )}
+                    {isStaff && (
+                      <Link to="/admin" className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--sf)', borderBottom: '1px solid var(--border)' }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                        Admin Panel
+                      </Link>
+                    )}
+                    {!hasIdentities ? (
+                      <Link to="/dashboard?tab=profile" className="flex items-center gap-2 px-4 py-3 text-sm font-black text-orange-500 bg-orange-500/10 hover:bg-orange-500/20 transition-colors border-b border-orange-500/20">
+                        <span className="text-base">✦</span>
+                        Create Identity Card
+                      </Link>
+                    ) : null}
+                    <Link to="/dashboard?tab=profile" className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      Identity Studio
+                    </Link>
+                    <Link to="/dashboard" className="flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
+                      <div className="flex items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h7" /><path d="M16 5l-4 4-4-4" /><path d="M22 17l-3 3-3-3" /><path d="M19 14v6" /></svg>
+                        Analytics
+                      </div>
+                    </Link>
+                    <button
+                      onClick={signOut}
+                      className="w-full flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-red-50 text-left"
+                      style={{ color: '#dc2626' }}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4m7 14l5-5-5-5m5 5H9" /></svg>
+                      Sign Out
+                    </button>
+                  </div>
+                )}
               </div>
 
-              {/* Standalone Avatar circle */}
+              {/* Profile Avatar circle (Visible on Mobile & Desktop) */}
               <Link 
                 to={profile ? (hasIdentities ? `/p/${profile.secure_slug || profile.username || profile.id}` : '/dashboard?tab=profile') : '/dashboard'}
                 className="hover:scale-105 transition-transform shrink-0 block relative z-10 cursor-pointer"
                 title="View Profile"
               >
-                <Avatar src={profile?.avatar_url} name={firstName} size="w-10 h-10 ring-2 ring-orange-500 ring-offset-2 shadow-sm" />
+                <Avatar src={profile?.avatar_url} name={firstName} size="w-8 h-8 sm:w-10 sm:h-10 ring-2 ring-orange-500 ring-offset-1 shadow-sm" />
               </Link>
             </div>
           ) : (
-            /* Not logged in: show Sign Up / Sign In */
-            <>
+            /* Not logged in: show Sign In / Sign Up */
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => onAuthClick?.('signin')}
-                className={`px-5 py-2.5 text-[13px] font-black uppercase tracking-wider rounded-lg border-[3px] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none shadow-[3px_3px_0px_#000] ${useDarkTheme ? 'bg-black text-white border-white shadow-[3px_3px_0px_#fff]' : 'bg-white text-black border-black'}`}
+                className={`px-3 py-1.5 sm:px-5 sm:py-2.5 text-[11px] sm:text-[13px] font-black uppercase tracking-wider rounded-lg border-2 sm:border-[3px] transition-all hover:translate-x-[1px] hover:translate-y-[1px] ${useDarkTheme ? 'bg-black text-white border-white' : 'bg-white text-black border-black'}`}
               >
                 Sign In
               </button>
               <button
                 onClick={() => onAuthClick?.('signup')}
-                className="px-5 py-2.5 text-[13px] font-black uppercase tracking-wider rounded-lg bg-orange-500 text-black border-[3px] border-black shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center gap-2"
+                className="hidden sm:flex px-5 py-2.5 text-[13px] font-black uppercase tracking-wider rounded-lg bg-orange-500 text-black border-[3px] border-black shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all items-center gap-2"
               >
                 Sign Up Free
               </button>
-            </>
+            </div>
           )}
-        </div>
 
-        {/* Mobile hamburger */}
-        <button className="md:hidden p-2 rounded-lg bg-orange-500 border-[3px] border-black text-black shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
-          <div className="w-6 h-5 relative flex flex-col justify-between">
-            <span className={`w-full h-1 bg-black rounded-full transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
-            <span className={`w-full h-1 bg-black rounded-full transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`} />
-            <span className={`w-full h-1 bg-black rounded-full transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
-          </div>
-        </button>
+          {/* Mobile hamburger */}
+          <button className="lg:hidden p-2 rounded-lg bg-orange-500 border-2 border-black text-black shadow-[2px_2px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] transition-all ml-0.5" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
+            <div className="w-5 h-4 relative flex flex-col justify-between">
+              <span className={`w-full h-0.5 bg-black rounded-full transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
+              <span className={`w-full h-0.5 bg-black rounded-full transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-full h-0.5 bg-black rounded-full transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-1.5' : ''}`} />
+            </div>
+          </button>
+        </div>
       </div>
 
 
