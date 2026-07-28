@@ -121,14 +121,13 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
       >
         <div className="max-w-[1200px] mx-auto px-3 sm:px-6 flex items-center justify-between h-16 lg:h-[76px] w-full relative">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 group select-none" aria-label="KnoWMi home">
-          {/* Uncontained KW Brand Logo */}
-          <span
-            style={{ fontFamily: "'Montserrat', sans-serif" }}
-            className="text-[26px] sm:text-[34px] lg:text-[42px] font-black tracking-tighter text-orange-500 shrink-0 leading-none group-hover:scale-105 transition-transform"
-          >
-            KW
-          </span>
+        <a href="/" className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0 group select-none" aria-label="KnoWMi home">
+          {/* Official Brand Logo Mark (Uncontained) */}
+          <img 
+            src="/favicon.png" 
+            alt="KnoWMi Logo" 
+            className="w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12 object-contain shrink-0 group-hover:scale-105 transition-transform" 
+          />
 
           <div className="flex flex-col leading-none relative z-20">
             <div className="relative">
