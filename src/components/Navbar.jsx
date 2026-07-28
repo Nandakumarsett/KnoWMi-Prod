@@ -121,23 +121,14 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
       >
         <div className="max-w-[1200px] mx-auto px-3 sm:px-6 flex items-center justify-between h-16 lg:h-[76px] w-full relative">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0 group" aria-label="KnoWMi home">
-          {/* KW Brand Logo Icon */}
-          <div className="relative shrink-0 flex items-center">
-            <img 
-              src="/favicon.png" 
-              alt="KW Logo" 
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl border border-white/20 shadow-md object-cover group-hover:scale-105 transition-transform" 
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-                const sibling = e.currentTarget.nextElementSibling;
-                if (sibling) sibling.style.display = 'flex';
-              }}
-            />
-            <div className="hidden w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-orange-500 text-black font-black text-xs sm:text-sm items-center justify-center shadow-md border border-black uppercase font-display shrink-0">
-              KW
-            </div>
-          </div>
+        <a href="/" className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 group select-none" aria-label="KnoWMi home">
+          {/* Uncontained KW Brand Logo */}
+          <span
+            style={{ fontFamily: "'Montserrat', sans-serif" }}
+            className="text-[26px] sm:text-[34px] lg:text-[42px] font-black tracking-tighter text-orange-500 shrink-0 leading-none group-hover:scale-105 transition-transform"
+          >
+            KW
+          </span>
 
           <div className="flex flex-col leading-none relative z-20">
             <div className="relative">
@@ -145,13 +136,13 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
                 style={{
                   fontFamily: "'Montserrat', sans-serif",
                 }}
-                className={`text-[20px] sm:text-[26px] lg:text-[34px] font-black tracking-tight block leading-[0.9] transition-colors ${useDarkTheme ? 'text-white' : 'text-[var(--ink)]'}`}
+                className={`text-[24px] sm:text-[30px] lg:text-[38px] font-black tracking-tight block leading-[0.9] transition-colors ${useDarkTheme ? 'text-white' : 'text-[var(--ink)]'}`}
               >
                 Kno<span className="text-orange-500">WM</span>i
               </span>
             </div>
             <span
-              className={`hidden sm:block text-[9px] lg:text-[10px] font-black tracking-[0.15em] mt-1 uppercase ${useDarkTheme ? 'text-white/60' : 'text-neutral-400'}`}
+              className={`hidden sm:block text-[9px] sm:text-[11px] lg:text-[12px] font-black tracking-[0.18em] mt-1 uppercase ${useDarkTheme ? 'text-white/60' : 'text-neutral-400'}`}
               style={{ fontFamily: "'Inter', sans-serif" }}
             >
               Scan Me. Know Me.
