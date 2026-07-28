@@ -2120,9 +2120,11 @@ function Dashboard() {
             >
               <img src="/favicon.png" alt="KnoWMi" className="w-8 h-8 rounded-xl border border-white/20 shadow-sm shrink-0" />
               <div className="flex flex-col">
-                <span className="text-xs font-black text-white tracking-wide leading-none group-hover:text-orange-500">KnoWMi</span>
+                <span className="text-xs font-black text-white tracking-wide leading-none group-hover:text-orange-500">
+                  {profile?.first_name ? `${profile.first_name}'s` : 'KnoWMi'}
+                </span>
                 <span className="text-[9px] font-bold text-orange-500 uppercase tracking-widest leading-none mt-1">
-                  {activeTab === 'profile' ? 'Identity' : 'Analytics'}
+                  | Dashboard
                 </span>
               </div>
             </div>
@@ -2138,7 +2140,7 @@ function Dashboard() {
                   {profile?.first_name ? `${profile.first_name}'s` : 'KnoWMi'}
                 </span>
                 <span className={`font-light text-xs sm:text-lg md:text-xl shrink-0 ${isVibeDark ? 'text-neutral-400 font-bold' : 'text-neutral-300'}`}>
-                  | {activeTab === 'profile' ? 'Identity Studio' : 'Analytics'}
+                  | Dashboard
                 </span>
               </h1>
               <p className="text-[10px] font-black text-orange-500 uppercase tracking-luxury leading-none mt-1 group-hover:underline">Scan Me. Know Me.</p>
