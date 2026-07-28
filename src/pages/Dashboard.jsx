@@ -2112,38 +2112,20 @@ function Dashboard() {
 
             <div className={`h-8 w-px hidden sm:block ${isVibeDark ? 'bg-[#1a1a1a]/10' : 'bg-neutral-100'}`} />
 
-            {/* Mobile Compact Logo */}
             <div 
               onClick={() => navigate('/')}
-              className="flex sm:hidden items-center gap-2 cursor-pointer group select-none shrink-0"
+              className="flex flex-col min-w-0 cursor-pointer group select-none"
               title="Return to Homepage"
             >
-              <img src="/favicon.png" alt="KnoWMi" className="w-8 h-8 rounded-xl border border-white/20 shadow-sm shrink-0" />
-              <div className="flex flex-col">
-                <span className="text-xs font-black text-white tracking-wide leading-none group-hover:text-orange-500">
+              <h1 className="font-display text-lg sm:text-2xl md:text-3xl tracking-tight transition-colors duration-300 text-white flex items-center gap-2 min-w-0 group-hover:text-orange-500">
+                <span className="truncate">
                   {profile?.first_name ? `${profile.first_name}'s` : 'KnoWMi'}
                 </span>
-                <span className="text-[9px] font-bold text-orange-500 uppercase tracking-widest leading-none mt-1">
-                  | Dashboard
-                </span>
-              </div>
-            </div>
-
-            {/* Desktop Full Title */}
-            <div 
-              onClick={() => navigate('/')}
-              className="hidden sm:flex flex-col min-w-0 cursor-pointer group select-none"
-              title="Return to Homepage"
-            >
-              <h1 className={`font-display text-base sm:text-xl md:text-2xl tracking-tight-premium transition-colors duration-300 text-white flex items-center gap-1.5 min-w-0 group-hover:text-orange-500`}>
-                <span className="truncate max-w-[140px] sm:max-w-none">
-                  {profile?.first_name ? `${profile.first_name}'s` : 'KnoWMi'}
-                </span>
-                <span className={`font-light text-xs sm:text-lg md:text-xl shrink-0 ${isVibeDark ? 'text-neutral-400 font-bold' : 'text-neutral-300'}`}>
+                <span className="font-light text-sm sm:text-xl text-neutral-400 shrink-0">
                   | Dashboard
                 </span>
               </h1>
-              <p className="text-[10px] font-black text-orange-500 uppercase tracking-luxury leading-none mt-1 group-hover:underline">Scan Me. Know Me.</p>
+              <p className="text-[11px] sm:text-xs font-bold text-orange-500 uppercase tracking-widest leading-none mt-1 group-hover:underline">Scan Me. Know Me.</p>
             </div>
           </div>
           
