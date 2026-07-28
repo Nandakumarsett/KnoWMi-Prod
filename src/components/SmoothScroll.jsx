@@ -26,18 +26,20 @@ export default function SmoothScroll({ children }) {
     window.lenis = lenis
 
     // Sync ScrollTrigger with Lenis
+    const updateLenis = (time) => {
+      if (lenisRef.current) {
+        lenisRef.current.raf(time * 1000)
+      }
+    }
+
     lenis.on('scroll', ScrollTrigger.update)
-
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000)
-    })
-
+    gsap.ticker.add(updateLenis)
     gsap.ticker.lagSmoothing(0)
 
     return () => {
+      gsap.ticker.remove(updateLenis)
       lenis.destroy()
       window.lenis = null
-      gsap.ticker.remove((time) => lenis.raf(time * 1000))
     }
   }, [])
 

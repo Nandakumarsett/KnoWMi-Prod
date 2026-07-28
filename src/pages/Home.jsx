@@ -21,7 +21,7 @@ import LiveSalesPopup from '../components/LiveSalesPopup'
 import { ArrowRight } from 'lucide-react'
 
 export default function Home() {
-  const { user } = useAuth()
+  const { user, profile } = useAuth()
   
   useDocumentMetadata({
     title: 'Scan Me. Know Me. | Custom QR Identity Tees',
