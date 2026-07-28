@@ -61,17 +61,7 @@ export default function App() {
           return
         }
 
-        const pendingAuthType = localStorage.getItem('pending_auth_type')
-        const isNewUser = (new Date() - new Date(session.user.created_at)) < 10000 // Created in last 10s
-
-        if (pendingAuthType === 'signup' && !isNewUser) {
-          toast('Welcome back! You already have an account. Taking you to your dashboard...', { icon: '👋' })
-          setTimeout(() => { window.location.href = '/dashboard' }, 1500)
-        }
-        
-        localStorage.removeItem('pending_auth_type')
-        
-        // Handle post-auth redirect for locked profiles
+        // Handle explicit return_to target if set
         const returnTo = localStorage.getItem('return_to')
         if (returnTo) {
           localStorage.removeItem('return_to')
@@ -79,11 +69,30 @@ export default function App() {
           return
         }
 
-        // If we are coming back from an OAuth redirect (token in hash),
-        // we clean the URL and let the current page (Home) handle the logged-in UI.
+        const pendingAuthType = localStorage.getItem('pending_auth_type')
+        const acqSource = localStorage.getItem('knowmi_acquisition_source')
+        const userCreatedAt = session?.user?.created_at ? new Date(session.user.created_at).getTime() : 0
+        const isNewUser = userCreatedAt > 0 && (Date.now() - userCreatedAt) < 60000 // Created within last 60 seconds
+
+        localStorage.removeItem('pending_auth_type')
+
+        // If newly created account OR signup intent OR scan acquisition source -> auto navigate to profile creation
+        if (isNewUser || pendingAuthType === 'signup' || acqSource === 'scan') {
+          if (window.location.hash.includes('access_token')) {
+            window.location.hash = ''
+          }
+          window.location.href = '/dashboard?tab=profile'
+          return
+        }
+
+        // OAuth redirect handling for returning users
         if (window.location.hash.includes('access_token')) {
           window.location.hash = '' // Clean the URL
-          window.location.reload() // Refresh to update Home page buttons
+          if (window.location.pathname === '/') {
+            window.location.href = '/dashboard?tab=profile'
+          } else {
+            window.location.reload()
+          }
         }
       }
     })

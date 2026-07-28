@@ -1079,7 +1079,15 @@ export default function PublicProfile() {
       {(!user || user?.id !== profile?.user_id) && !isClaimFlow && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[340px] px-4 animate-slideUp">
           <div
-            onClick={() => (window.location.href = !user ? "/?auth=signup" : "/dashboard")}
+            onClick={() => {
+              if (!user) {
+                localStorage.setItem('return_to', '/dashboard?tab=profile');
+                localStorage.setItem('knowmi_acquisition_source', 'scan');
+                window.location.href = "/?auth=signup";
+              } else {
+                navigate("/dashboard?tab=profile");
+              }
+            }}
             className="bg-[#1a1a1a] border-[3px] border-white p-3.5 rounded-xl shadow-[4px_4px_0px_#F97316] flex items-center justify-between gap-4 cursor-pointer hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all group"
           >
             <div className="flex items-center gap-3">
@@ -1196,8 +1204,8 @@ export default function PublicProfile() {
           </div>
         </div>
       )}
-      {/* ✨ Scanner Nudge Banner — shown to logged-in users who are NOT the profile owner */}
-      {user && isScanner && showScannerNudge && (
+      {/* ✨ Scanner Nudge Banner — shown to all scanners (logged-in or guests) who are NOT the profile owner */}
+      {isScanner && showScannerNudge && user?.id !== profile?.user_id && (
         <div
           className="fixed bottom-0 left-0 right-0 z-[150] px-4 pb-4 pt-0 flex justify-center"
           style={{ animation: 'nudgeSlideUp 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}
@@ -1221,7 +1229,7 @@ export default function PublicProfile() {
                   Want your own card like this?
                 </p>
                 <p className="text-neutral-400 text-[11px] font-medium mt-0.5 leading-tight">
-                  Set up your KnoWMi profile in seconds
+                  Set up your KnoWMi profile in 60 seconds
                 </p>
               </div>
               {/* Dismiss */}
@@ -1240,7 +1248,15 @@ export default function PublicProfile() {
             </div>
             {/* CTA row */}
             <button
-              onClick={() => navigate('/dashboard?tab=profile')}
+              onClick={() => {
+                if (!user) {
+                  localStorage.setItem('return_to', '/dashboard?tab=profile');
+                  localStorage.setItem('knowmi_acquisition_source', 'scan');
+                  window.location.href = "/?auth=signup";
+                } else {
+                  navigate('/dashboard?tab=profile');
+                }
+              }}
               className="w-full flex items-center justify-between px-4 py-3 bg-orange-500 text-black font-black text-xs uppercase tracking-widest hover:bg-orange-400 transition-colors border-t-2 border-black"
             >
               <span>Create my Profile Card</span>

@@ -127,6 +127,9 @@ export default function Home() {
     if (pendingRedirect === 'store_persona') {
       setPendingRedirect(null)
     }
+
+    // Default for any auth on home: navigate to dashboard profile tab to complete setup
+    navigate('/dashboard?tab=profile')
   }
 
   const handleSelectPlan = (planId) => {
