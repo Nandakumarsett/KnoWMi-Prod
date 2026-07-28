@@ -430,7 +430,7 @@ const PhoneMockup = () => {
                   </div>
                   
                   <p className="text-center text-[9px] font-bold text-neutral-300 leading-tight italic mb-6 px-4">
-                    "Architecting highly scalable backends. Open-source contributor. Ex-Google, building web3 tools."
+                    "Architecting scalable web products and open-source identity tools."
                   </p>
 
                   {/* About Me IDE Card */}
@@ -445,15 +445,15 @@ const PhoneMockup = () => {
                     <div className="space-y-2 font-mono text-[9px] text-neutral-300">
                       <div className="flex items-center justify-between border-b border-neutral-800/60 pb-1">
                         <span className="text-neutral-500 font-bold uppercase tracking-wider">ROLE</span>
-                        <span className="text-white font-black">Software Architect</span>
+                        <span className="text-white font-black">Software Engineer</span>
                       </div>
                       <div className="flex items-center justify-between border-b border-neutral-800/60 pb-1">
                         <span className="text-neutral-500 font-bold uppercase tracking-wider">STATUS</span>
-                        <span className="text-teal-400 font-black">Building Web3</span>
+                        <span className="text-teal-400 font-black">Building</span>
                       </div>
                       <div className="flex items-center justify-between border-b border-neutral-800/60 pb-1">
-                        <span className="text-neutral-500 font-bold uppercase tracking-wider">ORG</span>
-                        <span className="text-white font-black">ex-Google</span>
+                        <span className="text-neutral-500 font-bold uppercase tracking-wider">FOCUS</span>
+                        <span className="text-white font-black">Full Stack</span>
                       </div>
                     </div>
                   </div>

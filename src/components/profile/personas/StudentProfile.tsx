@@ -581,7 +581,7 @@ export function StudentProfile({ profile, stats, visitors = [], hideHeader = fal
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 bg-[#1DB954] text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-[#1ed760] transition-colors shadow-lg shadow-emerald-500/30"
               >
-                <Music size={20} /> {data.playlist_name || 'My Playlist'} <ExternalLink size={16} />
+                <Music size={20} /> {data.playlist_name || 'Playlist'} <ExternalLink size={16} />
               </a>
             </div>
           )}

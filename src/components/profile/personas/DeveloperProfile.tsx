@@ -139,11 +139,13 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
 
               <div className="mt-3 mb-2 text-center">
                 <h1 className="text-[28px] font-mono font-black text-neutral-950 tracking-widest leading-tight">
-                  {(profile.display_name || 'NEW USER').toUpperCase()}
+                  {(profile.display_name || '').toUpperCase()}
                 </h1>
-                <p className="text-neutral-800 font-black text-base sm:text-lg tracking-widest mt-1.5 uppercase">
-                  {data.about?.role || data.tagline || 'SYSTEM ENGINEER'}
-                </p>
+                {(data.about?.role || data.tagline) && (
+                  <p className="text-neutral-800 font-black text-base sm:text-lg tracking-widest mt-1.5 uppercase">
+                    {data.about?.role || data.tagline}
+                  </p>
+                )}
               </div>
 
               {profile.bio && (
@@ -474,9 +476,11 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
                   <h1 className="text-3xl sm:text-4xl font-light text-white tracking-widest uppercase mb-3">
                     {profile.display_name}
                   </h1>
-                  <p className="text-sm font-medium text-[#64FFDA] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
-                    <Monitor size={16} className="opacity-70" /> {data.about?.role || 'SYSTEM ARCHITECT'}
-                  </p>
+                  {data.about?.role && (
+                    <p className="text-sm font-medium text-[#64FFDA] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
+                      <Monitor size={16} className="opacity-70" /> {data.about.role}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -870,11 +874,13 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
 
                 <div className="text-center sm:text-left flex-grow">
                   <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-widest uppercase mb-2 hacker-glow">
-                    {profile.display_name || 'UNKNOWN_USER'}
+                    {profile.display_name}
                   </h1>
-                  <p className="text-sm text-[#00FF41] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
-                    <Terminal size={14} /> {data.about?.role || 'ROOT_ACCESS'}
-                  </p>
+                  {data.about?.role && (
+                    <p className="text-sm text-[#00FF41] uppercase tracking-widest flex items-center justify-center sm:justify-start gap-2">
+                      <Terminal size={14} /> {data.about.role}
+                    </p>
+                  )}
                   {profile.bio && (
                     <p className="text-xs leading-relaxed text-[#00FF41]/80 mt-4 border-l-2 border-[#00FF41]/50 pl-3">
                       <span className="text-[#00FF41] opacity-50 mr-2">&gt;</span>{profile.bio}
@@ -1231,9 +1237,11 @@ export function DeveloperProfile({ profile, stats, hideHeader = false }: { profi
                 <span className="text-[#8B949E]">$</span>
                 <span className="text-white font-bold text-xl">{profile.display_name}</span>
               </div>
-              <div className="text-[#8B949E] mb-3">
-                Role: <span className="text-[#58A6FF]">{data.about?.role || 'Software Engineer'}</span>
-              </div>
+              {data.about?.role && (
+                <div className="text-[#8B949E] mb-3">
+                  Role: <span className="text-[#58A6FF]">{data.about.role}</span>
+                </div>
+              )}
               {profile.bio && (
                 <p className="text-[#8B949E] text-sm leading-relaxed max-w-lg">
                   {profile.bio}
