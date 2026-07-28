@@ -201,6 +201,28 @@ export default function Home() {
         redirectAfter={pendingRedirect}
         defaultTab={authTab}
       />
+      {/* Floating Identity Setup Nudge Pill for Logged-In Users without an identity */}
+      {user && (!profile?.persona_data?.identities || profile.persona_data.identities.length === 0) && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[140] w-full max-w-md px-4 animate-slideUp">
+          <div className="bg-[#111] border-[3px] border-orange-500 p-4 rounded-2xl shadow-[0_0_40px_rgba(249,115,22,0.4)] flex items-center justify-between gap-3 text-white">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-orange-500 text-black font-black flex items-center justify-center text-xl shrink-0 border-2 border-black shadow-[2px_2px_0px_#000]">
+                ⚡
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-black uppercase tracking-wider text-white">Identity Card Inactive</p>
+                <p className="text-[11px] text-neutral-400 font-medium truncate">Set up your KnoWMi profile in 60s</p>
+              </div>
+            </div>
+            <button
+              onClick={() => navigate('/dashboard?tab=profile')}
+              className="px-4 py-2.5 bg-orange-500 text-black font-black text-xs uppercase tracking-wider rounded-xl border-2 border-black shadow-[2px_2px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all whitespace-nowrap shrink-0"
+            >
+              Create Now →
+            </button>
+          </div>
+        </div>
+      )}
       <LiveSalesPopup isActive={showSalesPopup} />
     </>
   )

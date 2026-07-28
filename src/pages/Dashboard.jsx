@@ -2249,6 +2249,23 @@ function Dashboard() {
                   >
                     Buy a Tee to Unlock 🚀
                   </button>
+
+                  {(!profile?.persona_data?.identities || profile.persona_data.identities.length === 0) && (
+                    <div className="mt-8 p-5 bg-[#111] border-[3px] border-orange-500 rounded-2xl max-w-sm w-full text-center shadow-[6px_6px_0px_#F97316] animate-pulse">
+                      <p className="text-xs font-black text-white uppercase tracking-wider mb-1">
+                        👋 New to KnoWMi?
+                      </p>
+                      <p className="text-[11px] text-neutral-400 font-medium mb-4 leading-snug">
+                        First set up your Digital Identity Card in the Identity Studio tab!
+                      </p>
+                      <button
+                        onClick={() => setActiveTab('profile')}
+                        className="w-full py-3 bg-orange-500 text-black border-2 border-black font-black text-xs uppercase tracking-widest rounded-xl hover:bg-orange-400 transition-colors shadow-[3px_3px_0px_#000]"
+                      >
+                        Create My Identity Card →
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 

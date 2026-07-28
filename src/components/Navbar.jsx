@@ -240,7 +240,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
               {/* Dropdown menu */}
               {dropdownOpen && (
                 <div
-                  className="absolute right-0 top-[calc(100%+8px)] w-48 rounded-xl overflow-hidden shadow-xl"
+                  className="absolute right-0 top-[calc(100%+8px)] w-52 rounded-xl overflow-hidden shadow-xl"
                   style={{ background: 'var(--paper)', border: '1px solid var(--border)', zIndex: 100 }}
                 >
                   {isStaff && (
@@ -249,22 +249,25 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
                       Admin Panel
                     </Link>
                   )}
-                  {isVerified || role === 'owner' || status === 'paid' ? (
-                    <>
-                      <Link to="/dashboard" className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h7" /><path d="M16 5l-4 4-4-4" /><path d="M22 17l-3 3-3-3" /><path d="M19 14v6" /></svg>
-                        Analytics Dashboard
-                      </Link>
-                    </>
-                  ) : (
-                    <Link to="/dashboard" className="flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
-                      <div className="flex items-center gap-2">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h7" /><path d="M16 5l-4 4-4-4" /><path d="M22 17l-3 3-3-3" /><path d="M19 14v6" /></svg>
-                        Analytics
-                      </div>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-orange-500"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                  {(!profile?.persona_data?.identities || profile.persona_data.identities.length === 0) ? (
+                    <Link to="/dashboard?tab=profile" className="flex items-center gap-2 px-4 py-3 text-sm font-black text-orange-500 bg-orange-500/10 hover:bg-orange-500/20 transition-colors border-b border-orange-500/20">
+                      <span className="text-base">✦</span>
+                      Create Identity Card
                     </Link>
-                  )}
+                  ) : null}
+                  <Link to="/dashboard?tab=profile" className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Identity Studio
+                  </Link>
+                  <Link to="/dashboard" className="flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors hover:bg-[var(--off)]" style={{ color: 'var(--ink)', borderBottom: '1px solid var(--border)' }}>
+                    <div className="flex items-center gap-2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h7" /><path d="M16 5l-4 4-4-4" /><path d="M22 17l-3 3-3-3" /><path d="M19 14v6" /></svg>
+                      Analytics
+                    </div>
+                    {!(isVerified || role === 'owner' || status === 'paid') && (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-orange-500"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    )}
+                  </Link>
                   <button
                     onClick={signOut}
                     className="w-full flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors hover:bg-red-50 text-left"
@@ -364,6 +367,14 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
                     Admin Panel
                   </Link>
                 )}
+                {(!profile?.persona_data?.identities || profile.persona_data.identities.length === 0) ? (
+                  <Link to="/dashboard?tab=profile" onClick={() => setMobileOpen(false)} className="py-3 px-4 bg-orange-500 text-black font-black text-xs uppercase tracking-wider rounded-xl text-center shadow-[3px_3px_0px_#000] border-2 border-black">
+                    ✦ Create My Identity Card
+                  </Link>
+                ) : null}
+                <Link to="/dashboard?tab=profile" onClick={() => setMobileOpen(false)} className="btn-outline btn-base py-3 text-sm rounded-xl w-full text-center" style={{ color: 'var(--ink)', borderColor: 'var(--border)' }}>
+                  Identity Studio
+                </Link>
                 <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="btn-outline btn-base py-3 text-sm rounded-xl w-full text-center" style={{ color: 'var(--ink)', borderColor: 'var(--border)' }}>
                   Analytics Dashboard
                 </Link>
