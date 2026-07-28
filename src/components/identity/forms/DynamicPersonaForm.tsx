@@ -27,7 +27,7 @@ export function DynamicPersonaForm({ config, data = {}, onChange }: DynamicPerso
             value={val || ''}
             onChange={e => onFieldChange(e.target.value)}
             placeholder={field.placeholder}
-            className="w-full bg-[#1a1a1a]/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-white/20 transition-all"
+            className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-orange-500 transition-all"
           />
         )
 
@@ -36,7 +36,7 @@ export function DynamicPersonaForm({ config, data = {}, onChange }: DynamicPerso
           <select
             value={val || ''}
             onChange={e => onFieldChange(e.target.value)}
-            className="w-full bg-[#1a1a1a]/5 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-white/20 transition-all"
+            className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-orange-500 transition-all"
           >
             <option value="" className="text-white">Select {field.label}</option>
             {(field.options || []).map(opt => (

@@ -39,28 +39,28 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
   }
 
   return (
-    <div className="space-y-24 py-10 animate-fadeIn">
+    <div className="space-y-8 py-4 animate-fadeIn">
       
       {/* SECTION: CURRENT ENDEAVORS */}
-      <section className="space-y-10">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
-            <Briefcase size={24} />
+      <section className="space-y-4">
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-9 h-9 rounded-xl bg-orange-500/10 text-orange-500 border border-orange-500/20 flex items-center justify-center">
+            <Briefcase size={18} />
           </div>
           <div>
-            <h3 className="text-lg font-black uppercase tracking-widest text-white">Current Endeavors</h3>
-            <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">What are you working on right now?</p>
+            <h3 className="text-base font-bold uppercase tracking-wider text-white">Current Endeavors</h3>
+            <p className="text-[11px] font-medium text-neutral-400">What are you working on right now?</p>
           </div>
         </div>
 
-        <div className="p-10 bg-[#1a1a1a] border border-[#E5D5C4] rounded-[40px] shadow-[8px_8px_0px_#fff] shadow-blue-500/5 space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-2">
-              <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Current Status</label>
+        <div className="p-6 sm:p-8 bg-[#1a1a1a] border border-neutral-800 rounded-2xl shadow-lg space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-1.5">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400">Current Status</label>
               <select
                 value={data.about?.status || ''}
                 onChange={e => updateAbout('status', e.target.value)}
-                className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none"
+                className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:border-orange-500 transition-all outline-none"
               >
                 <option value="">Select Status</option>
                 <option value="Freelancing">Freelancing / Self-Employed</option>
@@ -71,48 +71,48 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
               </select>
             </div>
 
-            <div className="space-y-2">
-              <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Company / Organization Name</label>
+            <div className="space-y-1.5">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400">Company / Organization Name</label>
               <input
                 type="text"
                 value={data.about?.company || ''}
                 onChange={e => updateAbout('company', e.target.value)}
                 placeholder="e.g. Google, Stripe, Freelance"
-                className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none"
+                className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:border-orange-500 transition-all outline-none"
               />
             </div>
 
-            <div className="space-y-2">
-              <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Professional Role</label>
+            <div className="space-y-1.5">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400">Professional Role</label>
               <input
                 type="text"
                 value={data.about?.role || ''}
                 onChange={e => updateAbout('role', e.target.value)}
                 placeholder="e.g. Full-Stack Developer"
-                className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none"
+                className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:border-orange-500 transition-all outline-none"
               />
-              <p className="text-[9px] text-neutral-400 uppercase font-bold tracking-widest mt-1">This title appears under your name</p>
+              <p className="text-[10px] text-neutral-400 mt-0.5">This title appears under your name on your profile</p>
             </div>
 
-            <div className="space-y-2">
-              <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Mission Statement</label>
+            <div className="space-y-1.5">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400">Mission Statement</label>
               <textarea
                 rows={2}
                 value={data.about?.mission || ''}
                 onChange={e => updateAbout('mission', e.target.value)}
                 placeholder="e.g. Engineering the future of decentralized identity."
-                className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none resize-none"
+                className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:border-orange-500 transition-all outline-none resize-none"
               />
             </div>
 
-            <div className="space-y-2 md:col-span-2">
-              <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Public Bio</label>
+            <div className="space-y-1.5 md:col-span-2">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400">Public Bio</label>
               <textarea
                 rows={3}
                 value={data.bio || ''}
                 onChange={e => updateField('bio', e.target.value)}
                 placeholder="Tell the world about your engineering journey..."
-                className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none resize-none"
+                className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:border-orange-500 transition-all outline-none resize-none"
               />
             </div>
           </div>
@@ -120,37 +120,37 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
       </section>
 
       {/* SECTION: BRAND IDENTITY (BANNER) */}
-      <section className="space-y-10">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
-            <Camera size={24} />
+      <section className="space-y-4">
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-9 h-9 rounded-xl bg-orange-500/10 text-orange-500 border border-orange-500/20 flex items-center justify-center">
+            <Camera size={18} />
           </div>
           <div>
-            <h3 className="text-lg font-black uppercase tracking-widest text-white">Brand Identity</h3>
-            <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Customize your profile backdrop</p>
+            <h3 className="text-base font-bold uppercase tracking-wider text-white">Brand Identity</h3>
+            <p className="text-[11px] font-medium text-neutral-400">Customize your profile backdrop</p>
           </div>
         </div>
 
-        <div className="p-10 bg-[#1a1a1a] border border-[#E5D5C4] rounded-[40px] shadow-[8px_8px_0px_#fff] shadow-blue-500/5">
+        <div className="p-6 sm:p-8 bg-[#1a1a1a] border border-neutral-800 rounded-2xl shadow-lg">
           {/* Banner Upload */}
           <div className="flex flex-col space-y-2">
-            <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Profile Banner</label>
-            <div className="relative group min-h-[200px]">
-              <div className="w-full h-full rounded-2xl overflow-hidden bg-[#1a1a1a] border-2 border-dashed border-blue-200 hover:border-blue-500 transition-all flex flex-col items-center justify-center cursor-pointer relative py-8">
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400">Profile Banner</label>
+            <div className="relative group min-h-[160px]">
+              <div className="w-full h-full rounded-xl overflow-hidden bg-[#0a0a0a] border border-dashed border-neutral-700 hover:border-orange-500 transition-all flex flex-col items-center justify-center cursor-pointer relative py-6">
                 {data.featured_work_url ? (
                   <>
                     <img src={getAssetUrl(data.featured_work_url)} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Banner Preview" />
-                    <div className="absolute inset-0 bg-neutral-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white backdrop-blur-sm">
-                      <Upload size={24} className="mb-2" />
+                    <div className="absolute inset-0 bg-neutral-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white backdrop-blur-sm">
+                      <Upload size={20} className="mb-1" />
                       <span className="text-[10px] font-bold uppercase tracking-wider">Replace Banner Image</span>
                     </div>
                   </>
                 ) : (
-                  <div className="flex flex-col items-center gap-2 text-blue-400 p-4 text-center">
-                    <Camera size={28} className="text-blue-500" />
+                  <div className="flex flex-col items-center gap-2 text-orange-400 p-4 text-center">
+                    <Camera size={24} className="text-orange-500" />
                     <div>
                       <span className="text-xs font-bold text-neutral-300">Upload Banner</span>
-                      <p className="text-[10px] mt-0.5 text-neutral-400">1200x400 JPG/PNG</p>
+                      <p className="text-[10px] mt-0.5 text-neutral-500">1200x400 JPG/PNG</p>
                     </div>
                   </div>
                 )}
@@ -169,8 +169,8 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                 />
               </div>
               {uploading && (
-                <div className="absolute inset-0 bg-[#1a1a1a]/80 backdrop-blur-sm rounded-2xl flex items-center justify-center z-20">
-                  <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                <div className="absolute inset-0 bg-[#1a1a1a]/80 backdrop-blur-sm rounded-xl flex items-center justify-center z-20">
+                  <div className="w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               )}
             </div>
@@ -179,63 +179,63 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
       </section>
 
       {/* SECTION: COLLABORATION & CONTACT */}
-      <section className="space-y-10">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
-            <Mail size={24} />
+      <section className="space-y-4">
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-9 h-9 rounded-xl bg-orange-500/10 text-orange-500 border border-orange-500/20 flex items-center justify-center">
+            <Mail size={18} />
           </div>
           <div>
-            <h3 className="text-lg font-black uppercase tracking-widest text-white">Contact & Collaboration</h3>
-            <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Define your professional gateways</p>
+            <h3 className="text-base font-bold uppercase tracking-wider text-white">Contact & Collaboration</h3>
+            <p className="text-[11px] font-medium text-neutral-400">Define your professional gateways</p>
           </div>
         </div>
 
-        <div className="p-10 bg-[#1a1a1a] border border-[#E5D5C4] rounded-[40px] shadow-[8px_8px_0px_#fff] shadow-blue-500/5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-             <div className="space-y-2">
-               <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Professional Email</label>
-               <input type="email" value={data.contact_email || ''} onChange={e => updateField('contact_email', e.target.value)} placeholder="hello@yourbrand.com" className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none" />
+        <div className="p-6 sm:p-8 bg-[#1a1a1a] border border-neutral-800 rounded-2xl shadow-lg">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+             <div className="space-y-1.5">
+               <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400">Professional Email</label>
+               <input type="email" value={data.contact_email || ''} onChange={e => updateField('contact_email', e.target.value)} placeholder="hello@yourbrand.com" className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:border-orange-500 transition-all outline-none" />
              </div>
-             <div className="space-y-2">
-               <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">WhatsApp Number</label>
+             <div className="space-y-1.5">
+               <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400">WhatsApp Number</label>
                <input type="text" value={data.contact_whatsapp !== undefined && data.contact_whatsapp !== '' ? data.contact_whatsapp : '+91 '} onChange={e => {
                  let val = e.target.value;
                  if (!val.startsWith('+')) val = '+' + val.replace(/\D/g, '');
                  else val = '+' + val.replace(/\D/g, '');
                  updateField('contact_whatsapp', val);
-               }} placeholder="+91 00000 00000" className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none" />
-               <p className="text-[10px] text-neutral-400 mt-1">This will display when scanned, please be aware. Make sure to enable private mode if you would not like to display personal info when scanned.</p>
+               }} placeholder="+91 00000 00000" className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:border-orange-500 transition-all outline-none" />
+               <p className="text-[10px] text-neutral-400 mt-0.5">Visible on your card upon scanning. Enable Privacy mode to mask.</p>
              </div>
-             <div className="space-y-2 md:col-span-2">
-               <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Quick Talk URL (Calendly, etc)</label>
-               <input type="url" value={data.quick_talk_url || ''} onChange={e => updateField('quick_talk_url', e.target.value)} placeholder="https://calendly.com/yourusername" className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none" />
+             <div className="space-y-1.5 md:col-span-2">
+               <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400">Quick Talk URL (Calendly, etc)</label>
+               <input type="url" value={data.quick_talk_url || ''} onChange={e => updateField('quick_talk_url', e.target.value)} placeholder="https://calendly.com/yourusername" className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:border-orange-500 transition-all outline-none" />
              </div>
-             <div className="space-y-2 md:col-span-2">
-               <label className="block text-[10px] font-black uppercase tracking-widest text-neutral-400">Collaboration Interest</label>
-               <textarea rows={2} value={data.collab_types || ''} onChange={e => updateField('collab_types', e.target.value)} placeholder="e.g. Open to Freelance, Mentorship..." className="w-full bg-[#1a1a1a] border-[3px] border-white/20 rounded-2xl px-6 py-4 text-sm font-black text-white focus:bg-[#1a1a1a] focus:border-blue-500 transition-all outline-none resize-none" />
+             <div className="space-y-1.5 md:col-span-2">
+               <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400">Collaboration Interest</label>
+               <textarea rows={2} value={data.collab_types || ''} onChange={e => updateField('collab_types', e.target.value)} placeholder="e.g. Open to Freelance, Mentorship..." className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:border-orange-500 transition-all outline-none resize-none" />
              </div>
           </div>
         </div>
       </section>
 
       {/* SECTION: NETWORK PRESENCE */}
-      <section className="space-y-10">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
-              <Globe size={24} />
+      <section className="space-y-4">
+        <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-orange-500/10 text-orange-500 border border-orange-500/20 flex items-center justify-center">
+              <Globe size={18} />
             </div>
             <div>
-              <h3 className="text-lg font-black uppercase tracking-widest text-white">Network Presence</h3>
-              <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Connect up to 6 platforms</p>
+              <h3 className="text-base font-bold uppercase tracking-wider text-white">Network Presence</h3>
+              <p className="text-[11px] font-medium text-neutral-400">Connect up to 6 platforms</p>
             </div>
           </div>
-          <span className="px-4 py-2 bg-[#2a2a2a] rounded-full text-[10px] font-black uppercase text-neutral-400 tracking-widest">
+          <span className="px-3 py-1 bg-neutral-800 rounded-full text-[10px] font-bold uppercase text-neutral-300 tracking-wider">
             {(data.platforms || []).length}/6 Active
           </span>
         </div>
 
-        <div className="p-10 bg-[#1a1a1a] border border-[#E5D5C4] rounded-[40px] shadow-[8px_8px_0px_#fff] shadow-blue-500/5 space-y-4">
+        <div className="p-6 sm:p-8 bg-[#1a1a1a] border border-neutral-800 rounded-2xl shadow-lg space-y-4">
           {(data.platforms || []).map((p: any, i: number) => (
             <div key={i} className="flex flex-col sm:flex-row gap-4 p-6 bg-[#1a1a1a] border border-white/20 rounded-[24px] relative group">
               <button type="button" onClick={() => {

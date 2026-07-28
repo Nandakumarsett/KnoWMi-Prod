@@ -1,4 +1,4 @@
-import{ba as fe,bk as ge,r as d,j as e,b7 as G,bb as f}from"./vendor-DJ8AXdcW.js";import{u as ve,A as we,s as U}from"./index-YYWkZ5_N.js";import{c as je}from"./completion-score-D5PUhF_l.js";import{D as ye,S as _e,C as ke,T as Ne}from"./CreatorForm-C_NFNkNj.js";import{p as M}from"./personaConfig-kq04fUx4.js";import{g as Ce,d as Se,m as Le,ai as $e,ao as xe,am as pe,U as Fe,O as Ae,u as Ee,o as ze,y as De}from"./vendor-icons-CWTa-WjU.js";import"./vendor-supabase-BkJ-lukb.js";import"./vendor-animation-DPn91hQ9.js";const Te=`
+import{ba as fe,bk as ge,r as d,j as e,b7 as G,bb as f}from"./vendor-DJ8AXdcW.js";import{u as ve,A as we,s as U}from"./index-CgJdyxgS.js";import{c as je}from"./completion-score-D5PUhF_l.js";import{D as ye,S as _e,C as ke,T as Ne}from"./CreatorForm-PCP1mO2w.js";import{p as M}from"./personaConfig-kq04fUx4.js";import{g as Ce,d as Se,m as Le,ai as $e,ao as xe,am as pe,U as Fe,O as Ae,u as Ee,o as ze,y as De}from"./vendor-icons-CWTa-WjU.js";import"./vendor-supabase-BkJ-lukb.js";import"./vendor-animation-DPn91hQ9.js";const Te=`
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
   
   .studio-page {
@@ -12,67 +12,67 @@ import{ba as fe,bk as ge,r as d,j as e,b7 as G,bb as f}from"./vendor-DJ8AXdcW.js
   
   .glass-card {
     background: #1a1a1a;
-    border-radius: 12px;
-    box-shadow: 8px 8px 0px #fff;
-    border: 4px solid #fff;
-    transition: all 0.3s ease;
+    border-radius: 16px;
+    box-shadow: 4px 4px 0px #fff;
+    border: 2px solid #fff;
+    transition: all 0.2s ease;
   }
   
   .glass-card:hover {
-    box-shadow: none;
-    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #fff;
+    transform: translate(1px, 1px);
   }
 
   .input-field {
     width: 100%;
-    padding: 12px 16px;
+    padding: 10px 14px;
     background: #0a0a0a;
-    border: 3px solid #fff;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 800;
+    border: 2px solid #333;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
     transition: all 0.2s;
     outline: none;
     color: white;
-    box-shadow: 4px 4px 0px #fff;
+    box-shadow: 2px 2px 0px #333;
   }
   
   .input-field:focus {
     border-color: #F97316;
     background: #0a0a0a;
-    box-shadow: 4px 4px 0px #F97316;
+    box-shadow: 2px 2px 0px #F97316;
   }
 
   .section-label {
     font-size: 10px;
-    font-weight: 900;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
     color: #a3a3a3;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 8px;
-    border-bottom: 3px solid #333;
+    border-bottom: 2px solid #262626;
     padding-bottom: 4px;
   }
 
   .chip {
-    padding: 8px 16px;
+    padding: 6px 14px;
     background: #1a1a1a;
-    border: 3px solid #fff;
+    border: 2px solid #404040;
     border-radius: 8px;
-    font-size: 12px;
-    font-weight: 900;
+    font-size: 11px;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
     color: white;
     text-transform: uppercase;
-    box-shadow: 4px 4px 0px #fff;
+    box-shadow: 2px 2px 0px #404040;
   }
 
   .chip:hover {
-    transform: translate(2px, 2px);
+    transform: translate(1px, 1px);
     box-shadow: none;
   }
 
@@ -80,7 +80,7 @@ import{ba as fe,bk as ge,r as d,j as e,b7 as G,bb as f}from"./vendor-DJ8AXdcW.js
     background: #F97316;
     color: black;
     border-color: #000;
-    box-shadow: 4px 4px 0px #000;
+    box-shadow: 2px 2px 0px #000;
   }
 
   .progress-ring {

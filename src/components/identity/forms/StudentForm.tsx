@@ -23,14 +23,14 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
   }
 
   // Helper for consistent input styling
-  const inputBaseClasses = "w-full bg-[#1a1a1a] border-[3px] border-white/20 text-white shadow-[inset_0px_2px_4px_rgba(0,0,0,0.5)] hover:border-white/40 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:bg-[#1a1a1a] focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none placeholder:text-neutral-400";
-  const labelClasses = "block text-[11px] font-bold uppercase tracking-wider text-neutral-400 font-bold mb-1.5";
+  const inputBaseClasses = "w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:border-orange-500 transition-all outline-none placeholder:text-neutral-500";
+  const labelClasses = "block text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-1.5";
 
   return (
-    <div className="space-y-8 sm:space-y-12 py-6 animate-fadeIn max-w-4xl mx-auto">
+    <div className="space-y-6 py-4 animate-fadeIn max-w-4xl mx-auto">
       
       {/* SECTION: ABOUT ME & AESTHETICS (COMBINED) */}
-      <section className="bg-[#1a1a1a] rounded-3xl p-6 sm:p-8 shadow-[2px_2px_0px_#fff] border border-white/20/60 relative overflow-hidden">
+      <section className="bg-[#1a1a1a] rounded-2xl p-6 sm:p-8 border border-neutral-800 shadow-lg relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
           <BookOpen size={100} />
         </div>
