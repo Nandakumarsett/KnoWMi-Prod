@@ -61,6 +61,9 @@ export default function App() {
           return
         }
 
+        const pendingAuthType = localStorage.getItem('pending_auth_type')
+        localStorage.removeItem('pending_auth_type')
+
         // Handle explicit return_to target if set
         const returnTo = localStorage.getItem('return_to')
         if (returnTo) {
@@ -68,12 +71,6 @@ export default function App() {
           window.location.href = returnTo
           return
         }
-
-        const pendingAuthType = localStorage.getItem('pending_auth_type')
-        const userCreatedAt = session?.user?.created_at ? new Date(session.user.created_at).getTime() : 0
-        const isNewUser = userCreatedAt > 0 && (Date.now() - userCreatedAt) < 60000 // Created within last 60 seconds
-
-        localStorage.removeItem('pending_auth_type')
 
         // Existing user sign-in: keep them on current page / homepage
         if (pendingAuthType === 'signin') {
@@ -83,8 +80,8 @@ export default function App() {
           return
         }
 
-        // Only brand-new account signups navigate to identity creation
-        if (pendingAuthType === 'signup' || isNewUser) {
+        // Only explicit signup intent navigates to identity creation ONCE
+        if (pendingAuthType === 'signup') {
           if (window.location.hash.includes('access_token')) {
             window.location.hash = ''
           }

@@ -202,7 +202,7 @@ export default function Home() {
         defaultTab={authTab}
       />
       {/* Floating Identity Setup Nudge Pill for Logged-In Users without an identity */}
-      {user && (!profile?.persona_data?.identities || profile.persona_data.identities.length === 0) && (
+      {user && !(Array.isArray(profile?.persona_data?.identities) && profile.persona_data.identities.length > 0) && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[140] w-full max-w-md px-4 animate-slideUp">
           <div className="bg-[#111] border-[3px] border-orange-500 p-4 rounded-2xl shadow-[0_0_40px_rgba(249,115,22,0.4)] flex items-center justify-between gap-3 text-white">
             <div className="flex items-center gap-3 min-w-0">

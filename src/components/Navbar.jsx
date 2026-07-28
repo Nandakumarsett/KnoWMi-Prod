@@ -95,6 +95,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
 
   const firstName = profile?.first_name || user?.user_metadata?.first_name || 'User'
   const status = profile?.status || 'free'
+  const hasIdentities = Array.isArray(profile?.persona_data?.identities) && profile.persona_data.identities.length > 0
 
   const useDarkTheme = isDark;
 
@@ -249,7 +250,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
                       Admin Panel
                     </Link>
                   )}
-                  {(!profile?.persona_data?.identities || profile.persona_data.identities.length === 0) ? (
+                  {!hasIdentities ? (
                     <Link to="/dashboard?tab=profile" className="flex items-center gap-2 px-4 py-3 text-sm font-black text-orange-500 bg-orange-500/10 hover:bg-orange-500/20 transition-colors border-b border-orange-500/20">
                       <span className="text-base">✦</span>
                       Create Identity Card
@@ -282,7 +283,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
 
               {/* Standalone Avatar circle */}
               <Link 
-                to={profile ? (profile.persona_data?.identities?.length > 0 ? `/p/${profile.secure_slug || profile.username || profile.id}` : '/dashboard?tab=profile') : '/dashboard'}
+                to={profile ? (hasIdentities ? `/p/${profile.secure_slug || profile.username || profile.id}` : '/dashboard?tab=profile') : '/dashboard'}
                 className="hover:scale-105 transition-transform shrink-0 block relative z-10 cursor-pointer"
                 title="View Profile"
               >
@@ -346,7 +347,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
               <>
                 {/* User info */}
                 <div className="flex items-center gap-3 px-3 py-2">
-                  <Link to={profile ? (profile.persona_data?.identities?.length > 0 ? `/p/${profile.secure_slug || profile.username || profile.id}` : '/dashboard?tab=profile') : '/dashboard'} onClick={() => setMobileOpen(false)} className="block shrink-0">
+                  <Link to={profile ? (hasIdentities ? `/p/${profile.secure_slug || profile.username || profile.id}` : '/dashboard?tab=profile') : '/dashboard'} onClick={() => setMobileOpen(false)} className="block shrink-0">
                     <Avatar src={profile?.avatar_url} name={firstName} size="w-9 h-9 ring-2 ring-orange-500 ring-offset-2" />
                   </Link>
                   <div>
@@ -367,7 +368,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
                     Admin Panel
                   </Link>
                 )}
-                {(!profile?.persona_data?.identities || profile.persona_data.identities.length === 0) ? (
+                {!hasIdentities ? (
                   <Link to="/dashboard?tab=profile" onClick={() => setMobileOpen(false)} className="py-3 px-4 bg-orange-500 text-black font-black text-xs uppercase tracking-wider rounded-xl text-center shadow-[3px_3px_0px_#000] border-2 border-black">
                     ✦ Create My Identity Card
                   </Link>
