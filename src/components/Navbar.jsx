@@ -126,7 +126,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
           <img 
             src="/logo-square.png" 
             alt="KnoWMi Logo" 
-            className="w-[52px] h-[52px] sm:w-[62px] sm:h-[62px] lg:w-[68px] lg:h-[68px] object-contain shrink-0 group-hover:scale-105 transition-transform"
+            className="w-[72px] h-[72px] sm:w-[82px] sm:h-[82px] lg:w-[90px] lg:h-[90px] object-contain shrink-0 group-hover:scale-105 transition-transform"
             style={useDarkTheme ? { filter: 'invert(1) hue-rotate(180deg)' } : {}}
           />
 
