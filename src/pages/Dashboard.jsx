@@ -2097,9 +2097,6 @@ function Dashboard() {
                   newParams.delete('mode')
                   newParams.delete('edit')
                   setSearchParams(newParams)
-                } else if (activeTab !== 'analytics') {
-                  setActiveTab('analytics')
-                  navigate('/dashboard')
                 } else {
                   navigate('/')
                 }
@@ -2108,20 +2105,24 @@ function Dashboard() {
             >
               <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
               <span className="text-xs font-bold uppercase tracking-widest hidden sm:inline">
-                {searchParams.get('mode') === 'edit' ? 'Back to Identities' : activeTab === 'analytics' ? 'Home' : 'Back to Analytics'}
+                {searchParams.get('mode') === 'edit' ? 'Back to Identities' : 'Back to Home'}
               </span>
             </button>
             <div className={`h-8 w-px hidden sm:block ${isVibeDark ? 'bg-[#1a1a1a]/10' : 'bg-neutral-100'}`} />
-            <div className="flex flex-col min-w-0">
-              <h1 className={`font-display text-base sm:text-xl md:text-2xl tracking-tight-premium transition-colors duration-300 ${isVibeDark ? 'text-white' : 'text-white'} flex items-center gap-1.5 min-w-0`}>
+            <div 
+              onClick={() => navigate('/')}
+              className="flex flex-col min-w-0 cursor-pointer group select-none"
+              title="Return to Homepage"
+            >
+              <h1 className={`font-display text-base sm:text-xl md:text-2xl tracking-tight-premium transition-colors duration-300 text-white flex items-center gap-1.5 min-w-0 group-hover:text-orange-500`}>
                 <span className="truncate max-w-[100px] xs:max-w-[140px] sm:max-w-none">
                   {profile?.first_name ? `${profile.first_name}'s` : 'KnoWMi'}
                 </span>
                 <span className={`font-light text-xs sm:text-lg md:text-xl shrink-0 ${isVibeDark ? 'text-neutral-400 font-bold' : 'text-neutral-300'}`}>
-                  | Analytics
+                  | Dashboard
                 </span>
               </h1>
-              <p className="text-[10px] font-black text-orange-500 uppercase tracking-luxury leading-none mt-1">Scan Me. Know Me.</p>
+              <p className="text-[10px] font-black text-orange-500 uppercase tracking-luxury leading-none mt-1 group-hover:underline">Scan Me. Know Me.</p>
             </div>
           </div>
           

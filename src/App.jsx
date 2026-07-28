@@ -70,14 +70,21 @@ export default function App() {
         }
 
         const pendingAuthType = localStorage.getItem('pending_auth_type')
-        const acqSource = localStorage.getItem('knowmi_acquisition_source')
         const userCreatedAt = session?.user?.created_at ? new Date(session.user.created_at).getTime() : 0
         const isNewUser = userCreatedAt > 0 && (Date.now() - userCreatedAt) < 60000 // Created within last 60 seconds
 
         localStorage.removeItem('pending_auth_type')
 
-        // If newly created account OR signup intent OR scan acquisition source -> auto navigate to profile creation
-        if (isNewUser || pendingAuthType === 'signup' || acqSource === 'scan') {
+        // Existing user sign-in: keep them on current page / homepage
+        if (pendingAuthType === 'signin') {
+          if (window.location.hash.includes('access_token')) {
+            window.location.hash = ''
+          }
+          return
+        }
+
+        // Only brand-new account signups navigate to identity creation
+        if (pendingAuthType === 'signup' || isNewUser) {
           if (window.location.hash.includes('access_token')) {
             window.location.hash = ''
           }
@@ -88,11 +95,7 @@ export default function App() {
         // OAuth redirect handling for returning users
         if (window.location.hash.includes('access_token')) {
           window.location.hash = '' // Clean the URL
-          if (window.location.pathname === '/') {
-            window.location.href = '/dashboard?tab=profile'
-          } else {
-            window.location.reload()
-          }
+          window.location.reload()
         }
       }
     })
