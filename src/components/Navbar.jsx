@@ -126,7 +126,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
           <img 
             src="/logo-square.png" 
             alt="KnoWMi Logo" 
-            className="w-10 h-10 sm:w-12 sm:h-12 lg:w-[52px] lg:h-[52px] object-contain shrink-0 group-hover:scale-105 transition-transform"
+            className="w-11 h-11 sm:w-[54px] sm:h-[54px] lg:w-[58px] lg:h-[58px] object-contain shrink-0 group-hover:scale-105 transition-transform"
             style={useDarkTheme ? { filter: 'invert(1) hue-rotate(180deg)' } : {}}
           />
 
@@ -136,13 +136,13 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
                 style={{
                   fontFamily: "'Montserrat', sans-serif",
                 }}
-                className={`text-[22px] sm:text-[28px] lg:text-[34px] font-black tracking-tight block leading-[0.9] transition-colors ${useDarkTheme ? 'text-white' : 'text-[var(--ink)]'}`}
+                className={`text-[24px] sm:text-[32px] lg:text-[38px] font-black tracking-tight block leading-[0.9] transition-colors ${useDarkTheme ? 'text-white' : 'text-[var(--ink)]'}`}
               >
                 Kno<span className="text-orange-500">WM</span>i
               </span>
             </div>
             <span
-              className={`hidden sm:block text-[9px] sm:text-[10px] lg:text-[11px] font-black tracking-[0.18em] mt-0.5 uppercase ${useDarkTheme ? 'text-white/60' : 'text-neutral-400'}`}
+              className={`hidden sm:block text-[9px] sm:text-[11px] lg:text-[12px] font-black tracking-[0.18em] mt-0.5 uppercase ${useDarkTheme ? 'text-white/60' : 'text-neutral-400'}`}
               style={{ fontFamily: "'Inter', sans-serif" }}
             >
               Scan Me. Know Me.
