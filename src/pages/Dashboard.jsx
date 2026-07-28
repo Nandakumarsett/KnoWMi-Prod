@@ -2088,7 +2088,7 @@ function Dashboard() {
       {/* Personalized Navigation */}
       <header className={`h-20 backdrop-blur-md border-b flex items-center px-4 md:px-8 sticky top-0 z-50 transition-colors duration-300 ${isVibeDark ? 'bg-[#13131a]/80 border-white/10' : 'bg-[#1a1a1a]/80 border-white/20'}`}>
         <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 sm:gap-6 shrink-0 min-w-0">
             <button 
               onClick={() => {
                 const isEditingMode = searchParams.get('mode') === 'edit'
@@ -2101,44 +2101,63 @@ function Dashboard() {
                   navigate('/')
                 }
               }}
-              className={`p-2 rounded-xl transition-colors flex items-center gap-2 group ${isVibeDark ? 'text-neutral-400 hover:bg-[#1a1a1a]/5' : 'text-neutral-400 hover:bg-neutral-100'}`}
+              className={`p-2 rounded-xl transition-colors flex items-center gap-1.5 group shrink-0 ${isVibeDark ? 'text-neutral-400 hover:bg-[#1a1a1a]/5' : 'text-neutral-400 hover:bg-neutral-100'}`}
+              title="Back to Home"
             >
-              <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-              <span className="text-xs font-bold uppercase tracking-widest hidden sm:inline">
-                {searchParams.get('mode') === 'edit' ? 'Back to Identities' : 'Back to Home'}
+              <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+              <span className="text-xs font-bold uppercase tracking-widest hidden md:inline">
+                {searchParams.get('mode') === 'edit' ? 'Back to Identities' : 'Home'}
               </span>
             </button>
+
             <div className={`h-8 w-px hidden sm:block ${isVibeDark ? 'bg-[#1a1a1a]/10' : 'bg-neutral-100'}`} />
+
+            {/* Mobile Compact Logo */}
             <div 
               onClick={() => navigate('/')}
-              className="flex flex-col min-w-0 cursor-pointer group select-none"
+              className="flex sm:hidden items-center gap-2 cursor-pointer group select-none shrink-0"
+              title="Return to Homepage"
+            >
+              <img src="/favicon.png" alt="KnoWMi" className="w-8 h-8 rounded-xl border border-white/20 shadow-sm shrink-0" />
+              <div className="flex flex-col">
+                <span className="text-xs font-black text-white tracking-wide leading-none group-hover:text-orange-500">KnoWMi</span>
+                <span className="text-[9px] font-bold text-orange-500 uppercase tracking-widest leading-none mt-1">
+                  {activeTab === 'profile' ? 'Identity' : 'Analytics'}
+                </span>
+              </div>
+            </div>
+
+            {/* Desktop Full Title */}
+            <div 
+              onClick={() => navigate('/')}
+              className="hidden sm:flex flex-col min-w-0 cursor-pointer group select-none"
               title="Return to Homepage"
             >
               <h1 className={`font-display text-base sm:text-xl md:text-2xl tracking-tight-premium transition-colors duration-300 text-white flex items-center gap-1.5 min-w-0 group-hover:text-orange-500`}>
-                <span className="truncate max-w-[100px] xs:max-w-[140px] sm:max-w-none">
+                <span className="truncate max-w-[140px] sm:max-w-none">
                   {profile?.first_name ? `${profile.first_name}'s` : 'KnoWMi'}
                 </span>
                 <span className={`font-light text-xs sm:text-lg md:text-xl shrink-0 ${isVibeDark ? 'text-neutral-400 font-bold' : 'text-neutral-300'}`}>
-                  | Dashboard
+                  | {activeTab === 'profile' ? 'Identity Studio' : 'Analytics'}
                 </span>
               </h1>
               <p className="text-[10px] font-black text-orange-500 uppercase tracking-luxury leading-none mt-1 group-hover:underline">Scan Me. Know Me.</p>
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {activeTab === 'profile' && (
               <button 
                 onClick={() => setShowOnboardingModal(true)}
-                className="px-3.5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all select-none border border-orange-500/30 bg-orange-500/10 text-orange-500 hover:bg-orange-500 hover:text-white mr-2 shrink-0"
+                className="hidden xs:inline-flex px-3 py-1.5 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all border border-orange-500/30 bg-orange-500/10 text-orange-500 hover:bg-orange-500 hover:text-white shrink-0"
               >
-                Onboarding Guide
+                Guide
               </button>
             )}
             {(() => {
               const pData = profile?.persona_data || {};
               const activeIdentity = (pData.identities && Array.isArray(pData.identities)) 
-                ? (pData.identities.find(i => i.active) || pData.identities[0])
+                ? (pData.identities.find(i => i?.active) || pData.identities[0])
                 : null;
               
               const displayName = activeIdentity?.first_name || profile?.first_name || 'User';
@@ -2148,7 +2167,8 @@ function Dashboard() {
               return (
                 <div 
                   onClick={() => navigate(`/p/${profile?.secure_slug || profile?.id}?from=${activeTab}`)}
-                  className={`flex items-center gap-3 pl-3 pr-1 py-1 rounded-2xl border transition-all cursor-pointer group ${isVibeDark ? 'bg-[#1a1a1a]/5 border-white/10 hover:border-orange-500/50' : 'bg-[#1a1a1a] border-white/20 hover:border-orange-200'}`}
+                  className={`flex items-center gap-2 sm:gap-3 pl-2.5 pr-1 py-1 rounded-2xl border transition-all cursor-pointer group ${isVibeDark ? 'bg-[#1a1a1a]/5 border-white/10 hover:border-orange-500/50' : 'bg-[#1a1a1a] border-white/20 hover:border-orange-200'}`}
+                  title="View Public Profile"
                 >
                   <div className="text-right hidden sm:block">
                     <p className={`text-xs font-black leading-none transition-colors duration-300 ${isVibeDark ? 'text-white' : 'text-white'}`}>{displayName}</p>
@@ -2161,10 +2181,10 @@ function Dashboard() {
                     src={avatarSrc} 
                     name={displayName} 
                     username={profile?.username} 
-                    size="w-9 h-9 border-2 border-white shadow-[2px_2px_0px_#fff] group-hover:border-orange-500/20 transition-all" 
+                    size="w-8 h-8 sm:w-9 sm:h-9 border-2 border-white shadow-[2px_2px_0px_#fff] group-hover:border-orange-500/20 transition-all shrink-0" 
                   />
                 </div>
-              );
+              )
             })()}
           </div>
         </div>
