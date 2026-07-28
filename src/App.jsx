@@ -28,6 +28,18 @@ function PageViewTracker() {
   const location = useLocation()
   useEffect(() => {
     posthog.capture('$pageview', { $current_url: window.location.href })
+
+    // Detect acquisition source once per session (don't overwrite existing)
+    if (!localStorage.getItem('knowmi_acquisition_source')) {
+      const params = new URLSearchParams(window.location.search)
+      const hasUtm = params.get('utm_source') || params.get('utm_medium') || params.get('utm_campaign')
+      if (hasUtm) {
+        localStorage.setItem('knowmi_acquisition_source', 'paid')
+      } else {
+        // Only set organic if not already set (scan sets it earlier)
+        localStorage.setItem('knowmi_acquisition_source', 'organic')
+      }
+    }
   }, [location])
   return null
 }

@@ -1721,6 +1721,16 @@ function Dashboard() {
       return false
     }
   })
+
+  // Contextual inline onboarding guide (source-aware, auto-shows for new users)
+  const [showContextualGuide, setShowContextualGuide] = useState(false)
+  const [guideDismissed, setGuideDismissed] = useState(() => {
+    try { return localStorage.getItem('knowmi_guide_dismissed') === 'true' } catch { return false }
+  })
+  const acquisitionSource = (() => {
+    try { return localStorage.getItem('knowmi_acquisition_source') || 'organic' } catch { return 'organic' }
+  })()
+
   const [hasPreviewed, setHasPreviewed] = useState(() => {
     try {
       return localStorage.getItem('knowmi_onboarding_previewed') === 'true'
@@ -1774,6 +1784,18 @@ function Dashboard() {
       localStorage.setItem('knowmi_active_tab', activeTab)
     } catch (e) {}
   }, [activeTab])
+
+  // Auto-show contextual onboarding guide for new users who haven't dismissed it
+  useEffect(() => {
+    if (!profile || authLoading || guideDismissed) return
+    const identities = profile?.persona_data?.identities || []
+    if (identities.length === 0) {
+      // Small delay so the page has rendered before the guide slides in
+      const t = setTimeout(() => setShowContextualGuide(true), 800)
+      return () => clearTimeout(t)
+    }
+  }, [profile, authLoading, guideDismissed])
+
 
   const [analyticsView, setAnalyticsView] = useState('vibe')
 
@@ -3033,6 +3055,116 @@ function Dashboard() {
             </button>
           ))}
         </nav>
+
+      {/* ✦ Contextual Onboarding Guide — auto-shown for new users, source-aware */}
+      {showContextualGuide && !guideDismissed && (
+        <div
+          className="fixed bottom-[88px] left-0 right-0 z-[140] px-4 flex justify-center"
+          style={{ animation: 'guideSlideUp 0.6s cubic-bezier(0.34,1.56,0.64,1) both' }}
+        >
+          <div className="w-full max-w-sm rounded-2xl border-[3px] border-orange-500 bg-[#0e0e0e] shadow-[0_0_60px_rgba(249,115,22,0.3)] overflow-hidden">
+            {/* Top accent */}
+            <div className="h-1 bg-gradient-to-r from-orange-600 via-orange-400 to-orange-600" />
+
+            {/* Header row */}
+            <div className="flex items-center gap-3 px-4 pt-3 pb-2">
+              <div className="w-9 h-9 shrink-0 rounded-xl bg-orange-500 text-black flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000]">
+                {acquisitionSource === 'scan' ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/>
+                    <rect x="7" y="7" width="10" height="10" rx="1"/>
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+                  </svg>
+                )}
+              </div>
+              <div className="flex-1">
+                <p className="text-white font-black text-[13px] leading-tight">
+                  {acquisitionSource === 'scan'
+                    ? 'You scanned a KnoWMi tee! 🔥'
+                    : acquisitionSource === 'paid'
+                    ? 'Welcome to KnoWMi! 👋'
+                    : 'Welcome — let\'s get you set up ✦'}
+                </p>
+                <p className="text-neutral-400 text-[11px] font-medium mt-0.5">
+                  {acquisitionSource === 'scan'
+                    ? 'Now build your own profile in 60 seconds'
+                    : 'Create your digital identity card — it takes 60 seconds'}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  try { localStorage.setItem('knowmi_guide_dismissed', 'true') } catch {}
+                  setGuideDismissed(true)
+                  setShowContextualGuide(false)
+                }}
+                className="w-6 h-6 shrink-0 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-neutral-400 hover:text-white transition-colors"
+                aria-label="Dismiss guide"
+              >
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M1 1L9 9M9 1L1 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </button>
+            </div>
+
+            {/* Step flow: Pulse → Identity */}
+            <div className="px-4 pb-3 flex items-center gap-2">
+              {/* Step 1 — You are here */}
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-orange-500/15 border border-orange-500/40">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97316" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+                <span className="text-[10px] font-black text-orange-400 uppercase tracking-wider">Pulse</span>
+                <span className="text-[9px] text-orange-300/60 font-bold">(here)</span>
+              </div>
+
+              {/* Arrow */}
+              <div className="flex items-center gap-0.5">
+                <div className="w-4 h-px bg-orange-500/50" />
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#F97316" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="animate-pulse">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </div>
+
+              {/* Step 2 — Go here */}
+              <div className="relative flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border-2 border-orange-500 shadow-[2px_2px_0px_#F97316]">
+                {/* pulsing ring */}
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full animate-ping opacity-70" />
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full" />
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span className="text-[10px] font-black text-black uppercase tracking-wider">Identity</span>
+                <span className="text-[9px] text-black/50 font-bold">(tap →)</span>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <button
+              onClick={() => {
+                setActiveTab('profile')
+                try { localStorage.setItem('knowmi_guide_dismissed', 'true') } catch {}
+                setGuideDismissed(true)
+                setShowContextualGuide(false)
+              }}
+              className="w-full flex items-center justify-between px-4 py-3 bg-orange-500 hover:bg-orange-400 text-black font-black text-xs uppercase tracking-widest border-t-2 border-black transition-colors"
+            >
+              <span>Set Up My Identity Now</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+          <style>{`
+            @keyframes guideSlideUp {
+              from { transform: translateY(40px); opacity: 0; }
+              to { transform: translateY(0); opacity: 1; }
+            }
+          `}</style>
+        </div>
+      )}
 
       {showOnboardingModal && (
         <div className="fixed inset-0 z-[150] bg-black/70 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn text-white select-none">

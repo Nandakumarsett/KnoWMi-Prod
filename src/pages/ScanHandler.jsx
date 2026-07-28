@@ -70,6 +70,10 @@ export default function ScanHandler() {
 
       // Immediately navigate for a seamless, fast user experience
       posthog.capture('qr_code_scanned', { profile_id: resolvedProfile.id, source: 'wearable' })
+      // Mark acquisition source so Dashboard can show contextual onboarding
+      if (!localStorage.getItem('knowmi_acquisition_source')) {
+        localStorage.setItem('knowmi_acquisition_source', 'scan')
+      }
       navigate(`/p/${finalSlug}?src=qr`)
 
       // FIRE AND FORGET ANALYTICS IN BACKGROUND
