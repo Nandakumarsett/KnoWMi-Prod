@@ -121,7 +121,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
       >
         <div className="max-w-[1200px] mx-auto px-3 sm:px-6 flex items-center justify-between h-16 lg:h-[76px] w-full relative">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0 group select-none" aria-label="KnoWMi home">
+        <a href="/" className="flex items-center gap-0 flex-shrink-0 group select-none" aria-label="KnoWMi home">
           {/* Official Brand Logo Mark — Stylized KW (Uncontained, no background box) */}
           <img 
             src="/logo-square.png" 
@@ -130,7 +130,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
             style={useDarkTheme ? { filter: 'invert(1) hue-rotate(180deg)' } : {}}
           />
 
-          <div className="flex flex-col leading-none relative z-20">
+          <div className="flex flex-col leading-none relative z-20 -ml-1.5 sm:-ml-3 lg:-ml-4">
             <div className="relative">
               <span
                 style={{
