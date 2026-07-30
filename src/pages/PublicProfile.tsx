@@ -1082,7 +1082,7 @@ export default function PublicProfile() {
             onClick={() => {
               if (!user) {
                 localStorage.setItem('return_to', '/dashboard?tab=profile');
-                localStorage.setItem('knowmi_acquisition_source', 'scan');
+                localStorage.setItem('knowmi_acquisition_source', fromSrc === 'qr' ? 'scan' : 'share');
                 window.location.href = "/?auth=signup";
               } else {
                 navigate("/dashboard?tab=profile");
@@ -1092,14 +1092,14 @@ export default function PublicProfile() {
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-white border-[2px] border-black flex items-center justify-center text-xl animate-pulse shadow-[2px_2px_0px_#000]">
-                👕
+                {fromSrc === 'qr' ? '👕' : '✨'}
               </div>
               <div className="text-left">
                 <p className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-0.5">
                   Powered by KnoWMi
                 </p>
                 <p className="text-xs font-black text-white tracking-widest uppercase">
-                  Claim Your Tee
+                  {fromSrc === 'qr' ? 'Claim Your Tee' : 'Create Your Free Card'}
                 </p>
               </div>
             </div>

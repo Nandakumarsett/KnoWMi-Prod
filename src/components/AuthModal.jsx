@@ -28,7 +28,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
       setAgreeTerms(false)
       setShowEmailForm(false)
       const isClaiming = localStorage.getItem('knowmi_pending_claim')
-      setTab(isClaiming ? 'signin' : defaultTab)
+      setTab(isClaiming ? 'signup' : defaultTab)
     }
   }, [open, defaultTab])
 
@@ -58,7 +58,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
 
   const handleSignUp = async (e) => {
     e.preventDefault()
-    if (!firstName.trim()) { setError('Please enter your display name'); return }
+    if (!firstName.trim()) { setError('Please choose a username for your profile link'); return }
     if (!email.trim().includes('@')) { setError('Please enter a valid email'); return }
     if (password.length < 6) { setError('Password must be at least 6 characters'); return }
     if (!agreeTerms) { setError('Please agree to our Terms to continue.'); return }
@@ -73,7 +73,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
       .maybeSingle()
 
     if (existingUser) {
-      setError('That display name is taken. Try another.')
+      setError('That username is already taken. Please choose another username for your profile link.')
       setLoading(false)
       return
     }
@@ -166,7 +166,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
   }
 
   const isClaiming = !!localStorage.getItem('knowmi_pending_claim')
-  const isSignIn = tab === 'signin' || isClaiming
+  const isSignIn = tab === 'signin'
   const isForgot = tab === 'forgot'
 
   return (
@@ -205,12 +205,20 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
             {!isForgot && (
               <>
                 <h2 className="text-xl font-black text-white mt-2">
-                  {isSignIn ? 'Welcome back 👋' : 'Claim your identity'}
+                  {isClaiming 
+                    ? (isSignIn ? 'Link to existing account 🔗' : 'Claim Your Tee 👕')
+                    : (isSignIn ? 'Welcome back 👋' : 'Claim your identity')
+                  }
                 </h2>
                 <p className="text-xs text-neutral-400 mt-1">
-                  {isSignIn
-                    ? 'Sign in to access your KnoWMi card'
-                    : 'Your card is ready. Takes about 30 seconds.'}
+                  {isClaiming
+                    ? (isSignIn 
+                        ? 'Sign in to link this phygital Tee to your profile.' 
+                        : 'Create a KnoWMi account to pair your phygital Tee.')
+                    : (isSignIn
+                        ? 'Sign in to access your KnoWMi card'
+                        : 'Your card is ready. Takes about 30 seconds.')
+                  }
                 </p>
               </>
             )}
@@ -220,7 +228,7 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
           </div>
 
           {/* Sign In / Sign Up tab toggle (only when not claiming / not forgot) */}
-          {!isForgot && !isClaiming && (
+          {!isForgot && (
             <div className="flex rounded-xl overflow-hidden mb-6 border-2 border-white/10 bg-white/5 p-1 gap-1">
               {['signup', 'signin'].map(t => (
                 <button
@@ -320,14 +328,19 @@ export default function AuthModal({ open, onClose, onSuccess, redirectAfter, def
                   className="flex flex-col gap-3"
                 >
                   {!isSignIn && (
-                    <input
-                      type="text"
-                      placeholder="Display Name"
-                      value={firstName}
-                      onChange={e => setFirstName(e.target.value)}
-                      className="w-full px-4 py-3 bg-white/10 text-white placeholder-neutral-500 font-semibold text-sm border border-white/20 rounded-xl outline-none focus:border-orange-500 transition-colors"
-                      autoComplete="given-name"
-                    />
+                    <div className="flex flex-col text-left">
+                      <input
+                        type="text"
+                        placeholder="Choose Username (for your profile URL)"
+                        value={firstName}
+                        onChange={e => setFirstName(e.target.value.replace(/[^a-zA-Z0-9_-]/g, ''))}
+                        className="w-full px-4 py-3 bg-white/10 text-white placeholder-neutral-500 font-semibold text-sm border border-white/20 rounded-xl outline-none focus:border-orange-500 transition-colors"
+                        autoComplete="username"
+                      />
+                      <span className="text-[10px] text-neutral-500 mt-1 pl-1 font-medium">
+                        Your profile link: knowmi.co/p/{firstName.toLowerCase() || 'username'}
+                      </span>
+                    </div>
                   )}
 
                   <input
