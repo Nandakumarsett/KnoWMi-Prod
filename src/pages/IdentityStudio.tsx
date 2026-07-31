@@ -1438,7 +1438,7 @@ export default function IdentityStudio() {
 
           {/* RIGHT: LIVE PREVIEW DEVICE FRAME */}
           {activePersona && (
-            <div className="hidden lg:block sticky top-[160px] z-30">
+            <div className="hidden lg:block lg:fixed lg:top-[120px] lg:w-[350px] lg:right-[calc((100vw-1200px)/2+40px)] max-[1200px]:lg:right-10 z-30">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-3 text-center">Live Preview Card</p>
               
               {/* Phone Frame wrapper */}
