@@ -38,6 +38,17 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
     return null
   }
 
+  // URL Premium Gating: If user is free, they can only be accessed via secure_slug.
+  // Accessing via first_name (custom username) is restricted to paid profiles.
+  const isPaidProfile = profile.status === 'paid' || profile.status === 'team' || profile.role === 'owner';
+  const firstNm = (profile.first_name || '').trim().toLowerCase();
+  const secSlug = (profile.secure_slug || '').trim().toLowerCase();
+  const querySlug = cleanSlug.toLowerCase();
+
+  if (!isPaidProfile && querySlug === firstNm && querySlug !== secSlug && !isUUID) {
+    return null;
+  }
+
   // Define Whitelist of public fields to prevent leakage
   const PUBLIC_WHITELIST = [
     'id', 'user_id', 'secure_slug', 'first_name', 'last_name', 'avatar_url',
@@ -112,7 +123,7 @@ export async function fetchProfile(slug: string): Promise<ProfileData | null> {
   return {
     id: publicProfile.id,
     user_id: publicProfile.user_id || null,
-    username: publicProfile.secure_slug || fn.toLowerCase(),
+    username: isPaidProfile ? (fn.toLowerCase() || publicProfile.secure_slug) : publicProfile.secure_slug,
     display_name: builtDisplayName,
     first_name: fn,
     last_name: ln,

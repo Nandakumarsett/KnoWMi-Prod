@@ -97,13 +97,13 @@ export default function QRIntercept() {
       
       let ownerProfile = null;
       try {
-        const { data: pubProfile } = await supabase.from('public_profiles').select('user_id, secure_slug').eq('id', qrData.profile_id).single();
+        const { data: pubProfile } = await supabase.from('public_profiles').select('user_id, secure_slug, first_name, status, role').eq('id', qrData.profile_id).single();
         if (pubProfile?.user_id) ownerProfile = pubProfile;
       } catch (e) {}
 
       if (!ownerProfile) {
         try {
-          const { data: privProfile } = await supabase.from('profiles').select('user_id, secure_slug').eq('id', qrData.profile_id).single();
+          const { data: privProfile } = await supabase.from('profiles').select('user_id, secure_slug, first_name, status, role').eq('id', qrData.profile_id).single();
           if (privProfile?.user_id) ownerProfile = privProfile;
         } catch (e) {}
       }
@@ -119,7 +119,9 @@ export default function QRIntercept() {
       }
 
       posthog.capture('tshirt_qr_scanned', { profile_id: qrData.profile_id, source: 'tshirt', city: resolvedCity, country: resolvedCountry })
-      const finalSlug = ownerProfile?.secure_slug || qrData.profile_slug || qrData.profile_id;
+      const isFree = ownerProfile?.status === 'free' || (!ownerProfile?.status && (!ownerProfile?.tier || ownerProfile?.tier === 'Starter' || ownerProfile?.tier === 'Free')) || ownerProfile?.tier === 'Free' || ownerProfile?.tier === 'Starter';
+      const isPaid = ownerProfile && (!isFree || ownerProfile.role === 'owner');
+      const finalSlug = isPaid ? (ownerProfile?.first_name || ownerProfile?.secure_slug) : (ownerProfile?.secure_slug || qrData.profile_slug || qrData.profile_id);
       navigate(`/p/${finalSlug}?src=tshirt`);
     } catch (err) {
       setIsUnclaimed(true);

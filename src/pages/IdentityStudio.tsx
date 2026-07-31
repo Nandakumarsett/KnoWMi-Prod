@@ -36,7 +36,9 @@ import {
   Calendar,
   MapPin,
   Star,
+  X,
 } from "lucide-react";
+import { PersonaRouter } from "../components/profile/PersonaRouter";
 import { useAuth } from "../context/AuthContext";
 import { supabase } from "../lib/supabase";
 import { computeCompletionScore } from "../lib/identity/completion-score";
@@ -173,6 +175,20 @@ const STYLES = `
 
   .status-badge.completed { background: #34d399; color: #000; }
   .status-badge.missing { background: #F97316; color: #000; }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
 `;
 
 // --- HELPERS ---
@@ -263,6 +279,7 @@ export default function IdentityStudio() {
   const [data, setData] = useState<any>({ ...INITIAL_STATE });
   const [showDetailed, setShowDetailed] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
+  const [showMobilePreview, setShowMobilePreview] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -633,6 +650,59 @@ export default function IdentityStudio() {
     [activePersona, data],
   );
 
+  const previewProfile = useMemo(() => {
+    const fn = (data.first_name || '').trim();
+    const ln = (data.last_name || '').trim();
+    
+    const social_links = [
+      { platform: 'instagram', url: data.instagram ? `https://instagram.com/${data.instagram.replace(/^@/, '')}` : '' },
+      { platform: 'linkedin', url: data.linkedin ? (data.linkedin.includes('linkedin.com') ? data.linkedin : `https://linkedin.com/in/${data.linkedin}`) : '' },
+      { platform: 'github', url: data.github ? (data.github.includes('github.com') ? data.github : `https://github.com/${data.github}`) : '' },
+      { platform: 'twitter', url: data.twitter ? (data.twitter.includes('twitter.com') ? data.twitter : `https://twitter.com/${data.twitter}`) : '' },
+      { platform: 'youtube', url: data.youtube ? (data.youtube.includes('youtube.com') ? data.youtube : `https://youtube.com/${data.youtube}`) : '' },
+      { platform: 'website', url: data.website || '' },
+      { platform: 'whatsapp', url: data.whatsapp ? `https://wa.me/${data.whatsapp.replace(/\D/g, '')}` : '' }
+    ].filter(link => link.url);
+
+    return {
+      id: profile?.id || 'preview-id',
+      user_id: profile?.user_id || null,
+      username: fn.toLowerCase() || 'preview',
+      display_name: fn && ln ? `${fn} ${ln}` : (fn || ln || 'Your Name'),
+      first_name: fn,
+      last_name: ln,
+      avatar_url: data.avatar_url,
+      member_id: profile?.wm_code || 'WM-PREVIEW-001',
+      persona: activePersona,
+      mood: data.mood || 'Expressive & Curious',
+      bio: data.bio || '',
+      pulse: score || 20,
+      tier: profile?.status === 'paid' ? 'Creator' : 'Starter',
+      status: profile?.status || 'free',
+      is_verified: profile?.is_verified ?? false,
+      joined_at: profile?.created_at || new Date().toISOString(),
+      views: 0,
+      top_location: 'India',
+      ghost_mode: false,
+      profile_theme: data.profile_theme || 'default',
+      social_links,
+      persona_data: {
+        identities: [
+          {
+            active: true,
+            persona_type: activePersona,
+            first_name: fn,
+            last_name: ln,
+            avatar_url: data.avatar_url,
+            bio: data.bio,
+            data: { ...data }
+          }
+        ],
+        [activePersona]: { ...data }
+      }
+    };
+  }, [data, activePersona, profile, score]);
+
   const activeConfig = useMemo(() => {
     const persona = (activePersona || "creator").toLowerCase();
     if (["tech", "dev", "developer"].includes(persona)) return personaConfigs["developer"];
@@ -755,11 +825,10 @@ export default function IdentityStudio() {
         </div>
       </header>
 
-      <main className="max-w-[1000px] mx-auto px-6 py-10">
-        {/* Forms centered */}
-        <div className="max-w-[1000px] mx-auto">
+      <main className="max-w-[1200px] mx-auto px-4 sm:px-6 py-10">
+        <div className={activePersona ? "grid grid-cols-1 lg:grid-cols-[1fr_385px] gap-10 items-start" : "max-w-[1000px] mx-auto"}>
           {/* LEFT: FORM SECTIONS */}
-          <div className="space-y-12">
+          <div className="space-y-12 w-full min-w-0">
             {/* Section 1: Choose Path (If no persona) */}
             {!activePersona && (
               <section className="space-y-6">
@@ -1254,8 +1323,58 @@ export default function IdentityStudio() {
               </>
             )}
           </div>
+
+          {/* RIGHT: LIVE PREVIEW DEVICE FRAME */}
+          {activePersona && (
+            <div className="hidden lg:block sticky top-28 z-30">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-3 text-center">Live Preview Card</p>
+              
+              {/* Phone Frame wrapper */}
+              <div className="relative mx-auto w-[350px] h-[680px] bg-black border-[8px] border-neutral-800 rounded-[48px] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col">
+                {/* Speaker/Camera notch */}
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-32 h-4.5 bg-neutral-850 rounded-full z-50 flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-neutral-900 border border-neutral-800 mr-2" />
+                  <div className="w-10 h-1 bg-neutral-950 rounded-full" />
+                </div>
+                
+                {/* Scrollable screen inside */}
+                <div className="flex-1 overflow-y-auto px-4 pt-10 pb-6 bg-[#0a0a0a] scrollbar-thin">
+                  <PersonaRouter profile={previewProfile} hideHeader={true} />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </main>
+
+      {/* Floating preview button for mobile/tablet */}
+      {activePersona && (
+        <button
+          onClick={() => setShowMobilePreview(true)}
+          className="lg:hidden fixed bottom-28 right-6 z-50 w-12 h-12 rounded-full bg-orange-500 text-black border-[3px] border-black shadow-[3px_3px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none flex items-center justify-center transition-all active:scale-95"
+          title="Show Live Preview"
+        >
+          <Eye size={20} />
+        </button>
+      )}
+
+      {/* Mobile Preview Modal Backdrop */}
+      {showMobilePreview && (
+        <div className="fixed inset-0 z-[9999] lg:hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="relative w-full max-w-[360px] h-[90vh] bg-[#0a0a0a] border-[4px] border-neutral-800 rounded-[36px] overflow-hidden flex flex-col shadow-2xl">
+            {/* Close button */}
+            <button
+              onClick={() => setShowMobilePreview(false)}
+              className="absolute top-4 right-4 z-[9999] w-8 h-8 rounded-full bg-neutral-900 text-white flex items-center justify-center border border-white/10 hover:bg-neutral-850"
+            >
+              <X size={16} />
+            </button>
+            <div className="flex-1 overflow-y-auto px-4 pt-12 pb-6 scrollbar-thin">
+              <PersonaRouter profile={previewProfile} hideHeader={true} />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Removed sticky insight strip as requested */}
 

@@ -17,7 +17,10 @@ export default function BusinessNeedsTab({ profile }) {
   const [customMessage, setCustomMessage] = useState('Hey, it was great meeting you! Scan my code to stay connected.');
   const [theme, setTheme] = useState('dark'); // 'dark', 'light', 'accent'
   const [isPrinting, setIsPrinting] = useState(false);
-  const [dynamicUrl, setDynamicUrl] = useState(`https://knowmi.in/p/${profile?.secure_slug || ''}?src=business`);
+  const isFree = profile?.status === 'free' || (!profile?.status && (!profile?.tier || profile?.tier === 'Starter' || profile?.tier === 'Free')) || profile?.tier === 'Free' || profile?.tier === 'Starter';
+  const isPaid = !isFree || profile?.role === 'owner';
+  const initialSlug = isPaid ? (profile?.first_name || profile?.secure_slug || '') : (profile?.secure_slug || '');
+  const [dynamicUrl, setDynamicUrl] = useState(`https://knowmi.in/p/${initialSlug}?src=business`);
 
   // ─── Team Management State ───
   const [teamOrders, setTeamOrders] = useState([]);

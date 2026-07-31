@@ -7,6 +7,13 @@ import {
 } from 'lucide-react'
 import { getAssetUrl } from '../../../lib/supabase'
 
+const CREATOR_BIO_PRESETS = [
+  { label: 'Creative', emoji: '🎨', text: 'Visual storyteller and content creator crafting digital experiences. Sharing tutorials, lifestyle insights, and creative inspiration to build a community.' },
+  { label: 'Ambitious', emoji: '🚀', text: 'Digital entrepreneur building a modern media brand. Designing engaging content, sharing strategic growth insights, and executing creative partnerships.' },
+  { label: 'Minimalist', emoji: '☕', text: 'Curating high-quality visual art, clean designs, and minimal aesthetics. Creating spaces that feel calm and inspiring.' },
+  { label: 'Storyteller', emoji: '💡', text: 'Sharing stories, creative writing, and digital art. My mission is to inspire deep connections and showcase human perspectives through art.' }
+]
+
 interface CreatorFormProps {
   data: any
   onChange: (newData: any) => void
@@ -139,6 +146,18 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
              <div>
                <label className={labelClasses}>Inside the Mind (Detailed Bio)</label>
                <textarea rows={3} value={data.bio || ''} maxLength={500} onChange={e => updateField('bio', e.target.value)} placeholder="Tell the world your creative mission..." className={`${inputBaseClasses} resize-none`} />
+               <div className="flex flex-wrap gap-2 mt-1.5">
+                 {CREATOR_BIO_PRESETS.map(preset => (
+                   <button
+                     type="button"
+                     key={preset.label}
+                     onClick={() => updateField('bio', preset.text)}
+                     className="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider bg-white/5 border border-white/10 rounded-lg hover:bg-orange-500 hover:text-black hover:border-orange-500 transition-all active:scale-95 text-neutral-400"
+                   >
+                     {preset.emoji} {preset.label}
+                   </button>
+                 ))}
+               </div>
              </div>
           </div>
         </div>

@@ -18,6 +18,13 @@ const TECH_SUGGESTIONS = [
   'Git', 'VS Code', 'Figma', 'Postman', 'Linux', 'GraphQL'
 ]
 
+const DEV_BIO_PRESETS = [
+  { label: 'Ambitious', emoji: '🚀', text: 'Full-stack developer building robust, scalable applications. Obsessed with clean code, modern architecture, and solving complex user problems.' },
+  { label: 'Techie', emoji: '💻', text: 'Software engineer specializing in React, Node, and TypeScript. Love diving deep into algorithms, performance tuning, and exploring cutting-edge tools.' },
+  { label: 'Minimalist', emoji: '☕', text: 'Developer focused on building simple, elegant, and highly functional web solutions. Let\'s make things that work beautifully.' },
+  { label: 'Innovator', emoji: '🌐', text: 'Building the future of digital identity. Fascinated by decentralized protocols, open-source projects, and bridging the gap between tech and design.' }
+]
+
 interface DeveloperFormProps {
   data: any
   onChange: (newData: any) => void
@@ -114,6 +121,18 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                 placeholder="Tell the world about your engineering journey..."
                 className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:border-orange-500 transition-all outline-none resize-none"
               />
+              <div className="flex flex-wrap gap-2 mt-1.5">
+                {DEV_BIO_PRESETS.map(preset => (
+                  <button
+                    type="button"
+                    key={preset.label}
+                    onClick={() => updateField('bio', preset.text)}
+                    className="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider bg-white/5 border border-white/10 rounded-lg hover:bg-orange-500 hover:text-black hover:border-orange-500 transition-all active:scale-95 text-neutral-400"
+                  >
+                    {preset.emoji} {preset.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

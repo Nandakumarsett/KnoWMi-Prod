@@ -24,7 +24,7 @@ export default function ScanHandler() {
         let profileError = null
 
         try {
-          let dbQuery = supabase.from('public_profiles').select('id, user_id, first_name, secure_slug, ghost_mode')
+          let dbQuery = supabase.from('public_profiles').select('id, user_id, first_name, secure_slug, ghost_mode, status, role')
           if (isUUID) {
             dbQuery = dbQuery.or(`id.eq.${code},secure_slug.eq.${code}`)
           } else {
@@ -60,7 +60,9 @@ export default function ScanHandler() {
     const finishScan = (resolvedProfile) => {
       setStatus('redirecting')
       
-      const finalSlug = resolvedProfile.secure_slug || resolvedProfile.id
+      const isFree = resolvedProfile.status === 'free' || (!resolvedProfile.status && (!resolvedProfile.tier || resolvedProfile.tier === 'Starter' || resolvedProfile.tier === 'Free')) || resolvedProfile.tier === 'Free' || resolvedProfile.tier === 'Starter';
+      const isPaid = !isFree || resolvedProfile.role === 'owner';
+      const finalSlug = isPaid ? (resolvedProfile.first_name || resolvedProfile.secure_slug) : (resolvedProfile.secure_slug || resolvedProfile.id);
 
       // Factory Claim Flow: Unclaimed shirt
       if (!resolvedProfile.user_id) {

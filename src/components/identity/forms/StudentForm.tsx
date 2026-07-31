@@ -10,6 +10,13 @@ import {
 import { EmojiPicker } from '../EmojiPicker'
 import { getAssetUrl } from '../../../lib/supabase'
 
+const STUDENT_BIO_PRESETS = [
+  { label: 'Ambitious', emoji: '🚀', text: 'Aspiring software engineer and student. Currently pursuing my degree, building side projects, and actively looking for internship opportunities.' },
+  { label: 'Minimalist', emoji: '☕', text: 'Learning, experimenting, and coding. Passionate about user design and usability. Documenting my university journey and growth.' },
+  { label: 'Techie', emoji: '💻', text: 'CS student building open-source tools. Focused on full-stack web development, algorithmic research, and continuous learning.' },
+  { label: 'Creative', emoji: '🎨', text: 'Student designer and developer. Merging engineering and arts to design interface experiences that matter.' }
+]
+
 interface StudentFormProps {
   data: any
   onChange: (newData: any) => void
@@ -101,6 +108,18 @@ export function StudentForm({ data = {}, onChange, onUpload, uploading }: Studen
                 placeholder="What drives you? What are you learning right now?"
                 className={`${inputBaseClasses} resize-none`}
               />
+              <div className="flex flex-wrap gap-2 mt-1.5">
+                {STUDENT_BIO_PRESETS.map(preset => (
+                  <button
+                    type="button"
+                    key={preset.label}
+                    onClick={() => onChange({ ...data, bio: preset.text, about_me: preset.text })}
+                    className="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider bg-white/5 border border-white/10 rounded-lg hover:bg-orange-500 hover:text-black hover:border-orange-500 transition-all active:scale-95 text-neutral-400"
+                  >
+                    {preset.emoji} {preset.label}
+                  </button>
+                ))}
+              </div>
              </div>
              <div>
                <label className={labelClasses}>Advice I Live By</label>

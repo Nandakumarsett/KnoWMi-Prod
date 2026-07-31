@@ -23,8 +23,7 @@ export const AuthProvider = ({ children }) => {
   const maybeAutopopulateFromGoogle = async (authUser) => {
     try {
       const meta = authUser.user_metadata || {}
-      // Only applies to Google OAuth users who have full_name in metadata
-      if (!meta.full_name && !meta.name) return
+      if (!meta.full_name && !meta.name && !meta.avatar_url && !meta.picture) return
 
       const { data: profileData } = await supabase
         .from('profiles')
@@ -35,18 +34,20 @@ export const AuthProvider = ({ children }) => {
       if (!profileData) return
 
       const updates = {}
+      const fullName = (meta.full_name || meta.name || '').trim()
 
-      // Only fill name if the profile has no name yet (don't overwrite user-set names)
-      if (!profileData.first_name) {
-        const fullName = (meta.full_name || meta.name || '').trim()
+      // 1. Sync last name if empty
+      if (!profileData.last_name && fullName) {
         const parts = fullName.split(' ')
-        updates.first_name = parts[0] || ''
-        if (parts.length > 1) updates.last_name = parts.slice(1).join(' ')
+        if (parts.length > 1) {
+          updates.last_name = parts.slice(1).join(' ')
+        }
       }
 
-      // Only fill avatar if none set yet (Google provides a profile photo URL)
-      if (!profileData.avatar_url && meta.avatar_url) {
-        updates.avatar_url = meta.avatar_url
+      // 2. Sync avatar url if empty
+      const googleAvatar = meta.avatar_url || meta.picture
+      if (!profileData.avatar_url && googleAvatar) {
+        updates.avatar_url = googleAvatar
       }
 
       if (Object.keys(updates).length > 0) {

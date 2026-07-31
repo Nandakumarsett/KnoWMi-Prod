@@ -24,6 +24,8 @@ interface Profile {
   wm_code: string;
   secure_slug: string;
   profile_category: string;
+  status?: string | null;
+  role?: string | null;
   updated_at?: string;
 }
 
@@ -143,6 +145,12 @@ export default function Leaderboard() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [shareProfile, setShareProfile] = useState<Profile | null>(null);
+
+  const getProfileSlug = (p: Profile) => {
+    const isFree = p.status === 'free' || (p.status === undefined ? false : (!p.status));
+    const isPaid = !isFree || p.role === 'owner';
+    return isPaid ? (p.username || p.secure_slug) : (p.secure_slug || p.id);
+  };
 
   useEffect(() => {
     document.title = 'KnoWMi Elite | Global Rankings';
@@ -338,7 +346,7 @@ export default function Leaderboard() {
                 return (
                   <div
                     key={p.username}
-                    onClick={() => navigate(`/p/${p.secure_slug || p.id}?src=leaderboard`)}
+                    onClick={() => navigate(`/p/${getProfileSlug(p)}?src=leaderboard`)}
                     className={`relative group flex flex-col items-center rounded-3xl border bg-gradient-to-b ${cfg.cardGradient} ${cfg.cardBorder} ${podiumHeight} w-full md:w-64 p-8 pt-14 cursor-pointer transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl backdrop-blur-sm overflow-hidden`}
                     style={cfg.glowStyle}
                   >
@@ -412,7 +420,7 @@ export default function Leaderboard() {
               {tableRows.map((p) => (
                 <div
                   key={p.username}
-                  onClick={() => navigate(`/p/${p.secure_slug || p.id}?src=leaderboard`)}
+                  onClick={() => navigate(`/p/${getProfileSlug(p)}?src=leaderboard`)}
                   className="group bg-white/5 hover:bg-white/10 border border-white/5 hover:border-orange-500/30 p-4 sm:p-5 rounded-2xl transition-all duration-300 cursor-pointer flex flex-col sm:flex-row items-center justify-between gap-4 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-orange-500/5"
                 >
                   <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
@@ -467,7 +475,7 @@ export default function Leaderboard() {
                         <Share2 size={16} />
                       </button>
                       <a
-                        href={`/p/${p.secure_slug || p.id}?src=leaderboard`}
+                        href={`/p/${getProfileSlug(p)}?src=leaderboard`}
                         onClick={(e) => e.stopPropagation()}
                         className="p-2.5 text-white/30 hover:text-teal-400 hover:bg-teal-500/10 rounded-xl transition-all"
                         title="View profile"
@@ -568,7 +576,7 @@ export default function Leaderboard() {
             <div className="p-6 pt-0 grid grid-cols-2 gap-3">
               <button
                 onClick={() => {
-                  const slug = shareProfile.secure_slug || shareProfile.id;
+                  const slug = getProfileSlug(shareProfile);
                   const link = `${window.location.origin}/p/${slug}?src=leaderboard_share`;
                   navigator.clipboard.writeText(link);
                   toast.success('Share link copied!');

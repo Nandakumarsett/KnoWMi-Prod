@@ -1469,7 +1469,7 @@ const IdentityPass = ({ profile }) => {
         <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
           <button 
             onClick={() => {
-              const slug = profile?.secure_slug || profile?.first_name || profile?.id;
+              const slug = isPaid ? (profile?.first_name || profile?.secure_slug) : (profile?.secure_slug || profile?.id);
               const profileLink = `${window.location.origin}/p/${slug}`;
               navigator.clipboard.writeText(profileLink);
               toast.success("Profile link copied to clipboard! 🔗");
@@ -1497,7 +1497,7 @@ const IdentityPass = ({ profile }) => {
       <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-10">
         <div className="relative group">
           <div 
-            onClick={() => navigate(`/p/${profile?.secure_slug || profile?.first_name || profile?.id}`)}
+            onClick={() => navigate(`/p/${isPaid ? (profile?.first_name || profile?.secure_slug) : (profile?.secure_slug || profile?.id)}`)}
             className="qr-print-card card p-12 flex flex-col items-center bg-[#1a1a1a] shadow-[8px_8px_0px_#fff] relative overflow-hidden cursor-pointer hover:shadow-orange-500/10 transition-all border-none"
           >
             <div className="absolute top-6 right-8 flex items-center gap-1.5 bg-emerald-50/50 px-2.5 py-1.5 rounded-xl backdrop-blur-sm border border-emerald-500/10">
@@ -2150,7 +2150,7 @@ function Dashboard() {
 
               return (
                 <div 
-                  onClick={() => navigate(`/p/${profile?.secure_slug || profile?.id}?from=${activeTab}`)}
+                  onClick={() => navigate(`/p/${isPaid ? (profile?.first_name || profile?.secure_slug) : (profile?.secure_slug || profile?.id)}?from=${activeTab}`)}
                   className={`flex items-center gap-2 sm:gap-3 pl-2.5 pr-1 py-1 rounded-2xl border transition-all cursor-pointer group ${isVibeDark ? 'bg-[#1a1a1a]/5 border-white/10 hover:border-orange-500/50' : 'bg-[#1a1a1a] border-white/20 hover:border-orange-200'}`}
                   title="View Public Profile"
                 >
@@ -3247,7 +3247,7 @@ function Dashboard() {
                   {!hasPreviewed ? (
                     <button 
                       onClick={() => {
-                        const slug = profile?.secure_slug || profile?.first_name || profile?.id;
+                        const slug = isPaid ? (profile?.first_name || profile?.secure_slug) : (profile?.secure_slug || profile?.id);
                         window.open(`/p/${slug}`, '_blank');
                         localStorage.setItem('knowmi_onboarding_previewed', 'true');
                         setHasPreviewed(true);
@@ -3279,7 +3279,7 @@ function Dashboard() {
                   {!hasShared ? (
                     <button 
                       onClick={() => {
-                        const slug = profile?.secure_slug || profile?.first_name || profile?.id;
+                        const slug = isPaid ? (profile?.first_name || profile?.secure_slug) : (profile?.secure_slug || profile?.id);
                         const profileLink = `${window.location.origin}/p/${slug}`;
                         navigator.clipboard.writeText(profileLink);
                         localStorage.setItem('knowmi_onboarding_shared', 'true');

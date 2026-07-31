@@ -26,6 +26,8 @@ interface Profile {
   wm_code: string;
   secure_slug: string;
   profile_category: string;
+  status?: string | null;
+  role?: string | null;
   updated_at?: string;
 }
 
@@ -67,6 +69,12 @@ export default function Leaderboard() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [shareProfile, setShareProfile] = useState<Profile | null>(null);
+
+  const getProfileSlug = (p: Profile) => {
+    const isFree = p.status === 'free' || (p.status === undefined ? false : (!p.status));
+    const isPaid = !isFree || p.role === 'owner';
+    return isPaid ? (p.username || p.secure_slug) : (p.secure_slug || p.id);
+  };
 
   useDocumentMetadata({
     title: 'KnoWMi Elite | Global Rankings',
@@ -320,7 +328,7 @@ export default function Leaderboard() {
                   <div
                     key={p.username}
                           onClick={() => {
-                      const slug = p.secure_slug || p.id;
+                      const slug = getProfileSlug(p);
                       navigate(`/p/${slug}?src=leaderboard`);
                     }}
                     className={`relative group flex flex-col items-center pt-16 pb-10 px-8 rounded-xl border border-white/10 transition-all duration-300 cursor-pointer shadow-lg hover:-translate-y-1 hover:shadow-orange-500/20 w-full md:w-72 bg-[#18181b] z-10 ${isFirst ? 'border-orange-500/30 shadow-lg h-auto md:min-h-[540px]' : 'h-auto md:min-h-[460px]'}`}
@@ -366,7 +374,7 @@ export default function Leaderboard() {
                       <Share2 size={16} /> Share
                     </button>
                     <a 
-                      href={`/p/${p.secure_slug || p.id}?src=leaderboard`} 
+                      href={`/p/${getProfileSlug(p)}?src=leaderboard`} 
                       className="flex-1 py-3 bg-white/10 text-white hover:bg-white/20 border border-white/10 rounded-lg font-semibold text-xs  tracking-wide flex items-center justify-center gap-2 transition-all shadow-lg hover:-translate-y-1 hover:shadow-orange-500/20"
                     >
                       <Eye size={16} /> View
@@ -385,7 +393,7 @@ export default function Leaderboard() {
             <div
               key={p.username}
               onClick={() => {
-                const slug = p.secure_slug || p.id;
+                const slug = getProfileSlug(p);
                 window.location.href = `/p/${slug}?src=leaderboard`;
               }}
               className="group min-w-[280px] w-[280px] flex-shrink-0 snap-start bg-[#18181b] p-6 rounded-xl border border-white/10 shadow-lg transition-all duration-300 cursor-pointer flex flex-col items-center gap-6 hover:-translate-y-1 hover:shadow-orange-500/20"
@@ -421,7 +429,7 @@ export default function Leaderboard() {
                     <Share2 size={16} />
                   </button>
                   <a 
-                    href={`/p/${p.secure_slug || p.id}?src=leaderboard`} 
+                    href={`/p/${getProfileSlug(p)}?src=leaderboard`} 
                     className="p-2.5 bg-white/10 text-white hover:bg-white/20 border border-white/10 shadow-lg hover:bg-teal-400 rounded-md transition-all active:scale-95 active:scale-95 "
                   >
                     <Eye size={16} />
@@ -513,7 +521,7 @@ export default function Leaderboard() {
                 </div>
                 <div className="mt-10 grid grid-cols-2 gap-5">
                   <button onClick={() => {
-                    const slug = shareProfile.secure_slug || shareProfile.id;
+                    const slug = getProfileSlug(shareProfile);
                     const fresh = `${window.location.origin}/p/${slug}?src=leaderboard_share`;
                     navigator.clipboard.writeText(fresh);
                     toast.success('Link copied to clipboard!');

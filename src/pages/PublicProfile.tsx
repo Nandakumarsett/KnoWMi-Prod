@@ -205,7 +205,10 @@ export default function PublicProfile() {
         </p>
         <button
           onClick={() => {
-            navigate("/?auth=signin");
+            if (username) {
+              localStorage.setItem("knowmi_pending_claim", username);
+            }
+            navigate("/?auth=signup");
           }}
           className="relative z-10 px-10 py-5 bg-orange-500 text-black border-[3px] border-black rounded-xl font-black uppercase tracking-widest text-xs shadow-[6px_6px_0px_#000] active:scale-95 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
         >
@@ -344,7 +347,7 @@ export default function PublicProfile() {
             if (user) {
               navigate("/dashboard");
             } else {
-              navigate("/?auth=signin");
+              navigate("/?auth=signup");
             }
           }}
           className="px-10 py-5 bg-orange-500 text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-2xl shadow-orange-500/20 active:scale-95 transition-all relative z-10 hover:bg-orange-600"
