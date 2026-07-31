@@ -189,6 +189,21 @@ const STYLES = `
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.2);
   }
+
+  /* Overrides for mobile replica inside studio preview */
+  .studio-preview-wrapper .min-h-screen {
+    min-height: 100% !important;
+    padding-top: 2rem !important; /* Make room for the notch bezel */
+  }
+  /* Disable cursor pointer-events for navigation links in preview */
+  .studio-preview-wrapper a,
+  .studio-preview-wrapper button {
+    pointer-events: none !important;
+  }
+  /* Allow scroll gestures on child items */
+  .studio-preview-wrapper * {
+    pointer-events: auto;
+  }
 `;
 
 // --- HELPERS ---
@@ -1336,15 +1351,15 @@ export default function IdentityStudio() {
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-3 text-center">Live Preview Card</p>
               
               {/* Phone Frame wrapper */}
-              <div className="relative mx-auto w-[350px] h-[680px] bg-black border-[8px] border-neutral-800 rounded-[48px] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col">
+              <div className="relative mx-auto w-[350px] h-[680px] bg-black border-[12px] border-neutral-900 rounded-[56px] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col ring-4 ring-neutral-800/80">
                 {/* Speaker/Camera notch */}
-                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-32 h-4.5 bg-neutral-850 rounded-full z-50 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-neutral-900 border border-neutral-800 mr-2" />
-                  <div className="w-10 h-1 bg-neutral-950 rounded-full" />
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-full z-50 flex items-center justify-center">
+                  <div className="w-2.5 h-2.5 rounded-full bg-neutral-900 border border-neutral-800 mr-2" />
+                  <div className="w-12 h-1 bg-neutral-950 rounded-full" />
                 </div>
                 
                 {/* Scrollable screen inside */}
-                <div className="flex-1 overflow-y-auto px-4 pt-10 pb-6 bg-[#0a0a0a] scrollbar-thin">
+                <div className="flex-1 overflow-y-auto w-full h-full bg-[#0a0a0a] scrollbar-thin studio-preview-wrapper relative">
                   <PersonaRouter profile={previewProfile} hideHeader={false} />
                 </div>
               </div>
@@ -1367,7 +1382,7 @@ export default function IdentityStudio() {
       {/* Mobile Preview Modal Backdrop */}
       {showMobilePreview && (
         <div className="fixed inset-0 z-[9999] lg:hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="relative w-full max-w-[360px] h-[90vh] bg-[#0a0a0a] border-[4px] border-neutral-800 rounded-[36px] overflow-hidden flex flex-col shadow-2xl">
+          <div className="relative w-full max-w-[360px] h-[90vh] bg-black border-[12px] border-neutral-900 rounded-[56px] overflow-hidden flex flex-col shadow-2xl ring-4 ring-neutral-800/80">
             {/* Close button */}
             <button
               onClick={() => setShowMobilePreview(false)}
@@ -1375,7 +1390,7 @@ export default function IdentityStudio() {
             >
               <X size={16} />
             </button>
-            <div className="flex-1 overflow-y-auto px-4 pt-12 pb-6 scrollbar-thin">
+            <div className="flex-1 overflow-y-auto w-full h-full bg-[#0a0a0a] scrollbar-thin studio-preview-wrapper relative">
               <PersonaRouter profile={previewProfile} hideHeader={false} />
             </div>
           </div>
