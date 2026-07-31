@@ -40,6 +40,7 @@ import {
 } from "lucide-react";
 import { PersonaRouter } from "../components/profile/PersonaRouter";
 import { useAuth } from "../context/AuthContext";
+import { createPortal } from "react-dom";
 import { supabase } from "../lib/supabase";
 import { computeCompletionScore } from "../lib/identity/completion-score";
 import { TagInput } from "../components/identity/TagInput";
@@ -274,6 +275,95 @@ const INITIAL_STATE = {
   avg_engagement: "",
   profile_theme: "default",
 };
+
+// A premium isolated iframe container to simulate a real mobile viewport width (350px)
+// This ensures that CSS @media queries evaluate correctly for mobile view, aligning everything exactly like a real phone.
+function MobilePreviewFrame({ children }: { children: React.ReactNode }) {
+  const [iframeRef, setIframeRef] = useState<HTMLIFrameElement | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    if (!iframeRef) return;
+    const doc = iframeRef.contentDocument || iframeRef.contentWindow?.document;
+    if (!doc) return;
+
+    // Set document meta and base styles
+    doc.open();
+    doc.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Mobile Preview</title>
+          <style>
+            html, body {
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              height: 100%;
+              background-color: #0D1117;
+              overflow-x: hidden;
+              overflow-y: auto;
+            }
+            /* Custom thin scrollbar inside iframe */
+            ::-webkit-scrollbar {
+              width: 4px;
+            }
+            ::-webkit-scrollbar-track {
+              background: transparent;
+            }
+            ::-webkit-scrollbar-thumb {
+              background: rgba(255, 255, 255, 0.1);
+              border-radius: 2px;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+              background: rgba(255, 255, 255, 0.2);
+            }
+            
+            /* Bezel notch buffer */
+            .min-h-screen {
+              min-height: 100% !important;
+              padding-top: 2.2rem !important;
+            }
+            /* Disable pointers for preview interaction safety */
+            a, button {
+              pointer-events: none !important;
+            }
+            * {
+              pointer-events: auto;
+            }
+          </style>
+        </head>
+        <body>
+          <div id="preview-root" style="width: 100%; height: 100%;"></div>
+        </body>
+      </html>
+    `);
+    doc.close();
+
+    // Copy all parent document styles into iframe document
+    const head = doc.head;
+    const parentStyles = document.querySelectorAll('link[rel="stylesheet"], style');
+    parentStyles.forEach((style) => {
+      head.appendChild(style.cloneNode(true));
+    });
+
+    setMounted(true);
+  }, [iframeRef]);
+
+  const previewRoot = iframeRef?.contentDocument?.getElementById("preview-root");
+
+  return (
+    <iframe
+      ref={setIframeRef}
+      className="w-full h-full border-none bg-transparent"
+      title="Mobile Live Preview"
+    >
+      {mounted && previewRoot && createPortal(children, previewRoot)}
+    </iframe>
+  );
+}
 
 export default function IdentityStudio() {
   const navigate = useNavigate();
@@ -1360,8 +1450,10 @@ export default function IdentityStudio() {
                 </div>
                 
                 {/* Scrollable screen inside */}
-                <div data-lenis-prevent className="flex-1 overflow-y-auto w-full h-full bg-[#0a0a0a] scrollbar-thin studio-preview-wrapper relative">
-                  <PersonaRouter profile={previewProfile} hideHeader={false} />
+                <div className="flex-1 w-full h-full bg-[#0d1117] relative">
+                  <MobilePreviewFrame>
+                    <PersonaRouter profile={previewProfile} hideHeader={false} />
+                  </MobilePreviewFrame>
                 </div>
               </div>
             </div>
@@ -1391,8 +1483,10 @@ export default function IdentityStudio() {
             >
               <X size={16} />
             </button>
-            <div data-lenis-prevent className="flex-1 overflow-y-auto w-full h-full bg-[#0a0a0a] scrollbar-thin studio-preview-wrapper relative">
-              <PersonaRouter profile={previewProfile} hideHeader={false} />
+            <div className="flex-1 w-full h-full bg-[#0d1117] relative">
+              <MobilePreviewFrame>
+                <PersonaRouter profile={previewProfile} hideHeader={false} />
+              </MobilePreviewFrame>
             </div>
           </div>
         </div>
