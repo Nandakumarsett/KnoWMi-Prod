@@ -205,6 +205,32 @@ const STYLES = `
   .studio-preview-wrapper * {
     pointer-events: auto;
   }
+
+  /* Auto-scale the fixed phone preview based on viewport height to fit all screen sizes & zooms */
+  @media (max-height: 900px) {
+    .phone-preview-fixed {
+      transform: scale(0.9);
+      transform-origin: top center;
+    }
+  }
+  @media (max-height: 800px) {
+    .phone-preview-fixed {
+      transform: scale(0.8);
+      transform-origin: top center;
+    }
+  }
+  @media (max-height: 700px) {
+    .phone-preview-fixed {
+      transform: scale(0.7);
+      transform-origin: top center;
+    }
+  }
+  @media (max-height: 600px) {
+    .phone-preview-fixed {
+      transform: scale(0.6);
+      transform-origin: top center;
+    }
+  }
 `;
 
 // --- HELPERS ---
@@ -1438,7 +1464,7 @@ export default function IdentityStudio() {
 
           {/* RIGHT: LIVE PREVIEW DEVICE FRAME */}
           {activePersona && (
-            <div className="hidden lg:block lg:fixed lg:top-[120px] lg:w-[350px] lg:right-[calc((100vw-1200px)/2+40px)] max-[1200px]:lg:right-10 z-30">
+            <div className="hidden lg:block lg:fixed lg:top-[120px] lg:w-[350px] lg:right-[calc((100vw-1200px)/2+40px)] max-[1200px]:lg:right-10 z-30 phone-preview-fixed">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400 mb-3 text-center">Live Preview Card</p>
               
               {/* Phone Frame wrapper */}
