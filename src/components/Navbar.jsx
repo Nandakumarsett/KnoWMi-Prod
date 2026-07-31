@@ -98,7 +98,7 @@ export default function Navbar({ onOrderClick, onAuthClick, isDark = true }) {
   const hasIdentities = Array.isArray(profile?.persona_data?.identities) && profile.persona_data.identities.length > 0
   const isFree = profile?.status === 'free' || (!profile?.status && (!profile?.tier || profile?.tier === 'Starter' || profile?.tier === 'Free')) || profile?.tier === 'Free' || profile?.tier === 'Starter';
   const isPaid = profile && (!isFree || profile.role === 'owner');
-  const profileSlug = isPaid ? (profile.first_name || profile.secure_slug) : (profile.secure_slug || profile.id);
+  const profileSlug = profile ? (isPaid ? (profile.first_name || profile.secure_slug) : (profile.secure_slug || profile.id)) : '';
 
   const useDarkTheme = isDark;
 
