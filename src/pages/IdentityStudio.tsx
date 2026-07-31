@@ -708,6 +708,7 @@ export default function IdentityStudio() {
       profile_theme: data.profile_theme || 'default',
       social_links,
       persona_data: {
+        ...data,
         identities: [
           {
             active: true,
@@ -1359,7 +1360,7 @@ export default function IdentityStudio() {
                 </div>
                 
                 {/* Scrollable screen inside */}
-                <div className="flex-1 overflow-y-auto w-full h-full bg-[#0a0a0a] scrollbar-thin studio-preview-wrapper relative">
+                <div data-lenis-prevent className="flex-1 overflow-y-auto w-full h-full bg-[#0a0a0a] scrollbar-thin studio-preview-wrapper relative">
                   <PersonaRouter profile={previewProfile} hideHeader={false} />
                 </div>
               </div>
@@ -1390,7 +1391,7 @@ export default function IdentityStudio() {
             >
               <X size={16} />
             </button>
-            <div className="flex-1 overflow-y-auto w-full h-full bg-[#0a0a0a] scrollbar-thin studio-preview-wrapper relative">
+            <div data-lenis-prevent className="flex-1 overflow-y-auto w-full h-full bg-[#0a0a0a] scrollbar-thin studio-preview-wrapper relative">
               <PersonaRouter profile={previewProfile} hideHeader={false} />
             </div>
           </div>
