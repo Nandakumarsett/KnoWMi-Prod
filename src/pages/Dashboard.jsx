@@ -1809,7 +1809,7 @@ function Dashboard() {
   
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate('/?auth=signin')
+      navigate('/')
     }
   }, [user, authLoading, navigate])
 
