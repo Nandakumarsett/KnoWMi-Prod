@@ -263,7 +263,7 @@ const INITIAL_STATE = {
 export default function IdentityStudio() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, refreshProfile } = useAuth();
+  const { user, refreshProfile, loading: authLoading } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -280,6 +280,12 @@ export default function IdentityStudio() {
   const [showDetailed, setShowDetailed] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showMobilePreview, setShowMobilePreview] = useState(false);
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/?auth=signin')
+    }
+  }, [user, authLoading, navigate])
 
   useEffect(() => {
     async function load() {
@@ -729,7 +735,7 @@ export default function IdentityStudio() {
 
   const topActions = incomplete.slice(0, 3);
 
-  if (loading)
+  if (loading || authLoading)
     return (
       <div className="studio-page flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
