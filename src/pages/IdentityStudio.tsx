@@ -1345,7 +1345,7 @@ export default function IdentityStudio() {
                 
                 {/* Scrollable screen inside */}
                 <div className="flex-1 overflow-y-auto px-4 pt-10 pb-6 bg-[#0a0a0a] scrollbar-thin">
-                  <PersonaRouter profile={previewProfile} hideHeader={true} />
+                  <PersonaRouter profile={previewProfile} hideHeader={false} />
                 </div>
               </div>
             </div>
@@ -1376,7 +1376,7 @@ export default function IdentityStudio() {
               <X size={16} />
             </button>
             <div className="flex-1 overflow-y-auto px-4 pt-12 pb-6 scrollbar-thin">
-              <PersonaRouter profile={previewProfile} hideHeader={true} />
+              <PersonaRouter profile={previewProfile} hideHeader={false} />
             </div>
           </div>
         </div>
