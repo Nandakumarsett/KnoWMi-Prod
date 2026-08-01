@@ -637,83 +637,6 @@ export default function IdentityStudio() {
       setUploading(false);
     }
   };
-  const checklistItems = useMemo(() => {
-    if (!activePersona) return [];
-    const items = [];
-    if (!data.avatar_url && !profile?.avatar_url) {
-      items.push({ id: "avatar_upload_input", label: "📸 Add Profile Photo", desc: "+25%" });
-    }
-    if (!data.first_name && !profile?.first_name) {
-      items.push({ id: "first_name_input", label: "👤 Fill First & Last Name", desc: "+25%" });
-    }
-    if (!data.bio && !data.tagline && !profile?.bio) {
-      items.push({ id: "bio_input", label: "💬 Select 1-Tap Bio", desc: "+25%" });
-    }
-    const hasSocial = data.instagram || data.linkedin || data.github || data.twitter || (data.platforms && data.platforms.length > 0);
-    if (!hasSocial) {
-      items.push({ id: "social_input_bar", label: "🌐 Connect 1 Social", desc: "+25%" });
-    }
-    return items;
-  }, [activePersona, data, profile]);
-
-  const scrollToField = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-      el.focus();
-    }
-  };
-
-  const handleAutoFill = (rawUrl: string) => {
-    if (!rawUrl) return;
-    try {
-      const cleanUrl = rawUrl.trim();
-      const parsedUrl = new URL(cleanUrl.startsWith('http') ? cleanUrl : `https://${cleanUrl}`);
-      const path = parsedUrl.pathname.split("/").filter(Boolean);
-
-      if (parsedUrl.hostname.includes("instagram.com") && path[0]) {
-        const handle = path[0].replace(/^@/, '');
-        updateField("instagram", handle);
-        const namePart = handle.replace(/[_.]/g, " ");
-        if (!data.first_name) {
-          updateField("first_name", namePart.charAt(0).toUpperCase() + namePart.slice(1));
-        }
-        toast.success("✨ Instagram connected and handle pre-filled!");
-      } else if (parsedUrl.hostname.includes("linkedin.com") && path[0] === "in" && path[1]) {
-        const handle = path[1].replace(/[-_]/g, " ").split(" ");
-        updateField("linkedin", path[1]);
-        if (!data.first_name && handle[0]) {
-          updateField("first_name", handle[0].charAt(0).toUpperCase() + handle[0].slice(1));
-        }
-        if (!data.last_name && handle[1]) {
-          updateField("last_name", handle[1].charAt(0).toUpperCase() + handle[1].slice(1));
-        }
-        toast.success("✨ LinkedIn connected and details pre-filled!");
-      } else if (parsedUrl.hostname.includes("github.com") && path[0]) {
-        const handle = path[0].replace(/^@/, '');
-        updateField("github", handle);
-        if (!data.first_name) {
-          updateField("first_name", handle.charAt(0).toUpperCase() + handle.slice(1));
-        }
-        toast.success("✨ GitHub connected and details pre-filled!");
-      } else if ((parsedUrl.hostname.includes("twitter.com") || parsedUrl.hostname.includes("x.com")) && path[0]) {
-        const handle = path[0].replace(/^@/, '');
-        updateField("twitter", handle);
-        if (!data.first_name) {
-          updateField("first_name", handle.charAt(0).toUpperCase() + handle.slice(1));
-        }
-        toast.success("✨ Twitter / X connected and details pre-filled!");
-      } else if (parsedUrl.hostname.includes("youtube.com") && path[0]) {
-        const handle = path[0].replace(/^@/, '');
-        updateField("youtube", handle);
-        toast.success("✨ YouTube channel connected!");
-      } else {
-        toast.error("URL format not recognized. Try pasting Instagram, LinkedIn, GitHub, or Twitter links.");
-      }
-    } catch (e) {
-      toast.error("Invalid URL format.");
-    }
-  };
 
   const handleSave = async () => {
     if (!user) {
@@ -1083,47 +1006,6 @@ export default function IdentityStudio() {
                   </div>
                 </section>
 
-                {/* 🎯 GAMIFIED FAST-TRACK ONBOARDING CHECKLIST */}
-                <div className="glass-card p-6 bg-gradient-to-r from-orange-500/10 via-[#1a1a1a] to-orange-500/5 border-2 border-orange-500/30 rounded-2xl mb-8 animate-fadeIn">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-orange-500 text-black border-2 border-black font-black flex items-center justify-center shadow-[3px_3px_0px_#000]">
-                        ⚡
-                      </div>
-                      <div>
-                        <h4 className="text-base font-black uppercase tracking-wider text-white">Fast-Track Setup</h4>
-                        <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
-                          {checklistItems.length === 0 ? "🎉 Core profile 100% complete! Your card is ready." : `${4 - checklistItems.length}/4 Core Steps Completed`}
-                        </p>
-                      </div>
-                    </div>
-                    {checklistItems.length === 0 ? (
-                      <span className="px-4 py-1.5 bg-green-500/20 text-green-400 border border-green-500/40 text-[10px] font-black uppercase tracking-widest rounded-full">
-                        100% Core Ready ✨
-                      </span>
-                    ) : (
-                      <span className="px-3 py-1 bg-orange-500/20 text-orange-400 border border-orange-500/40 text-[10px] font-black uppercase tracking-widest rounded-full">
-                        {checklistItems.length} Quick Action{checklistItems.length > 1 ? "s" : ""} Left
-                      </span>
-                    )}
-                  </div>
-
-                  {checklistItems.length > 0 && (
-                    <div className="flex flex-wrap gap-2.5 mt-2">
-                      {checklistItems.map((item) => (
-                        <button
-                          key={item.id}
-                          onClick={() => scrollToField(item.id)}
-                          className="px-4 py-2.5 bg-[#0a0a0a] hover:bg-orange-500 hover:text-black text-white border-2 border-neutral-700 hover:border-black rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 shadow-[3px_3px_0px_#000] active:translate-y-[1px]"
-                        >
-                          <span>{item.label}</span>
-                          <span className="text-[9px] opacity-70">({item.desc})</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
                 <section
                   id="tagline"
                   className="glass-card p-10 animate-slideUp"
@@ -1147,28 +1029,6 @@ export default function IdentityStudio() {
                         Completed ✅
                       </span>
                     )}
-                  </div>
-
-                  {/* ⚡ FAST PRE-FILL BAR */}
-                  <div id="social_input_bar" className="p-4 bg-orange-500/10 border border-orange-500/30 rounded-2xl mb-8 flex flex-col sm:flex-row items-center gap-3">
-                    <div className="flex items-center gap-2 shrink-0">
-                      <Sparkles size={16} className="text-orange-500 animate-pulse" />
-                      <span className="text-[11px] font-black uppercase tracking-wider text-orange-400">1-Click Pre-fill:</span>
-                    </div>
-                    <input
-                      type="text"
-                      placeholder="Paste LinkedIn, Instagram, or GitHub profile link..."
-                      className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-orange-500 transition-colors"
-                      onPaste={(e) => {
-                        const pasted = e.clipboardData.getData('text');
-                        if (pasted) handleAutoFill(pasted);
-                      }}
-                      onChange={(e) => {
-                        if (e.target.value.includes('http') || e.target.value.includes('.com')) {
-                          handleAutoFill(e.target.value);
-                        }
-                      }}
-                    />
                   </div>
 
                   {/* Avatar Upload Sub-section */}
