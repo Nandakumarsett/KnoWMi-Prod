@@ -5,7 +5,7 @@ import {
   Plus, Trash2, RefreshCw, FileText, Eye, 
   Terminal, Code2, BarChart3, Github, 
   Layout, ExternalLink, Globe, Target,
-  Camera, Upload, Briefcase, Mail
+  Camera, Upload, Briefcase, Mail, ChevronDown
 } from 'lucide-react'
 import { getAssetUrl } from '../../../lib/supabase'
 
@@ -31,6 +31,60 @@ interface DeveloperFormProps {
   isOwner?: boolean
   onUpload?: (file: File, type: string) => Promise<string | null>
   uploading?: boolean
+}
+
+function CollapsibleSection({
+  title,
+  subtitle,
+  icon: Icon,
+  badgeText,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  subtitle: string;
+  icon: any;
+  badgeText?: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  return (
+    <div className="bg-[#1a1a1a] rounded-[32px] p-8 border border-white/20 shadow-[2px_2px_0px_#fff] transition-all">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between gap-4 text-left focus:outline-none group cursor-pointer"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#fff]">
+            <Icon size={24} />
+          </div>
+          <div>
+            <h3 className="text-base sm:text-lg font-black uppercase tracking-widest text-white flex items-center gap-3">
+              {title}
+              {badgeText && (
+                <span className="px-3 py-1 bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] font-black tracking-widest rounded-full">
+                  {badgeText}
+                </span>
+              )}
+            </h3>
+            <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">{subtitle}</p>
+          </div>
+        </div>
+        <div className="w-10 h-10 rounded-xl bg-[#2a2a2a] flex items-center justify-center text-white group-hover:bg-blue-500 group-hover:text-black transition-colors shrink-0">
+          <ChevronDown size={18} className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+        </div>
+      </button>
+
+      {isOpen && (
+        <div className="mt-8 pt-8 border-t border-neutral-800 animate-fadeIn">
+          {children}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploading }: DeveloperFormProps) {
@@ -351,22 +405,13 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
       </section>
 
       {/* SECTION: BUILT MASTERPIECES */}
-      <section className="space-y-10">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
-              <Layout size={24} />
-            </div>
-            <div>
-              <h3 className="text-lg font-black uppercase tracking-widest text-white">Built Masterpieces</h3>
-              <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Showcase your top repositories</p>
-            </div>
-          </div>
-          <span className="px-4 py-2 bg-[#2a2a2a] rounded-full text-[10px] font-black uppercase text-neutral-400 tracking-widest">
-            {data.projects?.length || 0} Slots Active
-          </span>
-        </div>
-
+      <CollapsibleSection
+        title="Built Masterpieces"
+        subtitle="Showcase your top repositories & live projects"
+        icon={Layout}
+        badgeText={`${data.projects?.length || 0} Projects`}
+        defaultOpen={(data.projects || []).length > 0}
+      >
         <div className="grid grid-cols-1 gap-10">
           {(data.projects || []).map((p: any, i: number) => (
             <div key={i} className="group p-10 bg-[#1a1a1a] border border-white/20 rounded-[48px] shadow-[2px_2px_0px_#fff] hover:shadow-[8px_8px_0px_#fff] transition-all relative overflow-hidden">
@@ -470,13 +515,13 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-black uppercase tracking-widest text-neutral-400 mb-2">Project Link</label>
+                    <label className="block text-[11px] font-black uppercase tracking-widest text-neutral-400 mb-2">Target Link / URL</label>
                     <input
                       type="url"
-                      value={p.live_url || p.github_url || ''}
+                      value={p.github_url || p.live_url || ''}
                       onChange={e => {
                         const pCopy = [...(data.projects || [])]
-                        pCopy[i] = { ...p, live_url: e.target.value, github_url: '' }
+                        pCopy[i] = { ...p, github_url: e.target.value, live_url: e.target.value }
                         updateField('projects', pCopy)
                       }}
                       placeholder="https://github.com/... or https://yourproject.com"
@@ -504,27 +549,23 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
             Feature Another Masterpiece
           </button>
         </div>
-      </section>
+      </CollapsibleSection>
 
       {/* SECTION: COMMAND CENTER */}
-      <section className="space-y-10">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-[2px_2px_0px_#fff]">
-            <FileText size={24} />
-          </div>
-          <div>
-            <h3 className="text-lg font-black uppercase tracking-widest text-white">Command Center</h3>
-            <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Upload your developer CV or Resume</p>
-          </div>
-        </div>
-
-        <div className="p-10 bg-[#1a1a1a] border border-[#E5D5C4] rounded-[40px] shadow-[8px_8px_0px_#fff] shadow-blue-500/5">
-          <div className="flex items-center gap-8 p-10 border-4 border-dashed border-neutral-50 rounded-[32px] hover:border-blue-500 hover:bg-blue-50/50 transition-all group relative">
-            <div className="w-20 h-20 bg-[#1a1a1a] rounded-3xl flex items-center justify-center text-neutral-400 group-hover:text-blue-500 shadow-[8px_8px_0px_#fff] transition-all">
-              <FileText size={40} />
+      <CollapsibleSection
+        title="Command Center"
+        subtitle="Upload your developer CV or Resume"
+        icon={FileText}
+        badgeText={data.resume_url ? "CV Deployed ✓" : "Optional"}
+        defaultOpen={Boolean(data.resume_url)}
+      >
+        <div className="p-4 sm:p-6 bg-[#1a1a1a] border border-[#E5D5C4]/30 rounded-[32px]">
+          <div className="flex items-center gap-6 p-6 border-4 border-dashed border-neutral-700 rounded-[28px] hover:border-blue-500 hover:bg-blue-50/5 transition-all group relative">
+            <div className="w-16 h-16 bg-[#0a0a0a] rounded-2xl flex items-center justify-center text-neutral-400 group-hover:text-blue-500 shadow-[4px_4px_0px_#fff] transition-all shrink-0">
+              <FileText size={32} />
             </div>
-            <div className="flex-1">
-              <h4 className="text-xl font-black text-white mb-1 tracking-tighter">
+            <div className="flex-1 min-w-0">
+              <h4 className="text-lg font-black text-white mb-1 tracking-tight truncate">
                 {data.resume_url ? 'CV Deployed ✓' : 'Upload Resume / CV'}
               </h4>
               <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest">
@@ -535,7 +576,7 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                   href={data.resume_url} 
                   target="_blank" 
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 mt-4 text-[10px] font-black uppercase text-blue-500 hover:text-blue-600 tracking-widest"
+                  className="inline-flex items-center gap-2 mt-3 text-[10px] font-black uppercase text-blue-400 hover:text-blue-300 tracking-widest"
                 >
                   <Eye size={12} /> Live Preview Active
                 </a>
@@ -552,13 +593,13 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
               disabled={uploading}
             />
             {uploading && (
-              <div className="absolute inset-0 bg-[#1a1a1a]/60 backdrop-blur-sm flex items-center justify-center rounded-[32px] z-20">
-                <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+              <div className="absolute inset-0 bg-[#1a1a1a]/60 backdrop-blur-sm flex items-center justify-center rounded-[28px] z-20">
+                <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
               </div>
             )}
           </div>
         </div>
-      </section>
+      </CollapsibleSection>
 
       <style>{`
         @keyframes fadeIn {
