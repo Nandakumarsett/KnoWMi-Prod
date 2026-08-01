@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import toast from "react-hot-toast";
 import { fetchProfile } from "../lib/profile/fetch-profile";
 import { ProfileData } from "../types/profile";
 import { PersonaRouter } from "../components/profile/PersonaRouter";
@@ -95,6 +96,13 @@ export default function PublicProfile() {
   }, [username]);
 
   useEffect(() => {
+    if (!loading && !profile && username) {
+      toast.error("No profile found", { id: "no-profile-found" });
+      navigate("/", { replace: true });
+    }
+  }, [loading, profile, username, navigate]);
+
+  useEffect(() => {
     if (profile && !authLoading) {
       const isOwner = user && user.id === profile.user_id;
       if (!isOwner) {
@@ -182,44 +190,9 @@ export default function PublicProfile() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center p-6 text-center text-white relative overflow-hidden">
-        {/* Animated ring */}
-        <div className="relative z-10 mb-8">
-          <div className="w-24 h-24 rounded-xl border-[3px] border-orange-500 bg-[#1a1a1a] shadow-[6px_6px_0px_#F97316] flex items-center justify-center animate-pulse">
-            <Sparkles size={32} className="text-orange-500" />
-          </div>
-        </div>
-        <span className="relative z-10 px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-white text-black border-[3px] border-black shadow-[3px_3px_0px_#000] mb-6">
-          Unclaimed Tee
-        </span>
-        <h1 className="relative z-10 text-4xl font-black mb-4 uppercase tracking-tighter text-white">
-          This Tee is Available
-        </h1>
-        <p className="relative z-10 text-neutral-400 mb-3 max-w-sm leading-relaxed font-bold">
-          The account linked to this KnoWMi Tee has been removed. This Tee is
-          now free to be claimed.
-        </p>
-        <p className="relative z-10 text-neutral-500 text-xs mb-10 max-w-xs leading-relaxed font-bold">
-          If you own this Tee, sign in and claim it to lock your digital
-          identity to it.
-        </p>
-        <button
-          onClick={() => {
-            if (username) {
-              localStorage.setItem("knowmi_pending_claim", username);
-            }
-            navigate("/?auth=signup");
-          }}
-          className="relative z-10 px-10 py-5 bg-orange-500 text-black border-[3px] border-black rounded-xl font-black uppercase tracking-widest text-xs shadow-[6px_6px_0px_#000] active:scale-95 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
-        >
-          Claim Your Tee
-        </button>
-        <button
-          onClick={() => navigate("/")}
-          className="relative z-10 mt-6 px-6 py-3 bg-white text-black border-[3px] border-black text-xs font-black uppercase tracking-widest hover:bg-neutral-200 transition-colors rounded-xl shadow-[4px_4px_0px_#000]"
-        >
-          Return to KnoWMi
-        </button>
+      <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center p-6 text-center text-white">
+        <Sparkles className="animate-spin text-orange-500 mb-4" size={32} />
+        <p className="text-sm font-bold text-neutral-400 uppercase tracking-widest">No Profile Found. Redirecting to home...</p>
       </div>
     );
   }
