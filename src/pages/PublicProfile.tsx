@@ -50,10 +50,19 @@ export default function PublicProfile() {
     !sessionStorage.getItem('knowmi_nudge_dismissed')
   );
 
-  // Sanitize display_name — strip accidental username/persona prefix concatenation
-  // e.g. "tester_personaTester Persona" → "Tester Persona"
+  // Sanitize display_name — ensure full first_name + last_name is preserved
   const safeDisplayName = useMemo(() => {
     if (!profile) return "KnoWMi User";
+
+    const fn = (profile.first_name || "").trim();
+    const ln = (profile.last_name || "").trim();
+
+    if (fn && ln) {
+      return `${fn} ${ln}`;
+    }
+    if (fn) return fn;
+    if (ln) return ln;
+
     const rawName = profile.display_name || "";
     const usernameRaw = profile.username || "";
     const personaRaw = profile.persona || "";
@@ -61,14 +70,14 @@ export default function PublicProfile() {
     let cleanDisplayName = rawName;
     if (
       usernameRaw &&
-      rawName.toLowerCase().startsWith(usernameRaw.toLowerCase())
+      rawName.toLowerCase().startsWith(usernameRaw.toLowerCase() + "_")
     ) {
-      cleanDisplayName = rawName.slice(usernameRaw.length).trim();
+      cleanDisplayName = rawName.slice(usernameRaw.length + 1).trim();
     } else if (
       personaRaw &&
-      rawName.toLowerCase().startsWith(personaRaw.toLowerCase())
+      rawName.toLowerCase().startsWith(personaRaw.toLowerCase() + "_")
     ) {
-      cleanDisplayName = rawName.slice(personaRaw.length).trim();
+      cleanDisplayName = rawName.slice(personaRaw.length + 1).trim();
     }
     return cleanDisplayName || rawName || profile.username || "KnoWMi User";
   }, [profile]);
@@ -246,6 +255,7 @@ export default function PublicProfile() {
 
   const displayProfile = {
     ...profile,
+    display_name: safeDisplayName,
     avatar_url: profile.avatar_url,
     social_links: profile.social_links,
     persona_data: modifiedPersonaData,
