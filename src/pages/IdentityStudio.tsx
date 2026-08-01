@@ -637,6 +637,32 @@ export default function IdentityStudio() {
       setUploading(false);
     }
   };
+  const checklistItems = useMemo(() => {
+    if (!activePersona) return [];
+    const items = [];
+    if (!data.avatar_url && !profile?.avatar_url) {
+      items.push({ id: "avatar_upload_input", label: "📸 Add Profile Photo", desc: "+25%" });
+    }
+    if (!data.first_name && !profile?.first_name) {
+      items.push({ id: "first_name_input", label: "👤 Fill First & Last Name", desc: "+25%" });
+    }
+    if (!data.bio && !data.tagline && !profile?.bio) {
+      items.push({ id: "bio_input", label: "💬 Select 1-Tap Bio", desc: "+25%" });
+    }
+    const hasSocial = data.instagram || data.linkedin || data.github || data.twitter || (data.platforms && data.platforms.length > 0);
+    if (!hasSocial) {
+      items.push({ id: "social_input_bar", label: "🌐 Connect 1 Social", desc: "+25%" });
+    }
+    return items;
+  }, [activePersona, data, profile]);
+
+  const scrollToField = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.focus();
+    }
+  };
 
   const handleAutoFill = (rawUrl: string) => {
     if (!rawUrl) return;
@@ -1057,6 +1083,47 @@ export default function IdentityStudio() {
                   </div>
                 </section>
 
+                {/* 🎯 GAMIFIED FAST-TRACK ONBOARDING CHECKLIST */}
+                <div className="glass-card p-6 bg-gradient-to-r from-orange-500/10 via-[#1a1a1a] to-orange-500/5 border-2 border-orange-500/30 rounded-2xl mb-8 animate-fadeIn">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-orange-500 text-black border-2 border-black font-black flex items-center justify-center shadow-[3px_3px_0px_#000]">
+                        ⚡
+                      </div>
+                      <div>
+                        <h4 className="text-base font-black uppercase tracking-wider text-white">Fast-Track Setup</h4>
+                        <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
+                          {checklistItems.length === 0 ? "🎉 Core profile 100% complete! Your card is ready." : `${4 - checklistItems.length}/4 Core Steps Completed`}
+                        </p>
+                      </div>
+                    </div>
+                    {checklistItems.length === 0 ? (
+                      <span className="px-4 py-1.5 bg-green-500/20 text-green-400 border border-green-500/40 text-[10px] font-black uppercase tracking-widest rounded-full">
+                        100% Core Ready ✨
+                      </span>
+                    ) : (
+                      <span className="px-3 py-1 bg-orange-500/20 text-orange-400 border border-orange-500/40 text-[10px] font-black uppercase tracking-widest rounded-full">
+                        {checklistItems.length} Quick Action{checklistItems.length > 1 ? "s" : ""} Left
+                      </span>
+                    )}
+                  </div>
+
+                  {checklistItems.length > 0 && (
+                    <div className="flex flex-wrap gap-2.5 mt-2">
+                      {checklistItems.map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => scrollToField(item.id)}
+                          className="px-4 py-2.5 bg-[#0a0a0a] hover:bg-orange-500 hover:text-black text-white border-2 border-neutral-700 hover:border-black rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 shadow-[3px_3px_0px_#000] active:translate-y-[1px]"
+                        >
+                          <span>{item.label}</span>
+                          <span className="text-[9px] opacity-70">({item.desc})</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <section
                   id="tagline"
                   className="glass-card p-10 animate-slideUp"
@@ -1083,7 +1150,7 @@ export default function IdentityStudio() {
                   </div>
 
                   {/* ⚡ FAST PRE-FILL BAR */}
-                  <div className="p-4 bg-orange-500/10 border border-orange-500/30 rounded-2xl mb-8 flex flex-col sm:flex-row items-center gap-3">
+                  <div id="social_input_bar" className="p-4 bg-orange-500/10 border border-orange-500/30 rounded-2xl mb-8 flex flex-col sm:flex-row items-center gap-3">
                     <div className="flex items-center gap-2 shrink-0">
                       <Sparkles size={16} className="text-orange-500 animate-pulse" />
                       <span className="text-[11px] font-black uppercase tracking-wider text-orange-400">1-Click Pre-fill:</span>
@@ -1105,7 +1172,7 @@ export default function IdentityStudio() {
                   </div>
 
                   {/* Avatar Upload Sub-section */}
-                  <div className="flex items-center gap-8 pb-10 mb-10 border-b border-neutral-100">
+                  <div id="avatar_upload_input" className="flex items-center gap-8 pb-10 mb-10 border-b border-neutral-100">
                     <div className="relative group">
                       <div className="w-24 h-24 rounded-xl bg-[#0a0a0a] border-[4px] border-white shadow-[6px_6px_0px_#fff] overflow-hidden group-hover:scale-105 transition-transform duration-500">
                         <Avatar
@@ -1170,6 +1237,7 @@ export default function IdentityStudio() {
                       <div>
                         <label className="section-label">First Name</label>
                         <input
+                          id="first_name_input"
                           type="text"
                           placeholder="Enter first name"
                           className="input-field"
@@ -1299,6 +1367,7 @@ export default function IdentityStudio() {
                         )}
                       </label>
                       <textarea
+                        id="bio_input"
                         placeholder="Tell the world who you are..."
                         className="input-field min-h-[100px] py-4"
                         value={data.bio}
