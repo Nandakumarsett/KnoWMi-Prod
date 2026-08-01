@@ -283,9 +283,26 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                 <input type="text" value={p.followers || ''} onChange={e => {
                   const pCopy = [...(data.platforms || [])]; pCopy[i] = { ...p, followers: e.target.value }; updateField('platforms', pCopy);
                 }} placeholder="Stats/Followers (e.g. 1.2K)" className="w-full bg-[#1a1a1a] border-2 border-transparent rounded-xl px-4 py-3 text-sm font-black text-white focus:border-blue-500 transition-all outline-none" />
-                <input type="url" value={p.url || ''} onChange={e => {
+                <input type="text" value={p.url || ''} onChange={e => {
                   const pCopy = [...(data.platforms || [])]; pCopy[i] = { ...p, url: e.target.value }; updateField('platforms', pCopy);
-                }} placeholder="https://..." className="w-full bg-[#1a1a1a] border-2 border-transparent rounded-xl px-4 py-3 text-sm font-black text-white focus:border-blue-500 transition-all outline-none" />
+                }} onBlur={e => {
+                  let val = e.target.value.trim();
+                  if (val && !val.startsWith('http://') && !val.startsWith('https://')) {
+                    val = val.replace(/^@/, '');
+                    const plat = (p.platform || '').toLowerCase();
+                    if (plat.includes('github')) val = `https://github.com/${val}`;
+                    else if (plat.includes('linkedin')) val = `https://linkedin.com/in/${val}`;
+                    else if (plat.includes('twitter') || plat.includes('x')) val = `https://twitter.com/${val}`;
+                    else if (plat.includes('youtube')) val = `https://youtube.com/@${val}`;
+                    else if (plat.includes('instagram')) val = `https://instagram.com/${val}`;
+                    else if (plat.includes('medium')) val = `https://medium.com/@${val}`;
+                    else if (plat.includes('dev.to')) val = `https://dev.to/${val}`;
+                    else if (plat.includes('behance')) val = `https://behance.net/${val}`;
+                    else if (plat.includes('dribbble')) val = `https://dribbble.com/${val}`;
+                    else val = `https://${val}`;
+                    const pCopy = [...(data.platforms || [])]; pCopy[i] = { ...p, url: val }; updateField('platforms', pCopy);
+                  }
+                }} placeholder="https://... or @username" className="w-full bg-[#1a1a1a] border-2 border-transparent rounded-xl px-4 py-3 text-sm font-black text-white focus:border-blue-500 transition-all outline-none" />
               </div>
             </div>
           ))}

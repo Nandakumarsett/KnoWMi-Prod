@@ -638,44 +638,51 @@ export default function IdentityStudio() {
     }
   };
 
-  const handleAutoFill = (url: string) => {
-    if (!url) return;
+  const handleAutoFill = (rawUrl: string) => {
+    if (!rawUrl) return;
     try {
-      const parsedUrl = new URL(url);
+      const cleanUrl = rawUrl.trim();
+      const parsedUrl = new URL(cleanUrl.startsWith('http') ? cleanUrl : `https://${cleanUrl}`);
       const path = parsedUrl.pathname.split("/").filter(Boolean);
 
       if (parsedUrl.hostname.includes("instagram.com") && path[0]) {
-        updateField("instagram", url);
-        const handle = path[0].replace(/[_.]/g, " ");
+        const handle = path[0].replace(/^@/, '');
+        updateField("instagram", handle);
+        const namePart = handle.replace(/[_.]/g, " ");
         if (!data.first_name) {
-          updateField(
-            "first_name",
-            handle.charAt(0).toUpperCase() + handle.slice(1),
-          );
+          updateField("first_name", namePart.charAt(0).toUpperCase() + namePart.slice(1));
         }
-        toast.success("✨ Instagram connected and details pre-filled!");
-      } else if (
-        parsedUrl.hostname.includes("linkedin.com") &&
-        path[0] === "in" &&
-        path[1]
-      ) {
-        updateField("linkedin", url);
+        toast.success("✨ Instagram connected and handle pre-filled!");
+      } else if (parsedUrl.hostname.includes("linkedin.com") && path[0] === "in" && path[1]) {
         const handle = path[1].replace(/[-_]/g, " ").split(" ");
+        updateField("linkedin", path[1]);
         if (!data.first_name && handle[0]) {
-          updateField(
-            "first_name",
-            handle[0].charAt(0).toUpperCase() + handle[0].slice(1),
-          );
+          updateField("first_name", handle[0].charAt(0).toUpperCase() + handle[0].slice(1));
         }
         if (!data.last_name && handle[1]) {
-          updateField(
-            "last_name",
-            handle[1].charAt(0).toUpperCase() + handle[1].slice(1),
-          );
+          updateField("last_name", handle[1].charAt(0).toUpperCase() + handle[1].slice(1));
         }
         toast.success("✨ LinkedIn connected and details pre-filled!");
+      } else if (parsedUrl.hostname.includes("github.com") && path[0]) {
+        const handle = path[0].replace(/^@/, '');
+        updateField("github", handle);
+        if (!data.first_name) {
+          updateField("first_name", handle.charAt(0).toUpperCase() + handle.slice(1));
+        }
+        toast.success("✨ GitHub connected and details pre-filled!");
+      } else if ((parsedUrl.hostname.includes("twitter.com") || parsedUrl.hostname.includes("x.com")) && path[0]) {
+        const handle = path[0].replace(/^@/, '');
+        updateField("twitter", handle);
+        if (!data.first_name) {
+          updateField("first_name", handle.charAt(0).toUpperCase() + handle.slice(1));
+        }
+        toast.success("✨ Twitter / X connected and details pre-filled!");
+      } else if (parsedUrl.hostname.includes("youtube.com") && path[0]) {
+        const handle = path[0].replace(/^@/, '');
+        updateField("youtube", handle);
+        toast.success("✨ YouTube channel connected!");
       } else {
-        toast.error("Please paste a valid Instagram or LinkedIn profile URL.");
+        toast.error("URL format not recognized. Try pasting Instagram, LinkedIn, GitHub, or Twitter links.");
       }
     } catch (e) {
       toast.error("Invalid URL format.");
@@ -1073,6 +1080,28 @@ export default function IdentityStudio() {
                         Completed ✅
                       </span>
                     )}
+                  </div>
+
+                  {/* ⚡ FAST PRE-FILL BAR */}
+                  <div className="p-4 bg-orange-500/10 border border-orange-500/30 rounded-2xl mb-8 flex flex-col sm:flex-row items-center gap-3">
+                    <div className="flex items-center gap-2 shrink-0">
+                      <Sparkles size={16} className="text-orange-500 animate-pulse" />
+                      <span className="text-[11px] font-black uppercase tracking-wider text-orange-400">1-Click Pre-fill:</span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Paste LinkedIn, Instagram, or GitHub profile link..."
+                      className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-orange-500 transition-colors"
+                      onPaste={(e) => {
+                        const pasted = e.clipboardData.getData('text');
+                        if (pasted) handleAutoFill(pasted);
+                      }}
+                      onChange={(e) => {
+                        if (e.target.value.includes('http') || e.target.value.includes('.com')) {
+                          handleAutoFill(e.target.value);
+                        }
+                      }}
+                    />
                   </div>
 
                   {/* Avatar Upload Sub-section */}
