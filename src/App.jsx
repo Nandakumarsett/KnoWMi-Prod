@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import SmoothScroll from './components/SmoothScroll'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { posthog } from './lib/posthog'
+import { logSqlEvent } from './lib/analytics/sql-events'
 
 // Lazy loaded routes for bundle size optimization
 const Dashboard = lazy(() => import('./pages/Dashboard'))
@@ -56,12 +57,18 @@ export default function App() {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
+        const pendingAuthType = localStorage.getItem('pending_auth_type')
+        if (pendingAuthType === 'signup') {
+          logSqlEvent('user_signup', { email: session.user.email })
+        } else {
+          logSqlEvent('user_login', { email: session.user.email })
+        }
+
         if (localStorage.getItem('knowmi_pending_claim')) {
           window.location.href = '/dashboard'
           return
         }
 
-        const pendingAuthType = localStorage.getItem('pending_auth_type')
         localStorage.removeItem('pending_auth_type')
 
         // Handle explicit return_to target if set

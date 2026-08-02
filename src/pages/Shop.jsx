@@ -10,6 +10,7 @@ import AuthModal from '../components/AuthModal'
 import LiveSalesPopup from '../components/LiveSalesPopup'
 import { posthog } from '../lib/posthog'
 import { useDocumentMetadata } from '../hooks/useDocumentMetadata'
+import { logSqlEvent } from '../lib/analytics/sql-events'
 
 const PRODUCTS = [
   { id: 'regular', name: 'Regular Tee', price: 799, gsm: '200 GSM', disabled: false },
@@ -155,6 +156,12 @@ export default function Shop() {
             order_id: orderData.order_id,
             payment_id: response.razorpay_payment_id,
           })
+          logSqlEvent('purchase_completed', {
+            product_type: selectedProductType,
+            order_id: orderData.order_id,
+            payment_id: response.razorpay_payment_id,
+            price: product?.price,
+          });
           setOrderSuccess({ paymentId: response.razorpay_payment_id, orderId: orderData.order_id })
         },
         prefill: {
@@ -164,6 +171,14 @@ export default function Shop() {
           color: "#f97316"
         }
       }
+
+      logSqlEvent('checkout_initiated', {
+        product_type: selectedProductType,
+        size: selectedSize,
+        price: product?.price,
+        design_id: selectedDesign?.id,
+        order_id: orderData.order_id
+      });
 
       const paymentObject = new window.Razorpay(options)
       paymentObject.on('payment.failed', function (response) {
