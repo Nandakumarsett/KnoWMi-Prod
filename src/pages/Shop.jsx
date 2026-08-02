@@ -910,6 +910,65 @@ export default function Shop() {
         </div>
       )}
 
+      {/* Order Success & Activation Instructions Modal */}
+      {orderSuccess && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#1a1a1a] border-[3px] border-white text-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-[8px_8px_0px_#fff] relative space-y-6">
+            <div className="text-center space-y-2">
+              <div className="w-16 h-16 rounded-full bg-emerald-500/20 border-2 border-emerald-500 text-emerald-400 flex items-center justify-center mx-auto mb-2 text-2xl font-black">
+                🎉
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-orange-500 font-mono bg-orange-500/10 px-3 py-1 rounded-full border border-orange-500/20">
+                Order #{orderSuccess.orderId} Confirmed
+              </span>
+              <h2 className="text-2xl font-black uppercase tracking-tight text-white mt-1">What Happens Next?</h2>
+              <p className="text-xs text-neutral-400 font-medium">Please review these 2 simple steps to activate your phygital tee.</p>
+            </div>
+
+            <div className="space-y-4 bg-neutral-900/60 p-5 rounded-2xl border border-white/10 text-xs">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-xl bg-orange-500/20 border border-orange-500/30 text-orange-400 font-black flex items-center justify-center shrink-0">
+                  1
+                </div>
+                <div>
+                  <h4 className="font-bold text-white text-sm mb-0.5">📦 Delivery (3 - 5 Business Days)</h4>
+                  <p className="text-neutral-400 leading-relaxed">
+                    Your custom KnoWMi Phygital T-shirt with your printed QR code will arrive directly at your shipping address.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 pt-3 border-t border-neutral-800">
+                <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-black flex items-center justify-center shrink-0">
+                  2
+                </div>
+                <div>
+                  <h4 className="font-bold text-white text-sm mb-0.5">📱 Scan & Activate (Within 7 Days)</h4>
+                  <p className="text-neutral-400 leading-relaxed">
+                    Once your T-shirt arrives, scan the QR code on the tee using your phone camera to <strong className="text-white">activate and bind your profile within 7 days of arrival</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <button 
+                onClick={() => navigate('/dashboard')}
+                className="flex-1 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-wider text-xs rounded-xl transition-all border-[2px] border-black shadow-[3px_3px_0px_#000]"
+              >
+                Track Order Status →
+              </button>
+              <button 
+                onClick={() => navigate('/studio')}
+                className="py-3.5 px-5 bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs rounded-xl transition-all border border-white/20"
+              >
+                Edit Profile
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Team Checkout removed */}
       <LiveSalesPopup />
     </div>

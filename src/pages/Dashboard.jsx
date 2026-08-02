@@ -1461,6 +1461,28 @@ const IdentityPass = ({ profile }) => {
 
   return (
     <div className="animate-slideUp space-y-8">
+      {/* Phygital Tee Activation Instructions Banner */}
+      <div className="bg-[#1a1a1a] border-[3px] border-orange-500 rounded-2xl p-6 shadow-[6px_6px_0px_#f97316] relative overflow-hidden">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+          <div className="space-y-1 max-w-xl">
+            <span className="text-[10px] font-black uppercase tracking-wider text-orange-400 font-mono bg-orange-500/10 px-2.5 py-0.5 rounded-md border border-orange-500/20">
+              Phygital Activation Guide
+            </span>
+            <h3 className="text-xl font-black text-white">How To Activate Your Phygital T-Shirt</h3>
+            <p className="text-xs text-neutral-300 font-medium leading-relaxed">
+              1. Your custom T-shirt with your embedded QR code will arrive at your door in 3-5 days.<br />
+              2. <strong className="text-orange-400 font-bold">Scan the QR code on your tee using your phone camera within 7 days of arrival</strong> to bind & activate your live profile!
+            </p>
+          </div>
+          <button 
+            onClick={() => navigate('/shop')} 
+            className="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-black font-black uppercase text-xs rounded-xl border-[2px] border-black shadow-[2px_2px_0px_#000] shrink-0 transition-all"
+          >
+            Order Custom Tee →
+          </button>
+        </div>
+      </div>
+
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <p className="text-[11px] font-black uppercase text-orange-500 tracking-[0.2em] mb-2">My Official Identity</p>

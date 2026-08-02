@@ -444,7 +444,30 @@ export default function TrackOrder() {
                     <div>
                       <h4 className="text-[10px] font-black uppercase tracking-widest text-white">QR Secure Protocol</h4>
                       <p className="text-[10px] text-neutral-400 font-bold leading-relaxed">
-                        Every KnoWMi physical item is custom printed with a secure cryptographic web3 identity QR code.
+                        Every KnoWMi physical item is custom printed with a secure cryptographic identity QR code.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2-Step Activation Instructions Card */}
+                <div className="p-6 bg-[#1a1a1a] rounded-xl border-[3px] border-orange-500 shadow-[4px_4px_0px_#f97316] space-y-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">💡</span>
+                    <h4 className="text-xs font-black uppercase tracking-widest text-white">How To Activate Your Tee</h4>
+                  </div>
+
+                  <div className="space-y-3 text-xs">
+                    <div className="flex items-start gap-2.5">
+                      <span className="w-5 h-5 rounded-full bg-orange-500 text-black font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">1</span>
+                      <p className="text-neutral-300 font-medium">
+                        <strong className="text-white font-bold">Delivery (3 - 5 Days):</strong> Your T-shirt printed with your unique QR code will arrive at your address.
+                      </p>
+                    </div>
+                    <div className="flex items-start gap-2.5 pt-2 border-t border-neutral-800">
+                      <span className="w-5 h-5 rounded-full bg-emerald-500 text-black font-black flex items-center justify-center text-[10px] shrink-0 mt-0.5">2</span>
+                      <p className="text-neutral-300 font-medium">
+                        <strong className="text-white font-bold">Scan & Activate (7 Days):</strong> Scan the QR code on your tee with your smartphone camera to <strong className="text-orange-400">activate & bind your profile within 7 days of arrival</strong>.
                       </p>
                     </div>
                   </div>
