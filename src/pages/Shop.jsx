@@ -102,7 +102,10 @@ export default function Shop() {
     })
 
     const product = PRODUCTS.find(p => p.id === selectedProductType)
-    const actualPrice = product?.price || 799
+    const basePrice = product?.price || 799
+    const cgst = Math.round(basePrice * 0.025) // ₹20
+    const sgst = Math.round(basePrice * 0.025) // ₹20
+    const actualPrice = basePrice + cgst + sgst // ₹839 (799 + GST)
 
     // Load Razorpay SDK
     const res = await new Promise((resolve) => {
@@ -901,15 +904,15 @@ export default function Shop() {
               <div className="p-4 bg-black/60 rounded-xl border border-neutral-800 space-y-2 text-xs">
                 <div className="flex justify-between items-center text-neutral-400">
                   <span>Base Item Price</span>
-                  <span className="font-bold text-white">₹761</span>
+                  <span className="font-bold text-white">₹{PRODUCTS.find(p => p.id === selectedProductType)?.price || 799}</span>
                 </div>
                 <div className="flex justify-between items-center text-neutral-400">
                   <span>2.5% CGST</span>
-                  <span className="font-bold text-white">₹19</span>
+                  <span className="font-bold text-white">₹{Math.round((PRODUCTS.find(p => p.id === selectedProductType)?.price || 799) * 0.025)}</span>
                 </div>
                 <div className="flex justify-between items-center text-neutral-400">
                   <span>2.5% SGST</span>
-                  <span className="font-bold text-white">₹19</span>
+                  <span className="font-bold text-white">₹{Math.round((PRODUCTS.find(p => p.id === selectedProductType)?.price || 799) * 0.025)}</span>
                 </div>
                 <div className="flex justify-between items-center pt-1 border-t border-neutral-800">
                   <span className="flex items-center gap-1 text-emerald-400 font-bold">
@@ -924,7 +927,7 @@ export default function Shop() {
               <div className="pt-4 border-t border-neutral-800 flex items-center justify-between">
                 <div>
                   <p className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">Total Amount After GST</p>
-                  <p className="text-xl font-black text-orange-500">₹{PRODUCTS.find(p => p.id === selectedProductType)?.price || 799}</p>
+                  <p className="text-xl font-black text-orange-500">₹{(PRODUCTS.find(p => p.id === selectedProductType)?.price || 799) + Math.round((PRODUCTS.find(p => p.id === selectedProductType)?.price || 799) * 0.05)}</p>
                 </div>
                 <button 
                   type="submit" 

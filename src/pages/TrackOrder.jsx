@@ -401,15 +401,15 @@ export default function TrackOrder() {
                   <div className="py-6 border-b-[3px] border-white/20 space-y-3 text-xs font-bold text-neutral-400">
                     <div className="flex justify-between items-center">
                       <span>Base Item Price</span>
-                      <span className="font-black text-white">₹761</span>
+                      <span className="font-black text-white">₹799</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span>2.5% CGST</span>
-                      <span className="font-black text-white">₹19</span>
+                      <span className="font-black text-white">₹20</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span>2.5% SGST</span>
-                      <span className="font-black text-white">₹19</span>
+                      <span className="font-black text-white">₹20</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span>Shipping & Handling</span>
