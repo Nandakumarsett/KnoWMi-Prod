@@ -36,6 +36,7 @@ export default function Shop() {
   const [selectedProductType, setSelectedProductType] = useState('oversized')
   const [modalOpen, setModalOpen] = useState(false)
   const [authOpen, setAuthOpen] = useState(false)
+  const [addressModalOpen, setAddressModalOpen] = useState(false)
   const [checkoutLoading, setCheckoutLoading] = useState(false)
   const [orderSuccess, setOrderSuccess] = useState(null)
   const [remainingSpots, setRemainingSpots] = useState(100)
@@ -80,11 +81,17 @@ export default function Shop() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const triggerCheckout = async () => {
+  const triggerCheckout = () => {
     if (!user) {
       setAuthOpen(true)
       return
     }
+    setAddressModalOpen(true)
+  }
+
+  const executeRazorpayCheckout = async (addressData) => {
+    setAddressModalOpen(false)
+    setCheckoutLoading(true)
 
     posthog.capture('checkout_started', {
       product_type: selectedProductType,
@@ -94,9 +101,9 @@ export default function Shop() {
       price: PRODUCTS.find(p => p.id === selectedProductType)?.price,
     })
 
-    setCheckoutLoading(true)
     const product = PRODUCTS.find(p => p.id === selectedProductType)
-    
+    const actualPrice = product?.price || 799
+
     // Load Razorpay SDK
     const res = await new Promise((resolve) => {
       const script = document.createElement('script')
@@ -136,6 +143,8 @@ export default function Shop() {
       }
       if (!orderData) throw new Error('Failed to create order')
 
+      const fullShippingAddress = `${addressData.streetAddress}, ${addressData.city}, ${addressData.state} - ${addressData.pincode}`.trim();
+
       // 2. Open Razorpay Modal
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -143,7 +152,7 @@ export default function Shop() {
         currency: "INR",
         name: "KnoWMi",
         description: `Purchase ${product.name}`,
-        image: "https://knowmi.co/favicon.ico", // This will show the KnoWMi logo in the checkout modal
+        image: "https://knowmi.co/favicon.ico",
         order_id: orderData.order_id,
         handler: async function (response) {
           sessionStorage.setItem('knowmi_payment_success', 'true')
@@ -152,28 +161,31 @@ export default function Shop() {
 
           let userProfileId = null
           if (user?.id) {
-            const { data: prof } = await supabase.from('profiles').select('id, amount_paid').eq('user_id', user.id).maybeSingle()
+            const { data: prof } = await supabase.from('profiles').select('id, amount_paid, phone').eq('user_id', user.id).maybeSingle()
             if (prof) {
               userProfileId = prof.id
-              // 1. Insert order record into orders table
+              // 1. Insert order record into orders table with shipping address
               await supabase.from('orders').insert([{
                 profile_id: prof.id,
                 order_number: generatedOrderNum,
-                item_name: `${selectedDesign?.name || 'Phygital Signature Tee'} (${selectedProductType?.toUpperCase() || 'OVERSIZED'})`,
+                item_name: `${selectedDesign?.name || 'Phygital Signature Tee'} (${selectedProductType?.toUpperCase() || 'REGULAR'})`,
                 item_type: 'tshirt',
                 size: selectedSize || 'L',
-                amount: product?.price || 999,
+                amount: actualPrice,
                 status: 'paid',
+                shipping_address: fullShippingAddress,
+                delivery_city: addressData.city || 'Bengaluru',
                 estimated_delivery: '3 - 5 Business Days',
                 created_at: new Date().toISOString()
               }])
 
-              // 2. Update user profile to paid status
+              // 2. Update user profile to paid status & phone
               await supabase.from('profiles').update({
                 status: 'paid',
                 is_purchased: true,
                 purchased_at: new Date().toISOString(),
-                amount_paid: (prof.amount_paid || 0) + (product?.price || 999)
+                phone: addressData.phone || prof.phone,
+                amount_paid: (prof.amount_paid || 0) + actualPrice
               }).eq('id', prof.id)
 
               // 3. Sync to public_profiles
@@ -188,7 +200,7 @@ export default function Shop() {
             design_id: selectedDesign?.id,
             design_name: selectedDesign?.name,
             size: selectedSize,
-            price: product?.price,
+            price: actualPrice,
             order_id: generatedOrderNum,
             payment_id: response.razorpay_payment_id,
           })
@@ -197,13 +209,17 @@ export default function Shop() {
             product_type: selectedProductType,
             order_id: generatedOrderNum,
             payment_id: response.razorpay_payment_id,
-            price: product?.price,
+            price: actualPrice,
+            shipping_address: fullShippingAddress,
+            city: addressData.city
           });
 
           setOrderSuccess({ paymentId: response.razorpay_payment_id, orderId: generatedOrderNum })
         },
         prefill: {
           email: user.email,
+          contact: addressData.phone || '',
+          name: addressData.fullName || ''
         },
         theme: {
           color: "#f97316"
@@ -213,7 +229,7 @@ export default function Shop() {
       logSqlEvent('checkout_initiated', {
         product_type: selectedProductType,
         size: selectedSize,
-        price: product?.price,
+        price: actualPrice,
         design_id: selectedDesign?.id,
         order_id: orderData.order_id
       });
@@ -735,6 +751,131 @@ export default function Shop() {
           triggerCheckout();
         }}
       />
+      {/* 🚚 Standard E-Commerce Shipping Address Modal */}
+      {addressModalOpen && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fadeIn">
+          <div className="relative bg-[#121212] border-[3px] border-white w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-[8px_8px_0px_#fff]">
+            <button 
+              onClick={() => setAddressModalOpen(false)} 
+              className="absolute top-6 right-6 text-neutral-400 hover:text-white transition-colors"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-orange-500 text-black font-black flex items-center justify-center border-[2px] border-black shadow-[2px_2px_0px_#000]">
+                <Truck size={20} />
+              </div>
+              <div>
+                <h3 className="text-xl font-display font-black text-white uppercase tracking-tight">Delivery Address</h3>
+                <p className="text-xs text-neutral-400 font-bold">Step 1 of 2: Shipping details for your Phygital Tee</p>
+              </div>
+            </div>
+
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              const addressObj = {
+                fullName: formData.get('fullName'),
+                phone: formData.get('phone'),
+                streetAddress: formData.get('streetAddress'),
+                city: formData.get('city'),
+                state: formData.get('state'),
+                pincode: formData.get('pincode'),
+              };
+              if (!addressObj.fullName || !addressObj.phone || !addressObj.streetAddress || !addressObj.city || !addressObj.pincode) {
+                toast.error('Please complete all required shipping fields');
+                return;
+              }
+              executeRazorpayCheckout(addressObj);
+            }} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-neutral-400 tracking-wider mb-1.5">Full Name *</label>
+                  <input 
+                    type="text" 
+                    name="fullName"
+                    required 
+                    defaultValue={user?.user_metadata?.full_name || user?.user_metadata?.name || ''} 
+                    placeholder="e.g. Nanda Kumar"
+                    className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-orange-500 font-semibold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-neutral-400 tracking-wider mb-1.5">Mobile Phone (Delivery Updates) *</label>
+                  <input 
+                    type="tel" 
+                    name="phone"
+                    required 
+                    placeholder="10-digit mobile number"
+                    className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-orange-500 font-semibold"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-black uppercase text-neutral-400 tracking-wider mb-1.5">Flat / House No / Building / Street *</label>
+                <input 
+                  type="text" 
+                  name="streetAddress"
+                  required 
+                  placeholder="House No, Apartment / Street name, Area"
+                  className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-orange-500 font-semibold"
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-neutral-400 tracking-wider mb-1.5">City *</label>
+                  <input 
+                    type="text" 
+                    name="city"
+                    required 
+                    defaultValue="Bengaluru" 
+                    placeholder="City"
+                    className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-orange-500 font-semibold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-neutral-400 tracking-wider mb-1.5">State *</label>
+                  <input 
+                    type="text" 
+                    name="state"
+                    required 
+                    defaultValue="Karnataka" 
+                    placeholder="State"
+                    className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-orange-500 font-semibold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase text-neutral-400 tracking-wider mb-1.5">PIN Code *</label>
+                  <input 
+                    type="text" 
+                    name="pincode"
+                    required 
+                    placeholder="6 digits"
+                    className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-orange-500 font-semibold"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-neutral-800 flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">Total Payable</p>
+                  <p className="text-xl font-black text-orange-500">₹{PRODUCTS.find(p => p.id === selectedProductType)?.price || 799}</p>
+                </div>
+                <button 
+                  type="submit" 
+                  className="px-6 py-3 bg-white hover:bg-neutral-200 text-black border-[3px] border-black font-black uppercase tracking-wider text-xs rounded-xl transition-all shadow-[3px_3px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px]"
+                >
+                  Proceed to Payment →
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Team Checkout removed */}
       <LiveSalesPopup />
     </div>

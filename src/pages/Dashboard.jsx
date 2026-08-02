@@ -2871,10 +2871,17 @@ function Dashboard() {
                           <div className="absolute left-[15px] top-2 bottom-2 w-0.5 bg-neutral-100" />
                           
                           {[
-                            { label: 'Order Confirmed', status: 'pending', icon: Check, desc: 'Your identity is being prepared' },
+                            { label: 'Order Confirmed', status: 'pending', icon: Check, desc: 'Your identity tee is being prepared' },
                             { label: 'Payment Verified', status: 'paid', icon: ShieldCheck, desc: 'Quality check and packing' },
-                            { label: 'In Transit', status: 'shipped', icon: Rocket, desc: latestOrder.tracking_info || 'Handed over to delivery partner' },
-                            { label: 'Delivered', status: 'delivered', icon: MapPin, desc: `Arriving in ${latestOrder.delivery_city || 'your city'}` }
+                            { label: 'In Transit', status: 'shipped', icon: Rocket, desc: latestOrder.tracking_info ? `Dispatch: ${latestOrder.tracking_info}` : `En route to ${latestOrder.delivery_city || 'destination'}` },
+                            { 
+                              label: 'Delivered', 
+                              status: 'delivered', 
+                              icon: MapPin, 
+                              desc: latestOrder.status === 'delivered' 
+                                ? `Package delivered to ${latestOrder.delivery_city || 'your address'}` 
+                                : `Destination: ${latestOrder.delivery_city || 'India'}` 
+                            }
                           ].map((step, i) => {
                             const isCompleted = ['pending', 'paid', 'shipped', 'delivered'].indexOf(latestOrder.status) >= ['pending', 'paid', 'shipped', 'delivered'].indexOf(step.status)
                             const isCurrent = latestOrder.status === step.status
@@ -2893,6 +2900,18 @@ function Dashboard() {
                           })}
                         </div>
                       </div>
+
+                      {latestOrder.shipping_address && (
+                        <div className="card p-6 border border-white/20 bg-[#1a1a1a] rounded-2xl flex items-center gap-4 text-neutral-400 font-bold shadow-[4px_4px_0px_#fff]">
+                          <div className="w-12 h-12 rounded-2xl bg-black border border-white/20 flex items-center justify-center text-orange-500 shrink-0">
+                            <MapPin size={24} />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[10px] font-black uppercase text-neutral-400 tracking-wider">Shipping Destination</p>
+                            <p className="text-xs text-white font-bold truncate mt-0.5">{latestOrder.shipping_address}</p>
+                          </div>
+                        </div>
+                      )}
 
                       <div className="card p-6 border-dashed bg-transparent flex items-center gap-4 text-neutral-400 font-bold">
                         <div className="w-12 h-12 rounded-2xl bg-[#1a1a1a] flex items-center justify-center shadow-[2px_2px_0px_#fff]"><Globe size={24}/></div>
