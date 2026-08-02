@@ -198,6 +198,17 @@ export default function QRIntercept() {
         if (insertError) throw insertError;
       }
 
+      // Update customer profile status to active/paid upon claiming
+      await supabase.from('profiles').update({
+        status: 'paid',
+        is_purchased: true,
+        purchased_at: new Date().toISOString()
+      }).eq('id', userProfile.id);
+
+      await supabase.from('public_profiles').update({
+        status: 'paid'
+      }).eq('id', userProfile.id);
+
       posthog.capture('identity_claimed', { token, profile_id: userProfile.id })
       toast.success('🎉 Congratulations! Your physical KnoWMi is now bound and activated.');
       navigate('/studio');
