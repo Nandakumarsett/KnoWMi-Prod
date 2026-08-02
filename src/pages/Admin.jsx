@@ -5,6 +5,7 @@ import CatalogAdmin from '../components/CatalogAdmin'
 import LeadsAdmin from '../components/LeadsAdmin'
 import AnalyticsAdmin from '../components/AnalyticsAdmin'
 import OrdersAdmin from '../components/OrdersAdmin'
+import CustomersAdmin from '../components/CustomersAdmin'
 import QRStudioAdmin from '../components/QRStudioAdmin'
 import HomepagePreviewsAdmin from '../components/HomepagePreviewsAdmin'
 import ReturnRequestsAdmin from '../components/ReturnRequestsAdmin'
@@ -187,7 +188,8 @@ export default function Admin() {
         <div className="flex gap-1 mb-6 p-1 rounded-xl overflow-x-auto bg-[#1a1a1a] border-[3px] border-white/20 rounded-xl">
           {[
             ...(isOwner ? [
-              { k: 'users', l: '👥 Customers' }, 
+              { k: 'users', l: '👥 Users' }, 
+              { k: 'customers_crm', l: '📋 Customers Directory' },
               { k: 'orders', l: '📦 Orders' },
               { k: 'returns', l: '↩️ Returns' },
               { k: 'deletions', l: '🚨 Deletions' },
@@ -261,6 +263,9 @@ export default function Admin() {
             )}
           </>
         )}
+
+        {/* Dedicated Customers Directory / CRM */}
+        {tab === 'customers_crm' && <CustomersAdmin />}
 
         {/* Team tab (owner only) */}
         {tab === 'team' && isOwner && (
