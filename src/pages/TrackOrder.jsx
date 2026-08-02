@@ -361,13 +361,14 @@ export default function TrackOrder() {
                   <div className="flex items-center gap-4 py-4 border-b-[3px] border-white/20">
                     <div className="relative w-20 h-24 bg-[#0a0a0a] rounded-xl border-[2px] border-white overflow-hidden shrink-0 flex items-center justify-center shadow-[3px_3px_0px_#fff]">
                       {(() => {
-                        const hasCustomImage = order.model_image_url && !order.model_image_url.includes('front.webp');
-                        const imageSrc = hasCustomImage ? getAssetUrl(order.model_image_url) : '/assets/scrolly/tshirt_front.png';
+                        const rawUrl = order.model_image_url;
+                        const isWhiteTemplate = !rawUrl || rawUrl.includes('front.webp');
+                        const imageSrc = isWhiteTemplate ? '/assets/scrolly/tshirt_front.png' : getAssetUrl(rawUrl);
                         return (
                           <img 
                             src={imageSrc} 
                             className="w-full h-full object-cover" 
-                            alt="KnoWMi Signature Black Tee" 
+                            alt={order.item_name || "Purchased Product Tee"} 
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = '/assets/scrolly/tshirt_front.png';
@@ -382,13 +383,13 @@ export default function TrackOrder() {
                     
                     <div className="flex-1 min-w-0">
                       <h4 className="font-display font-black text-sm text-white tracking-wide leading-snug">
-                        KnoWMi <span className="text-orange-500 italic font-serif font-normal">Signature</span> Tee
+                        {order.item_name || 'KnoWMi Phygital Signature Tee'}
                       </h4>
                       <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mt-1">
-                        Regular Edition • Size {order.size || 'L'}
+                        Size {order.size || 'L'} • Phygital Edition
                       </p>
                       <span className="inline-block mt-1 text-[9px] font-black uppercase tracking-wider text-orange-400 font-mono bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">
-                        SKU-SIGNATURE-TEE
+                        {order.sku || 'SKU-SIGNATURE-TEE'}
                       </span>
                     </div>
 
