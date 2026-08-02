@@ -2972,15 +2972,17 @@ function Dashboard() {
                   </div>
                 )}
 
-                {/* Return Request Form */}
-                <div className="card p-8 bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] border border-white/20">
-                  <div className="mb-6">
-                    <p className="text-[11px] font-black uppercase text-orange-500 tracking-[0.2em] mb-1">Support</p>
-                    <h3 className="text-2xl font-display font-black tracking-tight">Report an Issue</h3>
-                    <p className="text-sm text-neutral-400 mt-1">Free replacements are provided for damaged products, QR code fade issues, or T-shirt color issues. Other requests like size exchanges require a paid replacement. All claims must be raised within 7 days of delivery.</p>
+                {/* Return Request Form (Only shown when order status is 'delivered') */}
+                {latestOrder && latestOrder.status === 'delivered' && (
+                  <div className="card p-8 bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] border border-white/20">
+                    <div className="mb-6">
+                      <p className="text-[11px] font-black uppercase text-orange-500 tracking-[0.2em] mb-1">Support</p>
+                      <h3 className="text-2xl font-display font-black tracking-tight">Report an Issue</h3>
+                      <p className="text-sm text-neutral-400 mt-1">Free replacements are provided for damaged products, QR code fade issues, or T-shirt color issues. Other requests like size exchanges require a paid replacement. All claims must be raised within 7 days of delivery.</p>
+                    </div>
+                    <ReturnRequestForm user={user} latestOrder={latestOrder} supabaseClient={supabase} />
                   </div>
-                  <ReturnRequestForm user={user} latestOrder={latestOrder} supabaseClient={supabase} />
-                </div>
+                )}
 
                 {/* Account Deletion */}
                 <div className="card p-8 bg-[#1a1a1a] shadow-[2px_2px_0px_#fff] border border-red-50">
