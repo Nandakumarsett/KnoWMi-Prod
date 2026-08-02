@@ -125,6 +125,8 @@ BEGIN
 END $$;
 
 -- 6. Updated record_customer_order RPC function with exact address & increment updates
+DROP FUNCTION IF EXISTS public.record_customer_order CASCADE;
+
 CREATE OR REPLACE FUNCTION public.record_customer_order(
   p_user_id UUID,
   p_customer_name TEXT,
