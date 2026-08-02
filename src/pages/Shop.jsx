@@ -156,15 +156,40 @@ export default function Shop() {
         order_id: orderData.order_id,
         handler: async function (response) {
           sessionStorage.setItem('knowmi_payment_success', 'true')
-          const randNum = Math.floor(1000 + Math.random() * 9000)
-          const generatedOrderNum = `KWM-${randNum}`
+          let generatedOrderNum = null;
 
-          let userProfileId = null
-          if (user?.id) {
-            const { data: prof } = await supabase.from('profiles').select('id, amount_paid, phone').eq('user_id', user.id).maybeSingle()
+          // 1. Try atomic PostgreSQL RPC for sequential order number and complete order record
+          try {
+            const { data: rpcRes, error: rpcErr } = await supabase.rpc('record_customer_order', {
+              p_user_id: user.id,
+              p_customer_name: addressData.fullName || user?.user_metadata?.full_name || '',
+              p_customer_email: user.email || '',
+              p_customer_phone: addressData.phone || '',
+              p_item_name: `${selectedDesign?.name || 'Phygital Signature Tee'} (${selectedProductType?.toUpperCase() || 'REGULAR'})`,
+              p_size: selectedSize || 'L',
+              p_amount: actualPrice,
+              p_shipping_address: fullShippingAddress,
+              p_city: addressData.city || 'Bengaluru',
+              p_state: addressData.state || 'Karnataka',
+              p_pincode: addressData.pincode || '',
+              p_payment_id: response.razorpay_payment_id,
+              p_razorpay_order_id: orderData.order_id
+            });
+
+            if (!rpcErr && rpcRes && rpcRes.order_number) {
+              generatedOrderNum = rpcRes.order_number;
+            }
+          } catch (e) {
+            console.warn('RPC record_customer_order failed, executing direct insert fallback:', e);
+          }
+
+          // Fallback if RPC migration hasn't been run yet
+          if (!generatedOrderNum) {
+            const { data: seqNum } = await supabase.rpc('generate_next_order_number').catch(() => ({ data: null }));
+            generatedOrderNum = seqNum || `KWM-${Math.floor(1000 + Math.random() * 8999)}`;
+
+            const { data: prof } = await supabase.from('profiles').select('id, amount_paid, phone').eq('user_id', user.id).maybeSingle();
             if (prof) {
-              userProfileId = prof.id
-              // 1. Insert order record into orders table with shipping address
               await supabase.from('orders').insert([{
                 profile_id: prof.id,
                 order_number: generatedOrderNum,
@@ -173,25 +198,30 @@ export default function Shop() {
                 size: selectedSize || 'L',
                 amount: actualPrice,
                 status: 'paid',
+                customer_name: addressData.fullName,
+                customer_email: user.email,
+                customer_phone: addressData.phone,
                 shipping_address: fullShippingAddress,
                 delivery_city: addressData.city || 'Bengaluru',
+                delivery_state: addressData.state || 'Karnataka',
+                delivery_pincode: addressData.pincode || '',
+                payment_id: response.razorpay_payment_id,
+                razorpay_order_id: orderData.order_id,
                 estimated_delivery: '3 - 5 Business Days',
                 created_at: new Date().toISOString()
-              }])
+              }]);
 
-              // 2. Update user profile to paid status & phone
               await supabase.from('profiles').update({
                 status: 'paid',
                 is_purchased: true,
                 purchased_at: new Date().toISOString(),
                 phone: addressData.phone || prof.phone,
                 amount_paid: (prof.amount_paid || 0) + actualPrice
-              }).eq('id', prof.id)
+              }).eq('id', prof.id);
 
-              // 3. Sync to public_profiles
               await supabase.from('public_profiles').update({
                 status: 'paid'
-              }).eq('id', prof.id)
+              }).eq('id', prof.id);
             }
           }
 
