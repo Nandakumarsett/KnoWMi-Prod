@@ -64,7 +64,7 @@ BEGIN
       p.id AS profile_id,
       p.user_id,
       COALESCE(NULLIF(TRIM(CONCAT(p.first_name, ' ', p.last_name)), ''), SPLIT_PART(au.email, '@', 1), 'KnoWMi Member') AS full_name,
-      COALESCE(au.email, p.email, 'noemail@knowmi.co') AS real_email,
+      COALESCE(au.email, 'noemail@knowmi.co') AS real_email,
       p.phone AS profile_phone,
       po.customer_phone,
       po.shipping_address,
