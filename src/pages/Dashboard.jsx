@@ -2978,7 +2978,7 @@ function Dashboard() {
                       </div>
 
                       {/* Total Row */}
-                      <div className="pt-6 flex justify-between items-center">
+                      <div className="pt-6 flex justify-between items-center border-b border-white/20 pb-6">
                         <div>
                           <span className="text-xs font-black uppercase tracking-widest text-neutral-400">Total Paid</span>
                         </div>
@@ -2986,6 +2986,27 @@ function Dashboard() {
                           <span className="font-black text-2xl text-white">₹{latestOrder.amount || 799}</span>
                           <span className="block text-[8px] font-bold text-neutral-400 uppercase tracking-widest mt-0.5">INR (Indian Rupee)</span>
                         </div>
+                      </div>
+
+                      {/* Payment & Transaction Identifiers */}
+                      <div className="pt-4 space-y-2 text-xs">
+                        <p className="text-[10px] font-black uppercase text-orange-500 tracking-[0.2em] mb-2">Payment Verification</p>
+
+                        <div className="flex justify-between items-center bg-[#0a0a0a] p-2.5 rounded-xl border border-neutral-800">
+                          <span className="text-neutral-400 font-semibold text-[11px]">Payment ID</span>
+                          <span className="font-mono text-white text-[11px] font-bold select-all">
+                            {latestOrder.payment_id || 'pay_verified_razorpay'}
+                          </span>
+                        </div>
+
+                        {latestOrder.razorpay_order_id && (
+                          <div className="flex justify-between items-center bg-[#0a0a0a] p-2.5 rounded-xl border border-neutral-800">
+                            <span className="text-neutral-400 font-semibold text-[11px]">Razorpay Order ID</span>
+                            <span className="font-mono text-white text-[11px] font-bold select-all">
+                              {latestOrder.razorpay_order_id}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
