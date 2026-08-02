@@ -147,22 +147,60 @@ export default function Shop() {
         order_id: orderData.order_id,
         handler: async function (response) {
           sessionStorage.setItem('knowmi_payment_success', 'true')
+          const randNum = Math.floor(1000 + Math.random() * 9000)
+          const generatedOrderNum = `KWM-${randNum}`
+
+          let userProfileId = null
+          if (user?.id) {
+            const { data: prof } = await supabase.from('profiles').select('id, amount_paid').eq('user_id', user.id).maybeSingle()
+            if (prof) {
+              userProfileId = prof.id
+              // 1. Insert order record into orders table
+              await supabase.from('orders').insert([{
+                profile_id: prof.id,
+                order_number: generatedOrderNum,
+                item_name: `${selectedDesign?.name || 'Phygital Signature Tee'} (${selectedProductType?.toUpperCase() || 'OVERSIZED'})`,
+                item_type: 'tshirt',
+                size: selectedSize || 'L',
+                amount: product?.price || 999,
+                status: 'paid',
+                estimated_delivery: '3 - 5 Business Days',
+                created_at: new Date().toISOString()
+              }])
+
+              // 2. Update user profile to paid status
+              await supabase.from('profiles').update({
+                status: 'paid',
+                is_purchased: true,
+                purchased_at: new Date().toISOString(),
+                amount_paid: (prof.amount_paid || 0) + (product?.price || 999)
+              }).eq('id', prof.id)
+
+              // 3. Sync to public_profiles
+              await supabase.from('public_profiles').update({
+                status: 'paid'
+              }).eq('id', prof.id)
+            }
+          }
+
           posthog.capture('order_placed', {
             product_type: selectedProductType,
             design_id: selectedDesign?.id,
             design_name: selectedDesign?.name,
             size: selectedSize,
             price: product?.price,
-            order_id: orderData.order_id,
+            order_id: generatedOrderNum,
             payment_id: response.razorpay_payment_id,
           })
+
           logSqlEvent('purchase_completed', {
             product_type: selectedProductType,
-            order_id: orderData.order_id,
+            order_id: generatedOrderNum,
             payment_id: response.razorpay_payment_id,
             price: product?.price,
           });
-          setOrderSuccess({ paymentId: response.razorpay_payment_id, orderId: orderData.order_id })
+
+          setOrderSuccess({ paymentId: response.razorpay_payment_id, orderId: generatedOrderNum })
         },
         prefill: {
           email: user.email,
