@@ -123,12 +123,12 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                 onChange={e => updateAbout('status', e.target.value)}
                 className="w-full bg-[#0a0a0a] border border-neutral-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-white focus:border-orange-500 transition-all outline-none"
               >
-                <option value="">Select Status</option>
-                <option value="Freelancing">Freelancing / Self-Employed</option>
-                <option value="Working at Company">Working at Company</option>
-                <option value="Seeking Opportunities">Seeking Opportunities (Open to Work)</option>
-                <option value="Student">Student / Learning</option>
-                <option value="Founder">Founder / Building startup</option>
+                <option value="" className="bg-[#1a1a1a] text-white">Select Status</option>
+                <option value="Freelancing" className="bg-[#1a1a1a] text-white">Freelancing / Self-Employed</option>
+                <option value="Working at Company" className="bg-[#1a1a1a] text-white">Working at Company</option>
+                <option value="Seeking Opportunities" className="bg-[#1a1a1a] text-white">Seeking Opportunities (Open to Work)</option>
+                <option value="Student" className="bg-[#1a1a1a] text-white">Student / Learning</option>
+                <option value="Founder" className="bg-[#1a1a1a] text-white">Founder / Building Stealth</option>
               </select>
             </div>
 
@@ -320,17 +320,17 @@ export function DeveloperForm({ data = {}, onChange, isOwner, onUpload, uploadin
                 <select value={p.platform || ''} onChange={e => {
                   const pCopy = [...(data.platforms || [])]; pCopy[i] = { ...p, platform: e.target.value }; updateField('platforms', pCopy);
                 }} className="w-full bg-[#1a1a1a] border-2 border-transparent rounded-xl px-4 py-3 text-sm font-black text-white focus:border-blue-500 transition-all outline-none appearance-none">
-                  <option value="">Platform</option>
-                  <option value="GitHub">GitHub</option>
-                  <option value="StackOverflow">StackOverflow</option>
-                  <option value="Twitter / X">Twitter / X</option>
-                  <option value="LinkedIn">LinkedIn</option>
-                  <option value="YouTube">YouTube</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Dev.to">Dev.to</option>
-                  <option value="Hashnode">Hashnode</option>
-                  <option value="Dribbble">Dribbble</option>
-                  <option value="Behance">Behance</option>
+                  <option value="" className="bg-[#1a1a1a] text-white">Platform</option>
+                  <option value="GitHub" className="bg-[#1a1a1a] text-white">GitHub</option>
+                  <option value="StackOverflow" className="bg-[#1a1a1a] text-white">StackOverflow</option>
+                  <option value="Twitter / X" className="bg-[#1a1a1a] text-white">Twitter / X</option>
+                  <option value="LinkedIn" className="bg-[#1a1a1a] text-white">LinkedIn</option>
+                  <option value="YouTube" className="bg-[#1a1a1a] text-white">YouTube</option>
+                  <option value="Medium" className="bg-[#1a1a1a] text-white">Medium</option>
+                  <option value="Dev.to" className="bg-[#1a1a1a] text-white">Dev.to</option>
+                  <option value="Hashnode" className="bg-[#1a1a1a] text-white">Hashnode</option>
+                  <option value="Dribbble" className="bg-[#1a1a1a] text-white">Dribbble</option>
+                  <option value="Behance" className="bg-[#1a1a1a] text-white">Behance</option>
                 </select>
               </div>
               <div className="w-full sm:flex-1 grid grid-cols-2 gap-4">

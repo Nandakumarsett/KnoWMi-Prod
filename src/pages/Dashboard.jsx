@@ -100,26 +100,26 @@ function ReturnRequestForm({ user, latestOrder, supabaseClient }) {
         <div>
           <label className="block text-[10px] font-black uppercase tracking-wide text-neutral-400 mb-1.5">Issue Type</label>
           <select value={form.issue_type} onChange={e => setForm(f => ({ ...f, issue_type: e.target.value }))}
-            className="w-full px-4 py-2.5 rounded-xl text-sm outline-none border border-white/20 bg-neutral-50">
-            <option value="defect">Damaged Product / Defect (Free)</option>
-            <option value="qr_issue">QR Fade Issue (Free)</option>
-            <option value="color_issue">T-Shirt Color Issue (Free)</option>
-            <option value="size_exchange">Size Exchange (Paid Replacement)</option>
-            <option value="other">Other</option>
+            className="w-full px-4 py-3 rounded-xl text-xs font-semibold text-white bg-[#0a0a0a] border border-neutral-700 outline-none focus:border-orange-500 transition-colors cursor-pointer">
+            <option value="defect" className="bg-[#1a1a1a] text-white">Damaged Product / Defect (Free)</option>
+            <option value="qr_issue" className="bg-[#1a1a1a] text-white">QR Fade Issue (Free)</option>
+            <option value="color_issue" className="bg-[#1a1a1a] text-white">T-Shirt Color Issue (Free)</option>
+            <option value="size_exchange" className="bg-[#1a1a1a] text-white">Size Exchange (Paid Replacement)</option>
+            <option value="other" className="bg-[#1a1a1a] text-white">Other</option>
           </select>
         </div>
         <div>
           <label className="block text-[10px] font-black uppercase tracking-wide text-neutral-400 mb-1.5">Unboxing Video Link</label>
           <input type="url" value={form.video_url} onChange={e => setForm(f => ({ ...f, video_url: e.target.value }))}
             placeholder="Google Drive / YouTube link"
-            className="w-full px-4 py-2.5 rounded-xl text-sm outline-none border border-white/20 bg-neutral-50" />
+            className="w-full px-4 py-3 rounded-xl text-xs font-semibold text-white bg-[#0a0a0a] border border-neutral-700 outline-none focus:border-orange-500 transition-colors placeholder:text-neutral-500" />
         </div>
       </div>
       <div>
         <label className="block text-[10px] font-black uppercase tracking-wide text-neutral-400 mb-1.5">Describe the Issue</label>
         <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
           rows={3} required placeholder="Be specific — what is the defect, what did you receive, etc."
-          className="w-full px-4 py-3 rounded-xl text-sm outline-none border border-white/20 bg-[#1a1a1a] resize-none" />
+          className="w-full px-4 py-3 rounded-xl text-xs font-semibold text-white bg-[#0a0a0a] border border-neutral-700 outline-none focus:border-orange-500 transition-colors resize-none placeholder:text-neutral-500" />
       </div>
       <div className="p-3 bg-amber-50 border border-amber-100 rounded-xl text-xs text-amber-700 leading-relaxed">
         ⚠️ A valid, continuous, uncut unboxing video is <strong>mandatory</strong> for all return requests. No video = No return/exchange.
@@ -2471,13 +2471,13 @@ function Dashboard() {
                 onChange={(e) => setSelectedRange(e.target.value)}
                 className={`px-4 py-2 border rounded-xl text-[10px] font-black uppercase tracking-wider cursor-pointer outline-none transition-all ${isVibeDark ? 'bg-[#1c1c26] border-white/10 text-white hover:border-white/20' : 'bg-[#1a1a1a] border-white/20 text-neutral-200 hover:border-white/20'}`}
               >
-                <option value="today">Today Only</option>
-                <option value="yesterday">Yesterday</option>
-                <option value="last_7">Last 7 Days</option>
-                <option value="last_week">Last Week</option>
-                <option value="last_month">Last Month</option>
-                <option value="ytd">Year to Date (YTD)</option>
-                <option value="all">All Time</option>
+                <option value="today" className="bg-[#1a1a1a] text-white">Today Only</option>
+                <option value="yesterday" className="bg-[#1a1a1a] text-white">Yesterday</option>
+                <option value="last_7" className="bg-[#1a1a1a] text-white">Last 7 Days</option>
+                <option value="last_week" className="bg-[#1a1a1a] text-white">Last Week</option>
+                <option value="last_month" className="bg-[#1a1a1a] text-white">Last Month</option>
+                <option value="ytd" className="bg-[#1a1a1a] text-white">Year to Date (YTD)</option>
+                <option value="all" className="bg-[#1a1a1a] text-white">All Time</option>
               </select>
               <button className="px-4 py-2 bg-[#3B82F6] text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-[6px_6px_0px_#fff] shadow-blue-500/20 hover:scale-105 transition-all">Export</button>
             </div>

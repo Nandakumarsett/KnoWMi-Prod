@@ -130,12 +130,12 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
              </div>
              <div>
                <label className={labelClasses}>Visual Style (Aesthetic)</label>
-               <select value={data.visual_style || ''} onChange={e => updateField('visual_style', e.target.value)} className={`${inputBaseClasses} appearance-none`}>
-                  <option value="">Select an Aesthetic</option>
-                  <option value="Cinematic">Cinematic</option>
-                  <option value="Minimalist">Minimalist</option>
-                  <option value="Vibrant">Vibrant</option>
-                  <option value="Moody">Moody</option>
+               <select value={data.visual_style || ''} onChange={e => updateField('visual_style', e.target.value)} className={`${inputBaseClasses} appearance-none cursor-pointer`}>
+                  <option value="" className="bg-[#1a1a1a] text-white">Select an Aesthetic</option>
+                  <option value="Cinematic" className="bg-[#1a1a1a] text-white">Cinematic</option>
+                  <option value="Minimalist" className="bg-[#1a1a1a] text-white">Minimalist</option>
+                  <option value="Vibrant" className="bg-[#1a1a1a] text-white">Vibrant</option>
+                  <option value="Moody" className="bg-[#1a1a1a] text-white">Moody</option>
                </select>
              </div>
              <div className="relative">
@@ -181,11 +181,11 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
           <div className="space-y-4">
             <div>
                <label className={labelClasses}>Current Status</label>
-               <select value={data.availability_status || ''} onChange={e => updateField('availability_status', e.target.value)} className={`${inputBaseClasses} appearance-none`}>
-                  <option value="">Select Status</option>
-                  <option value="Open">Open</option>
-                  <option value="Selective">Selective</option>
-                  <option value="Fully booked">Fully booked</option>
+               <select value={data.availability_status || ''} onChange={e => updateField('availability_status', e.target.value)} className={`${inputBaseClasses} appearance-none cursor-pointer`}>
+                  <option value="" className="bg-[#1a1a1a] text-white">Select Status</option>
+                  <option value="Open" className="bg-[#1a1a1a] text-white">Open</option>
+                  <option value="Selective" className="bg-[#1a1a1a] text-white">Selective</option>
+                  <option value="Fully booked" className="bg-[#1a1a1a] text-white">Fully booked</option>
                </select>
             </div>
             <div className="relative">
@@ -452,9 +452,9 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
                   </div>
                   <div>
                     <label className={labelClasses}>Media Source Type</label>
-                    <select value={work.type || 'image'} onChange={e => { const wCopy = [...(data.works || [])]; wCopy[i] = { ...work, type: e.target.value }; updateField('works', wCopy) }} className={`${inputBaseClasses} appearance-none`}>
-                      <option value="image">Still Graphic / Photo</option>
-                      <option value="video">Motion / Video</option>
+                    <select value={work.type || 'image'} onChange={e => { const wCopy = [...(data.works || [])]; wCopy[i] = { ...work, type: e.target.value }; updateField('works', wCopy) }} className={`${inputBaseClasses} appearance-none cursor-pointer`}>
+                      <option value="image" className="bg-[#1a1a1a] text-white">Still Graphic / Photo</option>
+                      <option value="video" className="bg-[#1a1a1a] text-white">Motion / Video</option>
                     </select>
                   </div>
                   <div>
@@ -509,17 +509,17 @@ export function CreatorForm({ data = {}, onChange, onUpload, uploading }: Creato
               <div className="w-full sm:w-1/3">
                 <select value={p.platform || ''} onChange={e => {
                   const pCopy = [...(data.platforms || [])]; pCopy[i] = { ...p, platform: e.target.value }; updateField('platforms', pCopy);
-                }} className={`${inputBaseClasses} py-2.5 appearance-none`}>
-                  <option value="">Platform</option>
-                  <option value="Instagram">Instagram</option>
-                  <option value="YouTube">YouTube</option>
-                  <option value="Threads">Threads</option>
-                  <option value="Twitter / X">Twitter / X</option>
-                  <option value="LinkedIn">LinkedIn</option>
-                  <option value="Snapchat">Snapchat</option>
-                  <option value="Facebook">Facebook</option>
-                  <option value="Behance">Behance</option>
-                  <option value="Dribbble">Dribbble</option>
+                }} className={`${inputBaseClasses} py-2.5 appearance-none cursor-pointer`}>
+                  <option value="" className="bg-[#1a1a1a] text-white">Platform</option>
+                  <option value="Instagram" className="bg-[#1a1a1a] text-white">Instagram</option>
+                  <option value="YouTube" className="bg-[#1a1a1a] text-white">YouTube</option>
+                  <option value="Threads" className="bg-[#1a1a1a] text-white">Threads</option>
+                  <option value="Twitter / X" className="bg-[#1a1a1a] text-white">Twitter / X</option>
+                  <option value="LinkedIn" className="bg-[#1a1a1a] text-white">LinkedIn</option>
+                  <option value="Snapchat" className="bg-[#1a1a1a] text-white">Snapchat</option>
+                  <option value="Facebook" className="bg-[#1a1a1a] text-white">Facebook</option>
+                  <option value="Behance" className="bg-[#1a1a1a] text-white">Behance</option>
+                  <option value="Dribbble" className="bg-[#1a1a1a] text-white">Dribbble</option>
                   <option value="Medium">Medium</option>
                 </select>
               </div>

@@ -76,6 +76,23 @@
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── High Contrast Native Select & Option Colors for All Browsers ── */
+  select option {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 12px;
+  }
+  select option:disabled {
+    color: #737373 !important;
+  }
+  select option:checked,
+  select option:hover {
+    background-color: #f97316 !important;
+    color: #000000 !important;
+  }
 }
 
 @layer components {
