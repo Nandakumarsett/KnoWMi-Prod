@@ -144,6 +144,15 @@ BEGIN
       );
     END IF;
   END LOOP;
+
+  -- Explicitly update any legacy white tee references in order_line_items and orders
+  UPDATE public.order_line_items 
+  SET image_url = '/assets/scrolly/tshirt_front.png' 
+  WHERE image_url IS NULL OR image_url = '' OR image_url LIKE '%front.webp%';
+
+  UPDATE public.orders 
+  SET model_image_url = '/assets/scrolly/tshirt_front.png' 
+  WHERE model_image_url IS NULL OR model_image_url = '' OR model_image_url LIKE '%front.webp%';
 END $$;
 
 -- 6. Updated record_customer_order RPC Function with Product & Line Item Integration
