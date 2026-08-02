@@ -257,15 +257,11 @@ export default function OrdersAdmin() {
             <div className="flex flex-col lg:flex-row gap-6">
               {/* Order Image / Model */}
               <div className="w-full lg:w-32 h-32 bg-[#1a1a1a] rounded-2xl flex items-center justify-center shrink-0 border-2 border-neutral-50 overflow-hidden">
-                {o.model_image_url ? (
-                  <img src={o.model_image_url} className="w-full h-full object-cover" />
-                ) : (
-                   <div className="relative w-full h-full p-2 opacity-20">
-                      <svg viewBox="0 0 200 250" className="w-full h-full fill-current">
-                        <path d="M40,50 Q100,30 160,50 L190,90 L165,115 L155,108 L155,230 Q100,245 45,230 L45,108 L35,115 L10,90 Z" />
-                      </svg>
-                   </div>
-                )}
+                {(() => {
+                  const hasCustom = o.model_image_url && !o.model_image_url.includes('front.webp');
+                  const imgSrc = hasCustom ? getAssetUrl(o.model_image_url) : '/assets/scrolly/tshirt_front.png';
+                  return <img src={imgSrc} className="w-full h-full object-cover" alt="Tee preview" />
+                })()}
               </div>
 
               {/* Order Info */}
