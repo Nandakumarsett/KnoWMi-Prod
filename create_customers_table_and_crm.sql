@@ -1,15 +1,14 @@
 -- ================================================
--- KnoWMi E-Commerce Dedicated Customers Directory System
+-- KnoWMi E-Commerce Customers Table (BIGINT Customer ID)
 -- Run this script in your Supabase SQL Editor
 -- ================================================
 
--- 1. Create sequence for customer codes (CUST-1001, CUST-1002...)
-CREATE SEQUENCE IF NOT EXISTS public.cust_code_seq START 1001;
+-- 1. Create sequence for BIGINT customer IDs starting at 1001
+CREATE SEQUENCE IF NOT EXISTS public.cust_id_seq START 1001;
 
--- 2. Create public.customers table
+-- 2. Create public.customers table with BIGINT Primary Key
 CREATE TABLE IF NOT EXISTS public.customers (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  customer_code TEXT UNIQUE DEFAULT ('CUST-' || LPAD(nextval('public.cust_code_seq')::text, 4, '0')),
+  id BIGINT PRIMARY KEY DEFAULT nextval('public.cust_id_seq'),
   user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   profile_id UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
   full_name TEXT NOT NULL,
@@ -25,9 +24,9 @@ CREATE TABLE IF NOT EXISTS public.customers (
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 
--- 3. Add customer_id reference to orders table if not exists
+-- 3. Add BIGINT customer_id reference to orders table
 ALTER TABLE public.orders
-ADD COLUMN IF NOT EXISTS customer_id UUID REFERENCES public.customers(id) ON DELETE SET NULL;
+ADD COLUMN IF NOT EXISTS customer_id BIGINT REFERENCES public.customers(id) ON DELETE SET NULL;
 
 -- 4. Enable RLS on customers
 ALTER TABLE public.customers ENABLE ROW LEVEL SECURITY;
@@ -56,7 +55,7 @@ USING (
 DO $$
 DECLARE
   r RECORD;
-  v_cust_id UUID;
+  v_cust_id BIGINT;
 BEGIN
   FOR r IN 
     SELECT DISTINCT ON (p.id)
@@ -89,7 +88,7 @@ BEGIN
   END LOOP;
 END $$;
 
--- 6. Updated record_customer_order RPC function to auto-upsert into public.customers
+-- 6. Updated record_customer_order RPC function with BIGINT customer_id
 CREATE OR REPLACE FUNCTION public.record_customer_order(
   p_user_id UUID,
   p_customer_name TEXT,
@@ -109,7 +108,7 @@ CREATE OR REPLACE FUNCTION public.record_customer_order(
 RETURNS JSONB AS $$
 DECLARE
   v_profile_id UUID;
-  v_customer_id UUID;
+  v_customer_id BIGINT;
   v_order_number TEXT;
   v_new_order_id UUID;
   v_result JSONB;
@@ -145,7 +144,7 @@ BEGIN
   -- 2. Generate next unique sequential order number
   v_order_number := public.generate_next_order_number();
 
-  -- 3. Insert order record linked to customer_id
+  -- 3. Insert order record linked to BIGINT customer_id
   INSERT INTO public.orders (
     profile_id,
     customer_id,

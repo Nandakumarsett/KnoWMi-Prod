@@ -99,7 +99,7 @@ export default function CustomersAdmin() {
                 <div className="flex justify-between items-start mb-3">
                   <div>
                     <span className="text-[10px] font-black uppercase tracking-wider text-orange-500 font-mono bg-orange-500/10 px-2 py-0.5 rounded-md border border-orange-500/20">
-                      {c.customer_code}
+                      Customer ID: #{c.id}
                     </span>
                     <h3 className="text-lg font-black text-white mt-1.5 leading-snug">{c.full_name}</h3>
                   </div>
