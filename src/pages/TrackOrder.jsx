@@ -359,7 +359,7 @@ export default function TrackOrder() {
                   
                   {/* Item Details */}
                   <div className="flex items-center gap-4 py-4 border-b-[3px] border-white/20">
-                    <div className="relative w-20 h-25 bg-[#2a2a2a] rounded-lg border-[2px] border-black overflow-hidden shrink-0 flex items-center justify-center shadow-[2px_2px_0px_#000]">
+                    <div className="relative w-20 h-24 bg-[#111111] rounded-xl border-[2px] border-white overflow-hidden shrink-0 flex items-center justify-center shadow-[3px_3px_0px_#fff]">
                       <img 
                         src={getAssetUrl(order.model_image_url) || '/assets/tees/front.webp'} 
                         className="w-full h-full object-cover" 
@@ -369,17 +369,24 @@ export default function TrackOrder() {
                           e.target.src = '/assets/tees/front.webp';
                         }}
                       />
-                      <div className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-orange-500 text-black rounded-full flex items-center justify-center text-[10px] font-black border-[2px] border-black select-none">
+                      {/* Phygital Embedded QR Badge Overlay */}
+                      <div className="absolute inset-0 m-auto w-7 h-7 bg-black/85 border border-orange-500 rounded-md flex items-center justify-center pointer-events-none shadow-md">
+                        <QrCode size={14} className="text-orange-500 animate-pulse" />
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-black rounded-full flex items-center justify-center text-[9px] font-black border border-black select-none">
                         1
                       </div>
                     </div>
                     
                     <div className="flex-1 min-w-0">
                       <h4 className="font-black text-sm text-white leading-snug truncate">
-                        {order.item_name || 'KnoWMi Identity Tee'}
+                        {order.item_name || 'KnoWMi Phygital Signature Tee (Regular Edition)'}
                       </h4>
-                      <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mt-1">
-                        Size {order.size || 'M'} • Phygital Core
+                      <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mt-0.5">
+                        SIZE {order.size || 'L'} • PHYGITAL CORE
+                      </p>
+                      <p className="text-[10px] font-black text-orange-500 font-mono mt-1">
+                        SKU-SIGNATURE-TEE
                       </p>
                     </div>
 
