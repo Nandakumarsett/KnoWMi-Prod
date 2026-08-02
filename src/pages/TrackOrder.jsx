@@ -359,18 +359,25 @@ export default function TrackOrder() {
                   
                   {/* Item Details */}
                   <div className="flex items-center gap-4 py-4 border-b-[3px] border-white/20">
-                    <div className="relative w-20 h-24 bg-[#111111] rounded-xl border-[2px] border-white overflow-hidden shrink-0 flex items-center justify-center shadow-[3px_3px_0px_#fff]">
-                      <img 
-                        src={getAssetUrl(order.model_image_url) || '/assets/tees/front.webp'} 
-                        className="w-full h-full object-cover" 
-                        alt="Tee preview" 
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = '/assets/tees/front.webp';
-                        }}
-                      />
+                    <div className="relative w-20 h-24 bg-[#0a0a0a] rounded-xl border-[2px] border-white overflow-hidden shrink-0 flex items-center justify-center shadow-[3px_3px_0px_#fff]">
+                      {(() => {
+                        const hasCustomImage = order.model_image_url && !order.model_image_url.includes('front.webp') && !order.model_image_url.includes('tshirt');
+                        const imageSrc = hasCustomImage ? getAssetUrl(order.model_image_url) : '/assets/tees/front.webp';
+                        return (
+                          <img 
+                            src={imageSrc} 
+                            className={`w-full h-full object-cover ${!hasCustomImage ? 'invert brightness-75 contrast-125' : ''}`} 
+                            alt="Phygital Tee preview" 
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/assets/tees/front.webp';
+                              e.target.className = 'w-full h-full object-cover invert brightness-75 contrast-125';
+                            }}
+                          />
+                        );
+                      })()}
                       {/* Phygital Embedded QR Badge Overlay */}
-                      <div className="absolute inset-0 m-auto w-7 h-7 bg-black/85 border border-orange-500 rounded-md flex items-center justify-center pointer-events-none shadow-md">
+                      <div className="absolute inset-0 m-auto w-7 h-7 bg-black/90 border border-orange-500 rounded-md flex items-center justify-center pointer-events-none shadow-lg">
                         <QrCode size={14} className="text-orange-500 animate-pulse" />
                       </div>
                       <div className="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-black rounded-full flex items-center justify-center text-[9px] font-black border border-black select-none">
