@@ -274,7 +274,11 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 GRANT EXECUTE ON FUNCTION public.record_customer_order TO authenticated, anon, service_role;
 
--- 7. Automatic Sync Trigger: Whenever Admin creates/updates a design, automatically sync to public.products
+-- 7. Add sku column to persona_designs if missing & create Automatic Sync Trigger to public.products
+ALTER TABLE public.persona_designs ADD COLUMN IF NOT EXISTS sku TEXT;
+
+DROP FUNCTION IF EXISTS public.trg_sync_persona_design_to_products CASCADE;
+
 CREATE OR REPLACE FUNCTION public.trg_sync_persona_design_to_products()
 RETURNS TRIGGER AS $$
 BEGIN
