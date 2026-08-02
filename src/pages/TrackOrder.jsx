@@ -362,7 +362,7 @@ export default function TrackOrder() {
                     <div className="relative w-20 h-25 bg-[#2a2a2a] rounded-lg border-[2px] border-black overflow-hidden shrink-0 flex items-center justify-center shadow-[2px_2px_0px_#000]">
                       <img 
                         src={getAssetUrl(order.model_image_url) || '/assets/tees/front.webp'} 
-                        className="w-full h-full object-cover grayscale brightness-90" 
+                        className="w-full h-full object-cover" 
                         alt="Tee preview" 
                         onError={(e) => {
                           e.target.onerror = null;

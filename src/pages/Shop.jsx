@@ -158,6 +158,8 @@ export default function Shop() {
           sessionStorage.setItem('knowmi_payment_success', 'true')
           let generatedOrderNum = null;
 
+          const designImageUrl = selectedDesign?.front_image_url || selectedDesign?.model_image_url || selectedDesign?.image_url || selectedDesign?.mockup_url || '/assets/tees/front.webp';
+
           // 1. Try atomic PostgreSQL RPC for sequential order number and complete order record
           try {
             const { data: rpcRes, error: rpcErr } = await supabase.rpc('record_customer_order', {
@@ -173,7 +175,8 @@ export default function Shop() {
               p_state: addressData.state || 'Karnataka',
               p_pincode: addressData.pincode || '',
               p_payment_id: response.razorpay_payment_id,
-              p_razorpay_order_id: orderData.order_id
+              p_razorpay_order_id: orderData.order_id,
+              p_model_image_url: designImageUrl
             });
 
             if (!rpcErr && rpcRes && rpcRes.order_number) {
@@ -207,6 +210,7 @@ export default function Shop() {
                 delivery_pincode: addressData.pincode || '',
                 payment_id: response.razorpay_payment_id,
                 razorpay_order_id: orderData.order_id,
+                model_image_url: designImageUrl,
                 estimated_delivery: '3 - 5 Business Days',
                 created_at: new Date().toISOString()
               }]);

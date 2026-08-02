@@ -6,7 +6,7 @@
 -- 1. Create order_num_seq sequence if not exists
 CREATE SEQUENCE IF NOT EXISTS public.order_num_seq START 1001;
 
--- 2. Add customer & shipping columns to orders table if not exist
+-- 2. Add customer, shipping, and image columns to orders table if not exist
 ALTER TABLE public.orders
 ADD COLUMN IF NOT EXISTS customer_name TEXT,
 ADD COLUMN IF NOT EXISTS customer_email TEXT,
@@ -14,7 +14,8 @@ ADD COLUMN IF NOT EXISTS customer_phone TEXT,
 ADD COLUMN IF NOT EXISTS delivery_state TEXT,
 ADD COLUMN IF NOT EXISTS delivery_pincode TEXT,
 ADD COLUMN IF NOT EXISTS payment_id TEXT,
-ADD COLUMN IF NOT EXISTS razorpay_order_id TEXT;
+ADD COLUMN IF NOT EXISTS razorpay_order_id TEXT,
+ADD COLUMN IF NOT EXISTS model_image_url TEXT;
 
 -- 3. Function to generate guaranteed unique, sequential order numbers (KWM-1001, KWM-1002...)
 CREATE OR REPLACE FUNCTION public.generate_next_order_number()
@@ -45,7 +46,7 @@ USING (
   EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role = 'owner')
 );
 
--- 5. Complete Atomic RPC Function to Record Customer Orders
+-- 5. Complete Atomic RPC Function to Record Customer Orders with Custom Tee Image
 CREATE OR REPLACE FUNCTION public.record_customer_order(
   p_user_id UUID,
   p_customer_name TEXT,
@@ -59,7 +60,8 @@ CREATE OR REPLACE FUNCTION public.record_customer_order(
   p_state TEXT,
   p_pincode TEXT,
   p_payment_id TEXT DEFAULT NULL,
-  p_razorpay_order_id TEXT DEFAULT NULL
+  p_razorpay_order_id TEXT DEFAULT NULL,
+  p_model_image_url TEXT DEFAULT NULL
 )
 RETURNS JSONB AS $$
 DECLARE
@@ -92,6 +94,7 @@ BEGIN
     delivery_pincode,
     payment_id,
     razorpay_order_id,
+    model_image_url,
     estimated_delivery,
     order_date,
     created_at
@@ -112,6 +115,7 @@ BEGIN
     p_pincode,
     p_payment_id,
     p_razorpay_order_id,
+    p_model_image_url,
     '3 - 5 Business Days',
     CURRENT_DATE,
     now()
