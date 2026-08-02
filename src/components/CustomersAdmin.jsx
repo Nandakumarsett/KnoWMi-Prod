@@ -27,20 +27,22 @@ export default function CustomersAdmin() {
       // Fallback from profiles & orders if customers table not migrated yet
       const { data: profs } = await supabase.from('profiles').select('*, orders(*)')
       if (profs) {
-        const mapped = profs.map(p => {
-          const latestOrder = p.orders?.[0] || {}
+        const mapped = profs.map((p, idx) => {
+          const paidOrders = (p.orders || []).filter(o => ['paid', 'shipped', 'delivered'].includes(o.status))
+          const latestOrder = paidOrders[0] || {}
+          const isPaid = paidOrders.length > 0 || p.status === 'paid'
+
           return {
-            id: p.id,
-            customer_code: `CUST-${p.wm_code || p.id.slice(0, 4).toUpperCase()}`,
+            id: idx + 1001,
             full_name: `${p.first_name || ''} ${p.last_name || ''}`.trim() || 'KnoWMi Customer',
-            email: p.email || latestOrder.customer_email || 'No email',
-            phone: p.phone || latestOrder.customer_phone || 'No phone',
-            street_address: latestOrder.shipping_address || 'Not provided',
-            city: latestOrder.delivery_city || 'Bengaluru',
-            state: latestOrder.delivery_state || 'Karnataka',
-            pincode: latestOrder.delivery_pincode || '',
-            total_orders: p.orders?.length || 1,
-            total_spent: p.amount_paid || (p.status === 'paid' ? 799 : 0),
+            email: p.email || latestOrder.customer_email || 'No signup email',
+            phone: isPaid ? (p.phone || latestOrder.customer_phone || null) : p.phone,
+            street_address: isPaid ? latestOrder.shipping_address : null,
+            city: isPaid ? latestOrder.delivery_city : null,
+            state: isPaid ? latestOrder.delivery_state : null,
+            pincode: isPaid ? latestOrder.delivery_pincode : null,
+            total_orders: isPaid ? (paidOrders.length || 1) : 0,
+            total_spent: isPaid ? (p.amount_paid || 799) : 0,
             created_at: p.created_at
           }
         })
@@ -53,9 +55,9 @@ export default function CustomersAdmin() {
   const filtered = customers.filter(c => 
     c.full_name?.toLowerCase().includes(search.toLowerCase()) ||
     c.email?.toLowerCase().includes(search.toLowerCase()) ||
-    c.phone?.includes(search) ||
-    c.customer_code?.toLowerCase().includes(search.toLowerCase()) ||
-    c.city?.toLowerCase().includes(search.toLowerCase())
+    (c.phone && c.phone.includes(search)) ||
+    (c.city && c.city.toLowerCase().includes(search.toLowerCase())) ||
+    String(c.id).includes(search)
   )
 
   return (
@@ -103,7 +105,7 @@ export default function CustomersAdmin() {
                     </span>
                     <h3 className="text-lg font-black text-white mt-1.5 leading-snug">{c.full_name}</h3>
                   </div>
-                  <span className="text-xs font-black text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                  <span className={`text-xs font-black px-2.5 py-1 rounded-full border ${c.total_spent > 0 ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-neutral-400 bg-neutral-800 border-neutral-700'}`}>
                     ₹{c.total_spent || 0}
                   </span>
                 </div>
@@ -115,12 +117,17 @@ export default function CustomersAdmin() {
                   </div>
                   <div className="flex items-center gap-2 truncate">
                     <Mail size={14} className="text-orange-500 shrink-0" />
-                    <span className="truncate">{c.email}</span>
+                    <span className="truncate text-white font-semibold">{c.email}</span>
                   </div>
                   <div className="flex items-start gap-2 pt-1">
                     <MapPin size={14} className="text-orange-500 shrink-0 mt-0.5" />
                     <span className="text-neutral-400 leading-tight">
-                      {c.street_address ? `${c.street_address}, ${c.city}, ${c.state} ${c.pincode}` : `${c.city || 'Bengaluru'}, ${c.state || 'Karnataka'}`}
+                      {c.street_address 
+                        ? `${c.street_address}${c.city ? `, ${c.city}` : ''}${c.state ? `, ${c.state}` : ''}${c.pincode ? ` - ${c.pincode}` : ''}`
+                        : c.city 
+                          ? `${c.city}, ${c.state || ''}`
+                          : 'No delivery address (No orders placed yet)'
+                      }
                     </span>
                   </div>
                 </div>
