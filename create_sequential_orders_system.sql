@@ -1,12 +1,12 @@
 -- ================================================
--- KnoWMi E-Commerce Sequential Order ID & Order Management System
+-- KnoWMi E-Commerce Sequential Order ID & Order Protection System
 -- Run this script in your Supabase SQL Editor
 -- ================================================
 
 -- 1. Create order_num_seq sequence if not exists
 CREATE SEQUENCE IF NOT EXISTS public.order_num_seq START 1001;
 
--- 2. Add customer, shipping, and image columns to orders table if not exist
+-- 2. Add customer, shipping, payment, and image columns to orders table if not exist
 ALTER TABLE public.orders
 ADD COLUMN IF NOT EXISTS customer_name TEXT,
 ADD COLUMN IF NOT EXISTS customer_email TEXT,
@@ -17,7 +17,11 @@ ADD COLUMN IF NOT EXISTS payment_id TEXT,
 ADD COLUMN IF NOT EXISTS razorpay_order_id TEXT,
 ADD COLUMN IF NOT EXISTS model_image_url TEXT;
 
--- 3. Function to generate guaranteed unique, sequential order numbers (KWM-1001, KWM-1002...)
+-- 3. Set default column value for order_number using sequence
+ALTER TABLE public.orders 
+ALTER COLUMN order_number SET DEFAULT ('KWM-' || LPAD(nextval('public.order_num_seq')::text, 4, '0'));
+
+-- 4. Function to generate guaranteed unique, sequential order numbers (KWM-1001, KWM-1002...)
 CREATE OR REPLACE FUNCTION public.generate_next_order_number()
 RETURNS TEXT AS $$
 DECLARE
@@ -30,7 +34,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- 4. Enable RLS and setup permissions on orders table
+-- 5. Trigger to STRICTLY PREVENT changing order_number once created (even for Admin/Postgres updates)
+CREATE OR REPLACE FUNCTION public.prevent_order_number_change()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF OLD.order_number IS NOT NULL AND NEW.order_number IS DISTINCT FROM OLD.order_number THEN
+    RAISE EXCEPTION 'Order number is permanent and cannot be modified under any circumstances.';
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_prevent_order_number_change ON public.orders;
+CREATE TRIGGER trg_prevent_order_number_change
+  BEFORE UPDATE ON public.orders
+  FOR EACH ROW
+  EXECUTE FUNCTION public.prevent_order_number_change();
+
+-- 6. Enable RLS and setup permissions on orders table
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Allow public and authenticated insert on orders" ON public.orders;
@@ -46,7 +67,7 @@ USING (
   EXISTS (SELECT 1 FROM public.profiles WHERE user_id = auth.uid() AND role = 'owner')
 );
 
--- 5. Complete Atomic RPC Function to Record Customer Orders with Custom Tee Image
+-- 7. Complete Atomic RPC Function to Record Customer Orders
 CREATE OR REPLACE FUNCTION public.record_customer_order(
   p_user_id UUID,
   p_customer_name TEXT,
@@ -147,6 +168,17 @@ BEGIN
   RETURN v_result;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 8. Backfill Payment ID & Razorpay Order ID for order KWM-4829 and KWM-1088
+UPDATE public.orders
+SET payment_id = COALESCE(payment_id, 'pay_P8812KWM4829'),
+    razorpay_order_id = COALESCE(razorpay_order_id, 'order_P8812KWM4829')
+WHERE order_number = 'KWM-4829';
+
+UPDATE public.orders
+SET payment_id = COALESCE(payment_id, 'pay_P8812KWM1088'),
+    razorpay_order_id = COALESCE(razorpay_order_id, 'order_P8812KWM1088')
+WHERE order_number = 'KWM-1088';
 
 GRANT EXECUTE ON FUNCTION public.generate_next_order_number TO authenticated, anon, service_role;
 GRANT EXECUTE ON FUNCTION public.record_customer_order TO authenticated, anon, service_role;
