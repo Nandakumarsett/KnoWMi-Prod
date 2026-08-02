@@ -273,3 +273,47 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 GRANT EXECUTE ON FUNCTION public.record_customer_order TO authenticated, anon, service_role;
+
+-- 7. Automatic Sync Trigger: Whenever Admin creates/updates a design, automatically sync to public.products
+CREATE OR REPLACE FUNCTION public.trg_sync_persona_design_to_products()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.products (
+    title,
+    sku,
+    price,
+    image_1,
+    image_2,
+    image_3,
+    inventory_on_hand,
+    inventory_committed,
+    inventory_damaged,
+    is_active
+  ) VALUES (
+    NEW.name,
+    COALESCE(NULLIF(NEW.sku, ''), 'KWM-DSG-' || SUBSTRING(NEW.id::text from 1 for 6)),
+    COALESCE(NEW.price, 799),
+    COALESCE(NULLIF(NEW.front_image_url, ''), NULLIF(NEW.model_image_url, ''), '/assets/scrolly/tshirt_front.png'),
+    NEW.back_image_url,
+    NEW.model_image_url,
+    COALESCE(NEW.total_stock, 100),
+    0,
+    0,
+    COALESCE(NEW.is_available, true)
+  )
+  ON CONFLICT (sku) DO UPDATE SET
+    title = EXCLUDED.title,
+    price = EXCLUDED.price,
+    image_1 = EXCLUDED.image_1,
+    image_2 = EXCLUDED.image_2,
+    image_3 = EXCLUDED.image_3,
+    updated_at = now();
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS trg_sync_design_to_products ON public.persona_designs;
+CREATE TRIGGER trg_sync_design_to_products
+AFTER INSERT OR UPDATE ON public.persona_designs
+FOR EACH ROW EXECUTE FUNCTION public.trg_sync_persona_design_to_products();

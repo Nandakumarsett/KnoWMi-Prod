@@ -69,15 +69,47 @@ export default function CatalogAdmin() {
       if (editingDetails) {
         const { error } = await supabase.from('persona_designs').update(updatePayload).eq('id', editingDetails.id)
         if (error) throw error
-        alert('Design updated!')
+
+        // Sync directly to public.products master catalog
+        const productPayload = {
+          title: formData.name,
+          price: formData.price || 799,
+          image_1: updatePayload.front_image_url || editingDetails.front_image_url || '/assets/scrolly/tshirt_front.png',
+          image_2: updatePayload.back_image_url || editingDetails.back_image_url || null,
+          image_3: updatePayload.model_image_url || editingDetails.model_image_url || null,
+          updated_at: new Date().toISOString()
+        };
+        await supabase.from('products').update(productPayload).eq('title', editingDetails.name).catch(console.warn);
+
+        alert('Product & Design updated successfully!')
       } else {
         updatePayload.category = 'universal'
         updatePayload.available_colors = []
-        updatePayload.total_stock = 0
+        updatePayload.total_stock = 100
         updatePayload.is_available = true
+        
+        const generatedSku = `KWM-${(formData.name || 'DSG').replace(/[^a-zA-Z0-9]/g, '').substring(0, 4).toUpperCase()}-${Math.floor(100 + Math.random() * 899)}`;
+        updatePayload.sku = generatedSku;
+
         const { error } = await supabase.from('persona_designs').insert([updatePayload])
         if (error) throw error
-        alert('Design added!')
+
+        // Insert into public.products master catalog
+        const productPayload = {
+          title: formData.name,
+          sku: generatedSku,
+          price: formData.price || 799,
+          image_1: updatePayload.front_image_url || updatePayload.model_image_url || '/assets/scrolly/tshirt_front.png',
+          image_2: updatePayload.back_image_url || null,
+          image_3: updatePayload.model_image_url || null,
+          inventory_on_hand: 100,
+          inventory_committed: 0,
+          inventory_damaged: 0,
+          is_active: true
+        };
+        await supabase.from('products').insert([productPayload]).catch(console.warn);
+
+        alert('New Product added to Master Products Catalog!')
       }
       
       setFormData({ name: '', price: 999 })
