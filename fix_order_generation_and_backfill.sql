@@ -1,5 +1,5 @@
 -- ================================================
--- Fix Order Generation & Backfill for Paid Account "testing"
+-- Fix Order Generation & Backfill for Paid Account "testing" (Amount: ₹799)
 -- Run this script in your Supabase SQL Editor
 -- ================================================
 
@@ -26,11 +26,10 @@ USING (
 DO $$
 DECLARE
   v_profile_id UUID;
-  v_user_id UUID;
   v_order_num TEXT;
 BEGIN
   -- Get testing user profile
-  SELECT id, user_id INTO v_profile_id, v_user_id 
+  SELECT id INTO v_profile_id 
   FROM public.profiles 
   WHERE LOWER(first_name) = 'testing' OR secure_slug = 'testing'
   LIMIT 1;
@@ -39,12 +38,12 @@ BEGIN
     -- Generate unique order number
     v_order_num := 'KWM-' || FLOOR(1000 + RANDOM() * 8999)::TEXT;
 
-    -- Update profile status to paid
+    -- Update profile status to paid and amount_paid to 799
     UPDATE public.profiles 
     SET status = 'paid',
         is_purchased = true,
         purchased_at = COALESCE(purchased_at, now()),
-        amount_paid = COALESCE(amount_paid, 999)
+        amount_paid = 799
     WHERE id = v_profile_id;
 
     -- Update public_profiles
@@ -52,7 +51,10 @@ BEGIN
     SET status = 'paid'
     WHERE id = v_profile_id;
 
-    -- Create active paid order if no order exists
+    -- Delete any dummy 999 orders if present for testing profile
+    DELETE FROM public.orders WHERE profile_id = v_profile_id AND amount = 999;
+
+    -- Create active paid order for ₹799 if no order exists
     IF NOT EXISTS (SELECT 1 FROM public.orders WHERE profile_id = v_profile_id) THEN
       INSERT INTO public.orders (
         profile_id,
@@ -71,10 +73,10 @@ BEGIN
       ) VALUES (
         v_profile_id,
         v_order_num,
-        'KnoWMi Phygital Signature Tee (Oversized Streetwear Edition)',
+        'KnoWMi Phygital Signature Tee (Regular Edition)',
         'tshirt',
         'L',
-        999,
+        799,
         'paid',
         'Customer Standard Shipping Address',
         'Bengaluru',

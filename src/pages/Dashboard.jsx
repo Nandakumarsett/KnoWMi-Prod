@@ -2937,19 +2937,23 @@ function Dashboard() {
                           </div>
 
                           <div className="text-right">
-                            <span className="font-black text-sm text-white">₹{latestOrder.amount || '999'}</span>
+                            <span className="font-black text-sm text-white">₹{latestOrder.amount || 799}</span>
                           </div>
                         </div>
 
                         {/* Financial Breakdown */}
-                        <div className="py-6 border-b border-white/20 space-y-3.5 text-xs">
-                          <div className="flex justify-between items-center text-neutral-400 font-bold font-medium">
-                            <span>Subtotal</span>
-                            <span className="font-bold text-white">₹{latestOrder.amount || '999'}</span>
+                        <div className="py-6 border-b border-white/20 space-y-3 text-xs font-medium text-neutral-400">
+                          <div className="flex justify-between items-center">
+                            <span>Base Item Price</span>
+                            <span className="font-bold text-white">₹{(latestOrder.amount || 799) - 19}</span>
                           </div>
-                          <div className="flex justify-between items-center text-neutral-400 font-bold font-medium">
-                            <span>Taxes & Shipping</span>
-                            <span className="font-bold text-emerald-600">₹0 (All Inclusive)</span>
+                          <div className="flex justify-between items-center">
+                            <span>GST & Gateway Processing (Incl.)</span>
+                            <span className="font-bold text-white">₹19</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span>Shipping & Handling</span>
+                            <span className="font-bold text-emerald-400">₹0 (Free)</span>
                           </div>
                         </div>
                       </div>
@@ -2960,7 +2964,7 @@ function Dashboard() {
                           <span className="text-xs font-black uppercase tracking-widest text-neutral-400">Total Paid</span>
                         </div>
                         <div className="text-right">
-                          <span className="font-black text-2xl text-white">₹{latestOrder.amount || '999'}</span>
+                          <span className="font-black text-2xl text-white">₹{latestOrder.amount || 799}</span>
                           <span className="block text-[8px] font-bold text-neutral-400 uppercase tracking-widest mt-0.5">INR (Indian Rupee)</span>
                         </div>
                       </div>

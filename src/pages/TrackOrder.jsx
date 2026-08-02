@@ -384,19 +384,23 @@ export default function TrackOrder() {
                     </div>
 
                     <div className="text-right">
-                      <span className="font-black text-sm text-white">₹{order.amount || '999'}</span>
+                      <span className="font-black text-sm text-white">₹{order.amount || 799}</span>
                     </div>
                   </div>
 
                   {/* Financial Breakdown */}
-                  <div className="py-6 border-b-[3px] border-white/20 space-y-3.5 text-xs font-bold text-neutral-400">
+                  <div className="py-6 border-b-[3px] border-white/20 space-y-3 text-xs font-bold text-neutral-400">
                     <div className="flex justify-between items-center">
-                      <span>Subtotal</span>
-                      <span className="font-black text-white">₹{order.amount || '999'}</span>
+                      <span>Base Item Price</span>
+                      <span className="font-black text-white">₹{(order.amount || 799) - 19}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span>Taxes & Shipping</span>
-                      <span className="font-black text-[#34d399]">₹0 (All Inclusive)</span>
+                      <span>GST & Gateway Processing (Incl.)</span>
+                      <span className="font-black text-white">₹19</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Shipping & Handling</span>
+                      <span className="font-black text-[#34d399]">₹0 (Free)</span>
                     </div>
                   </div>
 
@@ -406,7 +410,7 @@ export default function TrackOrder() {
                       <span className="text-xs font-black uppercase tracking-widest text-neutral-400">Total Paid</span>
                     </div>
                     <div className="text-right">
-                      <span className="font-black text-2xl text-orange-500">₹{order.amount || '999'}</span>
+                      <span className="font-black text-2xl text-orange-500">₹{order.amount || 799}</span>
                       <span className="block text-[8px] font-bold text-neutral-400 uppercase tracking-widest mt-0.5">INR (Indian Rupee)</span>
                     </div>
                   </div>
