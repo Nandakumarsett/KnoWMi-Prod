@@ -248,7 +248,11 @@ export default function Shop() {
             city: addressData.city
           });
 
-          setOrderSuccess({ paymentId: response.razorpay_payment_id, orderId: generatedOrderNum })
+          setOrderSuccess({ 
+            paymentId: response.razorpay_payment_id, 
+            orderId: generatedOrderNum,
+            razorpayOrderId: orderData?.order_id || ''
+          })
         },
         prefill: {
           email: user.email,
@@ -949,6 +953,23 @@ export default function Shop() {
                   </p>
                 </div>
               </div>
+            </div>
+
+            {/* Payment & Razorpay Order ID Verification Box */}
+            <div className="bg-black/60 border border-neutral-800 rounded-2xl p-4 space-y-2 text-xs font-mono">
+              <p className="text-[10px] font-black uppercase text-orange-500 tracking-[0.2em] font-sans">Payment Verification Receipt</p>
+              {orderSuccess.paymentId && (
+                <div className="flex justify-between items-center bg-[#111] p-2 rounded-xl border border-neutral-800">
+                  <span className="text-neutral-400 font-sans text-[11px]">Payment ID</span>
+                  <span className="text-white text-[11px] font-bold select-all">{orderSuccess.paymentId}</span>
+                </div>
+              )}
+              {orderSuccess.razorpayOrderId && (
+                <div className="flex justify-between items-center bg-[#111] p-2 rounded-xl border border-neutral-800">
+                  <span className="text-neutral-400 font-sans text-[11px]">Razorpay Order ID</span>
+                  <span className="text-white text-[11px] font-bold select-all">{orderSuccess.razorpayOrderId}</span>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
