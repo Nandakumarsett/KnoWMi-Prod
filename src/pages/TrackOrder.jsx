@@ -61,7 +61,7 @@ export default function TrackOrder() {
     try {
       const { data, error: dbError } = await supabase
         .from('orders')
-        .select('*')
+        .select('*, order_line_items(*)')
         .or(`order_number.eq.${q},id.eq.${q.length > 10 ? q : '00000000-0000-0000-0000-000000000000'}`)
         .limit(1)
         .maybeSingle()
@@ -359,44 +359,53 @@ export default function TrackOrder() {
                   
                   {/* Item Details */}
                   <div className="flex items-center gap-4 py-4 border-b-[3px] border-white/20">
-                    <div className="relative w-20 h-24 bg-[#0a0a0a] rounded-xl border-[2px] border-white overflow-hidden shrink-0 flex items-center justify-center shadow-[3px_3px_0px_#fff]">
-                      {(() => {
-                        const rawUrl = order.model_image_url;
-                        const itemName = (order.item_name || '').toLowerCase();
-                        let imageSrc = '/assets/scrolly/tshirt_front.png';
-                        if (rawUrl && !rawUrl.includes('front.webp')) {
-                          imageSrc = getAssetUrl(rawUrl);
-                        } else if (itemName.includes('anime')) {
-                          imageSrc = '/assets/scrolly/anime_shirt.jpg';
-                        }
-                        return (
-                          <img 
-                            src={imageSrc} 
-                            className="w-full h-full object-cover" 
-                            alt={order.item_name || "Purchased Product Tee"} 
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = '/assets/scrolly/tshirt_front.png';
-                            }}
-                          />
-                        );
-                      })()}
-                      <div className="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-black rounded-full flex items-center justify-center text-[9px] font-black border border-black select-none">
-                        1
-                      </div>
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-display font-black text-sm text-white tracking-wide leading-snug">
-                        {order.item_name || 'KnoWMi Phygital Signature Tee'}
-                      </h4>
-                      <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mt-1">
-                        Size {order.size || 'L'} • Phygital Edition
-                      </p>
-                      <span className="inline-block mt-1 text-[9px] font-black uppercase tracking-wider text-orange-400 font-mono bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">
-                        {order.sku || 'SKU-SIGNATURE-TEE'}
-                      </span>
-                    </div>
+                    {(() => {
+                      const lineItem = (order.order_line_items && order.order_line_items.length > 0) ? order.order_line_items[0] : null;
+                      const rawUrl = lineItem?.image_url || order.model_image_url;
+                      const itemName = (lineItem?.product_title || order.item_name || '').toLowerCase();
+                      let imageSrc = '/assets/scrolly/tshirt_front.png';
+                      if (rawUrl && !rawUrl.includes('front.webp')) {
+                        imageSrc = getAssetUrl(rawUrl);
+                      } else if (itemName.includes('anime')) {
+                        imageSrc = '/assets/scrolly/anime_shirt.jpg';
+                      }
+                      
+                      const displayTitle = lineItem?.product_title || order.item_name || 'KnoWMi Phygital Signature Tee';
+                      const displaySku = lineItem?.sku || order.sku || 'KWM-SIG-REG-01';
+                      const displaySize = lineItem?.size || order.size || 'L';
+                      const displayQty = lineItem?.quantity || 1;
+
+                      return (
+                        <>
+                          <div className="relative w-20 h-24 bg-[#0a0a0a] rounded-xl border-[2px] border-white overflow-hidden shrink-0 flex items-center justify-center shadow-[3px_3px_0px_#fff]">
+                            <img 
+                              src={imageSrc} 
+                              className="w-full h-full object-cover" 
+                              alt={displayTitle} 
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = '/assets/scrolly/tshirt_front.png';
+                              }}
+                            />
+                            <div className="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-black rounded-full flex items-center justify-center text-[9px] font-black border border-black select-none">
+                              {displayQty}
+                            </div>
+                          </div>
+                          
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-display font-black text-sm text-white tracking-wide leading-snug">
+                              {displayTitle}
+                            </h4>
+                            <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mt-1">
+                              Size {displaySize} • Phygital Edition
+                            </p>
+                            <span className="inline-block mt-1 text-[9px] font-black uppercase tracking-wider text-orange-400 font-mono bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">
+                              {displaySku}
+                            </span>
+                          </div>
+                        </>
+                      );
+                    })()}
 
                     <div className="text-right">
                       <span className="font-black text-sm text-white">₹{order.amount || 839}</span>
