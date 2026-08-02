@@ -897,9 +897,33 @@ export default function Shop() {
                 </div>
               </div>
 
+              {/* Tax & Free Shipping Breakdown */}
+              <div className="p-4 bg-black/60 rounded-xl border border-neutral-800 space-y-2 text-xs">
+                <div className="flex justify-between items-center text-neutral-400">
+                  <span>Base Item Price</span>
+                  <span className="font-bold text-white">₹761</span>
+                </div>
+                <div className="flex justify-between items-center text-neutral-400">
+                  <span>2.5% CGST</span>
+                  <span className="font-bold text-white">₹19</span>
+                </div>
+                <div className="flex justify-between items-center text-neutral-400">
+                  <span>2.5% SGST</span>
+                  <span className="font-bold text-white">₹19</span>
+                </div>
+                <div className="flex justify-between items-center pt-1 border-t border-neutral-800">
+                  <span className="flex items-center gap-1 text-emerald-400 font-bold">
+                    🚚 Shipping & Handling
+                  </span>
+                  <span className="font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 text-[11px]">
+                    ₹0 (Free for First 100 Customers)
+                  </span>
+                </div>
+              </div>
+
               <div className="pt-4 border-t border-neutral-800 flex items-center justify-between">
                 <div>
-                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">Total Payable</p>
+                  <p className="text-[10px] font-black text-neutral-400 uppercase tracking-wider">Total Amount After GST</p>
                   <p className="text-xl font-black text-orange-500">₹{PRODUCTS.find(p => p.id === selectedProductType)?.price || 799}</p>
                 </div>
                 <button 
