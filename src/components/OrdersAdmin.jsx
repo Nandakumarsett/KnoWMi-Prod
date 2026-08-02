@@ -258,8 +258,14 @@ export default function OrdersAdmin() {
               {/* Order Image / Model */}
               <div className="w-full lg:w-32 h-32 bg-[#1a1a1a] rounded-2xl flex items-center justify-center shrink-0 border-2 border-neutral-50 overflow-hidden">
                 {(() => {
-                  const hasCustom = o.model_image_url && !o.model_image_url.includes('front.webp');
-                  const imgSrc = hasCustom ? getAssetUrl(o.model_image_url) : '/assets/scrolly/tshirt_front.png';
+                  const rawUrl = o.model_image_url;
+                  const itemName = (o.item_name || '').toLowerCase();
+                  let imgSrc = '/assets/scrolly/tshirt_front.png';
+                  if (rawUrl && !rawUrl.includes('front.webp')) {
+                    imgSrc = getAssetUrl(rawUrl);
+                  } else if (itemName.includes('anime')) {
+                    imgSrc = '/assets/scrolly/anime_shirt.jpg';
+                  }
                   return <img src={imgSrc} className="w-full h-full object-cover" alt="Tee preview" />
                 })()}
               </div>

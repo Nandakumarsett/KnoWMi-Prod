@@ -20,9 +20,18 @@ SET payment_id = 'pay_P8812KWM1088',
     razorpay_order_id = 'order_P8812KWM1088'
 WHERE order_number = 'KWM-1088';
 
--- 4. Fill payment details & T-shirt design image for any paid orders missing payment_id or using blank white template
+-- 4. Fill payment details for any paid orders missing payment_id
 UPDATE public.orders
 SET payment_id = COALESCE(payment_id, 'pay_razorpay_' || SUBSTRING(id::text from 1 for 8)),
-    razorpay_order_id = COALESCE(razorpay_order_id, 'order_razorpay_' || SUBSTRING(id::text from 1 for 8)),
-    model_image_url = '/assets/scrolly/tshirt_front.png'
-WHERE status = 'paid' AND (model_image_url IS NULL OR model_image_url = '' OR model_image_url LIKE '%front.webp%');
+    razorpay_order_id = COALESCE(razorpay_order_id, 'order_razorpay_' || SUBSTRING(id::text from 1 for 8))
+WHERE status = 'paid' AND (payment_id IS NULL OR payment_id = '');
+
+-- 5. Update existing orders to match item_name to exact product front image
+UPDATE public.orders
+SET model_image_url = '/assets/scrolly/anime_shirt.jpg'
+WHERE LOWER(item_name) LIKE '%anime%';
+
+UPDATE public.orders
+SET model_image_url = '/assets/scrolly/tshirt_front.png'
+WHERE (model_image_url IS NULL OR model_image_url = '' OR model_image_url LIKE '%front.webp%')
+  AND LOWER(item_name) NOT LIKE '%anime%';

@@ -362,8 +362,13 @@ export default function TrackOrder() {
                     <div className="relative w-20 h-24 bg-[#0a0a0a] rounded-xl border-[2px] border-white overflow-hidden shrink-0 flex items-center justify-center shadow-[3px_3px_0px_#fff]">
                       {(() => {
                         const rawUrl = order.model_image_url;
-                        const isWhiteTemplate = !rawUrl || rawUrl.includes('front.webp');
-                        const imageSrc = isWhiteTemplate ? '/assets/scrolly/tshirt_front.png' : getAssetUrl(rawUrl);
+                        const itemName = (order.item_name || '').toLowerCase();
+                        let imageSrc = '/assets/scrolly/tshirt_front.png';
+                        if (rawUrl && !rawUrl.includes('front.webp')) {
+                          imageSrc = getAssetUrl(rawUrl);
+                        } else if (itemName.includes('anime')) {
+                          imageSrc = '/assets/scrolly/anime_shirt.jpg';
+                        }
                         return (
                           <img 
                             src={imageSrc} 
