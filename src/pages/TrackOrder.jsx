@@ -359,18 +359,18 @@ export default function TrackOrder() {
                   
                   {/* Item Details */}
                   <div className="flex items-center gap-4 py-4 border-b-[3px] border-white/20">
-                    <div className="relative w-20 h-24 bg-[#111111] rounded-xl border-[2px] border-white overflow-hidden shrink-0 flex items-center justify-center shadow-[3px_3px_0px_#fff]">
+                    <div className="relative w-20 h-24 bg-[#0a0a0a] rounded-xl border-[2px] border-white overflow-hidden shrink-0 flex items-center justify-center shadow-[3px_3px_0px_#fff]">
                       {(() => {
                         const hasCustomImage = order.model_image_url && !order.model_image_url.includes('front.webp');
-                        const imageSrc = hasCustomImage ? getAssetUrl(order.model_image_url) : '/assets/scrolly/tshirt_front.webp';
+                        const imageSrc = hasCustomImage ? getAssetUrl(order.model_image_url) : '/assets/scrolly/tshirt_front.png';
                         return (
                           <img 
                             src={imageSrc} 
                             className="w-full h-full object-cover" 
-                            alt="KnoWMi Phygital Tee" 
+                            alt="KnoWMi Signature Black Tee" 
                             onError={(e) => {
                               e.target.onerror = null;
-                              e.target.src = '/assets/scrolly/tshirt_front.webp';
+                              e.target.src = '/assets/scrolly/tshirt_front.png';
                             }}
                           />
                         );
@@ -381,19 +381,19 @@ export default function TrackOrder() {
                     </div>
                     
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-black text-sm text-white leading-snug truncate">
-                        {order.item_name || 'KnoWMi Phygital Signature Tee (Regular Edition)'}
+                      <h4 className="font-display font-black text-sm text-white tracking-wide leading-snug">
+                        KnoWMi <span className="text-orange-500 italic font-serif font-normal">Signature</span> Tee
                       </h4>
-                      <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mt-0.5">
-                        SIZE {order.size || 'L'} • PHYGITAL CORE
+                      <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mt-1">
+                        Regular Edition • Size {order.size || 'L'}
                       </p>
-                      <p className="text-[10px] font-black text-orange-500 font-mono mt-1">
+                      <span className="inline-block mt-1 text-[9px] font-black uppercase tracking-wider text-orange-400 font-mono bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">
                         SKU-SIGNATURE-TEE
-                      </p>
+                      </span>
                     </div>
 
                     <div className="text-right">
-                      <span className="font-black text-sm text-white">₹{order.amount || 799}</span>
+                      <span className="font-black text-sm text-white">₹{order.amount || 839}</span>
                     </div>
                   </div>
 
