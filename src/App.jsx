@@ -98,22 +98,17 @@ export default function App() {
 
         // OAuth redirect handling for returning users
         if (window.location.hash.includes('access_token')) {
-          window.location.hash = '' // Clean the URL
-          window.location.reload()
+          window.history.replaceState(null, '', window.location.pathname + window.location.search)
         }
       }
     })
 
-    // Global redirect for old hash links
-    // 1. Aggressive Hash Cleanup for legacy links
+    // Global redirect for old hash links with clean URL replacement (no reload loops)
     const handleHash = () => {
       const hash = window.location.hash
       if (hash === '#leaderboard' || hash.includes('leaderboard')) {
-        // Clear the hash and move to the clean route
         window.history.replaceState(null, '', '/leaderboard')
-        window.location.reload() // Force reload to clear any cache/state
-      } else if (hash && !hash.includes('access_token') && !hash.includes('pricing')) {
-        // Clear any other non-auth hashes
+      } else if (hash && !hash.includes('access_token') && !hash.includes('pricing') && !hash.includes('auth')) {
         window.history.replaceState(null, '', window.location.pathname + window.location.search)
       }
     }
