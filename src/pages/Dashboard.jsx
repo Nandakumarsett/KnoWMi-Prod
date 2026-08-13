@@ -40,6 +40,7 @@ import CityCard from '../components/vibe/CityCard'
 import ViralCard from '../components/vibe/ViralCard'
 import { AIInsightsToggle } from '../components/vibe/AIInsightsToggle'
 import { usePushNotifications } from '../hooks/usePushNotifications'
+import ShareBrandCardModal from '../components/ShareBrandCardModal'
 
 // Import Persona forms
 import { DeveloperForm } from '../components/identity/forms/DeveloperForm'
@@ -1892,6 +1893,7 @@ function Dashboard() {
   const [deviceDistribution, setDeviceDistribution] = useState({ mobile: 0, desktop: 0, tablet: 0 })
   const [linkClicks, setLinkClicks] = useState([])
   const [selectedSize, setSelectedSize] = useState('L')
+  const [shareCardOpen, setShareCardOpen] = useState(false)
   const idleTimer = useRef(null)
 
 
@@ -2152,6 +2154,14 @@ function Dashboard() {
           </div>
           
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <button 
+              onClick={() => setShareCardOpen(true)}
+              className="px-3 py-1.5 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all border border-orange-500/40 bg-orange-500 text-black hover:bg-white hover:text-black shrink-0 flex items-center gap-1.5 shadow-[2px_2px_0px_#fff]"
+              title="Open Official KnoWMi Brand Card"
+            >
+              <Sparkles size={12} />
+              Brand Card
+            </button>
             {activeTab === 'profile' && (
               <button 
                 onClick={() => setShowOnboardingModal(true)}
@@ -3371,6 +3381,13 @@ function Dashboard() {
         </div>
       )}
       {showComingSoon && <div className="fixed bottom-24 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full flex items-center gap-2 shadow-[8px_8px_0px_#fff] transition-all duration-300 animate-in fade-in slide-in-from-bottom-5 font-bold text-sm whitespace-nowrap" style={{ background: '#ea580c', color: 'white', zIndex: 9999 }}><Lock size={16} /> Business Center Coming Soon!</div>}
+      
+      <ShareBrandCardModal 
+        isOpen={shareCardOpen} 
+        onClose={() => setShareCardOpen(false)} 
+        profile={profile} 
+        username={profile?.username} 
+      />
       </div>
     )
   }
