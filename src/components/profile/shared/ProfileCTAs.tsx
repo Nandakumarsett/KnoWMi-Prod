@@ -52,7 +52,7 @@ export function ProfileCTAs({ profile, accentColor, onOpenShareModal }: ProfileC
           className="flex-1 py-3 px-4 rounded-xl font-bold transition-all hover:bg-white/5 active:scale-[0.98] border-2"
           style={{ borderColor: accentColor, color: accentColor }}
         >
-          🎴 Brand Share Card
+          🎴 Share Card
         </button>
       </div>
 

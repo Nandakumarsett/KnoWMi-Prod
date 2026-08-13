@@ -2161,10 +2161,10 @@ function Dashboard() {
             <button 
               onClick={() => setShareCardOpen(true)}
               className="px-3 py-1.5 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all border border-orange-500/40 bg-orange-500 text-black hover:bg-white hover:text-black shrink-0 flex items-center gap-1.5 shadow-[2px_2px_0px_#fff]"
-              title="Open Official KnoWMi Brand Card"
+              title="Open Official KnoWMi Share Card"
             >
               <Sparkles size={12} />
-              Brand Card
+              Share Card
             </button>
             {activeTab === 'profile' && (
               <button 
