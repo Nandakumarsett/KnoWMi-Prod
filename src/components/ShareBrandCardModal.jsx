@@ -21,14 +21,14 @@ export default function ShareBrandCardModal({ isOpen, onClose, profile, username
   const profileUrl = `${window.location.origin}/p/${resolvedSlug}`;
   const wmCode = (profile.wm_code || `WM-${(profile.id || '1001').slice(0, 6)}`).replace('PT-', 'WM-');
   const personaTitle = (profile.persona || 'Phygital Creator').toUpperCase();
-  const tagline = profile.tagline || 'Scan Me. Know Me. • Phygital Identity Protocol';
+  const tagline = profile.bio || profile.tagline || 'Scan me. Know me. Phygital identity protocol';
 
   const whatsappCardTemplate = `⚡ *KnoWMi® Official Phygital Brand Card*
 ──────────────────────────
 👤 *Name:* ${profileName}
 🏷️ *Persona:* ${personaTitle}
 🆔 *WM Code:* ${wmCode}
-💬 *Tagline:* "${tagline}"
+💬 *Bio:* "${tagline}"
 
 📲 *Scan / Visit Live Identity Pass:*
 ${profileUrl}
@@ -98,83 +98,64 @@ ${profileUrl}
     logoImg.src = '/favicon.png';
     await new Promise((res) => { logoImg.onload = res; logoImg.onerror = res; });
 
-    // Protocol Badge with Logo
-    ctx.fillStyle = 'rgba(249, 115, 22, 0.15)';
-    ctx.fillRect(210, 90, 380, 44);
-    ctx.strokeStyle = '#F97316';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(210, 90, 380, 44);
-
+    // Draw Top Brand Logo Icon (No Verified Text)
     if (logoImg.complete && logoImg.naturalWidth !== 0) {
-      ctx.drawImage(logoImg, 225, 96, 32, 32);
-      ctx.fillStyle = '#FF9933';
-      ctx.font = 'bold 16px sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText('VERIFIED KNOWMI IDENTITY', 270, 118);
-    } else {
-      ctx.fillStyle = '#FF9933';
-      ctx.font = 'bold 16px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('✦ VERIFIED KNOWMI IDENTITY ✦', 400, 118);
+      ctx.drawImage(logoImg, 376, 75, 48, 48);
     }
 
     // Profile Name
     ctx.fillStyle = '#FFFFFF';
     ctx.font = '900 36px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(profileName.toUpperCase(), 400, 200);
+    ctx.fillText(profileName.toUpperCase(), 400, 165);
 
     // Persona Title & WM Code
     ctx.fillStyle = '#F97316';
     ctx.font = 'bold 20px monospace';
-    ctx.fillText(`${personaTitle} • ${wmCode}`, 400, 240);
+    ctx.fillText(`${personaTitle} • ${wmCode}`, 400, 205);
 
-    // Tagline
+    // Bio / Tagline
     ctx.fillStyle = '#A3A3A3';
     ctx.font = 'italic 18px sans-serif';
-    ctx.fillText(`"${tagline}"`, 400, 285);
+    ctx.fillText(`"${tagline}"`, 400, 250);
 
-    // QR Container Box
+    // QR Container Box (White square)
     ctx.fillStyle = '#FFFFFF';
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 6;
-    ctx.fillRect(180, 330, 440, 440);
-    ctx.strokeRect(180, 330, 440, 440);
+    ctx.fillRect(180, 295, 440, 440);
+    ctx.strokeRect(180, 295, 440, 440);
 
-    // Draw QR Code Image
+    // Draw QR Code Image (Full container fill, no text inside white area)
     const qrImage = new Image();
     qrImage.crossOrigin = 'anonymous';
-    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=${encodeURIComponent(profileUrl)}`;
+    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(profileUrl)}`;
     await new Promise((res) => { qrImage.onload = res; qrImage.onerror = res; });
     if (qrImage.complete && qrImage.naturalWidth !== 0) {
-      ctx.drawImage(qrImage, 220, 370, 360, 360);
+      ctx.drawImage(qrImage, 200, 315, 400, 400);
     }
 
     // Draw Logo overlay in center of QR Code
     if (logoImg.complete && logoImg.naturalWidth !== 0) {
       ctx.fillStyle = '#FFFFFF';
       ctx.beginPath();
-      ctx.arc(400, 550, 36, 0, 2 * Math.PI);
+      ctx.arc(400, 515, 36, 0, 2 * Math.PI);
       ctx.fill();
       ctx.strokeStyle = '#000000';
       ctx.lineWidth = 3;
       ctx.stroke();
-      ctx.drawImage(logoImg, 375, 525, 50, 50);
+      ctx.drawImage(logoImg, 375, 490, 50, 50);
     }
 
-    // QR Tagline
-    ctx.fillStyle = '#000000';
-    ctx.font = '900 18px sans-serif';
-    ctx.fillText('SCAN ME. KNOW ME.', 400, 755);
-
-    // Bottom Slogan & URL
+    // Bottom Slogan: "SCAN ME. KNOW ME." (Replaces Authentic KnoWMi Brand Card Text)
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = '900 24px sans-serif';
-    ctx.fillText('AUTHENTIC KNOWMI® BRAND CARD', 400, 835);
+    ctx.font = '900 28px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('SCAN ME. KNOW ME.', 400, 815);
 
     ctx.fillStyle = '#F97316';
     ctx.font = 'bold 16px monospace';
-    ctx.fillText(profileUrl, 400, 875);
+    ctx.fillText(profileUrl, 400, 860);
 
     return new Promise((res) => canvas.toBlob(res, 'image/png'));
   };
