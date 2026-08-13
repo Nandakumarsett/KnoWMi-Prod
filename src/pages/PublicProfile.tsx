@@ -104,6 +104,35 @@ export default function PublicProfile() {
     loadProfile();
   }, [username]);
 
+  // Set Open Graph Card Meta Tags for Rich Mobile Link Sharing (WhatsApp, LinkedIn, iMessage, Twitter)
+  useEffect(() => {
+    if (!profile) return;
+    const cardTitle = `${safeDisplayName} — KnoWMi Official Brand Card`;
+    const cardDesc = `Scan Me. Know Me. • View ${safeDisplayName}'s official digital identity card powered by KnoWMi.`;
+    const cardImg = profile.avatar_url || 'https://knowmi.in/og-image.png';
+
+    document.title = cardTitle;
+
+    const updateMeta = (keyAttr: string, keyVal: string, contentVal: string) => {
+      let meta = document.querySelector(`meta[${keyAttr}="${keyVal}"]`);
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute(keyAttr, keyVal);
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', contentVal);
+    };
+
+    updateMeta('property', 'og:title', cardTitle);
+    updateMeta('property', 'og:description', cardDesc);
+    updateMeta('property', 'og:image', cardImg);
+    updateMeta('property', 'og:url', window.location.href);
+    updateMeta('name', 'twitter:card', 'summary_large_image');
+    updateMeta('name', 'twitter:title', cardTitle);
+    updateMeta('name', 'twitter:description', cardDesc);
+    updateMeta('name', 'twitter:image', cardImg);
+  }, [profile, safeDisplayName]);
+
   useEffect(() => {
     if (!loading && !profile && username) {
       toast.error("No profile found", { id: "no-profile-found" });
