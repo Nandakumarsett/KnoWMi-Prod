@@ -855,9 +855,9 @@ export default function PublicProfile() {
             </p>
           </div>
         )}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center lg:items-start justify-center">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center lg:items-start justify-center w-full">
           {/* Left Column - Fixed Identity Card */}
-          <div className="w-[380px] shrink-0 sticky top-28">
+          <div className="w-full max-w-[380px] shrink-0 lg:sticky lg:top-28">
             <div
               className="rounded-[24px] p-10 shadow-2xl flex flex-col items-center border"
               style={{
@@ -1057,7 +1057,7 @@ export default function PublicProfile() {
           </div>
 
           <div
-            className="flex-1 max-w-[680px] min-h-[600px] rounded-xl overflow-hidden shadow-[8px_8px_0px_#fff] p-6 border-[4px] border-white"
+            className="w-full flex-1 max-w-[680px] min-h-[600px] rounded-xl overflow-hidden shadow-[8px_8px_0px_#fff] p-4 sm:p-6 border-[4px] border-white"
             style={{ background: cardBg }}
           >
             <PersonaRouter
