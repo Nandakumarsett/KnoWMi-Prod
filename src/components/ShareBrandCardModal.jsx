@@ -73,108 +73,154 @@ ${profileUrl}
   const generateCardCanvasBlob = async () => {
     const canvas = document.createElement('canvas');
     canvas.width = 800;
-    canvas.height = 1000;
+    canvas.height = 1060;
     const ctx = canvas.getContext('2d');
 
-    // Canvas styling: Dark stealth theme
-    const grad = ctx.createLinearGradient(0, 0, 0, 1000);
-    grad.addColorStop(0, '#141424');
-    grad.addColorStop(1, '#06060c');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 800, 1000);
+    // === Premium dark gradient background ===
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, 1060);
+    bgGrad.addColorStop(0, '#12121E');
+    bgGrad.addColorStop(0.5, '#0A0A14');
+    bgGrad.addColorStop(1, '#050508');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, 800, 1060);
 
-    // Card Border
+    // === Outer card frame – clean white border ===
     ctx.strokeStyle = '#FFFFFF';
-    ctx.lineWidth = 10;
-    ctx.strokeRect(40, 40, 720, 920);
+    ctx.lineWidth = 6;
+    const rx = 32, ry = 32, fw = 720, fh = 980, fx = 40, fy = 40;
+    // Rounded rect helper
+    const roundRect = (x, y, w, h, r) => {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    };
+    roundRect(fx, fy, fw, fh, rx);
+    ctx.stroke();
 
-    // Top Orange Header Bar
+    // === Top accent line – thin orange strip ===
     ctx.fillStyle = '#F97316';
-    ctx.fillRect(40, 40, 720, 16);
+    roundRect(fx, fy, fw, 8, rx);
+    ctx.fill();
 
-    // Load KnoWMi Logo
+    // === Load KnoWMi Logo ===
     const logoImg = new Image();
     logoImg.crossOrigin = 'anonymous';
     logoImg.src = '/favicon.png';
     await new Promise((res) => { logoImg.onload = res; logoImg.onerror = res; });
 
-    // Protocol Badge with Logo
-    ctx.fillStyle = 'rgba(249, 115, 22, 0.15)';
-    ctx.fillRect(210, 90, 380, 44);
-    ctx.strokeStyle = '#F97316';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(210, 90, 380, 44);
-
+    // === Centered brand logo icon (replaces removed badge) ===
     if (logoImg.complete && logoImg.naturalWidth !== 0) {
-      ctx.drawImage(logoImg, 225, 96, 32, 32);
-      ctx.fillStyle = '#FF9933';
-      ctx.font = 'bold 16px sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText('VERIFIED KNOWMI IDENTITY', 270, 118);
-    } else {
-      ctx.fillStyle = '#FF9933';
-      ctx.font = 'bold 16px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('✦ VERIFIED KNOWMI IDENTITY ✦', 400, 118);
+      ctx.drawImage(logoImg, 376, 80, 48, 48);
     }
 
-    // Profile Name
+    // === Thin separator below logo ===
+    ctx.strokeStyle = 'rgba(249, 115, 22, 0.25)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(260, 148);
+    ctx.lineTo(540, 148);
+    ctx.stroke();
+
+    // === Profile Name ===
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = '900 36px sans-serif';
+    ctx.font = '900 38px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(profileName.toUpperCase(), 400, 200);
+    ctx.textBaseline = 'middle';
+    ctx.fillText(profileName.toUpperCase(), 400, 190);
 
-    // Persona Title & WM Code
+    // === Persona Title & WM Code ===
     ctx.fillStyle = '#F97316';
-    ctx.font = 'bold 20px monospace';
-    ctx.fillText(`${personaTitle} • ${wmCode}`, 400, 240);
+    ctx.font = 'bold 17px monospace';
+    ctx.fillText(`${personaTitle}  •  ${wmCode}`, 400, 232);
 
-    // Tagline
-    ctx.fillStyle = '#A3A3A3';
-    ctx.font = 'italic 18px sans-serif';
-    ctx.fillText(`"${tagline}"`, 400, 285);
+    // === Tagline ===
+    ctx.fillStyle = '#8A8A9A';
+    ctx.font = 'italic 17px sans-serif';
+    const displayTagline = tagline.length > 60 ? tagline.slice(0, 57) + '…' : tagline;
+    ctx.fillText(`"${displayTagline}"`, 400, 272);
 
-    // QR Container Box
+    // === Subtle divider above QR ===
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(180, 305);
+    ctx.lineTo(620, 305);
+    ctx.stroke();
+
+    // === QR Container – clean rounded white box ===
+    const qrBoxX = 195, qrBoxY = 325, qrBoxW = 410, qrBoxH = 410, qrR = 24;
     ctx.fillStyle = '#FFFFFF';
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 6;
-    ctx.fillRect(180, 330, 440, 440);
-    ctx.strokeRect(180, 330, 440, 440);
+    roundRect(qrBoxX, qrBoxY, qrBoxW, qrBoxH, qrR);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+    ctx.lineWidth = 3;
+    roundRect(qrBoxX, qrBoxY, qrBoxW, qrBoxH, qrR);
+    ctx.stroke();
 
-    // Draw QR Code Image
+    // === Draw QR Code Image (centred in white box) ===
     const qrImage = new Image();
     qrImage.crossOrigin = 'anonymous';
-    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=${encodeURIComponent(profileUrl)}`;
+    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=340x340&data=${encodeURIComponent(profileUrl)}`;
     await new Promise((res) => { qrImage.onload = res; qrImage.onerror = res; });
     if (qrImage.complete && qrImage.naturalWidth !== 0) {
-      ctx.drawImage(qrImage, 220, 370, 360, 360);
+      ctx.drawImage(qrImage, 230, 360, 340, 340);
     }
 
-    // Draw Logo overlay in center of QR Code
+    // === Logo overlay centred inside QR ===
     if (logoImg.complete && logoImg.naturalWidth !== 0) {
       ctx.fillStyle = '#FFFFFF';
       ctx.beginPath();
-      ctx.arc(400, 550, 36, 0, 2 * Math.PI);
+      ctx.arc(400, 530, 34, 0, 2 * Math.PI);
       ctx.fill();
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+      ctx.lineWidth = 2;
       ctx.stroke();
-      ctx.drawImage(logoImg, 375, 525, 50, 50);
+      ctx.drawImage(logoImg, 376, 506, 48, 48);
     }
 
-    // QR Tagline
-    ctx.fillStyle = '#000000';
-    ctx.font = '900 18px sans-serif';
-    ctx.fillText('SCAN ME. KNOW ME.', 400, 755);
+    // (QR white box has no text inside – clean)
 
-    // Bottom Slogan & URL
+    // === Subtle divider below QR ===
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(180, 760);
+    ctx.lineTo(620, 760);
+    ctx.stroke();
+
+    // === Bottom slogan: "SCAN ME. KNOW ME." ===
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = '900 24px sans-serif';
-    ctx.fillText('AUTHENTIC KNOWMI® BRAND CARD', 400, 835);
+    ctx.font = '900 28px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('SCAN ME. KNOW ME.', 400, 810);
 
+    // === Thin orange accent under slogan ===
     ctx.fillStyle = '#F97316';
-    ctx.font = 'bold 16px monospace';
-    ctx.fillText(profileUrl, 400, 875);
+    ctx.fillRect(340, 832, 120, 3);
+
+    // === Profile URL ===
+    ctx.fillStyle = '#F97316';
+    ctx.font = 'bold 14px monospace';
+    ctx.fillText(profileUrl, 400, 870);
+
+    // === Tiny bottom branding watermark ===
+    ctx.fillStyle = 'rgba(255,255,255,0.22)';
+    ctx.font = '600 11px sans-serif';
+    ctx.fillText('KnoWMi® Phygital Identity Protocol', 400, 920);
+
+    // === Bottom orange accent line (mirrors top) ===
+    ctx.fillStyle = '#F97316';
+    roundRect(fx, fy + fh - 8, fw, 8, rx);
+    ctx.fill();
 
     return new Promise((res) => canvas.toBlob(res, 'image/png'));
   };
