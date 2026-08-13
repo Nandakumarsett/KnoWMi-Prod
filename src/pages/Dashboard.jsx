@@ -1429,7 +1429,7 @@ const PersonaEditor = ({ profile, onUpdate }) => {
 
 
 
-const IdentityPass = ({ profile }) => {
+const IdentityPass = ({ profile, onOpenShareModal }) => {
   const navigate = useNavigate();
   const isOwner = profile?.role === 'owner';
   const isFree = profile?.status === 'free' || (!profile?.status && (!profile?.tier || profile?.tier === 'Starter' || profile?.tier === 'Free')) || profile?.tier === 'Free' || profile?.tier === 'Starter';
@@ -1492,10 +1492,14 @@ const IdentityPass = ({ profile }) => {
         <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
           <button 
             onClick={() => {
-              const slug = isPaid ? (profile?.first_name || profile?.secure_slug) : (profile?.secure_slug || profile?.id);
-              const profileLink = `${window.location.origin}/p/${slug}`;
-              navigator.clipboard.writeText(profileLink);
-              toast.success("Profile link copied to clipboard! 🔗");
+              if (onOpenShareModal) {
+                onOpenShareModal();
+              } else {
+                const slug = isPaid ? (profile?.first_name || profile?.secure_slug) : (profile?.secure_slug || profile?.id);
+                const profileLink = `${window.location.origin}/p/${slug}`;
+                navigator.clipboard.writeText(profileLink);
+                toast.success("Profile link copied to clipboard! 🔗");
+              }
             }} 
             className="h-12 px-6 text-sm font-black bg-neutral-900 text-white rounded-2xl hover:bg-neutral-800 flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[4px_4px_0px_#fff] w-full sm:w-auto shrink-0"
           >
@@ -2863,7 +2867,7 @@ function Dashboard() {
           </div>
           
           <div className={`tab-transition ${activeTab === 'pass' ? 'tab-visible' : 'tab-hidden'}`}>
-            {activeTab === 'pass' && <IdentityPass profile={profile} />}
+            {activeTab === 'pass' && <IdentityPass profile={profile} onOpenShareModal={() => setShareCardOpen(true)} />}
           </div>
 
           {/* Order Status Tab */}
