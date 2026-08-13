@@ -70,6 +70,88 @@ _Scan Me. Know Me. • Authentic Phygital Identity Protocol_`;
     }
   ];
 
+  const generateCardCanvasBlob = async () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 800;
+    canvas.height = 1000;
+    const ctx = canvas.getContext('2d');
+
+    // Canvas styling: Dark stealth theme
+    const grad = ctx.createLinearGradient(0, 0, 0, 1000);
+    grad.addColorStop(0, '#141424');
+    grad.addColorStop(1, '#06060c');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 800, 1000);
+
+    // Card Border
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 10;
+    ctx.strokeRect(40, 40, 720, 920);
+
+    // Top Orange Header Bar
+    ctx.fillStyle = '#F97316';
+    ctx.fillRect(40, 40, 720, 16);
+
+    // Protocol Badge
+    ctx.fillStyle = 'rgba(249, 115, 22, 0.15)';
+    ctx.fillRect(230, 90, 340, 44);
+    ctx.strokeStyle = '#F97316';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(230, 90, 340, 44);
+
+    ctx.fillStyle = '#FF9933';
+    ctx.font = 'bold 16px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('✦ VERIFIED KNOWMI IDENTITY ✦', 400, 118);
+
+    // Profile Name
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '900 36px sans-serif';
+    ctx.fillText(profileName.toUpperCase(), 400, 200);
+
+    // Persona Title & WM Code
+    ctx.fillStyle = '#F97316';
+    ctx.font = 'bold 20px monospace';
+    ctx.fillText(`${personaTitle} • ${wmCode}`, 400, 240);
+
+    // Tagline
+    ctx.fillStyle = '#A3A3A3';
+    ctx.font = 'italic 18px sans-serif';
+    ctx.fillText(`"${tagline}"`, 400, 285);
+
+    // QR Container Box
+    ctx.fillStyle = '#FFFFFF';
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 6;
+    ctx.fillRect(180, 330, 440, 440);
+    ctx.strokeRect(180, 330, 440, 440);
+
+    // Draw QR Code Image
+    const qrImage = new Image();
+    qrImage.crossOrigin = 'anonymous';
+    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=${encodeURIComponent(profileUrl)}`;
+    await new Promise((res) => { qrImage.onload = res; qrImage.onerror = res; });
+    if (qrImage.complete && qrImage.naturalWidth !== 0) {
+      ctx.drawImage(qrImage, 220, 370, 360, 360);
+    }
+
+    // QR Tagline
+    ctx.fillStyle = '#000000';
+    ctx.font = '900 18px sans-serif';
+    ctx.fillText('SCAN ME. KNOW ME.', 400, 755);
+
+    // Bottom Slogan & URL
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '900 24px sans-serif';
+    ctx.fillText('AUTHENTIC KNOWMI BRAND CARD', 400, 835);
+
+    ctx.fillStyle = '#F97316';
+    ctx.font = 'bold 16px monospace';
+    ctx.fillText(profileUrl, 400, 875);
+
+    return new Promise((res) => canvas.toBlob(res, 'image/png'));
+  };
+
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(profileUrl);
@@ -81,11 +163,29 @@ _Scan Me. Know Me. • Authentic Phygital Identity Protocol_`;
   };
 
   const handleNativeShare = async () => {
+    try {
+      const blob = await generateCardCanvasBlob();
+      if (blob) {
+        const file = new File([blob], `${profileName.replace(/\s+/g, '_')}_KnoWMi_Card.png`, { type: 'image/png' });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            title: `${profileName} — KnoWMi Brand Card`,
+            text: whatsappCardTemplate,
+            files: [file]
+          });
+          return;
+        }
+      }
+    } catch (err) {
+      console.warn('File share failed, falling back to URL share', err);
+    }
+
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${profileName} — KnoWMi Digital Identity`,
-          text: shareText,
+          title: `${profileName} — KnoWMi Brand Card`,
+          text: whatsappCardTemplate,
           url: profileUrl
         });
       } catch (err) {
@@ -93,6 +193,20 @@ _Scan Me. Know Me. • Authentic Phygital Identity Protocol_`;
       }
     } else {
       handleCopyLink();
+    }
+  };
+
+  const handleDownloadCardImage = async () => {
+    try {
+      const blob = await generateCardCanvasBlob();
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${profileName.replace(/\s+/g, '_')}_KnoWMi_Brand_Card.png`;
+      a.click();
+    } catch (e) {
+      console.error('Failed to generate image', e);
     }
   };
 
@@ -251,17 +365,27 @@ _Scan Me. Know Me. • Authentic Phygital Identity Protocol_`;
             className="flex items-center justify-center gap-2 py-3.5 px-4 bg-orange-500 text-black font-black text-xs uppercase tracking-widest rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all"
           >
             <Share2 size={16} />
-            More Apps
+            Share Image & Link
           </button>
         </div>
 
-        <button
-          onClick={handleDownloadCard}
-          className="w-full mt-3 flex items-center justify-center gap-2 py-3 px-4 bg-[#1a1a1a] text-neutral-300 font-bold text-xs uppercase tracking-wider rounded-xl border border-white/20 hover:text-white hover:border-white transition-colors"
-        >
-          <Download size={15} />
-          Export Standalone Card (HTML)
-        </button>
+        <div className="grid grid-cols-2 gap-2 mt-3">
+          <button
+            onClick={handleDownloadCardImage}
+            className="flex items-center justify-center gap-1.5 py-3 px-3 bg-neutral-900 text-orange-400 font-black text-[10px] uppercase tracking-wider rounded-xl border border-orange-500/40 hover:bg-neutral-800 transition-colors"
+          >
+            <Download size={14} />
+            Download Image (PNG)
+          </button>
+
+          <button
+            onClick={handleDownloadCard}
+            className="flex items-center justify-center gap-1.5 py-3 px-3 bg-[#1a1a1a] text-neutral-300 font-black text-[10px] uppercase tracking-wider rounded-xl border border-white/20 hover:text-white hover:border-white transition-colors"
+          >
+            <Download size={14} />
+            Export HTML Card
+          </button>
+        </div>
 
       </div>
     </div>
