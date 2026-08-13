@@ -120,20 +120,20 @@ export default function ShareBrandCardModal({ isOpen, onClose, profile, username
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 select-none animate-fadeIn">
-      <div className="relative w-full max-w-[440px] bg-[#0E0E16] border-[3px] border-white rounded-[32px] p-6 sm:p-8 shadow-[10px_10px_0px_#F97316] text-white my-auto max-h-[92vh] overflow-y-auto">
+    <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-md flex items-center justify-center pt-20 sm:pt-6 pb-6 px-4 select-none animate-fadeIn">
+      <div className="relative w-full max-w-[440px] bg-[#0E0E16] border-[3px] border-white rounded-[32px] p-6 sm:p-8 pt-8 sm:pt-8 shadow-[10px_10px_0px_#F97316] text-white my-auto max-h-[85vh] overflow-y-auto">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 w-9 h-9 rounded-xl bg-white border-2 border-black text-black font-black flex items-center justify-center shadow-[2px_2px_0px_#000] hover:bg-orange-500 transition-colors z-20"
+          className="absolute top-4 right-4 w-9 h-9 rounded-xl bg-white border-2 border-black text-black font-black flex items-center justify-center shadow-[2px_2px_0px_#000] hover:bg-orange-500 transition-colors z-30"
           title="Close Modal"
         >
           <X size={18} />
         </button>
 
         {/* Top Protocol Pill */}
-        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 text-[9px] font-black uppercase tracking-widest w-fit mb-5">
+        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 text-[9px] font-black uppercase tracking-widest w-fit mb-5 mt-1 sm:mt-0">
           <Sparkles size={12} className="text-orange-500" />
           KnoWMi Share Card
         </div>
