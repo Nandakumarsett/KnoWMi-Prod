@@ -8,10 +8,32 @@ export default function ShareBrandCardModal({ isOpen, onClose, profile, username
   if (!isOpen || !profile) return null;
 
   const profileName = profile.display_name || `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || profile.username || 'KnoWMi Creator';
-  const profileUrl = `${window.location.origin}/p/${profile.username || username || ''}`;
+  
+  const isFree = profile.status === 'free' || (!profile.status && (!profile.tier || profile.tier === 'Starter' || profile.tier === 'Free')) || profile.tier === 'Free' || profile.tier === 'Starter';
+  const isPaid = !isFree || profile.role === 'owner';
+  
+  const resolvedSlug = (
+    profile.username || 
+    username || 
+    (isPaid ? (profile.first_name || profile.secure_slug || profile.id) : (profile.secure_slug || profile.id || profile.first_name))
+  )?.toString().trim() || profile.id || 'user';
+
+  const profileUrl = `${window.location.origin}/p/${resolvedSlug}`;
   const wmCode = (profile.wm_code || `WM-${(profile.id || '1001').slice(0, 6)}`).replace('PT-', 'WM-');
   const personaTitle = (profile.persona || 'Phygital Creator').toUpperCase();
   const tagline = profile.tagline || 'Scan Me. Know Me. • Phygital Identity Protocol';
+
+  const whatsappCardTemplate = `🎴 *KnoWMi Official Phygital Brand Card*
+──────────────────────
+👤 *${profileName}*
+🏷️ *Persona:* ${personaTitle}
+🆔 *WM Code:* ${wmCode}
+💬 *Tagline:* "${tagline}"
+
+🔗 *View Live Profile & QR Card:*
+${profileUrl}
+──────────────────────
+_Scan Me. Know Me. • Authentic Phygital Identity Protocol_`;
 
   const shareText = `Check out ${profileName}'s official KnoWMi Phygital Brand Card! Scan Me. Know Me.`;
 
@@ -20,7 +42,7 @@ export default function ShareBrandCardModal({ isOpen, onClose, profile, username
       name: 'WhatsApp',
       icon: MessageCircle,
       bgColor: 'bg-emerald-500 hover:bg-emerald-600 text-black',
-      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(`${shareText}\n\n${profileUrl}`)}`
+      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappCardTemplate)}`
     },
     {
       name: 'LinkedIn',
@@ -32,19 +54,19 @@ export default function ShareBrandCardModal({ isOpen, onClose, profile, username
       name: 'X (Twitter)',
       icon: Twitter,
       bgColor: 'bg-black hover:bg-neutral-800 text-white border border-white/20',
-      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(profileUrl)}`
+      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`🎴 Check out ${profileName}'s official KnoWMi Brand Card!`)}&url=${encodeURIComponent(profileUrl)}`
     },
     {
       name: 'Telegram',
       icon: Send,
       bgColor: 'bg-sky-500 hover:bg-sky-600 text-white',
-      url: `https://t.me/share/url?url=${encodeURIComponent(profileUrl)}&text=${encodeURIComponent(shareText)}`
+      url: `https://t.me/share/url?url=${encodeURIComponent(profileUrl)}&text=${encodeURIComponent(`🎴 ${profileName}'s KnoWMi Digital Brand Card`)}`
     },
     {
       name: 'Email',
       icon: Mail,
       bgColor: 'bg-neutral-800 hover:bg-neutral-700 text-white',
-      url: `mailto:?subject=${encodeURIComponent(`${profileName} — KnoWMi Digital Brand Card`)}&body=${encodeURIComponent(`${shareText}\n\n${profileUrl}`)}`
+      url: `mailto:?subject=${encodeURIComponent(`${profileName} — KnoWMi Digital Brand Card`)}&body=${encodeURIComponent(whatsappCardTemplate)}`
     }
   ];
 
