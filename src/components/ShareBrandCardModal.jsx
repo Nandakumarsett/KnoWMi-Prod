@@ -23,17 +23,17 @@ export default function ShareBrandCardModal({ isOpen, onClose, profile, username
   const personaTitle = (profile.persona || 'Phygital Creator').toUpperCase();
   const tagline = profile.tagline || 'Scan Me. Know Me. • Phygital Identity Protocol';
 
-  const whatsappCardTemplate = `🎴 *KnoWMi Official Phygital Brand Card*
-──────────────────────
-👤 *${profileName}*
+  const whatsappCardTemplate = `⚡ *KnoWMi® Official Phygital Brand Card*
+──────────────────────────
+👤 *Name:* ${profileName}
 🏷️ *Persona:* ${personaTitle}
 🆔 *WM Code:* ${wmCode}
 💬 *Tagline:* "${tagline}"
 
-🔗 *View Live Profile & QR Card:*
+📲 *Scan / Visit Live Identity Pass:*
 ${profileUrl}
-──────────────────────
-_Scan Me. Know Me. • Authentic Phygital Identity Protocol_`;
+──────────────────────────
+🔥 *Scan Me. Know Me. • KnoWMi® Phygital Protocol*`;
 
   const shareText = `Check out ${profileName}'s official KnoWMi Phygital Brand Card! Scan Me. Know Me.`;
 
@@ -54,13 +54,13 @@ _Scan Me. Know Me. • Authentic Phygital Identity Protocol_`;
       name: 'X (Twitter)',
       icon: Twitter,
       bgColor: 'bg-black hover:bg-neutral-800 text-white border border-white/20',
-      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`🎴 Check out ${profileName}'s official KnoWMi Brand Card!`)}&url=${encodeURIComponent(profileUrl)}`
+      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`⚡ Check out ${profileName}'s official KnoWMi Brand Card!`)}&url=${encodeURIComponent(profileUrl)}`
     },
     {
       name: 'Telegram',
       icon: Send,
       bgColor: 'bg-sky-500 hover:bg-sky-600 text-white',
-      url: `https://t.me/share/url?url=${encodeURIComponent(profileUrl)}&text=${encodeURIComponent(`🎴 ${profileName}'s KnoWMi Digital Brand Card`)}`
+      url: `https://t.me/share/url?url=${encodeURIComponent(profileUrl)}&text=${encodeURIComponent(`⚡ ${profileName}'s KnoWMi Digital Brand Card`)}`
     },
     {
       name: 'Email',
@@ -92,21 +92,36 @@ _Scan Me. Know Me. • Authentic Phygital Identity Protocol_`;
     ctx.fillStyle = '#F97316';
     ctx.fillRect(40, 40, 720, 16);
 
-    // Protocol Badge
+    // Load KnoWMi Logo
+    const logoImg = new Image();
+    logoImg.crossOrigin = 'anonymous';
+    logoImg.src = '/favicon.png';
+    await new Promise((res) => { logoImg.onload = res; logoImg.onerror = res; });
+
+    // Protocol Badge with Logo
     ctx.fillStyle = 'rgba(249, 115, 22, 0.15)';
-    ctx.fillRect(230, 90, 340, 44);
+    ctx.fillRect(210, 90, 380, 44);
     ctx.strokeStyle = '#F97316';
     ctx.lineWidth = 2;
-    ctx.strokeRect(230, 90, 340, 44);
+    ctx.strokeRect(210, 90, 380, 44);
 
-    ctx.fillStyle = '#FF9933';
-    ctx.font = 'bold 16px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('✦ VERIFIED KNOWMI IDENTITY ✦', 400, 118);
+    if (logoImg.complete && logoImg.naturalWidth !== 0) {
+      ctx.drawImage(logoImg, 225, 96, 32, 32);
+      ctx.fillStyle = '#FF9933';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('VERIFIED KNOWMI IDENTITY', 270, 118);
+    } else {
+      ctx.fillStyle = '#FF9933';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('✦ VERIFIED KNOWMI IDENTITY ✦', 400, 118);
+    }
 
     // Profile Name
     ctx.fillStyle = '#FFFFFF';
     ctx.font = '900 36px sans-serif';
+    ctx.textAlign = 'center';
     ctx.fillText(profileName.toUpperCase(), 400, 200);
 
     // Persona Title & WM Code
@@ -135,6 +150,18 @@ _Scan Me. Know Me. • Authentic Phygital Identity Protocol_`;
       ctx.drawImage(qrImage, 220, 370, 360, 360);
     }
 
+    // Draw Logo overlay in center of QR Code
+    if (logoImg.complete && logoImg.naturalWidth !== 0) {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.arc(400, 550, 36, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      ctx.drawImage(logoImg, 375, 525, 50, 50);
+    }
+
     // QR Tagline
     ctx.fillStyle = '#000000';
     ctx.font = '900 18px sans-serif';
@@ -143,7 +170,7 @@ _Scan Me. Know Me. • Authentic Phygital Identity Protocol_`;
     // Bottom Slogan & URL
     ctx.fillStyle = '#FFFFFF';
     ctx.font = '900 24px sans-serif';
-    ctx.fillText('AUTHENTIC KNOWMI BRAND CARD', 400, 835);
+    ctx.fillText('AUTHENTIC KNOWMI® BRAND CARD', 400, 835);
 
     ctx.fillStyle = '#F97316';
     ctx.font = 'bold 16px monospace';
@@ -312,9 +339,17 @@ _Scan Me. Know Me. • Authentic Phygital Identity Protocol_`;
               size={135}
               level="H"
               includeMargin={false}
+              imageSettings={{
+                src: "/favicon.png",
+                x: undefined,
+                y: undefined,
+                height: 28,
+                width: 28,
+                excavate: true,
+              }}
             />
-            <p className="text-[9px] font-black text-black uppercase tracking-widest mt-1.5">
-              Scan Me. Know Me.
+            <p className="text-[9px] font-black text-black uppercase tracking-widest mt-1.5 flex items-center justify-center gap-1">
+              <img src="/favicon.png" className="w-3 h-3 inline-block" alt="KnoWMi" /> Scan Me. Know Me.
             </p>
           </div>
 
