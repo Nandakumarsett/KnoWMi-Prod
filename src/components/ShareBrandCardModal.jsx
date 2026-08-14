@@ -23,7 +23,7 @@ export default function ShareBrandCardModal({ isOpen, onClose, profile, username
   const personaTitle = (profile.persona || 'Phygital Creator').toUpperCase();
   const tagline = profile.tagline || 'Scan Me. Know Me. • Phygital Identity Protocol';
 
-  const whatsappCardTemplate = `⚡ *KnoWMi® Official Phygital Brand Card*
+  const cardTemplateText = `⚡ *KnoWMi® Official Phygital Brand Card*
 ──────────────────────────
 👤 *Name:* ${profileName}
 🏷️ *Persona:* ${personaTitle}
@@ -35,26 +35,24 @@ ${profileUrl}
 ──────────────────────────
 🔥 *Scan Me. Know Me. • KnoWMi® Phygital Protocol*`;
 
-  const shareText = `Check out ${profileName}'s official KnoWMi Phygital Brand Card! Scan Me. Know Me.`;
-
   const socialPlatforms = [
     {
       name: 'WhatsApp',
       icon: MessageCircle,
       bgColor: 'bg-emerald-500 hover:bg-emerald-600 text-black',
-      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappCardTemplate)}`
+      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(cardTemplateText)}`
     },
     {
       name: 'LinkedIn',
       icon: Linkedin,
       bgColor: 'bg-blue-600 hover:bg-blue-700 text-white',
-      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(profileUrl)}`
+      url: `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(cardTemplateText)}`
     },
     {
       name: 'X (Twitter)',
       icon: Twitter,
       bgColor: 'bg-black hover:bg-neutral-800 text-white border border-white/20',
-      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`⚡ Check out ${profileName}'s official KnoWMi Brand Card!`)}&url=${encodeURIComponent(profileUrl)}`
+      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(cardTemplateText)}`
     },
     {
       name: 'Telegram',
@@ -66,7 +64,7 @@ ${profileUrl}
       name: 'Email',
       icon: Mail,
       bgColor: 'bg-neutral-800 hover:bg-neutral-700 text-white',
-      url: `mailto:?subject=${encodeURIComponent(`${profileName} — KnoWMi Digital Brand Card`)}&body=${encodeURIComponent(whatsappCardTemplate)}`
+      url: `mailto:?subject=${encodeURIComponent(`${profileName} — KnoWMi Digital Brand Card`)}&body=${encodeURIComponent(cardTemplateText)}`
     }
   ];
 
@@ -235,40 +233,6 @@ ${profileUrl}
     }
   };
 
-  const handleNativeShare = async () => {
-    try {
-      const blob = await generateCardCanvasBlob();
-      if (blob) {
-        const file = new File([blob], `${profileName.replace(/\s+/g, '_')}_KnoWMi_Card.png`, { type: 'image/png' });
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            title: `${profileName} — KnoWMi Brand Card`,
-            text: whatsappCardTemplate,
-            files: [file]
-          });
-          return;
-        }
-      }
-    } catch (err) {
-      console.warn('File share failed, falling back to URL share', err);
-    }
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `${profileName} — KnoWMi Brand Card`,
-          text: whatsappCardTemplate,
-          url: profileUrl
-        });
-      } catch (err) {
-        console.warn('Share cancelled', err);
-      }
-    } else {
-      handleCopyLink();
-    }
-  };
-
   const handleDownloadCardImage = async () => {
     try {
       const blob = await generateCardCanvasBlob();
@@ -282,70 +246,6 @@ ${profileUrl}
     } catch (e) {
       console.error('Failed to generate image', e);
     }
-  };
-
-  // Escape HTML entities to prevent XSS in exported HTML card
-  const escapeHtml = (str) => {
-    if (!str) return '';
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  };
-
-  const handleDownloadCard = () => {
-    const safeName = escapeHtml(profileName);
-    const safePersona = escapeHtml(personaTitle);
-    const safeWmCode = escapeHtml(wmCode);
-    const safeTagline = escapeHtml(tagline);
-    const safeAvatarUrl = escapeHtml(profile.avatar_url);
-    const safeProfileUrl = escapeHtml(profileUrl);
-
-    const htmlContent = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${safeName} — KnoWMi Brand Card</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        body { background: #05050A; color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; margin: 0; }
-        .card { width: 100%; max-width: 400px; background: linear-gradient(160deg, #141420 0%, #08080E 100%); border: 3px solid #FFF; border-radius: 36px; padding: 36px 28px; box-shadow: 8px 8px 0px #F97316; text-align: center; }
-        .badge { background: rgba(249, 115, 22, 0.12); border: 1px solid rgba(249, 115, 22, 0.3); color: #FF9933; padding: 6px 14px; border-radius: 100px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; display: inline-block; margin-bottom: 20px; }
-        .avatar { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #FFF; margin: 0 auto 16px; object-fit: cover; box-shadow: 4px 4px 0px #F97316; }
-        .name { font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 900; text-transform: uppercase; margin-bottom: 4px; }
-        .persona { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; color: #F97316; margin-bottom: 12px; }
-        .tagline { font-size: 12px; color: #aaa; margin-bottom: 24px; font-weight: 600; }
-        .qr-box { background: #FFF; border: 3px solid #000; border-radius: 24px; padding: 20px; box-shadow: 4px 4px 0px #000; margin-bottom: 24px; }
-        .btn { display: block; width: 100%; background: #F97316; color: #000; font-weight: 900; text-decoration: none; padding: 14px; border-radius: 16px; border: 2px solid #000; text-transform: uppercase; letter-spacing: 1px; box-shadow: 3px 3px 0px #FFF; }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <div class="badge">✦ KnoWMi Identity ✦</div>
-        ${safeAvatarUrl ? `<img src="${safeAvatarUrl}" class="avatar" alt="${safeName}">` : ''}
-        <div class="name">${safeName}</div>
-        <div class="persona">${safePersona} • ${safeWmCode}</div>
-        <div class="tagline">"${safeTagline}"</div>
-        <div class="qr-box">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(profileUrl)}" style="width: 180px; height: 180px;">
-            <div style="font-size: 10px; font-weight: 900; color: #000; text-transform: uppercase; margin-top: 10px; letter-spacing: 2px;">Scan Me. Know Me.</div>
-        </div>
-        <a href="${safeProfileUrl}" target="_blank" class="btn">View Live Profile</a>
-    </div>
-</body>
-</html>`;
-
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${profileName.replace(/\s+/g, '_')}_KnoWMi_Card.html`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   return (
@@ -455,36 +355,18 @@ ${profileUrl}
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={handleCopyLink}
-            className="flex items-center justify-center gap-2 py-3.5 px-4 bg-white text-black font-black text-xs uppercase tracking-widest rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all"
+            className="flex items-center justify-center gap-2 py-3.5 px-4 bg-white text-black font-black text-xs uppercase tracking-widest rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all active:scale-95"
           >
             {copied ? <Check size={16} className="text-emerald-600" /> : <Copy size={16} />}
             {copied ? 'Copied!' : 'Copy Link'}
           </button>
 
           <button
-            onClick={handleNativeShare}
-            className="flex items-center justify-center gap-2 py-3.5 px-4 bg-orange-500 text-black font-black text-xs uppercase tracking-widest rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all"
-          >
-            <Share2 size={16} />
-            Share Image & Link
-          </button>
-        </div>
-
-        <div className="grid grid-cols-2 gap-2 mt-3">
-          <button
             onClick={handleDownloadCardImage}
-            className="flex items-center justify-center gap-1.5 py-3 px-3 bg-neutral-900 text-orange-400 font-black text-[10px] uppercase tracking-wider rounded-xl border border-orange-500/40 hover:bg-neutral-800 transition-colors"
+            className="flex items-center justify-center gap-2 py-3.5 px-4 bg-orange-500 text-black font-black text-xs uppercase tracking-widest rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all active:scale-95"
           >
-            <Download size={14} />
+            <Download size={16} />
             Download Image (PNG)
-          </button>
-
-          <button
-            onClick={handleDownloadCard}
-            className="flex items-center justify-center gap-1.5 py-3 px-3 bg-[#1a1a1a] text-neutral-300 font-black text-[10px] uppercase tracking-wider rounded-xl border border-white/20 hover:text-white hover:border-white transition-colors"
-          >
-            <Download size={14} />
-            Export HTML Card
           </button>
         </div>
 
