@@ -163,6 +163,7 @@ export default function Customizer({ plan = 'creator', user, onClose, onAuth }) 
     const file = e.target.files[0]
     if (file) {
       if (file.size > 5 * 1024 * 1024) { alert("File too large. Max 5MB."); return }
+      if (customImage) URL.revokeObjectURL(customImage)
       const url = URL.createObjectURL(file)
       setCustomImage(url)
     }

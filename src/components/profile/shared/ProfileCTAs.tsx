@@ -12,10 +12,11 @@ export function ProfileCTAs({ profile, accentColor, onOpenShareModal }: ProfileC
   const [shareModalOpen, setShareModalOpen] = useState(false)
 
   const handleSaveContact = () => {
+    const safeName = profile.display_name || profile.username || 'KnoWMi_User';
     const vcard = [
       'BEGIN:VCARD',
       'VERSION:3.0',
-      `FN:${profile.display_name}`,
+      `FN:${safeName}`,
       `NICKNAME:${profile.username}`,
       `URL:${window.location.origin}/p/${profile.username}`,
       `NOTE:KnoWMi ${profile.persona} persona — ${profile.mood ?? ''}`,
@@ -25,8 +26,9 @@ export function ProfileCTAs({ profile, accentColor, onOpenShareModal }: ProfileC
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `${profile.display_name.replace(' ', '_')}.vcf`
+    a.download = `${safeName.replace(/\s+/g, '_')}.vcf`
     a.click()
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
 
   const handleShare = async () => {

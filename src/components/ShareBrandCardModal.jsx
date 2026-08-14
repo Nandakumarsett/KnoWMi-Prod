@@ -278,19 +278,38 @@ ${profileUrl}
       a.href = url;
       a.download = `${profileName.replace(/\s+/g, '_')}_KnoWMi_Brand_Card.png`;
       a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch (e) {
       console.error('Failed to generate image', e);
     }
   };
 
+  // Escape HTML entities to prevent XSS in exported HTML card
+  const escapeHtml = (str) => {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  };
+
   const handleDownloadCard = () => {
+    const safeName = escapeHtml(profileName);
+    const safePersona = escapeHtml(personaTitle);
+    const safeWmCode = escapeHtml(wmCode);
+    const safeTagline = escapeHtml(tagline);
+    const safeAvatarUrl = escapeHtml(profile.avatar_url);
+    const safeProfileUrl = escapeHtml(profileUrl);
+
     const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${profileName} — KnoWMi Brand Card</title>
+    <title>${safeName} — KnoWMi Brand Card</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { background: #05050A; color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; margin: 0; }
@@ -306,16 +325,16 @@ ${profileUrl}
 </head>
 <body>
     <div class="card">
-        <div class="badge">✦ Verified KnoWMi Identity ✦</div>
-        ${profile.avatar_url ? `<img src="${profile.avatar_url}" class="avatar" alt="${profileName}">` : ''}
-        <div class="name">${profileName}</div>
-        <div class="persona">${personaTitle} • ${wmCode}</div>
-        <div class="tagline">"${tagline}"</div>
+        <div class="badge">✦ KnoWMi Identity ✦</div>
+        ${safeAvatarUrl ? `<img src="${safeAvatarUrl}" class="avatar" alt="${safeName}">` : ''}
+        <div class="name">${safeName}</div>
+        <div class="persona">${safePersona} • ${safeWmCode}</div>
+        <div class="tagline">"${safeTagline}"</div>
         <div class="qr-box">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(profileUrl)}" style="width: 180px; height: 180px;">
             <div style="font-size: 10px; font-weight: 900; color: #000; text-transform: uppercase; margin-top: 10px; letter-spacing: 2px;">Scan Me. Know Me.</div>
         </div>
-        <a href="${profileUrl}" target="_blank" class="btn">View Live Profile</a>
+        <a href="${safeProfileUrl}" target="_blank" class="btn">View Live Profile</a>
     </div>
 </body>
 </html>`;
@@ -326,6 +345,7 @@ ${profileUrl}
     a.href = url;
     a.download = `${profileName.replace(/\s+/g, '_')}_KnoWMi_Card.html`;
     a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   return (
