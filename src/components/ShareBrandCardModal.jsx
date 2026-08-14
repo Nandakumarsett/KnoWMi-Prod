@@ -36,28 +36,45 @@ ${profileUrl}
 🔥 *Scan Me. Know Me. • KnoWMi® Phygital Protocol*`;
 
   const sharePlatformWithCard = async (fallbackUrl) => {
-    if (navigator.canShare) {
-      try {
-        const blob = await generateCardCanvasBlob();
-        if (blob) {
-          const file = new File(
-            [blob],
-            `${profileName.replace(/\s+/g, '_')}_KnoWMi_Brand_Card.png`,
-            { type: 'image/png' }
-          );
-          if (navigator.canShare({ files: [file] })) {
-            await navigator.share({
-              title: `${profileName} — KnoWMi Official Brand Card`,
-              text: cardTemplateText,
-              files: [file]
-            });
-            return;
-          }
-        }
-      } catch (err) {
-        console.warn('Native image share cancelled or unavailable, opening web fallback', err);
+    try {
+      const blob = await generateCardCanvasBlob();
+      if (!blob) return;
+
+      const file = new File(
+        [blob],
+        `${profileName.replace(/\s+/g, '_')}_KnoWMi_Brand_Card.png`,
+        { type: 'image/png' }
+      );
+
+      // On Android / iOS / supported browsers: Web Share API attaches the actual personalized PNG card!
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: `${profileName} — KnoWMi Official Brand Card`,
+          text: cardTemplateText,
+          files: [file]
+        });
+        return;
       }
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        console.warn('Native image share cancelled or unavailable', err);
+      }
+      return;
     }
+
+    // Desktop fallback: Download the personalized image card and open web URL
+    try {
+      const blob = await generateCardCanvasBlob();
+      if (blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${profileName.replace(/\s+/g, '_')}_KnoWMi_Brand_Card.png`;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+    } catch (e) {}
+
     if (fallbackUrl) {
       window.open(fallbackUrl, '_blank', 'noopener,noreferrer');
     }
