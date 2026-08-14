@@ -141,17 +141,21 @@ export default function PublicProfile() {
       descMeta.setAttribute("content", descContent);
 
       // Open Graph / Twitter Card Tags (single source of truth)
-      const ogTitle = `${safeDisplayName} | KnoWMi`;
+      const ogTitle = `${safeDisplayName} | KnoWMi® Digital Identity`;
       const ogDesc = descContent;
       const ogUrl = window.location.href;
       const ogImage =
-        profile.avatar_url || 'https://knowmi.in/og-image.png';
+        profile.avatar_url || 'https://knowmi.in/og-image.png?v=3';
 
       const tags = {
         "og:title": ogTitle,
         "og:description": ogDesc,
         "og:url": ogUrl,
         "og:image": ogImage,
+        "og:image:secure_url": ogImage,
+        "og:image:type": "image/png",
+        "og:image:width": "1080",
+        "og:image:height": "1080",
         "og:type": "profile",
         "twitter:card": "summary_large_image",
         "twitter:title": ogTitle,
