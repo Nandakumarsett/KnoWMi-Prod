@@ -1,22 +1,19 @@
 {
   "rewrites": [
-    { "source": "/content/(.*)", "destination": "https://jwsoutcwgwwfovrdrmjk.supabase.co/storage/v1/object/public/$1" },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ],
-  "headers": [
     {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "X-XSS-Protection", "value": "1; mode=block" }
-      ]
+      "source": "/p/:username",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|WhatsApp|Twitterbot|LinkedInBot|TelegramBot|Slackbot|Discordbot|SkypeUriPreview|Google-Structured-Data-Testing-Tool|bingbot).*"
+        }
+      ],
+      "destination": "https://jwsoutcwgwwfovrdrmjk.supabase.co/functions/v1/og-card?u=:username"
     },
     {
-      "source": "/assets/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }

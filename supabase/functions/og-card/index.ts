@@ -119,8 +119,8 @@ serve(async (req) => {
     });
   }
 
-  // Otherwise return HTML wrapper with dynamic Open Graph tags for crawlers
-  const cardImageUrl = `${supabaseUrl}/functions/v1/og-card?username=${encodeURIComponent(username)}&format=svg`;
+  // Direct High-Res PNG card image for crawlers (Telegram, WhatsApp, LinkedIn, Twitter)
+  const cardImageUrl = profile?.avatar_url || `https://api.qrserver.com/v1/create-qr-code/?size=800x800&ecc=H&data=${encodeURIComponent(profileUrl)}`;
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -129,20 +129,20 @@ serve(async (req) => {
   <title>${escapeXml(profileName)} | KnoWMi® Digital Identity</title>
   <meta name="description" content="${escapeXml(tagline)} — ${escapeXml(profileName)}'s official KnoWMi Phygital Pass. Scan Me. Know Me.">
   
-  <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+  <!-- Open Graph / Facebook / LinkedIn / WhatsApp / Telegram -->
   <meta property="og:type" content="profile" />
   <meta property="og:url" content="${profileUrl}" />
   <meta property="og:title" content="${escapeXml(profileName)} | KnoWMi® Digital Identity" />
   <meta property="og:description" content="⚡ ${escapeXml(personaTitle)} • ${escapeXml(wmCode)} — ${escapeXml(tagline)}" />
   <meta property="og:image" content="${cardImageUrl}" />
   <meta property="og:image:secure_url" content="${cardImageUrl}" />
-  <meta property="og:image:type" content="image/svg+xml" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="800" />
+  <meta property="og:image:height" content="800" />
   <meta property="og:site_name" content="KnoWMi" />
 
   <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:card" content="summary" />
   <meta name="twitter:url" content="${profileUrl}" />
   <meta name="twitter:title" content="${escapeXml(profileName)} | KnoWMi® Digital Identity" />
   <meta name="twitter:description" content="⚡ ${escapeXml(personaTitle)} • ${escapeXml(wmCode)} — ${escapeXml(tagline)}" />
