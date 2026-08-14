@@ -35,58 +35,69 @@ ${profileUrl}
 ──────────────────────────
 🔥 *Scan Me. Know Me. • KnoWMi® Phygital Protocol*`;
 
+  const sharePlatformWithCard = async (fallbackUrl) => {
+    if (navigator.canShare) {
+      try {
+        const blob = await generateCardCanvasBlob();
+        if (blob) {
+          const file = new File(
+            [blob],
+            `${profileName.replace(/\s+/g, '_')}_KnoWMi_Brand_Card.png`,
+            { type: 'image/png' }
+          );
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              title: `${profileName} — KnoWMi Official Brand Card`,
+              text: cardTemplateText,
+              files: [file]
+            });
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('Native image share cancelled or unavailable, opening web fallback', err);
+      }
+    }
+    if (fallbackUrl) {
+      window.open(fallbackUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   const socialPlatforms = [
     {
       name: 'WhatsApp',
       icon: MessageCircle,
       bgColor: 'bg-emerald-500 hover:bg-emerald-600 text-black',
       url: `https://api.whatsapp.com/send?text=${encodeURIComponent(cardTemplateText)}`,
-      action: async (e) => {
-        // Try native image file share first on supported mobile devices
-        if (navigator.canShare) {
-          try {
-            const blob = await generateCardCanvasBlob();
-            if (blob) {
-              const file = new File([blob], `${profileName.replace(/\s+/g, '_')}_KnoWMi_Brand_Card.png`, { type: 'image/png' });
-              if (navigator.canShare({ files: [file] })) {
-                await navigator.share({
-                  title: `${profileName} — KnoWMi Brand Card`,
-                  text: cardTemplateText,
-                  files: [file]
-                });
-                return;
-              }
-            }
-          } catch (err) {
-            console.warn('Native image share cancelled or unavailable, opening WhatsApp Web', err);
-          }
-        }
-        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(cardTemplateText)}`, '_blank', 'noopener,noreferrer');
-      }
+      action: () => sharePlatformWithCard(`https://api.whatsapp.com/send?text=${encodeURIComponent(cardTemplateText)}`)
     },
     {
       name: 'LinkedIn',
       icon: Linkedin,
       bgColor: 'bg-blue-600 hover:bg-blue-700 text-white',
-      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(profileUrl)}`
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(profileUrl)}`,
+      action: () => sharePlatformWithCard(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(profileUrl)}`)
     },
     {
       name: 'X (Twitter)',
       icon: Twitter,
       bgColor: 'bg-black hover:bg-neutral-800 text-white border border-white/20',
-      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`⚡ Check out ${profileName}'s official KnoWMi Brand Card!\n\n`)}&url=${encodeURIComponent(profileUrl)}`
+      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`⚡ Check out ${profileName}'s official KnoWMi Brand Card!\n\n`)}&url=${encodeURIComponent(profileUrl)}`,
+      action: () => sharePlatformWithCard(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`⚡ Check out ${profileName}'s official KnoWMi Brand Card!\n\n`)}&url=${encodeURIComponent(profileUrl)}`)
     },
     {
       name: 'Telegram',
       icon: Send,
       bgColor: 'bg-sky-500 hover:bg-sky-600 text-white',
-      url: `https://t.me/share/url?url=${encodeURIComponent(profileUrl)}&text=${encodeURIComponent(`⚡ ${profileName}'s KnoWMi Digital Brand Card`)}`
+      url: `https://t.me/share/url?url=${encodeURIComponent(profileUrl)}&text=${encodeURIComponent(cardTemplateText)}`,
+      action: () => sharePlatformWithCard(`https://t.me/share/url?url=${encodeURIComponent(profileUrl)}&text=${encodeURIComponent(cardTemplateText)}`)
     },
     {
       name: 'Email',
       icon: Mail,
       bgColor: 'bg-neutral-800 hover:bg-neutral-700 text-white',
-      url: `mailto:?subject=${encodeURIComponent(`${profileName} — KnoWMi Digital Brand Card`)}&body=${encodeURIComponent(cardTemplateText)}`
+      url: `mailto:?subject=${encodeURIComponent(`${profileName} — KnoWMi Digital Brand Card`)}&body=${encodeURIComponent(cardTemplateText)}`,
+      action: () => sharePlatformWithCard(`mailto:?subject=${encodeURIComponent(`${profileName} — KnoWMi Digital Brand Card`)}&body=${encodeURIComponent(cardTemplateText)}`)
     }
   ];
 
