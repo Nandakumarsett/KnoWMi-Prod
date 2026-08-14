@@ -40,19 +40,41 @@ ${profileUrl}
       name: 'WhatsApp',
       icon: MessageCircle,
       bgColor: 'bg-emerald-500 hover:bg-emerald-600 text-black',
-      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(cardTemplateText)}`
+      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(cardTemplateText)}`,
+      action: async (e) => {
+        // Try native image file share first on supported mobile devices
+        if (navigator.canShare) {
+          try {
+            const blob = await generateCardCanvasBlob();
+            if (blob) {
+              const file = new File([blob], `${profileName.replace(/\s+/g, '_')}_KnoWMi_Brand_Card.png`, { type: 'image/png' });
+              if (navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                  title: `${profileName} — KnoWMi Brand Card`,
+                  text: cardTemplateText,
+                  files: [file]
+                });
+                return;
+              }
+            }
+          } catch (err) {
+            console.warn('Native image share cancelled or unavailable, opening WhatsApp Web', err);
+          }
+        }
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(cardTemplateText)}`, '_blank', 'noopener,noreferrer');
+      }
     },
     {
       name: 'LinkedIn',
       icon: Linkedin,
       bgColor: 'bg-blue-600 hover:bg-blue-700 text-white',
-      url: `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(cardTemplateText)}`
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(profileUrl)}`
     },
     {
       name: 'X (Twitter)',
       icon: Twitter,
       bgColor: 'bg-black hover:bg-neutral-800 text-white border border-white/20',
-      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(cardTemplateText)}`
+      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`⚡ Check out ${profileName}'s official KnoWMi Brand Card!\n\n`)}&url=${encodeURIComponent(profileUrl)}`
     },
     {
       name: 'Telegram',
@@ -333,19 +355,24 @@ ${profileUrl}
             {socialPlatforms.map((platform) => {
               const Icon = platform.icon;
               return (
-                <a
+                <button
                   key={platform.name}
-                  href={platform.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-all shadow-[2px_2px_0px_#000] hover:scale-105 active:scale-95 ${platform.bgColor}`}
+                  type="button"
+                  onClick={(e) => {
+                    if (platform.action) {
+                      platform.action(e);
+                    } else {
+                      window.open(platform.url, '_blank', 'noopener,noreferrer');
+                    }
+                  }}
+                  className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-all shadow-[2px_2px_0px_#000] hover:scale-105 active:scale-95 cursor-pointer ${platform.bgColor}`}
                   title={`Share on ${platform.name}`}
                 >
                   <Icon size={20} />
                   <span className="text-[8px] font-black uppercase tracking-wider mt-1.5 truncate max-w-full">
                     {platform.name.split(' ')[0]}
                   </span>
-                </a>
+                </button>
               );
             })}
           </div>
