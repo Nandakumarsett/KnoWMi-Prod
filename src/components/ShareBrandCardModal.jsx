@@ -89,7 +89,7 @@ ${profileUrl}
       name: 'LinkedIn',
       icon: Linkedin,
       bgColor: 'bg-blue-600 hover:bg-blue-700 text-white',
-      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(profileUrl)}`
+      url: `https://www.linkedin.com/feed/?shareActive=true`
     },
     {
       name: 'X (Twitter)',
