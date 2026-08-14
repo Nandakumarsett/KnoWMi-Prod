@@ -38,7 +38,7 @@ serve(async (req) => {
       const { data: bySlug } = await supabase
         .from('profiles')
         .select('id, username, display_name, first_name, last_name, persona, wm_code, tagline, avatar_url, is_verified, secure_slug')
-        .or(`secure_slug.eq.${username},id.eq.${username}`)
+        .or(`secure_slug.ilike.${username},id.eq.${username}`)
         .maybeSingle();
       if (bySlug) profile = bySlug;
     }
