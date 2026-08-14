@@ -35,6 +35,8 @@ ${profileUrl}
 ──────────────────────────
 🔥 *Scan Me. Know Me. • KnoWMi® Phygital Protocol*`;
 
+  const dynamicOgUrl = `${import.meta.env.VITE_SUPABASE_URL || 'https://jwsoutcwgwwfovrdrmjk.supabase.co'}/functions/v1/og-card?u=${encodeURIComponent(resolvedSlug)}`;
+
   const socialPlatforms = [
     {
       name: 'WhatsApp',
@@ -46,19 +48,19 @@ ${profileUrl}
       name: 'LinkedIn',
       icon: Linkedin,
       bgColor: 'bg-blue-600 hover:bg-blue-700 text-white',
-      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(profileUrl)}`
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(dynamicOgUrl)}`
     },
     {
       name: 'X (Twitter)',
       icon: Twitter,
       bgColor: 'bg-black hover:bg-neutral-800 text-white border border-white/20',
-      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`⚡ Check out ${profileName}'s official KnoWMi Brand Card!\n\n`)}&url=${encodeURIComponent(profileUrl)}`
+      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`⚡ Check out ${profileName}'s official KnoWMi Brand Card!\n\n`)}&url=${encodeURIComponent(dynamicOgUrl)}`
     },
     {
       name: 'Telegram',
       icon: Send,
       bgColor: 'bg-sky-500 hover:bg-sky-600 text-white',
-      url: `https://t.me/share/url?url=${encodeURIComponent(profileUrl)}&text=${encodeURIComponent(cardTemplateText)}`
+      url: `https://t.me/share/url?url=${encodeURIComponent(dynamicOgUrl)}&text=${encodeURIComponent(cardTemplateText)}`
     },
     {
       name: 'Email',
