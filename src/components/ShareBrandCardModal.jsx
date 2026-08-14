@@ -35,6 +35,49 @@ ${profileUrl}
 ──────────────────────────
 🔥 *Scan Me. Know Me. • KnoWMi® Phygital Protocol*`;
 
+  const handleSharePlatform = async (platform) => {
+    // 1. For WhatsApp on mobile: native file share if supported
+    if (platform.name === 'WhatsApp' && navigator.canShare) {
+      try {
+        const blob = await generateCardCanvasBlob();
+        if (blob) {
+          const file = new File([blob], `${profileName.replace(/\s+/g, '_')}_KnoWMi_Brand_Card.png`, { type: 'image/png' });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              title: `${profileName} — KnoWMi Brand Card`,
+              text: cardTemplateText,
+              files: [file]
+            });
+            return;
+          }
+        }
+      } catch (e) {}
+    }
+
+    // 2. For LinkedIn, X (Twitter), Telegram: Auto-download personalized PNG Card so creator can attach it, and copy template
+    if (['LinkedIn', 'X (Twitter)', 'Telegram'].includes(platform.name)) {
+      try {
+        const blob = await generateCardCanvasBlob();
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${profileName.replace(/\s+/g, '_')}_KnoWMi_Brand_Card.png`;
+          a.click();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+      } catch (e) {}
+
+      // Copy text to clipboard so it can be pasted easily
+      try {
+        await navigator.clipboard.writeText(cardTemplateText);
+      } catch (e) {}
+    }
+
+    // 3. Open the platform composer
+    window.open(platform.url, '_blank', 'noopener,noreferrer');
+  };
+
   const socialPlatforms = [
     {
       name: 'WhatsApp',
@@ -336,13 +379,7 @@ ${profileUrl}
                 <button
                   key={platform.name}
                   type="button"
-                  onClick={(e) => {
-                    if (platform.action) {
-                      platform.action(e);
-                    } else {
-                      window.open(platform.url, '_blank', 'noopener,noreferrer');
-                    }
-                  }}
+                  onClick={() => handleSharePlatform(platform)}
                   className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-all shadow-[2px_2px_0px_#000] hover:scale-105 active:scale-95 cursor-pointer ${platform.bgColor}`}
                   title={`Share on ${platform.name}`}
                 >
