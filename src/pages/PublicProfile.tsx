@@ -145,7 +145,7 @@ export default function PublicProfile() {
       const ogDesc = descContent;
       const ogUrl = window.location.href;
       const ogImage =
-        profile.avatar_url || 'https://knowmi.in/og-image.png?v=3';
+        profile.avatar_url || 'https://knowmi.in/og-image-v4.png';
 
       const tags = {
         "og:title": ogTitle,

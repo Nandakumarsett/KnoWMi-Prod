@@ -26,7 +26,7 @@ export default function Home() {
   useDocumentMetadata({
     title: 'Scan Me. Know Me. | Custom QR Identity Tees',
     description: 'India\'s first QR-enabled smart identity T-shirts. Share your social accounts, portfolio, contact card, and personal style instantly with a single scan.',
-    ogImage: 'https://knowmi.in/og-image.png'
+    ogImage: 'https://knowmi.in/og-image-v4.png'
   })
 
   const [authOpen, setAuthOpen] = useState(false)
