@@ -184,7 +184,12 @@ export default function PublicProfile() {
         brandSettings?.redirect_mode === "direct_corporate" &&
         brandSettings?.redirect_url
       ) {
-        window.location.replace(brandSettings.redirect_url);
+        const rawUrl = brandSettings.redirect_url.trim();
+        // Security check: only allow safe http / https protocols (prevent javascript: or data: URI injection)
+        const isSafeUrl = /^https?:\/\//i.test(rawUrl);
+        if (isSafeUrl) {
+          window.location.replace(rawUrl);
+        }
       }
     }
   }, [profile, user, isOwnerOfProfile]);
