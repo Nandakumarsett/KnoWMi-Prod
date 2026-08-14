@@ -4,6 +4,7 @@ import { X, Copy, Share2, Download, Check, Sparkles, ShieldCheck, MessageCircle,
 
 export default function ShareBrandCardModal({ isOpen, onClose, profile, username }) {
   const [copied, setCopied] = useState(false);
+  const [pendingPlatform, setPendingPlatform] = useState(null);
 
   if (!isOpen || !profile) return null;
 
@@ -54,8 +55,22 @@ ${profileUrl}
       } catch (e) {}
     }
 
-    // 2. For LinkedIn, X (Twitter), Telegram: Auto-download personalized PNG Card so creator can attach it, and copy template
+    // 2. For LinkedIn, X (Twitter), Telegram: Ask the user via popup
     if (['LinkedIn', 'X (Twitter)', 'Telegram'].includes(platform.name)) {
+      setPendingPlatform(platform);
+      return;
+    }
+
+    // 3. Open other platforms directly (Email, etc.)
+    window.open(platform.url, '_blank', 'noopener,noreferrer');
+  };
+
+  const executeShareWithChoice = async (shouldDownload) => {
+    if (!pendingPlatform) return;
+    const platform = pendingPlatform;
+    setPendingPlatform(null);
+
+    if (shouldDownload) {
       try {
         const blob = await generateCardCanvasBlob();
         if (blob) {
@@ -67,14 +82,14 @@ ${profileUrl}
           setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
       } catch (e) {}
-
-      // Copy text to clipboard so it can be pasted easily
-      try {
-        await navigator.clipboard.writeText(cardTemplateText);
-      } catch (e) {}
     }
 
-    // 3. Open the platform composer
+    // Copy text to clipboard so it can be pasted easily
+    try {
+      await navigator.clipboard.writeText(cardTemplateText);
+    } catch (e) {}
+
+    // Open the platform composer
     window.open(platform.url, '_blank', 'noopener,noreferrer');
   };
 
@@ -89,7 +104,7 @@ ${profileUrl}
       name: 'LinkedIn',
       icon: Linkedin,
       bgColor: 'bg-blue-600 hover:bg-blue-700 text-white',
-      url: `https://www.linkedin.com/feed/?shareActive=true`
+      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(profileUrl)}`
     },
     {
       name: 'X (Twitter)',
@@ -411,6 +426,46 @@ ${profileUrl}
             Download Image (PNG)
           </button>
         </div>
+
+        {/* Custom Confirmation Popup Dialog */}
+        {pendingPlatform && (
+          <div className="absolute inset-0 bg-black/95 backdrop-blur-sm z-50 flex flex-col items-center justify-center p-6 text-center rounded-[32px] animate-in fade-in zoom-in duration-200">
+            <div className="bg-[#141422] border-2 border-white/20 p-6 rounded-3xl max-w-sm w-full shadow-2xl">
+              <div className="w-12 h-12 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-orange-500/35">
+                <Download size={24} className="text-orange-500" />
+              </div>
+              <h3 className="text-sm font-black uppercase tracking-widest text-white mb-2">
+                Download Brand Card?
+              </h3>
+              <p className="text-xs text-neutral-400 mb-6 leading-relaxed">
+                Would you like to download your personalized Brand Card image to attach to your post?
+              </p>
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <button
+                  type="button"
+                  onClick={() => executeShareWithChoice(true)}
+                  className="py-3 px-4 bg-orange-500 hover:bg-orange-600 text-black font-black text-xs uppercase tracking-wider rounded-xl border border-black shadow-[2px_2px_0px_#000] active:scale-95 transition-all cursor-pointer"
+                >
+                  Yes, Download
+                </button>
+                <button
+                  type="button"
+                  onClick={() => executeShareWithChoice(false)}
+                  className="py-3 px-4 bg-neutral-800 hover:bg-neutral-700 text-white font-black text-xs uppercase tracking-wider rounded-xl border border-neutral-700 active:scale-95 transition-all cursor-pointer"
+                >
+                  No, Just Share
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPendingPlatform(null)}
+                className="text-[10px] font-bold text-neutral-500 hover:text-neutral-300 uppercase tracking-widest transition-all mt-2 cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>
